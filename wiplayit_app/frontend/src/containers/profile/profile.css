@@ -1,0 +1,1045 @@
+@media (max-width: 500px) {
+
+.unfollow-user-2,.unfollow-user { 
+    background-color:  #A33F0B !important; 
+    border: 1PX solid  #A33F0B !important;
+    color:  white !important;
+  }
+
+
+  .follow-user-2, .follow-user{ 
+    background-color:  white !important; 
+    border: 1PX solid  #A33F0B !important;
+  color: #A33F0B !important;
+}
+
+.f-box button, .follow-btn-sm button {
+     font-size:13px;
+     font-family: 'Teko';
+     text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 14px;
+    border: 1PX solid  #A33F0B;
+   }
+
+.f-box button {
+     margin: 7PX 0;
+    
+}
+
+
+
+.profile-contents {
+  background: white;
+  padding-top: 70px;
+  
+}
+
+
+.profile-activites {
+  border  : 1px solid #D5D7D5;
+  margin:  10px; 
+}
+
+
+
+#profile-page {
+   border:1px solid #ffff !important;
+   width:100%;
+   margin:  auto;
+   
+}
+
+.profile-section-top {
+  border:px solid black;
+  width: 44%;
+ 
+
+}
+
+.profile-container {
+  width:100%;
+  margin:  auto;
+  border: px solid blue;
+
+ }
+
+.profile {
+  border-bottom:  6PX solid  #D5D7D5; 
+  background: white;
+  padding-top: 10PX;
+  background: white;
+  flex-direction: row;
+  display: flex;
+  
+  }
+
+.profile-box {
+  display: flex;
+  border: px solid red;/* #D5D7D5;*/ 
+  background: white;
+  height:  100%;
+  width:100%;
+
+  
+}
+
+.profi-credential-container {
+  border: px solid red;
+  width: 100%;
+  
+}
+
+.profi-credential-box {
+     border: px solid black;
+     display: flex;
+     height: 62%;
+          
+        
+}
+
+
+
+.user-container {
+  border-bottom: 1px solid  #D5D7D5;
+  padding: 10px;
+  width:100%;
+  
+
+
+}
+
+
+.user-name-container {
+    margin-left: 7px;
+    margin-top: 7px;
+
+}
+
+.user-name {
+   margin:10PX 10% 10px;
+   padding-left: 7PX;
+   font-size: 10px;
+    color: black;
+    border: px solid blue;
+    font-family: 'Ubuntu';
+    font-weight: bold;
+   
+}
+
+.credentials-opt-btn {
+   background: #f3f3f3 !important;
+   margin-top: 10PX;
+}
+
+
+
+.profile-opt-btn  {
+  border: PX solid blue;
+  margin-top: 10% !important;
+  background:  white !important;
+  height: 30px !important;
+}
+
+
+.relation-box {
+  border: px solid blue;
+  display: flex;
+}
+.user-relation-box {
+  background: white;
+  border: px solid red;
+  
+}
+
+
+ .f-box, .user-relation{
+  border: px solid red;
+  width: 100%;
+    
+  
+}
+
+
+.num-followers-box {
+  border: px solid blue;
+  width: 100%;
+
+     
+}
+
+
+.num-followers {
+    border:px solid red;
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+    line-height: 3;
+     
+ }
+
+
+.num-followers:active, .num-followers:focus  {
+    color: #A33F0B;
+    text-decoration: none;
+    }
+ 
+
+.user-credential {
+  border:px solid blue;
+  padding-top: 10PX;
+  width: 100%;
+  display: block;
+  word-break: break-all;
+  
+}
+
+
+
+.name {
+    
+    font-weight: 600;
+    font-family: 'Kanit';
+    font-size: 13px;
+    color: black;
+    border: px solid blue;
+    line-height: 2;
+
+}
+.edit-user-photo {
+  font-size: 13px;
+  color: black;
+  width: 70px;
+  height: 30px;
+  
+
+  
+        
+}
+
+
+.img-box {
+    border: 1px solid   #D5D7D5;/*#F9F7F7;*/
+    border-radius: 100%;
+    width: 54%;
+    max-width: 100%;
+    margin: 0% 0 0 20% ;
+    
+}
+
+.profile-image {
+    border: 1px solid #F9F7F7;
+    border-radius: 100%;
+    width: 100%;
+    height: 59px;
+    object-fit:cover;
+    
+    
+}
+
+
+.edit-user-profile {
+  font-size: 10px;
+  width: 100%;
+  color: #615f5e;
+  background: white;
+  border: none;
+  box-shadow: none;
+}
+
+.edit-user-name {
+ margin: 0px 3%; 
+}
+.credentials-container {
+  background: white;
+
+}
+
+.user-credential {
+    margin: 4px 0px;
+    font-size: 11px;
+    
+    
+}
+
+
+
+.credentials-menu {
+   border-bottom: 1px solid #D5D7D5;;
+   display: flex;
+   background: #f3f3f3;
+   padding: 0 4PX;
+      
+}
+   
+
+#logout {
+   color:red;
+  width: 100%;
+}
+
+
+.about {
+  line-height: 2;
+  margin: 10px 7%  0;
+  font-size: 13PX;
+    
+}
+
+.about-user-box {
+    display: flex;
+    margin: 14px 5%;
+    font-size: 10px;
+} 
+
+.bio-icon,.location-icon {
+  font-size:11px !important;
+  font-weight: 100;
+  color: #A33F0B;
+  border:px solid blue;
+  line-height: 1; 
+}
+.user-location,.user-location-2 {
+  margin-left: 10px;
+  font-size: 10px;
+}
+
+.user-activities {
+  border-top  :2px solid  #D5D7D5;
+  display     : flex;
+  overflow-x  : scroll;
+  overflow-y  : hidden;
+  white-space : nowrap;
+  padding     : 0px;
+  background   :  #f1f1f1; /* #ECECEC; /*#f3f3f3;  /*white; /*#fefbfa;*/
+}
+
+.active-credential {
+     color: #A33F0B !important;
+     border: 1pX solid #D5D7D5  !important;
+
+    
+}
+
+.active-credential:focus {
+     color: #A33F0B !important;
+     border: 1pX solid #D5D7D5  !important;
+    
+}
+
+.img-container-s {
+ border:  px solid blue;
+ }
+
+.img-box-s {
+  border: px solid red;
+  margin: 8PX 7PX 0 8pX;
+}
+
+.user-photo {
+    border-radius: 50%;
+    width: 40px;
+    height:40px;
+    object-fit: cover;
+}
+
+
+.follow-box {
+  border: px solid black;
+  padding: 10PX 0PX 0PX;
+}
+
+.user-credentials  {
+   border: pX solid red;
+   font-size: 13PX;
+}
+
+.default-user-box {
+  padding: 0 10px;
+}
+
+
+.user-list-box {
+   background: #ffff;
+   
+}
+
+.user-container-sm {
+  border-top:  1px solid  #D5D7D5;
+  width: 100%;
+
+
+}
+
+
+.user-name-box {
+    border: px solid red;
+    width: 80%;
+    
+
+}
+
+
+
+.profile-name {
+    font-size: 12px;
+    color: black;
+    font-family: 'Ubuntu';
+    font-weight: bold;
+    border: px solid blue
+   
+}
+
+.user-box-sm {
+  display: flex;
+  border: 1px solid  #D5D7D5; 
+  margin: 2% !important;
+  padding: 3px;
+ }
+
+.user-box {
+  display: flex;
+  width:100%;
+  
+} 
+
+  
+.activities {
+  color:  grey; /*#f0eeed;*/
+  font-family: 'Mukta';
+  background: #f1f1f1;/* #f3f3f3 ;/*#fefbfa;*/
+  margin:5px 4% ;
+  border: none;
+  width: 100%;
+}
+
+.active-activities {
+  color:black;
+}
+
+
+.activities-counter {
+  border:  px solid #D5D7D5;
+  background:  white;
+  font-size: 11pX;
+  padding: 10px 10px 0; 
+  
+}
+
+
+.user-answers-container a:hover  {
+  color: black;
+
+}
+
+
+
+#logout-modal,#dropzone-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      
+}
+
+
+.logout-content {
+     background-color: #fefefe;
+     margin: 50% 25%;
+     width: 50%;
+     height: auto;
+     border: px solid black;
+
+}
+
+.logout-btn-box {
+ display: flex;
+ border: px solid red;  
+}
+
+.logout-title {
+  margin: 20px 0px 0px 20%;
+}
+.logout-btns {
+  width: 100%;
+  margin: 0px 10px;
+
+}
+
+.ajax-loader {
+  border: px solid blue; 
+}
+
+.logout-user:focus {
+   border: none;
+   outline: 0;
+}
+.cancel-logout,.logout-user {
+  background-color: #fefefe;
+  border:  none;
+  box-shadow: none;
+  width: 70px;
+  height: 30px;
+  color:black;
+  margin: 17px 0px;
+}
+
+
+.user-followers-box  {
+   border:px solid blue;/* #D5D7D5;*/
+   width: 100%;
+   display: flex;
+    color: black;
+      
+}
+
+
+.name-fields {
+  display: flex;
+  width: 100%;
+   
+}
+
+.last-name, .first-name {
+  border:1px solid #D5D7D5;
+  width: 90%;
+  height: 40px;
+  padding-left: 14px; 
+    box-shadow: none;
+}
+.first-name {
+  float: left;
+  margin-left: 14px;
+}
+
+.last-name {
+  float: right;
+  margin-right: 14px;
+}
+.field-credential-box,.field-location-box {
+  margin: 0px 0px;
+  border: px solid red;
+
+}
+
+.location-label {
+  margin: 0px 7%;
+  font-weight: 600;
+    font-family: 'Kanit';
+    font-size: 12px;
+    color: black;
+    border: px solid blue;
+    line-height: 2;
+} 
+
+.credential-field,.credential-field,.location-field {
+  size: 80;
+  width: 90%;
+  height: 40px;
+  margin:  0px 5%;
+  box-shadow: none;
+  font-size: 12px;
+  border: none;
+  border-bottom:   1px solid #9D9FA0;
+  padding-left: 14px;
+  margin: 0px 7%;
+}
+
+
+.quote-field {
+  width: 90%;
+  height:70px; 
+  margin: 0px 7%; 
+  padding: 7px 14px;
+  box-shadow: none;
+  border: 1px solid #9D9FA0;
+}
+
+
+
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (min-width: 980px) {
+  body {
+       margin-top: 0px !important;
+       background: #F4F2F1 !important;
+       width:100%;
+       overflow-x: hidden !important;
+      border:px solid green;/*white;*/
+       
+      
+ }
+
+.navigbar {
+  border: PX solid red !important;
+
+ 
+ }
+ 
+.profile-page {
+  border:px solid blue; /*#F9F7F7;*/
+  background:  #F9F7F7;
+  margin:  auto;
+  width:100%;
+
+  
+}
+
+.profile-container {
+    border: px solid black;
+    width: 100%;
+    background: #F4F2F1;
+   
+} 
+
+.profile {
+  border: px solid red;
+  display: flex;
+  width: 100%;
+  margin-top:10px;
+  background: #F4F2F1;
+  
+}
+
+.profile-box {
+  width: 75.9%;
+  display: flex;
+   border: px solid black; /* #D5D7D5;*/ 
+  background: white;
+  -webkit-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+  -moz-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+  box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+}
+
+
+.profile-contents {
+  border: px solid blue;
+  width: 80%;
+  padding:  10px;
+  margin: 0px 10%;
+}
+ 
+ 
+.user-relation-box {
+  background: white;
+  border: px solid red;
+
+  
+}
+
+
+
+.profile-opt-btn  {
+  border: PX solid blue;
+  margin-top: 20%;
+  height: 30px !important;
+}
+
+
+
+.relation-box {
+  border: px solid blue;
+  display: flex;
+}
+
+
+
+.profile-section-top {
+  background: white;
+  width: 30%;
+  border: PX solid blue;
+ }
+
+.profi-credential-container {
+  border: px solid black;
+   width: 75%;
+ 
+ }
+
+
+.profi-credential-box {
+     border: px solid black;
+     display: flex;
+     height: 74%;
+}
+
+.profi-credential-box  p {
+  border-bottom:  1px solid #D5D7D5;
+  font-size: 11px;
+  line-height: 1; 
+  height: 17% !important;
+  margin-top: 8%;
+  margin-right:2%; 
+  width: 100%;
+  }
+
+
+
+.f-box {
+   border: px solid black;
+   width: auto !important;
+} 
+.num-followers-box  {
+   border:px solid blue;/* #D5D7D5;*/
+   width: 100%;
+   padding: 10px 0px 0px;
+   
+      
+}
+.num-followers {
+    border:px solid red;
+    font-size: 11px;
+    color: black;
+    text-decoration: none;
+    line-height: 1;
+
+ }
+
+
+.num-followers:active, .num-followers:focus  {
+    color: #A33F0B;
+    text-decoration: none;
+    }
+ 
+
+
+.credentials-container {
+   border:  px solid #D5D7D5;
+   display: flex;
+   width: 100%;
+   
+  }
+
+.credentials-box {
+   border:  px solid red !important;
+      
+  }
+
+.user-activities {
+  border: 1px solid  #D5D7D5; 
+  background: white;
+  -webkit-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+  -moz-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+  box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+}
+
+
+#activities-box {
+  border: px solid blue;
+  margin: 10px 0px;
+ background: #F4F2F1;
+}
+
+
+.user-activities-box {
+  width: 50%;
+  margin: 4px 1%;
+  background: #F4F2F1;
+
+}
+
+.activities {
+  color:  grey; /*#f0eeed;*/
+  font-family: 'Kanit';
+  background:  #fefbfa;
+  border: none;
+  width: auto;
+}
+
+
+.activities-counter {
+  border:  1px solid #D5D7D5;
+  background:  white;
+  padding: 4px 10px; 
+  
+}
+
+.credentials-menu {
+  border-bottom:1px solid #D5D7D5;
+  width: 100%;
+  display: flex;
+}
+.about-user-box {
+  border: px solid blue;
+  margin: 14px 5%;
+  font-size: 10px;
+  
+}
+
+.about-box {
+  border: px solid red;
+  width: 100%;
+  height: 30px;
+
+}
+.about {
+  border: px solid blue;
+  font-size: 10px;
+  padding: 7px 7px;
+
+}
+
+
+
+.credentials-opt-box {
+  border: px solid red;
+  
+}
+.credentials-opt-btn {
+  font-size: 10px !important;
+  padding: 7px 7px !important;
+ }
+
+.teams-box,.credentials-box {
+  border: 1px solid  #D5D7D5; 
+  height:270px; 
+  width: 25%;
+  background: white;
+  margin: 4px 0 0;
+  -webkit-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+  -moz-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+  box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+}
+
+.follow-teams {
+  width: 25%;
+  margin: 0 0 0 1% ;
+  background: white;
+  border: 1px solid  #D5D7D5;  
+   
+}
+
+ 
+.user-box {
+  display: flex;
+  border: px solid red;
+
+
+}
+
+.user-name-container {
+    margin-left: 7px;
+    margin-top: 7px;
+
+}
+.user-name-box {
+  border: 1px solid red;
+} 
+
+.user-name {
+    font-size: 12px;
+    color: black;
+   font-family: 'Ubuntu';
+   font-weight: bold;
+   line-height: 1;
+   margin:18px 10% 7px !important;
+   padding: 0px 25%;
+   display: flex; 
+   
+   
+}
+
+.follow-box {
+
+}
+
+.profile-name-box {
+     border:px solid red;
+     width:100%;
+  }
+
+.profile-name-box {
+    border: px solid red;
+}
+
+
+.name {
+    
+    font-weight: 600;
+    font-family: 'Kanit';
+    font-size: 13px;
+    color: black;
+    border: px solid blue;
+    line-height: 2;
+
+}
+.edit-user-photo {
+  font-size: 13px;
+  color: black;
+  width: 70px;
+  height: 30px;
+  
+
+  
+        
+}
+
+
+.edit-user-name {
+  font-size: 10px;
+  color: #615f5e;
+  width: 70px;
+  height: 30px;
+  background: white;
+  border: none;
+  box-shadow: none;
+}
+
+.edit-user-name {
+  
+}
+
+
+.img-box {
+    border: 1px solid   #D5D7D5;/*#F9F7F7;*/
+    border-radius: 100%;
+    width: 48%;
+    max-width: 100%;
+    margin: 10% 25% 0;
+    
+}
+
+.profile-image {
+    border: 1px solid    #D5D7D5;
+    border-radius: 100%;
+    width: 100%;
+    height: 100px;
+    object-fit:cover;
+    
+    
+}
+
+
+
+.user-photo {
+    border-radius: 50%;
+    width: 40px;
+    height:40px;
+    object-fit: cover;
+}
+.user-container-sm {
+  border: 1px solid white;
+  margin: 10px 0;
+  width: 100%;
+
+}
+
+
+.user-box-sm {
+  display: flex;
+  width:auto;
+  border: 1px solid  #D5D7D5; 
+  margin: 2% !important;
+  padding: 3px;
+ }
+
+.user-box {
+  display: flex;
+  width:70%;
+  border: px solid black;
+
+}
+
+.about-user {
+  border: px solid blue;
+  font-size: 10px;
+
+  
+}
+
+
+.user-name-box {
+    border: px solid red;
+    width: 80%;
+
+}
+.img-container-s {
+ border:  px solid blue;
+ width: 20%;
+}
+.img-box-s {
+  border: px solid red;
+}
+
+.profile-name {
+    font-size: 12px;
+    color: black;
+    font-family: 'Ubuntu';
+    font-weight: bold;
+    border: px solid blue
+   
+}
+
+.profile-name:hover {
+  color: black;
+  text-decoration: none;
+
+}
+
+
+
+.follow-box {
+  border: px solid black;
+  width: 30%;
+
+}
+
+
+.follow-btn-sm {
+  border: px solid blue;
+  
+}
+
+
+.follow-user-2,
+.follow-user{ 
+  background-color:  white; 
+  color: #A33F0B;
+}
+
+.f-box button, .follow-btn-sm button {
+     font-size:17px;
+     font-family: 'Teko';
+     border-radius: 14px;
+     border:1px solid #A33F0B;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+}
+}
+
+
+
