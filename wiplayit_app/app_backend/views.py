@@ -1,22 +1,16 @@
-from rest_framework.views import APIView
-from rest_framework import generics, response, status, viewsets
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.shortcuts import get_object_or_404
+
+from rest_framework import viewsets
+
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+
 from rest_framework_guardian import filters
-from django.db.models.query import QuerySet
-from django.utils import timezone  
-from django.utils.timezone import get_current_timezone
+
 #from .permissions import CustomObjectPermissions
-from guardian.shortcuts import assign_perm, remove_perm, get_users_with_perms
-from guardian.core import ObjectPermissionChecker
-from mainApp.helpers import get_users_with_permissions, get_objects_perms, get_model_fields
-from mainApp.slug_generator import generate_unique_slug
-from .models import *
-from userApp.models import User
-from .serializers import *
+
+from app_backend.helpers import get_objects_perms, get_model_fields
+from app_backend.models import *
+
+from app_backend.serializers import *
 
 
 class BaseView():

@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 from django.urls import path, include, register_converter, re_path
 from rest_auth.views import PasswordResetConfirmView
-from userApp.api_autentication_views import *
+from app_backend.api_views.api_auth_views import *
 from allauth.account.views import confirm_email
 
 

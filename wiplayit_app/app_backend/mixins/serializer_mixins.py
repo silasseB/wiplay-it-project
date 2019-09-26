@@ -1,4 +1,5 @@
-from mainApp.helpers import  get_objects_perms
+
+from app_backend.helpers import  get_objects_perms
 
 class BaseSerialiizerMixin(object):
 	"""docstring for BaseSerialiizerMixin"""

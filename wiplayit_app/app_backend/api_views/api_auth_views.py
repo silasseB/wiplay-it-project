@@ -42,11 +42,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.core.mail import EmailMessage
-from mainApp.models import *
-from userApp.models import User, Profile
 
-from .serializers import *
-from mainApp.serializers import *
+from app_backend.models import User
+from app_backend.auth_serializers import CustomRegisterSerializer, CustomLoginSerializer
 
 
 

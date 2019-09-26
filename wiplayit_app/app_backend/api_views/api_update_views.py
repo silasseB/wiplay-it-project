@@ -1,8 +1,8 @@
-from .models import *
+from app_backend.models import *
 
-from .serializers import *
-from mainApp.views import *
-from mainApp.mixins.views_mixins import  UpdateObjectMixin
+from app_backend.serializers import *
+from app_backend.views import *
+from app_backend.mixins.views_mixins import  UpdateObjectMixin
 
 
 				

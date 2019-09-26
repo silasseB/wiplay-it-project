@@ -19,8 +19,8 @@ from allauth.account.forms import ResetPasswordForm
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 
-from userApp.models import  User, Profile
-from mainApp.models import * 
+from .models import  User, Profile
+
 
 class TokenSerializer(serializers.ModelSerializer):
 

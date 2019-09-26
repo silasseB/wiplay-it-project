@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from mptt.admin import MPTTModelAdmin
 
 #from .admin_forms import UserAdminCreationForm, UserAdminChangeForm
-from .models.main_models import *
+#from .models.main_models import *
 from .models import *
 
 # Register your models here.

@@ -7,14 +7,14 @@ from django.urls import path, include, register_converter, re_path
 #from rest_framework_jwt.views import obtain_jwt_token
 
 
-from mainApp.api_create_views import *
-from mainApp.api_detail_views import *
-from mainApp.api_update_views import *
+from .api_views.api_create_views import *
+from .api_views.api_detail_views import *
+from .api_views.api_update_views import *
 
 app_name = 'question_app'
 
 urlpatterns = [
-		path("", IndexView.as_view(), name='index'),
+		path("", index, name='index'),
         path("api/question/<int:pk>/", QuestionDetailView.as_view({'get':'retrieve'})),
         path("api/post/<int:pk>/", PostRetrieveView.as_view({'get':'retrieve'})),
         path("api/question/<int:pk>/edit/", UpdateQuestionView.as_view({'get':'retrieve','put':'put' })),

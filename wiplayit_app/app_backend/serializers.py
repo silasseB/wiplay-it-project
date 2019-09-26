@@ -5,9 +5,9 @@ from django.utils.timezone import get_current_timezone
 import pytz
 from guardian.core import ObjectPermissionChecker
 from guardian.shortcuts import assign_perm, remove_perm
-from mainApp.mixins.serializer_mixins import SerializerMixin, ModelSerializerMixin
-from userApp.serializers import  BaseUserSerializer
-from mainApp.helpers import get_users_with_permissions, get_objects_perms
+from .mixins.serializer_mixins import SerializerMixin, ModelSerializerMixin
+from .auth_serializers import  BaseUserSerializer
+from .helpers import get_users_with_permissions, get_objects_perms
 
 
 class BaseSerializer(ModelSerializerMixin, serializers.ModelSerializer):
