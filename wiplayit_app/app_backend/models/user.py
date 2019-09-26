@@ -14,7 +14,7 @@ from django.contrib.auth.models import User, PermissionsMixin
 from guardian.mixins import GuardianUserMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.base_user import AbstractBaseUser
-from userApp.managers import UserManager
+from app_backend.managers import UserManager
 from rest_framework.authtoken.models import Token
 from allauth.account.signals import user_signed_up
 from allauth.socialaccount.models import SocialAccount
@@ -24,7 +24,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from PIL import Image
 
-from mainApp.slug_generator import generate_unique_slug
+from app_backend.slug_generator import generate_unique_slug
 
 # Create your models here.
 
@@ -50,7 +50,7 @@ class User(AbstractBaseUser,PermissionsMixin, GuardianUserMixin):
     class Meta:
         db_table = "users" 
         permissions = (
-         		("change_user_followers", "Can Profile Followers"),
+                ("change_user_followers", "Can Profile Followers"),
                 ("change_user_followings", "Can User Followings"),
             )
 

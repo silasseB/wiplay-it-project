@@ -11,7 +11,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from PIL import Image
 
-from mainApp.slug_generator import generate_unique_slug
+from app_backend.slug_generator import generate_unique_slug
 import mptt
 from mptt.models import MPTTModel, TreeForeignKey
 
