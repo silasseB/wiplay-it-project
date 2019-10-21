@@ -2,23 +2,20 @@ import os
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-<<<<<<< HEAD
+
 from rest_framework import  status
 from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 
-=======
-
 from django.shortcuts import get_object_or_404, render
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 
 from app_backend.views import *
 from app_backend.serializers import IndexSerializer
 from app_backend.mixins.views_mixins import RetrieveMixin
 
 
-<<<<<<< HEAD
+
 @csrf_exempt
 def index(request, resource=''):
 	return render(request, 'index.html')
@@ -28,12 +25,9 @@ def handler404(request, exception):
     return render(request, 'index.html', status=404)
 def handler500(request):
     return render(request, 'index.html', status=500)
-=======
 
 def index(request):
 	return render(request, 'build/index.html')
-
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 
 class IndexView(BaseView, APIView):
 	serializer_class = IndexSerializer
@@ -43,11 +37,6 @@ class IndexView(BaseView, APIView):
 	
 		kwargs['context'] = self.get_serializer_context()
 		serializer = self.serializer_class(*args, **kwargs)
-<<<<<<< HEAD
-		print(serializer.data)
-  
-=======
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 		return Response(serializer.data,  status=status.HTTP_200_OK )
 		
 		

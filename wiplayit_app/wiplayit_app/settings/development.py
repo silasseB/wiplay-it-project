@@ -32,10 +32,6 @@ DEBUG = True
 ALLOWED_HOSTS = [ '127.0.0.1', '192.168.43.14' ]
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

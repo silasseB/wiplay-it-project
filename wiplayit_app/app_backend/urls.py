@@ -13,17 +13,13 @@ from .api_views.api_update_views import *
 
 app_name = 'question_app'
 
-<<<<<<< HEAD
+
 handler404 = handler404
 handler500 = handler500
 
 urlpatterns = [
 		path("", index, name='index'),
         path("api/main/", IndexView.as_view(), name='main'),
-=======
-urlpatterns = [
-		path("", index, name='index'),
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
         path("api/question/<int:pk>/", QuestionDetailView.as_view({'get':'retrieve'})),
         path("api/post/<int:pk>/", PostRetrieveView.as_view({'get':'retrieve'})),
         path("api/question/<int:pk>/edit/", UpdateQuestionView.as_view({'get':'retrieve','put':'put' })),
@@ -78,12 +74,7 @@ urlpatterns = [
         path('api/user/list/', UserView.as_view({'get': 'list'}), name="get-user-list"),
            
         path('api/profile/<int:pk>/edit/', UpdateUserProfileView.as_view({'get':'retrieve','put':'put' }), name='update-user-profile'), 
-<<<<<<< HEAD
-        #url(r'^.*/', index, name='unmatched')
-=======
 
-
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
         ]
 
 if settings.DEBUG:

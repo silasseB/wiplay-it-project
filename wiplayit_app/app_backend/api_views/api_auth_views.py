@@ -90,12 +90,6 @@ class CustomLoginView(LoginView):
 	def post(self, request, *args, **kwargs):
 		email = request.data.get("email")
 		password = request.data.get("password")
-<<<<<<< HEAD
-		print(request)
-=======
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
-
-		
 		self.request = request
 
 		self.serializer = self.get_serializer(data=self.request.data,
