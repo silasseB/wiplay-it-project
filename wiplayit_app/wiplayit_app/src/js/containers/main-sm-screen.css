@@ -1,0 +1,396 @@
+
+
+
+@media (max-width: 500px) {
+/*
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  display: none;
+  font-display:  block ;
+  color: #A33F0B;
+  font-family: 'Arvo';
+  font-display:  fallback;
+  src: local('Arvo'), url(https://fonts.gstatic.com/s/arvo/v9/rC7kKhY-eUDY-ucISTIf5PesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+}*/
+
+
+.arrow {
+    color: #A33F0B;
+    font-size: 17pX;
+    font-weight: bold;
+    margin: 0 !important;
+    border: px solid #D5D7D5;/*#F9F7F7;*/
+}
+
+.custom-back-btn {
+  width: 50px;
+  height: 20px;
+  margin:7px ;
+  border: none;
+  color: #fff;
+  background: #fff;
+ 
+
+    
+}
+
+.modal_dropdown,.home-link {
+  width: 70px;
+  height: 30px;
+  margin:7px ;
+  border: none;
+  color: #fff;
+      
+}
+
+
+.img-container-sm {
+    border: 1px solid #D5D7D5;/*#F9F7F7;*/
+    border-radius: 50%;
+    width: 30px;
+    height:30px;
+    
+}
+.img-container {
+    border: 1px solid  #D5D7D5;/*#F9F7F7;*/
+    border-radius: 100%;
+    width: 90px;
+    height:60px;
+    
+    
+}
+
+.profile-photo {
+    border: px solid #F9F7F7;
+    border-radius: 50%;
+    max-width: 100%; 
+    display:block; 
+    height: 100%;
+    object-fit: cover;
+    
+    
+}
+
+
+}
+.user-photo {
+    border-radius: 50%;
+    width: 40px;
+    height:40px;
+    object-fit: cover;
+}
+
+.mydropzone {
+  border: 1px solid red !important;
+  height: 100px !important; 
+}
+
+.partial-page-navbar, .form-navbar {
+   background:  #fefefe;
+   border:px solid #D5D7D5;
+   -webkit-box-shadow: 0px 3px 5px -1px rgba(202,202,202,1);
+   -moz-box-shadow: 0px 3px 5px -1px rgba(202,202,202,1);
+   box-shadow: 0px 3px 5px -1px rgba(202,202,202,1);
+
+}
+
+.nav-flex-box, .partial-form-navbar , .partial-page-navbar {
+    border: px solid  red !important;
+    position: relative;
+
+    display: flex;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height:auto;
+    background: white;
+}
+
+.back-btn-box {
+    border: px solid red !important;  
+    width: 100% !important;   
+
+}
+
+
+.submit-btn {
+    margin-right:  3% !important;
+    background: #A33F0B;  
+    border-radius: 50px;
+    font-family: 'Squada one';
+    font-size: 10px; 
+    width: 60px;
+    height: 23px;
+    margin:7px ;
+    border: none;
+    color: #fff;
+  
+}
+
+.submit-btn-box, .home-link-box,.navbar-dropdown-sm  {
+  border: 1px solid black;
+   padding-right: 3%;
+   width: 30%;
+ }
+
+
+.home-link-box,.navbar-dropdown-sm  {
+  padding: 3% 4% 0 0;
+ }
+
+
+
+.home-link {
+      font-size: 17px;
+      color: #A33F0B;
+      font-family: 'Teko';
+      font-weight: bold;
+}
+
+
+.options-modal.fade.in .modal-menu {
+     
+    opacity: 1;
+}
+
+ .modal-menu {
+  
+   width: 100%;
+   display: block !important;
+   background-color: white;
+   padding: 0px !important;
+   border-radius: 6px 6px 0 0;
+   -webkit-transition: bottom 0.3s ease-out;
+   -moz-transition: bottom 0.3s ease-out;
+   -o-transition: bottom 0.3s ease-out;
+   transition: bottom 0.3s ease-out;
+}
+
+.success-modal {
+  display: none;
+  position: fixed;
+  background:  #4CAF50;
+  width: 100%;
+  bottom: 0px;
+  
+   
+}
+
+.success-message {
+
+ background:  #4CAF50;
+ line-height: 3px;
+ 
+}
+
+.success-message p {
+  line-height: 4px;
+  border: 1px solid black;
+}
+
+
+
+/*A page modal that display forms */
+ .mobile-modal-page {
+    display: none;
+    padding-top: 52px;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #F9F7F7;/*#D5D7D5; /*rgb(0,0,0); /* Fall0back color */
+    background-color:#F9F7F7; /*rgba(0,0,0,0.4); /* Black w/ opacity */
+   /* background-color: rgb(0,0,0); /* Fallback color */
+  /*background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+     border:1px solid red; /*#fefefe;*/
+
+    
+}
+
+#modal-content {
+   background-color: #fefefe;
+   border:px solid red; /*#fefefe;*/
+   width: 44%; /* Full width */
+   margin: 0PX 28% 0;
+      
+}
+
+#mobile-modal-content {
+  background-color: #fefefe;
+   border:1px solid  #fefefe;
+   width: 100%; /* Full width */
+  min-height:  250px;
+   
+}
+
+.form-box {
+   background-color: #fefefe;
+   border:px solid red;
+   width: 100%; /* Full width */
+  
+   
+}
+
+.modal-form {
+  border: px solid black !important;
+  height: 100% !important;
+}
+ .add-title {
+  border: px solid black !important;
+  display: flex;
+}
+.guide-box  {
+  border: px solid black !important;
+  width: 70%;
+  
+
+ 
+}
+
+
+.title-btn-box {
+ border:  px solid black !important;
+  width: 30%;
+
+}
+
+.add-title p  {
+  border: px solid black !important;
+  margin-left: 12%;
+  margin-top: 10px;
+  
+}
+
+.title {
+  border: px solid black;
+  font-weight: bold;
+  font-size:17px;
+  margin: 20px 7% 0px;
+
+}
+
+.add-title-btn {
+  background: #F9F7F7;
+  width: 70;
+  height: 30px;
+  margin-left: 20px;
+  
+  margin-top: 7px;
+  font-family: 'PT Sans'; /*'Squada one';*/
+  font-weight: normal;
+  font-size:17px;
+  border: 1px solid #9D9FA0;;
+  color: #807f7f; 
+}
+
+.add-title-form  {
+  display: non;
+  font-size: 17PX;
+  width: 87%;
+  height:30px; 
+  margin: 0px 7%; 
+  padding: 7px 4px;
+  box-shadow: none;
+  font-weight:  bold;
+  border: 1px solid #9D9FA0;
+
+}
+
+.add-title-form:focus  {
+   outline: 1px solid  #9D9FA0;
+}
+
+.options-box {
+
+    border: px solid blue;
+}
+
+
+.menu-btn {
+  border: 1px solid black;
+  margin-right: 10%;
+
+}
+
+/*border-width: 0 17px 17px 17px;*/
+.modal-menu button:focus {
+  background:  #D5D7D5 !important;
+  border: none !important;
+ outline: 0px solid  transparent;
+}
+.modal-menu button {
+  background: #F9F7F7;
+  width: 100%;
+  height: 54px;
+  display: block;
+  font-family: 'PT San'; /*'Squada one';*/
+  font-weight: normal;
+  font-size:17px;
+  border:none;
+  color: #807f7f; 
+}
+ {
+  background: #D5D7D5;
+}
+
+
+.options-icon {
+  font-size: 20px;
+  color: black; /* #807f7f;*/
+  font-weight: bold;
+ } 
+
+
+.menu-dismiss-box {
+  display: flex;
+  width: 100%;
+  height: auto;
+  
+  background: #F9F7F7;
+  border-bottom:  1px solid  #D5D7D5;
+
+
+}
+.menu-helper-text {
+  width: 100%;
+  border: px solid red;
+}
+.menu-helper-text p {
+  margin:12px 0px 0px 35% ;
+  line-height: 1;
+  border: px solid blue;
+}
+
+.menu-dismiss {
+  width: 20% !important;
+  
+  height: 40px !important;
+  background: #F9F7F7;
+  border: none !important; 
+  box-shadow: none;
+  
+}
+.dismiss {
+  border: px solid blue;
+  font-weight: bold;
+  color:red;
+
+}
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

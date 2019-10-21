@@ -1,0 +1,892 @@
+
+@media (max-width:500px) {
+
+html, body {
+  border: px solid blue;
+  width: 100%;
+  background:#edf0f3;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  flex-direction: column;
+    
+}
+  
+
+.navigation-bar {
+  border-bottom: px solid red;
+  display: flex;
+  width: 100%;
+  background:#A33F0B;
+}
+
+.email-confirmation-page,.process-pin-page,.login-page{
+  width: 100%; 
+  min-height: 500px;
+  background:#edf0f3;
+
+}
+
+ 
+
+.sign-up-container,.login-container {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  background:#edf0f3;
+  min-height: 500px;
+  padding:  17% 0px;
+}
+
+
+.registration-container {
+  width: 100%;
+  height: auto;
+  background:#edf0f3;
+  border: px solid blue;
+  padding: 10% 0px;
+}
+
+
+.sign-up-form,.login-form {
+  border:1px solid #BDBDBD;
+  padding: 10px 4%;
+  margin: 10px 4% 7%;
+  
+}
+
+
+.login-fields {
+  border:px solid black;
+  padding: 17px 0px 10px ;
+  
+}
+.login-password-field, .login-email-field, 
+.email,.password {
+  size: 80;
+  width: 100%;
+  height: 40px;
+  box-shadow: none;
+  border: 1px solid #D5D7D5;
+  padding-left: 10px;
+}
+
+select {
+  
+    width: 50%;
+  float: right;
+  border: none;
+  box-shadow: none;
+  color:  #5384e5;
+}
+
+.country-field {
+  padding-right: 7%; 
+}
+
+select:focus {
+  border: none;
+  outline: 0 !important;
+}
+.username-fields {
+  border: px solid red;
+  display: flex;
+
+}
+
+.name-fields {
+  width: 100%;
+ border: px solid red;
+   
+}
+
+.last-name, .first-name {
+  border:2px solid #D5D7D5;
+  width: 90%;
+  height: 40px;
+  padding-left: 14px; 
+    box-shadow: none;
+}
+.last-name {
+  margin-left: 17px;
+}
+
+.pin,.email {
+  width: 100%;
+  border:1px solid #D5D7D5;
+  }
+.pin {
+  padding-left:  14px;
+}
+
+.email-fields, .password-fields {
+  display: non;
+  border:1px solid #D5D7D5;
+  margin: 10px 0px;
+  
+}
+
+
+.next-btn,.btn-submit {
+  width: 50%;
+  margin: 20px 24%;
+  color: white;
+  border: none;
+  background: #A33F0B;
+
+}
+.signup-label, .login-label {
+  margin:  0px 8% ;
+  padding: 0px 34%;
+  font-weight: bolder;
+    font-size: 11px;
+    border: px solid red;
+    display: flex;
+    
+}
+.help-text  {
+  margin:  20px 6%;
+   
+}
+
+.login-errors {
+  color:red;
+  border: px solid blue;
+ 
+}
+
+
+.social-login {
+  margin: 0px 5% 40px;
+  display: flex;
+  border: px solid black;
+  
+}
+
+ .twitter, .facebook,.google {
+  margin: auto;
+ } 
+.password-change {
+  color:  #5384e5;
+  margin: 10px 7%; 
+  background:#edf0f3;
+  border: none;
+  box-shadow: none; 
+  
+ }
+ .password-change:focus {
+  border:none;
+  outline: 0 !important;
+
+ }
+.btn-twitter,.btn-facebook {
+  background: #3B5998; /*#5a60e2;*/ 
+  color: white;
+  text-align: center;
+  height: 35px;
+  
+}
+
+.btn-twitter {
+  background: #3DC6EE;
+}
+
+.btn-google {
+  background: #dd4b39; /*#ed2a2a;*/
+  color: white;
+  text-align: center;
+  height: 35px;
+  
+}
+
+.btn:active:focus {
+  box-shadow: none; 
+  background-color: white;
+}
+
+.icon-color {
+  
+  color: #92293a;
+
+}
+
+.bg-color {
+   background:#A33F0B;
+}
+
+
+
+.navbar-title-box {
+   display: flex;
+   border: px solid red;
+   width: 100%;
+
+ 
+ }
+
+
+ .navbar-title-box p {
+  margin-left: 40%;
+  color: white;
+  line-height: 1;
+  margin-top: 10px;
+  font-size: 20px;
+
+ }
+
+.signup-bar-title p {
+  margin-left: 37%;
+  color: white;
+  line-height: 1;
+  margin-top: 10px;
+  font-size: 20px;
+
+}
+.navbar-link-box {
+  display: none;
+    border: 1px solid black;
+    width: 37%;
+    
+
+   
+}
+
+.create-account,.login-link {
+  border: px solid red;
+  color: white;
+  float: right;
+  margin-right: 14px;
+  margin-top: 4px;
+ }
+
+input:focus {
+  outline: 0!important;
+}
+
+
+.greetings {
+  font-size: 13px;
+  font-weight: bold;
+}
+.login-greetings {
+  margin: 38px 10px ;
+   width: 90%;
+   padding: 3px;
+   border:  px solid blue;
+} 
+.social-login-label {
+  font-size: 13px;
+  color: black;
+  font-weight: bold;
+  padding: 0px 40%;
+  border:px solid blue; 
+
+}
+
+.or-option {
+  padding-left: 44%;
+  margin: 0px 5%;
+  
+
+}
+
+.sign-or-login {
+   border: 1px solid #D2D2D2;
+   margin: 0px 4%;
+   padding: 10px;
+    
+}
+
+.registration-link-box {
+  display: flex;
+  border: px solid red;
+  margin: 0px 15%;
+}
+
+
+.registration-link-box a {
+   border: px solid red;
+   background:#edf0f3;
+   color: #5384e5;
+   font-size: 12px;
+}
+
+
+.signup-link {
+  border: px solid blue;
+  margin-left: 50px;
+}
+.privacy-policy-box {
+  margin: 10px 0px 0px;
+}
+
+.resend-link, .resend-cancel, .js-create-account {
+      border: px solid red;
+      width: 50%;
+      height: 24px;
+      margin-top: 10px;
+      margin-left: 28%;
+      background:  #A33F0B;
+      font-size: 10px !important;
+      color: white !important;
+}
+.password-change {
+  border: px solid blue !important;
+  font-size: 10px;
+  height:17px;
+  margin: 17px 0px 0px 20px; 
+  
+}
+
+button {
+  border: none !important; 
+  box-shadow: none !important; 
+    text-align: center !important;
+    outline: 0px transparent white;
+ }
+
+.email-confirmation-page {
+   border: px solid red;
+   min-height: 140px;
+   padding: 8px 0px;
+
+}
+.confirmation-page-box {
+  border:1px solid #BDBDBD;
+  margin: 57px 4%;
+  padding:  10px;
+}
+
+.confirm-msg {
+  border: px solid black;
+   font-size: 13px;
+}
+
+.resend-box {
+  display: flex;
+  padding: 10px;
+  border: px solid red;
+}
+
+.resend {
+  border: px solid blue;
+  width: 100%;
+}
+
+.resend p {
+   border: px solid red;
+   font-size: 10px;
+   margin: 7px 7px;
+   color:   #5384e5; 
+   
+}
+
+.resend-link {
+    margin-left: 0% !important;
+    width: 30% !important;
+}
+
+.resend-link:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.resend-btn-box {
+  border: px solid blue;
+    width: 90%;
+    }
+
+.send-email-form {
+    border: 1px solid #BDBDBD;
+    width: 100%;
+    padding: 19px;
+    
+}
+.send-email-field{ 
+  width: 100%;
+  border: px solid red;
+  margin: 0px 0px 17px;
+  
+ }
+
+ .send-submit-box {
+  width: 100%;
+  display: flex;
+  border: px solid black;
+ } 
+.submit-link, .resend-cancel {
+   width: 40% !important;
+   margin: 4px 4% !important;
+} 
+.resend-cancel {
+  color:#5384e5 !important; 
+  background: #edf0f3 !important;
+} 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (min-width:992px) {
+ body {
+  
+ 
+}  
+
+  
+#root {
+
+  border:px solid black;
+   
+}
+
+.login-page {
+    background:  #edf0f3 url("images/soccer.jpeg") no-repeat;
+    background-size: 100% 100%;
+    height: 98vh;
+    max-height: 500vh;
+   
+}
+
+.login-page {
+  border: 1px solid transparent;
+  width: 100%;
+}
+
+.email-confirmation-page ,.process-pin-page,.registration-container {
+  width: 50%;
+  height: auto;
+  margin: 100px 25%;
+  padding-top: 0px;
+  background: #edf0f3;
+  border:px solid blue !important,  
+    
+}
+
+.navigation-bar  {
+  border: px solid red;
+  display: flex;
+  width: 100%;
+  position: fixed;
+  background:#A33F0B;
+}
+
+.navbar-title-box {
+   border:px solid red;
+   margin: 0px 46%;
+ }
+
+
+ .navbar-title-box p {
+  color: white;
+  line-height: 1;
+  margin-top: 10px;
+  font-size: 20px;
+
+ }
+
+.navbar-link-box {
+    display: none;
+    border: px solid black;
+    width: 37%;
+    
+
+   
+}
+
+
+.social-login {
+  display: flex;
+  margin: 20px 12%;
+  border: px solid red;
+}
+
+
+.btn-twitter {
+  background: #3DC6EE;
+  float: right;
+  color: white;
+  margin-right: 32px;
+}
+
+.btn-facebook {
+  background: #3B5998;
+  color: white;
+  text-align: center;
+  float: right;
+}
+
+.btn-google {
+  background: #dd4b39;
+  color: white;
+  text-align: center;
+  float: left;
+}
+
+.twitter, .facebook,.google {
+  border: px solid red;
+  width: 100%;
+ } 
+
+.btn-sm:focus {
+   border: none !important;
+   box-shadow: none !important;
+}
+
+input:focus; button:focus {
+  outline: 0px transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+}
+
+a:hover {
+  color:white !important;
+  text-decoration: none !important;
+} 
+
+
+input {
+  padding: 2px !important;
+  width: 100%;
+  height: 26px;
+  box-shadow: none;
+  border: 1px solid #D5D7D5;
+  
+}
+
+.or-option {
+  padding-left: 44%;
+  margin: 0px 5%;
+  border-bottom: 3px solid #D2D2D2;
+
+}
+
+
+.name-fields-box {
+  border:px solid black;
+}
+
+.help-text  {
+  border: px solid black;
+   font-size: 8px;
+   margin: 2px 0px;
+
+}
+
+.username-fields {
+   display: flex;
+   border: px solid red;
+
+
+}
+
+
+.name-fields {
+  display: flex;
+  width: 100%;
+  border: px solid red;
+  
+   
+}
+
+.email-fields, .password-fields {
+  border: px solid blue;
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.last-name, .first-name,.pin,.email, .password{
+  font-size: 12px !important;
+  
+}
+
+.first-name {
+  float: left;
+  border: px solid black;
+  margin-right: 1px;
+}
+
+.last-name {
+  float: right;
+  margin-left: 1px;
+}
+
+
+
+.registration-flex-box {
+  border:px solid black !important;
+  display: flex; 
+}
+
+.login-container {
+  border: px solid blue !important;
+  width: 50%;
+}
+.sign-up-container  {
+    border: px solid red; 
+    width: 50%;
+
+}
+
+.login-form {
+  border: px solid blue;
+  
+}
+.sign-up-form {
+  border: px solid red;
+  
+}
+
+ .social-login-label {
+  font-size: 10px;
+  color: black;
+  font-weight: bold;
+  padding: 0px 43%;
+  border:px solid blue; 
+}
+
+.signup-label, .login-label  {
+  font-weight: bold;
+  font-size: 10px;
+  margin:  4px 40% 3px;
+  border: px solid blue !important;
+}
+
+
+.sign-up-form,.login-form {
+  border:1px solid #BDBDBD;
+  padding: 0px 4%;
+  margin: 0px 10% 20%;
+  
+}
+
+.login-fields {
+  margin: 3%;
+  border:px solid black;
+}
+
+.login-password-field, .login-email-field {
+  font-size: 12px;
+  
+}
+
+select:focus,.login-password-field:focus, .login-email-field:focus, 
+input:focus, button:focus {
+  outline: 0px transparent !important;
+
+}
+
+.separator {
+  border: 1px solid #D2D2D2;
+  background: #D2D2D2;
+}
+
+.sign-up-errors {
+   margin: 10px 0px;
+}
+
+.sign-up-errors li {
+  list-style-position: outside;
+   display: flex;
+   font-size: 8px;
+   border: px solid black;  
+   margin: 0% !important;
+}
+
+.sign-up-errors ul {
+  border: px solid blue;
+   list-style-type: none;
+  margin: 0;
+  padding: 0;;
+}
+
+.login-errors {
+  border: px solid blue;
+  font-size: 8px;
+  margin: 0px 10%; 
+
+}
+
+.btn-submit {
+  width: 25%;
+  height: 20px;
+  margin: 8px 0px 14px;
+  font-size: 8px !important;
+  color: white;
+  border: none;
+  background:  #A33F0B;
+
+}
+
+
+.sign-up-cancel {
+  background-color: #edf0f3;
+  color:#5384e5;
+  border: none;
+  width: 25%;
+  height: 20px;
+  font-size: 8px !important;
+  margin-left: 40px;
+}
+
+.submit-box {
+display: flex;
+border:px solid red;
+}
+
+.next-btn {
+   display: none;
+}
+
+.country-field {
+  font-size: 10px;
+}
+
+select {
+  border: 1px solid #D5D7D5;
+  width:100%;
+  color:  grey;
+  background: #edf0f3;
+  font-size: 13px;
+}
+
+.create-account-box  {
+     border: px solid black;
+     width: 100%;
+     padding: 0px 0px 3px; 
+      
+}
+
+.second-box-contents {
+   margin: 10px 10% !important;
+   border:1px solid #BDBDBD;
+}
+
+.greetings {
+  font-size: 11px;
+
+}
+.login-greetings {
+  margin: 8px 10px ;
+   width: 90%;
+   padding: 3px;
+   border:  px solid blue;
+}
+
+.resend-link, .resend-cancel, .js-create-account {
+      border: px solid red;
+      width: 50%;
+      height: 24px;
+      margin-top: 10px;
+      margin-left: 28%;
+      background:  #A33F0B;
+      font-size: 10px !important;
+      color: white !important;
+}
+.password-change {
+  border: px solid blue !important;
+  font-size: 10px;
+  height:17px;
+  margin: 17px 0px 0px 20px; 
+  
+}
+
+button {
+  border: none !important; 
+  box-shadow: none !important; 
+    text-align: center !important;
+    outline: 0px transparent white;
+ }
+
+.email-confirmation-page {
+   border: px solid red;
+   min-height: 140px;
+   padding: 8px 0px;
+
+}
+.confirmation-page-box {
+  border:1px solid #BDBDBD;
+  margin: 4px 4%;
+}
+
+.confirm-msg {
+  border: px solid black;
+   font-size: 13px;
+}
+
+.resend-box {
+  display: flex;
+  padding: 10px;
+  border: px solid red;
+}
+
+.resend {
+  border: px solid blue;
+  width: 100%;
+}
+
+.resend p {
+   border: px solid red;
+   font-size: 10px;
+   margin: 7px 7px;
+   color:   #5384e5; 
+   
+}
+
+.resend-link {
+    margin-left: 0% !important;
+    width: 30% !important;
+}
+
+.resend-link:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.resend-btn-box {
+  border: px solid blue;
+    width: 90%;
+    }
+
+.send-email-form {
+    border: 1px solid #BDBDBD;
+    display: flex;
+    width: 80%;
+    padding: 10px;
+}
+.send-email-field{ 
+  width: 65%;
+  height: 34px;
+  border: px solid red;
+ }
+
+ .send-submit-box {
+  width: 35%;
+  display: flex;
+  border: px solid black;
+ } 
+.submit-link, .resend-cancel {
+   width: 40% !important;
+   margin: 4px 4% !important;
+} 
+.resend-cancel {
+  color:#5384e5 !important; 
+  background: #edf0f3 !important;
+} 
+}
+
+
+
+
+
+
+
