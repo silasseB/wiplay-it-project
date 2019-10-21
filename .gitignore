@@ -6,13 +6,12 @@ __pycache__/
 migrations/
 media/
 .db.sqlite3
-
+node_modules/
 
 
 #--Frontend--
 
 # dependencies
-node_modules
 .pnp
 .pnp.js
 
