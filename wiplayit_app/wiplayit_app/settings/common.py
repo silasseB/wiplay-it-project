@@ -14,7 +14,10 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+<<<<<<< HEAD
 REACT_APP_DIR = os.path.join(BASE_DIR, 'm')
+=======
+>>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 print(BASE_DIR)
 
 
@@ -65,7 +68,11 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 SOCIALACCOUNT_AVATAR_SUPPORT = True
  
+<<<<<<< HEAD
 APPEND_SLASH = True
+=======
+
+>>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 
 
 AUTHENTICATION_BACKENDS = (
@@ -81,7 +88,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+<<<<<<< HEAD
         #'rest_framework.authentication.SessionAuthentication',
+=======
+        'rest_framework.authentication.SessionAuthentication',
+>>>>>>> acdb237ada63660939b02d523edee4585f8b0379
         'rest_framework.authentication.BasicAuthentication',
         ),
 
@@ -204,8 +215,11 @@ TEMPLATES = [
     },
 ]
 
+<<<<<<< HEAD
 #print(TEMPLATES)
 
+=======
+>>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 WSGI_APPLICATION = 'wiplayit_app.wsgi.application'
 
 ROOT_URLCONF = 'wiplayit_app.urls'
@@ -252,7 +266,11 @@ STATICFILES_FINDERS = "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
+<<<<<<< HEAD
     os.path.join(BASE_DIR, 'dist')
+=======
+    os.path.join(BASE_DIR, 'frontend', 'build', 'static')
+>>>>>>> acdb237ada63660939b02d523edee4585f8b0379
 ]
 
 print(STATICFILES_DIRS)
@@ -269,8 +287,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
+<<<<<<< HEAD
             'BUNDLE_DIR_NAME': 'dist/',
             'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+=======
+            'BUNDLE_DIR_NAME': 'bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+>>>>>>> acdb237ada63660939b02d523edee4585f8b0379
         }
 }
 
