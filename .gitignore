@@ -12,15 +12,15 @@ media/
 #--Frontend--
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 
 # testing
 /coverage
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -33,19 +33,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.json~
-<<<<<<< HEAD
-*.js~
 
 .vscode
 
-app_backend/static/
+
 .babelrc
-jsconfig.json
-package-lock.json
-package.json
-static/assets/
-webpack-stats.json
-webpack.config.js
-=======
+
+
 *.js~
 >>>>>>> acdb237ada63660939b02d523edee4585f8b0379
