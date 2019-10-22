@@ -27,7 +27,7 @@ def handler500(request):
     return render(request, 'index.html', status=500)
 
 def index(request):
-	return render(request, 'build/index.html')
+	return render(request, 'index.html')
 
 class IndexView(BaseView, APIView):
 	serializer_class = IndexSerializer
