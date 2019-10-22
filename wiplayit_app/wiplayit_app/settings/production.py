@@ -14,7 +14,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Valoi$wiplayit_project',
-        'USER': 'silasi',
+        'USER': 'Valoi',
         'PASSWORD': 'siLasValoi9020$?',
         'HOST': 'valoi.pythonanywhere.com',
         'PORT': '',
