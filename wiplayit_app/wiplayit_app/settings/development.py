@@ -26,7 +26,8 @@ from wiplayit_app.settings.common import *
 
 DEBUG = True
 
-# Application definition
+INSTALLED_APPS.append('webpack_loader')
+INSTALLED_APPS.append('coverage')
 
 
 ALLOWED_HOSTS = [ '127.0.0.1', '192.168.43.14' ]
@@ -43,6 +44,15 @@ DATABASES = {
     }
 }
 
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'dist/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+            'BUNDLE_DIR_NAME': 'bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+        }
+}
 
 
 CORS_ORIGIN_WHITELIST = ['http://192.168.43.14:3000', 'http://localhost:3000' ]

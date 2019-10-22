@@ -14,13 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REACT_APP_DIR = os.path.join(BASE_DIR, 'm')
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(sm1(p$as-5c)a@)^vthx1g%t+kil^rzxx%mx*!vp@8rbqm7t2'
 
 
@@ -70,7 +65,6 @@ APPEND_SLASH = True
 AUTHENTICATION_BACKENDS = (
 
         'django.contrib.auth.backends.ModelBackend',
-        #'userApp.custom_backend.CustomAuthBackend',
         'guardian.backends.ObjectPermissionBackend',
         'allauth.account.auth_backends.AuthenticationBackend',
         )
@@ -96,7 +90,6 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
    'USER_DETAILS_SERIALIZER'   : 'app_backend.auth_serializers.CustomRegisterSerializer',
    'TOKEN_SERIALIZER'          : 'app_backend.auth_serializers.TokenSerializer',
-   
    'PASSWORD_RESET_SERIALIZER' : 'app_backend.auth_serializers.CustomPasswordResetSerializer',
 }
 
@@ -114,20 +107,15 @@ JWT_AUTH = {
 # Application definition
 
 
-
-
-
 INSTALLED_APPS = [
     'rest_auth.registration',
     'django.contrib.auth',
-    
     'django.contrib.contenttypes',
     'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'webpack_loader',
     'rest_auth',
     'rest_framework.authtoken',
     'corsheaders',
@@ -137,9 +125,7 @@ INSTALLED_APPS = [
     'twilio',
     'guardian',
     'mptt',
-    'coverage',
     'allauth',
-    
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
@@ -251,7 +237,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'dist'),
-    os.path.join(BASE_DIR, 'frontend', 'build', 'static')
+    
 ]
 
 
@@ -260,18 +246,5 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'dist/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-            'BUNDLE_DIR_NAME': 'bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
-        }
-}
 
 
