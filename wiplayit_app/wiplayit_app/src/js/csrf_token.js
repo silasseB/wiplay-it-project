@@ -14,16 +14,20 @@ export  function getCookie(name) {
     
     if (document.cookie && document.cookie !== '') {
         var cookies = document.cookie.split(';');
+        console.log(cookies.length)
         
         for (var i = 0; i < cookies.length; i++) {
             var cookie  = cookies[i].split("=");
-            console.log(cookies) 
-            console.log(cookie) 
-            console.log(cookie[i].trim())
-                       
-            if (name == cookie[i].trim()) {
-                cookieValue = decodeURIComponent(cookie[i + 1]);
-                break;
+            console.log(cookie[i])
+            console.log(cookie[i].trim()) 
+            
+            if (cookie) {
+                console.log(cookie[i].trim())
+
+                if (name === cookie[i].trim()) {
+                    cookieValue = decodeURIComponent(cookie[i + 1]);
+                    break;
+                }
             }
         }
     }
