@@ -17,7 +17,7 @@ from django.contrib import admin
 
 from django.urls import path, include, re_path
 from app_backend.api_views.api_detail_views import index
-from django.urls import path, include
+
 
 
 urlpatterns = [

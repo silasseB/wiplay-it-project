@@ -7,7 +7,7 @@ from wiplayit_app.settings.common import *
 DEBUG = False
 
 
-ALLOWED_HOSTS = [ ]
+ALLOWED_HOSTS = ['valoi.pythonanywhere.com']
 INSTALLED_APPS.append('whitenoise')
 
 DATABASES = {
@@ -21,5 +21,5 @@ DATABASES = {
     }
 }
 
-#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
