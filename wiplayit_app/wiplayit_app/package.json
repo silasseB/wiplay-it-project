@@ -37,7 +37,6 @@
     "jquery": "^3.4.1",
     "material-design-icons": "^3.0.1",
     "popper.js": "^1.15.0",
-    "propper": "^1.0.3",
     "react": "^16.10.2",
     "react-autosize-textarea": "^7.0.0",
     "react-dom": "^16.10.2",
