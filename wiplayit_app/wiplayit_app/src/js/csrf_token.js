@@ -22,7 +22,7 @@ export  function getCookie(name) {
 
             
             if (cookie) {
-                console.log(cookie[i]
+                console.log(cookie[i])
 
                 if (name === cookie[i]) {
                     cookieValue = decodeURIComponent(cookie[i + 1]);
