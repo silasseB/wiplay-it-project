@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django_countries.fields import CountryField
-from django.contrib.auth.models import User, PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin
 from guardian.mixins import GuardianUserMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.base_user import AbstractBaseUser

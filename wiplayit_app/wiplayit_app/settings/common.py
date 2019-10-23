@@ -120,6 +120,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django.contrib.admin',
+    'webpack_loader',
     'app_backend',
     'django_countries',
     'twilio',
@@ -247,4 +248,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
+
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'dist/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+            
+            
+        }
+}
 
