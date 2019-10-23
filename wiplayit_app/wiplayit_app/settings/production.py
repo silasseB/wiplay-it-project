@@ -8,7 +8,7 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = ['valoi.pythonanywhere.com']
-INSTALLED_APPS.append('whitenoise')
+
 
 DATABASES = {
     'default': {
@@ -16,7 +16,7 @@ DATABASES = {
         'NAME': 'Valoi$wiplayit_project',
         'USER': 'Valoi',
         'PASSWORD': 'siLasValoi9020$?',
-        'HOST': 'valoi.pythonanywhere.com',
+        'HOST': 'Valoi.mysql.pythonanywhere-services.com',
         'PORT': '',
     }
 }
