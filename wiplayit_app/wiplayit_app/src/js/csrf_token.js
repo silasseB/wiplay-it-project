@@ -19,12 +19,12 @@ export  function getCookie(name) {
         for (var i = 0; i < cookies.length; i++) {
             var cookie  = cookies[i].split("=");
             console.log(cookie[i])
-            
+
             
             if (cookie) {
-                console.log(cookie[i].trim())
+                console.log(cookie[i]
 
-                if (name === cookie[i].trim()) {
+                if (name === cookie[i]) {
                     cookieValue = decodeURIComponent(cookie[i + 1]);
                     break;
                 }
