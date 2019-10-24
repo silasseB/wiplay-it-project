@@ -19,7 +19,7 @@ export  function getCookie(name) {
         for (var i = 0; i < cookies.length; i++) {
             var cookie  = cookies[i].split("=");
                         
-            if (cookie) {
+            if (cookie && cookie.length) {
                 console.log(cookie)
                 console.log(cookie[i], name)
 
