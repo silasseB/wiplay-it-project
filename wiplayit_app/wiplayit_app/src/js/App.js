@@ -20,7 +20,7 @@ import "./containers/profile/profile.css"
 import './containers/authentication/css/registration-mobile.css';
 import './containers/authentication/css/registration-desktop.css';
 
-//import 'font-awesome/css/font-awesome.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {store} from "./configs/store-config";

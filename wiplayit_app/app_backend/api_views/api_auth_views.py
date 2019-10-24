@@ -1,47 +1,32 @@
-import json
-import itertools
+
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.views import APIView
-from rest_framework import generics, status, permissions
+from rest_framework import status
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from django.http import (
-    Http404,
-    HttpResponsePermanentRedirect,
-    HttpResponseRedirect,HttpResponse
-)
-from rest_framework.test import APIClient
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework_jwt.settings import api_settings
-from rest_framework_jwt.settings import api_settings
-from django.core.serializers.json import DjangoJSONEncoder
 
+from django.http import HttpResponse
+#from django.contrib.auth import authenticate
+
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 from rest_auth.social_serializers import TwitterLoginSerializer 
 from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter	
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter	
 
-from rest_auth.registration.views import SocialLoginView, SocialConnectView
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from rest_auth.registration.views import SocialLoginView
+#from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 
 from allauth.account.utils import complete_signup,  send_email_confirmation
 from allauth.account import app_settings as allauth_settings
 
-from rest_auth.registration.views import RegisterView, VerifyEmailView
+from rest_auth.registration.views import RegisterView 
 from rest_auth.registration.serializers import  VerifyEmailSerializer
 
 from allauth.account.models import  EmailConfirmationHMAC
-from rest_auth.views import LoginView, PasswordResetView
-
+from rest_auth.views import LoginView
 from rest_framework.decorators import api_view
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.core.mail import EmailMessage
 
 from app_backend.models import User
 from app_backend.auth_serializers import CustomRegisterSerializer, CustomLoginSerializer
@@ -76,8 +61,6 @@ class CustomRegisterView(RegisterView):
                         headers=headers)
 
 
-def empty_view(request):
-    return HttpResponse('')	
 
 	
 

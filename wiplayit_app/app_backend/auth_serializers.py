@@ -107,7 +107,7 @@ class CustomPasswordResetSerializer (PasswordResetSerializer):
     
     def get_email_options(self):
         """Override this method to change default e-mail options"""
-        return {"domain_override": "localhost:3000"}
+        return {"domain_override": "valoi.pythonanywhere.com/#/"}
 
 
     def validate_email(self, value):
@@ -157,6 +157,8 @@ class CustomLoginSerializer(LoginSerializer):
 		email = attrs.get('email')
 		password = attrs.get('password')
 		user = None
+
+		print(attrs)
 		
 
 		user = self._validate_email(email, password)

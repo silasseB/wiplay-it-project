@@ -24,13 +24,6 @@ urlpatterns = [
 
     path('rest-auth/resend/account/confirm/email', SendEmailConfirimationView.as_view(),
        name='account_confirm_email'),
-
-
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-         empty_view, name='reset'),
-
-    
-  
         
     ]
 

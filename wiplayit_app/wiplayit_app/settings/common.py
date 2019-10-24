@@ -45,7 +45,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
-ACCOUNT_ADAPTER = 'app_backend.custom_adapter.CustomAccountAdapter'
+ACCOUNT_ADAPTER = 'app_backend.configs.custom_adapter.CustomAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_ADAPTER = 'app_backend.configs.custom_adapter.CustomSocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True

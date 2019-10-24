@@ -9,24 +9,25 @@ const CSRFToken = () => {
 };
 export default CSRFToken;
 
+
+
 export  function getCookie(name) {
     var cookieValue = null;
     
     if (document.cookie && document.cookie !== '') {
         var cookies = document.cookie.split(';');
-        console.log(cookies)
+        
         
         for (var i = 0; i < cookies.length; i++) {
             var cookie  = cookies[i].split("=");
                         
             if (cookie && cookie.length) {
-
-                console.log(cookie, i)
-                console.log(cookie[0].trim(), name)
-
-                if (name === cookie[0].trim()) {
-                    cookieValue = decodeURIComponent(cookie[0 + 1]);
-                    break;
+                for (var x = 0; x < cookie.length; x++) {
+                    
+                    if (name === cookie[x].trim()) {
+                        cookieValue = decodeURIComponent(cookie[x + 1].trim());
+                        break;
+                    }
                 }
             }
         }
