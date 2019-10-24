@@ -14,7 +14,9 @@ export default class Axios {
         this.cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
         this.withAuthentication = props;
         this.baseURL        =  API_URL;
-        //this.MobileAPI_URL  =  'http://192.168.43.14:3000'
+        this.DOMAIN_URL  =  window.location.origin;  // 'valoi.pythonanywhere.com';
+
+        console.log(window.location.origin)
     }
 
     getTokenKey(){
@@ -32,10 +34,10 @@ export default class Axios {
 
 
     axiosInstance(){
-       	let baseURL = API_URL;
+       	let baseURL = this.DOMAIN_URL;
         
     	if(window.navigator.platform === 'Linux armv7l'){
-            baseURL =  MobileAPI_URL;
+            //baseURL =  MobileAPI_URL;
                   
         }
 
