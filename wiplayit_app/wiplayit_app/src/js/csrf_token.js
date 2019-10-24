@@ -22,9 +22,9 @@ export  function getCookie(name) {
             if (cookie && cookie.length) {
 
                 console.log(cookie, i)
-                console.log(cookie[0], name)
+                console.log(cookie[0].trim(), name)
 
-                if (name === cookie[0]) {
+                if (name === cookie[0].trim()) {
                     cookieValue = decodeURIComponent(cookie[0 + 1]);
                     break;
                 }
