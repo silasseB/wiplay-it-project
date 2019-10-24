@@ -73,7 +73,7 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
 
         u = social_login.user
         u.set_unusable_password()
-        print(u.password)
+        print(u)
         #profile = {
          #       "profile_picture": social_login.user.picture
           #    }

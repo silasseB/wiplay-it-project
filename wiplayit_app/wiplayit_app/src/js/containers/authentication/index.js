@@ -10,6 +10,7 @@ import {store} from "../../configs/store-config";
 import Axios from '../../axios_instance';
 import Api from '../../api';
 import Helper from '../../containers/utils/helpers';
+import {authenticate} from '../../dispatch/index';
 import { getCookie } from '../../csrf_token.js';
 
 
@@ -79,14 +80,31 @@ export function withAuthentication(Component) {
 
         responseFacebook(response) {
            //console.log(response.accessToken);
-           var accessToken =  response.accessToken
-           var formData = new FormData();
+           let apiUrl =  api.facebookLoginApi();
+           let accessToken =  response.accessToken
+           let formData = helper.createFormData({"access_token": accessToken});
            console.log(accessToken)
-          
-           formData.append("access_token",accessToken);
-      
-           //var apiUrl =  api.facebookLoginApi(this)
+        
+           
+           return authenticate(apiUrl, formData, store.dispatch)
+           
 
+        };
+
+
+        responseTwitter = (response) => {
+            console.log(response);
+            //var accessToken =  response.accessToken
+            //var apiUrl =  api.twitterLoginApi(this)
+           //this.socialLogin(apiUrl, accessToken)
+        }
+
+
+        responseGoogle = (response)=> {
+           console.log(response);
+           var accessToken =  response.accessToken
+           //var apiUrl =  api.googleLoginApi(this)
+           //this.socialLogin(apiUrl, accessToken)
         };
 
 
@@ -119,22 +137,6 @@ export function withAuthentication(Component) {
 
 
         
-
-        responseTwitter = (response) => {
-            console.log(response);
-            //var accessToken =  response.accessToken
-            //var apiUrl =  api.twitterLoginApi(this)
-           //this.socialLogin(apiUrl, accessToken)
-        }
-
-
-        responseGoogle = (response)=> {
-           console.log(response);
-           //var accessToken =  response.accessToken
-           //var apiUrl =  api.googleLoginApi(this)
-           //this.socialLogin(apiUrl, accessToken)
-        };
-
         toggleSignUpForm = (props)=>{
            console.log(props)
            console.log(props, this.props)
@@ -142,11 +144,13 @@ export function withAuthentication(Component) {
            this.forceUpdate()
         }
 
-        togglePasswordResetForm = (props)=>{
+        togglePasswordResetForm = (props) => {
            console.log(props, this.props)
            this.props.togglePasswordReset(props)
            this.forceUpdate()
         };
+
+
       
       
         getAuthUrl = (formValues)=>{
@@ -154,7 +158,7 @@ export function withAuthentication(Component) {
        	    if (formValues.email && formValues.password &&
                 !formValues.password2 && !formValues.first_name){
 
-       		    return api.logginUser();
+       		       return api.logginUser();
        	    }
         	
        	    else if (formValues.first_name && formValues.last_name){
@@ -171,28 +175,12 @@ export function withAuthentication(Component) {
         };
 
         onSubmit = (values, dispatch) => {
+
             const axiosApi = new Axios(false);
             let apiUrl =  this.getAuthUrl(values);
-                
-            const instance = axiosApi.axiosInstance();
-            store.dispatch(action.authenticationPending()) 
-            
-         
-            return  instance.post(apiUrl, values)
-                .then(response => {
-                    console.log(response)
-                    dispatch(action.authenticationSuccess(response.data))}
-                )
-                .catch(error =>{
-                
-                if (error.response && error.response.data) {
-                    dispatch(action.authenticationError(error.response.data));
-                }
-                else if (error.request) {
-                    alert(apiUrl)
-                    dispatch(action.handleError())
-                }
-            }); 
+
+            return authenticate(apiUrl, values, dispatch);
+           
         }
       
         getProps() {

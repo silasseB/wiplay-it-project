@@ -2,6 +2,7 @@
 from rest_framework import  status
 from rest_framework.response import Response
 from guardian.shortcuts import assign_perm, remove_perm, get_users_with_perms
+from guardian.core import ObjectPermissionChecker
 from app_backend.serializers import BaseUserSerializer
 from app_backend.slug_generator import generate_unique_slug
 from app_backend.helpers import  get_objects_perms

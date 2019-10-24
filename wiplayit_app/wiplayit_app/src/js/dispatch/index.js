@@ -285,6 +285,33 @@ export function handleSubmit(props) {
 };
 
 
+export function authenticate(apiUrl='', values={}, dispatch=function(){}){
+    
+    const axiosApi = new Axios(false);
+    const instance = axiosApi.axiosInstance();
+
+    dispatch(action.authenticationPending());
+                
+         
+    return  instance.post(apiUrl, values)
+            .then(response => {
+            console.log(response)
+            dispatch(action.authenticationSuccess(response.data))}
+        )
+        .catch(error =>{
+                
+            if (error.response && error.response.data) {
+                dispatch(action.authenticationError(error.response.data));
+            }
+            else if (error.request) {
+                alert('Is a request error')
+                dispatch(action.handleError())
+            }
+        });
+   
+}; 
+
+
 const prepPayLoad = (objName, data)=>{
 	
 	if(objName === "question"){
