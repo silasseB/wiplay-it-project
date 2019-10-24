@@ -3,6 +3,7 @@ import axios from 'axios';
 
 let API_URL = 'http://127.0.0.1:8000';
 let MobileAPI_URL = 'http://192.168.43.14:8000'
+
 import { getCookie } from './csrf_token.js';
 
   
@@ -14,9 +15,7 @@ export default class Axios {
         this.cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
         this.withAuthentication = props;
         this.baseURL        =  API_URL;
-        this.DOMAIN_URL  =  window.location.origin;  // 'valoi.pythonanywhere.com';
-
-        console.log(window.location.origin)
+        this.DOMAIN_URL  =  window.location.origin; 
     }
 
     getTokenKey(){
