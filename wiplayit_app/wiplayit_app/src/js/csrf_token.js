@@ -20,11 +20,12 @@ export  function getCookie(name) {
             var cookie  = cookies[i].split("=");
                         
             if (cookie && cookie.length) {
-                console.log(cookie, i)
-                console.log(cookie[i], name)
 
-                if (name === cookie[i]) {
-                    cookieValue = decodeURIComponent(cookie[i + 1]);
+                console.log(cookie, i)
+                console.log(cookie[0], name)
+
+                if (name === cookie[0]) {
+                    cookieValue = decodeURIComponent(cookie[0 + 1]);
                     break;
                 }
             }
