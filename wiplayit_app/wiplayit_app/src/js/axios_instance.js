@@ -36,12 +36,7 @@ export default class Axios {
     axiosInstance(){
        	let baseURL = this.DOMAIN_URL;
         
-    	if(window.navigator.platform === 'Linux armv7l'){
-            //baseURL =  MobileAPI_URL;
-                  
-        }
-
-        var instance = axios.create({
+    	var instance = axios.create({
             baseURL: baseURL,
         });
 

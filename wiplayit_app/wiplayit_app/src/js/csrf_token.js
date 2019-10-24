@@ -15,6 +15,7 @@ export  function getCookie(name) {
     if (document.cookie && document.cookie !== '') {
         var cookies = document.cookie.split(';');
         console.log(cookies.length)
+        console.log(cookies)
         
         for (var i = 0; i < cookies.length; i++) {
             var cookie  = cookies[i].split("=");
@@ -22,7 +23,7 @@ export  function getCookie(name) {
 
             
             if (cookie) {
-                console.log(cookie[i])
+                console.log(cookie[i], name)
 
                 if (name === cookie[i]) {
                     cookieValue = decodeURIComponent(cookie[i + 1]);
