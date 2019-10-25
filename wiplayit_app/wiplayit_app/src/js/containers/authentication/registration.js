@@ -17,7 +17,7 @@ class RegistrationPage extends Component {
       super(props);
 
       this.state = {
-         navbarTitle                : 'Joining Latiro', 
+         navbarTitle : 'Joining Wiplayit', 
       }
 
     }
@@ -37,7 +37,7 @@ class RegistrationPage extends Component {
 
    render() {
       let props = this.getProps();
-      console.log(this.props)
+     
       return (
          <div> 
             <div>

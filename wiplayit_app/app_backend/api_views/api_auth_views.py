@@ -5,9 +5,6 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-from django.http import HttpResponse
-#from django.contrib.auth import authenticate
-
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
 from rest_auth.social_serializers import TwitterLoginSerializer 
@@ -16,7 +13,6 @@ from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter	
 
 from rest_auth.registration.views import SocialLoginView
-#from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 
 from allauth.account.utils import complete_signup,  send_email_confirmation
 from allauth.account import app_settings as allauth_settings

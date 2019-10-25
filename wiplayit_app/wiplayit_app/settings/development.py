@@ -25,7 +25,7 @@ from wiplayit_app.settings.common import *
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = True
-
+SITE_ID = 1
 
 INSTALLED_APPS.append('coverage')
 

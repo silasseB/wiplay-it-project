@@ -5,7 +5,7 @@ from wiplayit_app.settings.common import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
+SITE_ID = 2
 
 ALLOWED_HOSTS = ['valoi.pythonanywhere.com']
 

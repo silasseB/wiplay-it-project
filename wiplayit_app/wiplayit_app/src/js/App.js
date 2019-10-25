@@ -38,7 +38,7 @@ import  QuestionPage    from "./containers/question/question_page"
 import ProfilePage from "./containers/profile/profile_page";
 import  PasswordChangePage from "./containers/authentication/password_change_page";
 import EmailResendPage    from "./containers/authentication/email_resend_page"
-import PasswordResetForm   from "./containers/authentication/password_reset_form" 
+import PasswordResetPage   from "./containers/authentication/password_reset_page" 
 
 import AccountConfirmationPage from "./containers/authentication/account_confirmation_page"
 import UserListBox from "./containers/users/user_list_page"; 
@@ -46,22 +46,8 @@ import UserListBox from "./containers/users/user_list_page";
 
 export const history = createHashHistory();
 
-// Get the current location.
-const location = history.location;
-console.log(location);
 
 
-// Listen for changes to the current location.
-const unlisten = history.listen((location, action) => {
-  // location is an object like window.location
-  console.log(action, location.pathname, location.state);
-});
-
-// Use push, replace, and go to navigate around.
-//history.push('/home', { some: 'state' });
-
-// To stop listening, call the function returned from listen().
-unlisten();
 
 function App() {
   return (
@@ -88,7 +74,7 @@ function App() {
             <Route  path="/post/:slug/followings/" component={UserListBox} />
             <Route  path="/users/" component={UserListBox}/>
             <Route  path="/registration/account/confirm/:key/" component={AccountConfirmationPage} />
-            <Route  path="/user/account/password/reset/" component={PasswordResetForm} />
+            <Route  path="/user/account/password/reset/" component={PasswordResetPage} />
             <Route  path="/reset/:uid/:token/" component={PasswordChangePage} />
             <Route  path="/account/email/resend/" component={EmailResendPage} />
             <Route  path="/:slug/answer/" component={QuestionPage}/>
@@ -101,3 +87,7 @@ function App() {
 }
 
 export default App;
+
+
+
+

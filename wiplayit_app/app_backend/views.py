@@ -10,7 +10,13 @@ from rest_framework_guardian import filters
 from app_backend.helpers import get_objects_perms, get_model_fields
 from app_backend.models import *
 
-from app_backend.serializers import *
+from app_backend.serializers import (UserSerializer, QuestionSerializer, QuestionReadSerializer,
+	                                 AnswerReadSerializer, AnswerSerializer, AnswerCommentSerializer,
+	                                 AnswerCommentReadSerializer, AnswerReplySerializer,
+	                                  AnswerReplyReadSerializer )
+
+from app_backend.serializers import (PostSerializer, PostReadSerializer, PostCommentSerializer,
+	                                PostCommentReadSerializer, PostReplySerializer, PostReplyReadSerializer )
 
 
 class BaseView():

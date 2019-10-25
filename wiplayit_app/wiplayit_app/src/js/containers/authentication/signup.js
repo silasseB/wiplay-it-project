@@ -12,6 +12,7 @@ class SignUpPage extends Component {
     super(props);
 
       this.state = {
+        navbarTitle : 'Signing on Wiplayit',
       }
    }
 
@@ -21,7 +22,7 @@ class SignUpPage extends Component {
 
    getProps(){
       let props = {
-     
+          navbarTitle  : this.state.navbarTitle,
       }
 
     return Object.assign(props,this.props )
@@ -37,7 +38,7 @@ class SignUpPage extends Component {
     return (
           <div className="login-page"> 
             <div>
-              <NavBar {...props.signupFormState}/>
+              <NavBar {...props}/>
             </div>
           
             <div className="registration-container">

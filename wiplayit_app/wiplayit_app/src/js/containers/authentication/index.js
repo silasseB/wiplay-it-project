@@ -84,10 +84,14 @@ export function withAuthentication(Component) {
            let accessToken =  response.accessToken
            let formData = helper.createFormData({"access_token": accessToken});
            console.log(accessToken)
-        
-           
-           return authenticate(apiUrl, formData, store.dispatch)
-           
+
+           console.log(accessToken)
+            if (accessToken) {
+                return authenticate(apiUrl, formData, store.dispatch);
+            }
+
+            return ;
+
 
         };
 
@@ -101,10 +105,18 @@ export function withAuthentication(Component) {
 
 
         responseGoogle = (response)=> {
-           console.log(response);
-           var accessToken =  response.accessToken
-           //var apiUrl =  api.googleLoginApi(this)
-           //this.socialLogin(apiUrl, accessToken)
+            console.log(response);
+            var accessToken =  response.accessToken
+            var apiUrl =  api.googleLoginApi();
+
+            let formData = helper.createFormData({"access_token": accessToken});
+            console.log(accessToken)
+            if (accessToken) {
+                return authenticate(apiUrl, formData, store.dispatch);
+            }
+
+            return ;
+           
         };
 
 
@@ -199,8 +211,7 @@ export function withAuthentication(Component) {
 
         render() {
             let props = this.getProps(); 
-            console.log(props)
-
+           
             return (
                <div>
                     <div>

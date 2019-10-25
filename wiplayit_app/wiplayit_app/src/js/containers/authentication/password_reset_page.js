@@ -1,56 +1,43 @@
 import React, { Component } from 'react';
 import  withAuthentication   from '../../containers/authentication/index'; 
  
-import { NavBar, EmailForm } from '../../components/registration'
+import { NavBar, ReduxEmailForm } from '../../components/registration'
 
 
 
 
 class PasswordResetPage extends Component{
 
-   constructor(props) {
-      super(props);
+    constructor(props) {
+        super(props);
 
-      this.state = {
-         formName           : 'password_reset',
-         formTitle          : 'Password Reset',
+        this.state = {
+            formName       : 'password_reset',
+            navbarTitle    : 'Password Reset',
                              
-      };
+        };
     
-   }
+   };
 
       
-   componentDidMount() {
-    
-   }
-
-
-
-   getProps(){
-
-      let props = {
-                     
-      };
-
-      let parentProps =  this.props; 
-         
-
-      return Object.assign(props, parentProps );
-   }
+    getProps(){
+          
+        return Object.assign(this.state, this.props );
+    }
  
 
-   render(){
+    render(){
       
-      let props = this.getProps();
+        let props = this.getProps();
 
-      return (
-         <div>
-            <NavBar {...props}/>
-            <EmailForm {...props}/>
-         </div>
-      )
-   }
-}
+        return (
+            <div>
+                <NavBar {...props}/>
+                <ReduxEmailForm {...props}/>
+            </div>
+        )
+    };
+};
 
 
 

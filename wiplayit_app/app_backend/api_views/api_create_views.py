@@ -4,13 +4,14 @@ from app_backend.models import DraftEditorMediaContnent
 
 from app_backend.serializers import DraftEditorContentsSerializer
 
-from app_backend.views import *
+from app_backend.views import (BaseApiView, PostView, PostCommentView, PostReplyView, PostChildReplyView,
+	                            QuestionView, AnswerView, AnswerCommentView, AnswerReplyView, AnswerChildReplyView)
 from app_backend.mixins.views_mixins import CreateMixin
 
 
 
 
-class CreatePost(CreateMixin, PostView):
+class CreatePostView(CreateMixin, PostView):
 
 	def get_object(self):
 		pass    
@@ -42,13 +43,13 @@ class CreatePostReplyChildView(CreateMixin, PostChildReplyView):
     
 		
 
-class CreateQuestion(CreateMixin , QuestionView):
+class CreateQuestionView(CreateMixin , QuestionView):
 
 	def get_object(self):
 		pass    
     	
 
-class CreateAnswer(CreateMixin, AnswerView):
+class CreateAnswerView(CreateMixin, AnswerView):
 		
 	def get_object(self):
 		return get_object_or_404(Question, id=self.kwargs['pk'])  

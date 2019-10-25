@@ -1,29 +1,13 @@
 import os
-import itertools
 from django.conf import settings
 from django.db import models 
-from django.core.validators import RegexValidator
-from django.utils.text import slugify
-from django.utils import timezone  
-from guardian.shortcuts import assign_perm
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from PIL import Image
 
 from app_backend.slug_generator import generate_unique_slug
 import mptt
 from mptt.models import MPTTModel, TreeForeignKey
 
-from django_countries.fields import CountryField
-#from phonenumber_field.modelfields import PhoneNumberField
 
-''''
-class BaseModel(models.Model):
-	created_at   = models.DateTimeField(auto_now_add=True, blank=True)
-	created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
-	upvotes      = models.IntegerField(default=0)
-'''
 
 
 #Quetion model
@@ -46,7 +30,7 @@ class Question(models.Model):
 	#@models.permalink
 	def get_absolute_url(self):
 		from django.urls import reverse
-		return reverse('question_app:question-page', args=[self.id, self.slug])
+		return reverse('retrieve_apis : question', args=[self.id, self.slug])
 
 	def save(self, *args, **kwargs):
 		if not self.slug:

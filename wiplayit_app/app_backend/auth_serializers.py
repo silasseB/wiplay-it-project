@@ -1,23 +1,11 @@
-import json
-from django.conf import settings
+
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
 
-from allauth.account import app_settings as allauth_settings
-
 from rest_framework import serializers, exceptions
-
-from rest_framework import serializers
-from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from django.core.serializers.json import Serializer, DjangoJSONEncoder
-from rest_auth.serializers import UserDetailsSerializer,LoginSerializer,  PasswordResetSerializer
+from rest_auth.serializers import LoginSerializer,  PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer, VerifyEmailSerializer,SocialLoginSerializer
-from rest_framework.authtoken.models import Token
-from allauth.account.utils import complete_signup,  send_email_confirmation
-from allauth.account.forms import ResetPasswordForm
-from allauth.account.adapter import get_adapter
-from allauth.account.utils import setup_user_email
 
 from .models import  User, Profile
 
@@ -148,19 +136,16 @@ class CustomLoginSerializer(LoginSerializer):
 
 		else:
 			user = authenticate(email=email, password=password)
-
-
+			
 		return user
 
 
 	def validate(self, attrs):
-		email = attrs.get('email')
+
+		email    = attrs.get('email')
 		password = attrs.get('password')
-		user = None
-
-		print(attrs)
+		user     = None
 		
-
 		user = self._validate_email(email, password)
 
 

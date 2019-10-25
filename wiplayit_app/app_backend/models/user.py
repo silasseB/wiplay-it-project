@@ -6,10 +6,6 @@ from django.core.files.base import ContentFile
 from django.core import files
 from django.db import models
 from django.conf import settings
-
-from django.utils import timezone
-from django.core.validators import RegexValidator
-from django_countries.fields import CountryField
 from django.contrib.auth.models import PermissionsMixin
 from guardian.mixins import GuardianUserMixin
 from guardian.shortcuts import assign_perm

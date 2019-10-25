@@ -478,7 +478,7 @@ const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 900px)')
       <div className="social-login">
         <div className="google-login-box">
            <GoogleLogin
-               clientId = "276296526873-49h13iojgms8bgdsqrkk3dmej45qo8fu.apps.googleusercontent.com"
+               clientId = "499495811255-0v3hjt4lena190or9euvdla2qi5f8qrk.apps.googleusercontent.com"
                fields="first_name,last_name,email,picture"
                onSuccess={props.responseGoogle}
                onFailure={props.responseGoogle}

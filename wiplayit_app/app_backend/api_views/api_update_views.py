@@ -1,7 +1,6 @@
-from app_backend.models import *
 
-from app_backend.serializers import *
-from app_backend.views import *
+from app_backend.views import (UserView,PostView, PostCommentView, PostReplyView, 
+                                QuestionView, AnswerView, AnswerCommentView, AnswerReplyView )
 from app_backend.mixins.views_mixins import  UpdateObjectMixin
 
 
