@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers, exceptions
 from rest_framework.authtoken.models import Token
 from rest_auth.serializers import LoginSerializer,  PasswordResetSerializer
-from rest_auth.registration.serializers import RegisterSerializer, VerifyEmailSerializer,SocialLoginSerializer
+from rest_auth.registration.serializers import RegisterSerializer, SocialLoginSerializer
 
 from .models import  User, Profile
 

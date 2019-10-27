@@ -66,28 +66,6 @@ class Answer(models.Model):
 		return reverse('question_app:answer-page', args=[self.id])
 
 
-class DraftEditorMediaContnent(models.Model):
-    
-
-    #Stores draft editor content files 
-    def get_upload_path(self, filename):
-        return os.path.join('draft-editor-files', filename) 
-
-    draft_editor_file = models.FileField(upload_to=get_upload_path, null=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE, 
-                              blank=True, null=True) 
-
-
-    class Meta:
-        db_table = "draft_editor_contents"
-        permissions = (
-            ('view_draft_editor_files', 'Can View Draft Editor Files'),
-        )
-    
-    def __str__(self):
-        return "{0}".format(self.id)
-
 
 
 
@@ -142,12 +120,12 @@ class AnswerReply(MPTTModel):
 
     def serializable_object(self):
         children = []
-        for child in Reply.objects.filter(parent=self.pk):
+        for child in AnswerReply.objects.filter(parent=self.pk):
             children.append(child)
         return children
 
     def children(self):
-        return Reply.objects.filter(parent=self.pk)
+        return AnswerReply.objects.filter(parent=self.pk)
 
     
     def __str__(self):
@@ -310,3 +288,27 @@ class SendMessage(models.Model):
 
 
  
+
+class DraftEditorMediaContent(models.Model):
+    
+
+    #Stores draft editor content files 
+    def get_upload_path(self, filename):
+        return os.path.join('draft-editor-files', filename) 
+
+    draft_editor_file = models.FileField(upload_to=get_upload_path, null=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              on_delete=models.CASCADE, 
+                              blank=True, null=True) 
+
+
+    class Meta:
+        db_table = "draft_editor_contents"
+        permissions = (
+            ('view_draft_editor_files', 'Can View Draft Editor Files'),
+        )
+    
+    def __str__(self):
+        return "{0}".format(self.id)
+
+

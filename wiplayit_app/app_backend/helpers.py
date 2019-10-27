@@ -1,5 +1,5 @@
 from guardian.shortcuts import get_users_with_perms
-
+from guardian.core import ObjectPermissionChecker
 
 def get_users_with_permissions(obj,  permission_name=None):
 		users = []
@@ -135,4 +135,16 @@ def get_model_fields(for_model=None):
 	
 	
 	
-	
+def permission_checker(user=None):
+
+	if user is not None:
+		return ObjectPermissionChecker(user)
+	return user	
+
+
+def has_perm(user, perm, instance ):
+
+	checker = permission_checker(user)
+	return checker.has_perm(perms, instance)
+
+

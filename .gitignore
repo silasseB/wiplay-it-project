@@ -40,4 +40,6 @@ yarn-error.log*
 
 
 *.js~
->>>>>>> acdb237ada63660939b02d523edee4585f8b0379
+*.ttf
+*.eot
+

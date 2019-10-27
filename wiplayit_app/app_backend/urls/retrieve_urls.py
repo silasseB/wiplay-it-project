@@ -26,7 +26,7 @@ urlpatterns = [
         path("api/main/", IndexView.as_view(), name='main'),
 
 
-        path("api/question/<int:pk>/", RetrieveQuestionView.as_view({'get':'retrieve'}), name="question"),
+        path("api/question/<int:pk>/", RetrieveQuestionView.as_view({'get':'retrieve'}), name="questionk"),
         path("api/question/list/", RetrieveQuestionListView.as_view({'get':'list'}), name="question_list"),
         path("api/answer/<int:pk>/comment/list/", RetrieveAnswerCommentListView.as_view({'get':'list','post':'post' }), 
                                                                                                name="comment_list"),

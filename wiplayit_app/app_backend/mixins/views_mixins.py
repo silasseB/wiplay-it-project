@@ -5,7 +5,7 @@ from guardian.shortcuts import assign_perm, remove_perm, get_users_with_perms
 from guardian.core import ObjectPermissionChecker
 from app_backend.serializers import BaseUserSerializer
 from app_backend.slug_generator import generate_unique_slug
-from app_backend.helpers import  get_objects_perms
+from app_backend.helpers import  get_objects_perms, has_perm
 
 
 	
@@ -35,8 +35,7 @@ class BaseMixin(object):
     	data = dict()
     	related_field  = self.fields_to_update.get('related_field', False) 
     	text_field     = self.fields_to_update.get('text_field', False)
-    	print(hasattr(self, 'is_user'))
-
+    	
     	 
     	if  hasattr(self, 'is_user'):
     		data = self.update_user_fields(instance)
@@ -81,14 +80,14 @@ class BaseMixin(object):
     	return	
         
     	
-      	
+    '''  	
     def check_perm(self, perms, instance ):
-    	return self.checker().has_perm(perms, instance)
+    	checker = permission_checker(self.request.user)
+    	return checker.has_perm(perms, instance)
+    '''
     	
     	
-    def checker(self):
-    	return ObjectPermissionChecker(self.request.user) 
-    	
+        	
        	
     def remove_perm(self, perm, instance, user=None):
     	if user is None:

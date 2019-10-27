@@ -1,35 +1,32 @@
 from rest_framework import serializers
-from .models import *
-from django.utils import timezone
-from django.utils.timezone import get_current_timezone  
-import pytz
-from guardian.core import ObjectPermissionChecker
-from guardian.shortcuts import assign_perm, remove_perm
+from .models import (Question, Post, Answer, AnswerComment, AnswerReply,
+	                  PostComment, PostReply, DraftEditorMediaContent)
+
 from .mixins.serializer_mixins import SerializerMixin, ModelSerializerMixin
 from .auth_serializers import  BaseUserSerializer
-from .helpers import get_users_with_permissions, get_objects_perms
+from .helpers import get_users_with_permissions, permission_checker, has_perm
+
 
 
 class BaseSerializer(ModelSerializerMixin, serializers.ModelSerializer):
 	user_can_edit   = serializers.SerializerMethodField()
+
+	def current_user(self):
+		return self.context.get('request', None)
 	
 	
 	def get_user_can_edit(self, obj):
-		checker = self.checker()
+				
 		edit_perms = self.get_obj_permissions('edit_perms')
 		
 		if edit_perms:
-			return checker.has_perm(edit_perms[0], obj) or checker.has_perm(edit_perms[1], obj)
+			can_edit = has_perm(self.current_user, edit_perms[0], obj) or has_perm(self.current_user , edit_perms[1], obj)
+			return can_edit
 			
 		return False
-		
-	def checker(self):
-		request = self.context.get('request', None)
-		return ObjectPermissionChecker(request.user)
-		
-		
+
+			
 	
-		
 		
 	def get_obj_permissions(self, perm_to=None):
 		permissions = self.context.get('permissions', None)
@@ -49,7 +46,7 @@ class BaseChildSerializer(BaseSerializer):
 		perms = self.get_obj_permissions('upvotes_perms')
 
 		if perms:
-			return self.checker().has_perm(perms, obj)
+			return has_perm(self.current_user, perms, obj)
 
 		return False
 
@@ -62,7 +59,7 @@ class UserSerializer(BaseSerializer, BaseUserSerializer):
 				                
 	def get_user_is_following(self, obj):
 		perms = self.get_obj_permissions('followers_perms')
-		return self.checker().has_perm(perms, obj)
+		return has_perm(self.current_user ,perms, obj)
 	
 
 
@@ -230,7 +227,7 @@ class QuestionSerializer(BaseChildSerializer):
 	
 	def get_user_is_following(self, obj):
 		perms = self.get_obj_permissions('followers_perms')
-		return self.checker().has_perm(perms, obj)
+		return has_perm(self.current_user, perms, obj)
 		
 		
 	
@@ -307,7 +304,7 @@ class UserProfileSerializer(UserSerializer):
 		
 class DraftEditorContentsSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = DraftEditorMediaContnent 
+		model = DraftEditorMediaContent
 		fields = '__all__'
 
 
