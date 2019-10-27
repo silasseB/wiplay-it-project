@@ -1,17 +1,11 @@
-
-from django.conf import settings
-from django.conf.urls.static import static
 from django.conf.urls import url
-from django.urls import path, include, register_converter, re_path
-from rest_auth.views import PasswordResetConfirmView
-from app_backend.api_views.api_auth_views import *
-from allauth.account.views import confirm_email
+from django.urls import path, re_path
+from app_backend.api_views.api_auth_views import ( FacebookLogin, TwitterLogin, GoogleLogin,
+                                                   CustomRegisterView, CustomLoginView, CustomVerifyEmailView,
+                                                   SendEmailConfirimationView )
 
 
-
-#register_converter(converters.FourDigitYearConverter, 'yyyy')
-
-app_name = 'user_app'
+app_name = 'rest_auth_apis'
 
 urlpatterns = [
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
@@ -27,6 +21,3 @@ urlpatterns = [
         
     ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

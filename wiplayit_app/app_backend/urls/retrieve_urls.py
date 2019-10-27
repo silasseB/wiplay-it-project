@@ -1,5 +1,5 @@
 
-from django.urls import path, re_path
+from django.urls import path
 from app_backend.api_views.api_detail_views import ( RetrieveQuestionView, RetrieveQuestionListView,
                                                     RetrieveAnswerCommentListView, RetrieveAnswerReplyListView,
                                                     RetrieveAnswerReplyChildrenListView,RetrieveQuestionFollowers,
