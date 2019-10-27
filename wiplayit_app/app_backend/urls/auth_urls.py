@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from django.urls import path, re_path
+from django.urls import path
 from app_backend.api_views.api_auth_views import ( FacebookLogin, TwitterLogin, GoogleLogin,
                                                    CustomRegisterView, CustomLoginView, CustomVerifyEmailView,
                                                    SendEmailConfirimationView )

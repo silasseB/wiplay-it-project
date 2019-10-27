@@ -305,7 +305,6 @@ class CreateMixin(BaseMixin):
 
 		if edit_perms is not None:
 			for perm in edit_perms:
-				print(perm)
 				self.assign_perm(perm, instance)
 						
 		return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -1,7 +1,9 @@
 
 from django.shortcuts import get_object_or_404
-from app_backend.models import DraftEditorMediaContent
+from app_backend.helpers import get_objects_perms
 
+from app_backend.models import ( User, Question, Post, Answer, AnswerComment, AnswerReply,
+	                  PostComment, PostReply, DraftEditorMediaContent )
 from app_backend.serializers import DraftEditorContentsSerializer
 
 from app_backend.views import (BaseApiView, PostView, PostCommentView, PostReplyView, PostChildReplyView,
@@ -86,16 +88,16 @@ class CreateAnswerReplyChildView(CreateMixin , AnswerChildReplyView):
 class CreateDraftEditorContentsView(CreateMixin, BaseApiView):
 	queryset = DraftEditorMediaContent.objects.all()
 	serializer_class = DraftEditorContentsSerializer
-	permissions = 'view_draft_editor_files'
+	permissions = get_objects_perms('draft_editor_contents_perms')
 
 	def post(self, request):
 		editor_file = request.data.get('draft_editor_file')
 		
 		data = {
-		'draft_editor_file' : editor_file,
+		  'draft_editor_file' : editor_file,
 		}
 
-		serializer = self.create(data, permissions)
+		serializer = self.create(data)
 
 		return serializer
 	

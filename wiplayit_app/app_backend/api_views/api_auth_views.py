@@ -22,10 +22,11 @@ from rest_auth.registration.serializers import  VerifyEmailSerializer
 
 from allauth.account.models import  EmailConfirmationHMAC
 from rest_auth.views import LoginView
-from rest_framework.decorators import api_view
 
 from app_backend.models import User
-from app_backend.auth_serializers import CustomRegisterSerializer, CustomLoginSerializer
+from app_backend.auth_serializers import ( CustomRegisterSerializer,
+                                           CustomLoginSerializer,
+                                           EmailSerializer )
 
 
 
@@ -67,8 +68,6 @@ class CustomLoginView(LoginView):
 	
 	
 	def post(self, request, *args, **kwargs):
-		email = request.data.get("email")
-		password = request.data.get("password")
 		self.request = request
 
 		self.serializer = self.get_serializer(data=self.request.data,

@@ -57,6 +57,11 @@ def get_objects_perms(perms_for=None):
 		'post_reply_perms' : {
 		    'edit_perms': ['change_postreply' ,'delete_postreply'],
 		    'upvotes_perms':"change_post_reply_upvotes"
+		},
+
+		'draft_editor_contents_perms' : {
+		    'edit_perms': ['delete_drafteditormediacontnent' ,'change_drafteditormediacontnent',
+		                                                         'view_drafteditormediacontnent'],
 		}
     }
 		         
@@ -145,6 +150,6 @@ def permission_checker(user=None):
 def has_perm(user, perm, instance ):
 
 	checker = permission_checker(user)
-	return checker.has_perm(perms, instance)
+	return checker.has_perm(perm, instance)
 
 

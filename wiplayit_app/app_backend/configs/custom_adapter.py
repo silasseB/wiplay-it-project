@@ -2,12 +2,12 @@
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.utils import build_absolute_uri
-from django.conf import settings
+
 
 class CustomAccountAdapter(DefaultAccountAdapter):
 
     def get_email_confirmation_url(self, request, emailconfirmation):
-        url = "http://localhost:3000/registration/account/confirm/" + emailconfirmation.key + "/"
+        url = "https://valoi.pythonanywhere.com/#/registration/account/confirm/" + emailconfirmation.key + "/"
         ret = build_absolute_uri(
             request,
             url)

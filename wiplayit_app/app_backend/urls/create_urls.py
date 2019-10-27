@@ -2,7 +2,7 @@
 from django.urls import path
 
 from app_backend.api_views.api_create_views import ( CreateQuestionView, CreateAnswerView, CreateAnswerCommentView,
-                                          CreateAnswerReplyView, CreateAnswerReplyView, CreateAnswerReplyChildView,
+                                          CreateAnswerReplyView, CreateAnswerReplyChildView,
                                           CreatePostView, CreatePostCommentView, CreatePostReplyView, 
                                           CreatePostReplyChildView,
                                           CreateDraftEditorContentsView )
