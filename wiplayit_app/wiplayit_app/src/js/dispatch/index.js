@@ -1,4 +1,5 @@
 
+import { SubmissionError } from 'redux-form'; 
 import Api from '../api';
 import Axios from '../axios_instance';
 import  * as action  from '../actions/actionCreators';
@@ -301,6 +302,9 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
         .catch(error =>{
                 
             if (error.response && error.response.data) {
+                console.log(error.response.data)
+                throw new SubmissionError(error.response.data)
+
                 dispatch(action.authenticationError(error.response.data));
             }
             else if (error.request) {

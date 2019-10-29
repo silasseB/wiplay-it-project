@@ -3,7 +3,7 @@ import React from 'react';
 //import {DefaultWrongPage} from "components/partial_components"
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-
+import { SubmissionError } from 'redux-form'; 
 import  * as action  from '../../actions/actionCreators';
 
 import {store} from "../../configs/store-config";
@@ -79,13 +79,11 @@ export function withAuthentication(Component) {
         };
 
         responseFacebook(response) {
-           //console.log(response.accessToken);
-           let apiUrl =  api.facebookLoginApi();
-           let accessToken =  response.accessToken
-           let formData = helper.createFormData({"access_token": accessToken});
-           console.log(accessToken)
-
-           console.log(accessToken)
+            
+            let apiUrl =  api.facebookLoginApi();
+            let accessToken =  response.accessToken
+            let formData = helper.createFormData({"access_token": accessToken});
+           
             if (accessToken) {
                 return authenticate(apiUrl, formData, store.dispatch);
             }
@@ -121,7 +119,7 @@ export function withAuthentication(Component) {
 
 
         componentDidUpdate(nextProps , prevState){
-            console.log(nextProps, prevState)
+           
         };
 
 
@@ -129,9 +127,8 @@ export function withAuthentication(Component) {
             const onStoreChange = () => {
                 let  onStoreUpdate = store.getState();   
                 var userAuth = onStoreUpdate.entyties.userAuth;
-                console.log(userAuth, onStoreUpdate)
-
-                if(userAuth && userAuth.auth && userAuth.auth.isLoggedIn){
+                
+                if(userAuth && userAuth.auth && userAuth.auth.isLoggedIn && userAuth.auth.tokenKey){
                    console.log(userAuth.auth)
                    this.Redirect();
                 }
@@ -165,35 +162,40 @@ export function withAuthentication(Component) {
 
       
       
-        getAuthUrl = (formValues)=>{
-        	
-       	    if (formValues.email && formValues.password &&
-                !formValues.password2 && !formValues.first_name){
+        getAuthUrl = (formName)=>{
 
-       		       return api.logginUser();
-       	    }
-        	
-       	    else if (formValues.first_name && formValues.last_name){
-       		    return api.createUser();
-       	    }
+            switch(formName){
 
-       	    else if (formValues.password2 && formValues.password1){
-       		    return api.passwordChangeApi();
-       	    } 
-        	
-       	    else{
-                return  api.passwordResetApi();
-    	    }
+                case 'login':
+                    return api.logginUser();
+
+                case 'signUp':
+                    return api.createUser();
+
+                case 'passwordChange':
+                    return api.passwordChangeApi();
+
+                case 'emailForm':
+                    return api.passwordResetApi();
+
+                default:
+                    return  '';
+
+            };
+       	    
         };
 
-        onSubmit = (values, dispatch) => {
+
+        onSubmit = (values, dispatch, props) => {
+            console.log(props)
 
             const axiosApi = new Axios(false);
-            let apiUrl =  this.getAuthUrl(values);
+            let apiUrl =  this.getAuthUrl(props.form);
 
             return authenticate(apiUrl, values, dispatch);
            
-        }
+        };
+
       
         getProps() {
             let  props = {
@@ -206,7 +208,7 @@ export function withAuthentication(Component) {
             };
          
             return Object.assign(props, this.props);
-        }
+        };
     
 
         render() {

@@ -594,13 +594,14 @@ export const authenticationPending = () => ({
 
 
 export const authenticationSuccess = (tokenKey) => {
-      console.log(tokenKey)
+      
+      var isLoggedIn = tokenKey && tokenKey.key?true:false;
       return {
          type   : types.USER_AUTHENTICATION.SUCCESS,
          payload : {
             auth :{
                 tokenKey   : tokenKey.key,
-                isLoggedIn : true,
+                isLoggedIn,
             },
 
             isLoading  : false,

@@ -13,6 +13,7 @@ from app_backend.views import ( BaseView, UserView, QuestionView, PostDetailView
                                 PostCommentDetailView,PostReplyDetailView,
 	                            QuestionDetailView, AnswerCommentDetailView, 
 	                            AnswerReplyDetailView )
+from app_backend.auth_serializers import BaseUserSerializer
 from app_backend.serializers import IndexSerializer, UserProfileSerializer
 from app_backend.mixins.views_mixins import RetrieveMixin
 

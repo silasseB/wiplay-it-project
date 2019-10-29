@@ -95,7 +95,7 @@ const InitialState = () => {
 export function entyties(state=InitialState(), action) {
    switch (action.type){
 
-       case types.USER_AUTHENTICATION.PENDING :
+      case types.USER_AUTHENTICATION.PENDING :
          Object.assign(state, action.payload)
          return state; 
 

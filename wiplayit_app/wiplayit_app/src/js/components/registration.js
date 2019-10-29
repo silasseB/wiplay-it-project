@@ -10,7 +10,7 @@ import  AjaxLoader from "../components/ajax-loader";
 
 
 const  LoginFormComponent = props => {
-
+   console.log(props)
    let disabledStyle = props.submitting || props.isOnSignUpForm?
                                   {opacity:'0.60'}:
                                   {};
@@ -81,6 +81,7 @@ export default ReduxLoginForm;
 
 
 export const  SignUpFormComponent = props => {
+   console.log(props)
 
    let disabledStyle = props.submitting ?
                                   {opacity:'0.60'}:
@@ -90,7 +91,9 @@ export const  SignUpFormComponent = props => {
      return(
         <div>
           <p className="signup-form-title">Sign Up</p>
+
           <form onSubmit={props.handleSubmit} className="sign-up-form">
+          
             <fieldset  disabled={props.submitting} 
                        style={disabledStyle}
                        className="fieldset-signup" >
