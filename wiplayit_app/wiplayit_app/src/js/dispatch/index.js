@@ -304,7 +304,7 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
                 dispatch(action.authenticationError(error.response.data));
             }
             else if (error.request) {
-                alert('Is a request error')
+                console.log(error.request)
                 dispatch(action.handleError())
             }
         });
