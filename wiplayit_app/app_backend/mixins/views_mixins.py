@@ -1,9 +1,7 @@
 
 from rest_framework import  status
 from rest_framework.response import Response
-from guardian.shortcuts import assign_perm, remove_perm, get_users_with_perms
-from guardian.core import ObjectPermissionChecker
-from app_backend.serializers import BaseUserSerializer
+from guardian.shortcuts import assign_perm, remove_perm
 from app_backend.slug_generator import generate_unique_slug
 from app_backend.helpers import  get_objects_perms, has_perm
 
@@ -43,8 +41,7 @@ class BaseMixin(object):
     	else:
     		data[text_field ]  = self.request.data.get(text_field, False)
     		add_post     = self.request.data.get("add_post", False)
-    		add_question = self.request.data.get("add_question", False)
-    		
+    		    		
     		if instance is not None:
     			data['slug']   = self.update_slug_field(instance)
     			
@@ -129,8 +126,10 @@ class UpdateObjectMixin(BaseMixin):
 
 
 	def modify_current_user_followings_field(self, instance, increm=False, decrem=False):
+
 		if increm:
 			instance.followings = instance.followings + 1
+			
 		elif decrem:
 			instance.followings = instance.followings - 1
 
@@ -139,14 +138,15 @@ class UpdateObjectMixin(BaseMixin):
 
 	def update_followers_fields(self, instance, **kwargs):
 		data    = dict()
+		current_user     = self.request.user
 		
 		followers_perms = self.permissions.get('followers_perms',None)
-		user_is_following = self.check_perm(followers_perms, instance)
+		user_is_following = has_perm(current_user, followers_perms, instance)
 
 		if  hasattr(self, 'is_user'):
 			profile    = dict()
 			followings_perms = self.permissions.get('followings_perms',None)
-			current_user     = self.request.user
+			
 
 			if user_is_following:
 				print(" Is Unfollowing")
@@ -189,8 +189,9 @@ class UpdateObjectMixin(BaseMixin):
 
 		upvotes_perm = self.permissions.get('upvotes_perms',None)
 		data = dict()
+		current_user     = self.request.user
 				
-		if self.check_perm(upvotes_perm, instance):
+		if has_perm(current_user, upvotes_perm, instance):
 			instance.upvotes = instance.upvotes - 1
 			instance.save()
 			self.remove_perm(upvotes_perm, instance )

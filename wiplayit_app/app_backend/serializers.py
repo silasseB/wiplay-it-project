@@ -12,15 +12,19 @@ class BaseSerializer(ModelSerializerMixin, serializers.ModelSerializer):
 	user_can_edit   = serializers.SerializerMethodField()
 
 	def current_user(self):
-		return self.context.get('request', None)
+		request =  self.context.get('request', None)
+		if request:
+			return request.user
+		return None
 	
 	
 	def get_user_can_edit(self, obj):
+		current_user = self.current_user()
 				
 		edit_perms = self.get_obj_permissions('edit_perms')
 		
 		if edit_perms:
-			can_edit = has_perm(self.current_user, edit_perms[0], obj) or has_perm(self.current_user , edit_perms[1], obj)
+			can_edit = has_perm(current_user, edit_perms[0], obj) or has_perm(current_user , edit_perms[1], obj)
 			return can_edit
 			
 		return False
@@ -46,7 +50,7 @@ class BaseChildSerializer(BaseSerializer):
 		perms = self.get_obj_permissions('upvotes_perms')
 
 		if perms:
-			return has_perm(self.current_user, perms, obj)
+			return has_perm(self.current_user(), perms, obj)
 
 		return False
 
@@ -59,7 +63,7 @@ class UserSerializer(BaseSerializer, BaseUserSerializer):
 				                
 	def get_user_is_following(self, obj):
 		perms = self.get_obj_permissions('followers_perms')
-		return has_perm(self.current_user ,perms, obj)
+		return has_perm(self.current_user() ,perms, obj)
 	
 
 
@@ -227,7 +231,7 @@ class QuestionSerializer(BaseChildSerializer):
 	
 	def get_user_is_following(self, obj):
 		perms = self.get_obj_permissions('followers_perms')
-		return has_perm(self.current_user, perms, obj)
+		return has_perm(self.current_user(), perms, obj)
 		
 		
 	
