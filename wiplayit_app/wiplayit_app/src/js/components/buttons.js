@@ -476,7 +476,7 @@ export  const EditProfileButtons = props => (
 )
 export const ProfileOptsModalBtns = props => {
    
-   const pathToEditProfile = `/edit/profile/${props.obj.slug}/`;
+   const pathToEditProfile = `/edit/profile/${props.obj.slug}/${props.obj.id}/`;
    let  state = {
             userProfile : props.obj, 
             byId        : props.byId,

@@ -67,12 +67,13 @@ export function getUserList(props) {
 
 export function getQuestionList(questionListById) {
 	console.log(questionListById)
-   const instance = axiosApi.axiosInstance();  
-   let apiUrl     = api.getQuestionListApi();  
-   return dispatch => {
+    const instance = axiosApi.axiosInstance();  
+    let apiUrl     = api.getQuestionListApi(); 
+
+    return dispatch => {
       dispatch(action.getQuestionListPending(questionListById))
 	   instance.get(apiUrl)
-      .then(response => dispatch(action.getQuestionListSuccess(questionListById,response.data)))
+      .then(response => dispatch(action.getQuestionListSuccess(questionListById, response.data)))
       .catch(error => {
       	if (error.response) {
       		var { errors } =  error.response.data

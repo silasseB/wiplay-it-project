@@ -32,6 +32,7 @@ import IndexBox from "./containers/index/index_page";
 import PostListPage from "./containers/post/post_list"
 import  PostPage    from "./containers/post/post_page"
 import  QuestionPage    from "./containers/question/question_page"
+import QuestionListPage from "./containers/question/question_list"
 import ProfilePage from "./containers/profile/profile_page";
 import  PasswordChangePage from "./containers/authentication/password_change_page";
 import EmailResendPage    from "./containers/authentication/email_resend_page"
@@ -67,9 +68,10 @@ function App() {
             <Route  path="/user/signup/" component={SignUpPage} />
             <Route  path="/user/login/" component={LoginPage} />
             <Route  path="/editor/" component={ModalContainer} />
-            <Route  path="/post/list/" component={PostListPage} />
+            <Route  path="/posts/" component={PostListPage} />
+            <Route  path="/questions/" component={QuestionListPage} />
             <Route  path="/post/:slug/" component={PostPage} />
-            <Route  path="/edit/profile/:slug/" component={EditProfile} />
+            <Route  path="/edit/profile/:slug/:id/" component={EditProfile} />
             <Route  path="/followers/:id/:slug/" component={QuestionFollowersBox} />
             <Route  path="/answer/:id/upvoters/" component={AnswerUpVotersBox} />
             <Route  path="/answer/comment/:id/upvoters/" component={AnswerCommentUpVotersBox} />

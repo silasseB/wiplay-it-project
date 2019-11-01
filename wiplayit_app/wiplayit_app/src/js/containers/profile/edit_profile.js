@@ -49,10 +49,10 @@ class EditProfile extends Component{
    
 
     componentDidMount() {
-        let { state } = this.props.location;
+        let { slug, id } = this.props.match.params;
            
-        if (state ) {
-            let { byId } = state;
+        if (id ) {
+            var byId = `userProfile${id}`;
             var userProfile = this.props.entyties.userProfile.byId[byId]
 
             if (userProfile) {
@@ -61,16 +61,17 @@ class EditProfile extends Component{
             }
 
             else {
-                userProfile  = this.props.location.state.userProfile;
+                this.props.getUserProfile(id);
+                //userProfile  = this.props.location.state.userProfile;
               
-                store.dispatch(action.getUserProfilePending(userProfile.id));
-                store.dispatch(action.getUserProfileSuccess(userProfile));  
+                //store.dispatch(action.getUserProfilePending(userProfile.id));
+                //store.dispatch(action.getUserProfileSuccess(userProfile));  
 
-                this.populateEditForm(userProfile);
+                //this.populateEditForm(userProfile);
             }
 
             
-            this.setState({profileById : byId });
+            this.setState({profileById : byId, userProfile });
         }
     };
 
@@ -144,22 +145,22 @@ class EditProfile extends Component{
     submitProps() {
        
         let props = {};
-        let { state } = this.props.location;
+        let { slug, id } = this.props.match.params;
 
-        if (state) {
-            let { userProfile, byId } = this.props.location.state;
+        if (id) {
+            let {profileById, userProfile } = this.state;
             let form = this.state.form;
             form.profile_picture = '';
        
             props['formData']  = helper.createFormData(form);
    
             props['obj']       =   userProfile;
-            props['objId']     =   userProfile.id;
-            props['byId']      =   byId;
+            props['objId']     =   id;
+            props['byId']      =   profileById;
             props['objName']   =  'userProfile';
             props['isPut']     =   true;
             props['actionType'] =  types.UPDATE_USER_PROFILE;
-            props['apiUrl']    =   api.updateProfileApi(userProfile.id);
+            props['apiUrl']    =   api.updateProfileApi(id);
         }
 
         return props;
