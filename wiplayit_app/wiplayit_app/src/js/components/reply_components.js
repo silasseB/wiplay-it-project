@@ -278,15 +278,20 @@ export const Reply = props => {
             usersIsFor : answer? 'answerReplyUpVoters' : 'postReplyUpVoters', 
         }
 
-   let pathToUpvoters =  `/reply/${reply.id}/upvoters/`;
+   let pathToUpvoters;
 
    var createApiUrl = '';
    var updateUrl    = ''; 
+
    if (answer) {
+
+      pathToUpvoters =  `/answer/reply/${reply.id}/upvoters/`;
       updateUrl    = api.updateAnswerReplyApi(reply.id);
       createApiUrl = api.createAnswerReplyChildApi(reply.id);
       
-   }else if(post){
+   }
+   else{
+      pathToUpvoters =  `/post/reply/${reply.id}/upvoters/`;
       updateUrl    = api.updatePostReplyApi(reply.id);
       createApiUrl = api.createPostReplyChildApi(reply.id);
       

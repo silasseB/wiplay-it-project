@@ -18,7 +18,7 @@ export const NavBarSmallScreen = props => {
     let state = {userProfile:currentUser}
     
     if (currentUser) {
-        path_to_profile = `/profile/${currentUser.slug}/`;
+        path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
         
     }
    
@@ -100,7 +100,7 @@ export const NavBarBigScreen = props => {
     var state   = { currentUser, userProfile : currentUser};
 
     if (currentUser) {
-        path_to_profile = `/profile/${currentUser.slug}/`;
+        path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
         userProfile = currentUser.profile;
         
     }
@@ -182,7 +182,7 @@ export const PartialNavBar = props =>{
    const state     = {currentUser};
    
    if (currentUser) {
-      path_to_profile = `/profile/${currentUser.slug}/`;
+      path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
       userProfile     = currentUser.profile;
    }
 

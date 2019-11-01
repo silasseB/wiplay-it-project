@@ -20,7 +20,7 @@ const api      = new Api();
 
 
 export const QuestionComponent = props => {
-   //console.log(props)
+   console.log(props)
    var questionById = props.questionById;
    var questionEntytie = props.entyties.question;
    questionEntytie = questionEntytie.byId[questionById]
@@ -38,8 +38,8 @@ export const QuestionComponent = props => {
          margin     : '0 0 2px'
    }
 
-   let questionPath = `/question/${question.slug}/`;
-   let pathToFollowers =  `/${question.slug}/followers/`;
+   let questionPath = `/question/${question.slug}/${question.id}/`;
+   let pathToFollowers =  `/followers/${question.id}/${question.slug}/`;
 
    let state = {
          question,

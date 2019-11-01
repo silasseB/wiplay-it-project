@@ -17,78 +17,91 @@ import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
 class QuestionPage extends Component {
 
-   constructor(props) {
-      super(props);
+    constructor(props) {
+        super(props);
 
-         this.state = {
+        var { state } = props.location;
+        let question  = null;
+
+        if (state) {
+            question = state.question;
+        }
+
+        this.state = {
+            question,
             isQuestionBox : true, 
             pageName      : "Question", 
-            questionById  : ''
-         };
+            questionById  : '',
+            isNewQuestion : false,
+        };
 
-      };
+    };
   
-   componentWillUnmount() {
-   }
+    componentWillUnmount() {
+    }
 
 
-   componentDidUpdate(nextProps, prevState) {
-     console.log(nextProps)
-     //var questionById = this.state.questionById;
-     //var questionEntytie = nextProps.entyties.question;
+    componentDidUpdate(nextProps, prevState) {
+        
+        //var questionById = this.state.questionById;
+        //var questionEntytie = nextProps.entyties.question;
 
-     //questionEntytie = questionEntytie.byId[questionById];
+        //questionEntytie = questionEntytie.byId[questionById];
 
-   }    
+    }    
 
 
     componentDidMount() {
         console.log(this.props)
-        var { state } = this.props.location;
-        var { entyties } = this.props;
+        let { state } = this.props.location;
+        let { slug, id } = this.props.match.params; 
+        let { entyties } = this.props;
+        let questionById = '';
 
-        if (state) {
+        var questionList = entyties.questions;
+        //this.setState({state})
 
-            let { isNewQuestion, question } = state;
-            var questionById = `question${question.id}`;
-            this.setState({questionById})
+        if (id) {
+            
+            questionById = `question${id}`;
+            this.setState({questionById});
 
+            /*
             if (isNewQuestion) {
-                store.dispatch(action.getQuestionSuccess(question))
+                //store.dispatch(action.getQuestionSuccess(question))
                 store.dispatch(action.Redirected());
                 return ;
-            }
-      
-            var questionEntytie = entyties.question;
-            questionEntytie = questionEntytie.byId[questionById]
-
-            if (!questionEntytie) {
-                store.dispatch(getQuestion(question.id));
-            }
+            }*/
         }
       
+        var question = entyties.question;
+        question = question.byId[questionById]
+
+        if (!question) {
+            store.dispatch(getQuestion(id));
+        }
     };
    
 
    
-   componentDidCatch(error, info) {
-    // You can also log the error to an error reporting service
-    console.log(error, info);
-  }
+    componentDidCatch(error, info) {
+        // You can also log the err or to an error reporting service
+        console.log(error, info);
+    }
     
-   getProps(){
-      //Collect all state data and props.
-      let props = {
-         isQuestionBox     : this.state.isQuestionBox,
-         pageName          : this.state.pageName,
-         questionById      : this.state.questionById
-    
-      };
-      return Object.assign(props, this.props );  
-     
-   };
+    getProps(){
+        //Collect all state data and props.
+        let props = {
+            isQuestionBox     : this.state.isQuestionBox,
+            pageName          : this.state.pageName,
+            questionById      : this.state.questionById
+        };
 
-   render() {
+        return Object.assign(props, this.props );  
+     
+    };
+
+    render() {
         let props = this.getProps();
         var questionById = props.questionById;
         var question = props.entyties.question;

@@ -1,9 +1,7 @@
 import React from 'react';
-import { Router, Route,Switch  } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { withRouter } from "react-router";
 
-
-import { Provider } from 'react-redux'
-import { createHashHistory, createMemoryHistory, createBrowserHistory } from 'history';
 import logo from './logo.svg';
 import './App.css';
 
@@ -23,7 +21,6 @@ import './containers/authentication/css/registration-desktop.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {store} from "./configs/store-config";
 
 import  RegistrationPage  from "./containers/authentication/registration";
 import  SignUpPage from "./containers/authentication/signup";
@@ -41,23 +38,31 @@ import EmailResendPage    from "./containers/authentication/email_resend_page"
 import PasswordResetPage   from "./containers/authentication/password_reset_page" 
 
 import AccountConfirmationPage from "./containers/authentication/account_confirmation_page"
+
 import UserListBox from "./containers/users/user_list_page"; 
+import ProfileFollowersBox from "./containers/users/profile-followers-page"; 
+import ProfileFollowingsBox from "./containers/users/profile-followings-page"; 
+import QuestionFollowersBox from "./containers/users/question-followers-page"; 
+import AnswerUpVotersBox  from "./containers/users/answer-upvoters-page"; 
+import AnswerCommentUpVotersBox  from "./containers/users/answer-comment-upvoters-page"; 
+import AnswerReplyUpVotersBox  from "./containers/users/answer-reply-upvoters-page"; 
+import PostUpVotersBox  from "./containers/users/post-upvoters-page"; 
+import PostCommentUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
+import PostReplyUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
 
 
-export const history = createHashHistory();
+
 
 
 
 
 function App() {
   return (
-    <Provider store={store}> 
-    <Router history={history}>
-      <div>
-        <Switch>
+     <div>
+ 
             <Route exact path="/" component={IndexBox}/>
-            <Route  path="/profile/:slug/" component={ProfilePage}/>
-            <Route  path="/question/:slug/" component={QuestionPage}/>
+            <Route  path="/profile/:id/:slug/" component={ProfilePage}/>
+            <Route  path="/question/:slug/:id/" component={QuestionPage}/>
             <Route  path="/user/registration/" component={RegistrationPage} />
             <Route  path="/user/signup/" component={SignUpPage} />
             <Route  path="/user/login/" component={LoginPage} />
@@ -65,28 +70,28 @@ function App() {
             <Route  path="/post/list/" component={PostListPage} />
             <Route  path="/post/:slug/" component={PostPage} />
             <Route  path="/edit/profile/:slug/" component={EditProfile} />
-            <Route  path="/:slug/followers/" component={UserListBox} />
-            <Route  path="/answer/:id/upvoters/" component={UserListBox} />
-            <Route  path="/comment/:id/upvoters/" component={UserListBox} />
-            <Route  path="/reply/:id/upvoters/" component={UserListBox} />
-            <Route  path="/post/:id/upvoters/" component={UserListBox} />
-            <Route  path="/user/:slug/followers/" component={UserListBox} />
-            <Route  path="/post/:slug/followings/" component={UserListBox} />
+            <Route  path="/followers/:id/:slug/" component={QuestionFollowersBox} />
+            <Route  path="/answer/:id/upvoters/" component={AnswerUpVotersBox} />
+            <Route  path="/answer/comment/:id/upvoters/" component={AnswerCommentUpVotersBox} />
+            <Route  path="/answer/reply/:id/upvoters/" component={AnswerReplyUpVotersBox} />
+            <Route  path="/post/:id/upvoters/" component={PostUpVotersBox} />
+            <Route  path="/post/comment/:id/upvoters/" component={PostCommentUpVotersBox} />
+            <Route  path="/post/reply/:id/upvoters/" component={PostReplyUpVotersBox} />
+            
+            <Route  path="/profile/:slug/:id/followers/" component={ProfileFollowersBox} />
+            <Route  path="/profile/:slug/:id/followings/" component={ProfileFollowingsBox} />
             <Route  path="/users/" component={UserListBox}/>
             <Route  path="/registration/account/confirm/:key/" component={AccountConfirmationPage} />
             <Route  path="/user/account/password/reset/" component={PasswordResetPage} />
             <Route  path="/reset/:uid/:token/" component={PasswordChangePage} />
             <Route  path="/account/email/resend/" component={EmailResendPage} />
             <Route  path="/:slug/answer/" component={QuestionPage}/>
-         </Switch>
-      </div>
-   </Router>
-  </Provider>
-
+     </div>
+ 
   );
 }
 
-export default App;
+export default withRouter(App);
 
 
 

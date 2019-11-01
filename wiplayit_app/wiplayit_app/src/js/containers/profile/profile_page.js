@@ -58,19 +58,20 @@ class ProfilePage extends Component {
   
 
     componentDidMount() {
-        console.log(this.props)
-        let {state} = this.props.location;
+        
+        
+        let { slug, id } = this.props.match.params;
 
-        if (state && state.userProfile) {
-            let userId    =   state.userProfile.id;
-            var profileById = `userProfile${userId}`;
+        if (id) {
+            
+            var profileById = `userProfile${id}`;
             this.setState({profileById});
          
             const userProfile = this.props.entyties.userProfile.byId[profileById];
             console.log(userProfile)
 
             if (!userProfile) {
-                this.props.getUserProfile(userId);
+                this.props.getUserProfile(id);
             }
         }
     };

@@ -41,7 +41,7 @@ export const CommentsComponent = props => {
    const editorState = EditorState.createWithContent(contentState);
 
 
-    let pathToUpvoters =  `/comment/${comment.id}/upvoters/`;
+    let pathToUpvoters ;
 
    
     
@@ -51,47 +51,54 @@ export const CommentsComponent = props => {
         }
 
    
-   var createApiUrl = '';
-   var updateUrl    = ''; 
-   if (isAnswerBox) {
-      updateUrl    = api.updateAnswerCommentApi(comment.id);
-      createApiUrl = api.createAnswerCommentReplyApi(comment.id);
-   }else{
-      updateUrl    = api.updatePostCommentApi(comment.id);
-      createApiUrl = api.createPostCommentReplyApi(comment.id);
-   }
+    var createApiUrl = '';
+    var updateUrl    = ''; 
 
-   let  modalOptionsProps = {
-      modalProps : {
+    if (comment.answer) {
+
+        pathToUpvoters =  `/answer/comment/${comment.id}/upvoters/`;
+        updateUrl    = api.updateAnswerCommentApi(comment.id);
+        createApiUrl = api.createAnswerCommentReplyApi(comment.id);
+    }
+
+    else{
+        
+       pathToUpvoters =  `/post/comment/${comment.id}/upvoters/`;
+       updateUrl    = api.updatePostCommentApi(comment.id);
+       createApiUrl = api.createPostCommentReplyApi(comment.id);
+    }
+
+    let  modalOptionsProps = {
+        modalProps : {
+            objName     : 'comment',
+            actionType  : types.UPDATE_COMMENT,
+            isPut       : true,
+            obj         : comment, 
+            objId       : comment.id,
+            objIndex    : index, 
+            apiUrl      : updateUrl,
+        },
+
+        modalType : 'optionsMenu', 
+    };
+   
+    let upvoteBtnProps = {
         objName     : 'comment',
         actionType  : types.UPDATE_COMMENT,
         isPut       : true,
-        obj         : comment, 
-        objId       : comment.id,
-        objIndex    : index, 
+        obj         : props.comment, 
+        objId       : props.comment.id,
+        objIndex    : props.index,
         apiUrl      : updateUrl,
-      },
-
-      modalType : 'optionsMenu', 
+        byId        : props.commentById,
     };
    
-   let upvoteBtnProps = {
-      objName     : 'comment',
-      actionType  : types.UPDATE_COMMENT,
-      isPut       : true,
-      obj         : props.comment, 
-      objId       : props.comment.id,
-      objIndex    : props.index,
-      apiUrl      : updateUrl,
-      byId        : props.commentById,
-   };
-   
 
-   let  createReplyProps = {
-      modalProps : {
-        objName           : 'reply',
-        actionType        : types.CREATE_REPLY,
-        obj               : props.comment,
+    let  createReplyProps = {
+        modalProps : {
+           objName           : 'reply',
+           actionType        : types.CREATE_REPLY,
+           obj               : props.comment,
         objId             : props.comment.id,
         isPost            : true,
         objIndex          : props.index,

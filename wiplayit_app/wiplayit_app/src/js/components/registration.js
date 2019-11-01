@@ -93,7 +93,7 @@ export const  SignUpFormComponent = props => {
           <p className="signup-form-title">Sign Up</p>
 
           <form onSubmit={props.handleSubmit} className="sign-up-form">
-          
+
             <fieldset  disabled={props.submitting} 
                        style={disabledStyle}
                        className="fieldset-signup" >
@@ -245,7 +245,7 @@ export const PassWordChangeForm = props => {
   )
 }
 
-export const ReduxPassWordChangeForm = reduxForm({form: 'PasswordChange',})(PassWordChangeForm)
+export const ReduxPassWordChangeForm = reduxForm({form: 'passwordChange',})(PassWordChangeForm)
 
 
 export const EmailForm = props => {

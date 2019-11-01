@@ -67,7 +67,7 @@ export const ProfileComponent = props => {
       };
 
       
-      let pathToUserFollowers =  `/user/${userProfile.slug}/followers/`;
+      let pathToUserFollowers =  `/profile/${userProfile.slug}/${userProfile.id}/followers/`;
 
       let btnsProps = {
          modalOptionsProps,
@@ -342,11 +342,11 @@ export const UserQuestions = props => {
             }
          </div> 
      
-         {  questions.questionList.map((questionObj, index) => {
-            let questionProps = {questionObj, questionById : byId }
+         {  questions.questionList.map((question, index) => {
+            let questionProps = {question, questionById : byId }
             Object.assign(questionProps, props)
             return (
-               <div key={questionObj.id} className="profile-activites"> 
+               <div key={question.id} className="profile-activites"> 
                   <QuestionComponent {...questionProps}/>
                </div>
             )

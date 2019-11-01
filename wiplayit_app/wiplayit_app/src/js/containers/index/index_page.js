@@ -252,7 +252,7 @@ export const Answers = props => {
 
                             let answerProps = { answer, index};
                             let question = answer.question;
-                            let questionPath = `/question/${question.slug}/`;
+                            let questionPath = `/question/${question.slug}/${question.id}/`;
 
                             Object.assign(answerProps, props); 
       
