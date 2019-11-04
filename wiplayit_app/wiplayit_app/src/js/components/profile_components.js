@@ -395,7 +395,7 @@ export const UserPosts = props => {
 export const UsersComponent = props => {
   console.log(props)
 
-   let pathToProfile =  `/profile/${props.user.slug}/`;
+   let pathToProfile =  `/profile/${props.user.id}/${props.user.slug}/`;
 
    let state = { userProfile : props.user}
 
@@ -631,7 +631,7 @@ export const UserActivitiesBtns = props => {
 
 
 export const UserComponentSmall = props => {
-   let pathToProfile =  `/profile/${props.user.slug}/`;
+   let pathToProfile =  `/profile/${props.user.id}/${props.user.slug}/`;
    let state = {currentUser:props.currentUser, userProfile:props.user}
    //console.log(props)
    return (
