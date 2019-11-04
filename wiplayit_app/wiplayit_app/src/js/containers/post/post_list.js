@@ -28,23 +28,17 @@ class  PostListPage extends Component  {
      
    }
   
-   componentWillMount() {
-      console.log(this.props)
-
-   }
-
-   
+      
    componentDidMount() {
       console.log(this.props)
-      let postList  = localStorage.getItem('postList');
       var postListById = this.state.postListById;
-      postList = JSON.parse(postList);
-      if (postList) {
-         store.dispatch(action.getPostListPending(postListById));
-         store.dispatch(action.getPostListSuccess(postListById ,postList));
-      }else{
-        this.props.getPostList(postListById);                           
-      }
+      
+      var posts = this.props.entyties.posts;
+      posts = posts.byId[postListById]
+      
+
+      this.props.getPostList(postListById);                           
+      
           
    }
 

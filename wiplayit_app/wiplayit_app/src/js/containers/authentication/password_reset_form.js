@@ -21,10 +21,7 @@ class PasswordResetForm extends Component{
             
    }
 
-   componentDidMount() {
-    
-   }
-
+   
    
    render(){
       

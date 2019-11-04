@@ -13,7 +13,7 @@ urlpatterns = [
     path('rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
     path('rest-auth/registration/', CustomRegisterView.as_view()),
     path('rest-auth/login/', CustomLoginView.as_view()),
-    url(r'^registration/account-confirm-email/(?P<key>[-:\w]+)/$', CustomVerifyEmailView.as_view(),
+    url(r'^rest-auth/account-confirm-email/(?P<key>[-:\w]+)/$', CustomVerifyEmailView.as_view(),
         name='account_confirm_email'),
 
     path('rest-auth/resend/account/confirm/email', SendEmailConfirimationView.as_view(),

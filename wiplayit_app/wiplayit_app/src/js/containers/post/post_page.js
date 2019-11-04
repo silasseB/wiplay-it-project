@@ -29,10 +29,7 @@ class  PostPage extends Component  {
         };
     };
   
-    componentWillMount() {
-
-    }
-
+    
     componentDidUpdate(nextProps,prevProps) {
       
 

@@ -28,12 +28,7 @@ class  QuestionListPage extends Component  {
      
    }
   
-   componentWillMount() {
-      console.log(this.props)
-
-   }
-
-   
+      
    componentDidMount() {
       console.log(this.props)
       var questionListById = this.state.questionListById;

@@ -26,16 +26,20 @@ export function withAuthentication(Component) {
     return class Authentication extends React.Component {
 
         constructor(props) {
+
             super(props);
             this.state = {
-            isAuthenticated : false,
+                isAuthenticated : false,
+                form : null,
             };
 
+            this.form                = this.form.bind(this);  
             this.onSubmit            = this.onSubmit.bind(this);
+            this. confirmUser        = this.confirmUser.bind(this);
             this.responseFacebook    = this.responseFacebook.bind(this);
             this.responseTwitter     = this.responseTwitter.bind(this);
             this.responseGoogle      = this.responseGoogle.bind(this);     
-        }
+        };
 
 
         isAuthenticated() {
@@ -106,9 +110,8 @@ export function withAuthentication(Component) {
             console.log(response);
             var accessToken =  response.accessToken
             var apiUrl =  api.googleLoginApi();
-
             let formData = helper.createFormData({"access_token": accessToken});
-            console.log(accessToken)
+
             if (accessToken) {
                 return authenticate(apiUrl, formData, store.dispatch);
             }
@@ -144,6 +147,29 @@ export function withAuthentication(Component) {
 
         };
 
+        form = (name) => {
+
+            if (name) {
+
+                switch(name){
+                    case 'loginForm':
+                        return;
+
+                    case 'signUpForm':
+                        return;
+
+                    case 'emailForm':
+                        return; 
+
+                    case 'passwordChangeForm':
+                        return;
+
+                    default:
+                        return null;
+                };
+            }
+        };
+
 
         
         toggleSignUpForm = (props)=>{
@@ -158,6 +184,26 @@ export function withAuthentication(Component) {
            this.props.togglePasswordReset(props)
            this.forceUpdate()
         };
+
+
+        confirmUser = ( key, callback )=>{
+            
+            let withToken = false;
+            const axiosApi = new Axios(withToken);
+            const  apiUrl  = api.accountConfirmApi(key);
+            let instance   = axiosApi.axiosInstance();
+
+            instance.get(apiUrl)
+            .then(response => { 
+                
+                let {detail} = response.data;
+                callback({ confirmed : true, successMassage : detail });
+            })
+            .catch(error => {
+                console.log(error)
+                callback({ confirmed: false});
+            });
+        } ;
 
 
       
@@ -187,11 +233,8 @@ export function withAuthentication(Component) {
 
 
         onSubmit = (values, dispatch, props) => {
-            console.log(props)
-
-            const axiosApi = new Axios(false);
+            
             let apiUrl =  this.getAuthUrl(props.form);
-
             return authenticate(apiUrl, values, dispatch);
            
         };
@@ -199,12 +242,13 @@ export function withAuthentication(Component) {
       
         getProps() {
             let  props = {
-                onSubmit : this.onSubmit, 
+                onSubmit                : this.onSubmit, 
                 responseFacebook        : this.responseFacebook,
                 responseGoogle          : this.responseGoogle,
                 responseTwitter         : this.responseTwitter,
                 togglePasswordResetForm : this.togglePasswordResetForm, 
                 toggleSignUpForm        : this.toggleSignUpForm,
+                confirmUser             : this.confirmUser,
             };
          
             return Object.assign(props, this.props);

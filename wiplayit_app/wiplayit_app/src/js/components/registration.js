@@ -432,6 +432,7 @@ const TermsAndContionTextComponent = props => {
 
 
 export const AccountConfirmationComponent = props => {
+  console.log(props)
   return(
    
    <div  className="accont-confirmation-container" >
@@ -441,7 +442,7 @@ export const AccountConfirmationComponent = props => {
 
       <div className="confirmation-message-box">
          <p className="confirmation-message message-success">
-            Your Account has been successfully confirmed. You can click bellow to login
+            {props.successMessage}. You can click bellow to login
          </p> 
 
          <LoginSmallScreem/>

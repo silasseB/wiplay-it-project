@@ -271,7 +271,7 @@ export default class Api{
     }
 
     accountConfirmApi(key) {
-        var url = `/registration/account-confirm-email/${key}`;
+        var url = `/rest-auth/account-confirm-email/${key}/`;
         return url ;
          
     }

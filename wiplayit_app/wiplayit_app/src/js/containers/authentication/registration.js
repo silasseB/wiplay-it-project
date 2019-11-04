@@ -23,7 +23,7 @@ class RegistrationPage extends Component {
     }
 
    componentDidMount() {
-    
+    console.log(this.props)
    }
 
    getProps(){

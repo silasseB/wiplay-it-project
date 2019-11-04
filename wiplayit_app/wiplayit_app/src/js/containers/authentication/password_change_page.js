@@ -21,11 +21,7 @@ export class PasswordChangePage extends Component{
 
    
    
-   componentDidMount() {
-      console.log(this.props)
-    
-   }
-
+   
    render(){
       
       let props = Object.assign(this.state, this.props);

@@ -8,26 +8,28 @@ import {ReduxSignUpForm, NavBar }  from '../../components/registration';
 
 class SignUpPage extends Component {
 
-   constructor(props) {
-    super(props);
+    constructor(props) {
 
-      this.state = {
-        navbarTitle : 'Signing on Wiplayit',
-      }
-   }
+        super(props);
+        this.state = {
+            navbarTitle : 'Signing on Wiplayit',
+        };
+    };
 
   
-   componentDidMount() {
-   }
+    componentDidMount() {
+        
 
-   getProps(){
+    };
+
+    getProps(){
       let props = {
-          navbarTitle  : this.state.navbarTitle,
+        navbarTitle  : this.state.navbarTitle,
       }
 
-    return Object.assign(props,this.props )
+      return Object.assign(props,this.props );
       
-    }
+    };
 
 
 

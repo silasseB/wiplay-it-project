@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-
+import  withAuthentication   from '../../containers/authentication/index'; 
 import { NavBar, AccountConfirmationComponent } from '../../components/registration'
 
 import Axios from '../../axios_instance'
@@ -18,85 +18,63 @@ const api = new Api();
 
   
 
+class AccountConfirmationPage extends Component{
 
-export default  class AccountConfirmationPage extends Component{
+    constructor(props) {
+        super(props);
 
-  constructor(props) {
-    super(props);
+        this.state = {
+            confirmed        :  false,
+            successMassage   :  '',
+            pageTitle        :  'Account Confirmation',
+            navbarTitle      :  'Confirm Account',
+            formDescription  :  ['Account Confirmation'],
+        };
 
-    this.state = {
-      confirmed        :  false,
-      pageTitle        :  'Account Confirmation',
-      navbarTitle      :  'Confirm Account',
-      formDescription  :  ['Account Confirmation'],
-      
-            
-      
-    }
+        this.isConfirmed = this.isConfirmed.bind(this);
     
+    };
 
-  }
+
+    isConfirmed = (params)=>{
+      console.log(params)  
+      this.setState(params);
+    };
 
    
-   componentDidMount() {
-    const axiosApi = new Axios(false);
-    
-    const  apiUrl = api.accountConfirmApi(this)
-    let instance = axiosApi.axiosInstance();
-
-    return instance.get(apiUrl)
-      .then(response => { 
-                   console.log(response.data)
-                   this.setState({ confirmed : true})
-           
-         
-        return Promise.resolve(response);
-      })
-      .catch(error => {console.log(error.response); console.log("failed")});
-     
-   }
-   
-
-  sendRequest(apiUrl, formData=null, formState=null) {
-    
-  };
+    componentDidMount() {
+        console.log(this.props)
+        let { key } = this.props.match.params; 
+        this.props.confirmUser( key, this.isConfirmed );    
+    };
    
   
-   getProps(){
-
-         let props = {
-           pageTitle         : this.state.pageTitle,
-           formDescription   : this.state.formDescription,
-           navbarTitle       : this.state.navbarTitle,
-                 
-         };
-
-         let parentProps =  this.props; 
+    getProps(){
          
-
-         return Object.assign(props, parentProps );
-   }
+        return Object.assign(this.state, this.props );
+    };
  
 
   
   
-   render() {
-      let props = this.getProps();
+    render() {
+        let props = this.getProps();
       
-      return (
-         <div className="registration-page">
-           <NavBar {...props}/>
+        return (
+            <div className="registration-page">
+              <NavBar {...props}/>
 
-            <div>
-               <div className="account-confirm-container registration-container">
-                  <AccountConfirmationComponent{...props } />   
-               </div>
-            </div>
+               <div>
+                    <div className="account-confirm-container registration-container">
+                       <AccountConfirmationComponent{...props } />   
+                    </div>
+                </div>
           
-         </div>
-      );
-  };
-}
+            </div>
+        );
+    };
+};
 
 
+export default withAuthentication(AccountConfirmationPage);
 

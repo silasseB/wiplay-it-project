@@ -10,9 +10,7 @@ export class EmailResendPage extends Component{
       super(props);
 
       this.state = {
-         current_user     :  '',
-
-                     
+   
       };
 
       
@@ -20,10 +18,6 @@ export class EmailResendPage extends Component{
 
    
    
-   componentDidMount() {
-    
-   }
-
    render(){
       console.log(this.props)
       return (

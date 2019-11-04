@@ -37,9 +37,7 @@ class QuestionPage extends Component {
 
     };
   
-    componentWillUnmount() {
-    }
-
+    
 
     componentDidUpdate(nextProps, prevState) {
         
