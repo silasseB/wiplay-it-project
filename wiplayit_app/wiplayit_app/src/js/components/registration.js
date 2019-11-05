@@ -1,7 +1,6 @@
 import React from 'react';
 import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { Field, reduxForm } from 'redux-form'
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import  AjaxLoader from "../components/ajax-loader";
@@ -9,41 +8,52 @@ import  AjaxLoader from "../components/ajax-loader";
 
 
 
-const  LoginFormComponent = props => {
+export const  LoginFormComponent = props => {
    console.log(props)
-   let disabledStyle = props.submitting || props.isOnSignUpForm?
+   let { submitting, onSignUpForm } = props;
+   
+
+   let disabledStyle = submitting || onSignUpForm?
                                   {opacity:'0.60'}:
                                   {};
-    
-   return(
+       
+    return(
+        <div>
+        {props.form?
 
-      <div>
+        <div>
+        
+
             <p className="login-form-title label">Login</p>
 
-            <form onSubmit={props.handleSubmit} className="login-form">
+            <form onSubmit={props.onSubmit} className="login-form">
              
-              <fieldset style={disabledStyle}
-                        disabled={props.isOnSignUpForm    || props.submitting }
+              <fieldset style={ disabledStyle }
+                        disabled={ submitting || onSignUpForm }
                         className="fieldset-login">
                                
                <div className="login-box">
                   <div className="login-fields">
-                    <Field
+                    <input
                       className="login-email-field"
                       placeholder="Email Address"
                       type="email"
                       name="email"
-                      component="input"
+                      value={props.form.email}
+                      onChange={props.handleFormChange}  
+                      
                     />
                     
                   </div>
                   <div className="login-fields">
-                    <Field
+                    <input
                       className="login-password-field"
                       placeholder="Password"
                       type="password"
                       name="password"
-                      component="input"
+                      value={props.form.password}
+                      onChange={props.handleFormChange} 
+                      
                     />
 
                   </div>
@@ -51,7 +61,7 @@ const  LoginFormComponent = props => {
                   <div className="registration-btn-box">  
                      <button type="submit" className="btn-sm  btn-submit"
                              style={disabledStyle}
-                             disabled={props.submitting || props.isOnSignUpForm} >
+                             disabled={ submitting || onSignUpForm} >
 
                        Submit
 
@@ -64,15 +74,19 @@ const  LoginFormComponent = props => {
              </fieldset>
           </form>
 
-          <RegistrationSpinLoader {...props}/> 
-      </div>
-      )
+          <SpinLoader {...props}/> 
+         
+        </div>
+      :
+      ""
     }
+    </div>
+    )
+};
 
-const ReduxLoginForm = reduxForm({form : 'login',updateUnregisteredFields:true})(LoginFormComponent)
 
 
-export default ReduxLoginForm;
+export default LoginFormComponent;
 
 
 
@@ -81,20 +95,22 @@ export default ReduxLoginForm;
 
 
 export const  SignUpFormComponent = props => {
-   console.log(props)
+    console.log(props)
 
-   let disabledStyle = props.submitting ?
-                                  {opacity:'0.60'}:
-                                  {}; 
+    let { submitting } = props;
+    
+    let disabledStyle = submitting ? {opacity:'0.60'}:{}; 
    
-   
-     return(
+    
+    return(
         <div>
+          { props.form?
+          <div>
           <p className="signup-form-title">Sign Up</p>
 
-          <form onSubmit={props.handleSubmit} className="sign-up-form">
+          <form onSubmit={props.onSubmit} className="sign-up-form">
 
-            <fieldset  disabled={props.submitting} 
+            <fieldset  disabled={ submitting } 
                        style={disabledStyle}
                        className="fieldset-signup" >
 
@@ -104,22 +120,24 @@ export const  SignUpFormComponent = props => {
                             
                   <div className="username-fields">
                     <div className="name-field-box1">
-                      <Field
+                      <input
                         placeholder="First Name"
                         className="first-name-input"
                         type="text"
                         name="first_name"
-                        component="input"
+                        value={props.form.first_name}
+                        onChange={props.handleFormChange}
                       />
 
                     </div>  
                     <div className="name-field-box2">
-                      <Field
+                      <input
                         placeholder="Last Name"
                         className="last-name-input"
                         type="text"
                         name="last_name"
-                        component="input"
+                        value={props.form.last_name}
+                       onChange={props.handleFormChange}
                       />
                       
                     </div>
@@ -129,12 +147,13 @@ export const  SignUpFormComponent = props => {
 
                <div  className="email-fields signup-fields">
                   <div className="email-box">
-                    <Field
+                    <input
                       placeholder="Email"
                       className="email"
                       type="email"
                       name="email"
-                      component="input"
+                      value={props.form.email}
+                      onChange={props.handleFormChange}
                     />
 
                   </div>
@@ -142,12 +161,12 @@ export const  SignUpFormComponent = props => {
 
                <div className="password-fields signup-fields">
                   <div className="password-box">
-                      <Field
+                      <input
                         placeholder="Password"
                         className="password"
                         type="password"
-                        name="password"
-                        component="input"
+                        value={props.form.email}
+                        onChange={props.handleFormChange}
                       />
 
                   </div>
@@ -155,30 +174,37 @@ export const  SignUpFormComponent = props => {
             </div>
             <button type="submit" className="btn-submit btn-sm"
                        style={disabledStyle} 
-                       disabled={props.submitting}>
+                       disabled={submitting}>
                   Submit
               </button>
               <CancelFormBtn {...props}/>          
             </fieldset>
           </form>
 
-         <RegistrationSpinLoader {...props}/> 
+         <SpinLoader {...props}/> 
       </div>
+
+      :
+      ""
+    }
+    </div>
           
    )
 }
 
 
 
-export const ReduxSignUpForm = reduxForm({form: 'signUp',updateUnregisteredFields:true})(SignUpFormComponent)
 
 
 
 export const PassWordChangeForm = props => {
-   let disabledStyle = props.submitting?
+    let { submitting, isOnSignUpForm } = props
+   let disabledStyle = submitting || isOnSignUpForm? 
                                   {opacity:'0.60'}:
                                   {};
    return(
+    <div>
+        {props.form?
 
       <div className="">
          <p className="password-change-form-title">Password Change</p>
@@ -194,41 +220,43 @@ export const PassWordChangeForm = props => {
 
             :
 
-            <form className="password-change-form" onSubmit={props.handleSubmit} >
+            <form className="password-change-form" onSubmit={props.onSubmit} >
 
                { props.formDescription.map(( description, index) =>
                   <li key={index} className="password-form-description">{description}</li>
                )}
 
                <fieldset style={disabledStyle}
-                disabled={props.submitting}>
+                disabled={ submitting || isOnSignUpForm}>
 
                   <div  className="" >
                      <div className="change-password-box">
-                        <Field
+                        <input
                            className="password"
                            placeholder="New Password"
                            type="password"
                            name="password1"
-                           component="input"
+                           value={props.form.password1}
+                           onChange={props.handleFormChange}
                         />
                      </div>
 
                      <div className="change-password-box">
 
-                        <Field
+                        <input
                            className="password"
                            placeholder="Repeat New Password"
                            type="password"
                            name="password2"
-                           component="input"
+                           value={props.form.password2}
+                           onChange={props.handleFormChange}
                         />
                      </div>
 
                      <div className="submit-box">  
                         <button type="submit" 
                                 style={disabledStyle}
-                                disabled={props.submitting} 
+                                disabled={ submitting || isOnSignUpForm} 
                                 className="btn-sm  btn-submit" >
 
                               Submit
@@ -240,85 +268,95 @@ export const PassWordChangeForm = props => {
             </form>
          }
 
-         <RegistrationSpinLoader {...props}/> 
+         <SpinLoader {...props}/> 
       </div>
+      :
+      ""
+    }
+    </div>
   )
 }
 
-export const ReduxPassWordChangeForm = reduxForm({form: 'passwordChange',})(PassWordChangeForm)
 
 
-export const EmailForm = props => {
-  let disabledStyle = props.submitting || props.isOnSignUpForm?
+
+export const EmailFormComponent = props => {
+
+    let disabledStyle = props.submitting || props.onSignUpForm?
                                   {opacity:'0.60'}:
                                   {};
    
-   return(
-      <div className="email-form-box">
-        <p className="password-reset-form-title">
+    return(
+        <div>
+            { props.form? 
+               <div className="email-form-box">
+                    <p className="password-reset-form-title">
           
-        </p>
+                    </p>
 
-         { props.successMassage?
-            <div className="success-message-box">
-               <p className="message-success">
+            { props.successMassage?
+               <div className="success-message-box">
+                    <p className="message-success">
                  
-               </p>
+                    </p>
 
-               <div className="resend-email-box ">
-                  <button type="button" className="resend-email-btn" >Resend</button>
-                  <CancelEmailForm {...props}/>
-               </div>
-            </div>
-         :
+                    <div className="resend-email-box ">
+                        <button type="button" className="resend-email-btn" >Resend</button>
+                        <CancelEmailForm {...props}/>
+                    </div>
+                </div>
+            :
 
-         <form className="email-form" onSubmit={props.handleSubmit}>
+            <form className="email-form" onSubmit={props.onSubmit}>
           
-            <fieldset style={disabledStyle} 
-                      disabled={props.submitting || props.isOnSignUpForm} >
+                <fieldset style={disabledStyle} 
+                      disabled={props.submitting || props.onSignUpForm} >
 
-               <div  className="email-fields">
-                  <div className="email-box">
-                     <Field
-                        placeholder="Email"
-                        className="email"
-                        type="email"
-                        name="email"
-                        component="input"
+                    <div  className="email-fields">
+                        <div className="email-box">
+                            <input
+                               placeholder="Email"
+                               className="email"
+                               type="email"
+                               name="email"
+                               value={props.form.email}
+                               onChange={props.handleFormChange}
                        
-                     />
+                            />
 
-                  </div>
-               </div>
+                        </div>
+                    </div>
 
-               <div className="registration-btn-box">
-                  <button type="submit" 
-                       style={disabledStyle} 
-                       disabled={props.submitting || props.isOnSignUpForm}
-                       className="btn-submit btn-sm">
-
-                        Submit
-                  </button>
-                  <CancelEmailForm {...props}/>
+                    <div className="registration-btn-box">
+                        <button type="submit" 
+                            style={disabledStyle} 
+                            disabled={props.submitting || props.onSignUpForm}
+                            className="btn-submit btn-sm">
+                            Submit
+                        </button>
+                        <CancelEmailForm {...props}/>
                   
-               </div>
+                    </div>
 
-               
+                </fieldset>    
 
-            </fieldset>    
+            </form>
 
-         </form>
+            }
 
-         }
+            <SpinLoader {...props}/>  
+        </div>
 
-         <RegistrationSpinLoader {...props}/>  
-      </div>
+        :
+        ""
+        }
+    </div>
 
    )
 }
 
 
-export const ReduxEmailForm = reduxForm({form: 'emailForm',})(EmailForm)
+
 
 
 
@@ -364,6 +402,8 @@ const RegistrationSmall = props => (
 
 const RegistrationBig = props => {
    let toggleProps = {value : true,};
+   console.log(props)
+   
    return(
       <div className="registration-box">
          <div className="registration-welcome-box">
@@ -377,21 +417,21 @@ const RegistrationBig = props => {
 
       <p className="or-option">Or</p>
       <div className="registration-flex-box ">
-        {props.isOnPasswordResetForm?
+        {props.onPasswordResetForm?
           <div className="password-reset-container">
-            <ReduxEmailForm {...props}/> 
+            <EmailFormComponent {...props}/> 
           </div>
           :
           <div className="login-container" >
-            <ReduxLoginForm {...props}/>
+            <LoginFormComponent {...props}/>
          </div>
                       
         }
 
          <p className="separator"></p>
             <div className="signup-container">
-               { props.isOnSignUpForm?
-                  <ReduxSignUpForm {...props}/>
+               { props.onSignUpForm?
+                  <SignUpFormComponent {...props}/>
                :
                <div className="second-box-contents signup-container-contents" 
                           style={props.createUserBtnStyles} >
@@ -523,51 +563,51 @@ const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 900px)')
 
 
 export const  NavBar   = props => {
-        return (
-            <div className="navigation-bar fixed-top">
+    
+    return (
+        <div className="navigation-bar fixed-top">
 
-              <div className="navbar-box1">
+            <div className="navbar-box1">
                
-              </div>
+            </div>
 
-              <div className="navbar-box2 navbar-title-box">
+            <div className="navbar-box2 navbar-title-box">
                 <p className="" >{props.navbarTitle}</p>
-              </div>
+            </div>
               
-              <div className="navbar-box3">
+            <div className="navbar-box3">
                {props.nabarLink}
                
-              </div>
-            </div>    
-          )
-
-  
-}
+            </div>
+        </div>    
+    );
+};
 
 
 
 export const  SpinLoader  = props => {
-   return (
-      <div className="registration-spin-loader-box">
-         { props.submitting?
-         <AjaxLoader/> 
-        :
-        "" 
-     }
-   </div>
-   )
-}
+  
+    return (
+        <div className="registration-spin-loader-box">
+            { props.submitting?
+               <AjaxLoader/> 
+               :
+               "" 
+            }
+        </div>
+    );
+};
 
 const  PasswordChangeButton  = props => {
 
     let toggleProps = {value:true, style:{display:'none'}};
-   return(
-      <button type="button" onClick={()=> props.togglePasswordResetForm(toggleProps)} 
+    return(
+        <button type="button" onClick={()=> props.togglePasswordResetForm(toggleProps)} 
                   className="password-change-btn" >
-         Forgot Password ?
-      </button>
-   );
-}
+            Forgot Password ?
+        </button>
+    );
+};
 
 const  PasswordChangeLink  = props => (
    <Link className="password-change" to="/user/account/password/reset/"> 
@@ -577,31 +617,33 @@ const  PasswordChangeLink  = props => (
 
 
 const  CancelBtn  = props => {
-   let toggleProps = {
-         value : false, 
-         onSignupLoginFormStyles : {opacity:'2.60'},
-         createUserBtnStyles     : {display:'block'}
-      };
+    let toggleProps = {
+        value : false, 
+        onSignupLoginFormStyles : {opacity:'2.60'},
+        createUserBtnStyles     : {display:'block'}
+    };
 
-   return(
-      <button type="button" onClick={()=>props.toggleSignUpForm(toggleProps)} 
+    return(
+        <button type="button" onClick={()=>props.toggleSignUpForm(toggleProps)} 
                   className="form-cancel-btn btn-sm " >
-         Cancel
-      </button>
-   )
+           Cancel
+        </button>
+    )
 };
 
 const  CancelPasswordResetBtn  = props => {
-   let toggleProps = {value:false, style:{display:'block'} }
-   return (
-      <button type="button" onClick={()=>props.togglePasswordResetForm(toggleProps)} 
-                  className="form-cancel-btn btn-sm " >
-         Cancel
-      </button>
-   );
-}
+    let toggleProps = {value:false, style:{display:'block'} }
 
-const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 800px)');
+    return (
+        <button type="button" onClick={()=>props.togglePasswordResetForm(toggleProps)} 
+            className="form-cancel-btn btn-sm " >
+            Cancel
+        </button>
+    );
+};
+
+const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 900px)');
+
 
 const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 800px)');
 const CancelEmailForm = MatchMediaHOC(CancelPasswordResetBtn , '(min-width: 800px)');

@@ -22,42 +22,38 @@ class RegistrationPage extends Component {
 
     }
 
-   componentDidMount() {
-    console.log(this.props)
-   }
+    componentDidMount() {
+       console.log(this.props)
+       this.props.formConstructor('loginForm')
+    }
 
-   getProps(){
-      let props = {
-         navbarTitle               : this.state.navbarTitle,
-      };
 
-      let parentProps = this.props;
-      return Object.assign(props, parentProps )
-   };
+    getProps(){
+        return Object.assign(this.state, this.props )
+    };
 
-   render() {
-      let props = this.getProps();
+    render() {
+        let props = this.getProps();
+        console.log(props)
      
-      return (
-         <div> 
-            <div>
-              <NavBar {...props}/>
-            </div>
+        return (
+            <div> 
+                <div>
+                    <NavBar {...props}/>
+                </div>
 
-            <div className="registration-page">
+                <div className="registration-page">
                       
-               <div className="registration-container">
-                 <RegistrationComponent {...props}/>         
+                    <div className="registration-container">
+                        <RegistrationComponent {...props}/>         
 
-               </div>
+                    </div>
             
+                </div>
+
             </div>
-
-
-         </div>
-
-      );
-   };
+        );
+    };
 };
 
 export default withAuthentication(RegistrationPage);

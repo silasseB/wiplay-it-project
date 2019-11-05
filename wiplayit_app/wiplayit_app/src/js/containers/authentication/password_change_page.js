@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavBar, ReduxPassWordChangeForm } from '../../components/registration';
+import { NavBar, PassWordChangeForm } from '../../components/registration';
 import  withAuthentication   from '../../containers/authentication/index'; 
 
 
@@ -21,6 +21,11 @@ export class PasswordChangePage extends Component{
 
    
    
+    componentDidMount() {
+       console.log(this.props)
+       this.props.formConstructor('passwordChangeForm');
+    }
+
    
    render(){
       
@@ -31,7 +36,7 @@ export class PasswordChangePage extends Component{
 
             <div className="registration-page">
                <div className="password-change-container registration-container">
-                  <ReduxPassWordChangeForm {...props}/>
+                  <PassWordChangeForm {...props}/>
                </div>   
             </div>
          </div>

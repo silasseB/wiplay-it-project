@@ -1,1 +1,1 @@
-{"status":"done","chunks":{"main":[{"name":"app.bundle.js","path":"/home/silasi/Mywork/wiplay-it-project/wiplayit_app/wiplayit_app/static/dist/app.bundle.js"}]}}
+{"status":"done","error":"ModuleNotFoundError","message":"Module not found: Error: Can't resolve 'redux-form' in '/home/silasi/Mywork/wiplay-it-project/wiplayit_app/wiplayit_app/src/js/dispatch'","chunks":{"main":[{"name":"app.bundle.js","path":"/home/silasi/Mywork/wiplay-it-project/wiplayit_app/wiplayit_app/static/dist/app.bundle.js"}]}}

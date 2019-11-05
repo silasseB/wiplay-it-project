@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import  withAuthentication   from '../../containers/authentication/index'; 
-import {ReduxSignUpForm, NavBar }  from '../../components/registration'; 
+import { SignUpFormComponent, NavBar }  from '../../components/registration'; 
 
 
 
@@ -18,7 +18,7 @@ class SignUpPage extends Component {
 
   
     componentDidMount() {
-        
+        this.props.formConstructor('signUpForm')
 
     };
 
@@ -36,7 +36,8 @@ class SignUpPage extends Component {
 
    render() {
      
-    let props = this.getProps();        
+    let props = this.getProps(); 
+           
     return (
           <div className="login-page"> 
             <div>
@@ -45,7 +46,7 @@ class SignUpPage extends Component {
           
             <div className="registration-container">
               
-              <ReduxSignUpForm {...props}/>
+              <SignUpFormComponent {...props}/>
               
 
             </div>

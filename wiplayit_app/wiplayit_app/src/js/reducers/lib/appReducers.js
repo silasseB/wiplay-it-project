@@ -25,8 +25,7 @@ const InitialState = () => {
     return {
     
         userAuth : {
-            isOnSignUpForm         : false,
-            isOnPasswordResetForm  : false,
+            
             isLoading              : false,
 
             auth : {
@@ -96,7 +95,9 @@ export function entyties(state=InitialState(), action) {
    switch (action.type){
 
       case types.USER_AUTHENTICATION.PENDING :
-         Object.assign(state, action.payload)
+
+         Object.assign(state.userAuth, action.payload)
+         console.log(state.userAuth, action)
          return state; 
 
       case types.USER_AUTHENTICATION.SUCCESS:
@@ -108,17 +109,7 @@ export function entyties(state=InitialState(), action) {
          return state;
           
 
-      case types.TOGGLE.SIGNUP_FORM:
-         Object.assign(state.userAuth, action.payload)
-         return state;   
-
-      case types.TOGGLE.PASSWORD_RESET_FORM:
-         Object.assign(state.userAuth, action.payload)
-         return state;
-
-
-
-
+      
 
       case types.GET_CURRENT_USER.SUCCESS:
          Object.assign(state.currentUser, action.payload)

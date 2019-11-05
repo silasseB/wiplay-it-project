@@ -363,5 +363,11 @@ input:focus {
   padding:  10px;
 }
 
+.registration-spin-loader-box {
+  border: px solid blue;
+  margin: 0 40%;
+
+}
+
 }
 

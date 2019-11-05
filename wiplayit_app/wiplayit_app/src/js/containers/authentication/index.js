@@ -3,7 +3,7 @@ import React from 'react';
 //import {DefaultWrongPage} from "components/partial_components"
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { SubmissionError } from 'redux-form'; 
+; 
 import  * as action  from '../../actions/actionCreators';
 
 import {store} from "../../configs/store-config";
@@ -29,16 +29,25 @@ export function withAuthentication(Component) {
 
             super(props);
             this.state = {
-                isAuthenticated : false,
-                form : null,
+                isAuthenticated      : false,
+                form                 : null,
+                formName             : null, 
+                submitting           : false,
+                onSignUpForm         : false,
+                onPasswordResetForm  : false,
+                onPasswordChangeForm : false, 
+
             };
 
-            this.form                = this.form.bind(this);  
-            this.onSubmit            = this.onSubmit.bind(this);
-            this. confirmUser        = this.confirmUser.bind(this);
-            this.responseFacebook    = this.responseFacebook.bind(this);
-            this.responseTwitter     = this.responseTwitter.bind(this);
-            this.responseGoogle      = this.responseGoogle.bind(this);     
+            this.formConstructor          = this.formConstructor.bind(this);  
+            this.onSubmit                 = this.onSubmit.bind(this);
+            this.handleFormChange         = this.handleFormChange.bind(this); 
+            this. confirmUser             = this.confirmUser.bind(this);
+            this.responseFacebook         = this.responseFacebook.bind(this);
+            this.responseTwitter          = this.responseTwitter.bind(this);
+            this.responseGoogle           = this.responseGoogle.bind(this);  
+            this.toggleSignUpForm         = this.toggleSignUpForm.bind(this);
+            this.togglePasswordResetForm  = this.togglePasswordResetForm.bind(this);   
         };
 
 
@@ -130,6 +139,7 @@ export function withAuthentication(Component) {
             const onStoreChange = () => {
                 let  onStoreUpdate = store.getState();   
                 var userAuth = onStoreUpdate.entyties.userAuth;
+                //console.log(userAuth)
                 
                 if(userAuth && userAuth.auth && userAuth.auth.isLoggedIn && userAuth.auth.tokenKey){
                    console.log(userAuth.auth)
@@ -147,21 +157,52 @@ export function withAuthentication(Component) {
 
         };
 
-        form = (name) => {
+        handleFormChange(e){
+            e.preventDefault()
+            let form = this.state.form;
+            
+            if (form) {
+                form[e.target.name] = e.target.value;
+                this.setState({form});
+            }
+        };
 
+        formConstructor = (name) => {
+            
             if (name) {
 
                 switch(name){
+
                     case 'loginForm':
+
+                        let loginForm = {'email':'', 'password':''}
+                        this.setState({'form' : loginForm, 'formName':name})
                         return;
 
                     case 'signUpForm':
+
+                        let signUpForm = {
+                            'first_name' : '',
+                            'last_name'  : '',
+                            'email'      : '',
+                            'password'   : '',
+
+                        };
+
+                        this.setState({ 'form': signUpForm, 'formName':name });
                         return;
 
-                    case 'emailForm':
+                    case 'passwordResetForm':
+                    case 'emailResendForm':
+
+                        let emailForm = { 'email'      : '', };
+                        this.setState({ 'form' : emailForm,  'formName':name})
                         return; 
 
                     case 'passwordChangeForm':
+
+                        let passwordChangeForm = { 'password1' : '', 'password2' : '' }
+                        this.setState({ 'form' : passwordChangeForm,  'formName':name })
                         return;
 
                     default:
@@ -173,16 +214,12 @@ export function withAuthentication(Component) {
 
         
         toggleSignUpForm = (props)=>{
-           console.log(props)
-           console.log(props, this.props)
-           this.props.toggleSignUp(props)
-           this.forceUpdate()
-        }
+            this.setState({onSignUpForm:props.value})
+        };
 
         togglePasswordResetForm = (props) => {
-           console.log(props, this.props)
-           this.props.togglePasswordReset(props)
-           this.forceUpdate()
+            this.setState({onPasswordResetForm : props.value})
+           
         };
 
 
@@ -209,20 +246,23 @@ export function withAuthentication(Component) {
       
       
         getAuthUrl = (formName)=>{
-
+            console.log(formName)
             switch(formName){
 
-                case 'login':
+                case 'loginForm':
                     return api.logginUser();
 
-                case 'signUp':
+                case 'signUpForm':
                     return api.createUser();
 
-                case 'passwordChange':
+                case 'passwordChangeForm':
                     return api.passwordChangeApi();
 
-                case 'emailForm':
+                case 'passwordResetForm':
                     return api.passwordResetApi();
+
+                case 'emailResendForm':
+                    return api.confirmationEmailResendApi();
 
                 default:
                     return  '';
@@ -232,17 +272,26 @@ export function withAuthentication(Component) {
         };
 
 
-        onSubmit = (values, dispatch, props) => {
+        onSubmit = (e) => {
+            e.preventDefault();
+            this.setState( {submitting : true} )
+
+            let formName = this.state.formName;
+            let form = this.state.form;
             
-            let apiUrl =  this.getAuthUrl(props.form);
-            return authenticate(apiUrl, values, dispatch);
+            let apiUrl =  this.getAuthUrl(formName);
+            store.dispatch(action.authenticationPending());
+            return authenticate(apiUrl, form, store.dispatch);
            
         };
 
       
         getProps() {
             let  props = {
-                onSubmit                : this.onSubmit, 
+                ...this.state,
+                onSubmit                : this.onSubmit,
+                formConstructor         : this.formConstructor,
+                handleFormChange        : this.handleFormChange,
                 responseFacebook        : this.responseFacebook,
                 responseGoogle          : this.responseGoogle,
                 responseTwitter         : this.responseTwitter,

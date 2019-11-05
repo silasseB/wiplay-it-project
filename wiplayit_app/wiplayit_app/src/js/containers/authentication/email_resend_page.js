@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EmailForm,NavBar } from '../../components/registration'
+import { EmailFormComponent,NavBar } from '../../components/registration'
 import  withAuthentication   from '../../containers/authentication/index'; 
  
 
@@ -16,6 +16,12 @@ export class EmailResendPage extends Component{
       
    }
 
+   componentDidMount() {
+      console.log(this.props)
+      this.props.formConstructor('emailResendForm')
+    }
+
+
    
    
    render(){
@@ -24,7 +30,7 @@ export class EmailResendPage extends Component{
          <div>
             <NavBar {...this.props}/>
 
-            <EmailForm {...this.props}/>
+            <EmailFormComponent {...this.props}/>
          </div>
       )
    }

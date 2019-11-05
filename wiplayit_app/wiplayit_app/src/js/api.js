@@ -276,6 +276,10 @@ export default class Api{
          
     }
 
+    confirmationEmailResendApi(){
+        return `rest-auth/resend/account/confirm/email/`;
+    }
+
     facebookLoginApi() {
         
         var url = `/rest-auth/facebook/`;

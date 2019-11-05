@@ -1,5 +1,5 @@
 
-import { SubmissionError } from 'redux-form'; 
+ 
 import Api from '../api';
 import Axios from '../axios_instance';
 import  * as action  from '../actions/actionCreators';
@@ -288,21 +288,24 @@ export function handleSubmit(props) {
 
 
 export function authenticate(apiUrl='', values={}, dispatch=function(){}){
-    
+    console.log(apiUrl, values)
     const axiosApi = new Axios(false);
     const instance = axiosApi.axiosInstance();
 
-    dispatch(action.authenticationPending());
+    
                 
-         
+    /*   
     return  instance.post(apiUrl, values)
             .then(response => {
-            console.log(response)
-            dispatch(action.authenticationSuccess(response.data))}
+
+               console.log(response)
+               dispatch(action.authenticationSuccess(response.data));
+            }
         )
         .catch(error =>{
                 
             if (error.response && error.response.data) {
+
                 console.log(error.response.data)
                 throw new SubmissionError(error.response.data)
 
@@ -312,7 +315,7 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
                 console.log(error.request)
                 dispatch(action.handleError())
             }
-        });
+        });*/
    
 }; 
 

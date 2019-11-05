@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ReduxEmailForm } from '../../components/registration'
+import { EmailFormComponent } from '../../components/registration'
 import  withAuthentication   from '../../containers/authentication/index'; 
  
  
@@ -19,7 +19,12 @@ class PasswordResetForm extends Component{
                          
       };
             
-   }
+   };
+
+   componentDidMount() {
+      this.props.formConstructor('passwordResetForm')
+
+    };
 
    
    
@@ -31,7 +36,7 @@ class PasswordResetForm extends Component{
       return (
          <div className="password-reset">
          
-             <ReduxEmailForm {...props}/>
+             <EmailFormComponent {...props}/>
          
          </div>
       )
