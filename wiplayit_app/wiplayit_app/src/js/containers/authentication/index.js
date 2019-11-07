@@ -40,8 +40,11 @@ export function withAuthentication(Component) {
                 onPasswordChangeForm : false, 
                 formIsValid          : false,
                 formErrors           : null,
+                successMassage       : null,
 
             };
+
+            //React binding
 
             this.validateForm             = this.formIsValid.bind(this);          
             this.formConstructor          = this.formConstructor.bind(this);  
@@ -52,7 +55,8 @@ export function withAuthentication(Component) {
             this.responseTwitter          = this.responseTwitter.bind(this);
             this.responseGoogle           = this.responseGoogle.bind(this);  
             this.toggleSignUpForm         = this.toggleSignUpForm.bind(this);
-            this.togglePasswordResetForm  = this.togglePasswordResetForm.bind(this);   
+            this.togglePasswordResetForm  = this.togglePasswordResetForm.bind(this);  
+            this._Redirect                = this._Redirect.bind(this); 
         };
 
 
@@ -74,7 +78,7 @@ export function withAuthentication(Component) {
             return false;
         }
 
-        Redirect(){
+        _Redirect(){
             let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
 
             if (cachedEntyties){
@@ -145,17 +149,22 @@ export function withAuthentication(Component) {
                 let  onStoreUpdate = store.getState();   
                 var userAuth = onStoreUpdate.entyties.userAuth;
 
-                if (userAuth) {
+                if (userAuth && userAuth.auth) {
                     
-                    let { auth } = userAuth;
+                    let { auth, error, isLoggedIn, tokenKey, datail } = userAuth.auth;
 
-                    if (userAuth.error || auth.isLoggedIn || auth.tokenKey) {
-                        console.log(userAuth.error)
-                        this.setState({ submitting : false })
+                            
+                    if (error || isLoggedIn || tokenKey || datail) {
+                        this.setState({ submitting : false, datail, error })
                     }
 
-                    if(auth && auth.isLoggedIn && auth.tokenKey){
-                        this.Redirect(); 
+                    if( isLoggedIn && tokenKey){
+                        
+                        setTimeout(()=> {
+                             this._Redirect(); 
+                        }, 1000);
+                           
+
                     }
                 }
             };
@@ -250,7 +259,11 @@ export function withAuthentication(Component) {
 
                 emailForm          : { 'email'  : '', }, 
 
-                passwordChangeForm : { 'password1' : '', 'password2' : '' }
+                passwordChangeForm : {
+                     'new_password1' : '',
+                     'new_password2' : '',
+
+                    }
             }  
         }
 
@@ -286,14 +299,16 @@ export function withAuthentication(Component) {
 
                     case 'emailResendForm':
 
-                        form = getFormFields().emailForm;
+                        form = this.getFormFields().emailForm;
                         this.setState({ onEmailResendForm : true });
 
                         return this._SetForm(form, formName);
 
                     case 'passwordChangeForm':
+                        let { uid, token } = this.props.match.params;
 
-                        form = getFormFields().passwordChangeForm;
+                        form = this.getFormFields().passwordChangeForm;
+                        form = Object.assign({uid, token}, form);
 
                         this.setState({ onPasswordChangeForm : true});
                         
@@ -383,7 +398,7 @@ export function withAuthentication(Component) {
                     return api.createUser();
 
                 case 'passwordChangeForm':
-                    return api.passwordChangeApi();
+                    return api.passwordResetConfirmApi();
 
                 case 'passwordResetForm':
                     return api.passwordResetApi();
@@ -418,9 +433,11 @@ export function withAuthentication(Component) {
                     }
 
                 }
-  
+
                 store.dispatch(action.authenticationPending());
                 let formData = helper.createFormData({...form});
+
+                this.setState({submitting : true})
                 return authenticate(apiUrl, formData, store.dispatch);
 
             }else{

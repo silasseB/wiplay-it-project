@@ -79,6 +79,7 @@ class CustomLoginView(LoginView):
 
 
 
+
 class CustomVerifyEmailView(APIView):
 	permission_classes = (AllowAny,)
 	

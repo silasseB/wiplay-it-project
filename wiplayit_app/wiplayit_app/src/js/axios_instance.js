@@ -48,7 +48,7 @@ export default class Axios {
                 instance.defaults.headers.common['Authorization'] = tokenKey;
             }
         }
-        
+        console.log(csrftoken)
         instance.defaults.xsrfCookieName = csrftoken;
         instance.defaults.timeout = 30000;
         return instance;

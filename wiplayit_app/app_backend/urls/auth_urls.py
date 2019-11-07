@@ -18,6 +18,7 @@ urlpatterns = [
 
     path('rest-auth/resend/account/confirm/email', SendEmailConfirimationView.as_view(),
        name='account_confirm_email'),
+
         
     ]
 

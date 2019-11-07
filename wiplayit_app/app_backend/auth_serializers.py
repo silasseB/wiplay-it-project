@@ -1,6 +1,7 @@
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
+from django.conf import settings
 
 from rest_framework import serializers, exceptions
 from rest_framework.authtoken.models import Token
@@ -95,7 +96,12 @@ class CustomPasswordResetSerializer (PasswordResetSerializer):
     
     def get_email_options(self):
         """Override this method to change default e-mail options"""
-        return {"domain_override": "valoi.pythonanywhere.com/#/"}
+        host = settings.ALLOWED_HOSTS[0]
+
+        if settings.DEBUG:
+        	host = host + ":8000"
+
+        return {"domain_override": host }
 
 
     def validate_email(self, value):

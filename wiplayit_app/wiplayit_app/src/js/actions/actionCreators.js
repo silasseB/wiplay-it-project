@@ -593,15 +593,22 @@ export const authenticationPending = () => ({
 });
 
 
-export const authenticationSuccess = (tokenKey) => {
+export const authenticationSuccess = (successResponse) => {
       
-      var isLoggedIn = tokenKey && tokenKey.key?true:false;
+      var isLoggedIn = successResponse && successResponse.key?true:false;
+
+      let tokenKey = successResponse && successResponse.key?
+                                        successResponse.key:null;  
+
+      let detail = successResponse && successResponse.detail?
+                                      successResponse.detail:null; 
       return {
          type   : types.USER_AUTHENTICATION.SUCCESS,
          payload : {
             auth :{
-                tokenKey   : tokenKey.key,
+                tokenKey,
                 isLoggedIn,
+                detail,
             },
 
             isLoading  : false,
@@ -615,8 +622,11 @@ export const authenticationError = (error) => {
    return {
       type   : types.USER_AUTHENTICATION.ERROR,
       payload : {
-         error     : error.data || error,
-         isLoading : false,
+        auth:{
+          error     : error.data || error,
+        },
+
+        isLoading : false,
       }
   };
 };

@@ -22,14 +22,14 @@ export class PasswordChangePage extends Component{
    
    
     componentDidMount() {
-       console.log(this.props)
-       this.props.formConstructor('passwordChangeForm');
+        this.props.formConstructor('passwordChangeForm');
     }
 
    
    render(){
       
       let props = Object.assign(this.state, this.props);
+      console.log(props)
       return (
          <div>
             <NavBar {...props.passwordChangeStateForm}/> 

@@ -10,7 +10,7 @@ import  AjaxLoader from "../components/ajax-loader";
 
 export const  LoginFormComponent = props => {
     console.log(props)
-    let { submitting, onSignUpForm , formIsValid, formName, form, validateForm} = props;
+    let { submitting, onSignUpForm, formIsValid, formName, error, form, validateForm} = props;
 
     form = form && form.loginForm? 
                            form.loginForm:null;
@@ -37,8 +37,26 @@ export const  LoginFormComponent = props => {
               <fieldset style={ fieldSetStyles}
                         disabled={ submitting || onSignUpForm }
                         className="fieldset-login">
+                    {error && error.non_field_errors && error.non_field_errors.length?
+                            <div>
+                                { error.non_field_errors.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                    }        
                                
                <div className="login-box">
+                    {error && error.email && error.email.length?
+                            <div>
+                                { error.email.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                    }
                   <div className="login-fields">
                     <input
                       className="login-email-field"
@@ -113,7 +131,7 @@ export default LoginFormComponent;
 export const  SignUpFormComponent = props => {
     console.log(props)
 
-    let { submitting, form, onSignUpForm, formName, formIsValid, validateForm } = props;
+    let { submitting, form, onSignUpForm, formName, formIsValid,error, validateForm } = props;
 
     form = form && form.signUpForm? 
                            form.signUpForm:null;
@@ -131,6 +149,15 @@ export const  SignUpFormComponent = props => {
           <p className="signup-form-title">Sign Up</p>
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
+                {error && error.non_field_errors && error.non_field_errors.length?
+                            <div>
+                                { error.non_field_errors.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                }        
 
             <fieldset  disabled={ submitting } 
                        style={ fieldSetStyles}
@@ -149,6 +176,8 @@ export const  SignUpFormComponent = props => {
                         name="first_name"
                         value={form.first_name}
                         onChange={props.handleFormChange}
+                        autoFocus 
+                        required
                       />
 
                     </div>  
@@ -159,7 +188,9 @@ export const  SignUpFormComponent = props => {
                         type="text"
                         name="last_name"
                         value={form.last_name}
-                       onChange={props.handleFormChange}
+                        onChange={props.handleFormChange}
+                        autoFocus 
+                        required
                       />
                       
                     </div>
@@ -168,6 +199,16 @@ export const  SignUpFormComponent = props => {
                </div>
 
                <div  className="email-fields signup-fields">
+                    {error && error.email && error.email.length?
+                            <div>
+                                { error.email.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                    }
+
                   <div className="email-box">
                     <input
                       placeholder="Email"
@@ -176,6 +217,8 @@ export const  SignUpFormComponent = props => {
                       name="email"
                       value={form.email}
                       onChange={props.handleFormChange}
+                      autoFocus 
+                      required 
                     />
 
                   </div>
@@ -190,6 +233,8 @@ export const  SignUpFormComponent = props => {
                         name="password"
                         value={form.password}
                         onChange={props.handleFormChange}
+                        autoFocus 
+                        required
                       />
 
                   </div>
@@ -226,7 +271,7 @@ export const  SignUpFormComponent = props => {
 
 
 export const PassWordChangeForm = props => {
-    let { submitting, form,
+    let { submitting, form, formName,
           onSignUpForm,onPasswordChangeForm,
            formIsValid , validateForm } = props;
 
@@ -235,9 +280,11 @@ export const PassWordChangeForm = props => {
                                   {};
     
     form = form && form.passwordChangeForm? 
-                           form.loginForm:null;
+                           form.passwordChangeForm:null;
 
     formIsValid = onPasswordChangeForm? validateForm(form, formName):false;
+
+    console.log(form, props)
 
     let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
                                                      {opacity:'0.60'}:{};
@@ -246,12 +293,12 @@ export const PassWordChangeForm = props => {
     
     return(
     <div>
-        {props.form?
+        {form?
 
-      <div className="">
+        <div className="">
          <p className="password-change-form-title">Password Change</p>
 
-           { props.successMassage !== ''?
+           { props.successMassage?
                <div className="password-change-success-box">
                   <p className="password-change-success message-success">{props.successMassage}</p>
                   
@@ -270,6 +317,15 @@ export const PassWordChangeForm = props => {
 
                <fieldset style={ fieldSetStyles}
                 disabled={ submitting || onSignUpForm}>
+                   {error && error.non_field_errors && error.non_field_errors.length?
+                            <div>
+                                { error.non_field_errors.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                    }        
 
                   <div  className="" >
                      <div className="change-password-box">
@@ -277,9 +333,11 @@ export const PassWordChangeForm = props => {
                            className="password"
                            placeholder="New Password"
                            type="password"
-                           name="password1"
-                           value={form.password1}
+                           name="new_password1"
+                           value={form.new_password1}
                            onChange={props.handleFormChange}
+                           autoFocus 
+                           required
                         />
                      </div>
 
@@ -289,16 +347,18 @@ export const PassWordChangeForm = props => {
                            className="password"
                            placeholder="Repeat New Password"
                            type="password"
-                           name="password2"
-                           value={form.password2}
+                           name="new_password2"
+                           value={form.new_password2}
                            onChange={props.handleFormChange}
+                           autoFocus 
+                           required
                         />
                      </div>
 
                      <div className="submit-box">  
                         <button type="submit" 
                                 style={ submitButtonStyles }
-                                disabled={ submitting || onSignUpForm || formIsValid} 
+                                disabled={ submitting || onSignUpForm || !formIsValid} 
                                 className="btn-sm  btn-submit" >
 
                               Submit
@@ -327,13 +387,13 @@ export const EmailFormComponent = props => {
 
     let { submitting ,onSignUpForm,
           onPasswordResetForm, 
-          onEmailResendForm, form,
+          onEmailResendForm, form,error,
           formIsValid, formName, validateForm } = props;
 
     form = form && form[formName]? 
                            form[formName]:null;
 
-    formIsValid = onPasswordResetForm || onEmailResendForm?
+    formIsValid =  onPasswordResetForm || onEmailResendForm?
                              validateForm(form, formName):false;
 
     let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
@@ -364,11 +424,30 @@ export const EmailFormComponent = props => {
             :
 
             <form className="email-form" onSubmit={props.onSubmit}>
-          
+                    {error && error.non_field_errors && error.non_field_errors.length?
+                            <div>
+                                { error.non_field_errors.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                    }         
                 <fieldset style={ fieldSetStyles} 
                       disabled={ submitting || onSignUpForm} >
 
                     <div  className="email-fields">
+                       {error && error.email.length?
+                            <div>
+                                { error.email.map(( error, index) =>
+                                   <li key={index} className="email-error">{error}</li>
+                                )}
+                            </div>
+                            :
+                            ""
+                        }
+
+                        <p></p>
                         <div className="email-box">
                             <input
                                placeholder="Email"
@@ -377,6 +456,8 @@ export const EmailFormComponent = props => {
                                name="email"
                                value={form.email}
                                onChange={props.handleFormChange}
+                               autoFocus 
+                               required
                        
                             />
 
@@ -386,7 +467,7 @@ export const EmailFormComponent = props => {
                     <div className="registration-btn-box">
                         <button type="submit" 
                             style={submitButtonStyles} 
-                            disabled={submitting || onSignUpForm || formIsValid }
+                            disabled={submitting || onSignUpForm || !formIsValid }
                             className="btn-submit btn-sm">
                             Submit
                         </button>

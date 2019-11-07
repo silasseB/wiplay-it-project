@@ -288,7 +288,7 @@ export function handleSubmit(props) {
 
 
 export function authenticate(apiUrl='', values={}, dispatch=function(){}){
-    console.log(apiUrl, values)
+
     const axiosApi = new Axios(false);
     const instance = axiosApi.axiosInstance();
      
@@ -301,14 +301,16 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
             }
         )
         .catch(error =>{
+            let { response, request } = error
                 
-            if (error.response && error.response.data) {
-                console.log(error.response.data)
-                dispatch(action.authenticationError(error.response.data));
+            if ( response && response.data) {
+                console.log(response.data)
+                console.log(typeof response.data )
+                dispatch(action.authenticationError(response.data));
             }
-            else if (error.request) {
-                console.log(error.request)
-                dispatch(action.handleError())
+            else if (request) {
+                console.log(request)
+                dispatch(action.handleError(request))
             }
         });
    

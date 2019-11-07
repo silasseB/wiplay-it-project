@@ -26,11 +26,13 @@ const InitialState = () => {
     
         userAuth : {
             isLoading  : false,
-            error      : "",
+            error      : null,
 
             auth : {
-                tokenKey    : "",
+                tokenKey    : null,
                 isLoggedIn  : false,
+                detail      : null,
+                error       : null,
                
             },
         },
