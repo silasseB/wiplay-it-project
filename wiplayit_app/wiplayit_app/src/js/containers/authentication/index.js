@@ -30,15 +30,20 @@ export function withAuthentication(Component) {
             super(props);
             this.state = {
                 isAuthenticated      : false,
+                defaultActiveForm    : null,
                 form                 : null,
                 formName             : null, 
+                onLoginForm          : false,
                 submitting           : false,
                 onSignUpForm         : false,
                 onPasswordResetForm  : false,
                 onPasswordChangeForm : false, 
+                formIsValid          : false,
+                formErrors           : null,
 
             };
 
+            this.validateForm             = this.formIsValid.bind(this);          
             this.formConstructor          = this.formConstructor.bind(this);  
             this.onSubmit                 = this.onSubmit.bind(this);
             this.handleFormChange         = this.handleFormChange.bind(this); 
@@ -139,11 +144,19 @@ export function withAuthentication(Component) {
             const onStoreChange = () => {
                 let  onStoreUpdate = store.getState();   
                 var userAuth = onStoreUpdate.entyties.userAuth;
-                //console.log(userAuth)
-                
-                if(userAuth && userAuth.auth && userAuth.auth.isLoggedIn && userAuth.auth.tokenKey){
-                   console.log(userAuth.auth)
-                   this.Redirect();
+
+                if (userAuth) {
+                    
+                    let { auth } = userAuth;
+
+                    if (userAuth.error || auth.isLoggedIn || auth.tokenKey) {
+                        console.log(userAuth.error)
+                        this.setState({ submitting : false })
+                    }
+
+                    if(auth && auth.isLoggedIn && auth.tokenKey){
+                        this.Redirect(); 
+                    }
                 }
             };
 
@@ -159,66 +172,180 @@ export function withAuthentication(Component) {
 
         handleFormChange(e){
             e.preventDefault()
-            let form = this.state.form;
+            let  { form, formName } = this.state;
+          
             
             if (form) {
-                form[e.target.name] = e.target.value;
+
+                let currentForm = form[formName];
+                currentForm[e.target.name] = e.target.value;
                 this.setState({form});
             }
         };
 
+        _InvalidateForm(){
+
+        }
+
+
+
+        formIsValid(form, formName=null){
+                        
+            if (form) {
+
+                let formKeys = Object.keys(form);
+                let formIsValid = true;
+               
+                for (var key in formKeys) {
+                    key = formKeys[key]
+
+                    if(/^ *$/.test(form[key])){
+                        formIsValid = false 
+                        console.log(/^ *$/.test(form[key]), form[key])
+                        break
+                    }
+                }
+
+                console.log(`the ${formName} is valid: ` + formIsValid)
+                return formIsValid;
+
+            }else{
+                return false
+            }
+
+        };
+
+
+        _SetForm(form, formName){
+           
+            let currentForm = this.state.form;
+            
+            if (currentForm) {
+
+                if (!currentForm[formName]) {
+
+                    currentForm[formName] = {...form}
+                    console.log(form, currentForm)
+                }
+
+                form = currentForm;
+
+            }else{
+                form = Object.defineProperty({}, formName, { value : form });
+            }
+           
+            this.setState({form, formName});
+
+        };
+
+        getFormFields(){
+            return {
+                loginForm  : {'email':'', 'password':''},
+
+                signUpForm : {
+                                'first_name' : '',
+                                'last_name'  : '',
+                                'email'      : '',
+                                'password'   : '', },
+
+                emailForm          : { 'email'  : '', }, 
+
+                passwordChangeForm : { 'password1' : '', 'password2' : '' }
+            }  
+        }
+
         formConstructor = (name) => {
             
             if (name) {
+                let formName = name;
+                let defaultActiveForm = formName;
+                let form = null;
 
-                switch(name){
+                switch(formName){
 
                     case 'loginForm':
 
-                        let loginForm = {'email':'', 'password':''}
-                        this.setState({'form' : loginForm, 'formName':name})
-                        return;
+                        form = this.getFormFields().loginForm;
+                        this.setState({ onLoginForm : true, defaultActiveForm})
+
+                        return this._SetForm(form, formName)
 
                     case 'signUpForm':
 
-                        let signUpForm = {
-                            'first_name' : '',
-                            'last_name'  : '',
-                            'email'      : '',
-                            'password'   : '',
+                        form = this.getFormFields().signUpForm;
+                        this.setState({onSignUpForm : true})
 
-                        };
-
-                        this.setState({ 'form': signUpForm, 'formName':name });
-                        return;
+                        return this._SetForm(form, formName);
 
                     case 'passwordResetForm':
+
+                        form = this.getFormFields().emailForm;
+                        this.setState({ onPasswordResetForm : true, defaultActiveForm });
+
+                        return this._SetForm(form, formName); 
+
                     case 'emailResendForm':
 
-                        let emailForm = { 'email'      : '', };
-                        this.setState({ 'form' : emailForm,  'formName':name})
-                        return; 
+                        form = getFormFields().emailForm;
+                        this.setState({ onEmailResendForm : true });
+
+                        return this._SetForm(form, formName);
 
                     case 'passwordChangeForm':
 
-                        let passwordChangeForm = { 'password1' : '', 'password2' : '' }
-                        this.setState({ 'form' : passwordChangeForm,  'formName':name })
-                        return;
+                        form = getFormFields().passwordChangeForm;
+
+                        this.setState({ onPasswordChangeForm : true});
+                        
+                        return this._SetForm(form, formName);
 
                     default:
                         return null;
                 };
+
             }
         };
 
+        getCurrentDefaultForm(){
+           return this.state.defaultActiveForm;
+        }
+
 
         
-        toggleSignUpForm = (props)=>{
-            this.setState({onSignUpForm:props.value})
+        toggleSignUpForm = (params)=>{
+            const currentFormName = this.getCurrentDefaultForm();
+            let signUpFormName = "signUpForm";
+            let { value } = params;
+
+            if (!value) {
+                this.setState({onSignUpForm : false})
+                this.formConstructor(currentFormName) 
+            }
+
+            if ( value) {
+                this.formConstructor(signUpFormName)
+            }
+            
+
+
         };
 
-        togglePasswordResetForm = (props) => {
-            this.setState({onPasswordResetForm : props.value})
+        togglePasswordResetForm = (params) => {
+            
+            const defaultActiveForm = 'loginForm';
+            let passwordResetFormName = "passwordResetForm";
+            let { value } = params;
+
+            if (!value) {
+                this.setState({onPasswordResetForm : false})
+                this.formConstructor(defaultActiveForm) 
+            }
+
+            if ( value) {
+                this.formConstructor(passwordResetFormName)
+            }
+            
+
            
         };
 
@@ -274,14 +401,32 @@ export function withAuthentication(Component) {
 
         onSubmit = (e) => {
             e.preventDefault();
-            this.setState( {submitting : true} )
-
-            let formName = this.state.formName;
-            let form = this.state.form;
+            let formName    = this.state.formName;
+            let form        = this.state.form[formName];
+            let formIsValid = this.formIsValid(form, formName);
+            let apiUrl      = this.getAuthUrl(formName);
             
-            let apiUrl =  this.getAuthUrl(formName);
-            store.dispatch(action.authenticationPending());
-            return authenticate(apiUrl, form, store.dispatch);
+
+            if ( form && formIsValid) {
+
+                if (form.email) {
+                    let emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    let emailIsValid = emailRegExp.test(form.email)
+
+                    if (!emailIsValid) {
+                        return 
+                    }
+
+                }
+  
+                store.dispatch(action.authenticationPending());
+                let formData = helper.createFormData({...form});
+                return authenticate(apiUrl, formData, store.dispatch);
+
+            }else{
+                
+                this._InvalidateForm()
+            }
            
         };
 
@@ -298,6 +443,7 @@ export function withAuthentication(Component) {
                 togglePasswordResetForm : this.togglePasswordResetForm, 
                 toggleSignUpForm        : this.toggleSignUpForm,
                 confirmUser             : this.confirmUser,
+                validateForm            : this.validateForm, 
             };
          
             return Object.assign(props, this.props);

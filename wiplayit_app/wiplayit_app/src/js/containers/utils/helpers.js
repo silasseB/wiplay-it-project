@@ -81,10 +81,11 @@ export default class Helper {
 
     validateForm(params){
         let validatedForm = {};
-        console.log(params.form)
 
-        if (params.editorContents) {
-            let form      = convertToRaw(params.editorContents);
+        let {editorContents, form } = params
+
+        if (editorContents) {
+            form      = convertToRaw(editorContents);
             let entityMap = Object.keys(form.entityMap);
             let blockText =   this._blockText(form);
                   
@@ -101,8 +102,8 @@ export default class Helper {
             } 
         }
 
-        else if(params.form){
-            let textarea = params.form.textarea;
+        else if(form){
+            let textarea = form.textarea;
             if (/^ *$/.test(textarea)) {
                 //If textarea field is empty? Return form errors
 
@@ -114,7 +115,7 @@ export default class Helper {
             }
             else {
                 validatedForm = {
-                    data          : params.form.textarea,
+                    data          : form.textarea,
                     formIsValid   : true,
                     formHasErrors : false
                 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import {  Link,Route } from "react-router-dom";
 
 import { ModalManager } from 'react-dynamic-modal';
+import {CustomModal} from "../../containers/modal-conf";
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navBar";
 
@@ -163,8 +165,10 @@ class ProfilePage extends Component {
                             </div>
 
                             :
-
-                            <ProfileComponent {...props}/> 
+                            <div>
+                               <ModalLink {...props}/>
+                               <ProfileComponent {...props}/> 
+                            </div>
                         }
                     </div>
 
@@ -183,6 +187,42 @@ export default withHigherOrderIndexBox(ProfilePage);
 
 
 
+
+
+
+
+
+export const ModalLink = (props) =>{
+    return(
+        <div>
+        <Link to={`${props.match.url}edit`}>Edit Profile</Link>
+
+        <Route
+          path={`${props.match.url}edit`}
+          render={() => {
+            return (
+              <Modal
+                onClick={() => {
+                  props.history.push(props.match.url);
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: '100%'
+                  }}
+                >
+                  Edit Profile Modal!
+                </div>
+              </Modal>
+            );
+          }}
+        />
+      </div>
+        )
+}
 
 
 

@@ -25,12 +25,13 @@ const InitialState = () => {
     return {
     
         userAuth : {
-            
-            isLoading              : false,
+            isLoading  : false,
+            error      : "",
 
             auth : {
                 tokenKey    : "",
                 isLoggedIn  : false,
+               
             },
         },
 
@@ -106,6 +107,7 @@ export function entyties(state=InitialState(), action) {
 
       case types.USER_AUTHENTICATION.ERROR:
          Object.assign(state.userAuth, action.payload)
+         console.log(state)
          return state;
           
 

@@ -291,10 +291,8 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
     console.log(apiUrl, values)
     const axiosApi = new Axios(false);
     const instance = axiosApi.axiosInstance();
-
+     
     
-                
-    /*   
     return  instance.post(apiUrl, values)
             .then(response => {
 
@@ -305,17 +303,14 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
         .catch(error =>{
                 
             if (error.response && error.response.data) {
-
                 console.log(error.response.data)
-                throw new SubmissionError(error.response.data)
-
                 dispatch(action.authenticationError(error.response.data));
             }
             else if (error.request) {
                 console.log(error.request)
                 dispatch(action.handleError())
             }
-        });*/
+        });
    
 }; 
 

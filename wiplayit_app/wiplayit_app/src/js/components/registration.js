@@ -9,17 +9,23 @@ import  AjaxLoader from "../components/ajax-loader";
 
 
 export const  LoginFormComponent = props => {
-   console.log(props)
-   let { submitting, onSignUpForm } = props;
-   
+    console.log(props)
+    let { submitting, onSignUpForm , formIsValid, formName, form, validateForm} = props;
 
-   let disabledStyle = submitting || onSignUpForm?
-                                  {opacity:'0.60'}:
-                                  {};
-       
+    form = form && form.loginForm? 
+                           form.loginForm:null;
+
+    formIsValid  = !onSignUpForm? validateForm(form, formName):false;
+
+    let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
+                                                     {opacity:'0.60'}:{};
+    
+    let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{}; 
+    
+
     return(
         <div>
-        {props.form?
+        { form?
 
         <div>
         
@@ -28,7 +34,7 @@ export const  LoginFormComponent = props => {
 
             <form onSubmit={props.onSubmit} className="login-form">
              
-              <fieldset style={ disabledStyle }
+              <fieldset style={ fieldSetStyles}
                         disabled={ submitting || onSignUpForm }
                         className="fieldset-login">
                                
@@ -39,8 +45,10 @@ export const  LoginFormComponent = props => {
                       placeholder="Email Address"
                       type="email"
                       name="email"
-                      value={props.form.email}
-                      onChange={props.handleFormChange}  
+                      value={form.email}
+                      onChange={props.handleFormChange} 
+                      autoFocus 
+                      required
                       
                     />
                     
@@ -51,8 +59,10 @@ export const  LoginFormComponent = props => {
                       placeholder="Password"
                       type="password"
                       name="password"
-                      value={props.form.password}
+                      value={form.password}
                       onChange={props.handleFormChange} 
+                      autoFocus
+                      required
                       
                     />
 
@@ -60,8 +70,8 @@ export const  LoginFormComponent = props => {
     
                   <div className="registration-btn-box">  
                      <button type="submit" className="btn-sm  btn-submit"
-                             style={disabledStyle}
-                             disabled={ submitting || onSignUpForm} >
+                             style={ submitButtonStyles }
+                             disabled={ submitting || onSignUpForm || !formIsValid} >
 
                        Submit
 
@@ -74,7 +84,13 @@ export const  LoginFormComponent = props => {
              </fieldset>
           </form>
 
-          <SpinLoader {...props}/> 
+          { onSignUpForm?
+            
+            ""
+            :
+            <SpinLoader {...props}/> 
+              
+          } 
          
         </div>
       :
@@ -97,21 +113,27 @@ export default LoginFormComponent;
 export const  SignUpFormComponent = props => {
     console.log(props)
 
-    let { submitting } = props;
+    let { submitting, form, onSignUpForm, formName, formIsValid, validateForm } = props;
+
+    form = form && form.signUpForm? 
+                           form.signUpForm:null;
     
-    let disabledStyle = submitting ? {opacity:'0.60'}:{}; 
-   
+    formIsValid = onSignUpForm? validateForm(form, formName):false;
+    let submitButtonStyles = submitting || !formIsValid?{opacity:'0.60'}:{};
+    
+    let fieldSetStyles = submitting ? {opacity:'0.60'}:{}; 
+
     
     return(
         <div>
-          { props.form?
+          { form?
           <div>
           <p className="signup-form-title">Sign Up</p>
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
 
             <fieldset  disabled={ submitting } 
-                       style={disabledStyle}
+                       style={ fieldSetStyles}
                        className="fieldset-signup" >
 
               <div className="sign-up-box">
@@ -125,7 +147,7 @@ export const  SignUpFormComponent = props => {
                         className="first-name-input"
                         type="text"
                         name="first_name"
-                        value={props.form.first_name}
+                        value={form.first_name}
                         onChange={props.handleFormChange}
                       />
 
@@ -136,7 +158,7 @@ export const  SignUpFormComponent = props => {
                         className="last-name-input"
                         type="text"
                         name="last_name"
-                        value={props.form.last_name}
+                        value={form.last_name}
                        onChange={props.handleFormChange}
                       />
                       
@@ -152,7 +174,7 @@ export const  SignUpFormComponent = props => {
                       className="email"
                       type="email"
                       name="email"
-                      value={props.form.email}
+                      value={form.email}
                       onChange={props.handleFormChange}
                     />
 
@@ -165,7 +187,8 @@ export const  SignUpFormComponent = props => {
                         placeholder="Password"
                         className="password"
                         type="password"
-                        value={props.form.email}
+                        name="password"
+                        value={form.password}
                         onChange={props.handleFormChange}
                       />
 
@@ -173,15 +196,20 @@ export const  SignUpFormComponent = props => {
                </div>
             </div>
             <button type="submit" className="btn-submit btn-sm"
-                       style={disabledStyle} 
-                       disabled={submitting}>
+                       style={submitButtonStyles} 
+                       disabled={submitting || !formIsValid}>
                   Submit
               </button>
               <CancelFormBtn {...props}/>          
             </fieldset>
           </form>
-
-         <SpinLoader {...props}/> 
+          { onSignUpForm?
+     
+            <SpinLoader {...props}/> 
+            :
+            ""
+              
+          }
       </div>
 
       :
@@ -198,11 +226,25 @@ export const  SignUpFormComponent = props => {
 
 
 export const PassWordChangeForm = props => {
-    let { submitting, isOnSignUpForm } = props
-   let disabledStyle = submitting || isOnSignUpForm? 
+    let { submitting, form,
+          onSignUpForm,onPasswordChangeForm,
+           formIsValid , validateForm } = props;
+
+    let disabledStyle = submitting || onSignUpForm? 
                                   {opacity:'0.60'}:
                                   {};
-   return(
+    
+    form = form && form.passwordChangeForm? 
+                           form.loginForm:null;
+
+    formIsValid = onPasswordChangeForm? validateForm(form, formName):false;
+
+    let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
+                                                     {opacity:'0.60'}:{};
+    
+    let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{};
+    
+    return(
     <div>
         {props.form?
 
@@ -226,8 +268,8 @@ export const PassWordChangeForm = props => {
                   <li key={index} className="password-form-description">{description}</li>
                )}
 
-               <fieldset style={disabledStyle}
-                disabled={ submitting || isOnSignUpForm}>
+               <fieldset style={ fieldSetStyles}
+                disabled={ submitting || onSignUpForm}>
 
                   <div  className="" >
                      <div className="change-password-box">
@@ -236,7 +278,7 @@ export const PassWordChangeForm = props => {
                            placeholder="New Password"
                            type="password"
                            name="password1"
-                           value={props.form.password1}
+                           value={form.password1}
                            onChange={props.handleFormChange}
                         />
                      </div>
@@ -248,15 +290,15 @@ export const PassWordChangeForm = props => {
                            placeholder="Repeat New Password"
                            type="password"
                            name="password2"
-                           value={props.form.password2}
+                           value={form.password2}
                            onChange={props.handleFormChange}
                         />
                      </div>
 
                      <div className="submit-box">  
                         <button type="submit" 
-                                style={disabledStyle}
-                                disabled={ submitting || isOnSignUpForm} 
+                                style={ submitButtonStyles }
+                                disabled={ submitting || onSignUpForm || formIsValid} 
                                 className="btn-sm  btn-submit" >
 
                               Submit
@@ -281,14 +323,28 @@ export const PassWordChangeForm = props => {
 
 
 export const EmailFormComponent = props => {
+    console.log(props)
 
-    let disabledStyle = props.submitting || props.onSignUpForm?
-                                  {opacity:'0.60'}:
-                                  {};
+    let { submitting ,onSignUpForm,
+          onPasswordResetForm, 
+          onEmailResendForm, form,
+          formIsValid, formName, validateForm } = props;
+
+    form = form && form[formName]? 
+                           form[formName]:null;
+
+    formIsValid = onPasswordResetForm || onEmailResendForm?
+                             validateForm(form, formName):false;
+
+    let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
+                                                     {opacity:'0.60'}:{};
+    
+    let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{};
+
    
     return(
         <div>
-            { props.form? 
+            { form? 
                <div className="email-form-box">
                     <p className="password-reset-form-title">
           
@@ -309,8 +365,8 @@ export const EmailFormComponent = props => {
 
             <form className="email-form" onSubmit={props.onSubmit}>
           
-                <fieldset style={disabledStyle} 
-                      disabled={props.submitting || props.onSignUpForm} >
+                <fieldset style={ fieldSetStyles} 
+                      disabled={ submitting || onSignUpForm} >
 
                     <div  className="email-fields">
                         <div className="email-box">
@@ -319,7 +375,7 @@ export const EmailFormComponent = props => {
                                className="email"
                                type="email"
                                name="email"
-                               value={props.form.email}
+                               value={form.email}
                                onChange={props.handleFormChange}
                        
                             />
@@ -329,8 +385,8 @@ export const EmailFormComponent = props => {
 
                     <div className="registration-btn-box">
                         <button type="submit" 
-                            style={disabledStyle} 
-                            disabled={props.submitting || props.onSignUpForm}
+                            style={submitButtonStyles} 
+                            disabled={submitting || onSignUpForm || formIsValid }
                             className="btn-submit btn-sm">
                             Submit
                         </button>
@@ -344,7 +400,13 @@ export const EmailFormComponent = props => {
 
             }
 
-            <SpinLoader {...props}/>  
+            { onSignUpForm?
+            
+            ""
+            :
+            <SpinLoader {...props}/> 
+              
+          }  
         </div>
 
         :
@@ -617,11 +679,8 @@ const  PasswordChangeLink  = props => (
 
 
 const  CancelBtn  = props => {
-    let toggleProps = {
-        value : false, 
-        onSignupLoginFormStyles : {opacity:'2.60'},
-        createUserBtnStyles     : {display:'block'}
-    };
+    let toggleProps = {value : false};
+    
 
     return(
         <button type="button" onClick={()=>props.toggleSignUpForm(toggleProps)} 
@@ -632,7 +691,7 @@ const  CancelBtn  = props => {
 };
 
 const  CancelPasswordResetBtn  = props => {
-    let toggleProps = {value:false, style:{display:'block'} }
+    let toggleProps = {value:false};
 
     return (
         <button type="button" onClick={()=>props.togglePasswordResetForm(toggleProps)} 
