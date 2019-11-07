@@ -12,7 +12,6 @@ class PasswordResetPage extends Component{
         super(props);
 
         this.state = {
-            formName       : 'password_reset',
             navbarTitle    : 'Password Reset',
                              
         };

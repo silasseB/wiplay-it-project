@@ -12,7 +12,6 @@ class PasswordResetForm extends Component{
       super(props);
 
       this.state = {
-         formName           : 'password_reset',
          formTitle          : 'Password Reset',
          navbarTitle        : 'Password Reset',
          formDescription    : [''],

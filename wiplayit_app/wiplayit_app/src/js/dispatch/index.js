@@ -11,7 +11,8 @@ const api = new Api();
 
 
 export function getIndex(options) {
-    const instance = axiosApi.axiosInstance();  
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();  
     let apiUrl     = api.getIndexApi(); 
 
     
@@ -203,8 +204,9 @@ export function getReplyChildrenList(props) {
 
 
 export function getCurrentUser(tokenKey) {
-	let instance = axiosApi.axiosInstance();
-    console.log(tokenKey)
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance(); 
+	console.log(tokenKey)
 	
 	return dispatch => {
 	  	dispatch(action.getCurrentUserPending());

@@ -594,21 +594,24 @@ export const authenticationPending = () => ({
 
 
 export const authenticationSuccess = (successResponse) => {
+  console.log(successResponse)
       
       var isLoggedIn = successResponse && successResponse.key?true:false;
 
       let tokenKey = successResponse && successResponse.key?
                                         successResponse.key:null;  
-
-      let detail = successResponse && successResponse.detail?
+    
+      let successMessage = successResponse && successResponse.detail?
                                       successResponse.detail:null; 
+      let email = successResponse && successResponse.email?
+                                     successResponse.email:null;
       return {
          type   : types.USER_AUTHENTICATION.SUCCESS,
          payload : {
             auth :{
                 tokenKey,
                 isLoggedIn,
-                detail,
+                successMessage,
             },
 
             isLoading  : false,

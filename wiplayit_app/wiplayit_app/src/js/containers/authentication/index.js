@@ -40,7 +40,8 @@ export function withAuthentication(Component) {
                 onPasswordChangeForm : false, 
                 formIsValid          : false,
                 formErrors           : null,
-                successMassage       : null,
+                successMessage       : null,
+                email                : null,
 
             };
 
@@ -95,7 +96,10 @@ export function withAuthentication(Component) {
                 }
 
                 if (auth && auth.isLoggedIn){
-                    this.props.history.push('/')
+                    setTimeout(()=> {
+                        this.props.history.push('/'); 
+                        }, 1000);
+                    
                 }
             }
         };
@@ -150,21 +154,15 @@ export function withAuthentication(Component) {
                 var userAuth = onStoreUpdate.entyties.userAuth;
 
                 if (userAuth && userAuth.auth) {
+                    let { auth } = userAuth;
                     
-                    let { auth, error, isLoggedIn, tokenKey, datail } = userAuth.auth;
-
+                    let {  error, isLoggedIn, tokenKey, successMessage , email} = auth;
                             
-                    if (error || isLoggedIn || tokenKey || datail) {
-                        this.setState({ submitting : false, datail, error })
-                    }
+                    this.setState({ submitting : false, successMessage, error, email })             
+                    
 
                     if( isLoggedIn && tokenKey){
-                        
-                        setTimeout(()=> {
-                             this._Redirect(); 
-                        }, 1000);
-                           
-
+                       this._Redirect()
                     }
                 }
             };
@@ -210,12 +208,10 @@ export function withAuthentication(Component) {
 
                     if(/^ *$/.test(form[key])){
                         formIsValid = false 
-                        console.log(/^ *$/.test(form[key]), form[key])
                         break
                     }
                 }
 
-                console.log(`the ${formName} is valid: ` + formIsValid)
                 return formIsValid;
 
             }else{
@@ -234,7 +230,7 @@ export function withAuthentication(Component) {
                 if (!currentForm[formName]) {
 
                     currentForm[formName] = {...form}
-                    console.log(form, currentForm)
+                   
                 }
 
                 form = currentForm;
@@ -257,7 +253,7 @@ export function withAuthentication(Component) {
                                 'email'      : '',
                                 'password'   : '', },
 
-                emailForm          : { 'email'  : '', }, 
+                emailForm          : { 'email'  : 'lereko@gmail.com', }, 
 
                 passwordChangeForm : {
                      'new_password1' : '',
@@ -349,7 +345,12 @@ export function withAuthentication(Component) {
             
             const defaultActiveForm = 'loginForm';
             let passwordResetFormName = "passwordResetForm";
-            let { value } = params;
+            let { value, successMessage } = params;
+
+            if (!successMessage) {
+                this.setState({successMessage : false})
+                this.formConstructor(passwordResetFormName)
+            }
 
             if (!value) {
                 this.setState({onPasswordResetForm : false})

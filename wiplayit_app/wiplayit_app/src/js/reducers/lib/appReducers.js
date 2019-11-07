@@ -31,7 +31,7 @@ const InitialState = () => {
             auth : {
                 tokenKey    : null,
                 isLoggedIn  : false,
-                detail      : null,
+                successMessage      : null,
                 error       : null,
                
             },

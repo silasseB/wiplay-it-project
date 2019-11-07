@@ -272,8 +272,8 @@ export const  SignUpFormComponent = props => {
 
 export const PassWordChangeForm = props => {
     let { submitting, form, formName,
-          onSignUpForm,onPasswordChangeForm,
-           formIsValid , validateForm } = props;
+          onSignUpForm,onPasswordChangeForm, error,
+           formIsValid , validateForm, successMessage } = props;
 
     let disabledStyle = submitting || onSignUpForm? 
                                   {opacity:'0.60'}:
@@ -298,9 +298,10 @@ export const PassWordChangeForm = props => {
         <div className="">
          <p className="password-change-form-title">Password Change</p>
 
-           { props.successMassage?
+           { successMessage?
                <div className="password-change-success-box">
-                  <p className="password-change-success message-success">{props.successMassage}</p>
+                  <p className="password-change-success message-success">{ successMessage}</p>
+                  <p>Chick bellow to login with your password</p>
                   
                    <LoginSmallScreem/>
                    <LoginBigScreem/>
@@ -386,7 +387,7 @@ export const EmailFormComponent = props => {
     console.log(props)
 
     let { submitting ,onSignUpForm,
-          onPasswordResetForm, 
+          onPasswordResetForm, successMessage,
           onEmailResendForm, form,error,
           formIsValid, formName, validateForm } = props;
 
@@ -396,10 +397,13 @@ export const EmailFormComponent = props => {
     formIsValid =  onPasswordResetForm || onEmailResendForm?
                              validateForm(form, formName):false;
 
+    let email = successMessage?props.email:null;
+
     let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
                                                      {opacity:'0.60'}:{};
     
     let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{};
+    let toggleProps = {successMessage:false, value:true}
 
    
     return(
@@ -410,14 +414,17 @@ export const EmailFormComponent = props => {
           
                     </p>
 
-            { props.successMassage?
+            { successMessage && !submitting?
                <div className="success-message-box">
                     <p className="message-success">
-                 
+                         {successMessage}
                     </p>
 
                     <div className="resend-email-box ">
-                        <button type="button" className="resend-email-btn" >Resend</button>
+                        <button type="button" onClick={()=> props.togglePasswordResetForm(toggleProps)}
+                                 className="resend-email-btn" >
+                           Resend
+                        </button>
                         <CancelEmailForm {...props}/>
                     </div>
                 </div>
@@ -786,7 +793,7 @@ const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 900px)');
 
 
 const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 800px)');
-const CancelEmailForm = MatchMediaHOC(CancelPasswordResetBtn , '(min-width: 800px)');
+const CancelEmailForm = MatchMediaHOC(CancelPasswordResetBtn , '(min-width: 900px)');
 
 const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , '(max-width: 500px)');
 const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton , '(min-width: 800px)');
