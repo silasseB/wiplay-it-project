@@ -166,7 +166,6 @@ class ProfilePage extends Component {
 
                             :
                             <div>
-                               <ModalLink {...props}/>
                                <ProfileComponent {...props}/> 
                             </div>
                         }

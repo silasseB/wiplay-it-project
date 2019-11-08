@@ -14,8 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
+
 from django.urls import path, include, re_path
 from app_backend.api_views.api_detail_views import index
 
@@ -31,10 +30,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('rest-auth/', include('rest_auth.urls')),
     re_path(r'.*/', index),
-    path('', include('django.contrib.auth.urls')),
-    path('accounts/', include('allauth.urls')),
-    path('rest-auth/', include('rest_auth.urls')),
+  
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+

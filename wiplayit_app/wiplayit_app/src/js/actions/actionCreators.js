@@ -286,7 +286,8 @@ export const updateActionPending = (actionType, byId) => ({
   type:  actionType.PENDING,
   byId,
   payload: {
-    isLoading: false,
+    isLoading: true,
+    submitting : true,
   }
 });
 
@@ -302,6 +303,7 @@ export const updateActionSuccess = (actionType, byId, data)=> {
         payload: {
             ...data,
             isLoading : false,
+            submitting : false,
       }
    };
 };
@@ -313,6 +315,7 @@ export const updateActionError = (actionType, byId, error) => ({
   payload: {
    error,
    isLoading : false,
+   submitting : false,
   }
 });
 

@@ -61,7 +61,7 @@ const paths = {
         },
         { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]},
         { test: /\.json$/, loader: "json-loader" },
-        { test: /\.(png|jpeg|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
+        { test: /\.(png|jp(e*)g|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
         {
             test: /\.scss$/,
             use: [

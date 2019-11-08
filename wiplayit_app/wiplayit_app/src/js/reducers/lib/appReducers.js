@@ -131,11 +131,12 @@ export function entyties(state=InitialState(), action) {
 
 
       case types.GET_USER_PROFILE.PENDING:
-         //console.log(action.payload) 
-         if (!state.userProfile.byId[action.profileById]) {
-            Object.defineProperty(state.userProfile.byId, action.profileById, {value : action.payload});
-         }
-         return state;
+
+
+          if (!state.userProfile.byId[action.profileById]) {
+              Object.defineProperty(state.userProfile.byId, action.profileById, {value : action.payload});
+          }
+          return state;
 
       case types.GET_USER_PROFILE.SUCCESS:
          //console.log(action.payload) 
@@ -405,17 +406,27 @@ export function entyties(state=InitialState(), action) {
          return state;  
       */
       case types.UPDATE_USER_PROFILE.PENDING:
+           
+        console.log(action.payload)
+         let payload = action.payload;
+        
          if (state.userProfile.byId[action.byId]) {
-            var userProfile =state.userProfile.byId[action.byId];
+
+            let userProfile = state.userProfile.byId[action.byId];
            
             if (userProfile.user && userProfile.user.user_is_following) {
-               userProfile.user.user_is_following = false
+                userProfile.user.user_is_following = false
+
             }else{
-               userProfile.user.user_is_following = true
+                userProfile.user.user_is_following = true
             }
-           
-            Object.assign(state.userProfile.byId[action.byId], userProfile);
-         }
+
+            payload = Object.assign(userProfile, action.payload);
+          }
+
+         
+
+          Object.assign(state.userProfile.byId[action.byId], payload);
         return state;
 
       case types.UPDATE_USER_PROFILE.SUCCESS:

@@ -76,9 +76,7 @@ export const ProfileComponent = props => {
          btnText : <i className="material-icons ">more_horiz</i>,  
       };
 
-      Object.assign(btnsProps, props)
-
-      console.log(btnsProps)
+      Object.assign(btnsProps, props);
 
       var followers_text =   userProfile.profile.followers > 1? 'Followers' : 'Follower'  
 
@@ -101,6 +99,10 @@ export const ProfileComponent = props => {
                      </div>;
 
       const UserItemsComponent = props.userItemsComponent;   
+
+
+      let  profile_picture = userProfile && userProfile.profile?
+                         userProfile.profile.profile_picture:null;
                  
 
       return (
@@ -112,9 +114,8 @@ export const ProfileComponent = props => {
                   <div className="profile-section-top">
                  
                      <div className="img-box">
-                     { userProfile.profile.profile_picture? 
-                       <img alt="" src={userProfile.profile.profile_picture} 
-                                     className="profile-image"/>
+                     { profile_picture? 
+                       <img alt="" src={`${profile_picture}`} className="profile-image"/>
 
                       :
                         <img alt="" src={require("../images/user-avatar.png")}
@@ -393,19 +394,22 @@ export const UserPosts = props => {
 };
 
 export const UsersComponent = props => {
-  console.log(props)
+    let {user, usersById} = props
 
-   let pathToProfile =  `/profile/${props.user.id}/${props.user.slug}/`;
+    let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
+    let profile_picture = user.profile.profile_picture;
+      
+    console.log(profile_picture)
 
-   let state = { userProfile : props.user}
+    let state        = { userProfile : user}
 
-   let followBtnProps = {
+    let followBtnProps = {
          objName     : 'usersList',
          actionType  : types.UPDATE_USER_LIST,
          isPut       : true,
-         obj         : props.user.profile, 
-         objId       : props.user.id,
-         apiUrl      : api.updateProfileApi(props.user.id),
+         obj         : user.profile, 
+         objId       : user.id,
+         apiUrl      : api.updateProfileApi(user.id),
          byId        : props.usersById,
       };
       var btnsProps = {followBtnProps}
@@ -413,7 +417,7 @@ export const UsersComponent = props => {
    Object.assign(btnsProps, props)
 
 
-   let unfollowOrFollowUserBtn =  props.user.user_is_following? 
+   let unfollowOrFollowUserBtn =    user.user_is_following? 
                                          <UnfollowUserBtn {...btnsProps} />
                                        :
                                          <FollowUserBtn {...btnsProps}/>;
@@ -424,8 +428,8 @@ export const UsersComponent = props => {
                <div className="img-container-s">
                   <div className="img-box-s user-img">
           <Link  to={{ pathname: pathToProfile,state,}}>  
-          { props.user.profile.profile_picture? 
-            <img alt="" src={ props.user.profile.profile_picture } className="user-photo"/> 
+          {user && profile_picture? 
+            <img  src={`${profile_picture}`} alt="" className="user-photo"/> 
 
                
             :
@@ -440,12 +444,12 @@ export const UsersComponent = props => {
 
         <Link className="profile-name" to={{ pathname: pathToProfile,state,}}>
 
-          {props.user.first_name }   {props.user.last_name }
-          {props.user.followed }
+          {user.first_name }   {user.last_name }
+          {user.followed }
         </Link>
 
         <div className="user-credentials">
-         <p> {props.user.profile.followers } Followers</p>
+         <p> {user.profile.followers } Followers</p>
           <p className="relatio about-user"></p>
         </div>
 
@@ -454,7 +458,7 @@ export const UsersComponent = props => {
     </div>
     
     <div className="follow-box" >
-         { props.user.email !== props.currentUser.email?
+         { user.email !== props.currentUser.email?
             <div className="follow-btn-sm">
                { unfollowOrFollowUserBtn }
             </div>

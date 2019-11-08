@@ -48,27 +48,33 @@ export function getIndex(options) {
 
 
 export function getUserList(props) {
-  const instance = axiosApi.axiosInstance();  
-  var { apiUrl, usersById } = props;  
-  return dispatch => {
-      dispatch(action.getUserListPending(usersById))
-	   instance.get(apiUrl)
-      .then(response => dispatch(action.getUserListSuccess(usersById, response.data)))
-      .catch(error => {
-      	if (error.response) {
-      	   dispatch(action.getUserListError(usersById, error.response.data));
-         }else{
-         	dispatch(action.handleError());
-         }
-      }); 
-   };
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
+  
+    var { apiUrl, usersById } = props;
+
+    return dispatch => {
+
+        dispatch(action.getUserListPending(usersById))
+
+	    instance.get(apiUrl)
+        .then(response => dispatch(action.getUserListSuccess(usersById, response.data)))
+        .catch(error => {
+
+      	    if (error.response) {
+      	        dispatch(action.getUserListError(usersById, error.response.data));
+            }else{
+         	   dispatch(action.handleError());
+            }
+        }); 
+    };
 };
 
 
 
 export function getQuestionList(questionListById) {
-	console.log(questionListById)
-    const instance = axiosApi.axiosInstance();  
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
     let apiUrl     = api.getQuestionListApi(); 
 
     return dispatch => {
@@ -90,9 +96,13 @@ export function getQuestionList(questionListById) {
 
 
 export function getPostList(postListById) {
-  const instance = axiosApi.axiosInstance();  
-  let   apiUrl     = api.getPostListApi();  
-  return dispatch => {
+
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
+     
+    let   apiUrl     = api.getPostListApi();
+
+    return dispatch => {
       dispatch(action.getPostListPending(postListById))
 	   instance.get(apiUrl)
       .then(response => dispatch(action.getPostListSuccess(postListById, response.data)))
@@ -109,9 +119,13 @@ export function getPostList(postListById) {
 
 
 export function getQuestion(id) {
-  const instance = axiosApi.axiosInstance();  
-  let apiUrl = api.getQuestionApi(id);
-  return dispatch => {
+
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
+      
+    let apiUrl = api.getQuestionApi(id);
+
+    return dispatch => {
       dispatch(action.getQuestionPending(id))
 	   instance.get(apiUrl)
       .then(response => dispatch(action.getQuestionSuccess(response.data)))
@@ -125,9 +139,11 @@ export function getQuestion(id) {
 
 
 export function getPost(id) {
-  const instance = axiosApi.axiosInstance();  
-  let apiUrl = api.getPostApi(id);
-  return dispatch => {
+     const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
+    let apiUrl = api.getPostApi(id);
+
+    return dispatch => {
       dispatch(action.getPostPending(id))
 	   instance.get(apiUrl)
       .then(response => dispatch(action.getPostSuccess(response.data)))
@@ -138,9 +154,14 @@ export function getPost(id) {
 
 
 
-export function getUserProfile(id) {
-    const instance = axiosApi.axiosInstance();  
-    let apiUrl    =   api.getProfileApi(id);
+export function getUserProfile(id, apiUrl) {
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
+
+    if (!apiUrl) {
+        console.log(apiUrl)
+        apiUrl    =   api.getProfileApi(id);
+    }
 
     return dispatch => {
 
@@ -229,13 +250,17 @@ export function getCurrentUser(tokenKey) {
 
 
 export function handleSubmit(props) {
-   console.log(props)
-   let { actionType, byId, objName, formData, apiUrl } = props;
+
+    console.log(props)
+    const axiosInstance = new Axios(true);
+    const instance = axiosInstance.axiosInstance();
+    let { actionType, byId, objName, formData, apiUrl } = props;
+
+
    
    byId = byId?byId:"newObject"; 
-   const instance = axiosApi.axiosInstance();
-      
-   if (props.isPut) {
+         
+    if (props.isPut) {
    	return dispatch => {
      	dispatch(action.updateActionPending(actionType,byId))
 

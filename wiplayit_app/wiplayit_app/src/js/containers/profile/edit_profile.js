@@ -29,31 +29,63 @@ class EditProfile extends Component{
        super(props);
 
         this.state = {
-            userProfile  :  '',
-            profileById  :  '',
+            userProfile  :  null,
+            profileById  :  null,
+            submitting   : false,
 
             form         : {
-               profile_picture  : "",
                first_name       : "",
                last_name        : "",
                credential       : "",
                live             : "",
                favorite_quote   : "",
                phone_number     : "",
+               profile_picture  : "", 
            },
         };
      
         this.handleChange   =  this.handleChange.bind(this)
         this.handleImageAdd =  this.handleImageAdd.bind(this)
     }; 
+
+    onProfileUpdate = () =>{
+ 
+        const onStoreChange = () => {
+            let { slug, id } = this.props.match.params;
+            let storeUpdate  = store.getState();
+            let {entyties }  = storeUpdate;
+            let byId         =  id? `userProfile${id}`:null;
+
+            let userProfile = byId? entyties.userProfile.byId[byId]:null;
+            console.log(userProfile.submitting)
+
+            if (userProfile) {
+                this.setState({ submitting : userProfile.submitting})
+            }
+                           
+            if (userProfile && userProfile.user) {
+                this.populateEditForm(userProfile.user);
+            }
+        };
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
+
+
+    componentWillUnmount() {
+            this.unsubscribe();
+        };
    
 
     componentDidMount() {
+        this.onProfileUpdate();
+
         let { slug, id } = this.props.match.params;
-           
+        let {entyties }  = this.props;
+
+                   
         if (id ) {
-            var byId = `userProfile${id}`;
-            var userProfile = this.props.entyties.userProfile.byId[byId]
+            let byId = `userProfile${id}`;
+            let userProfile = entyties.userProfile.byId[byId]
 
             if (userProfile) {
                 this.populateEditForm(userProfile.user);
@@ -61,36 +93,27 @@ class EditProfile extends Component{
             }
 
             else {
-                this.props.getUserProfile(id);
-                //userProfile  = this.props.location.state.userProfile;
-              
-                //store.dispatch(action.getUserProfilePending(userProfile.id));
-                //store.dispatch(action.getUserProfileSuccess(userProfile));  
-
-                //this.populateEditForm(userProfile);
+                let apiUrl = api.updateProfileApi(id)
+                this.props.getUserProfile(id, apiUrl);
+                
             }
-
-            
+           
             this.setState({profileById : byId, userProfile });
         }
     };
 
     populateEditForm(userProfile ){
-        console.log(userProfile)
-
+        
         if (userProfile) {
-            let form        =  this.state.form;
-            let profile     = userProfile.profile;
-
-            let {profile_picture,live,credential,favorite_quote} = profile 
-
-            profile_picture = profile_picture?profile_picture:'';
-
-            let {first_name,last_name} = userProfile
-       
-            form    = {first_name,last_name,profile_picture,live,credential,favorite_quote};
+            let {form}     =  this.state;
             
-            this.setState({ form });
+            let {first_name, last_name} = userProfile
+
+            let { live, credential, favorite_quote } = userProfile.profile 
+      
+            form    = { first_name, last_name, live, credential, favorite_quote };
+            
+            this.setState({ form, userProfile });
         }
     }
 
@@ -105,12 +128,13 @@ class EditProfile extends Component{
 
     handleImageAdd(params){
 
-        let form = this.state.form;
+        let { byId, form } = this.state;
+        
         form['profile_picture'] = params.file;
-        var submitProps = this.submitProps();
+        let submitProps = this.submitProps(form);
         this.props.submit(submitProps);
 
-        let { byId } = this.state;
+        
         var userProfile = this.props.entyties.userProfile.byId[byId];
 
         this.populateEditForm(userProfile);
@@ -119,14 +143,13 @@ class EditProfile extends Component{
 
 
     getProps(){
+        let { form } = this.state; 
         let props = {
            handleChange   : this.handleChange, 
            handleImageAdd : this.handleImageAdd,
-           form           : this.state.form,
            textAreaProps  : this.textAreaProps(),
-           submitProps    : this.submitProps(),
-           userProfile    : this.state.userProfile,
-           profileById    : this.state.profileById,
+           submitProps    : this.submitProps(form),
+           ...this.state,
         }
 
         return Object.assign(props, this.props);
@@ -142,16 +165,14 @@ class EditProfile extends Component{
     };
 
 
-    submitProps() {
+    submitProps(form) {
        
         let props = {};
         let { slug, id } = this.props.match.params;
 
         if (id) {
-            let {profileById, userProfile } = this.state;
-            let form = this.state.form;
-            form.profile_picture = '';
-       
+            let { profileById, userProfile } = this.state; 
+                   
             props['formData']  = helper.createFormData(form);
    
             props['obj']       =   userProfile;
@@ -169,8 +190,8 @@ class EditProfile extends Component{
     render() {
       let props = this.getProps();
       console.log(props)
-      var profileById = props.profileById;
-      var userProfile = props.entyties.userProfile.byId[profileById]
+            
+      var userProfile = props.userProfile
 
       return (
         <div>
@@ -179,13 +200,9 @@ class EditProfile extends Component{
             <div>
                 { userProfile?
                     <div>
-                       { userProfile.isLoading?
-                            <div className="page-spin-loder-box">
-                               <AjaxLoader/>
-                            </div>
-                            : 
+                       
                            <ProfileEditComponent {...props}/>
-                        }
+                       }
                     </div>
 
                     :
@@ -205,15 +222,19 @@ class EditProfile extends Component{
 export default withHigherOrderIndexBox(EditProfile);
 
 const ProfileEditComponent = props => {
-    console.log(props)
-    const profileById = props.profileById; 
-    let userProfile = props.entyties.userProfile.byId[profileById];
-    console.log(userProfile)
-    userProfile = userProfile.user;
+    console.log(props) 
+    let {submitting, userProfile } = props;
+
+    let submitButtonStyles = submitting?{opacity:'0.60'}:{};
+    
+    let fieldSetStyles = submitting? {opacity:'0.60'}:{};
 
     return(
 
         <div  className="edit-profile-container" >
+          <fieldset style={ fieldSetStyles} 
+                      disabled={ submitting} >
+
       
          <div className="edit-img-container">
             <div className="item-title-box">
@@ -315,6 +336,7 @@ const ProfileEditComponent = props => {
                <TextareaAutosize {...props.textAreaProps}  rows={3}/>  
             </div>   
          </div>
+         </fieldset>
     
         </div>
     );

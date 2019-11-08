@@ -77,19 +77,12 @@ class BaseMixin(object):
     	return	
         
     	
-    '''  	
-    def check_perm(self, perms, instance ):
-    	checker = permission_checker(self.request.user)
-    	return checker.has_perm(perms, instance)
-    '''
-    	
-    	
-        	
-       	
+     	
     def remove_perm(self, perm, instance, user=None):
     	if user is None:
     		user = self.request.user
     	return remove_perm(perm, user, instance)
+
     	        
     def assign_perm(self,  perm, instance, user=None):
         if user is None:
@@ -224,6 +217,7 @@ class UpdateObjectMixin(BaseMixin):
 
 		for field in profile_fields:
 			request_field = self.request.data.get(field)
+			print(request_field)
 			
 			if request_field:
 				profile[field]  = request_field

@@ -269,7 +269,16 @@ export const EditorNavBar = props  => {
 }
 
 
-export const EditProfileNavBar = props  => (
+export const EditProfileNavBar = props  => {
+
+  let {submitting, userProfile } = props;
+
+  let submitButtonStyles = submitting?{opacity:'0.60'}:{};
+   
+  let fieldSetStyles = submitting? {opacity:'0.60'}:{};
+
+
+  return(
      <div className="form-navbar fixed-top">
         <div className="partial-form-navbar "> 
 
@@ -282,11 +291,18 @@ export const EditProfileNavBar = props  => (
             </div>
 
 	         <div className="submit-btn-box">
-		        <button type="submit" onClick={()=> props.submit(props.submitProps)} value="submit" className="submit-btn ">Submit </button>
+		        <button type="submit" 
+            style={submitButtonStyles} 
+                            disabled={submitting}
+            onClick={()=> props.submit(props.submitProps)}
+                       value="submit" className="submit-btn ">
+                       Submit
+            </button>
 	         </div>
          </div>
      </div>    
-)
+  )
+};
 
 
 

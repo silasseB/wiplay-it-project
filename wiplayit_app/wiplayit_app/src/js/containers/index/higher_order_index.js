@@ -33,8 +33,8 @@ export function withHigherOrderIndexBox(Component) {
             super(props);
 
             this.state = {
-               currentUser      : '',
-               isAuthenticated  :  localStorage.getItem('auth' )?true : false,
+               currentUser      : this.getCurrentUser(),
+               isAuthenticated  : this.isAuthenticated(),
                modalIsOpen      : false,
             };
 
@@ -47,7 +47,7 @@ export function withHigherOrderIndexBox(Component) {
         
             if (cachedEntyties){
         	    let { auth  }  = cachedEntyties;
-        	    if ( auth && auth.isLoggedIn){
+        	    if ( auth && auth.isLoggedIn && auth.tokenKey){
         		    return true
                	}
             }
@@ -147,10 +147,18 @@ export function withHigherOrderIndexBox(Component) {
 
         getCurrentUser(){
       	    let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
+            let entyties = this.props.entyties;
+
+            if (entyties && entyties.currentUser && entyties.currentUser.user) {
+
+                return entyties.currentUser.user;
+            }
 
           	if (cachedEntyties && cachedEntyties.currentUser) {
       	        return cachedEntyties.currentUser.user
             }
+
+           
 
             return null;  
         }
@@ -258,7 +266,7 @@ export function withHigherOrderIndexBox(Component) {
                 logout             : this.logout,
                 followOrUpVote     : this.followOrUpVote.bind(this),
                 unfollowOrDownVote : this.unfollowOrDownVote.bind(this),
-                currentUser        : this.getCurrentUser(),
+                ...this.state,
             };
          
             Object.assign(props, this.props );
@@ -286,20 +294,20 @@ export function withHigherOrderIndexBox(Component) {
 const mapDispatchToProps = (dispatch, ownProps) => {
    
     return {
-    	getIndex               : (props)     =>  dispatch(getIndex(props)), 
-        getUserProfile       : (id)      => dispatch(getUserProfile(id)),
-        getUserList          : (props)   => dispatch(getUserList(props)),
-        getQuestionList      : (id)      => dispatch(_getQuestionList(id)),
-        getPostList          : (id)      => dispatch(getPostList(id)),
-        getQuestion          : (id)      => dispatch(getQuestion(id)),
-        getPost              : (id)      => dispatch(getPost(id)),
-        getCommentList       : (comment) => dispatch(getCommentList(comment)),
-        getReplyList         : (props)   => dispatch(getReplyList(props)),
-        getReplyChildrenList : (reply)   => dispatch(getReplyChildrenList(reply)),
-        getCurrentUser       : (apiUrl)  => dispatch(getCurrentUser()),
-        submit               : (props )  => dispatch(handleSubmit(props)), 
-        showModal            : (props )  => dispatch(action.showModal(props)),
-        hideModal            : (props )  => dispatch(action.hideModal(props)),  
+    	getIndex               : (props)    =>  dispatch(getIndex(props)), 
+        getUserProfile       : (id, apiUrl) => dispatch(getUserProfile(id, apiUrl)),
+        getUserList          : (props)      => dispatch(getUserList(props)),
+        getQuestionList      : (id)         => dispatch(_getQuestionList(id)),
+        getPostList          : (id)         => dispatch(getPostList(id)),
+        getQuestion          : (id)         => dispatch(getQuestion(id)),
+        getPost              : (id)         => dispatch(getPost(id)),
+        getCommentList       : (comment)    => dispatch(getCommentList(comment)),
+        getReplyList         : (props)      => dispatch(getReplyList(props)),
+        getReplyChildrenList : (reply)      => dispatch(getReplyChildrenList(reply)),
+        getCurrentUser       : (apiUrl)     => dispatch(getCurrentUser()),
+        submit               : (props )     => dispatch(handleSubmit(props)), 
+        showModal            : (props )     => dispatch(action.showModal(props)),
+        hideModal            : (props )     => dispatch(action.hideModal(props)),  
    }
 
 };
