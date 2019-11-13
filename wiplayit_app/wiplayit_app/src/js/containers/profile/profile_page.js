@@ -34,30 +34,12 @@ class ProfilePage extends Component {
         this.redirectToEdit =  this.redirectToEdit.bind(this);
     };
 
-    componentDidUpdate(nextProps, prevProps){ 
-        var profileById = this.state.profileById;
-        const userProfile = nextProps.entyties.userProfile.byId[profileById];
-
-      
-        if (userProfile) {
-            let answers      = nextProps.entyties.answers;
-
-            if (userProfile && userProfile.user) {
-                var byId         =`usersAnswers${userProfile.user.id}`;
-                answers          = answers.byId[byId]
-                var usersAnswers = userProfile.answers;
-
-                if (!answers) {
-                   store.dispatch(action.getAnswerListPending(byId));
-                   store.dispatch(action.getAnswerListSuccess(byId, usersAnswers));
-                }
-            }
-        }
-    };
+    
 
     onProfileUpdate = () =>{
  
         const onStoreChange = () => {
+
             let { slug, id } = this.props.match.params;
             let storeUpdate  = store.getState();
             let {entyties }  = storeUpdate;
@@ -65,10 +47,16 @@ class ProfilePage extends Component {
 
             let userProfile  = profileById? entyties.userProfile.byId[profileById]:null;
 
-            if (userProfile) {
-                if (userProfile.user) {
-                    
-                    LocalCache('userProfile', userProfile.user)
+            if (userProfile && userProfile.user) {
+                userProfile = userProfile.user;
+
+                if (userProfile.answers) {
+
+                    //let userProfileAnswerParams =  this._userProfileAnswerParams(userProfile)
+                    //this.showUserItems(userProfileAnswerParams)
+
+                    this._dispatchUserProfileItems(userProfile);
+                    LocalCache('userProfile', userProfile);
                 }
             }
         };
@@ -79,31 +67,62 @@ class ProfilePage extends Component {
 
     componentWillUnmount() {
             this.unsubscribe();
-        };
+    };
    
 
     componentDidMount() {
         this.onProfileUpdate();
         
-        let cachedEntyties = this.props;
+        let { cachedEntyties } = this.props;
         let { slug, id } = this.props.match.params;
 
         if (id) {
             
             var profileById = `userProfile${id}`;
             this.setState({profileById});
-         
+            
             let  {userProfile, currentUser, auth} = cachedEntyties;
 
                                     
             if (!userProfile) {
                 this.props.getUserProfile(id);
+                
             }else{
+               console.log('userProfile found from cachedEntyties')
                store.dispatch(action.getUserProfilePending(id));
                store.dispatch(action.getUserProfileSuccess(userProfile));
+               this._dispatchUserProfileItems(userProfile);
             }
         }
     };
+
+    _dispatchUserProfileItems(userProfile){
+        let answers      = this.props.entyties.answers;
+
+        if (userProfile && userProfile.answers && userProfile.answers.length) {
+            var byId         =`usersAnswers${userProfile.id}`;
+            answers          = answers.byId[byId]
+            var usersAnswers = userProfile.answers;
+
+            if (!answers) {
+                store.dispatch(action.getAnswerListPending(byId));
+                store.dispatch(action.getAnswerListSuccess(byId, usersAnswers));
+           }
+        }
+
+    }
+
+    _userProfileAnswerParams=(userProfile)=>{
+        if (userProfile) {
+
+            return  {
+                component      :  UserAnswers,
+                byId           : `usersAnswers${userProfile.id}`,
+                data           :  userProfile.answers,
+                items          : 'isUsersAnswers',
+            }  
+        }
+    }
 
    
     showUserItems(params) {

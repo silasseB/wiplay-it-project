@@ -23,18 +23,7 @@ else {
 store.subscribe(() => {
    let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'))  || {};
    let storeUpdate = store.getState().entyties
-   let { userAuth, currentUser,userProfile } = storeUpdate;
-   let userProfileAllIds =  userProfile.allIds.length
-   
-   if (userAuth.auth.isLoggedIn){
-       cachedEntyties['auth'] = userAuth.auth
-   }
-
-   else if(currentUser.user){
-      cachedEntyties['currentUser'] = currentUser;
-
-   }
-
+      
    localStorage.setItem('@@CachedEntyties', JSON.stringify(cachedEntyties ));
    
 });

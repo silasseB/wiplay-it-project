@@ -13,6 +13,7 @@ import { ModalOptionsMenu } from "../../components/buttons";
 import { DropImage } from "../../containers/profile/edit_profile";
 import AppEditor  from '../../containers/editor'
 import {store} from "../../configs/store-config";
+import {LocalCache} from  "../../utils/storage";
 
 
 
@@ -33,16 +34,17 @@ export function withHigherOrderIndexBox(Component) {
             super(props);
 
             this.state = {
-               currentUser      : this.getCurrentUser(),
-               isAuthenticated  : this.isAuthenticated(),
-               cachedEntyties   : JSON.parse(localStorage.getItem('@@CachedEntyties'))||{},
-               modalIsOpen      : false,
+                currentUser        : {},
+                cachedEntyties     : this.cachedEntyties(), 
+                isAuthenticated    : this.isAuthenticated(),
+                modalIsOpen        : false,
             };
         };
 
 
         isAuthenticated() {
-      	    let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
+      	    let cachedEntyties = this.cachedEntyties();
+            console.log(cachedEntyties)
         
             if (cachedEntyties){
         	    let { auth  }  = cachedEntyties;
@@ -53,6 +55,26 @@ export function withHigherOrderIndexBox(Component) {
 
             return false;
         };
+
+        getCurrentUser =(currentUser=undefined)=>{
+            let  cachedEntyties  = this.cachedEntyties();
+        
+            console.log(currentUser, cachedEntyties)
+            if (!currentUser && cachedEntyties) {
+                currentUser  = cachedEntyties.currentUser
+            }
+            
+            if (currentUser) {
+                this.setState({currentUser})
+            }
+            return currentUser;  
+        };
+
+        cachedEntyties = ()=>{
+            return JSON.parse(localStorage.getItem('@@CachedEntyties'))  || {};
+        }
+
+
 
         //static getDerivedStateFromError(error) {
         // Update state so the next render will show the fallback UI.
@@ -78,6 +100,14 @@ export function withHigherOrderIndexBox(Component) {
  
             const onStoreChange = () => {
                 let storeUpdate = store.getState();
+                let {currentUser} = storeUpdate.entyties;
+                if (currentUser && currentUser.user) {
+
+                    LocalCache('currentUser', currentUser.user)
+                    this.getCurrentUser(currentUser.user)
+                }
+
+
                                
                 //if (!storeUpdate.question.visited && storeUpdate.question.newObject) {
                 //   console.log('redirecting to question page')
@@ -85,8 +115,8 @@ export function withHigherOrderIndexBox(Component) {
                 // }
                //Open the Modal whenever modal is true.
 
-            this.openModal(storeUpdate.modal);
-            /*
+                this.openModal(storeUpdate.modal);
+             /*
 
             if (this.state.modalIsOpen) {
                 if (this.state.modalIsOpen) {
@@ -143,24 +173,6 @@ export function withHigherOrderIndexBox(Component) {
             }
 
             ModalManager.close();
-        }
-
-        getCurrentUser(){
-      	    let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
-            let entyties = this.props.entyties;
-
-            if (entyties && entyties.currentUser && entyties.currentUser.user) {
-
-                return entyties.currentUser.user;
-            }
-
-          	if (cachedEntyties && cachedEntyties.currentUser) {
-      	        return cachedEntyties.currentUser.user
-            }
-
-           
-
-            return null;  
         }
 
 
@@ -229,19 +241,11 @@ export function withHigherOrderIndexBox(Component) {
         };
       
         unfollowOrDownVote(params) {
-        
-         if (params.objName === "question" || params.objName === "userProfile" 
-                                    || params.objName === "usersList" ) {
-            var followers     = params.obj.followers - 1;
-
-            params['formData'] = helper.createFormData({ followers });
-         }else{
             var upvotes       = params.obj.upvotes - 1; 
             params['formData'] = helper.createFormData({upvotes})
-         }
-        this.props.submit(params); //handle subimiting downVotes or Unfollwers 
+            this.props.submit(params); //handle subimiting downVotes or Unfollwers 
 
-      };
+        };
 
         followOrUpVote(params) {
       
@@ -262,6 +266,7 @@ export function withHigherOrderIndexBox(Component) {
         };
      
         getProps(){
+
             let props = {
                 logout             : this.logout,
                 followOrUpVote     : this.followOrUpVote.bind(this),
@@ -287,6 +292,7 @@ export function withHigherOrderIndexBox(Component) {
 
     };
 };
+
 
 
 //binds on `props` change

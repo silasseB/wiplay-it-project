@@ -61,12 +61,20 @@ class EditProfile extends Component{
            
 
             if (userProfile) {
+                let user = userProfile.user;
                 this.setState({ submitting : userProfile.submitting});
 
-                if (userProfile.user) {
-                                
-                    LocalCache('userProfile', userProfile.user)
-                    this.populateEditForm(userProfile.user);
+                if (user) {
+                    let {currentUser } = this.props;
+                                       
+                    if (currentUser) {
+                        if (currentUser.id === user.id) {
+                            LocalCache('currentUser', user)
+                        }
+                    }
+
+                    LocalCache('userProfile', user)
+                    this.populateEditForm(user);
                 }
             }
         };
@@ -86,11 +94,13 @@ class EditProfile extends Component{
                           
         if (id ) {
             let profileById = `userProfile${id}`;
+            console.log(cachedEntyties)
             let  {userProfile, currentUser, auth} = cachedEntyties;
 
             this.setState({profileById});
 
             if (userProfile) {
+                 console.log('userProfile found from cachedEntyties')
                 this.populateEditForm(userProfile);
 
             }else {

@@ -44,14 +44,14 @@ export const ProfileComponent = props => {
       }
 
       let followBtnProps = {
-         objName     : 'userProfile',
-         actionType  : types.UPDATE_USER_PROFILE,
-         isPut       : true,
-         obj         : userProfile.profile, 
-         objId       : userProfile.id,
-         apiUrl      : api.updateProfileApi(userProfile.id),
-         byId        : profileById,
-      };
+          objName     : 'userProfile',
+          actionType  : types.UPDATE_USER_PROFILE,
+          isPut       : true,
+          obj         : userProfile.profile, 
+          objId       : userProfile.id,
+          apiUrl      : api.updateProfileApi(userProfile.id),
+          byId        : profileById,
+        };
       
       let  modalOptionsProps = {
          modalProps : {
@@ -555,79 +555,80 @@ export const UserFollowers = props => {
 
 
 export const UserActivitiesBtns = props => {
-   var profileById = props.profileById;
-   var userProfile = props.entyties.userProfile.byId[profileById];
-   var user     = userProfile.user;
+    var profileById = props.profileById;
+    var userProfile = props.entyties.userProfile.byId[profileById];
+    var user        = userProfile.user;
 
-   var usersAnswers = {
+    console.log(userProfile)
+
+    var usersAnswers = {
       component      : UserAnswers,
       byId           : `usersAnswers${user.id}`,
       data           :  userProfile.answers,
       items          : 'isUsersAnswers',
 
-   }
+    }
    
-   var usersQuestions = {
+    var usersQuestions = {
       component        : UserQuestions,
       byId             : `usersQuestions${user.id}`,
       data             :  userProfile.questions, 
       items            : 'isUsersQuestions',
      }
 
-   var usersPosts = {
+    var usersPosts = {
       component      : UserPosts,
       byId           : `usersPosts${user.id}`,
       data           :  userProfile.posts,
       items          : 'isUsersPosts',
-   }
+    }
    
-   var usersFollowers = {
+    var usersFollowers = {
       component          : UserFollowers,
       byId               : `usersFollowers${user.id}`,
       data               :  userProfile.followers,
       items              : 'isUsersFollowers'
-   }
+    }
 
 
-   var usersFollowings = {
+    var usersFollowings = {
       component           :  UserFollowings,
       byId                :  `usersFollowings${user.id}`,
       data                :   userProfile.followings,
       items               : 'isUsersFollowings'
-   }
+    }
    
-   return (
-      <div className="user-activities">
+    return (
+        <div className="user-activities">
 
-         <button type="button" onClick={() => props.showUserItems(usersAnswers)} 
+            <button type="button" onClick={() => props.showUserItems(usersAnswers)} 
                              className="btn-sm activities user-answers" >
-            Answers { userProfile.answers.length } 
-         </button>
+                Answers { userProfile.answers.length } 
+            </button>
 
-         <button type="button" onClick={() => props.showUserItems(usersQuestions)} 
+            <button type="button" onClick={() => props.showUserItems(usersQuestions)} 
                         className="btn-sm activities user-questions" >
-            Questions { userProfile.questions.length } 
-         </button>
+               Questions { userProfile.questions.length } 
+            </button>
 
-         <button type="button" onClick={() => props.showUserItems(usersPosts)} 
+            <button type="button" onClick={() => props.showUserItems(usersPosts)} 
                                className="btn-sm activities user-posts">
-        { userProfile.posts.length }  Posts   
-       </button> 
+               { userProfile.posts.length }  Posts   
+            </button> 
 
-       <button type="button" onClick={() => props.showUserItems(usersFollowings)} 
+            <button type="button" onClick={() => props.showUserItems(usersFollowings)} 
                             className="btn-sm activities user-following ">
-       { userProfile.followings.length } Followings
-     </button>
+                { userProfile.followings.length } Followings
+            </button>
          
-     <button type="button" onClick={() => props.showUserItems(usersFollowers)} 
-                           className="btn-sm activities user-followers " >
-        { userProfile.followers.length }  Followers        
-    </button>
+            <button type="button" onClick={() => props.showUserItems(usersFollowers)} 
+                            className="btn-sm activities user-followers " >
+               { userProfile.followers.length }  Followers        
+            </button>
 
-   </div>
-  
-  )
-}
+        </div>
+    );
+};
 
 
 

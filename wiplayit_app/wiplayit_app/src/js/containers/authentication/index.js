@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 ; 
 import  * as action  from '../../actions/actionCreators';
+import {LocalCache} from  "../../utils/storage";
 
 import {store} from "../../configs/store-config";
 import Axios from '../../axios_instance';
@@ -91,9 +92,7 @@ export function withAuthentication(Component) {
                 let {currentUser} = cachedEntyties;
 
                 if(!currentUser){
-                   // store.dispatch(getCurrentUser(auth.tokenKey));
-                   console.log(auth)
-
+                  
                 }
 
                 if (auth && auth.isLoggedIn){
@@ -163,6 +162,8 @@ export function withAuthentication(Component) {
                     
 
                     if( isLoggedIn && tokenKey){
+
+                        LocalCache('auth', auth)
                        this._Redirect()
                     }
                 }
