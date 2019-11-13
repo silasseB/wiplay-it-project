@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 
 import * as serviceWorker from './serviceWorker';
 
-import {store} from "./configs/store-config";
+import { store } from "./configs/store-config";
 
 import App from './App';
 export const history = createBrowserHistory();

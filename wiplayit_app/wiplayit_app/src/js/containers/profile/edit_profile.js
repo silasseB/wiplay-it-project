@@ -8,6 +8,7 @@ import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 import  * as types  from '../../actions/types';
 import  * as action  from '../../actions/actionCreators';
 import {store} from "../../configs/store-config";
+import {LocalCache} from  "../../utils/storage";
 
 import  AjaxLoader from "../../components/ajax-loader";
 
@@ -57,14 +58,16 @@ class EditProfile extends Component{
             let byId         =  id? `userProfile${id}`:null;
 
             let userProfile = byId? entyties.userProfile.byId[byId]:null;
-            console.log(userProfile.submitting)
+           
 
             if (userProfile) {
-                this.setState({ submitting : userProfile.submitting})
-            }
-                           
-            if (userProfile && userProfile.user) {
-                this.populateEditForm(userProfile.user);
+                this.setState({ submitting : userProfile.submitting});
+
+                if (userProfile.user) {
+                                
+                    LocalCache('userProfile', userProfile.user)
+                    this.populateEditForm(userProfile.user);
+                }
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -78,27 +81,22 @@ class EditProfile extends Component{
 
     componentDidMount() {
         this.onProfileUpdate();
-
+        let { cachedEntyties } = this.props; 
         let { slug, id } = this.props.match.params;
-        let {entyties }  = this.props;
-
-                   
+                          
         if (id ) {
-            let byId = `userProfile${id}`;
-            let userProfile = entyties.userProfile.byId[byId]
+            let profileById = `userProfile${id}`;
+            let  {userProfile, currentUser, auth} = cachedEntyties;
+
+            this.setState({profileById});
 
             if (userProfile) {
-                this.populateEditForm(userProfile.user);
+                this.populateEditForm(userProfile);
 
-            }
-
-            else {
+            }else {
                 let apiUrl = api.updateProfileApi(id)
                 this.props.getUserProfile(id, apiUrl);
-                
             }
-           
-            this.setState({profileById : byId, userProfile });
         }
     };
 
@@ -133,11 +131,7 @@ class EditProfile extends Component{
         form['profile_picture'] = params.file;
         let submitProps = this.submitProps(form);
         this.props.submit(submitProps);
-
-        
-        var userProfile = this.props.entyties.userProfile.byId[byId];
-
-        this.populateEditForm(userProfile);
+       
 
     };
 
@@ -189,7 +183,6 @@ class EditProfile extends Component{
 
     render() {
       let props = this.getProps();
-      console.log(props)
             
       var userProfile = props.userProfile
 
@@ -200,9 +193,7 @@ class EditProfile extends Component{
             <div>
                 { userProfile?
                     <div>
-                       
-                           <ProfileEditComponent {...props}/>
-                       }
+                        <ProfileEditComponent {...props}/>
                     </div>
 
                     :
@@ -222,12 +213,14 @@ class EditProfile extends Component{
 export default withHigherOrderIndexBox(EditProfile);
 
 const ProfileEditComponent = props => {
-    console.log(props) 
+    
     let {submitting, userProfile } = props;
-
+    userProfile = userProfile;
+    
     let submitButtonStyles = submitting?{opacity:'0.60'}:{};
     
     let fieldSetStyles = submitting? {opacity:'0.60'}:{};
+
 
     return(
 
@@ -243,7 +236,7 @@ const ProfileEditComponent = props => {
 
             <div className="item-title-container">
                <div className="image-contain">
-                  { userProfile.profile.profile_picture?
+                  { userProfile && userProfile.profile.profile_picture?
                      <div className="edit-image-box">
                         <img alt="" className="edit-image" src={ userProfile.profile.profile_picture }/>
                      </div>
@@ -407,7 +400,7 @@ export class DropImage extends React.Component {
     
     render() {
       let props = this.getProps();
-      console.log(this.props)
+
       return (
          <div>
             
@@ -455,7 +448,7 @@ export class DropImage extends React.Component {
 
 
 export const EditBtn = props => {
-    console.log(props)
+    
   
     let  modalOptionsProps = {
             modalProps : {handleImageAdd:props.handleImageAdd},

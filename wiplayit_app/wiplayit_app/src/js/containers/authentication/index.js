@@ -30,6 +30,7 @@ export function withAuthentication(Component) {
             super(props);
             this.state = {
                 isAuthenticated      : false,
+                confirmed            : false,
                 defaultActiveForm    : null,
                 form                 : null,
                 formName             : null, 
@@ -42,7 +43,7 @@ export function withAuthentication(Component) {
                 formErrors           : null,
                 successMessage       : null,
                 email                : null,
-
+            
             };
 
             //React binding
@@ -56,7 +57,7 @@ export function withAuthentication(Component) {
             this.responseTwitter          = this.responseTwitter.bind(this);
             this.responseGoogle           = this.responseGoogle.bind(this);  
             this.toggleSignUpForm         = this.toggleSignUpForm.bind(this);
-            this.togglePasswordResetForm  = this.togglePasswordResetForm.bind(this);  
+            this.toggleEmailForm          = this.toggleEmailForm.bind(this);  
             this._Redirect                = this._Redirect.bind(this); 
         };
 
@@ -253,7 +254,7 @@ export function withAuthentication(Component) {
                                 'email'      : '',
                                 'password'   : '', },
 
-                emailForm          : { 'email'  : 'lereko@gmail.com', }, 
+                emailForm          : { 'email'  : '', }, 
 
                 passwordChangeForm : {
                      'new_password1' : '',
@@ -341,15 +342,14 @@ export function withAuthentication(Component) {
 
         };
 
-        togglePasswordResetForm = (params) => {
-            
+        toggleEmailForm = (params) => {
+            console.log(params)
             const defaultActiveForm = 'loginForm';
-            let passwordResetFormName = "passwordResetForm";
-            let { value, successMessage } = params;
+            let { value, successMessage, formName } = params;
 
             if (!successMessage) {
                 this.setState({successMessage : false})
-                this.formConstructor(passwordResetFormName)
+                this.formConstructor(formName)
             }
 
             if (!value) {
@@ -358,7 +358,7 @@ export function withAuthentication(Component) {
             }
 
             if ( value) {
-                this.formConstructor(passwordResetFormName)
+                this.formConstructor(formName)
             }
             
 
@@ -377,11 +377,18 @@ export function withAuthentication(Component) {
             .then(response => { 
                 
                 let {detail} = response.data;
-                callback({ confirmed : true, successMassage : detail });
+                callback({ confirmed : true, successMessage : detail });
+                this.setState({ confirmed : true, successMessage : detail })
             })
             .catch(error => {
-                console.log(error)
-                callback({ confirmed: false});
+                console.log(error) 
+                if (error.status === '400') {
+
+                   console.log(error) 
+                   callback({ confirmed: false});
+                   error = "Unable to confirn your account"
+                   this.setState({ confirmed : false })
+                }
             });
         } ;
 
@@ -458,7 +465,7 @@ export function withAuthentication(Component) {
                 responseFacebook        : this.responseFacebook,
                 responseGoogle          : this.responseGoogle,
                 responseTwitter         : this.responseTwitter,
-                togglePasswordResetForm : this.togglePasswordResetForm, 
+                toggleEmailForm         : this.toggleEmailForm, 
                 toggleSignUpForm        : this.toggleSignUpForm,
                 confirmUser             : this.confirmUser,
                 validateForm            : this.validateForm, 

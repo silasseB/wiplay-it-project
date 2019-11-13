@@ -139,9 +139,14 @@ export function entyties(state=InitialState(), action) {
           return state;
 
       case types.GET_USER_PROFILE.SUCCESS:
-         //console.log(action.payload) 
-         Object.assign(state.userProfile.byId[action.profileById], action.payload);
-         return state;
+            
+            let newState = state;
+            if (action.profileById) {
+                console.log(newState ,action) 
+               newState.userProfile.allIds.push(action.profileById)
+               Object.assign(newState.userProfile.byId[action.profileById], action.payload);
+            }
+        return newState;
 
       case types.GET_USER_PROFILE.ERROR:
          Object.assign(state.userProfile.byId[action.profileById], action.payload);
@@ -407,30 +412,32 @@ export function entyties(state=InitialState(), action) {
       */
       case types.UPDATE_USER_PROFILE.PENDING:
            
-        console.log(action.payload)
-         let payload = action.payload;
-        
-         if (state.userProfile.byId[action.byId]) {
+        console.log(state, action)
+        let payload = action.payload;
 
-            let userProfile = state.userProfile.byId[action.byId];
-           
-            if (userProfile.user && userProfile.user.user_is_following) {
-                userProfile.user.user_is_following = false
+        if (!state.userProfile.byId[action.byId]) {
+            Object.defineProperty(
+                   state.userProfile.byId, 
+                   action.byId, {value : payload} 
+                );
+        }
+        console.log(state,action)
 
-            }else{
-                userProfile.user.user_is_following = true
-            }
-
-            payload = Object.assign(userProfile, action.payload);
-          }
-
-         
-
-          Object.assign(state.userProfile.byId[action.byId], payload);
         return state;
 
       case types.UPDATE_USER_PROFILE.SUCCESS:
-         Object.assign(state.userProfile.byId[action.byId], action.payload);
+           console.log(state)
+
+           if (!state.userProfile.byId[action.byId]) {
+                Object.defineProperty(
+                   state.userProfile.byId, 
+                   action.byId, {value : action.payload} 
+                );
+
+            }else{
+                Object.assign(state.userProfile.byId[action.byId], action.payload);
+            }
+
         return state;  
 
       case types.UPDATE_USER_PROFILE.ERROR:

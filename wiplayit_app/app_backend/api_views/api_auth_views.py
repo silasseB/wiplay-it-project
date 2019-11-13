@@ -20,6 +20,9 @@ from allauth.account import app_settings as allauth_settings
 from rest_auth.registration.views import RegisterView 
 from rest_auth.registration.serializers import  VerifyEmailSerializer
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMultiAlternatives
+from django.template import loader
 from allauth.account.models import  EmailConfirmationHMAC
 from rest_auth.views import LoginView
 
@@ -27,6 +30,26 @@ from app_backend.models import User
 from app_backend.auth_serializers import ( CustomRegisterSerializer,
                                            CustomLoginSerializer,
                                            EmailSerializer )
+
+
+
+def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        """
+        Send a django.core.mail.EmailMultiAlternatives to `to_email`.
+        """
+        subject = loader.render_to_string(subject_template_name, context)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        body = loader.render_to_string(email_template_name, context)
+
+        email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
+        if html_email_template_name is not None:
+            html_email = loader.render_to_string(html_email_template_name, context)
+            email_message.attach_alternative(html_email, 'text/html')
+
+        email_message.send()
+
 
 
 
@@ -107,10 +130,12 @@ class CustomVerifyEmailView(APIView):
 		
 		self.kwargs['key'] = serializer.validated_data['key']
 		confirmation       = self.get_object()
-		confirmation.confirm(self.request)
-
+		print(confirmation)
+		
 		if confirmation:
 			#Finally confirm the user 
+			confirmation.confirm(self.request)
+
 			user = confirmation.email_address.user
 			user.is_confirmed = True 
 
@@ -118,8 +143,9 @@ class CustomVerifyEmailView(APIView):
 
 			msg = """Your Account has been successfully confirmed."""
 			return Response({'detail': _(msg)}, status=status.HTTP_200_OK)
-			
-		return Response({},status=status.HTTP_404_NOT_FOUND )
+
+		msg = """Could not confirm your account with this link"""
+		return Response({'detail':msg}, status=status.HTTP_400_BAD_REQUEST )
 			
 
 
@@ -140,7 +166,8 @@ class SendEmailConfirimationView(APIView):
 			email = serializer.validated_data['email']
 
 			if user:
-				
+				user.is_active = False
+					
 				send_email_confirmation(self.request, user)
 				msg = _('Account confirmation e-mail has been resent')
 				return Response({'email': email, 'detail': msg},status=status.HTTP_201_CREATED,)

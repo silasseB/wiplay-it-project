@@ -23,17 +23,19 @@ else {
 store.subscribe(() => {
    let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'))  || {};
    let storeUpdate = store.getState().entyties
-   var { userAuth, currentUser } = storeUpdate;
+   let { userAuth, currentUser,userProfile } = storeUpdate;
+   let userProfileAllIds =  userProfile.allIds.length
    
-         
    if (userAuth.auth.isLoggedIn){
-      cachedEntyties['auth'] = userAuth.auth
-   }
-   else if(currentUser.user){
-      cachedEntyties['currentUser'] = currentUser;
+       cachedEntyties['auth'] = userAuth.auth
    }
 
-   localStorage.setItem('@@CachedEntyties',JSON.stringify(cachedEntyties));
+   else if(currentUser.user){
+      cachedEntyties['currentUser'] = currentUser;
+
+   }
+
+   localStorage.setItem('@@CachedEntyties', JSON.stringify(cachedEntyties ));
    
 });
 

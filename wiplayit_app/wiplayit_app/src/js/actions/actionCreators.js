@@ -202,13 +202,6 @@ export const getUserProfilePending = (id) => {
       profileById,
       payload: {
          isLoading          : true,
-         user               : "",
-         questions          : [],
-         answers            : [],
-         posts              : [],
-         followers          : [],
-         followings         : [],
-         error              : '',
       }
    }
 };
@@ -216,8 +209,9 @@ export const getUserProfilePending = (id) => {
 
 
 export const getUserProfileSuccess = (userProfile) => {
-   var id = userProfile.id;
-   var profileById = `userProfile${id}`;
+    console.log(userProfile)
+    var id = userProfile.id;
+    var profileById = `userProfile${id}`;
 
     return{
         type: types.GET_USER_PROFILE.SUCCESS,

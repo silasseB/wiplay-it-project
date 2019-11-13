@@ -159,16 +159,17 @@ export function getUserProfile(id, apiUrl) {
     const instance = axiosInstance.axiosInstance();
 
     if (!apiUrl) {
-        console.log(apiUrl)
         apiUrl    =   api.getProfileApi(id);
     }
+
+    console.log(apiUrl, id)
 
     return dispatch => {
 
         dispatch(action.getUserProfilePending(id))
 	    instance.get(apiUrl)
         .then(response => {
-        	console.log(response.data)
+        	console.log(response.data.profile)
             dispatch(action.getUserProfileSuccess(response.data));
         })
         .catch(error => {
@@ -253,7 +254,7 @@ export function handleSubmit(props) {
 
     console.log(props)
     const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
+    const instance      = axiosInstance.axiosInstance();
     let { actionType, byId, objName, formData, apiUrl } = props;
 
 

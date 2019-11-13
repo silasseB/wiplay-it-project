@@ -35,10 +35,9 @@ export function withHigherOrderIndexBox(Component) {
             this.state = {
                currentUser      : this.getCurrentUser(),
                isAuthenticated  : this.isAuthenticated(),
+               cachedEntyties   : JSON.parse(localStorage.getItem('@@CachedEntyties'))||{},
                modalIsOpen      : false,
             };
-
-            console.log(props)
         };
 
 
@@ -71,7 +70,7 @@ export function withHigherOrderIndexBox(Component) {
         };
 
         static getDerivedStateFromProps(props, state) {
-           console.log(state, props)
+           console.log(state)
            return null
         }
 
@@ -79,6 +78,7 @@ export function withHigherOrderIndexBox(Component) {
  
             const onStoreChange = () => {
                 let storeUpdate = store.getState();
+                               
                 //if (!storeUpdate.question.visited && storeUpdate.question.newObject) {
                 //   console.log('redirecting to question page')
                 // this.redirecToQuestionPage(storeUpdate.question) 
@@ -276,8 +276,7 @@ export function withHigherOrderIndexBox(Component) {
 
         render() {
             let props = this.getProps();
-            //console.log(props)
-
+            
             return (
                 <div>
                    <Component {...props}/>

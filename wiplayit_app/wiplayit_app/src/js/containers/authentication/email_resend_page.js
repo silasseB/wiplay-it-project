@@ -17,7 +17,6 @@ export class EmailResendPage extends Component{
    }
 
    componentDidMount() {
-      console.log(this.props)
       this.props.formConstructor('emailResendForm')
     }
 

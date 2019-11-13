@@ -403,7 +403,7 @@ export const EmailFormComponent = props => {
                                                      {opacity:'0.60'}:{};
     
     let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{};
-    let toggleProps = {successMessage:false, value:true}
+    let toggleProps = {successMessage:false, value:true, formName}
 
    
     return(
@@ -421,7 +421,7 @@ export const EmailFormComponent = props => {
                     </p>
 
                     <div className="resend-email-box ">
-                        <button type="button" onClick={()=> props.togglePasswordResetForm(toggleProps)}
+                        <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)}
                                  className="resend-email-btn" >
                            Resend
                         </button>
@@ -444,7 +444,7 @@ export const EmailFormComponent = props => {
                       disabled={ submitting || onSignUpForm} >
 
                     <div  className="email-fields">
-                       {error && error.email.length?
+                       {error && error.email && error.email.length?
                             <div>
                                 { error.email.map(( error, index) =>
                                    <li key={index} className="email-error">{error}</li>
@@ -750,9 +750,9 @@ export const  SpinLoader  = props => {
 
 const  PasswordChangeButton  = props => {
 
-    let toggleProps = {value:true, style:{display:'none'}};
+    let toggleProps = { value : true, formName : 'passwordResetForm' };
     return(
-        <button type="button" onClick={()=> props.togglePasswordResetForm(toggleProps)} 
+        <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)} 
                   className="password-change-btn" >
             Forgot Password ?
         </button>
@@ -767,7 +767,7 @@ const  PasswordChangeLink  = props => (
 
 
 const  CancelBtn  = props => {
-    let toggleProps = {value : false};
+    let toggleProps = {value : false, formName:props.formName};
     
 
     return(
@@ -779,10 +779,10 @@ const  CancelBtn  = props => {
 };
 
 const  CancelPasswordResetBtn  = props => {
-    let toggleProps = {value:false};
+    let toggleProps = {value:false, formName:props.formName};
 
     return (
-        <button type="button" onClick={()=>props.togglePasswordResetForm(toggleProps)} 
+        <button type="button" onClick={()=>props.toggleEmailForm(toggleProps)} 
             className="form-cancel-btn btn-sm " >
             Cancel
         </button>

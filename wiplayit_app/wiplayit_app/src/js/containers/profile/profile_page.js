@@ -7,7 +7,7 @@ import {CustomModal} from "../../containers/modal-conf";
 import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navBar";
 
 import  * as action  from '../../actions/actionCreators';
-
+import {LocalCache} from  "../../utils/storage";
 import { ProfileComponent, UserAnswers } from "../../components/profile_components";
 import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
@@ -40,9 +40,7 @@ class ProfilePage extends Component {
 
       
         if (userProfile) {
-            console.log(userProfile)
-            var answers      = nextProps.entyties.answers;
-            console.log(answers)
+            let answers      = nextProps.entyties.answers;
 
             if (userProfile && userProfile.user) {
                 var byId         =`usersAnswers${userProfile.user.id}`;
@@ -56,12 +54,38 @@ class ProfilePage extends Component {
             }
         }
     };
+
+    onProfileUpdate = () =>{
+ 
+        const onStoreChange = () => {
+            let { slug, id } = this.props.match.params;
+            let storeUpdate  = store.getState();
+            let {entyties }  = storeUpdate;
+            let profileById  =  id? `userProfile${id}`:null;
+
+            let userProfile  = profileById? entyties.userProfile.byId[profileById]:null;
+
+            if (userProfile) {
+                if (userProfile.user) {
+                    
+                    LocalCache('userProfile', userProfile.user)
+                }
+            }
+        };
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
   
   
 
+    componentWillUnmount() {
+            this.unsubscribe();
+        };
+   
+
     componentDidMount() {
+        this.onProfileUpdate();
         
-        
+        let cachedEntyties = this.props;
         let { slug, id } = this.props.match.params;
 
         if (id) {
@@ -69,11 +93,14 @@ class ProfilePage extends Component {
             var profileById = `userProfile${id}`;
             this.setState({profileById});
          
-            const userProfile = this.props.entyties.userProfile.byId[profileById];
-            console.log(userProfile)
+            let  {userProfile, currentUser, auth} = cachedEntyties;
 
+                                    
             if (!userProfile) {
                 this.props.getUserProfile(id);
+            }else{
+               store.dispatch(action.getUserProfilePending(id));
+               store.dispatch(action.getUserProfileSuccess(userProfile));
             }
         }
     };

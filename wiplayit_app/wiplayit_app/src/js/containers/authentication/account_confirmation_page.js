@@ -25,7 +25,7 @@ class AccountConfirmationPage extends Component{
 
         this.state = {
             confirmed        :  false,
-            successMassage   :  '',
+            successMessage   :  '',
             pageTitle        :  'Account Confirmation',
             navbarTitle      :  'Confirm Account',
             formDescription  :  ['Account Confirmation'],
@@ -38,12 +38,12 @@ class AccountConfirmationPage extends Component{
 
     isConfirmed = (params)=>{
       console.log(params)  
-      this.setState(params);
+      this.setState({...params});
     };
 
    
     componentDidMount() {
-        console.log(this.props)
+        
         let { key } = this.props.match.params; 
         this.props.confirmUser( key, this.isConfirmed );    
     };
@@ -59,7 +59,7 @@ class AccountConfirmationPage extends Component{
   
     render() {
         let props = this.getProps();
-      
+        console.log(props) 
         return (
             <div className="registration-page">
               <NavBar {...props}/>
