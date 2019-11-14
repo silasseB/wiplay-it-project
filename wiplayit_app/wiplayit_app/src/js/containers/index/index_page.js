@@ -79,25 +79,30 @@ class IndexBox extends Component {
         
         if (cachedEntyties) {
             let { index, currentUser } = cachedEntyties;
-            let timeStamp = index.timeStamp;
 
-            let msDiff   = now.getTime() - timeStamp
-            let secDiff  = msDiff / 1000
-            let menDiff  = secDiff / 60
-            let hourDiff = menDiff/60
-            let dayDiff  = hourDiff/24
-
-            console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
-            console.log(parseInt(hourDiff)  + ' ' + 'hours ago')
-            console.log(parseInt(dayDiff)  + ' ' + 'days ago')
-            console.log( hourDiff < 1 )
             
-            if(index && hourDiff < 1 ){
-                console.log('Index found from cachedEntyties')
-                store.dispatch(action.getIndexPending());
-                store.dispatch(action.getIndexSuccess(index));
-                this.updateIndexEntyties(index)
-                return 
+            if(index){
+                let timeStamp = index.timeStamp;
+
+                let msDiff   = now.getTime() - timeStamp
+                let secDiff  = msDiff / 1000
+                let menDiff  = secDiff / 60
+                let hourDiff = menDiff/60
+                let dayDiff  = hourDiff/24
+
+                console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
+                console.log(parseInt(hourDiff)  + ' ' + 'hours ago')
+                console.log(parseInt(dayDiff)  + ' ' + 'days ago')
+                console.log( hourDiff < 1 )
+                if (hourDiff < 1) {
+
+                    console.log('Index found from cachedEntyties')
+                    store.dispatch(action.getIndexPending());
+                    store.dispatch(action.getIndexSuccess(index));
+                    this.updateIndexEntyties(index)
+
+                    return 
+                }
             }
         }
 
