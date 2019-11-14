@@ -252,6 +252,12 @@ export default class Api{
          
     }
 
+    logoutUser() {
+        var url = `/rest-auth/logout/`;
+        return url ;
+         
+    }
+
     passwordResetApi() {
         var url = `/rest-auth/password/reset/`;
         return url ;

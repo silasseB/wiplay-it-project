@@ -22,8 +22,9 @@ else {
 
 store.subscribe(() => {
    let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'))  || {};
-   let storeUpdate = store.getState().entyties
-      
+   let storeUpdate = store.getState()
+   localStorage.setItem('@@CachedStore', JSON.stringify(storeUpdate ));
+
    localStorage.setItem('@@CachedEntyties', JSON.stringify(cachedEntyties ));
    
 });

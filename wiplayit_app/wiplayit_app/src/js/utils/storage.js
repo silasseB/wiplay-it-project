@@ -3,7 +3,6 @@
 export const LocalCache = (key, value)=>{
     let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'))  || {};
     let mergedCache;
-    let newCache;
     
     if (key && value) {
     	if (cachedEntyties[key]) {
@@ -17,7 +16,7 @@ export const LocalCache = (key, value)=>{
    	    }
    	}
    	    
-   	
+   	console.log(cachedEntyties, value)
     localStorage.setItem('@@CachedEntyties',JSON.stringify(cachedEntyties))
     return cachedEntyties;
 }

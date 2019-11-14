@@ -3,8 +3,10 @@
 import os
 import sys
 
+Base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def main():
+    print(Base)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wiplayit_app.settings.development')
     try:
         from django.core.management import execute_from_command_line

@@ -75,25 +75,25 @@ class ProfilePage extends Component {
         
         let { cachedEntyties } = this.props;
         let { slug, id } = this.props.match.params;
+        let  profileById = `userProfile${id}`;
 
-        if (id) {
-            
-            var profileById = `userProfile${id}`;
-            this.setState({profileById});
-            
-            let  {userProfile, currentUser, auth} = cachedEntyties;
+        if (cachedEntyties) {
+            let { userProfile, currentUser, auth } = cachedEntyties;
 
-                                    
-            if (!userProfile) {
-                this.props.getUserProfile(id);
-                
-            }else{
+            if(userProfile && userProfile.id == id){
+                profileById = `userProfile${id}`;
+                this.setState({profileById })
+        
                console.log('userProfile found from cachedEntyties')
                store.dispatch(action.getUserProfilePending(id));
                store.dispatch(action.getUserProfileSuccess(userProfile));
-               this._dispatchUserProfileItems(userProfile);
+               return this._dispatchUserProfileItems(userProfile);
             }
         }
+
+        this.setState({profileById })
+        return this.props.getUserProfile(id);
+
     };
 
     _dispatchUserProfileItems(userProfile){

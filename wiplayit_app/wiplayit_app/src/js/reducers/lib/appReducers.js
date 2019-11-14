@@ -139,9 +139,9 @@ export function entyties(state=InitialState(), action) {
           return state;
 
       case types.GET_USER_PROFILE.SUCCESS:
-            
+            console.log(action, state)
             let newState = state;
-            if (action.profileById) {
+            if (state.userProfile.byId[action.profileById]) {
                 console.log(newState ,action) 
                newState.userProfile.allIds.push(action.profileById)
                Object.assign(newState.userProfile.byId[action.profileById], action.payload);
@@ -290,7 +290,7 @@ export function entyties(state=InitialState(), action) {
 
 
       case types.GET_ANSWER_LIST.SUCCESS:
-         //console.log(state.answers, action)
+         console.log(state.answers, action)
          Object.assign(state.answers.byId[action.byId],action.payload);
          return state; 
 

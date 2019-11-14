@@ -43,7 +43,8 @@ export const createActionError = (byId, actionType, error) => ({
 
 
 
-export const getIndexSuccess = (options) => {
+export const getIndexSuccess = (data) => {
+  console.log(data)
     
     return {
         type         : types.GET_INDEX.SUCCESS,
@@ -51,6 +52,7 @@ export const getIndexSuccess = (options) => {
         payload: {
             isLoading : false,
             isSuccess : true,
+            ...data,
         }
     };
 };
@@ -389,7 +391,7 @@ export const getPostListError = ( byId, error) =>({
 
 
 export const getAnswerListSuccess = (byId, answerList) => {
-
+    console.log(answerList)
     return{
         type: types.GET_ANSWER_LIST.SUCCESS,
         byId,

@@ -98,7 +98,7 @@ export function withAuthentication(Component) {
                 if (auth && auth.isLoggedIn){
                     setTimeout(()=> {
                         this.props.history.push('/'); 
-                        }, 1000);
+                        }, 500);
                     
                 }
             }

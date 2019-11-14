@@ -21,19 +21,12 @@ export function getIndex(options) {
        dispatch(action.getIndexPending());
        instance.get(apiUrl)
        .then(response => {
-             console.log(response)          
-            let {posts, questions, answers } = response.data;
-            var { questionListById, answerListById, postListById} = options;
+            console.log(response)  
+            dispatch(action.getIndexSuccess(response.data)); 
 
-            dispatch(action.getAnswerListSuccess(answerListById, answers));
-            dispatch(action.getQuestionListSuccess(questionListById, questions));
-            dispatch(action.getPostListSuccess(postListById, posts));
-
-            dispatch(action.getIndexSuccess(options));
-
-            
-       })
-       .catch(error => {
+           
+        })
+        .catch(error => {
             if (error.response) {
                var { errors } =  error.response.data
                dispatch(action.getIndexError( errors ));

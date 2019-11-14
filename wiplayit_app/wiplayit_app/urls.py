@@ -26,8 +26,6 @@ urlpatterns = [
     path('', include('app_backend.urls.update_urls')),
     path('', include('app_backend.urls.retrieve_urls')),
     path('', include('app_backend.urls.auth_urls')),
-    path('auth/', include('django.contrib.auth.urls')),
-    path('accounts/', include('allauth.urls')),
     path('rest-auth/', include('rest_auth.urls')),
     re_path(r'.*/', index),
   

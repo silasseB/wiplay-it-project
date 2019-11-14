@@ -6,6 +6,7 @@ import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navB
 import  AjaxLoader from "../../components/ajax-loader";
 import { QuestionComponent} from "../../components/question_components"
 import {store} from "../../configs/store-config";
+import {LocalCache} from  "../../utils/storage";
 
 import AnswersBox from "../../containers/answer/answer_page";
 
@@ -39,45 +40,52 @@ class QuestionPage extends Component {
   
     
 
-    componentDidUpdate(nextProps, prevState) {
-        
-        //var questionById = this.state.questionById;
-        //var questionEntytie = nextProps.entyties.question;
+       
 
-        //questionEntytie = questionEntytie.byId[questionById];
+    onQuestionUpdate = () =>{
+ 
+        const onStoreChange = () => {
+            let storeUpdate   = store.getState();
+            let {entyties }   = storeUpdate;
+            let {questionById}  =  this.state;
+            let question      =  entyties.question.byId[questionById];
 
-    }    
+            if (question && !question.isLoading) {
+               console.log(question)
+
+                LocalCache('question', question.question);
+            }
+        };
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
 
 
     componentDidMount() {
         console.log(this.props)
-        let { state } = this.props.location;
-        let { slug, id } = this.props.match.params; 
-        let { entyties } = this.props;
-        let questionById = '';
+        this.onQuestionUpdate();
+        
+        let { cachedEntyties } = this.props;
+        let { slug, id } = this.props.match.params;
+        let  questionById = `question${id}`;
 
-        var questionList = entyties.questions;
-        //this.setState({state})
+        if (cachedEntyties) {
+            let { question, currentUser } = cachedEntyties;
+            console.log(question)
 
-        if (id) {
-            
-            questionById = `question${id}`;
-            this.setState({questionById});
-
-            /*
-            if (isNewQuestion) {
-                //store.dispatch(action.getQuestionSuccess(question))
-                store.dispatch(action.Redirected());
-                return ;
-            }*/
+            if(question && question.id == id){
+                questionById = `question${id}`;
+                this.setState({questionById })
+        
+               console.log('Question found from cachedEntyties')
+               store.dispatch(action.getQuestionPending(id));
+               store.dispatch(action.getQuestionSuccess(question));
+               return 
+               
+            }
         }
-      
-        var question = entyties.question;
-        question = question.byId[questionById]
 
-        if (!question) {
-            store.dispatch(getQuestion(id));
-        }
+        this.setState({questionById})
+        return this.props.getQuestion(id);
     };
    
 
