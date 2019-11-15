@@ -55,9 +55,6 @@ class IndexBox extends Component {
 
             if (index && index.isSuccess && !index.timeStamp) {
                 console.log(index)
-                var timeStamp = new Date();
-                index['timeStamp'] = timeStamp.getTime()
-
                 this.updateIndexEntyties(index)
                 LocalCache('index', index);
             }

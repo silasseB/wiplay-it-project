@@ -28,16 +28,56 @@ class  PostPage extends Component  {
             postById    : ''
         };
     };
-  
-    
-    componentDidUpdate(nextProps,prevProps) {
-      
 
-      if (nextProps !== this.props ) {
-        console.log('Component updated');
-      } 
+    onQuestionUpdate = () =>{
+
+        const onStoreChange = () => {
+
+            let storeUpdate   = store.getState();
+            let {entyties }   = storeUpdate;
+            let {postById}  =  this.state;
+            let post      =  entyties.post.byId[postById];
+
+            if (post && !post.isLoading) {
+
+                console.log(post)
+                LocalCache('post', post.post );
+            }
+        };
+
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
+
+
+    componentDidMount() {
+        console.log(this.props)
+        this.onQuestionUpdate();
         
-    };   
+        let { cachedEntyties } = this.props;
+        let { slug, id } = this.props.match.params;
+        let  postById = `post${id}`;
+
+        if (cachedEntyties) {
+            let { post } = cachedEntyties;
+            console.log(post)
+
+            if(post && post.id == id){
+                postById = `post${id}`;
+                this.setState({postById })
+        
+               console.log('Post found from cachedEntyties')
+               store.dispatch(action.getPostPending(id));
+               store.dispatch(action.getPostSuccess(post));
+               return 
+               
+            }
+        }
+
+        this.setState({postById})
+        return this.props.getPost(id);
+    };
+   
+   
 
     componentDidMount() {
         let {state} = this.props.location;
