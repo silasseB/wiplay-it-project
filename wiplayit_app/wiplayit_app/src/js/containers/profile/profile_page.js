@@ -20,7 +20,7 @@ import  AjaxLoader from "../../components/ajax-loader";
 
 
 
-class ProfilePage extends Component {
+class UserProfileContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -81,13 +81,30 @@ class ProfilePage extends Component {
             let { userProfile, currentUser, auth } = cachedEntyties;
 
             if(userProfile && userProfile.id == id){
-                profileById = `userProfile${id}`;
-                this.setState({profileById })
+                var curentTimeStamp = new Date();
+
+                let timeStamp = userProfile.timeStamp;
+
+                let msDiff   = curentTimeStamp.getTime() - timeStamp
+                let secDiff  = msDiff / 1000
+                let menDiff  = secDiff / 60
+                let hourDiff = menDiff/60
+                let dayDiff  = hourDiff/24
+
+                console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
+                console.log(parseInt(hourDiff)  + ' ' + 'hours ago')
+                console.log(parseInt(dayDiff)  + ' ' + 'days ago')
+                console.log( hourDiff < 1 )
+
+                if (hourDiff < 1) {
+                    profileById = `userProfile${id}`;
+                    this.setState({profileById })
         
-               console.log('userProfile found from cachedEntyties')
-               store.dispatch(action.getUserProfilePending(id));
-               store.dispatch(action.getUserProfileSuccess(userProfile));
-               return this._dispatchUserProfileItems(userProfile);
+                    console.log('userProfile found from cachedEntyties')
+                    store.dispatch(action.getUserProfilePending(id));
+                    store.dispatch(action.getUserProfileSuccess(userProfile));
+                    return this._dispatchUserProfileItems(userProfile);
+                }
             }
         }
 
@@ -213,6 +230,7 @@ class ProfilePage extends Component {
                             :
                             <div>
                                <ProfileComponent {...props}/> 
+                              
                             </div>
                         }
                     </div>
@@ -228,7 +246,7 @@ class ProfilePage extends Component {
 
 
 
-export default withHigherOrderIndexBox(ProfilePage);
+export default withHigherOrderIndexBox(UserProfileContainer);
 
 
 

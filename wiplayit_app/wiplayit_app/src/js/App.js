@@ -33,10 +33,11 @@ import PostListPage from "./containers/post/post_list"
 import  PostPage    from "./containers/post/post_page"
 import  QuestionPage    from "./containers/question/question_page"
 import QuestionListPage from "./containers/question/question_list"
-import ProfilePage from "./containers/profile/profile_page";
+import UserProfileContainer from "./containers/profile/profile_page";
 import  PasswordChangePage from "./containers/authentication/password_change_page";
 import EmailResendPage    from "./containers/authentication/email_resend_page"
-import PasswordResetPage   from "./containers/authentication/password_reset_page" 
+import PasswordResetPage   from "./containers/authentication/password_reset_page"
+import Example from "./modal-router-example"; 
 
 import AccountConfirmationPage from "./containers/authentication/account_confirmation_page"
 
@@ -62,7 +63,7 @@ function App() {
      <div>
  
             <Route exact path="/" component={IndexBox}/>
-            <Route  path="/profile/:id/:slug/" component={ProfilePage}/>
+            <Route  path="/profile/:id/:slug/" component={UserProfileContainer}/>
             <Route  path="/question/:slug/:id/" component={QuestionPage}/>
             <Route  path="/user/registration/" component={RegistrationPage} />
             <Route  path="/user/signup/" component={SignUpPage} />
@@ -79,7 +80,7 @@ function App() {
             <Route  path="/post/:id/upvoters/" component={PostUpVotersBox} />
             <Route  path="/post/comment/:id/upvoters/" component={PostCommentUpVotersBox} />
             <Route  path="/post/reply/:id/upvoters/" component={PostReplyUpVotersBox} />
-            
+            <Route  path="/modal/router/" component={Example} />
             <Route  path="/profile/:slug/:id/followers/" component={ProfileFollowersBox} />
             <Route  path="/profile/:slug/:id/followings/" component={ProfileFollowingsBox} />
             <Route  path="/users/" component={UserListBox}/>
