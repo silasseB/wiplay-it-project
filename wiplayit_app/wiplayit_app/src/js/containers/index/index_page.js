@@ -51,10 +51,12 @@ class IndexBox extends Component {
             let storeUpdate   = store.getState();
             let {entyties }   = storeUpdate;
             let { index  }    = entyties;
-             
+            console.log(index) 
 
             if (index && index.isSuccess && !index.timeStamp) {
-                console.log(index)
+                var timeStamp = new Date();
+                index['timeStamp'] = timeStamp.getTime();
+                
                 this.updateIndexEntyties(index)
                 LocalCache('index', index);
             }
@@ -95,7 +97,7 @@ class IndexBox extends Component {
 
                     console.log('Index found from cachedEntyties')
                     store.dispatch(action.getIndexPending());
-                    store.dispatch(action.getIndexSuccess(index));
+                    store.dispatch(action.getIndexSuccess(index,));
                     this.updateIndexEntyties(index)
 
                     return 
