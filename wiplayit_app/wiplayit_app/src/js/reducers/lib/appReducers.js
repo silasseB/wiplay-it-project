@@ -209,20 +209,7 @@ export function entyties(state=InitialState(), action) {
          return state;      
       
       case types.GET_QUESTION.SUCCESS:
-         var question = action.payload.question;
-         var answerById = `answer${question.id}`;
-         var answerState = {
-            answerList    : question.answers,
-            newObject     : "",
-            isLoading     : false,
-            visited       : false,
-            error         : '',
-         }
-
-         Object.assign(state.question.byId[action.questionById], action.payload);
-         if (question.answers.length) {
-             Object.defineProperty(state.answers.byId, answerById, {value : answerState});
-         }
+            Object.assign(state.question.byId[action.questionById], action.payload);
          return state; 
 
       case types.GET_QUESTION.ERROR:

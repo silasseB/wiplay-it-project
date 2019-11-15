@@ -6,6 +6,10 @@ export const LocalCache = (key, value)=>{
     
     if (key && value) {
     	//Create timeStamp
+    	if (!value.timeStamp) {
+    		var timeStamp = new Date();
+            value['timeStamp'] = timeStamp.getTime();
+    	}
     	
     	if (cachedEntyties[key]) {
     	    mergedCache = Object.assign( cachedEntyties[key], value)
