@@ -39,12 +39,12 @@ export function withHigherOrderIndexBox(Component) {
                 isAuthenticated    : this.isAuthenticated(),
                 modalIsOpen        : false,
             };
+            this.openModal = this.openModal.bind(this);
         };
 
 
         isAuthenticated() {
       	    let cachedEntyties = this.cachedEntyties();
-            console.log(cachedEntyties)
         
             if (cachedEntyties){
         	    let { auth  }  = cachedEntyties;
@@ -59,7 +59,6 @@ export function withHigherOrderIndexBox(Component) {
         getCurrentUser =(currentUser=undefined)=>{
             let  cachedEntyties  = this.cachedEntyties();
         
-            console.log(currentUser, cachedEntyties)
             if (!currentUser && cachedEntyties) {
                 currentUser  = cachedEntyties.currentUser
             }
@@ -181,8 +180,10 @@ export function withHigherOrderIndexBox(Component) {
             //Open modal is open is true and close the if isOpen is false
             //And most importantly render the modal with its contents based on the 
             //action dispatched 
+            console.log(this.props)
 
             const modals   = new Modals();
+            let location = this.props.location;
             if (modal.isOpen) {
                 let modalProps = modal.modalProps?modal.modalProps:{};
                 //Get Some important props and merge them with modalProps
@@ -194,7 +195,13 @@ export function withHigherOrderIndexBox(Component) {
                 if (modal.modalType === 'editor') {
                     modalProps['modalContents'] =  <AppEditor {...props}/>;
                     console.log(modal, modalProps)
-                    modals.editorModal(modal.modalProps);
+                    //modals.editorModal(modal.modalProps);
+                    let state = {
+                           background    : location,
+                           modalContents : <AppEditor {...props}/> 
+                        }
+
+                    this.props.history.push( `/compose/${'question'}/${'1'}/`,state )
 
                     setTimeout( () => {
                         this.setState({modalIsOpen : true})
@@ -262,7 +269,7 @@ export function withHigherOrderIndexBox(Component) {
         };
 
         push(){
-            this.props.history.pus(this.props, 'hello') 
+            this.props.history.push(this.props, 'hello') 
         };
      
         getProps(){
@@ -281,7 +288,7 @@ export function withHigherOrderIndexBox(Component) {
 
         render() {
             let props = this.getProps();
-            
+            console.log(props)
             return (
                 <div>
                    <Component {...props}/>
@@ -299,7 +306,7 @@ export function withHigherOrderIndexBox(Component) {
 const mapDispatchToProps = (dispatch, ownProps) => {
    
     return {
-    	getIndex               : (props)    =>  dispatch(getIndex(props)), 
+    	getIndex             : (props)      => dispatch(getIndex(props)), 
         getUserProfile       : (id, apiUrl) => dispatch(getUserProfile(id, apiUrl)),
         getUserList          : (props)      => dispatch(getUserList(props)),
         getQuestionList      : (id)         => dispatch(_getQuestionList(id)),

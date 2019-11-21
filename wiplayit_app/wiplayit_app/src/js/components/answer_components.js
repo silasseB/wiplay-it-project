@@ -4,6 +4,8 @@ import { MatchMediaHOC } from 'react-match-media';
 import { AnswerOptModalBtns,ModalCloseBtn,UpVoteAnswerBtn,
   DownVoteAnswerBtn,OpenModalButton, QuestionOptDropDownBtn, CommentBtn  }
  from "../components/buttons";
+import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import { GetModalLinkProps } from "../components/component-props";
 
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import  * as types  from '../actions/types';
@@ -52,48 +54,37 @@ export const AnswersComponent = props => {
         }
 
 
-   let  modalOptionsProps = {
-      modalProps : {
-        objName    : 'answer',
-        actionType : types.UPDATE_ANSWER,
-        isPut      : true,
-        obj        : answer, 
-        
-      },
-      modalType : 'optionsMenu', 
-   };
    
-   let upvoteBtnProps = {
-      objName     : 'answer',
-      actionType  : types.UPDATE_ANSWER,
-      isPut       : true,
-      obj         : answer, 
-      objId       : answer.id,
-      apiUrl      : api.updateAnswerApi(answer.id),
-      byId        : answerById,
-   };
-   
-   let  createCommentProps = {
-      modalProps : {
-        objName           : 'comment',
-        actionType        : types.CREATE_COMMENT,
+
+
+    let editAnswerProps = {
+        objName     : 'Answer',
+        isPut       : true,
+        obj         : answer, 
+        byId        : answerById,
+    };
+
+
+
+    let editCommentProps = {
+        objName           : 'Comment',
         obj               : answer,
-        objId             : answer.id,
         isPost            : true,
-        editorPlaceHolder : 'Add Comment...',
-        apiUrl            : api.createAnswerCommentApi(answer.id),
-         
-      },
-      modalType : 'editor', 
-          
-   };
+        
+    };
+
+
+    editAnswerProps = GetModalLinkProps.props(editAnswerProps)
+    editCommentProps = GetModalLinkProps.props(editCommentProps)
+    console.log( editAnswerProps, editCommentProps)
+
+    let EditorModalLink = <EditorLink {...editCommentProps}/>; 
+    let MenuModalLink   = <OptionsModalLink {...editAnswerProps}/>
+    
 
    let btnsProps = {
-         createCommentProps,
-         upvoteBtnProps,
-         modalOptionsProps,
-         btnStyles:optionsBtnStyles,
-         btnText : <i className="material-icons ">more_horiz</i>, 
+         editAnswerProps,
+         editCommentProps, 
       }; 
 
    Object.assign(btnsProps, props)
@@ -101,22 +92,17 @@ export const AnswersComponent = props => {
                          { props.answer.upvotes }  Upvotes
                      </Link>;
     
-   let btn1 =  props.answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
+   let UpVoteBtn =  props.answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
                : <UpVoteAnswerBtn {...btnsProps}/>
 
-   let btn2 =  <CommentBtn {...btnsProps}/>;
-                         
+                          
               
-   let optionsBtn =  <div>
-                        <OptBtnSmallScreen {...btnsProps}/> 
-                        <OptBtnBigScreen {...props}/>
-                     </div>;
-
+   
    const btnsList   = { 
             itemsCounter : itemsCounter,
-            btn1   : btn1,
-            btn2   : btn2,
-            btn3   : optionsBtn,
+            btn1   : UpVoteBtn,
+            btn2   : EditorModalLink,
+            btn3   : MenuModalLink,
             Styles : Styles
          };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link, useLocation } from "react-router-dom";
 import Api from '../api';
 import  * as types  from '../actions/types';
 
@@ -8,8 +8,9 @@ const api      = new Api();
 
 
 export const CreateQuestionBtn = props => {
-   let  createQuestionProps = {
-      modalProps :{
+    let location = useLocation();
+    let  modalProps = {
+      editorProps :{
         objName           : 'question',
         actionType        : types.CREATE_QUESTION,
         isPost            : true,
@@ -19,20 +20,26 @@ export const CreateQuestionBtn = props => {
       },
       modalType : 'editor', 
           
-   };
+    };
 
-  return(
-      <button type="button" onClick={ () => props.showModal(createQuestionProps)} 
-                id="create-question" className="btn btn-sm  create-question">
-           Ask
-      </button>
+    return(
+        <Link id="create-question" className="btn btn-sm  create-question"
+                to={{
+            pathname: `/compose/${'question'}/${'1'}/`,
+            // This is the trick! This link sets
+            // the `background` in location state.
+            state: { background: location, modalProps }
+          }}
+           >
+           Ask  
+        </Link>
    );
 };
 
 
 export const CreatePostBtn = props =>{
    //console.log(props)
-   let createPostProps = {
+   let modalProps = {
       modalProps :{
          objName           : 'post',
          isPost            : true,
@@ -45,10 +52,17 @@ export const CreatePostBtn = props =>{
    };
         
    return(
-      <button type="button" onClick={ () => props.showModal(createPostProps)}
-            className="btn btn-sm  create-post">
-         Post
-      </button>
+        <Link id="create-post" className="btn btn-sm"
+                to={{
+            pathname: `/compose/${'post'}/${'1'}/`,
+            // This is the trick! This link sets
+            // the `background` in location state.
+            state: { background: location, modalProps }
+          }}
+           >
+           Ask  
+        </Link>
+     
    );
 }
 
@@ -78,7 +92,7 @@ export const FollowQuestionBtn = props => {
    
    return(
       <div>
-         <button  type="button" onClick={ () => props.followOrUpVote(props.followBtnProps)}
+         <button  type="button" onClick={ () => props.followOrUpVote(props.editQuestionProps)}
             className="btn-sm follow-question" >
 
             Follow <span className="fa fa-rss icon-color"></span>            
@@ -94,7 +108,7 @@ export const UnfollowQuestionBtn = props => {
 
    return(
       <div>
-         <button  type="button" onClick={() =>  props.unfollowOrDownVote(props.followBtnProps)}
+         <button  type="button" onClick={() =>  props.unfollowOrDownVote(props.editQuestionProps)}
                                className="btn-sm  follow-question" >
                Following <span className="fa fa-rss"></span>
          </button>
@@ -106,7 +120,7 @@ export const UnfollowQuestionBtn = props => {
            
 export const UpVotePostBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () =>  props.followOrUpVote(props.upvoteBtnProps)}
+   <button  type="button" onClick={ () =>  props.followOrUpVote(props.editPostProps)}
                                           className="btn-sm  upvote-answer" >
      Upvote <span className="fa fa-arrow-up"></span>
   </button>
@@ -120,7 +134,7 @@ export const UpVotePostBtn = props => (
          
 export const DownVotePostBtn = props => (  
 <div>       
-    <button   type="button" onClick={ () =>  props.unfollowOrDownVote(props.upvoteBtnProps)}
+    <button   type="button" onClick={ () =>  props.unfollowOrDownVote(props.editPostProps)}
                                          className="btn-sm icon-color upvote-answer" >
     Upvoted <span className=" fa fa-arrow-up icon-color"></span>
   </button>
@@ -131,7 +145,7 @@ export const DownVotePostBtn = props => (
             
 export const UpVoteAnswerBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () => props.followOrUpVote(props.upvoteBtnProps)}
+   <button  type="button" onClick={ () => props.followOrUpVote(props.editAnswerProps)}
                                           className="btn-sm  upvote-answer" >
      Upvote <span className="fa fa-arrow-up"></span>
   </button>
@@ -145,7 +159,7 @@ export const UpVoteAnswerBtn = props => (
          
 export const DownVoteAnswerBtn = props => (  
 <div>       
-    <button   type="button" onClick={ () => props.unfollowOrDownVote(props.upvoteBtnProps)}
+    <button   type="button" onClick={ () => props.unfollowOrDownVote(props.editAnswerProps)}
                                          className="btn-sm icon-color upvote-answer" >
     Upvoted <span className=" fa fa-arrow-up icon-color"></span>
   </button>
@@ -158,16 +172,23 @@ export const DownVoteAnswerBtn = props => (
 
 export const AnswerBtn = props => {
    //console.log(props)
-   
+   let { modalProps } = props;
 
-return  (  
-      <div>      
-        <button type="button" onClick={ () => props.showModal(props.createAnswerProps) }
-          className="btn-sm  create-answer" >
-            <span className="fa fa-edit icon-color"></span>  Answer
-         </button>
+    return  (  
+      <div>
+         <Link id="create-answer" className="btn btn-sm"
+                to={{
+            pathname: `/compose/${'answer'}/${'1'}/`,
+            // This is the trick! This link sets
+            // the `background` in location state.
+            state: { background: location, modalProps }
+          }}
+           >
+         <span className="fa fa-edit icon-color"></span>  Answer  
+        </Link>
+
       </div>
-   );
+    );
 };
 
 export const EditAnswerBtn = props => {
@@ -210,7 +231,7 @@ return (
              
 export const UpVoteCommentBtn = props => (     
    <div>    
-      <button  type="button" onClick={ () => props.followOrUpVote(props.upvoteBtnProps)}
+      <button  type="button" onClick={ () => props.followOrUpVote(props.editCommentProps)}
                className="btn-sm comment-btn upvote-comment-btn upvote-comment" >
          Upvote 
       </button>
@@ -221,7 +242,7 @@ export const UpVoteCommentBtn = props => (
 
 export const DownVoteCommentBtn = props => (     
    <div>    
-      <button  type="button" onClick={ () => props.unfollowOrDownVote(props.upvoteBtnProps)} 
+      <button  type="button" onClick={ () => props.unfollowOrDownVote(props.editCommentProps)} 
                       className="btn-sm  icon-color upvote-comment" >
          Upvoted 
       </button>
@@ -232,7 +253,7 @@ export const DownVoteCommentBtn = props => (
 
 export const UpVoteReplyBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () =>  props.followOrUpVote(props.upvoteBtnProps)}
+   <button  type="button" onClick={ () =>  props.followOrUpVote(props.editReplyProps)}
                    className="btn-sm comment-btn upvote-comment-btn upvote-comment" >
      Upvote 
   </button>
@@ -243,7 +264,7 @@ export const UpVoteReplyBtn = props => (
 
 export const DownVoteReplytBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () => props.unfollowOrDownVote(props.upvoteBtnProps)} 
+   <button  type="button" onClick={ () => props.unfollowOrDownVote(props.editReplyProps)} 
                       className="btn-sm  icon-color upvote-comment" >
      Upvoted 
   </button>

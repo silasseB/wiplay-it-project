@@ -1,6 +1,6 @@
 import React from 'react';
-import Api from '../api';
-
+import { GetModalLinkProps } from "../components/component-props";
+import {EditorLink, OptionsModalLink} from "../components/modal-links"
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { EditAnswerBtn, AnswerBtn, FollowQuestionBtn,UnfollowQuestionBtn, 
@@ -14,140 +14,98 @@ const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
 const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 
 
-const api      = new Api();
-
 
 
 
 export const QuestionComponent = props => {
-   console.log(props)
-   var questionById = props.questionById;
-   var questionEntytie = props.entyties.question;
-   questionEntytie = questionEntytie.byId[questionById]
-
-   var question     = props.question;
+    console.log(props)
+    let { question, questionById, isQuestionBox }    = props;
 
 
 
-   let optionsBtnStyles = {
-         fontSize   : '8px',
-         background : 'white',
-         fontWeight : 'bold',
-         width      : '40px',
-         color      : '#4A4A4A',
-         margin     : '0 0 2px'
-   }
+    let optionsBtnStyles = {
+        fontSize   : '8px',
+        background : 'white',
+        fontWeight : 'bold',
+        width      : '40px',
+        color      : '#4A4A4A',
+        margin     : '0 0 2px'
+    }
 
-   let questionPath = `/question/${question.slug}/${question.id}/`;
-   let pathToFollowers =  `/followers/${question.id}/${question.slug}/`;
+    let questionPath = `/question/${question.slug}/${question.id}/`;
+    let pathToFollowers =  `/followers/${question.id}/${question.slug}/`;
 
-   let state = {
-         question,
-         usersIsFor : 'questionFollowers', 
-     }
+    let state = {
+        question,
+        usersIsFor : 'questionFollowers', 
+    }
 
-   let apiProps;
+    
+
+    let getObj = ()=>{
+
+        if (isQuestionBox && question.user_has_answer) {
+            var questionEntytie = props.entyties.question;
+            questionEntytie = questionEntytie.byId[questionById];
+
+            return questionEntytie.userAnswer;
+        }
+        return question;
+    }
 
 
-   apiProps = {...state};
+    let editQuestionProps = {
+        objName     : 'Question',
+        isPut       : true,
+        obj         : question, 
+        byId        : questionById,
+    };
 
 
-   let  modalOptionsProps = {
-      modalProps : {
-        objName    : 'question',
-        actionType : types.UPDATE_QUESTION,
-        isPut      : true,
-        obj        : question, 
-        
-      },
-      modalType : 'optionsMenu', 
-   };
 
-   let followBtnProps = {
-      objName     : 'question',
-      actionType  : types.UPDATE_QUESTION,
-      isPut       : true,
-      obj         : question, 
-      objId       : question.id,
-      index       : props.index,
-      apiUrl      : api.updateQuestionApi(question.id),
-      byId        : questionById,
-   };
+    let editAnswerProps = {
+        objName           : 'Answer',
+        obj               : getObj(),
+        isPost            : !question.user_has_answer,
+        isPut             : question.user_has_answer,   
+       
+    };
 
-   let  createAnswerProps = {
-      modalProps :{
-        objName           : 'answer',
-        actionType        : types.CREATE_ANSWER,
-        obj               : question,
-        objId             : question.id,
-        isPost            : true,
-        editorPlaceHolder : 'Create Answer...',
-        apiUrl            : api.createAnswerApi(question.id),
-         
-      },
-      modalType : 'editor', 
-          
-   };
 
-   let  editAnswerProps = {};
-
-   if (props.isQuestionBox ) {
-      
-      if (questionEntytie.userHasAnswer) {
-         var userAnswer = questionEntytie.userAnswer;
-      
-         editAnswerProps = {
-            modalProps :{
-              objName           : 'answer',
-              objIndex          : userAnswer.index,
-              objId             : userAnswer.id,
-              obj               : userAnswer,
-              isPut             : true,
-              actionType        : types.UPDATE_ANSWER,
-              editorPlaceHolder : 'Create Answer...',
-              apiUrl            : api.updateAnswerApi(userAnswer.id),
-            },
-            modalType : 'editor', 
-         };
-      }
-   }
+    editAnswerProps = GetModalLinkProps.props(editAnswerProps)
+    editQuestionProps = GetModalLinkProps.props(editQuestionProps)
+    console.log( editAnswerProps, editQuestionProps)
+ 
+    let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
+    let MenuModalLink   = <OptionsModalLink {...editQuestionProps}/>
+    
 
 
    let btnsProps = {
-                  createAnswerProps,
-                  editAnswerProps,
-                  followBtnProps,
-                  modalOptionsProps,
-                  btnStyles:optionsBtnStyles,
-                  btnText : <i className="material-icons ">more_horiz</i>, 
-               }
+            editAnswerProps,
+            editQuestionProps
+        }
 
    Object.assign(btnsProps, props)
+
 
    let questionFollowers = <Link to={{ pathname : pathToFollowers,state }}>
                              { question.followers} Followers
                            </Link>;
-   let editAnswerBtn      =  props.userHasAnswer? <EditAnswerBtn {...btnsProps}/>
-                                                : <AnswerBtn {...btnsProps}/>
-
+   
    let unfollowOrFollowQuestionBtn =  question.user_is_following? 
                                          <UnfollowQuestionBtn {...btnsProps} />
                                        :
                                          <FollowQuestionBtn {...btnsProps}/>;
 
 
-   let optionsBtn = <div>
-                     <OptBtnSmallScreen {...btnsProps}/> 
-                     <OptBtnBigScreen {...props}/>
-                   </div>;
-
    const btnsList  = {
-                 itemsCounter : questionFollowers,
-                 btn1         : editAnswerBtn,
-                 btn2         : unfollowOrFollowQuestionBtn,
-                 btn3         : optionsBtn,
-                 Styles       : Styles,
-              }
+            itemsCounter : questionFollowers,
+            btn1         : EditorModalLink,
+            btn2         : unfollowOrFollowQuestionBtn,
+            btn3         : MenuModalLink,
+            Styles       : Styles,
+        }
 
    let QuestionProps = { questionPath, state, btnsList };
    Object.assign(QuestionProps, props)

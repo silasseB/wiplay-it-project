@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import  * as action  from "../../actions/actionCreators";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import {NavigationBarSmallScreen,NavigationBarBigScreen } from "../../components/navBar";
 import {store} from "../../configs/store-config";
@@ -41,7 +42,7 @@ class IndexBox extends Component {
 
     componentDidCatch(error, info) {
         // You can also log the error to an error reporting service
-        console.log(error, info);
+        //console.log(error, info);
     }
 
 
@@ -51,7 +52,6 @@ class IndexBox extends Component {
             let storeUpdate   = store.getState();
             let {entyties }   = storeUpdate;
             let { index  }    = entyties;
-            console.log(index) 
 
             if (index && index.isSuccess && !index.timeStamp) {
                 var timeStamp = new Date();
@@ -89,10 +89,8 @@ class IndexBox extends Component {
                 let hourDiff = menDiff/60
                 let dayDiff  = hourDiff/24
 
-                console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
-                console.log(parseInt(hourDiff)  + ' ' + 'hours ago')
-                console.log(parseInt(dayDiff)  + ' ' + 'days ago')
-                console.log( hourDiff < 1 )
+                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+               
                 if (hourDiff < 1) {
 
                     console.log('Index found from cachedEntyties')
@@ -196,13 +194,13 @@ export default  withHigherOrderIndexBox(IndexBox);
 
 
 export const IndexComponent = props => {
-   
+    let location = useLocation();
       
    return(
      <div className="home-page-contents" id="home-page-contents">
-       <Answers {...props}/>
-       <Posts {...props}/>
-       <Questions {...props}/>
+        <Answers {...props}/>
+        <Posts {...props}/>
+        <Questions {...props}/>
 
      </div>
    )

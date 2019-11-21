@@ -13,6 +13,8 @@ import ReplyChildrenBox from "../containers/replies/reply_children_page";
 import ReplyGrandChildrenBox from "../containers/replies/reply_grand_children_page";
 import ReplyGreatGrandChildBox from "../containers/replies/reply_great_grand_child_page";
 
+import {EditorLink, OptionsModalLink} from "../components/modal-links";
+import { GetModalLinkProps } from "../components/component-props";
 import { UserComponentSmall } from "../components/profile_components";
 
 
@@ -208,7 +210,7 @@ export const ReplyGreatGrandChildComponent = props => {
             }
 
    var replies   =  props.entyties.replies;
-   replies =  replies.byId[props.byId];
+   replies       =  replies.byId[props.byId];
    var replyList =  replies.replyList;
 
    return(
@@ -268,6 +270,7 @@ export const Reply = props => {
    }
 
    let {answer, post } = props.props;
+   let { byId } = props || props.props 
    var reply = props.reply;
    let storedState = JSON.parse(reply.reply)
    const contentState = convertFromRaw(storedState);
@@ -297,54 +300,38 @@ export const Reply = props => {
       
    }
      
+    let editReplyProps = {
+        objName     : 'Reply',
+        isPut       : true,
+        obj         : reply, 
+        byId,
+        apiUrl      : updateUrl,
+    };
 
-   let  modalOptionsProps = {
-      modalProps : {
-         objName    : 'reply',
-         actionType : types.UPDATE_REPLY,
-         isPut      : true,
-         obj        : reply, 
-         apiUrl     : updateUrl,
-         objIndex   : props.index,
-         objId      : reply.id,
-         byId       : props.byId,
-      },
-      modalType : 'optionsMenu', 
-   };
-   
 
-   let upvoteBtnProps = {
-      objName     : 'reply',
-      actionType  : types.UPDATE_REPLY,
-      isPut       : true,
-      obj         : reply, 
-      objId       : reply.id,
-      objIndex    : props.index,
-      apiUrl      : updateUrl,
-      byId        : props.byId,
-   };
-   
-   let  createReplyProps = {
-      modalProps : {
-        objName           : 'reply',
-        actionType        : types.CREATE_REPLY,
+
+    let editReplyChildProps = {
+        objName           : 'Reply',
         obj               : reply,
-        objId             : reply.id,
         isPost            : true,
-        editorPlaceHolder : 'Add Reply...',
+        byId,
         apiUrl            : createApiUrl,
-        byId        : props.byId,
         
-         
-      },
-      modalType : 'editor', 
-          
-   };
+    };
+
+
+    editReplyChildProps = GetModalLinkProps.props( editReplyChildProps )
+    editReplyProps = GetModalLinkProps.props(editReplyProps)
+    
+    console.log( editReplyProps, editReplyChildProps)
+
+    let EditorModalLink = <EditorLink {...editReplyChildProps}/>; 
+    let MenuModalLink   = <OptionsModalLink {...editReplyProps}/>
+    
 
    let btnsProps = {
-         createReplyProps,
-         upvoteBtnProps,
-         modalOptionsProps,
+        editReplyProps,
+        editReplyChildProps,
          btnStyles:optionsBtnStyles,
          btnText : 'More', 
       }; 
@@ -357,20 +344,15 @@ export const Reply = props => {
    let upvoteBtn =  reply.upvoted? <DownVoteReplytBtn {...btnsProps}/>
                : <UpVoteReplyBtn {...btnsProps}/>
 
-   let replyBtn =  <ReplyBtn {...btnsProps}/>;
                          
               
-   let optionsBtn =  <div>
-                        <OptBtnSmallScreen {...btnsProps}/> 
-                        <OptBtnBigScreen {...props}/>
-                     </div>;
-
+   
 
    const btnsList  = {
         itemsCounter :  itemsCounter,
         btn1         :  upvoteBtn,
-        btn2         :  replyBtn,
-        btn3         :  optionsBtn,
+        btn2         :  EditorModalLink,
+        btn3         :  MenuModalLink,
       } 
  
 

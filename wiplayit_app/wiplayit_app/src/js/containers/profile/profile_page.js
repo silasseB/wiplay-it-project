@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {  Link,Route } from "react-router-dom";
 
-import { ModalManager } from 'react-dynamic-modal';
-import {CustomModal} from "../../containers/modal-conf";
+
+import {ModalManager} from "../../containers/modal/modal_container";
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navBar";
 
@@ -92,10 +92,7 @@ class UserProfileContainer extends Component {
                 let dayDiff  = hourDiff/24
 
                 console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
-                console.log(parseInt(hourDiff)  + ' ' + 'hours ago')
-                console.log(parseInt(dayDiff)  + ' ' + 'days ago')
-                console.log( hourDiff < 1 )
-
+        
                 if (hourDiff < 1) {
                     profileById = `userProfile${id}`;
                     this.setState({profileById })

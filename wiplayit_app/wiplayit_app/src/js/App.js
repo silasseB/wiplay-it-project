@@ -1,32 +1,23 @@
 import React from 'react';
-import { Route } from "react-router-dom";
+
+import {
+  Router,
+  Switch,
+  Route,
+  Link,
+  useHistory,
+  useLocation,
+  useParams,
+  
+} from "react-router-dom";
+
 import { withRouter } from "react-router";
 
-import logo from './logo.svg';
-import './App.css';
-
-import './index.css';
-import "./containers/index/home.css";
-import "./containers/navbar.css";
-import "./containers/question/css/mobile-question-page.css";
-import "./containers/question/css/desktop-question-page.css";
-
-import "./containers/main-sm-screen.css";
-import "./containers/profile/profile-edit.css"
-import "./containers/profile/profile.css"
-
-import './containers/authentication/css/registration-mobile.css';
-import './containers/authentication/css/registration-desktop.css';
-
-import 'font-awesome/css/font-awesome.min.css';
-import 'bootstrap/dist/js/bootstrap.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import  RegistrationPage  from "./containers/authentication/registration";
 import  SignUpPage from "./containers/authentication/signup";
 import  LoginPage from "./containers/authentication/login";
 
-import ModalContainer from "./containers/modal";
 import EditProfile from "./containers/profile/edit_profile";
 import IndexBox from "./containers/index/index_page";
 import PostListPage from "./containers/post/post_list"
@@ -37,10 +28,10 @@ import UserProfileContainer from "./containers/profile/profile_page";
 import  PasswordChangePage from "./containers/authentication/password_change_page";
 import EmailResendPage    from "./containers/authentication/email_resend_page"
 import PasswordResetPage   from "./containers/authentication/password_reset_page"
-import Example from "./modal-router-example"; 
+import {Modal}   from  "./containers/modal/modal-conf";
+import { ModalManager}   from  "./containers/modal/modal_container";
 
 import AccountConfirmationPage from "./containers/authentication/account_confirmation_page"
-
 import UserListBox from "./containers/users/user_list_page"; 
 import ProfileFollowersBox from "./containers/users/profile-followers-page"; 
 import ProfileFollowingsBox from "./containers/users/profile-followings-page"; 
@@ -59,16 +50,28 @@ import PostReplyUpVotersBox  from "./containers/users/post-comment-upvoters-page
 
 
 function App() {
+  let location = useLocation();
+  let history = useHistory();
+  let params = useParams();
+  //let match = useMatch()
+  let background = location.state && location.state.background;
+  let state = location && location.state;
+
+  if (!background) {
+    ModalManager.close();
+  }
+  console.log(background, location, state)
+
   return (
      <div>
- 
-            <Route exact path="/" component={IndexBox}/>
+        <Switch location={background || location}>
+            <Route exact path="/" children={<IndexBox/>}/>
+                   
             <Route  path="/profile/:id/:slug/" component={UserProfileContainer}/>
             <Route  path="/question/:slug/:id/" component={QuestionPage}/>
             <Route  path="/user/registration/" component={RegistrationPage} />
             <Route  path="/user/signup/" component={SignUpPage} />
             <Route  path="/user/login/" component={LoginPage} />
-            <Route  path="/editor/" component={ModalContainer} />
             <Route  path="/posts/" component={PostListPage} />
             <Route  path="/questions/" component={QuestionListPage} />
             <Route  path="/post/:slug/" component={PostPage} />
@@ -80,7 +83,7 @@ function App() {
             <Route  path="/post/:id/upvoters/" component={PostUpVotersBox} />
             <Route  path="/post/comment/:id/upvoters/" component={PostCommentUpVotersBox} />
             <Route  path="/post/reply/:id/upvoters/" component={PostReplyUpVotersBox} />
-            <Route  path="/modal/router/" component={Example} />
+            <Route  path="/modal/router/" component={Modal} />
             <Route  path="/profile/:slug/:id/followers/" component={ProfileFollowersBox} />
             <Route  path="/profile/:slug/:id/followings/" component={ProfileFollowingsBox} />
             <Route  path="/users/" component={UserListBox}/>
@@ -89,6 +92,10 @@ function App() {
             <Route  path="/reset/:uid/:token/" component={PasswordChangePage} />
             <Route  path="/account/email/resend/" component={EmailResendPage} />
             <Route  path="/:slug/answer/" component={QuestionPage}/>
+           
+        </Switch>
+
+         {background && <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>}
      </div>
  
   );

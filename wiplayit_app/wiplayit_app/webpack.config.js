@@ -3,18 +3,22 @@ var path = require("path");
 var webpack = require('webpack');
 var BundleTracker = require('webpack-bundle-tracker');
 //var SplitByPathPlugin = require('webpack-split-by-path');
+let staticPath = `/Mywork/wiplay-it-project/wiplayit_app/app_backend/static/dist/`;
 
 const paths = {
   STATIC: path.resolve(__dirname, 'static/dist'),
   SRC: path.resolve(__dirname, 'src'), // source folder path -> ADDED IN THIS STEP
   JS: path.resolve(__dirname, 'src/'),
+  NODE_MODULES: path.resolve(__dirname, 'node_modules'),
+  
 };
 
+  console.log(paths.STATIC)
 
   // Webpack configuration
   module.exports = {
     entry: path.join(paths.JS, '/js/index.js'),
-
+    
     output: {
       path: paths.STATIC,
       filename: 'app.bundle.js',
@@ -34,6 +38,7 @@ const paths = {
 
   plugins: [
     new BundleTracker({filename: './webpack-stats.json'}),
+    
     /*
     new SplitByPathPlugin([
       {
@@ -44,7 +49,7 @@ const paths = {
   ],
   module: {
     rules: [
-        {
+          {
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             use: {
@@ -73,6 +78,11 @@ const paths = {
     ]
   },
   resolve: {
+  
+    alias:{
+      wiplayit: path.resolve( __dirname, 'src', 'js' )
+    },
+
     extensions: ['*', '.js', '.jsx']
   }
 

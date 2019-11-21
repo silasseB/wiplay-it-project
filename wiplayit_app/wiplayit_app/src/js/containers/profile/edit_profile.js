@@ -1,6 +1,8 @@
+
 import React, { Component } from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
-import { ModalManager} from 'react-dynamic-modal';
+import {ModalManager} from "../../containers/modal/modal_container";
+
 import { EditProfileNavBar, NavigationBarBigScreen } from "../../components/navBar";
 import {  ModalCloseBtn  } from "../../components/buttons";
 import withHigherOrderIndexBox from "../../containers/index/higher_order_index";

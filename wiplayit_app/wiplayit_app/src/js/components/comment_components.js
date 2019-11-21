@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 
-
+import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import { GetModalLinkProps } from "../components/component-props";
 import { ReplyBtn,UpVoteCommentBtn, CommentOptModalBtns, DownVoteCommentBtn,
          OpenModalButton, QuestionOptDropDownBtn, ModalCloseBtn  } from "../components/buttons";
 import {ButtonsBox} from "../components/partial_components";
@@ -34,86 +35,62 @@ export const CommentsComponent = props => {
               margin     : '0 0 2px'
    }
 
-   let { isAnswerBox, comment, index} = props;
+    let { isAnswerBox,post, answer, comment, commentById, currentUser} = props;
    
-   let storedState = JSON.parse(comment.comment)
-   const contentState = convertFromRaw(storedState);
-   const editorState = EditorState.createWithContent(contentState);
+    let storedState = JSON.parse(comment.comment)
+    const contentState = convertFromRaw(storedState);
+    const editorState = EditorState.createWithContent(contentState);
 
 
     let pathToUpvoters ;
 
    
     
-   let state = {
+    let state = {
             comment,
             usersIsFor : isAnswerBox? 'answerCommentUpVoters' : 'postCommentUpVoters', 
         }
-
-   
-    var createApiUrl = '';
-    var updateUrl    = ''; 
-
     if (comment.answer) {
-
         pathToUpvoters =  `/answer/comment/${comment.id}/upvoters/`;
-        updateUrl    = api.updateAnswerCommentApi(comment.id);
-        createApiUrl = api.createAnswerCommentReplyApi(comment.id);
+        
     }
 
     else{
         
        pathToUpvoters =  `/post/comment/${comment.id}/upvoters/`;
-       updateUrl    = api.updatePostCommentApi(comment.id);
-       createApiUrl = api.createPostCommentReplyApi(comment.id);
     }
-
-    let  modalOptionsProps = {
-        modalProps : {
-            objName     : 'comment',
-            actionType  : types.UPDATE_COMMENT,
-            isPut       : true,
-            obj         : comment, 
-            objId       : comment.id,
-            objIndex    : index, 
-            apiUrl      : updateUrl,
-        },
-
-        modalType : 'optionsMenu', 
-    };
    
-    let upvoteBtnProps = {
-        objName     : 'comment',
-        actionType  : types.UPDATE_COMMENT,
+    let editCommentProps = {
+        objName     : 'Comment',
         isPut       : true,
-        obj         : props.comment, 
-        objId       : props.comment.id,
-        objIndex    : props.index,
-        apiUrl      : updateUrl,
-        byId        : props.commentById,
+        obj         : comment, 
+        byId        : commentById,
     };
-   
 
-    let  createReplyProps = {
-        modalProps : {
-           objName           : 'reply',
-           actionType        : types.CREATE_REPLY,
-           obj               : props.comment,
-        objId             : props.comment.id,
+
+
+    let editReplyProps = {
+        objName           : 'Reply',
+        obj               : comment,
         isPost            : true,
-        objIndex          : props.index,
-        editorPlaceHolder : 'Add Reply...',
-        apiUrl            : createApiUrl,
-         
-      },
-      modalType : 'editor', 
-          
-   };
+        
+    };
 
+
+    editCommentProps = GetModalLinkProps.props( editCommentProps)
+    editReplyProps = GetModalLinkProps.props(editReplyProps)
+    
+    console.log( editReplyProps, editCommentProps)
+
+    let EditorModalLink = <EditorLink {...editReplyProps}/>; 
+    let MenuModalLink   = <OptionsModalLink {...editCommentProps}/>
+    
+
+
+    
    let btnsProps = {
-         createReplyProps,
-         upvoteBtnProps,
-         modalOptionsProps,
+         editCommentProps,
+         editReplyProps,
          btnStyles:optionsBtnStyles,
          btnText : 'More', 
       }; 
@@ -128,22 +105,18 @@ export const CommentsComponent = props => {
                : <UpVoteCommentBtn {...btnsProps}/>
 
    let replyBtn =  <ReplyBtn {...btnsProps}/>;
-   let optionsBtn =  <div>
-                        <OptBtnSmallScreen {...btnsProps}/> 
-                        <OptBtnBigScreen {...props}/>
-                     </div>;
-                         
+   
               
     const btnsList  = {
-        itemsCounter :  itemsCounter,
-        btn1         :  upvoteBtn,
-        btn2         :  replyBtn,
-        btn3         :  optionsBtn,
+        itemsCounter :  upvoteBtn,
+        btn1         :  EditorModalLink,
+        btn2         :  EditorModalLink,
+        btn3         :  MenuModalLink,
       } 
 
       const userProps  = {
-              user        : props.comment.created_by,
-              currentUser : props.currentUser,
+              user        : comment.created_by,
+              currentUser : currentUser,
             };
 
     

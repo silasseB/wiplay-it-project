@@ -59,7 +59,7 @@ export default class Api{
 
     }
 
-    createAnswerCommentReplyApi(id){
+    createAnswerReplyApi(id){
        var api = `/api/create/answer/comment/${id}/reply/`;
         return api;
     }
