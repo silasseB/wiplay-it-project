@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
 import {ModalManager} from "../../containers/modal/modal_container";
+import { ChangeImageLink } from "../../components/modal-links"
+import { GetModalLinkProps } from "../../components/component-props";
 
 import { EditProfileNavBar, NavigationBarBigScreen } from "../../components/navBar";
 import {  ModalCloseBtn  } from "../../components/buttons";
@@ -258,7 +260,7 @@ const ProfileEditComponent = props => {
                      </div> 
                   }
                 
-               <EditBtn {...props}/>
+               <ChangeImageLink {...{userProfile}}/>
                </div>
                
             </div>
@@ -412,6 +414,8 @@ export class DropImage extends React.Component {
     
     render() {
       let props = this.getProps();
+      console.log(this.props)
+      let { background } = this.props
 
       return (
          <div>
@@ -419,7 +423,7 @@ export class DropImage extends React.Component {
                <div className="upload-preview">
                   <div className="drop-image-btns">
                      <div className="dismiss-box">
-                     <button  type="button" onClick={ModalManager.close} className="btn-sm image-drop-dismiss">
+                     <button  type="button" onClick={()=> ModalManager.close(background)} className="btn-sm image-drop-dismiss">
                         <span className="dismiss">&times;</span>
                      </button>
                      </div>
@@ -463,7 +467,7 @@ export const EditBtn = props => {
     
   
     let  modalOptionsProps = {
-            modalProps : {handleImageAdd:props.handleImageAdd},
+            modalProps : { handleImageAdd: props.handleImageAdd},
             modalType : 'dropImage'
         };
 

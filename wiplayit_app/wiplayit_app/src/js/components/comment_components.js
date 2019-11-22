@@ -80,8 +80,6 @@ export const CommentsComponent = props => {
     editCommentProps = GetModalLinkProps.props( editCommentProps)
     editReplyProps = GetModalLinkProps.props(editReplyProps)
     
-    console.log( editReplyProps, editCommentProps)
-
     let EditorModalLink = <EditorLink {...editReplyProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editCommentProps}/>
     
@@ -116,7 +114,7 @@ export const CommentsComponent = props => {
 
       const userProps  = {
               user        : comment.created_by,
-              currentUser : currentUser,
+              currentUser ,
             };
 
     

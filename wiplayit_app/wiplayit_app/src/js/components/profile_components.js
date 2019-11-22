@@ -13,6 +13,8 @@ import { UnfollowUserBtn, FollowUserBtn, OpenModalButton,
 import{ QuestionComponent } from "../components/question_components"
 
 import{ PostComponent } from "../components/post_components"
+import { GetModalLinkProps } from "../components/component-props";
+import { OptionsModalLink} from "../components/modal-links"
 
 import  { AnswersComponent } from "../components/answer_components";
 
@@ -28,6 +30,7 @@ export const ProfileComponent = props => {
     var profileById = props.profileById;
     var userProfile = props.entyties.userProfile.byId[profileById];
     userProfile = userProfile.user;
+    let currentUser = props.currentUser;
      
     let  state = {
          usersIsFor : 'userProfileFollowers',
@@ -43,35 +46,24 @@ export const ProfileComponent = props => {
               margin     : '0 0 2px'
       }
 
-      let followBtnProps = {
-          objName     : 'userProfile',
-          actionType  : types.UPDATE_USER_PROFILE,
-          isPut       : true,
-          obj         : userProfile.profile, 
-          objId       : userProfile.id,
-          apiUrl      : api.updateProfileApi(userProfile.id),
-          byId        : profileById,
-        };
-      
-      let  modalOptionsProps = {
-         modalProps : {
-            objName    : 'userProfile',
+            
+
+      let editUserProfileProps = {
+            objName    : 'UserProfile',
             isPut      : true,
             obj        : userProfile, 
-            objId      : userProfile.id,
             byId        : profileById,
-            redirectToEdit : props.redirectToEdit,
-         },
+            currentUser,
 
-         modalType : 'optionsMenu', 
-      };
+      }
 
+      editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+      let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;
       
       let pathToUserFollowers =  `/profile/${userProfile.slug}/${userProfile.id}/followers/`;
 
       let btnsProps = {
-         modalOptionsProps,
-         followBtnProps,
+         editUserProfileProps,
          btnStyles:optionsBtnStyles,
          btnText : <i className="material-icons ">more_horiz</i>,  
       };
@@ -86,12 +78,12 @@ export const ProfileComponent = props => {
 
                                 </Link>;
 
-      let unfollowOrFollowUserBtn =  userProfile.user_is_following? 
+        let unfollowOrFollowUserBtn =  userProfile.user_is_following? 
                                          <UnfollowUserBtn {...btnsProps} />
                                        :
                                          <FollowUserBtn {...btnsProps}/>;
 
-
+        
       
       let optionsBtn =  <div>
                         <OptBtnSmallScreen {...btnsProps}/> 
@@ -151,7 +143,7 @@ export const ProfileComponent = props => {
                            
                         <div className="user-relation-box">
                            <div className="prof-option options-box">
-                              {optionsBtn}
+                              {MenuModalLink}
                            </div>
                         </div>
                      </div>

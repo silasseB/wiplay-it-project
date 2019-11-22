@@ -259,7 +259,7 @@ export const ReplyGreatGrandChildComponent = props => {
 
 
 export const Reply = props => {
-   console.log(props)
+
    let optionsBtnStyles = {
               fontSize   : '11px',
               background : ' #F5F5F5',
@@ -269,7 +269,7 @@ export const Reply = props => {
               margin     : '0 0 2px'
    }
 
-   let {answer, post } = props.props;
+   let {answer, post, currentUser } = props.props;
    let { byId } = props || props.props 
    var reply = props.reply;
    let storedState = JSON.parse(reply.reply)
@@ -306,6 +306,7 @@ export const Reply = props => {
         obj         : reply, 
         byId,
         apiUrl      : updateUrl,
+        currentUser,
     };
 
 
@@ -315,6 +316,7 @@ export const Reply = props => {
         obj               : reply,
         isPost            : true,
         byId,
+        currentUser,
         apiUrl            : createApiUrl,
         
     };
@@ -323,7 +325,6 @@ export const Reply = props => {
     editReplyChildProps = GetModalLinkProps.props( editReplyChildProps )
     editReplyProps = GetModalLinkProps.props(editReplyProps)
     
-    console.log( editReplyProps, editReplyChildProps)
 
     let EditorModalLink = <EditorLink {...editReplyChildProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editReplyProps}/>

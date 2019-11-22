@@ -160,6 +160,7 @@ export const Questions = props => {
    questionEntytie = questionEntytie.byId[questionById]
    var question =questionEntytie.question
    let questionProps = { question};
+   console.log(question)
    Object.assign(questionProps, props) 
 
    

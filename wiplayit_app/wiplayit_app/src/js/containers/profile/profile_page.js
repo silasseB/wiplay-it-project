@@ -185,7 +185,7 @@ class UserProfileContainer extends Component {
 
         ModalManager.close();
         console.log(this.props)
-        this.props.history.push(params.pathToEditProfile, params.state)
+        //this.props.history.push(params.pathToEditProfile)
     };    
 
     getProps(){

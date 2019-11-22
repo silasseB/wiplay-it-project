@@ -29,7 +29,8 @@ const api      = new Api();
 
 
 export const AnswersComponent = props => {
-   var { answer, answerById } = props;
+   console.log(props)
+   var { answer, answerListById, currentUser } = props;
    
   let pathToUpvoters =  `/answer/${props.answer.id}/upvoters/`;
 
@@ -61,7 +62,8 @@ export const AnswersComponent = props => {
         objName     : 'Answer',
         isPut       : true,
         obj         : answer, 
-        byId        : answerById,
+        byId        : answerListById,
+        currentUser,
     };
 
 
@@ -70,13 +72,14 @@ export const AnswersComponent = props => {
         objName           : 'Comment',
         obj               : answer,
         isPost            : true,
+        currentUser,
         
     };
 
 
     editAnswerProps = GetModalLinkProps.props(editAnswerProps)
     editCommentProps = GetModalLinkProps.props(editCommentProps)
-    console.log( editAnswerProps, editCommentProps)
+   
 
     let EditorModalLink = <EditorLink {...editCommentProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editAnswerProps}/>
@@ -108,7 +111,7 @@ export const AnswersComponent = props => {
 
    const userProps  = {
               user        : props.answer.created_by,
-              currentUser : props.currentUser,
+              currentUser,
             };
 
    return (

@@ -4,6 +4,7 @@ import Api from '../api';
 
 export const GetModalLinkProps = {
 	props(props){
+		let linkProps = {...props};
 		let {
 			objName,
 			obj,
@@ -15,20 +16,13 @@ export const GetModalLinkProps = {
         } = props;
 
 		isPost  = isPost || false;
+		isPut  =  isPut || false;
 
-        isPut  =  isPut || false;
+		linkProps['actionType'] = actionType || GetActionTypesProps(objName, isPut, isPost);
+		linkProps['apiUrl']     = apiUrl || GetRestApiProps(objName, obj, isPut, isPost);
+		linkProps['editorPlaceHolder'] = `Create ${objName}...`;
 
-		return {
-            objName           : objName,
-            actionType        : actionType || GetActionTypesProps(objName, isPut, isPost),
-            apiUrl            : apiUrl || GetRestApiProps(objName, obj, isPut, isPost),
-            obj               : obj,
-            isPost            : isPost,
-            isPut             : isPut,
-            editorPlaceHolder : `Create ${objName}...`,
-            
-         
-        }
+		return linkProps;
     },
 
 }
@@ -38,6 +32,10 @@ export const GetActionTypesProps = (actionName, isPut=false, isPost=false) => {
     let actionType; 
     
     switch(actionName){
+        case 'UserProfile':
+ 	        actionType = isPut? types.UPDATE_USER_PROFILE:null;
+ 	 	    return actionType;  
+
     	case 'Question':
  	        actionType = isPut? types.UPDATE_QUESTION: types.CREATE_QUESTION;
  	        return actionType;
@@ -73,6 +71,9 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
 	let apiUrl;
 	switch(actionName){
+		case 'UserProfile':
+		    apiUrl    = api.updateProfileApi(id);
+			return apiUrl
     	case 'Question':
  	        apiUrl = isPut? api.updateQuestionApi(id): api.createQuestionApi();
  	        return apiUrl;
@@ -107,6 +108,7 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
  	    case 'Reply':
  	        if (isPost) {
+ 	        	
 	           	apiUrl = obj.post? api.createPostReplyApi(id)
  	        	            :
  	        	            api.createAnswerReplyApi(id);

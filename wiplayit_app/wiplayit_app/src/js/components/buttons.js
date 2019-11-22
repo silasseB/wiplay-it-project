@@ -1,6 +1,9 @@
 import React from 'react';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,Router } from "react-router-dom";
+import {history} from "../index" 
 import Api from '../api';
+import { ModalManager}   from  "../containers/modal/modal_container";
+
 import  * as types  from '../actions/types';
 
 
@@ -70,7 +73,7 @@ export const UnfollowUserBtn = props => {
    
    return(
       <div className="f-box">
-         <button type="button" onClick={ () => props.unfollowOrDownVote(props.followBtnProps) }  
+         <button type="button" onClick={ () => props.unfollowOrDownVote(props.editUserProfileProps) }  
                  className="unfollow-user" >
             Following             
          </button>
@@ -80,7 +83,7 @@ export const UnfollowUserBtn = props => {
 
 export const FollowUserBtn = props => (
   <div className="f-box">
-      <button   type="button" onClick={ () => props.followOrUpVote(props.followBtnProps) }
+      <button   type="button" onClick={ () => props.followOrUpVote(props.editUserProfileProps) }
                 className="follow-user" >
        Follow 
       </button>
@@ -497,22 +500,24 @@ export  const EditProfileButtons = props => (
 )
 export const ProfileOptsModalBtns = props => {
    
-   const pathToEditProfile = `/edit/profile/${props.obj.slug}/${props.obj.id}/`;
-   let  state = {
+    const pathToEditProfile = `/edit/profile/${props.obj.slug}/${props.obj.id}/`;
+    let  state = {
             userProfile : props.obj, 
             byId        : props.byId,
         }
 
-   console.log(props)
+    console.log(props)
 
-   return (
+    return (
       <div>
-         { props.currentUser.id === props.obj.id?      
-            <button type="button" 
-                onClick={()=>props.redirectToEdit({pathToEditProfile,state})} 
-                                     className="btn-sm edit-user-profile">
-               Edit Profile
-            </button>
+         { props.obj && props.obj.user_can_edit?   
+         <Router history={history}> 
+            <Link className="btn-sm edit-user-profile"
+                  to={{ pathname : pathToEditProfile ,state }}>
+                Edit Profile
+            </Link>
+            </Router>
+  
             :
             ""
          }
@@ -563,36 +568,36 @@ export const ModalOptionsMenu = props => {
    return(
       <div className="modal-menu  modal-body">
        <ModalCloseBtn {...props}/>
-      { props.objName === 'userProfile'?
+      { props.objName === 'UserProfile'?
          <ProfileOptsModalBtns {...props}/>
          :
          
       <div>
-      {props.objName === 'question'?
+      {props.objName === 'Question'?
           <QuestionOptModalBtns {...props}/>
           :
           ""
        }
        
-       {props.objName === 'answer'?
+       {props.objName === 'Answer'?
           <AnswerOptModalBtns {...props}/>
           :
           ""
        }
 
-       {props.objName === 'comment'?
+       {props.objName === 'Comment'?
           <CommentOptModalBtns {...props}/>
           :
           ""
        }
 
-       {props.objName === 'reply'?
+       {props.objName === 'Reply'?
           <ReplyOptModalBtns {...props}/>
           :
           ""
        }
 
-       {props.objName === 'post'?
+       {props.objName === 'Post'?
           <PostOptModalBtns {...props}/>
           :
           ""
@@ -621,11 +626,12 @@ export const ModalOptionsMenu = props => {
 
 
 export const ModalCloseBtn = props => (
+ 
   <div className="menu-dismiss-box">
     <div className="menu-helper-text" >
         <p>Choose category</p>
      </div>
-      <button  type="button" onClick={() => props.hideModal()} className="btn-sm menu-dismiss">
+      <button  type="button"  onClick={()=> ModalManager.close(props.background)}  className="btn-sm menu-dismiss">
          <span className="dismiss">&times;</span>
     </button>
   </div>

@@ -11,6 +11,8 @@ import {
   useLocation,
   useParams
 } from "react-router-dom";
+import {history} from "../../index" 
+
 
 import Assign from 'lodash.assign';
 //import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
@@ -69,10 +71,10 @@ class ModalBox extends Component{
 
     close(){
        
-       if(!this.props.onRequestClose || this.props.onRequestClose()){
-          console.log(this.props)
-          //this.history.goBack();
-          //ModalManager.close();
+        if(!this.props.onRequestClose || this.props.onRequestClose()){
+           
+           let background = this.props;
+           ModalManager.close(background);
        }
    }
 
@@ -81,6 +83,7 @@ class ModalBox extends Component{
    }
 
    componentDidMount(){
+    console.log(this.props)
       const transitionTimeMS = this.getTransitionDuration();
       setTimeout(() => this.setState({open : true}),0);
       onClose = (callback) => {
@@ -144,33 +147,32 @@ var node;
 var modals = [];
 
 const renderModal = () => {
-   console.log(modals.length, modals.length == 1)
+   
    if(modals.length == 0)
       return;
 
    const component = modals.shift();
 
    if(!node){
-      node = document.createElement('div');
-      console.log(component, node)
-      document.body.appendChild(node);
+        node = document.createElement('div');
+        document.body.appendChild(node);
    }
    ReactDOM.render(component,node);
 }
 
-console.log(node)
+
 export const ModalManager = {
 
     open(component){
-        console.log(component)
+
        modals.push(component);
-       console.log(modals.length, modals.length == 1)
+
        if(modals.length == 1){ // render the modal only if there is no other showing modals
           renderModal();
        }
     },
     close(background){
-        let history = useHistory();
+       
         onClose && onClose(() => {
             
             background &&   history.goBack();

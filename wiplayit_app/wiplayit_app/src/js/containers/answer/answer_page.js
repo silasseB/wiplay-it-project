@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { AnswersComponent } from "../../components/answer_components";
+import {store} from "../../configs/store-config";
+import  * as action  from '../../actions/actionCreators';
 
 
 
@@ -11,7 +13,7 @@ class AnswersBox extends Component {
         this.state = {
             isAnswerBox : true,
             question : '',
-            answerById  : '', 
+            answerListById  : '', 
         };
     };
    
@@ -28,8 +30,12 @@ class AnswersBox extends Component {
         questionEntytie = questionEntytie.byId[questionById];
 
         let question  =  questionEntytie.question;
-        var answerById   = `answer${question.id}`;
-        this.setState({answerById, question })
+        var answerListById   = `answer${question.id}`;
+        if (question.answers) {
+            store.dispatch(action.getAnswerListPending(answerListById));
+            store.dispatch(action.getAnswerListSuccess(answerListById, question.answers));
+        }
+        this.setState({answerListById, question })
     };
 
     componentDidUpdate(nextProps, prevState) {
@@ -40,10 +46,7 @@ class AnswersBox extends Component {
     getProps() {
    
         let props = {
-            isAnswerBox  : this.state.isAnswerBox,
-
-            answerById   : this.state.answerById,
-            question  : this.state.question,
+            ...this.state
         };
 
         return Object.assign(props, this.props)
@@ -53,7 +56,8 @@ class AnswersBox extends Component {
    render() { 
       const props =  this.getProps();
       var answers      = props.entyties.answers;
-      answers          = answers.byId[props.answerById]
+      console.log(answers)
+      answers          = answers.byId[props.answerListById]
          
       return (
          <div>
@@ -79,7 +83,7 @@ export default AnswersBox;
 
 export const Answers = props => {
     var answers = props.entyties.answers;
-    answers = answers.byId[props.answerById]
+    answers = answers.byId[props.answerListById]
          
     return(
         <div>
@@ -90,7 +94,7 @@ export const Answers = props => {
                     
                     { answers.answerList.map((answer, index) => {
 
-                        let answerProps = {answer : answer, index : index};
+                        let answerProps = { answer };
 
                         Object.assign(answerProps, props); 
       

@@ -21,14 +21,15 @@ import * as Effects from '../../containers/modal/Effects';
 
 export function Modal(props) {
     let history = useHistory();
+    let {background} = props || props.modalProps;
     let {
         modalType, 
         editorProps,
         optionsMenuProps,
         dropImageProps, 
-                      } = props && props.modalProps;
+                        } = props && props.modalProps;
 
-    console.log(props, modalType)
+    //console.log(props, modalType)
     
     let back = e => {
        e.stopPropagation();
@@ -39,14 +40,17 @@ export function Modal(props) {
       switch(type){
         
         case 'editor':
+            editorProps['background'] = background;
             editorProps['modalContents'] =  <AppEditor {...editorProps}/>;
             return ModalOpener.editorModal(editorProps);
 
         case 'optionsMenu':
+            optionsMenuProps['background'] = background;
             optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
             return ModalOpener.optionsMenuModal(optionsMenuProps);
 
         case 'dropImage':
+            dropImageProps['background'] = background;
             dropImageProps['modalContents'] = <DropImage {...dropImageProps}/>
             return ModalOpener.dropImageModal(dropImageProps);
 
@@ -76,7 +80,7 @@ export const ModalOpener = {
 
 
     editorModal(contents){
-        console.log(contents)
+
         return ModalManager.open(
             <EditModal {...contents} onRequestClose={() => true}/>
         );
@@ -118,13 +122,16 @@ const option_modal_styles = {
 
 
 export const OptionModal = props => {
+    
     let modal_props = {
       modal_styles   : option_modal_styles,
       effect         : Effects.SlideFromBottom,
       modalContents  : props.modalContents,
+      background     : props.background,
     };
 
     modal_props =Object.assign(modal_props, props)
+
 
    return(
       <ModalContainer {...modal_props} />
@@ -162,6 +169,7 @@ export const EditModal = props => {
        modal_styles   : edit_modal_styles,
        effect         : Effects.SlideFromBottom ,
        modalContents  : props.modalContents,
+       background     : props.background,
 
     }; 
 
@@ -200,6 +208,7 @@ export const DropImageModal = props => {
       modal_styles   : image_modal_styles,
       effect         : Effects.ScaleUp,
       modalContents  : props.modalContents,
+      background     : props.background,
    }; 
 
    return(
@@ -218,11 +227,15 @@ export const DropImageModal = props => {
 export function  ModalContainer(props)  {
    
    //Render modal with pass its contents
-    const { modalContents, modal_styles ,effect, onRequestClose } = props;
-    console.log(onRequestClose)
+    const { modalContents, modal_styles ,effect, onRequestClose, background } = props;
+    console.log(props)
     return (
-        <ModalBox style={modal_styles}  
-            onRequestClose={onRequestClose}  effect={effect}>
+        <ModalBox
+            style={modal_styles}
+            background={background}
+            onRequestClose={onRequestClose}
+            effect={effect}>
+
             {modalContents}
          
         </ModalBox>

@@ -18,8 +18,8 @@ const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px
 
 
 export const QuestionComponent = props => {
-    console.log(props)
-    let { question, questionById, isQuestionBox }    = props;
+    
+    let { question, questionById, isQuestionBox, currentUser }    = props;
 
 
 
@@ -59,6 +59,7 @@ export const QuestionComponent = props => {
         isPut       : true,
         obj         : question, 
         byId        : questionById,
+        currentUser,
     };
 
 
@@ -67,14 +68,14 @@ export const QuestionComponent = props => {
         objName           : 'Answer',
         obj               : getObj(),
         isPost            : !question.user_has_answer,
-        isPut             : question.user_has_answer,   
+        isPut             : question.user_has_answer, 
+        currentUser,  
        
     };
 
 
     editAnswerProps = GetModalLinkProps.props(editAnswerProps)
     editQuestionProps = GetModalLinkProps.props(editQuestionProps)
-    console.log( editAnswerProps, editQuestionProps)
  
     let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editQuestionProps}/>

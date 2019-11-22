@@ -22,7 +22,6 @@ import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Router, Switch  } from "react-router-dom";
-import ModalGalleryExample from "./modal-router-example"; 
 
 import { createHashHistory, createMemoryHistory, createBrowserHistory } from 'history';
 import { Provider } from 'react-redux'

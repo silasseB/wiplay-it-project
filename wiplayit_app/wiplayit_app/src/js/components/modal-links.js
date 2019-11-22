@@ -38,8 +38,7 @@ export const OptionsModalLink = props => {
             modalType   : 'optionsMenu', 
         }; 
         
-    
-    console.log(props)
+        
     return(
         <Link id="create-question" className="btn btn-sm  create-question"
                 to={{
@@ -65,7 +64,7 @@ export const ChangeImageLink = props => {
             dropImageProps : {...props},
             modalType   : 'dropImage', 
         }; 
-    console.log(props)
+    
 
     return(
         <Link id="create-question" className="btn btn-sm  create-question"

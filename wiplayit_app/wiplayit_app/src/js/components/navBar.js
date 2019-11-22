@@ -3,6 +3,7 @@ import React from 'react';
 import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { SubmitBtn,CreateQuestionBtn,CreatePostBtn  } from "../components/buttons";
+import { ModalManager}   from  "../containers/modal/modal_container";
 
 //import "containers/navbar.css"
 
@@ -233,13 +234,14 @@ export const NavigationBarSmallScreen = MatchMediaHOC(NavBarSmallScreen, '(max-w
 
 export const EditorNavBar = props  => {
    console.log(props)
+   let background = props.background;
    return (
    <div id="editor-nav-bar" className="fixed-top">
       <div className="editor-navbar"> 
          <div className="back-btn-box">
            
 	            <button type="button" className="editor-custom-back-btn custom-back-btn "
-                  onClick={()=> props.hideModal(props)}  data-dismiss="moda">
+                  onClick={()=> ModalManager.close(background)}  data-dismiss="moda">
 	            <span className="editor-arrow material-icons ">arrow_back</span>
 	            </button>
             
