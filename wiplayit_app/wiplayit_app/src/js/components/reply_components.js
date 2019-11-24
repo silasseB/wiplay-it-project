@@ -3,9 +3,8 @@ import { BrowserRouter,Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from '../components/editor_components';
+import { UpVoteReplyBtn, DownVoteReplytBtn} from '../components/buttons';
 
-import { ReplyBtn, ReplyOptModalBtns, DownVoteReplytBtn, UpVoteReplyBtn,
-         OpenModalButton,QuestionOptDropDownBtn, ModalCloseBtn  } from "../components/buttons";
 import {ButtonsBox} from "../components/partial_components";
 import Api from '../api';
 import  * as types  from '../actions/types';
@@ -18,8 +17,8 @@ import { GetModalLinkProps } from "../components/component-props";
 import { UserComponentSmall } from "../components/profile_components";
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
+//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 const api      = new Api();
 
 

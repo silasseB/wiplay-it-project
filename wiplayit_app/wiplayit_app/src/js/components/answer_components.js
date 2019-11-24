@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link, BrowserRouter  } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { AnswerOptModalBtns,ModalCloseBtn,UpVoteAnswerBtn,
-  DownVoteAnswerBtn,OpenModalButton, QuestionOptDropDownBtn, CommentBtn  }
- from "../components/buttons";
+
 import {EditorLink, OptionsModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
+import { UpVoteAnswerBtn, DownVoteAnswerBtn} from '../components/buttons';
 
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import  * as types  from '../actions/types';
@@ -21,8 +20,8 @@ import { UserComponentSmall } from "../components/profile_components";
 
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
+//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 const api      = new Api();
 
 
@@ -30,7 +29,7 @@ const api      = new Api();
 
 export const AnswersComponent = props => {
    console.log(props)
-   var { answer, answerListById, currentUser } = props;
+   var { answer, answerById, currentUser } = props;
    
   let pathToUpvoters =  `/answer/${props.answer.id}/upvoters/`;
 
@@ -62,7 +61,7 @@ export const AnswersComponent = props => {
         objName     : 'Answer',
         isPut       : true,
         obj         : answer, 
-        byId        : answerListById,
+        byId        : answerById,
         currentUser,
     };
 
@@ -73,6 +72,7 @@ export const AnswersComponent = props => {
         obj               : answer,
         isPost            : true,
         currentUser,
+        byId              : answerById
         
     };
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 import {NavigationBarSmallScreen,NavigationBarBigScreen } from "../../components/navBar";
-import {store} from "../../configs/store-config";
+import {store, useStoreUpdate} from "../../configs/store-config";
 import {LocalCache} from  "../../utils/storage";
 
 import { QuestionComponent} from "../../components/question_components"
@@ -45,6 +45,9 @@ class IndexBox extends Component {
         //console.log(error, info);
     }
 
+    componentWillUnmount() {
+        this.unsubscribe();
+    };
 
     onIndexUpdate = () =>{
  
@@ -63,19 +66,16 @@ class IndexBox extends Component {
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
+    
 
-
+    
     componentDidMount() {
+            
         this.onIndexUpdate();
+
         let { cachedEntyties } = this.props;
-
         var now = new Date();
-
-        let since = new Date('2019-11-14T08:46:32.934Z')
-        
-                    
-        
-        
+     
         if (cachedEntyties) {
             let { index, currentUser } = cachedEntyties;
 
@@ -97,13 +97,13 @@ class IndexBox extends Component {
                     store.dispatch(action.getIndexPending());
                     store.dispatch(action.getIndexSuccess(index,));
                     this.updateIndexEntyties(index)
-
-                    return 
+                    
+                }else{
+                    this.props.getIndex();
                 }
             }
         }
-
-        return this.props.getIndex();
+        
     };
    
 
@@ -113,7 +113,7 @@ class IndexBox extends Component {
         var { questionListById,
               answerListById, 
               postListById,
-              userListById
+              userListById,
             } = this.state;
 
         let {questions, posts, answers, users} = index;
@@ -138,9 +138,10 @@ class IndexBox extends Component {
            store.dispatch(action.getUserListSuccess(userListById, users));
 
         }
+        
+        this.forceUpdate()
 
-
-    }
+    };
 
 
     getProps(){
@@ -153,7 +154,10 @@ class IndexBox extends Component {
 
       
     render() {
-        let props = this.getProps()
+        let props = this.getProps();
+        let indexUpdate = useStoreUpdate('index') 
+  
+
         let entyties = props.entyties;
         var index  = entyties.index;
         
@@ -225,7 +229,11 @@ export const Questions = props => {
             </div>
 
             { questions.questionList.map((question, index) => {
-                let contentsProps = {question, index};
+                let contentsProps = {
+                    question,
+                    questionById :questionListById
+                };
+
                 Object.assign(contentsProps, props)  
 
                 return (
@@ -267,7 +275,11 @@ export const Posts = props => {
                     </div>
 
                     { posts.postList.map((post, index) => {
-                        let contentsProps = {post, index};
+                        let contentsProps = {
+                            post,
+                            postById: postListById,
+                            };
+
                         Object.assign(contentsProps, props)  
 
                         return (
@@ -309,7 +321,10 @@ export const Answers = props => {
                   
                         { answers.answerList.map((answer, index) => {
 
-                            let answerProps = { answer, index};
+                            let answerProps = {
+                                    answer,
+                                    answerById: answerListById,
+                                };
                             let question = answer.question;
                             let questionPath = `/question/${question.slug}/${question.id}/`;
 

@@ -7,8 +7,7 @@ import Api from '../api';
 import  * as types  from '../actions/types';
 
 
-import { UnfollowUserBtn, FollowUserBtn, OpenModalButton,
-       EditUserDropDownbutton } from "../components/buttons"; 
+import { UnfollowUserBtn, FollowUserBtn,EditUserDropDownbutton } from "../components/buttons"; 
 
 import{ QuestionComponent } from "../components/question_components"
 
@@ -19,8 +18,8 @@ import { OptionsModalLink} from "../components/modal-links"
 import  { AnswersComponent } from "../components/answer_components";
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-const OptBtnBigScreen = MatchMediaHOC(EditUserDropDownbutton, '(min-width: 800px)');
+//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
+//const OptBtnBigScreen = MatchMediaHOC(EditUserDropDownbutton, '(min-width: 800px)');
 const api      = new Api();
 
 
@@ -85,11 +84,7 @@ export const ProfileComponent = props => {
 
         
       
-      let optionsBtn =  <div>
-                        <OptBtnSmallScreen {...btnsProps}/> 
-                        <OptBtnBigScreen {...props}/>
-                     </div>;
-
+      
       const UserItemsComponent = props.userItemsComponent;   
 
 
@@ -386,25 +381,24 @@ export const UserPosts = props => {
 };
 
 export const UsersComponent = props => {
-    let {user, usersById} = props
+    let {user, usersById, currentUser} = props
 
     let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
     let profile_picture = user.profile.profile_picture;
-      
-    console.log(profile_picture)
-
+        
     let state        = { userProfile : user}
 
-    let followBtnProps = {
-         objName     : 'usersList',
-         actionType  : types.UPDATE_USER_LIST,
-         isPut       : true,
-         obj         : user.profile, 
-         objId       : user.id,
-         apiUrl      : api.updateProfileApi(user.id),
-         byId        : props.usersById,
-      };
-      var btnsProps = {followBtnProps}
+    let editUserProfileProps = {
+            objName    : 'UsersList',
+            isPut      : true,
+            obj        : user, 
+            byId       : usersById,
+            currentUser,
+
+      }
+
+    editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+    var btnsProps = {editUserProfileProps}
       
    Object.assign(btnsProps, props)
 
@@ -427,7 +421,7 @@ export const UsersComponent = props => {
             :
              <img alt="" src={require("../images/user-avatar.png")} className="user-photo"/>  
             
-            }       
+            }        
           </Link>
         </div>
       </div> 

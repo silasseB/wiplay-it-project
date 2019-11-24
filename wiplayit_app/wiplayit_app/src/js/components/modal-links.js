@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 
 export const EditorLink = props => {
-	console.log(props)
+	
     let location = useLocation();
     let  modalProps = {
             editorProps : {...props},
@@ -67,7 +67,7 @@ export const ChangeImageLink = props => {
     
 
     return(
-        <Link id="create-question" className="btn btn-sm  create-question"
+        <Link id="create-question" className="btn-sm edit-img-btn " 
                 to={{
             pathname: `/compose/${'profile-pic'}/${'1'}/`,
             // This is the trick! This link sets
@@ -75,9 +75,10 @@ export const ChangeImageLink = props => {
             state: { background: location, modalProps }
           }}
            >
-           Ask  
+           Change  
         </Link>
    );
 };
+
 
 

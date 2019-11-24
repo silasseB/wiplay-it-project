@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
+import { UpVoteCommentBtn, DownVoteCommentBtn  } from '../components/buttons';
 
 import {EditorLink, OptionsModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
-import { ReplyBtn,UpVoteCommentBtn, CommentOptModalBtns, DownVoteCommentBtn,
-         OpenModalButton, QuestionOptDropDownBtn, ModalCloseBtn  } from "../components/buttons";
+
 import {ButtonsBox} from "../components/partial_components";
 import Api from '../api';
 import  * as types  from '../actions/types';
@@ -16,8 +16,8 @@ import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from '../components/editor_components';
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
+//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 const api      = new Api();
 
 
@@ -26,14 +26,14 @@ const api      = new Api();
 
 
 export const CommentsComponent = props => {
-  let optionsBtnStyles = {
+    let optionsBtnStyles = {
               fontSize   : '11px',
               background : ' #F5F5F5',
               fontWeight : 'bold',
               width      : '40px',
               color      : '#4A4A4A',
               margin     : '0 0 2px'
-   }
+    }
 
     let { isAnswerBox,post, answer, comment, commentById, currentUser} = props;
    
@@ -65,6 +65,7 @@ export const CommentsComponent = props => {
         isPut       : true,
         obj         : comment, 
         byId        : commentById,
+        currentUser,
     };
 
 
@@ -73,6 +74,8 @@ export const CommentsComponent = props => {
         objName           : 'Reply',
         obj               : comment,
         isPost            : true,
+        currentUser,
+        byId : commentById,
         
     };
 
@@ -102,12 +105,11 @@ export const CommentsComponent = props => {
    let upvoteBtn =  props.comment.upvoted? <DownVoteCommentBtn {...btnsProps}/>
                : <UpVoteCommentBtn {...btnsProps}/>
 
-   let replyBtn =  <ReplyBtn {...btnsProps}/>;
    
               
     const btnsList  = {
-        itemsCounter :  upvoteBtn,
-        btn1         :  EditorModalLink,
+        itemsCounter :  itemsCounter,
+        btn1         :  upvoteBtn,
         btn2         :  EditorModalLink,
         btn3         :  MenuModalLink,
       } 

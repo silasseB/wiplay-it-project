@@ -34,8 +34,6 @@ class UserListBox extends Component {
     }
 
     
-
-
     getProps(){
         let props = {
             pageName       : this.state.pageName,
@@ -50,7 +48,7 @@ class UserListBox extends Component {
         var usersById = props.usersById;
         const users = props.entyties.users.byId[usersById];
         //userProfile = userProfile.user;
-        //console.log(users)
+        console.log(users)
    
         return (
             <div>

@@ -31,5 +31,15 @@ const storeEnhancers = compose(
    persistStore()
 );
 
+
 export const store = createStore(rootReducer, storeEnhancers);
+
+export const useStoreUpdate = (entytie)=>{
+    
+    store.subscribe(() => {
+        let storeUpdate = store.getState().entyties;
+        return storeUpdate[entytie]  
+    })
+}
+
 

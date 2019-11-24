@@ -34,7 +34,11 @@ export const GetActionTypesProps = (actionName, isPut=false, isPost=false) => {
     switch(actionName){
         case 'UserProfile':
  	        actionType = isPut? types.UPDATE_USER_PROFILE:null;
- 	 	    return actionType;  
+ 	 	    return actionType; 
+
+ 	 	case 'UsersList':
+ 	        actionType = isPut? types.UPDATE_USER_LIST:null;
+ 	 	    return actionType;   
 
     	case 'Question':
  	        actionType = isPut? types.UPDATE_QUESTION: types.CREATE_QUESTION;
@@ -67,11 +71,11 @@ export const GetActionTypesProps = (actionName, isPut=false, isPost=false) => {
 export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)=>{
     const api      = new Api();
     let id = obj && obj.id;
-    console.log(obj)
 
 	let apiUrl;
 	switch(actionName){
 		case 'UserProfile':
+		case 'UsersList':       
 		    apiUrl    = api.updateProfileApi(id);
 			return apiUrl
     	case 'Question':
@@ -107,12 +111,9 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
 
  	    case 'Reply':
- 	        if (isPost) {
- 	        	
-	           	apiUrl = obj.post? api.createPostReplyApi(id)
- 	        	            :
- 	        	            api.createAnswerReplyApi(id);
- 	        }
+ 	        apiUrl = isPost && obj.post && api.createPostReplyApi(id);
+ 	        apiUrl = !apiUrl && isPost? api.createAnswerReplyApi(id):apiUrl;
+ 	         	        
  	        return apiUrl;
 
 

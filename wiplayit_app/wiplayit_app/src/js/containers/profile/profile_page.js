@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {  Link,Route } from "react-router-dom";
 
+import {history} from "../../index" 
 
 import {ModalManager} from "../../containers/modal/modal_container";
 
@@ -185,7 +186,7 @@ class UserProfileContainer extends Component {
 
         ModalManager.close();
         console.log(this.props)
-        //this.props.history.push(params.pathToEditProfile)
+        history.push(params.pathToEditProfile)
     };    
 
     getProps(){

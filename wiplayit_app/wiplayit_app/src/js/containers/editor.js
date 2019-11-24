@@ -10,8 +10,9 @@ import Axios from '../axios_instance'
 import  Helper from '../containers/utils/helpers';
 import {TextAreaEditor, DraftEditor } from  "../components/editor_components";
 import { EditorNavBar } from "../components/navBar";
-
+import {store} from '../configs/store-config';
 import Api from '../api';
+import { handleSubmit }  from "../dispatch/index"
 
 
   
@@ -151,6 +152,33 @@ export default  class AppEditor extends Component{
 
     } 
 
+    subimtCleanForm =()=>{
+        let { contentIsEmpty }= this.state;
+        if (contentIsEmpty) {
+            //alert()
+           console.log('Form is Empth')
+           return
+        }
+
+        let submitProps = this.getSubmitProps();
+        store.dispatch(handleSubmit(submitProps));
+
+    }
+
+    onEditorUpdate = () =>{
+ 
+        const onStoreChange = () => {
+            let storeUpdate   = store.getState();
+            console.log(storeUpdate)
+        };
+
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    };
+
     componentDidUpdate(){
        //let contents =  JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()))
        //const contentState = convertFromRaw( JSON.parse( contents) );
@@ -163,7 +191,7 @@ export default  class AppEditor extends Component{
     }
 
     componentDidMount(){
-    
+        this.onEditorUpdate();
        //window.history.pushState({}, '');  
                               
        //window.addEventListener("popstate", this.closeEditor.bind(this));
@@ -175,7 +203,7 @@ export default  class AppEditor extends Component{
        state['objName'] = this.props.objName;
        state['editorPlaceHolder'] = this.props.editorPlaceHolder;
             
-       if (this.props.objName === 'post') {
+       if (this.props.objName === 'Post') {
          this.setState({onPost: true })
       }
 
@@ -185,11 +213,11 @@ export default  class AppEditor extends Component{
    
       if (this.props.isPut) {
          state['contentIsEmpty'] = false;
-         if (this.props.objName === 'question') {
+         if (this.props.objName === 'Question') {
             state.form['textarea']  = this.props.obj.add_question; 
          }
 
-         else if (this.props.objName === 'answer') {
+         else if (this.props.objName === 'Answer') {
             let storedState = JSON.parse(this.props.obj.add_answer);
             console.log(this.props)
             let editorState = this.newEditorState(storedState);
@@ -198,14 +226,14 @@ export default  class AppEditor extends Component{
 
          }
 
-         else if (this.props.objName === 'comment') {
+         else if (this.props.objName === 'Comment') {
             let storedState = JSON.parse(this.props.obj.comment);
             let editorState = this.newEditorState(storedState);
             state['editorState']  = editorState; //
            
          }
 
-         else if (this.props.objName === 'reply') {
+         else if (this.props.objName === 'Reply') {
             let storedState = JSON.parse(this.props.obj.reply);
             let editorState = this.newEditorState(storedState);
             state['editorState']  = editorState; 
@@ -217,12 +245,7 @@ export default  class AppEditor extends Component{
       this.setState({state})
    }
 
-    closeEditor = (e) => {
-       e.preventDefault();
-       e.stopPropagation();
-       console.log(e);
-
-     }
+    
 
 
     newEditorState(storedState){
@@ -366,12 +389,12 @@ export default  class AppEditor extends Component{
 
       var objName = this.props.objName;
       
-      if (objName === "question") {
+      if (objName === "Question") {
          let form      =  this.state.form;
          validatedForm =  helper.validateForm({form});
          validForm     =  {add_question: validatedForm.data}; 
       }
-      else if (objName === "post") {
+      else if (objName === "Post") {
         let form      =  this.state.form;
         var add_title =  helper.validateForm({form});
         
@@ -382,12 +405,12 @@ export default  class AppEditor extends Component{
 
       }
 
-      else if(objName === "answer"){
+      else if(objName === "Answer"){
          validForm   =  {add_answer : validatedForm.data};  
-      }else if(objName === "comment"){
+      }else if(objName === "Comment"){
          validForm   =  {comment : validatedForm.data};    
       }
-      else if(objName === "reply"){
+      else if(objName === "Reply"){
          validForm   =  {reply : validatedForm.data};    
       }
       console.log(validForm, validatedForm) 
@@ -437,7 +460,8 @@ export default  class AppEditor extends Component{
             postTitle         : this.state.postTitle,
             contentIsEmpty    : this.state.contentIsEmpty,
             handleEmptyForm   : this.handleEmptyForm.bind(this),
-            submitProps       : this.getSubmitProps(),
+            subimtCleanForm   : this.subimtCleanForm.bind(this),
+            submitProps       : this.getSubmitProps.bind(this),
             textAreaProps     : this.getTextAreaProps(), 
         } 
 
@@ -460,7 +484,7 @@ export default  class AppEditor extends Component{
             <div className="editors-page" onClick={this.focus}>
                <EditorNavBar {...props}/>
 
-               {this.props.objName === "question"?
+               {this.props.objName === "Question"?
                   <TextAreaEditor {...props}/>
                   :
                   <DraftEditor {...props}/>

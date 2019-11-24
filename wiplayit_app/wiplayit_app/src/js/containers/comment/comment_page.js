@@ -7,7 +7,7 @@ import {  CommentsComponent } from "../../components/comment_components"
 //import { UserComponentSmall } from "components/profile_components";
 import {Editor, EditorState, convertFromRaw} from 'draft-js';
 import {pageMediaBlockRenderer} from '../../components/editor_components';
-import {store} from "../../configs/store-config";
+import {store, useStoreUpdate} from "../../configs/store-config";
 
 
 
@@ -70,8 +70,11 @@ class CommentsBox extends Component {
 
    render() { 
       let props  = this.getProps();
+      let commentsUpdate = useStoreUpdate('comments')
+      
       var comments    = props.entyties.comments;
       comments = comments.byId[props.commentById]
+      console.log(props, comments, commentsUpdate)
 
        
       

@@ -3,15 +3,14 @@ import { GetModalLinkProps } from "../components/component-props";
 import {EditorLink, OptionsModalLink} from "../components/modal-links"
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { EditAnswerBtn, AnswerBtn, FollowQuestionBtn,UnfollowQuestionBtn, 
-          QuestionOptDropDownBtn, OpenModalButton,
-          ModalCloseBtn,QuestionOptDropDownBtns,QuestionOptModalBtns  } from "../components/buttons";
+import { FollowQuestionBtn, UnfollowQuestionBtn} from '../components/buttons';
+
 import {ButtonsBox, Styles } from "../components/partial_components";
 //import AnswersBox from "containers/answer/answer_page";
 import  * as types  from '../actions/types';
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
+//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 
 
 

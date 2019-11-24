@@ -44,24 +44,29 @@ import PostCommentUpVotersBox  from "./containers/users/post-comment-upvoters-pa
 import PostReplyUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
 
 
-
+let GetModalRouter = (background)=>{
+    let location = useLocation();
+    let state = location && location.state;
+    return background && 
+           <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
+}
 
 
 
 
 function App() {
   let location = useLocation();
-  let history = useHistory();
-  let params = useParams();
-  //let match = useMatch()
   let background = location.state && location.state.background;
-  let state = location && location.state;
+  
+  let ModalRouter = GetModalRouter(background)
 
   if (!background) {
-    ModalManager.close();
+    setTimeout(()=> {
+        ModalManager.close(); 
+        }, 500);
+    
   }
-  console.log(background, location, state)
-
+  
   return (
      <div>
         <Switch location={background || location}>
@@ -95,7 +100,7 @@ function App() {
            
         </Switch>
 
-         {background && <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>}
+         {ModalRouter}
      </div>
  
   );

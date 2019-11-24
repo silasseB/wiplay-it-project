@@ -4,39 +4,39 @@ import  * as types  from '../actions/types';
 
 
 
-export const createActionPending = (byId, actionType) => {
+export const createActionPending = (params) => {
    //console.log(actionType)
     return{
-        type: actionType.PENDING,
-        byId,
+        type: params.actionType && params.actionType.PENDING,
+        byId : params.byId,
         payload: {
-           isLoading : true,
+           isCreating : true,
         }
     }
 };
 
 
 
-export const createActionSuccess = (byId, actionType, response) => {
+export const createActionSuccess = (params) => {
    //console.log(actionType)
    return{
-      type: actionType.SUCCESS,
-      byId,
+      type: params.actionType && params.actionType.SUCCESS,
+      byId: params.byId,
       payload: {
-         newObject   : response, 
-         isLoading   : false,
+         newObject   : params.data, 
+         isCreating   : false,
 
       }
    };
 };
 
 
-export const createActionError = (byId, actionType, error) => ({
-  type: actionType.ERROR,
-  byId,
+export const createActionError = (params) => ({
+  type: params.actionType && params.actionType.ERROR,
+  byId : params.byId,
   payload: {
-     error     : error.detail, 
-     isLoading : false,
+     error     : params.error.detail, 
+     isCreating : false,
   }
 });
 
@@ -58,6 +58,44 @@ export const getIndexSuccess = (data) => {
 };
 
 
+
+
+
+export const updateActionPending = (params) => ({
+  type:  params.actionType && params.actionType.PENDING,
+  byId : params.byId,
+  payload: {
+    submitting : true,
+    isUpdating : true,
+  }
+});
+
+
+
+
+export const updateActionSuccess = (params)=> {
+   console.log(params)
+
+    return{
+        type:  params.actionType && params.actionType.SUCCESS,
+        byId : params.byId,
+        payload: {
+            ...params.data,
+            submitting : false,
+            isUpdating : false
+      }
+   };
+};
+
+
+export const updateActionError = (params) => ({
+  type:  params.actionType && params.actionType.ERROR,
+  byId : params.byId,
+  payload: {
+    error: params.error,
+    submitting : false,
+  }
+});
 
 
 export const getIndexPending = () => {
@@ -278,42 +316,6 @@ export const deleteQuestionError = ({error}) => ({
 
 
 
-export const updateActionPending = (actionType, byId) => ({
-  type:  actionType.PENDING,
-  byId,
-  payload: {
-    isLoading: true,
-    submitting : true,
-  }
-});
-
-
-
-
-export const updateActionSuccess = (actionType, byId, data)=> {
-   console.log(actionType, data)
-
-    return{
-        type:  actionType.SUCCESS,
-        byId,
-        payload: {
-            ...data,
-            isLoading : false,
-            submitting : false,
-      }
-   };
-};
-
-
-export const updateActionError = (actionType, byId, error) => ({
-  type:  actionType.ERROR,
-  byId,
-  payload: {
-   error,
-   isLoading : false,
-   submitting : false,
-  }
-});
 
 
 export const getQuestionListSuccess = (byId, questionList) => {
@@ -428,6 +430,7 @@ export const getAnswerListError = (byId,error) =>({
 
 
 export const getCommentListSuccess = (byId, commentList) => {
+   
     return{
         type: types.GET_COMMENT_LIST.SUCCESS,
         byId,
@@ -441,13 +444,16 @@ export const getCommentListSuccess = (byId, commentList) => {
 
 
 
-export const getCommentListPending = (byId) => ({
+export const getCommentListPending = (byId) => {
+  
+  return{
     type: types.GET_COMMENT_LIST.PENDING,
     byId,
     payload: {
         showLink    : false,
     }
-});
+  };
+};
 
 
 

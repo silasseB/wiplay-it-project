@@ -10,92 +10,36 @@ import  * as types  from '../actions/types';
 const api      = new Api();
 
 
-export const CreateQuestionBtn = props => {
-    let location = useLocation();
-    let  modalProps = {
-      editorProps :{
-        objName           : 'question',
-        actionType        : types.CREATE_QUESTION,
-        isPost            : true,
-        editorPlaceHolder : 'Add Question...',
-        apiUrl            : api.createQuestionApi(),
-         
-      },
-      modalType : 'editor', 
-          
-    };
-
-    return(
-        <Link id="create-question" className="btn btn-sm  create-question"
-                to={{
-            pathname: `/compose/${'question'}/${'1'}/`,
-            // This is the trick! This link sets
-            // the `background` in location state.
-            state: { background: location, modalProps }
-          }}
-           >
-           Ask  
-        </Link>
-   );
-};
-
-
-export const CreatePostBtn = props =>{
-   //console.log(props)
-   let modalProps = {
-      modalProps :{
-         objName           : 'post',
-         isPost            : true,
-         actionType        : types.CREATE_POST,
-         editorPlaceHolder : 'Write Post...',
-         apiUrl            : api.createPostApi(),
-                
-      },
-      modalType : 'editor', 
-   };
-        
-   return(
-        <Link id="create-post" className="btn btn-sm"
-                to={{
-            pathname: `/compose/${'post'}/${'1'}/`,
-            // This is the trick! This link sets
-            // the `background` in location state.
-            state: { background: location, modalProps }
-          }}
-           >
-           Ask  
-        </Link>
-     
-   );
-}
-
 export const UnfollowUserBtn = props => {
    
-   return(
+    return(
       <div className="f-box">
-         <button type="button" onClick={ () => props.unfollowOrDownVote(props.editUserProfileProps) }  
+         <button type="button" onClick={ () => props.editfollowersOrUpVoters(props.editUserProfileProps) }  
                  className="unfollow-user" >
             Following             
          </button>
       </div>
-   );
+    );
 };
 
-export const FollowUserBtn = props => (
-  <div className="f-box">
-      <button   type="button" onClick={ () => props.followOrUpVote(props.editUserProfileProps) }
+export const FollowUserBtn = props => {
+    
+    return(
+    <div className="f-box">
+      <button   type="button" onClick={ () => props.editfollowersOrUpVoters(props.editUserProfileProps) }
                 className="follow-user" >
        Follow 
       </button>
-  </div> 
-)                           
+   </div> 
+  )
+}                           
 
 
 export const FollowQuestionBtn = props => {
-   
-   return(
+    
+    return(
       <div>
-         <button  type="button" onClick={ () => props.followOrUpVote(props.editQuestionProps)}
+         <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editQuestionProps)}
             className="btn-sm follow-question" >
 
             Follow <span className="fa fa-rss icon-color"></span>            
@@ -106,24 +50,22 @@ export const FollowQuestionBtn = props => {
 
 
 export const UnfollowQuestionBtn = props => {
-   let btnProps = {unFollowing : true};
-   Object.assign(btnProps, props)
-
-   return(
+   
+    return(
       <div>
-         <button  type="button" onClick={() =>  props.unfollowOrDownVote(props.editQuestionProps)}
+         <button  type="button" onClick={() =>  props.editfollowersOrUpVoters(props.editQuestionProps)}
                                className="btn-sm  follow-question" >
                Following <span className="fa fa-rss"></span>
          </button>
       </div>
-   )
+    )
 };
 
 
            
 export const UpVotePostBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () =>  props.followOrUpVote(props.editPostProps)}
+   <button  type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editPostProps)}
                                           className="btn-sm  upvote-answer" >
      Upvote <span className="fa fa-arrow-up"></span>
   </button>
@@ -137,7 +79,7 @@ export const UpVotePostBtn = props => (
          
 export const DownVotePostBtn = props => (  
 <div>       
-    <button   type="button" onClick={ () =>  props.unfollowOrDownVote(props.editPostProps)}
+    <button   type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editPostProps)}
                                          className="btn-sm icon-color upvote-answer" >
     Upvoted <span className=" fa fa-arrow-up icon-color"></span>
   </button>
@@ -147,14 +89,13 @@ export const DownVotePostBtn = props => (
 
             
 export const UpVoteAnswerBtn = props => (     
-<div>    
-   <button  type="button" onClick={ () => props.followOrUpVote(props.editAnswerProps)}
+   <div>    
+        <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
                                           className="btn-sm  upvote-answer" >
-     Upvote <span className="fa fa-arrow-up"></span>
-  </button>
-</div>
-
- )
+            Upvote <span className="fa fa-arrow-up"></span>
+        </button>
+    </div>
+)
 
 
 
@@ -162,7 +103,7 @@ export const UpVoteAnswerBtn = props => (
          
 export const DownVoteAnswerBtn = props => (  
 <div>       
-    <button   type="button" onClick={ () => props.unfollowOrDownVote(props.editAnswerProps)}
+    <button   type="button" onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
                                          className="btn-sm icon-color upvote-answer" >
     Upvoted <span className=" fa fa-arrow-up icon-color"></span>
   </button>
@@ -173,68 +114,10 @@ export const DownVoteAnswerBtn = props => (
 
 
 
-export const AnswerBtn = props => {
-   //console.log(props)
-   let { modalProps } = props;
-
-    return  (  
-      <div>
-         <Link id="create-answer" className="btn btn-sm"
-                to={{
-            pathname: `/compose/${'answer'}/${'1'}/`,
-            // This is the trick! This link sets
-            // the `background` in location state.
-            state: { background: location, modalProps }
-          }}
-           >
-         <span className="fa fa-edit icon-color"></span>  Answer  
-        </Link>
-
-      </div>
-    );
-};
-
-export const EditAnswerBtn = props => {
-   //console.log(props)
-   return(  
-      <div>      
-         <button type="button" onClick={ () => props.showModal(props.editAnswerProps) }
-            className="btn-sm  create-answer" >
-          <span className="fa fa-edit icon-color"></span>  Edit Answer
-      </button>
-  </div>
- )
-};
-
-export const CommentBtn = props =>{
- // console.log(props)
-return (  
-  <div>      
-    <button type="button" onClick={ () => props.showModal(props.createCommentProps) } 
-                    className="btn-sm answer-btn create-comment" >
-    Comment
-    </button>
-  </div>
- )
-}
-
-export const ReplyBtn = props =>{
-  //console.log(props)
-return ( 
-
-  <div>      
-    <button type="button" onClick={ () => props.showModal(props.createReplyProps) } 
-                    className="btn-sm comment-btn create-reply" >
-    Reply
-    </button>
-  </div>
- )
-}
-
              
 export const UpVoteCommentBtn = props => (     
    <div>    
-      <button  type="button" onClick={ () => props.followOrUpVote(props.editCommentProps)}
+      <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editCommentProps)}
                className="btn-sm comment-btn upvote-comment-btn upvote-comment" >
          Upvote 
       </button>
@@ -245,7 +128,7 @@ export const UpVoteCommentBtn = props => (
 
 export const DownVoteCommentBtn = props => (     
    <div>    
-      <button  type="button" onClick={ () => props.unfollowOrDownVote(props.editCommentProps)} 
+      <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editCommentProps)} 
                       className="btn-sm  icon-color upvote-comment" >
          Upvoted 
       </button>
@@ -256,7 +139,7 @@ export const DownVoteCommentBtn = props => (
 
 export const UpVoteReplyBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () =>  props.followOrUpVote(props.editReplyProps)}
+   <button  type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editReplyProps)}
                    className="btn-sm comment-btn upvote-comment-btn upvote-comment" >
      Upvote 
   </button>
@@ -267,7 +150,7 @@ export const UpVoteReplyBtn = props => (
 
 export const DownVoteReplytBtn = props => (     
 <div>    
-   <button  type="button" onClick={ () => props.unfollowOrDownVote(props.editReplyProps)} 
+   <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editReplyProps)} 
                       className="btn-sm  icon-color upvote-comment" >
      Upvoted 
   </button>
@@ -284,7 +167,12 @@ export const PostOptModalBtns = props => {
       <div>
          { props.obj.created_by.id === props.currentUser.id?  
          <div>
-            <button onClick={ () => props.showModal(props)} className="btn-sm edit-question">
+            <button className="btn-sm edit-question" onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push(`/compose/${'post'}/${props.obj.id}/`); 
+                        }, 500);
+                    }}>>
                 Edit Post
             </button>
 
@@ -335,8 +223,13 @@ export const QuestionOptDropDownBtns = props => (
   <div >  
    { props.obj.created_by.id === props.currentUser.id?  
     <div>
-  <button onClick={ () => props.editQuestion(props)} className="btn-sm edit-question">
-    Edit Question
+  <button className="btn-sm edit-question" onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push(`/compose/${'question'}/${props.obj.id}/`); 
+                        }, 500);
+                        }}>
+                Edit Question
   </button>
   
   <button type="button" className="btn-sm  delete-question" >
@@ -356,27 +249,30 @@ export const QuestionOptDropDownBtns = props => (
 
 )
 
-export const QuestionOptModalBtns = props => {
-   let  updateQuestionProps = {
-      modalProps :{
-        objName           : 'question',
-        objIndex          : props.index,
-        objId             : props.obj.id,
-        obj               : props.obj,
-        isPut             : true,
-        editorPlaceHolder : 'Add Question...',
-        actionType        : types.UPDATE_QUESTION,
-         
-      },
-      modalType : 'editor', 
-          
-   };
+const getModalProps = (props)=>{
+    return {
+            editorProps : {...props},
+            modalType   : 'editor', 
+        };
 
-   return (
-      <div>
-         { props.obj.created_by.id === props.currentUser.id? 
-         <div>
-            <button onClick={ () => props.showModal(updateQuestionProps)} className="btn-sm edit-question">
+}
+
+export const QuestionOptModalBtns = props => {
+    console.log(props)
+    let {background} = props
+    let modalPath = `/compose/${'question'}/${props.obj.id }/`
+    let modalProps = getModalProps(props);
+    let state = { background, modalProps} 
+    return (
+        <div>
+           { props.obj.created_by.id === props.currentUser.id? 
+           <div>
+            <button className="btn-sm edit-question" onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push({ pathname: modalPath, state} ); 
+                        }, 500);
+                    }}>
                 Edit Question
             </button>
 
@@ -394,13 +290,21 @@ export const QuestionOptModalBtns = props => {
 
 
 export const AnswerOptModalBtns = props => {
+    let {background} = props
+    let modalPath = `/compose/${'answer'}/${props.obj.id }/`
+    let modalProps = getModalProps(props);
+    let state = { background, modalProps} 
    
    return(
       <div>
          { props.obj.created_by.id === props.currentUser.id?
             <div>
-               <button onClick={ () => props.showModal(props.editAnswerProps)}
-                     className="btn-sm edit-question">
+               <button className="btn-sm edit-question" onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push({ pathname: modalPath, state}); 
+                        }, 500);
+                    }}>
                   Edit Answer
                </button>
                <button type="button" className="btn-sm  delete-question" >
@@ -417,72 +321,67 @@ export const AnswerOptModalBtns = props => {
 
 
 export const CommentOptModalBtns = props => {
-   var apiUrl = props.isAnswerBox?api.updateAnswerCommentApi(props.obj.id):
-                                  api.updatePostCommentApi(props.obj.id);
-   var  editCommentProps = {
-            modalProps :{
-              objName           : 'comment',
-              objIndex          : props.index,
-              objId             : props.obj.id,
-              obj               : props.obj,
-              isPut             : true,
-              actionType        : types.UPDATE_COMMENT,
-              editorPlaceHolder : 'Add Comment...',
-              apiUrl            : apiUrl,
-            },
-            modalType : 'editor', 
-         };
-   return(
-      <div>
-         {props.obj.created_by.id === props.currentUser.id?
-            <div>
-               <button onClick={ () => props.showModal(editCommentProps)} className="btn-sm">
-                  Edit Comment
-               </button>
-               <button type="button" className="btn-sm  delete-question" >
-                  Delete 
-               </button>
-            </div>
-            :""
-         }
+    console.log(props);
+    let {background} = props
+    let modalPath = `/compose/${'comment'}/${props.obj.id }/`
+    let modalProps = getModalProps(props);
+    let state = { background, modalProps} 
+   
+    return(
+        <div>
+            { props.obj.created_by.id === props.currentUser.id?
+                <div>
+                    <button className="btn-sm"  onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push({ pathname: modalPath, state}); 
+                        }, 500);
+                    }}>
+                        Edit Comment
+                    </button>
+                    <button type="button" className="btn-sm  delete-question" >
+                       Delete 
+                    </button>
+               </div>
+
+               :
+               ""
+            }
     
-      </div>
-   );
+        </div>
+    );
 };
 
 
 
 export const ReplyOptModalBtns = props => {
-  // console.log(props)
-  
-   var   editReplyProps = {
-            modalProps :{
-              objName           : 'reply',
-              objIndex          : props.index,
-              objId             : props.objId,
-              obj               : props.obj,
-              isPut             : true,
-              actionType        : props.actionType,
-              editorPlaceHolder : 'Add Reply...',
-              apiUrl            : props.apiUrl,
-            },
-            modalType : 'editor', 
-   };
+    let {background} = props
+    let modalPath = `/compose/${'reply'}/${props.obj.id }/`
+    let modalProps = getModalProps(props);
+    let state = { background, modalProps}; 
 
-   return(
-      <div>
-         {props.obj.created_by.id === props.currentUser.id?
-            <div>
-               <button onClick={ () => props.showModal(editReplyProps)} className="btn-sm">
-                  Edit Reply
-               </button>
+    return(
+        <div>
+            {props.obj.created_by.id === props.currentUser.id?
+                <div>
+                    <button className="btn-sm" onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push({ pathname: modalPath, state }); 
+                        }, 500);
+                        }}
+                        >
+                         Edit Reply
+                    </button>
  
-               <button type="button" className="btn-sm  delete-question" >
-                  Delete 
-               </button>
-            </div>
-            : ""
-         }
+                    <button type="button" className="btn-sm  delete-question" >
+                        Delete 
+                    </button>
+                </div>
+
+               :
+               ""
+            }
       </div>
    );
 };
@@ -511,12 +410,20 @@ export const ProfileOptsModalBtns = props => {
     return (
       <div>
          { props.obj && props.obj.user_can_edit?   
-         <Router history={history}> 
-            <Link className="btn-sm edit-user-profile"
-                  to={{ pathname : pathToEditProfile ,state }}>
+            <button className="btn-sm edit-user-profile"
+                onClick={()=>{
+                       ModalManager.close(props.background) 
+                       setTimeout(()=> {
+                           history.push(pathToEditProfile); 
+                        }, 500);
+                      
+                    }
+                }>
+                
+                 
                 Edit Profile
-            </Link>
-            </Router>
+            </button>
+         
   
             :
             ""
@@ -639,22 +546,6 @@ export const ModalCloseBtn = props => (
 
 
 
-
-export const OpenModalButton = props => {
-  //console.log(props)
-  return(
-   <div >
-      <button 
-         style={props.btnStyles} 
-         onClick={() => props.showModal(props.modalOptionsProps)} 
-         className=" options-btn" 
-         type="button"
-      >
-      {props.btnText}
-      </button>
-   </div>
-  )
-}
 
 export const EditUserDropDownbutton = props => (
   <div>

@@ -37,10 +37,11 @@ class QuestionPage extends Component {
         };
 
     };
-  
-    
 
-       
+    componentWillUnmount() {
+        this.unsubscribe();
+    };
+
 
     onQuestionUpdate = () =>{
  
@@ -59,27 +60,45 @@ class QuestionPage extends Component {
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
+  
+    
 
     componentDidMount() {
         console.log(this.props)
-        this.onQuestionUpdate();
-        
+        this.onQuestionUpdate()
+            
         let { cachedEntyties } = this.props;
         let { slug, id } = this.props.match.params;
         let  questionById = `question${id}`;
+
+        
 
         if (cachedEntyties) {
             let { question, currentUser } = cachedEntyties;
             console.log(question)
 
+
             if(question && question.id == id){
-                questionById = `question${id}`;
-                this.setState({questionById })
-        
-               console.log('Question found from cachedEntyties')
-               store.dispatch(action.getQuestionPending(id));
-               store.dispatch(action.getQuestionSuccess(question));
-               return 
+                var now = new Date();
+                let timeStamp = question.timeStamp;
+
+                let msDiff   = now.getTime() - timeStamp
+                let secDiff  = msDiff / 1000
+                let menDiff  = secDiff / 60
+                let hourDiff = menDiff/60
+                let dayDiff  = hourDiff/24
+
+                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+                
+               
+                if (menDiff < 1) {
+                    questionById = `question${id}`;
+                    this.setState({questionById })
+                    console.log('Question found from cachedEntyties')
+                    store.dispatch(action.getQuestionPending(id));
+                    store.dispatch(action.getQuestionSuccess(question));
+                    return 
+                }
                
             }
         }
@@ -112,7 +131,7 @@ class QuestionPage extends Component {
         var questionById = props.questionById;
         var question = props.entyties.question;
         question = question.byId[questionById]
-
+        console.log(question)
                  
         return (
 

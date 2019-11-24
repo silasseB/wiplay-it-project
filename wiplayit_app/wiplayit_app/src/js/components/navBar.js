@@ -2,13 +2,24 @@
 import React from 'react';
 import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { SubmitBtn,CreateQuestionBtn,CreatePostBtn  } from "../components/buttons";
+import { SubmitBtn  } from "../components/buttons";
 import { ModalManager}   from  "../containers/modal/modal_container";
+import {EditorLink } from "../components/modal-links"
+import { GetModalLinkProps } from "../components/component-props";
 
-//import "containers/navbar.css"
 
 
+let createPostProps = {
+        objName     : 'Post',
+        isPost       : true,
+            };
+     let createQuestionProps = {
+        objName     : 'Question',
+        isPost       : true,
+      };
 
+createQuestionProps = GetModalLinkProps.props(createQuestionProps)
+createPostProps = GetModalLinkProps.props(createPostProps)
 
 export const NavBarSmallScreen = props => {
     
@@ -20,18 +31,22 @@ export const NavBarSmallScreen = props => {
     
     if (currentUser) {
         path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
+        createPostProps['currentUser'] = currentUser;
+       createQuestionProps['currentUser'] = currentUser;
         
     }
+    
    
+
     return (
 		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
             <Link to="/" className="logo"><strong>Wiplayit</strong></Link>
               <div className="mobile-navbar-center">
                 <div className="create-post-box">
-                 <CreateQuestionBtn {...props}/>
+                 <EditorLink {...createQuestionProps}/>
     
                   <p>Or</p>
-                  <CreatePostBtn  {...props}/>
+                  <EditorLink  {...createPostProps}/>
                 </div>
               </div>
 
@@ -103,10 +118,11 @@ export const NavBarBigScreen = props => {
     if (currentUser) {
         path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
         userProfile = currentUser.profile;
-        
-    }
-      
+        createPostProps['currentUser'] = currentUser;
+        createQuestionProps['currentUser'] = currentUser;  
 
+    }
+    
         
 	return(
 			
@@ -155,10 +171,10 @@ export const NavBarBigScreen = props => {
 
        
     <div className="btn-box" >
-        <CreateQuestionBtn {...props}/>
-       <strong>Or</strong>
-
-        <CreatePostBtn {...props}/>
+      <EditorLink {...createQuestionProps}/>
+                 <strong>Or</strong>
+      <EditorLink  {...createPostProps}/>
+       
     </div>
     
        
@@ -252,18 +268,11 @@ export const EditorNavBar = props  => {
          </div>
 	     
          <div className="submit-btn-box">
-           {props.contentIsEmpty?
-               <button type="button" onClick={()=> props.handleEmptyForm(props)}
-                  className="editor-submit-btn submit-btn">
-                  Submit
-               </button>
-
-              :
-               <button type="button" onClick={()=> props.submit(props.submitProps)}
+            <button type="button" onClick={()=> props.subimtCleanForm()}
                 className="editor-submit-btn submit-btn">
                   Submit
-               </button>
-            }
+            </button>
+           
          </div>
       </div>
    </div>    

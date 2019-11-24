@@ -288,10 +288,13 @@ class CreateMixin(BaseMixin):
 		
 	def create(self, data):
 		edit_perms = self.permissions.get('edit_perms',None)
+		print(data)
+		print(self.request.data)
 
 		serializer = self.get_serializer(data=data)
 				
-		if not serializer.is_valid(raise_exception=True):
+		if not serializer.is_valid():
+			print(serializer.errors)
 			
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

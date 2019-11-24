@@ -2,13 +2,12 @@ import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import Api from '../api';
+import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import { GetModalLinkProps } from "../components/component-props";
 
-import {UpVotePostBtn,DownVotePostBtn, CommentBtn,
-         OpenModalButton, QuestionOptDropDownBtn,PostOptDropDownBtns,
-        PostOptModalBtns, ModalCloseBtn  } from "../components/buttons"
 import  * as types  from '../actions/types';
 
-
+import {DownVotePostBtn,UpVotePostBtn} from '../components/buttons';
 import CommentsBox from "../containers/comment/comment_page";
 import {pageMediaBlockRenderer} from '../components/editor_components';
 import {Editor,EditorState, convertFromRaw} from 'draft-js';
@@ -20,8 +19,8 @@ import { UserComponentSmall } from "../components/profile_components";
 
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-const OptBtnBigScreen   = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
+//const OptBtnBigScreen   = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 const api      = new Api();
 
 
@@ -38,7 +37,7 @@ export const PostComponent = props => {
               margin     : '0 0 2px'
    }
 
-   let post     =    props.post;
+   let {post, currentUser, postById}     =    props;
 
    let   storedState    = JSON.parse(post.add_post);
    const contentState   = convertFromRaw(storedState);
@@ -49,80 +48,60 @@ export const PostComponent = props => {
             post,
             usersIsFor : 'postUpVoters', 
         }
-   
-   let  modalOptionsProps = {
-      modalProps : {
-        objName    : 'post',
-        actionType : types.UPDATE_POST,
-        isPut      : true,
-        obj        : props.post, 
-        
-      },
-      modalType : 'optionsMenu', 
-   };
-   
-   let upvoteBtnProps = {
-      objName     : 'post',
-      actionType  : types.UPDATE_POST,
-      isPut       : true,
-      obj         : post, 
-      objId       : post.id,
-      objIndex    : props.index,
-      apiUrl      : api.updatePostApi(post.id),
-      byId        : props.postById,
-   };
-   
-   let  createCommentProps = {
-      modalProps : {
-        objName           : 'comment',
-        actionType        : types.CREATE_COMMENT,
+     let editPostProps = {
+        objName     : 'Post',
+        isPut       : true,
+        obj         : post, 
+        byId        : postById,
+        currentUser,
+    };
+
+
+
+    let editCommentProps = {
+        objName           : 'Comment',
         obj               : post,
-        objId             : post.id,
         isPost            : true,
-        editorPlaceHolder : 'Add Comment...',
-        apiUrl            : api.createPostCommentApi(post.id),
-         
-      },
-      modalType : 'editor', 
-          
-   };
+        currentUser,
+        byId        : postById,
+        
+    };
+
+
+    editPostProps = GetModalLinkProps.props(editPostProps)
+    editCommentProps = GetModalLinkProps.props(editCommentProps)
+   
+
+    let EditorModalLink = <EditorLink {...editCommentProps}/>; 
+    let MenuModalLink   = <OptionsModalLink {...editPostProps}/>
+    
 
    let btnsProps = {
-         createCommentProps,
-         upvoteBtnProps,
-         modalOptionsProps,
-         btnStyles:optionsBtnStyles,
-         btnText : <i className="material-icons ">more_horiz</i>, 
+         editAnswerProps,
+         editCommentProps, 
       }; 
 
+
+
+   
    Object.assign(btnsProps, props)
    let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
                          { post.upvotes }  Upvotes
                      </Link>;
 
-   let btn1 =  post.upvoted? <DownVotePostBtn {...btnsProps}/>
+   let UpVoteBtn =  post.upvoted? <DownVotePostBtn {...btnsProps}/>
                : <UpVotePostBtn {...btnsProps}/>
 
-   let btn2 =  <CommentBtn {...btnsProps}/>;
-                         
-              
-   let optionsBtn =  <div>
-                        <OptBtnSmallScreen {...btnsProps}/> 
-                        <OptBtnBigScreen {...props}/>
-                     </div>;
 
    const btnsList   = { 
             itemsCounter : itemsCounter,
-            btn1   : btn1,
-            btn2   : btn2,
-            btn3   : optionsBtn,
+            btn1   : UpVoteBtn,
+            btn2   : EditorModalLink,
+            btn3   : MenuModalLink,
             Styles : Styles
          };
 
-   const userProps  = {
-              user        : props.post.created_by,
-              currentUser : props.currentUser,
-            };
+   const userProps  = {user : post.created_by, currentUser};
   
 
     return (

@@ -180,6 +180,7 @@ export function getUserProfile(id, apiUrl) {
 
 
 export function getCommentList(byId) {
+    
     return dispatch => {
         dispatch(action.getCommentListPending(byId))
 	}
@@ -252,24 +253,37 @@ export function handleSubmit(props) {
 
 
    
-   byId = byId?byId:"newObject"; 
+    byId = byId?byId:"newObject"; 
+    let updateProps = {
+        actionType,
+        byId,
+        isUpdating:true,
+        }
+    let createProps = {
+        actionType,
+        byId,
+        isCreating: true, 
+    } 
          
     if (props.isPut) {
    	return dispatch => {
-     	dispatch(action.updateActionPending(actionType,byId))
+
+     	dispatch(action.updateActionPending(updateProps))
 
 		instance.put(apiUrl, formData)
 		.then(response => {
-			var payLoad = prepPayLoad(objName, response.data);
-			console.log(payLoad, props) 
-			dispatch(action.updateActionSuccess(actionType, byId, payLoad));
-			dispatch(action.hideModal())
+		 
+            updateProps['data'] = prepPayLoad(objName, response.data);
+			dispatch(action.updateActionSuccess(updateProps));
+			
 		})
 		.catch(error => {
 			console.log(error)
 			dispatch(action.hideModal())
+
 			if (error.response && error.response.data) {
-			   dispatch(action.updateActionError(actionType, byId, error.response.data));
+               createProps['error'] = error.response.data;
+			   dispatch(action.updateActionError(updateProps));
 			}else{
       		dispatch(action.handleError(error.request))
       	}
@@ -278,18 +292,20 @@ export function handleSubmit(props) {
 	}
    }else if (props.isPost) {
         return dispatch => {
-     	    dispatch(action.createActionPending(byId, props.actionType ))
+     	    dispatch(action.createActionPending(createProps ))
 
 		    instance.post(props.apiUrl, props.formData)
 		    .then(response => {
-			
-			    dispatch(action.createActionSuccess(byId, props.actionType, response.data));
-                dispatch(action.hideModal());
+			    createProps['data'] = response.data; 
+			    dispatch(action.createActionSuccess(createProps));
+                
 		    })
 		    .catch(error => {
+                console.log(error)
 				
 			    if (error.response && error.response.data) {
-				    dispatch(action.createActionError(byId ,props.actionType, error.response.data));
+                    createProps['error'] = error.response.data;
+				    dispatch(action.createActionError(createProps));
       		
          	    }else{
       	        	dispatch(action.handleError(error.request))
@@ -340,27 +356,27 @@ export function authenticate(apiUrl='', values={}, dispatch=function(){}){
 
 const prepPayLoad = (objName, data)=>{
 	
-	if(objName === "question"){
-	   data = { questionObj : data };
+	if(objName === "Question"){
+	   data = { question : data };
 	}
-	else if(objName === "answer"){
+	else if(objName === "Answer"){
       data = { answer : data };
 	}
-	else if(objName === "comment"){
+	else if(objName === "Comment"){
 		data = { comment : data };
 	}
-	else if(objName === "reply"){
+	else if(objName === "Reply"){
 		data = { reply : data };
 	}
-	else if(objName === "post"){
+	else if(objName === "Post"){
 		data = { postObj : data };
 	}
 
-	else if(objName === "userProfile"){
+	else if(objName === "UserProfile"){
 		data = {user : data};
 	}
 
-	else if(objName === "usersList"){
+	else if(objName === "UsersList"){
 		data = {user : data};
 	}
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from "react-router";
-import { ModalManager} from 'react-dynamic-modal';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import {handleSubmit, getCurrentUser,getPost, getUserList,
@@ -13,11 +12,9 @@ import { ModalOptionsMenu } from "../../components/buttons";
 import { DropImage } from "../../containers/profile/edit_profile";
 import AppEditor  from '../../containers/editor'
 import {store} from "../../configs/store-config";
+import {history} from "../../index";
 import {LocalCache} from  "../../utils/storage";
 
-
-
-import Modals from "../../containers/modal-conf";
 import Helper from '../../containers/utils/helpers';
 
 
@@ -29,6 +26,7 @@ const helper   = new Helper();
 export function withHigherOrderIndexBox(Component) {
 
     return class HigherOrderIndexBox extends Component {
+        _isMounted = false;
 
         constructor(props) {
             super(props);
@@ -39,7 +37,8 @@ export function withHigherOrderIndexBox(Component) {
                 isAuthenticated    : this.isAuthenticated(),
                 modalIsOpen        : false,
             };
-            this.openModal = this.openModal.bind(this);
+            this.onStoreUpdate     = this.onStoreUpdate.bind(this);
+             
         };
 
 
@@ -87,6 +86,7 @@ export function withHigherOrderIndexBox(Component) {
         // }
         
         componentWillUnmount() {
+            this._isMounted = false;
             this.unsubscribe();
         };
 
@@ -95,42 +95,36 @@ export function withHigherOrderIndexBox(Component) {
            return null
         }
 
-        onStoreUpdate = () =>{
+        
+        onStoreUpdate = (params, callback=function(){}) =>{
  
             const onStoreChange = () => {
+                
                 let storeUpdate = store.getState();
-                let {currentUser} = storeUpdate.entyties;
+                var timeStamp = new Date();
+                let { entyties } = storeUpdate;
+                let { currentUser, index, question, userProfile } = entyties
+
+                let questionById = params && params.questionById
+                question      =  entyties.question.byId[questionById];
+
+                console.log(entyties, index)
+
                 if (currentUser && currentUser.user) {
 
                     LocalCache('currentUser', currentUser.user)
                     this.getCurrentUser(currentUser.user)
+                 
                 }
 
-
-                               
-                //if (!storeUpdate.question.visited && storeUpdate.question.newObject) {
-                //   console.log('redirecting to question page')
-                // this.redirecToQuestionPage(storeUpdate.question) 
-                // }
-               //Open the Modal whenever modal is true.
-
-                this.openModal(storeUpdate.modal);
-             /*
-
-            if (this.state.modalIsOpen) {
-                if (this.state.modalIsOpen) {
-                    store.dispatch(action.hideModal())
+                if (this._isMounted) {
+                    this.forceUpdate()
                 }
-            }
-
-            else if (this.props.history && this.props.history.action === "PUSH") {
-                //console.log(storeUpdate)
-            }*/
-           }
+            };
 
             this.unsubscribe = store.subscribe(onStoreChange);
 
-        }
+        };
 
         
       
@@ -144,11 +138,12 @@ export function withHigherOrderIndexBox(Component) {
         }
 
         componentDidMount() {
-           this.onStoreUpdate() //Subscribe on store change    
+            this._isMounted = true;
+            this.onStoreUpdate() //Subscribe on store change    
       
             if (!this.isAuthenticated()) {
                 //User is not authenticated,so redirect to authentication page.
-                this.props.history.push('/user/registration/')
+                history.push('/user/registration/')
             }
 
             if(!this.getCurrentUser()){
@@ -162,80 +157,17 @@ export function withHigherOrderIndexBox(Component) {
 
             if (this.isAuthenticated()) {
                 localStorage.removeItem('@@CachedEntyties')
-                this.props.history.push('/user/registration')
+                history.push('/user/registration')
 
             }
             else{
         	   localStorage.removeItem('@@CachedEntyties')
-               this.props.history.push('/user/registration')
+               history.push('/user/registration')
 
             }
-
-            ModalManager.close();
+           
         }
 
-
-
-        openModal = (modal) => {
-            //Open modal is open is true and close the if isOpen is false
-            //And most importantly render the modal with its contents based on the 
-            //action dispatched 
-            console.log(this.props)
-
-            const modals   = new Modals();
-            let location = this.props.location;
-            if (modal.isOpen) {
-                let modalProps = modal.modalProps?modal.modalProps:{};
-                //Get Some important props and merge them with modalProps
-                let props = this.getProps()  
-                Object.assign(props, modalProps)
-
-                console.log(modal)
-
-                if (modal.modalType === 'editor') {
-                    modalProps['modalContents'] =  <AppEditor {...props}/>;
-                    console.log(modal, modalProps)
-                    //modals.editorModal(modal.modalProps);
-                    let state = {
-                           background    : location,
-                           modalContents : <AppEditor {...props}/> 
-                        }
-
-                    this.props.history.push( `/compose/${'question'}/${'1'}/`,state )
-
-                    setTimeout( () => {
-                        this.setState({modalIsOpen : true})
-                       //this.props.history.push({},'')
-                    }, 10);
-               
-                }
-
-                else if(modal.modalType === 'optionsMenu'){
-                    modalProps['modalContents'] = <ModalOptionsMenu {...props}/>
-                    modals.optionsMenuModal(modalProps)
-
-                    setTimeout( () => {
-                       this.setState({modalIsOpen : true})
-                       //this.props.history.push({},'')
-                    }, 10);
-              
-                }
-                else if(modal.modalType === 'dropImage'){
-                    modalProps['modalContents'] = <DropImage {...props}/>
-                    modals.dropImageModal(modalProps)
-
-                    setTimeout( () => {
-                        this.setState({modalIsOpen : true})
-                       //this.props.history.push({},'')
-                    }, 10);
-                }
-        
-
-            }else{
-                this.setState({modalIsOpen: false})
-                ModalManager.close();
-            }
-        }
      
         redirecToQuestionPage  = (questionObj) => {
             questionObj = questionObj.newObject;
@@ -247,37 +179,37 @@ export function withHigherOrderIndexBox(Component) {
             }
         };
       
-        unfollowOrDownVote(params) {
-            var upvotes       = params.obj.upvotes - 1; 
-            params['formData'] = helper.createFormData({upvotes})
-            this.props.submit(params); //handle subimiting downVotes or Unfollwers 
+        
 
-        };
+        editfollowersOrUpVoters = (params) =>{
+            params = this._getFormData(params);
+            this.props.submit(params); 
+        }
 
-        followOrUpVote(params) {
-      
-            if (params.objName === "question" || params.objName === "userProfile"
-                                              || params.objName === "usersList") {
-                var followers     = params.obj.followers + 1;
-                params['formData'] = helper.createFormData({ followers });
+        _getFormData = (params) =>{
+            let objName = params.objName;
+
+            switch(objName){
+                case 'Question':
+                case 'UserProfile':
+                case 'UsersList':
+                    var followers     = params.obj.followers;
+                    params['formData'] = helper.createFormData({ followers });
+                    return params;
+
+                default:
+                    var upvotes       = params.obj.upvotes; 
+                    params['formData'] = helper.createFormData({upvotes});
+                    return params; 
             }
-            else{
-                var upvotes       = params.obj.upvotes + 1; 
-                params['formData'] = helper.createFormData({upvotes})
-            }
-            this.props.submit(params); //handle subimiting upvotes or follwers 
-        };
 
-        push(){
-            this.props.history.push(this.props, 'hello') 
-        };
+        }
      
         getProps(){
 
             let props = {
-                logout             : this.logout,
-                followOrUpVote     : this.followOrUpVote.bind(this),
-                unfollowOrDownVote : this.unfollowOrDownVote.bind(this),
+                logout                  : this.logout,
+                editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
                 ...this.state,
             };
          
@@ -288,7 +220,7 @@ export function withHigherOrderIndexBox(Component) {
 
         render() {
             let props = this.getProps();
-            console.log(props)
+            //console.log(props)
             return (
                 <div>
                    <Component {...props}/>
@@ -330,8 +262,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
    
     return {
-       modal         : state.modal,
-       entyties      : state.entyties,       
+        entyties      : state.entyties,       
     }
 };
 

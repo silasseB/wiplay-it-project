@@ -364,8 +364,9 @@ export function entyties(state=InitialState(), action) {
         */
 
       case types.GET_COMMENT_LIST.PENDING:
-         //console.log(action)
+         
          Object.assign(state.comments.byId[action.byId], action.payload)
+         console.log(action, state.comments)
          return state;    
 
       case types.GET_REPLY_LIST.PENDING:
@@ -448,11 +449,16 @@ export function entyties(state=InitialState(), action) {
         return state;
 
       case types.UPDATE_USER_LIST.SUCCESS:
-         var userUpdate    = action.payload.user;
-         var usersToUpdate =state.users.byId[action.byId];
-         helper.updateReducerListEntynties(usersToUpdate.userList, userUpdate);
+         var  updatedUser     = action.payload && action.payload.user;
+
+        if (state.users.byId[action.byId]) {
+            var usersToUpdate = state.users.byId[action.byId];
+            usersToUpdate = usersToUpdate.userList
+            console.log(usersToUpdate)
+            helper.updateReducerListEntynties(usersToUpdate, updatedUser);
+        }
                   
-         return state;  
+        return state;  
 
       case types.UPDATE_USER_LIST.ERROR:
          Object.assign(state.users.byId[action.byId], {error: action.payload});
@@ -460,17 +466,51 @@ export function entyties(state=InitialState(), action) {
 
 
       case types.UPDATE_QUESTION.PENDING:
-         Object.assign(state.question.byId[action.byId], action.payload);
-         return state;
+        console.log(action, state.question)
+        if (state.question.byId[action.byId]) {
+           Object.assign(state.question.byId[action.byId], action.payload);
 
-      case types.UPDATE_QUESTION.SUCCESS:
-         Object.assign(state.question.byId[action.byId], action.payload);
-         return state;                  
+        }else if(state.questions.byId[action.byId]){
+            Object.assign(state.questions.byId[action.byId], action.payload);
+        }
+        return state;
+
+    case types.UPDATE_QUESTION.SUCCESS:
+        let updatedQuestion = action.payload && action.payload.question
+
+        if (state.question.byId[action.byId]) {
+            let question = state.question.byId[action.byId]
+            question     = question.question;
+           
+            let updatedQuestionState = {
+                isUpdating : false,
+                question   : Object.assign(question, updatedQuestion),
+            
+            } 
+        
+           Object.assign(state.question.byId[action.byId], updatedQuestionState);
+
+        }else if(state.questions.byId[action.byId]){
+            
+            var questions = state.questions.byId[action.byId];
+            let questionList = questions && questions.questionList;
+            helper.updateReducerListEntynties(questionList, updatedQuestion);
+
+        };
+        return state;                  
       
 
-      case types.UPDATE_QUESTION.ERROR:
-         Object.assign(state.question.byId[action.byId], action.payload);
-         return state;   
+    case types.UPDATE_QUESTION.ERROR:
+        let { error } = action.payload
+
+        if (state.question.byId[action.byId]) {
+           Object.assign(state.question.byId[action.byId], action.payload);
+
+        }else if(state.questions.byId[action.byId]){
+            Object.assign(state.questions.byId[action.byId], action.payload);
+        };
+
+        return state;   
 
 
       case types.UPDATE_ANSWER.PENDING:
@@ -495,10 +535,12 @@ export function entyties(state=InitialState(), action) {
          return state
 
       case types.UPDATE_COMMENT.SUCCESS:
+
          let updatedComment = action.payload.comment;
          var comments = state.comments.byId[action.byId];
-
-         helper.updateReducerListEntynties(comments.commentList, updatedComment);
+         comments = comments.commentList
+         helper.updateReducerListEntynties(comments, updatedComment);
+         console.log(action, updatedComment, comments)
          return state
       
       case types.UPDATE_COMMENT.ERROR:
