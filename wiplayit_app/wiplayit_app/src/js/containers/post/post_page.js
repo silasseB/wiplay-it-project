@@ -29,7 +29,7 @@ class  PostPage extends Component  {
         };
     };
 
-    onQuestionUpdate = () =>{
+    onPostUpdate = () =>{
 
         const onStoreChange = () => {
 
@@ -38,7 +38,7 @@ class  PostPage extends Component  {
             let {postById}  =  this.state;
             let post      =  entyties.post.byId[postById];
 
-            if (post && !post.isLoading) {
+            if (post && !post.isLoading && !post.timeStamp) {
 
                 console.log(post)
                 LocalCache('post', post.post );
@@ -49,50 +49,40 @@ class  PostPage extends Component  {
     };
 
 
+    
+
     componentDidMount() {
-        console.log(this.props)
-        this.onQuestionUpdate();
-        
         let { cachedEntyties } = this.props;
         let { slug, id } = this.props.match.params;
         let  postById = `post${id}`;
 
-        if (cachedEntyties) {
-            let { post } = cachedEntyties;
-            console.log(post)
+        let { post, currentUser } = cachedEntyties;
+        console.log(post)
 
-            if(post && post.id == id){
-                postById = `post${id}`;
-                this.setState({postById })
-        
-               console.log('Post found from cachedEntyties')
-               store.dispatch(action.getPostPending(id));
-               store.dispatch(action.getPostSuccess(post));
-               return 
+        if(post && post.id == id){
+                var now = new Date();
+                let timeStamp = post.timeStamp;
+
+                let msDiff   = now.getTime() - timeStamp
+                let secDiff  = msDiff / 1000
+                let menDiff  = secDiff / 60
+                let hourDiff = menDiff/60
+                let dayDiff  = hourDiff/24
+
+                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+                
                
+            if (menDiff < 5) {
+                this.setState({postById })
+                console.log('Post found from cachedEntyties')
+                store.dispatch(action.getPostPending(id));
+                store.dispatch(action.getPostSuccess(post));
+                return 
             }
         }
-
-        this.setState({postById})
-        return this.props.getPost(id);
-    };
-   
-   
-
-    componentDidMount() {
-        let {state} = this.props.location;
-
-        if (state) {
-            let { isNewPost, post } = state;
-           this.setState({postById:`post${post.id}`});
-
-        if (isNewPost) {
-            store.dispatch(action.getQuestionSuccess(post))
-            store.dispatch(action.Redirected());
-        }else {
-            store.dispatch(getPost(post.id));
-        } 
-      }
+        
+        this.setState({postById }) 
+        store.dispatch(getPost(id));
     };
 
 

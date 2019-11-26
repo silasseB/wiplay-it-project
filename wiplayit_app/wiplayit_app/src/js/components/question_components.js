@@ -49,7 +49,7 @@ export const QuestionComponent = props => {
 
             return questionEntytie.userAnswer;
         }
-        return question;
+        return null;
     }
 
 

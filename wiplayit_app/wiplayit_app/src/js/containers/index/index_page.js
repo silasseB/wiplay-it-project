@@ -54,7 +54,17 @@ class IndexBox extends Component {
         const onStoreChange = () => {
             let storeUpdate   = store.getState();
             let {entyties }   = storeUpdate;
-            let { index  }    = entyties;
+            let {
+               index,
+               questions,
+               posts, 
+               answers }   = entyties;
+            let {
+                filteredAnswers,
+                filteredPosts, 
+                filteredQuestions } =this.state;
+
+            questions = questions.byId[filteredQuestions]
 
             if (index && index.isSuccess && !index.timeStamp) {
                 var timeStamp = new Date();
@@ -63,6 +73,8 @@ class IndexBox extends Component {
                 this.updateIndexEntyties(index)
                 LocalCache('index', index);
             }
+
+            if (questions) {}
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
@@ -78,8 +90,7 @@ class IndexBox extends Component {
      
         if (cachedEntyties) {
             let { index, currentUser } = cachedEntyties;
-
-            
+                       
             if(index){
                 let timeStamp = index.timeStamp;
 
@@ -90,19 +101,18 @@ class IndexBox extends Component {
                 let dayDiff  = hourDiff/24
 
                 console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
-               
-                if (hourDiff < 1) {
+                              
+                if (menDiff < 5) {
 
                     console.log('Index found from cachedEntyties')
                     store.dispatch(action.getIndexPending());
                     store.dispatch(action.getIndexSuccess(index,));
                     this.updateIndexEntyties(index)
-                    
-                }else{
-                    this.props.getIndex();
+                    return;
                 }
             }
         }
+        this.props.getIndex();
         
     };
    
@@ -323,8 +333,8 @@ export const Answers = props => {
 
                             let answerProps = {
                                     answer,
-                                    answerById: answerListById,
                                 };
+                                
                             let question = answer.question;
                             let questionPath = `/question/${question.slug}/${question.id}/`;
 

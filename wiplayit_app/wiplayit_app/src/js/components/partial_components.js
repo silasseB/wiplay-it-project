@@ -72,3 +72,57 @@ export const Styles = {
 
       }
    }
+
+
+
+const AlertStyles = {
+  
+  alertBox: {
+    width                   : '100%',
+    margin                  : 'auto',
+    border                  : '1px solid rgba(0, 0, 0, .2)',
+    background              : '#38B0F0',
+    overflow                : 'none',
+    borderRadius            : '4px',
+    outline                 : 'none',
+    boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
+    height                  : 'auto', 
+    bottom                  :  0,
+    top                     :  'auto', 
+    position                : 'fixed',
+    right                   : 'auto',
+    left                    : 'auto',
+  },
+
+  alertMessageBox :{
+    color   : '#fff',
+    margin  : '5px 20px',
+    
+  },
+  message :{
+    listStyleType: 'none',
+    margin: 0,
+    padding: 0,
+
+  }
+};
+
+
+export const AlertComponent =(props)=> {
+    console.log(props)
+    let defaulfMessage = 'This is a warning message alert'
+    return(
+        <div style={AlertStyles.alertBox} className="alert-box">
+            <div style={AlertStyles.alertMessageBox} className="alert-ms-box">
+                <ul style={AlertStyles.message}>
+                    <li>
+                        { props.errorMessage || props.successMessage || defaulfMessage}
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    )
+};
+
+

@@ -79,7 +79,7 @@ function App() {
             <Route  path="/user/login/" component={LoginPage} />
             <Route  path="/posts/" component={PostListPage} />
             <Route  path="/questions/" component={QuestionListPage} />
-            <Route  path="/post/:slug/" component={PostPage} />
+            <Route  path="/post/:slug/:id/" component={PostPage} />
             <Route  path="/edit/profile/:slug/:id/" component={EditProfile} />
             <Route  path="/followers/:id/:slug/" component={QuestionFollowersBox} />
             <Route  path="/answer/:id/upvoters/" component={AnswerUpVotersBox} />

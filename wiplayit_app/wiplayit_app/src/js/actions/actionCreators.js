@@ -98,6 +98,47 @@ export const updateActionError = (params) => ({
 });
 
 
+export const ModalSubmitPending = () => ({
+  type: "SUBMIT_PENDING",
+  payload: {
+      submitting : true,
+  }
+});
+
+
+export const ModalSubmitSuccess = (params) => {
+
+    let {objName, isPut, isPost} = params;
+    let action = isPost?'created':'edited'
+    let successMessage = `${objName} successefully ${action}`
+
+    return{
+        type: "SUBMIT_SUCESS",
+        payload: {
+           ...params,
+           submitting : false,
+           successMessage : successMessage,
+        }
+    };
+};
+
+
+
+
+export const ModalSubmitError = (params) => {
+
+    return{
+        type    : "SUBMIT_ERROR",
+        payload : {
+            error   : params.error,
+            submitting : false,
+            errorMessage: ``,
+        }
+    };
+};
+
+
+
 export const getIndexPending = () => {
 
     return{

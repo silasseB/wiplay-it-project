@@ -90,20 +90,40 @@ const InitialState = () => {
             byId   : {},
             allIds : []
         },
+        modal : {
+            submitting     : false,
+            error          : null,
+            successMessage : null,
+        },
     };
 };
 
 
 export function entyties(state=InitialState(), action) {
-   switch (action.type){
+    switch (action.type){
+        case "SUBMIT_PENDING":
+            console.log(action, state)
+            Object.assign(state.modal, action.payload)
 
-      case types.USER_AUTHENTICATION.PENDING :
+           return state;
 
-         Object.assign(state.userAuth, action.payload)
-         console.log(state.userAuth, action)
-         return state; 
+        case "SUBMIT_SUCESS":
+            console.log(action, state)
+            Object.assign(state.modal, action.payload)
 
-      case types.USER_AUTHENTICATION.SUCCESS:
+           return state;
+
+        case "SUBMIT_ERROR":
+            Object.assign(state.modal, action.payload)
+
+           return state;
+    
+        case types.USER_AUTHENTICATION.PENDING :
+            Object.assign(state.userAuth, action.payload)
+            console.log(state.userAuth, action)
+            return state; 
+
+        case types.USER_AUTHENTICATION.SUCCESS:
          Object.assign(state.userAuth, action.payload);
          return state;              
 
@@ -571,32 +591,3 @@ export function entyties(state=InitialState(), action) {
 }
 
    
-
-const modalState = {
-   isOpen     : false,
-   modalType  : null,
-   modalProps : {},  
-};
-
-
-
-export  function modal(state=modalState, action) {
-   switch (action.type){
-      case 'SHOW_MODAL':
-      console.log(state, action)
-          let newModal  = Object.assign({}, state, action.payload)
-         console.log(newModal, state);   
-         return newModal;  
-
-       case 'HIDE_MODAL':
-          let hideModal  = Object.assign({}, state, action.payload)
-          return hideModal;    
-         
-      default:
-         return state;
-   }
-}
-
-
-
-

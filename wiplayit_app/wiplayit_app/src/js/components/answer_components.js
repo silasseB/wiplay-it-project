@@ -29,7 +29,7 @@ const api      = new Api();
 
 export const AnswersComponent = props => {
    console.log(props)
-   var { answer, answerById, currentUser } = props;
+   var { answer, answerListById, currentUser } = props;
    
   let pathToUpvoters =  `/answer/${props.answer.id}/upvoters/`;
 
@@ -59,9 +59,10 @@ export const AnswersComponent = props => {
 
     let editAnswerProps = {
         objName     : 'Answer',
+        linkName    : 'Edit Answer',
         isPut       : true,
         obj         : answer, 
-        byId        : answerById,
+        byId        : answerListById,
         currentUser,
     };
 
@@ -72,7 +73,7 @@ export const AnswersComponent = props => {
         obj               : answer,
         isPost            : true,
         currentUser,
-        byId              : answerById
+        byId              : answerListById,
         
     };
 

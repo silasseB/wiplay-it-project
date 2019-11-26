@@ -30,7 +30,7 @@ class AnswersBox extends Component {
         questionEntytie = questionEntytie.byId[questionById];
 
         let question  =  questionEntytie.question;
-        var answerListById   = `answer${question.id}`;
+        var answerListById   = `answers${question.id}`;
         if (question.answers) {
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, question.answers));

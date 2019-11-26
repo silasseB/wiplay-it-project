@@ -257,23 +257,26 @@ export function handleSubmit(props) {
     let updateProps = {
         actionType,
         byId,
+        objName,
         isUpdating:true,
         }
     let createProps = {
         actionType,
         byId,
+        objName,
         isCreating: true, 
     } 
          
     if (props.isPut) {
    	return dispatch => {
-
+        dispatch(action.ModalSubmitPending())
      	dispatch(action.updateActionPending(updateProps))
 
 		instance.put(apiUrl, formData)
 		.then(response => {
 		 
             updateProps['data'] = prepPayLoad(objName, response.data);
+            dispatch(action.ModalSubmitSuccess(updateProps))
 			dispatch(action.updateActionSuccess(updateProps));
 			
 		})
@@ -283,6 +286,7 @@ export function handleSubmit(props) {
 
 			if (error.response && error.response.data) {
                createProps['error'] = error.response.data;
+               dispatch(action.ModalSubmitError(updateProps))
 			   dispatch(action.updateActionError(updateProps));
 			}else{
       		dispatch(action.handleError(error.request))
@@ -297,6 +301,7 @@ export function handleSubmit(props) {
 		    instance.post(props.apiUrl, props.formData)
 		    .then(response => {
 			    createProps['data'] = response.data; 
+                dispatch(action.ModalSubmitSuccess(createProps))
 			    dispatch(action.createActionSuccess(createProps));
                 
 		    })
@@ -305,6 +310,7 @@ export function handleSubmit(props) {
 				
 			    if (error.response && error.response.data) {
                     createProps['error'] = error.response.data;
+                    dispatch(action.ModalSubmitError(createProps))
 				    dispatch(action.createActionError(createProps));
       		
          	    }else{

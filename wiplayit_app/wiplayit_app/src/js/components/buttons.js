@@ -413,7 +413,7 @@ export const ProfileOptsModalBtns = props => {
             <button className="btn-sm edit-user-profile"
                 onClick={()=>{
                        ModalManager.close(props.background) 
-                       setTimeout(()=> {
+                        setTimeout(()=> {
                            history.push(pathToEditProfile); 
                         }, 500);
                       

@@ -22,7 +22,7 @@ export const EditorLink = props => {
             state: { background: location, modalProps }
           }}
            >
-           {props.objName}  
+           {props.objName || props.linkName}  
         </Link>
    );
 };

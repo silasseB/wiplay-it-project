@@ -87,7 +87,7 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
  	        return apiUrl;
 
  	    case 'Post':
- 	        apiUrl = isPut? api.updatePostApi(id): api.createPostCommentApi(id);
+ 	        apiUrl = isPut? api.updatePostApi(id): api.createPostApi(id);
  	        return apiUrl;
 
 

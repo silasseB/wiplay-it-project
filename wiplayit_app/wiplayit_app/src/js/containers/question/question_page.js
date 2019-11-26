@@ -51,7 +51,7 @@ class QuestionPage extends Component {
             let {questionById}  =  this.state;
             let question      =  entyties.question.byId[questionById];
 
-            if (question && !question.isLoading) {
+            if (question && !question.isLoading && !post.timeStamp) {
                console.log(question)
 
                 LocalCache('question', question.question);

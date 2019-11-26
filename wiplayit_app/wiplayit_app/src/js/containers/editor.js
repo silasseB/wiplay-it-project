@@ -4,13 +4,18 @@ import '../containers/app-editor.css';
 import { CharacterMetadata, CompositeDecorator, AtomicBlockUtils,
          RichUtils,convertToRaw, convertFromRaw,Entity,
          genKey, EditorState, ContentBlock} from 'draft-js';
+import  {ModalSubmitPending}  from '../actions/actionCreators';
+import { ModalManager}   from  "../containers/modal/modal_container";
 
 import { List, Repeat } from 'immutable';
 import Axios from '../axios_instance'
 import  Helper from '../containers/utils/helpers';
 import {TextAreaEditor, DraftEditor } from  "../components/editor_components";
+import { AlertComponent } from "../components/partial_components";
+
 import { EditorNavBar } from "../components/navBar";
 import {store} from '../configs/store-config';
+import { history } from "../index";
 import Api from '../api';
 import { handleSubmit }  from "../dispatch/index"
 
@@ -52,9 +57,9 @@ return (
 
 
 export default  class AppEditor extends Component{
+    _isMounted = false;
 
-
-   constructor(props) {
+    constructor(props) {
         super(props);
         const decorator = new CompositeDecorator([
          {
@@ -66,20 +71,26 @@ export default  class AppEditor extends Component{
 
       
       this.state = {
-         editorState       : EditorState.createEmpty(decorator),
-         form              : {textarea   :  "", },
-         editorPlaceHolder : "", 
-         postTitle         : "",
-         showURLInput      : false,
-         showImage         : false,
-         url               : '',
-         urlType           : '',
-         urlValue          : '',
-         italicOnClick     : false,
-         boldOnClick       : false,
-         onLinkInput       : false, 
-         onPost            : false,
-         contentIsEmpty    : true,
+         editorState        : EditorState.createEmpty(decorator),
+         form               : {textarea   :  "", },
+         editorPlaceHolder  : "", 
+         postTitle          : "",
+         showURLInput       : false,
+         showImage          : false,
+         url                : '',
+         urlType            : '',
+         urlValue           : '',
+         italicOnClick      : false,
+         boldOnClick        : false,
+         onLinkInput        : false, 
+         onPost             : false,
+         contentIsEmpty     : true,
+         submitting         : false,
+         showSuccessMessage : false,
+         hasErrors          : false,  
+         errorMessage       : null,
+         successMessage     : null,
+        
 
       };
 
@@ -154,13 +165,31 @@ export default  class AppEditor extends Component{
 
     subimtCleanForm =()=>{
         let { contentIsEmpty }= this.state;
+
         if (contentIsEmpty) {
-            //alert()
-           console.log('Form is Empth')
-           return
+            console.log('Form is Empth')
+            this.setState(
+                {
+                    submitting   : true,
+                    hasErrors    : true,
+                    errorMessage : 'You cannot submint empty form'
+                });
+
+            setTimeout(()=> {
+                this.setState(
+                    {
+                       submitting   : false,
+                       hasErrors    : false,
+                       errorMessage : null
+                    }
+                ); 
+            }, 5000);
+
+            return
         }
 
         let submitProps = this.getSubmitProps();
+        store.dispatch(ModalSubmitPending());
         store.dispatch(handleSubmit(submitProps));
 
     }
@@ -168,14 +197,56 @@ export default  class AppEditor extends Component{
     onEditorUpdate = () =>{
  
         const onStoreChange = () => {
+            if (this._isMounted) {
+
             let storeUpdate   = store.getState();
-            console.log(storeUpdate)
+            let {background} = this.props;
+
+            let {entyties} = storeUpdate
+            let {modal} = entyties
+            console.log(modal)
+            this.setState({submitting : modal.submitting});
+
+            
+
+            if (modal && modal.successMessage) {
+
+                /*if(data && !data.successMessageAlerted){
+                    data['successMessageAlerted'] = true;
+                    this.setState({showSuccessMessage:true});
+                }*/
+
+
+                ModalManager.close(background)
+                let {objName, data} = modal;
+
+                if (objName === "Question" || objName === "Post" && !data.redirected) {
+                    data['redirected'] = true;
+
+                    let pathToPost = `post/${data.slug}/${data.id}/`
+                    let pathToQuestion = `question/${data.slug}/${data.id}/`
+
+                    let redirectTo = objName === "Question" ? pathToQuestion
+                                                            : pathToPost;
+                    setTimeout(()=> {
+                           history.push(redirectTo); 
+                        }, 500);
+
+                }
+
+            }
+
+                
+                
+               
+            }
         };
 
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
     componentWillUnmount() {
+        this._isMounted = false;
         this.unsubscribe();
     };
 
@@ -191,6 +262,7 @@ export default  class AppEditor extends Component{
     }
 
     componentDidMount(){
+        this._isMounted = true;
         this.onEditorUpdate();
        //window.history.pushState({}, '');  
                               
@@ -450,45 +522,44 @@ export default  class AppEditor extends Component{
             promptLinkIpunt   : this.promptLinkIpunt,
             addItalic         : this.addItalic,
             addBold           : this.addBold,
-            italicOnClick     : this.state.italicOnClick,
-            boldOnClick       : this.state.boldOnClick,
-            onLinkInput       : this.state.onLinkInput,
-            onPost            : this.state.onPost,
             editorContents    : editorContents,
-            editorPlaceHolder : this.state.editorPlaceHolder,
-            editorState       : this.state.editorState,
-            postTitle         : this.state.postTitle,
-            contentIsEmpty    : this.state.contentIsEmpty,
             handleEmptyForm   : this.handleEmptyForm.bind(this),
             subimtCleanForm   : this.subimtCleanForm.bind(this),
             submitProps       : this.getSubmitProps.bind(this),
             textAreaProps     : this.getTextAreaProps(), 
+            ...this.state,
         } 
-
-        if (this.state.contentIsEmpty) {
-                props['canSubmit']    = true;
-                props['submitStyles'] = {opacity:'0.70',};
-            }else{
-                props['canSubmit']    = false;
-                props['submitStyles'] = {opacity:'2',};
-            }
-
+      
         return Object.assign(props, this.props);
       
     }
 
     render() {
         let props = this.getProps();
+        let onSubmitStyles = props.submitting ? {opacity:'0.70',}
+                                              : {opacity:'2',};
+
+        let showAlertMessageStiles = props.hasErrors?{ display : 'block'}:
+                                                     { display : 'none' };
+       
+
         console.log(props)
         return (
             <div className="editors-page" onClick={this.focus}>
-               <EditorNavBar {...props}/>
+                <fieldset style={onSubmitStyles} 
+                      disabled={ props.submitting } >
+                    <EditorNavBar {...props}/>
 
-               {this.props.objName === "Question"?
-                  <TextAreaEditor {...props}/>
-                  :
-                  <DraftEditor {...props}/>
-               }
+                    { this.props.objName === "Question"?
+                        <TextAreaEditor {...props}/>
+                        :
+                        <DraftEditor {...props}/>
+                    }
+                </fieldset>
+
+                <div style={showAlertMessageStiles}>
+                    <AlertComponent {...props}/>
+                </div>
                
             </div>
         );

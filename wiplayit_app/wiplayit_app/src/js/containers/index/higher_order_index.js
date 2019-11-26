@@ -7,7 +7,7 @@ import {handleSubmit, getCurrentUser,getPost, getUserList,
          getQuestionList as _getQuestionList,getCommentList, getIndex }  from "../../dispatch/index"
 import  * as action  from '../../actions/actionCreators';
 
-
+import { AlertComponent } from "../../components/partial_components";
 import { ModalOptionsMenu } from "../../components/buttons";
 import { DropImage } from "../../containers/profile/edit_profile";
 import AppEditor  from '../../containers/editor'
@@ -35,7 +35,8 @@ export function withHigherOrderIndexBox(Component) {
                 currentUser        : {},
                 cachedEntyties     : this.cachedEntyties(), 
                 isAuthenticated    : this.isAuthenticated(),
-                modalIsOpen        : false,
+                showSuccessMessage : false,
+                successMessage     : null,
             };
             this.onStoreUpdate     = this.onStoreUpdate.bind(this);
              
@@ -103,10 +104,11 @@ export function withHigherOrderIndexBox(Component) {
                 let storeUpdate = store.getState();
                 var timeStamp = new Date();
                 let { entyties } = storeUpdate;
-                let { currentUser, index, question, userProfile } = entyties
+                let { currentUser,modal, index, question, userProfile } = entyties
 
                 let questionById = params && params.questionById
                 question      =  entyties.question.byId[questionById];
+                let data = modal && modal.data
 
                 console.log(entyties, index)
 
@@ -116,6 +118,16 @@ export function withHigherOrderIndexBox(Component) {
                     this.getCurrentUser(currentUser.user)
                  
                 }
+
+                if( data && !data.successMessageAlerted){
+                    let successMessage = modal.successMessage;
+                    data['successMessageAlerted'] = true;
+                    this.setState({ showSuccessMessage : true, successMessage });
+                }
+
+                setTimeout(()=> {
+                    this.setState({showSuccessMessage:false}); 
+                    }, 5000);
 
                 if (this._isMounted) {
                     this.forceUpdate()
@@ -139,7 +151,8 @@ export function withHigherOrderIndexBox(Component) {
 
         componentDidMount() {
             this._isMounted = true;
-            this.onStoreUpdate() //Subscribe on store change    
+            this.onStoreUpdate() //Subscribe on store change  
+             
       
             if (!this.isAuthenticated()) {
                 //User is not authenticated,so redirect to authentication page.
@@ -220,10 +233,16 @@ export function withHigherOrderIndexBox(Component) {
 
         render() {
             let props = this.getProps();
+            let showAlertMessageStiles = props.showSuccessMessage?{ display : 'block'}:
+                                                              { display : 'none' };
             //console.log(props)
             return (
                 <div>
-                   <Component {...props}/>
+                    <Component {...props}/>
+
+                    <div >
+                       <AlertComponent {...props}/>
+                    </div>
                 </div> 
 
             );
@@ -250,8 +269,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getReplyChildrenList : (reply)      => dispatch(getReplyChildrenList(reply)),
         getCurrentUser       : (apiUrl)     => dispatch(getCurrentUser()),
         submit               : (props )     => dispatch(handleSubmit(props)), 
-        showModal            : (props )     => dispatch(action.showModal(props)),
-        hideModal            : (props )     => dispatch(action.hideModal(props)),  
+        
    }
 
 };
