@@ -74,8 +74,7 @@ class CommentsBox extends Component {
       
       var comments    = props.entyties.comments;
       comments = comments.byId[props.commentById]
-      console.log(props, comments, commentsUpdate)
-
+      
        
       
       return (

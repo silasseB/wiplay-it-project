@@ -110,7 +110,6 @@ export function withHigherOrderIndexBox(Component) {
                 question      =  entyties.question.byId[questionById];
                 let data = modal && modal.data
 
-                console.log(entyties, index)
 
                 if (currentUser && currentUser.user) {
 

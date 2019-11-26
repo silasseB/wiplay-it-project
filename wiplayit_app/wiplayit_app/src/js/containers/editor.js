@@ -211,12 +211,7 @@ export default  class AppEditor extends Component{
 
             if (modal && modal.successMessage) {
 
-                /*if(data && !data.successMessageAlerted){
-                    data['successMessageAlerted'] = true;
-                    this.setState({showSuccessMessage:true});
-                }*/
-
-
+              
                 ModalManager.close(background)
                 let {objName, data} = modal;
 

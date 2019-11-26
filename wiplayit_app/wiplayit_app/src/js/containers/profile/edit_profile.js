@@ -13,6 +13,7 @@ import  * as types  from '../../actions/types';
 import  * as action  from '../../actions/actionCreators';
 import {store} from "../../configs/store-config";
 import {LocalCache} from  "../../utils/storage";
+import { handleSubmit }  from "../../dispatch/index"
 
 import  AjaxLoader from "../../components/ajax-loader";
 
@@ -151,12 +152,13 @@ class EditProfile extends Component{
 
 
     getProps(){
-        let { form } = this.state; 
+        
         let props = {
            handleChange   : this.handleChange, 
            handleImageAdd : this.handleImageAdd,
            textAreaProps  : this.textAreaProps(),
-           submitProps    : this.submitProps(form),
+           submitProps    : this.submitProps(),
+           editUserProfileProps : this.getUserEditProps(),
            ...this.state,
         }
 
@@ -173,31 +175,33 @@ class EditProfile extends Component{
     };
 
 
-    submitProps(form) {
-       
-        let props = {};
-        let { slug, id } = this.props.match.params;
-
-        if (id) {
-            let { profileById, userProfile } = this.state; 
-                   
-            props['formData']  = helper.createFormData(form);
-   
-            props['obj']       =   userProfile;
-            props['objId']     =   id;
-            props['byId']      =   profileById;
-            props['objName']   =  'userProfile';
-            props['isPut']     =   true;
-            props['actionType'] =  types.UPDATE_USER_PROFILE;
-            props['apiUrl']    =   api.updateProfileApi(id);
-        }
-
-        return props;
+    submitProps() {
+        let { form } = this.state;
+        let editUserProfileProps = this.getUserEditProps()
+        let formData = helper.createFormData(form)
+        return Object.assign(editUserProfileProps, {formData})
+    
+          
+           
     };
+
+    getUserEditProps(){
+        let { profileById, userProfile } = this.state;
+        let currentUser = this.props.currentUser;
+        let editUserProfileProps = {
+                objName     : 'UserProfile',
+                isPut       : true,
+                obj         : userProfile, 
+                byId        : profileById,
+                currentUser ,
+            } 
+        return GetModalLinkProps.props(editUserProfileProps)    
+
+    }
 
     render() {
       let props = this.getProps();
-            
+          
       var userProfile = props.userProfile
 
       return (
@@ -236,6 +240,7 @@ const ProfileEditComponent = props => {
     let fieldSetStyles = submitting? {opacity:'0.60'}:{};
 
 
+
     return(
 
         <div  className="edit-profile-container" >
@@ -260,7 +265,7 @@ const ProfileEditComponent = props => {
                      </div> 
                   }
                 
-               <ChangeImageLink {...{userProfile}}/>
+               <ChangeImageLink {...props.editUserProfileProps}/>
                </div>
                
             </div>
@@ -374,16 +379,42 @@ export class DropImage extends React.Component {
       super(props);
       this.state = {
          file: '',
-         imagePreviewUrl: ''
+         imagePreviewUrl: '',
+         submitting: false,
       };
 
       this.handleChange = this.handleChange.bind(this);
 
    }
+
+    componentDidMount(){
+        this.onImageDropUpdate();
+    }
+    
+
+    onImageDropUpdate = () =>{
  
+        const onStoreChange = () => {
+            let storeUpdate   = store.getState();
+
+            let {entyties} = storeUpdate
+            let {modal} = entyties
+            let {background} = this.props;
+            this.setState({submitting : modal.submitting});
+
+            if (modal && modal.successMessage) {
+                ModalManager.close(background)
+            }
+        };
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    };
   
     
-   handleChange(event) {
+    handleChange(event) {
       event.preventDefault();
       var reader = new FileReader();
       var file = event.target.files[0];
@@ -399,13 +430,25 @@ export class DropImage extends React.Component {
   
     }
 
+    handleImageAdd(params){
+        let file = this.state.file;
+        
+        let formData = helper.createFormData({'profile_picture': file});
+        let submitProps = Object.assign({formData}, this.props)
+        console.log(submitProps, this.props)        
+        store.dispatch(handleSubmit(submitProps));
+       
 
-   getProps() {
+    };
+
+
+    getProps() {
    
       let props = {
         file         : this.state.file,
         userProfile  : this.props.userProfile,
         isImageDrop  : true,
+        ...this.state,
                            
       };
 
@@ -413,12 +456,18 @@ export class DropImage extends React.Component {
     }
     
     render() {
-      let props = this.getProps();
-      console.log(this.props)
-      let { background } = this.props
+        let props = this.getProps();
+        let { background } = this.props
+        let submitButtonStyles = props.submitting?{opacity:'0.60'}:{};
+    
+        let fieldSetStyles = props.submitting? {opacity:'0.60'}:{};
 
-      return (
-         <div>
+
+        return (
+            <div>
+            <fieldset style={ fieldSetStyles} 
+                      disabled={ props.submitting} >
+
             
                <div className="upload-preview">
                   <div className="drop-image-btns">
@@ -431,7 +480,7 @@ export class DropImage extends React.Component {
                   
                   { this.state.imagePreviewUrl?
                      <div className="add-image-box">
-                     <button  type="button" onClick={()=>this.props.handleImageAdd(props)} className="btn-sm image-add-btn">
+                     <button  type="button" onClick={()=>this.handleImageAdd()} className="btn-sm image-add-btn">
                        Add
                      </button>
                      </div>
@@ -457,6 +506,8 @@ export class DropImage extends React.Component {
                   }
 
                </div>
+               </fieldset>
+
          </div>  
       );
     }

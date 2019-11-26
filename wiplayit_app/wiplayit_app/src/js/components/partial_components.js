@@ -109,8 +109,8 @@ const AlertStyles = {
 
 
 export const AlertComponent =(props)=> {
-    console.log(props)
     let defaulfMessage = 'This is a warning message alert'
+    
     return(
         <div style={AlertStyles.alertBox} className="alert-box">
             <div style={AlertStyles.alertMessageBox} className="alert-ms-box">

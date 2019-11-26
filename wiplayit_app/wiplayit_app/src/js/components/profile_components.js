@@ -47,14 +47,14 @@ export const ProfileComponent = props => {
 
             
 
-      let editUserProfileProps = {
+        let editUserProfileProps = {
             objName    : 'UserProfile',
             isPut      : true,
             obj        : userProfile, 
             byId        : profileById,
             currentUser,
 
-      }
+        }
 
       editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
       let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;

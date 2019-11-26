@@ -203,20 +203,21 @@ class UpdateObjectMixin(BaseMixin):
 		profile     = dict()
 		data        = dict()
 		text_fields  = self.fields_to_update.get('text_fields', False)
-		print(text_fields)
+		
 		user_fields = text_fields.get('user')
 		profile_fields = text_fields.get('profile')
 
 		
 		for field in user_fields:
-			request_field = self.request.data.get(field)
-			data[field] = request_field
-						
-			if request_field == 'first_name':
-				data['slug']       = self.update_slug_field(instance)
+			request_field = self.request.data.get(field, False)
+			if request_field:
+				data[field] = request_field
+
+				if request_field == 'first_name':
+					data['slug']       = self.update_slug_field(instance)
 
 		for field in profile_fields:
-			request_field = self.request.data.get(field)
+			request_field = self.request.data.get(field, False)
 			print(request_field)
 			
 			if request_field:
