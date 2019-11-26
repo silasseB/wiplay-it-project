@@ -240,7 +240,7 @@ export function withHigherOrderIndexBox(Component) {
                 <div>
                     <Component {...props}/>
 
-                    <div >
+                    <div style={showAlertMessageStiles}>
                        <AlertComponent {...props}/>
                     </div>
                 </div> 
