@@ -14,7 +14,7 @@ import {
 
 import { ModalOptionsMenu } from "../../components/buttons";
 import { DropImage } from "../../containers/profile/edit_profile";
-import AppEditor  from '../../containers/editor'
+import AppEditor  from '../../containers/editor';
 import ModalBox,{ModalManager}  from "../../containers/modal/modal_container";
 import * as Effects from '../../containers/modal/Effects';
 
@@ -37,26 +37,29 @@ export function Modal(props) {
     };
 
     let getModalType = (type) => {
-      switch(type){
+        if (background) {
+            switch(type){
+         
+                case 'editor':
+                    editorProps['background'] = background;
+                    editorProps['modalContents'] =  <AppEditor {...editorProps}/>;
+                    return ModalOpener.editorModal(editorProps);
+
+                case 'optionsMenu':
+                   optionsMenuProps['background'] = background;
+                   optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
+                   return ModalOpener.optionsMenuModal(optionsMenuProps);
+
+                case 'dropImage':
+                    dropImageProps['background'] = background;
+                    dropImageProps['modalContents'] = <DropImage {...dropImageProps}/>
+                    return ModalOpener.dropImageModal(dropImageProps);
+
+                default:
+                    return; 
+            }
         
-        case 'editor':
-            editorProps['background'] = background;
-            editorProps['modalContents'] =  <AppEditor {...editorProps}/>;
-            return ModalOpener.editorModal(editorProps);
-
-        case 'optionsMenu':
-            optionsMenuProps['background'] = background;
-            optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
-            return ModalOpener.optionsMenuModal(optionsMenuProps);
-
-        case 'dropImage':
-            dropImageProps['background'] = background;
-            dropImageProps['modalContents'] = <DropImage {...dropImageProps}/>
-            return ModalOpener.dropImageModal(dropImageProps);
-
-        default:
-            return; 
-      }
+        }
     }; 
 
     return (
@@ -95,7 +98,6 @@ export const ModalOpener = {
     },
 };
 
-let onClose;
 
 
 

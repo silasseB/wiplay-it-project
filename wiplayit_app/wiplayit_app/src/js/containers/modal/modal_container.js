@@ -172,7 +172,7 @@ export const ModalManager = {
        }
     },
     close(background){
-       
+        
         onClose && onClose(() => {
             
             background &&   history.goBack();

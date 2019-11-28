@@ -199,13 +199,14 @@ export function withHigherOrderIndexBox(Component) {
         }
 
         _getFormData = (params) =>{
-            let objName = params.objName;
+           
+            let {objName, obj} = params;
 
             switch(objName){
                 case 'Question':
                 case 'UserProfile':
                 case 'UsersList':
-                    var followers     = params.obj.followers;
+                    var followers     = obj.followers || obj.profile.followers;
                     params['formData'] = helper.createFormData({ followers });
                     return params;
 
@@ -215,7 +216,7 @@ export function withHigherOrderIndexBox(Component) {
                     return params; 
             }
 
-        }
+        };
      
         getProps(){
 

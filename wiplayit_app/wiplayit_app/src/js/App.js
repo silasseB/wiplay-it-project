@@ -47,8 +47,7 @@ import PostReplyUpVotersBox  from "./containers/users/post-comment-upvoters-page
 let GetModalRouter = (background)=>{
     let location = useLocation();
     let state = location && location.state;
-    return background && 
-           <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
+    return <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
 }
 
 
@@ -60,15 +59,15 @@ function App() {
   
   let ModalRouter = GetModalRouter(background)
 
-  if (!background) {
-    setTimeout(()=> {
+    /*if (!background) {
+        
+        setTimeout(()=> {
         ModalManager.close(); 
         }, 500);
-    
-  }
+    }*/
   
-  return (
-     <div>
+    return (
+        <div>
         <Switch location={background || location}>
             <Route exact path="/" children={<IndexBox/>}/>
                    
@@ -89,8 +88,8 @@ function App() {
             <Route  path="/post/comment/:id/upvoters/" component={PostCommentUpVotersBox} />
             <Route  path="/post/reply/:id/upvoters/" component={PostReplyUpVotersBox} />
             <Route  path="/modal/router/" component={Modal} />
-            <Route  path="/profile/:slug/:id/followers/" component={ProfileFollowersBox} />
-            <Route  path="/profile/:slug/:id/followings/" component={ProfileFollowingsBox} />
+            <Route  path="/user/profile/:slug/:id/followers/" component={ProfileFollowersBox} />
+            <Route  path="/user/profile/:slug/:id/followings/" component={ProfileFollowingsBox} />
             <Route  path="/users/" component={UserListBox}/>
             <Route  path="/registration/account/confirm/:key/" component={AccountConfirmationPage} />
             <Route  path="/user/account/password/reset/" component={PasswordResetPage} />

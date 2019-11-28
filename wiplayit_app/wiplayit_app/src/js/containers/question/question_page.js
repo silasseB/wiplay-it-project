@@ -46,12 +46,14 @@ class QuestionPage extends Component {
     onQuestionUpdate = () =>{
  
         const onStoreChange = () => {
+            var now = new Date();
             let storeUpdate   = store.getState();
             let {entyties }   = storeUpdate;
             let {questionById}  =  this.state;
+
             let question      =  entyties.question.byId[questionById];
 
-            if (question && !question.isLoading && !post.timeStamp) {
+            if (question && !question.isLoading && !question.timeStamp) {
                console.log(question)
 
                 LocalCache('question', question.question);

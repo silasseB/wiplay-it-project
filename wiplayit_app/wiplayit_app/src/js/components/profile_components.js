@@ -59,7 +59,7 @@ export const ProfileComponent = props => {
       editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
       let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;
       
-      let pathToUserFollowers =  `/profile/${userProfile.slug}/${userProfile.id}/followers/`;
+      let pathToUserFollowers =  `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
 
       let btnsProps = {
          editUserProfileProps,

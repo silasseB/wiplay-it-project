@@ -194,16 +194,21 @@ export const PostOptDropDownBtns = props => (
   <div >  
    { props.obj.created_by.id === props.currentUser.id?  
     <div>
-  <button onClick={ () => props.editPost(props)} className="btn-sm edit-post">
-    Edit Post
-  </button>
+        <button className="btn-sm edit-post" onClick={()=>{
+                        ModalManager.close(props.background) 
+                        setTimeout(()=> {
+                           history.push(`/compose/${'post'}/${props.obj.id}/`); 
+                        }, 1000);
+                        }}>
+            Edit Post
+        </button>
   
-  <button type="button" className="btn-sm  delete-question" >
-     Delete 
-  </button>
-  </div>
-  :""
-  }
+        <button type="button" className="btn-sm  delete-question" >
+            Delete 
+        </button>
+       </div>
+    :""
+    }
 
   <button  type="button" className="btn-sm  bookmark" >
     Bookmark 
@@ -227,7 +232,7 @@ export const QuestionOptDropDownBtns = props => (
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
                            history.push(`/compose/${'question'}/${props.obj.id}/`); 
-                        }, 500);
+                        }, 1000);
                         }}>
                 Edit Question
   </button>
@@ -271,7 +276,7 @@ export const QuestionOptModalBtns = props => {
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
                            history.push({ pathname: modalPath, state} ); 
-                        }, 500);
+                        }, 1000);
                     }}>
                 Edit Question
             </button>
@@ -303,7 +308,7 @@ export const AnswerOptModalBtns = props => {
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
                            history.push({ pathname: modalPath, state}); 
-                        }, 500);
+                        }, 1000);
                     }}>
                   Edit Answer
                </button>
@@ -335,7 +340,7 @@ export const CommentOptModalBtns = props => {
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
                            history.push({ pathname: modalPath, state}); 
-                        }, 500);
+                        }, 1000);
                     }}>
                         Edit Comment
                     </button>
@@ -368,7 +373,7 @@ export const ReplyOptModalBtns = props => {
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
                            history.push({ pathname: modalPath, state }); 
-                        }, 500);
+                        }, 1000);
                         }}
                         >
                          Edit Reply
