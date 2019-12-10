@@ -6,24 +6,129 @@ import rootReducer from '../reducers/index';
 
 
 
-const persistStore = () => (next) =>
-(reducer, initialState, enhancer) => {
-let store;
-if (typeof initialState !== 'function') {
-   store = next(reducer, initialState, enhancer);
+const persistStore = () => (next) => (reducer, initialState, enhancer) => {
+    let store;
+    if (typeof initialState !== 'function') {
+        const preloadedState = initialState ||
+        JSON.parse(localStorage.getItem('@@CacheEntities') || {});
+        let entities = Object.defineProperty({}, "entities", {
+                                               value : preloadedState,
+                                               writable     : true,
+                                               configurable : true,
+                                               enumerable   : true,
+                                            });;
 
-} 
+        console.log(entities)
 
-else {
-   const preloadedState = initialState ||
-   JSON.parse(localStorage.getItem('@@CachedEntyties') || {})
-   store = next(reducer, preloadedState, enhancer);
-}
+       store = next(reducer, initialState, enhancer);
+       
+       
+    } 
 
-return store;
-}
+    else {
+        const preloadedState = initialState ||
+        JSON.parse(localStorage.getItem('@@CacheEntities') || {})
+        store = next(reducer, preloadedState, enhancer);
+        //alert('hello')
+    }
+
+    
+
+    let UpdateKeyedLocalCache =(storeData, cacheData)=> {
+        //console.log(cachedKeys, )
+        let cacheMerge;
+        let storeDataKeys = storeData && Object.keys(storeData);
+         
+                    
+        if (storeDataKeys.length) {
+                        
+            for(var Key in storeData){
+                let storeDataValue  =  storeData[Key] 
+                let cacheDataValue  = cacheData && cacheData[Key] || {} ;
+
+                cacheMerge = Object.assign(cacheDataValue, storeDataValue);
+
+                cacheMerge =  Object.defineProperty({}, Key, {
+                                               value : cacheMerge,
+                                               writable     : true,
+                                               configurable : true,
+                                               enumerable   : true,
+                                            });
+                                           
+            }
+      
+        }
 
 
+        return cacheMerge;     
+    };
+
+    let UpdateNonKeyedLocalCache =(storeData, cacheData)=> {
+       return  Object.assign( cacheData || {}, storeData);
+
+    };
+
+    store.subscribe(() => {
+
+        let cacheEntities = localStorage.getItem('@@CacheEntities');
+        cacheEntities     = cacheEntities && JSON.parse(cacheEntities || {}) || {};
+                
+        let storeUpdate = store.getState();
+        let { entities } = storeUpdate;
+        let storeEntities = entities;
+        
+
+        if (cacheEntities && Object.keys(cacheEntities).length) {
+          
+            let storeData 
+            let cacheData;
+            let _cacheMerge;
+
+            for(var entitieKey in storeEntities){
+
+                storeData = storeEntities && storeEntities[entitieKey]
+                cacheData = cacheEntities && cacheEntities[entitieKey];
+
+                let storeDataKeys = storeData && Object.keys(storeData);
+                                 
+                                
+                if (storeDataKeys.length && entitieKey != 'index' &&
+                                            entitieKey != 'currentUser' && 
+                                            entitieKey != 'userAuth' &&
+                                            entitieKey != 'modal' ) {
+        
+                    _cacheMerge = UpdateKeyedLocalCache(storeData, cacheData)
+                                        
+                    cacheEntities[entitieKey] = Object.assign(cacheData, _cacheMerge)
+
+                   
+                 
+                }else if (storeDataKeys.length && entitieKey === 'currentUser' || 
+                                                  entitieKey === 'userAuth' ||
+                                                  entitieKey === 'modal' ||
+                                                  entitieKey === 'index'  ) {
+
+                    _cacheMerge = UpdateNonKeyedLocalCache(storeData, cacheData)
+                    cacheEntities[entitieKey] = Object.assign(cacheData, _cacheMerge)
+                   
+                }
+            }
+
+                      
+        }else{
+            cacheEntities =  Object.assign(cacheEntities, entities);
+        } 
+      
+        localStorage.setItem('@@CacheEntities',JSON.stringify(cacheEntities));  
+    })
+
+
+
+
+
+
+    return store;
+};
 
 
 const storeEnhancers = compose(
@@ -34,11 +139,11 @@ const storeEnhancers = compose(
 
 export const store = createStore(rootReducer, storeEnhancers);
 
-export const useStoreUpdate = (entytie)=>{
+export const useStoreUpdate = (entitie)=>{
     
     store.subscribe(() => {
-        let storeUpdate = store.getState().entyties;
-        return storeUpdate[entytie]  
+        let storeUpdate = store.getState().entities;
+        return storeUpdate[entitie]  
     })
 }
 

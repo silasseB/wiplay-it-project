@@ -64,17 +64,20 @@ export function withAuthentication(Component) {
 
 
         isAuthenticated() {
-            let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
-            console.log(cachedEntyties)
+            let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
+            console.log(cacheEntities)
 
-            if (cachedEntyties){
-                let { auth }  = cachedEntyties;
+            if (cacheEntities){
+                let { userAuth  }  = cacheEntities;
+                
+                if ( userAuth){
+                    let { auth } = userAuth;
 
-                if (auth && auth.isLoggedIn){
-                    this.props.history.push('/')
-
-                    this.props.forceUpdate()
-                    return true
+                    if (auth && auth.isLoggedIn){
+                        this.props.history.push('/')
+                        this.props.forceUpdate()
+                        return true
+                    }
                 }
             }
 
@@ -82,23 +85,19 @@ export function withAuthentication(Component) {
         }
 
         _Redirect(){
-            let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
+            let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
 
-            if (cachedEntyties){
+            if (cacheEntities){
 
-                let { auth }  = cachedEntyties;
-                //store.dispatch(getCurrentUser(auth.tokenKey));
-
-                let {currentUser} = cachedEntyties;
-
-                if(!currentUser){
-                  
-                }
-
-                if (auth && auth.isLoggedIn){
-                    setTimeout(()=> {
-                        this.props.history.push('/'); 
+               let { userAuth  }  = cacheEntities;
+                
+                if ( userAuth){
+                    let { auth } = userAuth;
+                    if (auth && auth.isLoggedIn){
+                        setTimeout(()=> {
+                            this.props.history.push('/'); 
                         }, 500);
+                    }
                     
                 }
             }
@@ -150,21 +149,20 @@ export function withAuthentication(Component) {
 
         componentDidMount() {
             const onStoreChange = () => {
-                let  onStoreUpdate = store.getState();   
-                var userAuth = onStoreUpdate.entyties.userAuth;
+                let  storeUpdate = store.getState(); 
+                let { entities } =  storeUpdate;
+                var { userAuth } = entities;
 
                 if (userAuth && userAuth.auth) {
                     let { auth } = userAuth;
-                    
+                    console.log(auth)                    
                     let {  error, isLoggedIn, tokenKey, successMessage , email} = auth;
                             
                     this.setState({ submitting : false, successMessage, error, email })             
                     
 
                     if( isLoggedIn && tokenKey){
-
-                        LocalCache('auth', auth)
-                       this._Redirect()
+                        this._Redirect()
                     }
                 }
             };
@@ -507,7 +505,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => {
    return {
-      userAuth : state.entyties.userAuth,
+      userAuth : state.entities.userAuth,
       
    }
 };

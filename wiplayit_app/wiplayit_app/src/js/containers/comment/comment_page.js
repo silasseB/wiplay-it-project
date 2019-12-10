@@ -72,8 +72,8 @@ class CommentsBox extends Component {
       let props  = this.getProps();
       let commentsUpdate = useStoreUpdate('comments')
       
-      var comments    = props.entyties.comments;
-      comments = comments.byId[props.commentById]
+      var comments    = props.entities.comments;
+      comments = comments[props.commentById]
       
        
       
@@ -122,8 +122,8 @@ export default CommentsBox;
 
 export const CommentsLink = props => {
    var byId = props.commentById;
-   var comments    = props.entyties.comments;
-   comments = comments.byId[byId]
+   var comments    = props.entities.comments;
+   comments = comments[byId]
    let styles ={
       border         : "px solid red",
       fontSize       : "11px",
@@ -159,8 +159,8 @@ export const CommentsLink = props => {
 
 const AnswerComments = props => {
    
-   var comments    = props.entyties.comments;
-   comments = comments.byId[props.commentById]
+   var comments    = props.entities.comments;
+   comments = comments[props.commentById]
    return (
       <div >
         
@@ -195,8 +195,8 @@ const AnswerComments = props => {
 
 const PostComments = props => {
    var commentById = `commentsPost${props.post.id}`;
-   var comments    = props.entyties.comments;
-   comments       = comments.byId[commentById]
+   var comments    = props.entities.comments;
+   comments       = comments[commentById]
    return (
       <div>
 

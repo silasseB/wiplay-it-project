@@ -1,10 +1,10 @@
 
 import { combineReducers } from 'redux';
-import { entyties}  from './lib/appReducers';
+import { entities}  from './lib/appReducers';
 
 
 
 export  default combineReducers({
-	entyties,
+	entities,
 
 })

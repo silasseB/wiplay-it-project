@@ -31,8 +31,8 @@ export const RepliesComponent = props => {
          margin     : '15px 22px',
    }
    
-   var replies   =   props.entyties.replies;
-   replies =  replies.byId[props.repliesById];
+   var replies   =   props.entities.replies;
+   replies =  replies[props.repliesById];
    return(
       <div>
    
@@ -93,8 +93,8 @@ export const ReplyChildernComponent = props => {
                margin     : '15px 22px 10px  38px',
    };
      
-   var replies   =   props.entyties.replies;
-   replies =  replies.byId[props.replyChildrenById];
+   var replies   =   props.entities.replies;
+   replies =  replies[props.replyChildrenById];
 
    return(
       <div >
@@ -151,8 +151,8 @@ export const ReplyGrandChildernComponent = props => {
             margin    : '15px 22px 10px 60px',
          }
 
-   var replies   =   props.entyties.replies;
-   replies =  replies.byId[props.grandChildById];
+   var replies   =   props.entities.replies;
+   replies =  replies[props.grandChildById];
    return(
          <div >
 
@@ -208,8 +208,8 @@ export const ReplyGreatGrandChildComponent = props => {
               margin     : '15px 22px 10px 75px'
             }
 
-   var replies   =  props.entyties.replies;
-   replies       =  replies.byId[props.byId];
+   var replies   =  props.entities.replies;
+   replies       =  replies[props.byId];
    var replyList =  replies.replyList;
 
    return(
@@ -491,8 +491,8 @@ export const RepliesLink = props => {
 
 export const CommentsReplyLink = props => {
    var byId = props.repliesById;
-   var replies   =  props.entyties.replies;
-   var linkData  =  replies.byId[byId].linkData;
+   var replies   =  props.entities.replies;
+   var linkData  =  replies[byId].linkData;
    var reply     =  linkData.reply;
   
    var apiUrl = '';
@@ -520,7 +520,7 @@ export const CommentsReplyLink = props => {
 
 export const ChildRepliesLink = props => {
    var byId = props.replyChildrenById;
-   var replyState = props.entyties.replies.byId[byId]
+   var replyState = props.entities.replies[byId]
    
    var linkData  = replyState.linkData;
    var reply =   props.childParent;
@@ -553,7 +553,7 @@ export const ChildRepliesLink = props => {
 export const GrandChildRepliesLink = props => {
    var reply = props.grandChildParent;
    var byId = props.grandChildById ;
-   var replies   = props.entyties.replies.byId[byId]
+   var replies   = props.entities.replies[byId]
    var linkData  = replies.linkData;
   
    var apiUrl    = '';
@@ -585,7 +585,7 @@ export const GrandChildRepliesLink = props => {
 
 export const GreatGrandChildRepliesLink = props => {
    var byId = props.byId;
-   var replyState = props.entyties.replies.byId[byId];
+   var replyState = props.entities.replies[byId];
 
    var linkData  = replyState.linkData;
    var reply     = props.greatGrandChildParent;

@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 import {NavigationBarSmallScreen,NavigationBarBigScreen } from "../../components/navBar";
-import {store, useStoreUpdate} from "../../configs/store-config";
-import {LocalCache} from  "../../utils/storage";
+import {store } from "../../configs/store-config";
 
 import { QuestionComponent} from "../../components/question_components"
 import { PostComponent} from "../../components/post_components"
@@ -53,28 +52,29 @@ class IndexBox extends Component {
  
         const onStoreChange = () => {
             let storeUpdate   = store.getState();
-            let {entyties }   = storeUpdate;
+            let {entities }   = storeUpdate;
             let {
                index,
                questions,
                posts, 
-               answers }   = entyties;
-            let {
-                filteredAnswers,
-                filteredPosts, 
-                filteredQuestions } =this.state;
+               answers }   = entities && entities;
+            
+            var { questionListById,
+              answerListById, 
+              postListById,
+              userListById,
+            } = this.state;
 
-            questions = questions.byId[filteredQuestions]
+            
 
             if (index && index.isSuccess && !index.timeStamp) {
                 var timeStamp = new Date();
                 index['timeStamp'] = timeStamp.getTime();
-                
-                this.updateIndexEntyties(index)
-                LocalCache('index', index);
+             
+                this.updateIndexEntities(index);
+               
             }
-
-            if (questions) {}
+          
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
@@ -82,17 +82,19 @@ class IndexBox extends Component {
 
     
     componentDidMount() {
+        //console.log(this.props)
             
         this.onIndexUpdate();
 
-        let { cachedEntyties } = this.props;
+        let { cacheEntities } = this.props;
         var now = new Date();
      
-        if (cachedEntyties) {
-            let { index, currentUser } = cachedEntyties;
+        if (cacheEntities) {
+            let { index, currentUser } = cacheEntities;
                        
             if(index){
                 let timeStamp = index.timeStamp;
+                //console.log(timeStamp)
 
                 let msDiff   = now.getTime() - timeStamp
                 let secDiff  = msDiff / 1000
@@ -100,14 +102,14 @@ class IndexBox extends Component {
                 let hourDiff = menDiff/60
                 let dayDiff  = hourDiff/24
 
-                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+                //console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                               
-                if (menDiff < 5) {
+                if (menDiff <= 3) {
 
                     console.log('Index found from cachedEntyties')
                     store.dispatch(action.getIndexPending());
                     store.dispatch(action.getIndexSuccess(index,));
-                    this.updateIndexEntyties(index)
+                    this.updateIndexEntities(index)
                     return;
                 }
             }
@@ -119,40 +121,48 @@ class IndexBox extends Component {
 
    
 
-    updateIndexEntyties(index){
+    updateIndexEntities(index){
         var { questionListById,
               answerListById, 
               postListById,
               userListById,
             } = this.state;
 
-        let {questions, posts, answers, users} = index;
+        let {questions, posts, answers, users} =  index && index;
 
-       
+        let indexQuestions = { filteredQuestions : questions};
+        let indexAnswers   = { filteredAnswers   : answers};
+        let indexPosts     = { filteredPosts     : posts};
+        let indexUsers     = { filteredUsers    : users};
+
+               
         if (questions && questions.length ) {
+           
             store.dispatch(action.getQuestionListPending(questionListById));
-            store.dispatch(action.getQuestionListSuccess(questionListById, questions))
+            store.dispatch(action.getQuestionListSuccess(questionListById, questions));
+            
         }
         if (answers && answers.length) {
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, answers));
+           
 
         }
         if (posts && posts.length){
            store.dispatch(action.getPostListPending(postListById));
            store.dispatch(action.getPostListSuccess(postListById, posts));
+           
         }
 
         if (users && users.length){
            store.dispatch(action.getUserListPending(userListById));
            store.dispatch(action.getUserListSuccess(userListById, users));
+           
 
         }
-        
-        this.forceUpdate()
-
     };
 
+    
 
     getProps(){
         let props = {
@@ -165,11 +175,9 @@ class IndexBox extends Component {
       
     render() {
         let props = this.getProps();
-        let indexUpdate = useStoreUpdate('index') 
   
-
-        let entyties = props.entyties;
-        var index  = entyties.index;
+        let { entities }  = props ;
+        var { index }          = entities;
         
                      
         return (
@@ -224,15 +232,15 @@ export const IndexComponent = props => {
 
 export const Questions = props => {
    
-    var { questionListById, entyties } = props;
+    var { questionListById, entities } = props;
 
-    var questions = entyties.questions.byId[questionListById];
+    var questions = entities.questions[questionListById];
    
   
     return (
 
       <div>
-         { questions &&questions.questionList && questions.questionList.length?
+         { questions && questions.questionList && questions.questionList.length?
          <div className="index-questions-box">
             <div className="index-items-label">
                 <b>Questions</b>
@@ -270,15 +278,15 @@ export const Questions = props => {
 
 export const Posts = props => {
    
-    var { postListById, entyties } = props;
+    var { postListById, entities } = props;
 
-    var posts = entyties.posts.byId[postListById];
+    var posts = entities.posts[postListById];
     
   
     return (
 
         <div >
-            { posts && posts.postList.length?
+            { posts && posts.postList && posts.postList.length?
                 <div  className="index-posts-box">
                     <div className="index-items-label">
                         <b>Posts</b>
@@ -315,13 +323,13 @@ export const Posts = props => {
 
 
 export const Answers = props => {
-    var { answerListById, entyties } = props;
-    var answers   = entyties.answers.byId[answerListById]; 
+    var { answerListById, entities } = props;
+    var answers   = entities.answers[answerListById]; 
          
     return(
         <div>
 
-            {answers && answers.answerList?
+            {answers && answers.answerList && answers.answerList?
                 <div className="index-answers-box">
 
                     <div className="answer-container">

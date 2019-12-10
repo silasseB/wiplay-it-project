@@ -1,6 +1,10 @@
 
 import React from 'react';
 import { Link, useLocation } from "react-router-dom";
+import { store } from "../configs/store-config";
+import {showModal} from '../actions/actionCreators';
+import {history} from "../index" 
+
 
 
 export const EditorLink = props => {
@@ -12,19 +16,25 @@ export const EditorLink = props => {
         };
 
     let context = props.objName.toLowerCase();
-
+    let pathname =  `/compose/${context}/${'1'}/`
+    let state = { 
+        background : props.background || location,
+        modalProps
+    } 
+   
+    
     return(
-        <Link id="create-question" className="btn btn-sm  create-question"
-                to={{
-            pathname: `/compose/${context}/${'1'}/`,
-            // This is the trick! This link sets
-            // the `background` in location state.
-            state: { background: location, modalProps }
-          }}
-           >
-           {props.objName || props.linkName}  
-        </Link>
-   );
+        <button className=""  onClick={()=> {
+                        setTimeout(()=> {
+                            
+                            history.push({ pathname: pathname, state}); 
+                        }, 500);
+
+                    }}>
+                    { props.linkName || props.objName } 
+        </button>
+        
+    );
 };
 
 
@@ -32,25 +42,32 @@ export const EditorLink = props => {
 
 export const OptionsModalLink = props => {
     let location = useLocation();
+    let pathname = `/compose/${'options'}/${props.obj.id}/`;
 
     let  modalProps = {
             optionsMenuProps : {...props},
             modalType   : 'optionsMenu', 
         }; 
+
+    let state = { 
+        background : props.background || location,
+        modalProps
+    } 
         
         
     return(
-        <Link id="create-question" className="btn btn-sm  create-question"
-                to={{
-            pathname: `/compose/${'options'}/${'1'}/`,
-            // This is the trick! This link sets
-            // the `background` in location state.
-            state: { background: location, modalProps }
-          }}
-           >
-           <i className="material-icons ">more_horiz</i>  
-        </Link>
-   );
+        <button className="btn btn-sm"    onClick={()=> {
+                        
+                        setTimeout(()=> {
+
+                            history.push({ pathname: pathname, state}); 
+                        }, 500);
+
+                    }}>
+             <i className="material-icons ">more_horiz</i>  
+        </button>
+        
+    );
 };
 
 
@@ -64,19 +81,21 @@ export const ChangeImageLink = props => {
             dropImageProps : {...props},
             modalType   : 'dropImage', 
         }; 
-    
+    let pathname = `/compose/${'profile-pic'}/${'1'}/`;
+    let state    = { background: location, modalProps };
 
     return(
-        <Link id="create-question" className="btn-sm edit-img-btn " 
-                to={{
-            pathname: `/compose/${'profile-pic'}/${'1'}/`,
-            // This is the trick! This link sets
-            // the `background` in location state.
-            state: { background: location, modalProps }
-          }}
-           >
-           Change  
-        </Link>
+       
+        <button className="btn-sm edit-img-btn "   onClick={()=> {
+                        
+                        setTimeout(()=> {
+                            
+                            history.push({ pathname: pathname, state}); 
+                        }, 500);
+
+                    }}>
+            Change  
+        </button>
    );
 };
 

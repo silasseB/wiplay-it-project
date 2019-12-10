@@ -59,26 +59,18 @@ class EditProfile extends Component{
         const onStoreChange = () => {
             let { slug, id } = this.props.match.params;
             let storeUpdate  = store.getState();
-            let {entyties }  = storeUpdate;
+            let {entities }  = storeUpdate;
             let byId         =  id? `userProfile${id}`:null;
 
-            let userProfile = byId? entyties.userProfile.byId[byId]:null;
+            let userProfile = byId? entities.userProfile[byId]:null;
            
 
             if (userProfile) {
+
                 let user = userProfile.user;
                 this.setState({ submitting : userProfile.submitting});
 
                 if (user) {
-                    let {currentUser } = this.props;
-                                       
-                    if (currentUser) {
-                        if (currentUser.id === user.id) {
-                            LocalCache('currentUser', user)
-                        }
-                    }
-
-                    LocalCache('userProfile', user)
                     this.populateEditForm(user);
                 }
             }
@@ -94,18 +86,22 @@ class EditProfile extends Component{
 
     componentDidMount() {
         this.onProfileUpdate();
-        let { cachedEntyties } = this.props; 
+        let { cacheEntities } = this.props; 
         let { slug, id } = this.props.match.params;
                           
         if (id ) {
             let profileById = `userProfile${id}`;
-            console.log(cachedEntyties)
+            
             let  {userProfile, currentUser, auth} = cachedEntyties;
+            userProfile = userProfile && userProfile[profileById]
+            userProfile = userProfile.user
+
+            console.log(userProfile)
 
             this.setState({profileById});
 
             if (userProfile) {
-                 console.log('userProfile found from cachedEntyties')
+                console.log('userProfile found from cachedEntyties')
                 this.populateEditForm(userProfile);
 
             }else {
@@ -514,24 +510,6 @@ export class DropImage extends React.Component {
 }
 
 
-export const EditBtn = props => {
-    
-  
-    let  modalOptionsProps = {
-            modalProps : { handleImageAdd: props.handleImageAdd},
-            modalType : 'dropImage'
-        };
-
-    
-
-    return(
-       <div>
-           <button className="btn-sm edit-img-btn "  onClick={() => props.showModal(modalOptionsProps)} type="button" >
-               Change
-           </button>
-       </div>
-    );
-};
 
 
 //const EditBtnSmallScreen = MatchMediaHOC(EditBtn, '(max-width: 500px)');

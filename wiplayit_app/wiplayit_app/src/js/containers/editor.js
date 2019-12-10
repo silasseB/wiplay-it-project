@@ -12,6 +12,7 @@ import Axios from '../axios_instance'
 import  Helper from '../containers/utils/helpers';
 import {TextAreaEditor, DraftEditor } from  "../components/editor_components";
 import { AlertComponent } from "../components/partial_components";
+import {showModal}  from '../actions/actionCreators';
 
 import { EditorNavBar } from "../components/navBar";
 import {store} from '../configs/store-config';
@@ -89,7 +90,9 @@ export default  class AppEditor extends Component{
          showSuccessMessage : false,
          hasErrors          : false,  
          errorMessage       : null,
-         successMessage     : null,
+         submited           : false,
+         redirected         : false, 
+
         
 
       };
@@ -199,41 +202,48 @@ export default  class AppEditor extends Component{
         const onStoreChange = () => {
             if (this._isMounted) {
 
-            let storeUpdate   = store.getState();
-            let {background} = this.props;
-
-            let {entyties} = storeUpdate
-            let {modal} = entyties
-            console.log(modal)
-            this.setState({submitting : modal.submitting});
-
+                let storeUpdate   = store.getState();
             
+                let {entities} = storeUpdate
+                let {modal} = entyties
+                let { redirected, submited } = this.state
+                let {background, isPost} = this.props;
 
-            if (modal && modal.successMessage) {
+                console.log(modal, this.state, this.props)
 
-              
-                ModalManager.close(background)
-                let {objName, data} = modal;
+                if (modal) {
+                    this.setState({ submitting : modal.submitting });
 
-                if (objName === "Question" || objName === "Post" && !data.redirected) {
-                    data['redirected'] = true;
+                    if (modal.successMessage && !submited) {
 
-                    let pathToPost = `post/${data.slug}/${data.id}/`
-                    let pathToQuestion = `question/${data.slug}/${data.id}/`
+                        this.setState({submited : true});
+                        ModalManager.close(background)
 
-                    let redirectTo = objName === "Question" ? pathToQuestion
+                        let {objName, data} = modal;
+                        let canRedirect = objName === "Question" || objName === "Post" || false;
+                        isPost = isPost || false;
+
+                        if (canRedirect  && isPost && !redirected) {
+                            this.setState({ redirected : true});
+
+                            let obj = data.question || data.post;
+                            console.log(obj, data)
+
+                            let pathToPost     = `post/${obj.slug}/${obj.id}/`
+                            let pathToQuestion = `question/${obj.slug}/${obj.id}/`
+
+                            let redirectTo = objName === "Question" ? pathToQuestion
                                                             : pathToPost;
-                    setTimeout(()=> {
-                           history.push(redirectTo); 
-                        }, 500);
+                            setTimeout(()=> {
+                                history.push(redirectTo); 
+                            }, 1000);
+  
+                        }
+                    }
+
+                    return;
 
                 }
-
-            }
-
-                
-                
-               
             }
         };
 
@@ -242,44 +252,41 @@ export default  class AppEditor extends Component{
 
     componentWillUnmount() {
         this._isMounted = false;
+        
         this.unsubscribe();
     };
 
-    componentDidUpdate(){
-       //let contents =  JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()))
-       //const contentState = convertFromRaw( JSON.parse( contents) );
-       //console.log(JSON.parse( contents))
-       //console.log(convertToRaw(this.state.editorState.getCurrentContent()))
-        window.onpopstate =  (e) => {
-            e.preventDefault();
-           //console.log(e);
-        }
-    }
+    
 
     componentDidMount(){
         this._isMounted = true;
+        //this.setState({submited : false, redirected: false});
         this.onEditorUpdate();
-       //window.history.pushState({}, '');  
-                              
-       //window.addEventListener("popstate", this.closeEditor.bind(this));
-       //window.onpopstate = this.closeEditor;
-
-       console.log(this.props)
-
+       
        let state = this.state;
        state['objName'] = this.props.objName;
        state['editorPlaceHolder'] = this.props.editorPlaceHolder;
             
        if (this.props.objName === 'Post') {
          this.setState({onPost: true })
-      }
+       }
 
       if (this.props.objId) {
          state['objId']    = this.props.objId;
       }
    
-      if (this.props.isPut) {
-         state['contentIsEmpty'] = false;
+        if (this.props.isPut) {
+            state['contentIsEmpty'] = false;
+
+            if (this.props.objName === 'Post') {
+               let storedState = JSON.parse(this.props.obj.add_post);
+               console.log(this.props)
+
+               let editorState = this.newEditorState(storedState);
+               state['editorState']  = editorState; //
+               state.form['textarea']  = this.props.obj.add_title;
+            }
+
          if (this.props.objName === 'Question') {
             state.form['textarea']  = this.props.obj.add_question; 
          }
@@ -309,7 +316,7 @@ export default  class AppEditor extends Component{
              
       }
       
-      this.setState({state})
+      this.setState({...state})
    }
 
     
@@ -485,7 +492,10 @@ export default  class AppEditor extends Component{
    };
 
    getSubmitProps = () =>{
-      return Object.assign({formData : this.getFormData()}, this.props);
+      return Object.assign({
+                       formData : this.getFormData(), 
+                       IsModal  : true
+                    }, this.props);
    }
 
 
@@ -545,7 +555,7 @@ export default  class AppEditor extends Component{
                       disabled={ props.submitting } >
                     <EditorNavBar {...props}/>
 
-                    { this.props.objName === "Question"?
+                    { props.objName === "Question"?
                         <TextAreaEditor {...props}/>
                         :
                         <DraftEditor {...props}/>

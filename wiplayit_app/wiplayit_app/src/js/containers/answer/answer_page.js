@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AnswersComponent } from "../../components/answer_components";
 import {store} from "../../configs/store-config";
 import  * as action  from '../../actions/actionCreators';
+import {LocalCache} from  "../../utils/storage";
 
 
 
@@ -25,23 +26,23 @@ class AnswersBox extends Component {
 
 
     componentDidMount() {
-        var questionById =  this.props.questionById;
-        var questionEntytie = this.props.entyties.question;
-        questionEntytie = questionEntytie.byId[questionById];
+      let {questionById, cacheEntities } = this.props;
+      let { question } =  cacheEntities;
+        question = question[questionById];
 
-        let question  =  questionEntytie.question;
+        question  =  question.question;
         var answerListById   = `answers${question.id}`;
+
         if (question.answers) {
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, question.answers));
+
         }
+
         this.setState({answerListById, question })
     };
 
-    componentDidUpdate(nextProps, prevState) {
-    
-    } 
-   
+       
  
     getProps() {
    
@@ -55,9 +56,9 @@ class AnswersBox extends Component {
 
    render() { 
       const props =  this.getProps();
-      var answers      = props.entyties.answers;
-      console.log(answers)
-      answers          = answers.byId[props.answerListById]
+      var answers      = props.entities.answers;
+      
+      answers          = answers[props.answerListById]
          
       return (
          <div>
@@ -82,8 +83,8 @@ export default AnswersBox;
 
 
 export const Answers = props => {
-    var answers = props.entyties.answers;
-    answers = answers.byId[props.answerListById]
+    var answers = props.entities.answers;
+    answers = answers[props.answerListById]
          
     return(
         <div>

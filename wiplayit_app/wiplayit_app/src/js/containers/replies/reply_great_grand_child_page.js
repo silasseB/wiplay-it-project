@@ -76,8 +76,8 @@ class ReplyGreatGrandChildBox extends Component {
         let props       =  this.getProps();
         var replyParent =  this.props.reply;
         let byId        =  this.state.byId;
-        var replies     =  props.entyties.replies;
-        replies         =  replies.byId[byId]; 
+        var replies     =  props.entities.replies;
+        replies         =  replies[byId]; 
 
         var apiUrl = '';
 

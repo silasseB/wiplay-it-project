@@ -44,8 +44,8 @@ export const QuestionComponent = props => {
     let getObj = ()=>{
 
         if (isQuestionBox && question.user_has_answer) {
-            var questionEntytie = props.entyties.question;
-            questionEntytie = questionEntytie.byId[questionById];
+            var questionEntytie = props.cacheEntities.question;
+            questionEntytie = questionEntytie[questionById];
 
             return questionEntytie.userAnswer;
         }

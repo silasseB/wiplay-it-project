@@ -27,7 +27,7 @@ const api      = new Api();
 export const ProfileComponent = props => {
     console.log(props)
     var profileById = props.profileById;
-    var userProfile = props.entyties.userProfile.byId[profileById];
+    var userProfile = props.entities.userProfile[profileById];
     userProfile = userProfile.user;
     let currentUser = props.currentUser;
      
@@ -205,7 +205,7 @@ export const ProfileComponent = props => {
 export const UserList = props => {
     console.log(props)
     var usersById = props.usersById;
-    const users   = props.entyties.users.byId[usersById];
+    const users   = props.cacheEntities.users[usersById];
 
     return (
       <div>
@@ -258,11 +258,11 @@ export const UserfollowersNum = props => {
 
 export const UserAnswers = props =>{
    var profileById    = props.profileById;
-   let userProfile    = props.entyties.userProfile.byId[profileById].user;
+   let userProfile    = props.entities.userProfile[profileById].user;
    var byId           = `usersAnswers${userProfile.id}`
-   var answers        = props.entyties.answers;
+   var answers        = props.entities.answers;
    
-   var usersAnswers   = answers.byId[byId]
+   var usersAnswers   = answers[byId]
 
    
    return (
@@ -314,10 +314,10 @@ export const UserAnswers = props =>{
 
 export const UserQuestions = props => {
    var profileById = props.profileById;
-   let userProfile = props.entyties.userProfile.byId[profileById].user;
+   let userProfile = props.entities.userProfile[profileById].user;
    var byId     = `usersQuestions${userProfile.id}`
-   var questions  = props.entyties.questions;
-   questions      = questions.byId[byId]
+   var questions  = props.entities.questions;
+   questions      = questions[byId]
    console.log(questions, byId, props)
     
    return (
@@ -349,10 +349,10 @@ export const UserQuestions = props => {
 
 export const UserPosts = props => {
    var profileById = props.profileById;
-   let userProfile = props.entyties.userProfile.byId[profileById].user;
+   let userProfile = props.entities.userProfile[profileById].user;
    var byId     = `usersPosts${userProfile.id}`
-   var posts  = props.entyties.posts;
-   posts      = posts.byId[byId]
+   var posts  = props.entities.posts;
+   posts      = posts[byId]
    
    return(
      <div className="post-container">
@@ -466,9 +466,9 @@ export const UsersComponent = props => {
 
 export const UserFollowings = props => {
    var profileById = props.profileById;
-   let userProfile = props.entyties.userProfile.byId[profileById].user;
+   let userProfile = props.entities.userProfile[profileById].user;
    var usersById   = `usersFollowings${userProfile.id}`;
-   var users       = props.entyties.users.byId[usersById];
+   var users       = props.entities.users[usersById];
     console.log(users,usersById, props.entyties)
    let userListProps = { usersById };
 
@@ -505,9 +505,9 @@ export const UserFollowings = props => {
 
 export const UserFollowers = props => {
    var profileById = props.profileById;
-   let userProfile = props.entyties.userProfile.byId[profileById].user;
+   let userProfile = props.entities.userProfile[profileById].user;
    var usersById   = `usersFollowers${userProfile.id}`
-   var users       = props.entyties.users.byId[usersById];
+   var users       = props.entities.users[usersById];
 
    let userListProps = { usersById };
   
@@ -542,7 +542,7 @@ export const UserFollowers = props => {
 
 export const UserActivitiesBtns = props => {
     var profileById = props.profileById;
-    var userProfile = props.entyties.userProfile.byId[profileById];
+    var userProfile = props.entities.userProfile[profileById];
     var user        = userProfile.user;
 
     console.log(userProfile)
@@ -583,33 +583,40 @@ export const UserActivitiesBtns = props => {
       data                :   userProfile.followings,
       items               : 'isUsersFollowings'
     }
+
+    let totalAnswers   = userProfile && userProfile.answers && userProfile.answers.length || 0;
+    let totalQuestions = userProfile && userProfile.questions && userProfile.questions.length || 0;
+    let totalPosts     = userProfile && userProfile.posts && userProfile.posts.length || 0;
+    let totalFollowers = userProfile && userProfile.followers && userProfile.followers.length || 0;
+    let totalFollowings = userProfile && userProfile.followings && userProfile.followings.length || 0;
+
    
     return (
         <div className="user-activities">
 
             <button type="button" onClick={() => props.showUserItems(usersAnswers)} 
                              className="btn-sm activities user-answers" >
-                Answers { userProfile.answers.length } 
+                { totalAnswers } {totalAnswers <= 1? "Answer":"Answers"}
             </button>
 
             <button type="button" onClick={() => props.showUserItems(usersQuestions)} 
                         className="btn-sm activities user-questions" >
-               Questions { userProfile.questions.length } 
+                { totalQuestions } {totalQuestions <= 1? "Question":"Questions"}
             </button>
 
             <button type="button" onClick={() => props.showUserItems(usersPosts)} 
                                className="btn-sm activities user-posts">
-               { userProfile.posts.length }  Posts   
+               { totalPosts } {totalPosts <= 1? "Post":"Posts"}
             </button> 
 
             <button type="button" onClick={() => props.showUserItems(usersFollowings)} 
                             className="btn-sm activities user-following ">
-                { userProfile.followings.length } Followings
+                { totalFollowings } {totalFollowings <= 1? "Following":"Followings"}
             </button>
          
             <button type="button" onClick={() => props.showUserItems(usersFollowers)} 
                             className="btn-sm activities user-followers " >
-               { userProfile.followers.length }  Followers        
+               { totalFollowers } {totalFollowers <= 1? "Follower":"Followers"}        
             </button>
 
         </div>

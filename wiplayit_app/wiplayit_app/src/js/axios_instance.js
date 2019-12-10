@@ -12,7 +12,7 @@ var csrftoken = getCookie('csrftoken');
 export default class Axios {
 
     constructor(props){
-        this.cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties'));
+        this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
         this.withAuthentication = props;
         this.baseURL        =  API_URL;
         this.DOMAIN_URL  =  window.location.origin; 
@@ -20,11 +20,15 @@ export default class Axios {
 
     getTokenKey(){
         
-        if (this.cachedEntyties) {
-            var {auth } = this.cachedEntyties
+        if (this.cacheEntities) {
+            let {userAuth} = this.cacheEntities;
 
-            if (auth && auth.tokenKey) {
-                return auth.tokenKey
+            if (userAuth) {
+                let {auth} = userAuth;
+
+                if (auth && auth.tokenKey) {
+                   return auth.tokenKey
+                }
             }
         }
 

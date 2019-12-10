@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link, useLocation,Router } from "react-router-dom";
+import { Link, useLocation, Router } from "react-router-dom";
 import {history} from "../index" 
-import Api from '../api';
+
 import { ModalManager}   from  "../containers/modal/modal_container";
+import { store } from "../configs/store-config";
 
-import  * as types  from '../actions/types';
 
 
-const api      = new Api();
+
 
 
 export const UnfollowUserBtn = props => {
@@ -36,7 +36,7 @@ export const FollowUserBtn = props => {
 
 
 export const FollowQuestionBtn = props => {
-    
+    //console.log(props.editQuestionProps)
     return(
       <div>
          <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editQuestionProps)}
@@ -50,7 +50,7 @@ export const FollowQuestionBtn = props => {
 
 
 export const UnfollowQuestionBtn = props => {
-   
+    //console.log(props.editQuestionProps)
     return(
       <div>
          <button  type="button" onClick={() =>  props.editfollowersOrUpVoters(props.editQuestionProps)}
@@ -163,16 +163,22 @@ export const DownVoteReplytBtn = props => (
 
 export const PostOptModalBtns = props => {
    //console.log(props)
+   let {background} = props
+    let modalPath = `/compose/${'post'}/${props.obj.id }/`
+    let modalProps = getModalProps(props);
+    let state = { background, modalProps} 
    return (
       <div>
          { props.obj.created_by.id === props.currentUser.id?  
          <div>
             <button className="btn-sm edit-question" onClick={()=>{
                         ModalManager.close(props.background) 
+                        
                         setTimeout(()=> {
-                           history.push(`/compose/${'post'}/${props.obj.id}/`); 
-                        }, 500);
-                    }}>>
+                           history.push({ pathname: modalPath, state} ); 
+                        }, 1000);
+
+                    }}>
                 Edit Post
             </button>
 
@@ -232,7 +238,7 @@ export const QuestionOptDropDownBtns = props => (
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
                            history.push(`/compose/${'question'}/${props.obj.id}/`); 
-                        }, 1000);
+                        }, 3000);
                         }}>
                 Edit Question
   </button>
@@ -272,8 +278,10 @@ export const QuestionOptModalBtns = props => {
         <div>
            { props.obj.created_by.id === props.currentUser.id? 
            <div>
-            <button className="btn-sm edit-question" onClick={()=>{
+            <button className="btn-sm edit-question" onClick={() => {
+                       
                         ModalManager.close(props.background) 
+
                         setTimeout(()=> {
                            history.push({ pathname: modalPath, state} ); 
                         }, 1000);
@@ -307,6 +315,7 @@ export const AnswerOptModalBtns = props => {
                <button className="btn-sm edit-question" onClick={()=>{
                         ModalManager.close(props.background) 
                         setTimeout(()=> {
+
                            history.push({ pathname: modalPath, state}); 
                         }, 1000);
                     }}>

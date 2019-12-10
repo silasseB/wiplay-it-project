@@ -43,23 +43,6 @@ export const createActionError = (params) => ({
 
 
 
-export const getIndexSuccess = (data) => {
-  console.log(data)
-    
-    return {
-        type         : types.GET_INDEX.SUCCESS,
-   
-        payload: {
-            isLoading : false,
-            isSuccess : true,
-            ...data,
-        }
-    };
-};
-
-
-
-
 
 export const updateActionPending = (params) => ({
   type:  params.actionType && params.actionType.PENDING,
@@ -101,7 +84,9 @@ export const updateActionError = (params) => ({
 export const ModalSubmitPending = () => ({
   type: "SUBMIT_PENDING",
   payload: {
-      submitting : true,
+      submitting     : true,
+      data           : null,
+      successMessage : null,
   }
 });
 
@@ -162,6 +147,20 @@ export const getIndexError = ( error) => ({
       isSuccess : false,
     }
 });
+
+
+export const getIndexSuccess = (data) => {
+      
+    return {
+        type         : types.GET_INDEX.SUCCESS,
+   
+        payload: {
+            isLoading : false,
+            isSuccess : true,
+            ...data,
+        }
+    };
+};
 
 
 export const getQuestionPending = (id) => {
@@ -360,6 +359,7 @@ export const deleteQuestionError = ({error}) => ({
 
 
 export const getQuestionListSuccess = (byId, questionList) => {
+    //console.log(questionList)
     return{
 	   type: types.GET_QUESTION_LIST.SUCCESS,
       byId,
@@ -377,8 +377,7 @@ export const getQuestionListPending = (byId) => ({
    byId,
    payload: {
       isLoading    : true,
-      questionList : [],
-      error        : "",
+      
    }
 });
 
@@ -414,8 +413,7 @@ export const getPostListPending = (byId) => ({
     byId,
     payload: {
       isLoading  : true,
-      postList   : [],
-      error      : "",  
+        
     }
 });
 
@@ -434,7 +432,7 @@ export const getPostListError = ( byId, error) =>({
 
 
 export const getAnswerListSuccess = (byId, answerList) => {
-    console.log(answerList)
+
     return{
         type: types.GET_ANSWER_LIST.SUCCESS,
         byId,
@@ -696,7 +694,7 @@ export const getCurrentUserSuccess = (response) => {
 
 
 export const getCurrentUserPending = () => {
- console.log('is loading the current user...')
+    
    return {
       type    : types.GET_CURRENT_USER.SUCCESS,
       payload : {
@@ -708,7 +706,7 @@ export const getCurrentUserPending = () => {
 
 
 export const getUserListSuccess = (byId, users) => {
-    console.log(users)
+    
     return{
       type: types.GET_USER_LIST.SUCCESS,
       byId,
@@ -825,15 +823,12 @@ export const getReplyChildLindData = (props) => {
 };
 
 
-export const showModal = (props) =>{
-   console.log(props)
-
-   return {
-      type: 'SHOW_MODAL',
+export const showModal = (value) =>{
+   
+    return {
+      type: 'MODAL_ROUTER',
       payload : {
-         modalProps : props.modalProps,
-         modalType  : props.modalType,
-         isOpen     : true,
+        modalIsOpen  : value,
       }
    };
 };
@@ -841,21 +836,14 @@ export const showModal = (props) =>{
 
 
 
-export const hideModal = () =>({
-   type: 'HIDE_MODAL',
-   payload : {
-      isOpen    : false,
-      modalType : null,
-      modalProps : {},
-   }
- });
 
 
 
 
 export const getUserAnswer = (answerList) => {
-   let cachedEntyties = JSON.parse(localStorage.getItem('@@CachedEntyties')); 
-   let currentUser =  cachedEntyties.currentUser;
+   let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')); 
+   let currentUser =  cacheEntities.currentUser;
+   currentUser = currentUser.user;
    var answer = '' 
       
    if (answerList.length) {

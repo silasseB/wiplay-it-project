@@ -37,6 +37,7 @@ export function Modal(props) {
     };
 
     let getModalType = (type) => {
+
         if (background) {
             switch(type){
          
@@ -83,7 +84,7 @@ export const ModalOpener = {
 
 
     editorModal(contents){
-
+        
         return ModalManager.open(
             <EditModal {...contents} onRequestClose={() => true}/>
         );
@@ -230,7 +231,7 @@ export function  ModalContainer(props)  {
    
    //Render modal with pass its contents
     const { modalContents, modal_styles ,effect, onRequestClose, background } = props;
-    console.log(props)
+    
     return (
         <ModalBox
             style={modal_styles}

@@ -68,8 +68,8 @@ class RepliesBox extends Component {
    render() { 
       let props  = this.getProps();
       //var replyState = props.replyState;
-      var replies    =   props.entyties.replies;
-      replies        =  replies.byId[props.repliesById];
+      var replies    =   props.entities.replies;
+      replies        =  replies[props.repliesById];
                  
       return (
          <div>

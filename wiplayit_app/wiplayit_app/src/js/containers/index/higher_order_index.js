@@ -33,10 +33,11 @@ export function withHigherOrderIndexBox(Component) {
 
             this.state = {
                 currentUser        : {},
-                cachedEntyties     : this.cachedEntyties(), 
+                cacheEntities     : this.cacheEntities(), 
                 isAuthenticated    : this.isAuthenticated(),
                 showSuccessMessage : false,
                 successMessage     : null,
+                modalIsOpen        : false,
             };
             this.onStoreUpdate     = this.onStoreUpdate.bind(this);
              
@@ -44,12 +45,17 @@ export function withHigherOrderIndexBox(Component) {
 
 
         isAuthenticated() {
-      	    let cachedEntyties = this.cachedEntyties();
-        
-            if (cachedEntyties){
-        	    let { auth  }  = cachedEntyties;
-        	    if ( auth && auth.isLoggedIn && auth.tokenKey){
-        		    return true
+      	    let cacheEntities = this.cacheEntities();
+                    
+            if (cacheEntities){
+        	    let { userAuth  }  = cacheEntities;
+                                
+        	    if ( userAuth){
+                    let { auth } = userAuth;
+
+                    if (auth && auth.isLoggedIn && auth.tokenKey) {
+             		    return true;
+                    }
                	}
             }
 
@@ -57,20 +63,23 @@ export function withHigherOrderIndexBox(Component) {
         };
 
         getCurrentUser =(currentUser=undefined)=>{
-            let  cachedEntyties  = this.cachedEntyties();
-        
-            if (!currentUser && cachedEntyties) {
-                currentUser  = cachedEntyties.currentUser
+                    
+            if (!currentUser) {
+                let  cacheEntities  = this.cacheEntities();
+
+                currentUser  = cacheEntities.currentUser;
+                currentUser = currentUser && currentUser.user;
             }
             
             if (currentUser) {
                 this.setState({currentUser})
             }
+
             return currentUser;  
         };
 
-        cachedEntyties = ()=>{
-            return JSON.parse(localStorage.getItem('@@CachedEntyties'))  || {};
+        cacheEntities = ()=>{
+            return JSON.parse(localStorage.getItem('@@CacheEntities'))  || {};
         }
 
 
@@ -87,12 +96,13 @@ export function withHigherOrderIndexBox(Component) {
         // }
         
         componentWillUnmount() {
-            this._isMounted = false;
             this.unsubscribe();
+            this._isMounted = false;
+            
         };
 
         static getDerivedStateFromProps(props, state) {
-           console.log(state)
+           //console.log(state, props)
            return null
         }
 
@@ -100,36 +110,33 @@ export function withHigherOrderIndexBox(Component) {
         onStoreUpdate = (params, callback=function(){}) =>{
  
             const onStoreChange = () => {
+                if (this._isMounted) {
                 
                 let storeUpdate = store.getState();
                 var timeStamp = new Date();
-                let { entyties } = storeUpdate;
-                let { currentUser,modal, index, question, userProfile } = entyties
+                let { entities } = storeUpdate;
+                let { currentUser,modal, index, question, userProfile } = entities
+               
+                let data = modal && modal.data;
 
-                let questionById = params && params.questionById
-                question      =  entyties.question.byId[questionById];
-                let data = modal && modal.data
-
-
-                if (currentUser && currentUser.user) {
-
-                    LocalCache('currentUser', currentUser.user)
-                    this.getCurrentUser(currentUser.user)
-                 
+                if (modal) {
+                   this.setState({ modalIsOpen : modal.modalIsOpen }) 
                 }
 
                 if( data && !data.successMessageAlerted){
                     let successMessage = modal.successMessage;
                     data['successMessageAlerted'] = true;
                     this.setState({ showSuccessMessage : true, successMessage });
-                }
 
-                setTimeout(()=> {
-                    this.setState({showSuccessMessage:false}); 
+                    setTimeout(()=> {
+                       this.setState({showSuccessMessage:false}); 
                     }, 5000);
+                }
+                
+               
 
-                if (this._isMounted) {
-                    this.forceUpdate()
+                this.forceUpdate()
+               
                 }
             };
 
@@ -148,32 +155,38 @@ export function withHigherOrderIndexBox(Component) {
             e.preventDefault()
         }
 
+        componentDidUpdate(prevProps, nextProps) {
+            //console.log(prevProps, nextProps, this.props)
+        }
+
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change  
              
       
             if (!this.isAuthenticated()) {
-                //User is not authenticated,so redirect to authentication page.
+               //User is not authenticated,so redirect to authentication page.
                 history.push('/user/registration/')
             }
 
             if(!this.getCurrentUser()){
+
         	    store.dispatch(getCurrentUser());
             }
         };
 
 
         logout = () => {
-            localStorage.removeItem('@@CachedEntyties');
+            localStorage.removeItem('@@CacheEntities');
 
             if (this.isAuthenticated()) {
-                localStorage.removeItem('@@CachedEntyties')
+                localStorage.removeItem('@@CacheEntities');
+
                 history.push('/user/registration')
 
             }
             else{
-        	   localStorage.removeItem('@@CachedEntyties')
+        	   localStorage.removeItem('@@CacheEntities');       
                history.push('/user/registration')
 
             }
@@ -194,6 +207,7 @@ export function withHigherOrderIndexBox(Component) {
         
 
         editfollowersOrUpVoters = (params) =>{
+            console.log(params)
             params = this._getFormData(params);
             this.props.submit(params); 
         }
@@ -206,7 +220,7 @@ export function withHigherOrderIndexBox(Component) {
                 case 'Question':
                 case 'UserProfile':
                 case 'UsersList':
-                    var followers     = obj.followers || obj.profile.followers;
+                    var followers     = obj.followers || obj.profile && obj.profile.followers;
                     params['formData'] = helper.createFormData({ followers });
                     return params;
 
@@ -235,10 +249,17 @@ export function withHigherOrderIndexBox(Component) {
             let props = this.getProps();
             let showAlertMessageStiles = props.showSuccessMessage?{ display : 'block'}:
                                                               { display : 'none' };
+            let onModalStyles = props.modalIsOpen ? {opacity:'0.70',}
+                                              : {opacity:'2',};
             //console.log(props)
             return (
                 <div>
-                    <Component {...props}/>
+                    <fieldset style={ onModalStyles } 
+                      disabled={ props.modalIsOpen } >
+
+                        <Component {...props}/>
+
+                    </fieldset>
 
                     <div style={showAlertMessageStiles}>
                        <AlertComponent {...props}/>
@@ -280,7 +301,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
    
     return {
-        entyties      : state.entyties,       
+        entities      : state.entities,       
     }
 };
 

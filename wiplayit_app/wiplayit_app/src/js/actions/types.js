@@ -86,6 +86,8 @@ export const CREATE_REPLY_CHILD  = asyncActionType(CREATE.REPLY_CHILD);
 
 
 export const UPDATE_QUESTION      = asyncActionType(UPDATE.QUESTION);
+export const UPDATE_QUESTION_LIST = asyncActionType(UPDATE.QUESTION_LIST);
+
 export const UPDATE_POST          = asyncActionType(UPDATE.POST);
 export const UPDATE_ANSWER        = asyncActionType(UPDATE.ANSWER)
 export const UPDATE_REPLY         = asyncActionType(UPDATE.REPLY);

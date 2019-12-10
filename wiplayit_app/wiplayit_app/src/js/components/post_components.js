@@ -39,9 +39,11 @@ export const PostComponent = props => {
 
    let {post, currentUser, postById}     =    props;
 
-   let   storedState    = JSON.parse(post.add_post);
-   const contentState   = convertFromRaw(storedState);
-   const editorState    = EditorState.createWithContent(contentState);
+
+   let   storedState    =  JSON.parse(post.add_post);
+   const contentState   =  convertFromRaw(storedState);
+   const editorState    =  EditorState.createWithContent(contentState);
+
    let   postPath       = `/post/${post.slug}/${post.id}/`;
    let   pathToUpvoters =  `/post/${post.id}/upvotes/`;
    let state = {

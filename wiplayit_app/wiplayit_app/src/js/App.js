@@ -12,6 +12,8 @@ import {
 } from "react-router-dom";
 
 import { withRouter } from "react-router";
+import { store } from "./configs/store-config";
+import {showModal}  from './actions/actionCreators';
 
 
 import  RegistrationPage  from "./containers/authentication/registration";
@@ -43,9 +45,21 @@ import PostUpVotersBox  from "./containers/users/post-upvoters-page";
 import PostCommentUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
 import PostReplyUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
 
+let storeUpdate = store.getState();
 
-let GetModalRouter = (background)=>{
-    let location = useLocation();
+let GetModalRouter = (location)=>{
+    let background = location.state && location.state.background;
+    
+    if (!background ) {
+           
+        setTimeout( () => {
+            ModalManager.close(); 
+        }, 100);
+
+        return '';
+    }
+
+    
     let state = location && location.state;
     return <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
 }
@@ -54,18 +68,14 @@ let GetModalRouter = (background)=>{
 
 
 function App() {
-  let location = useLocation();
-  let background = location.state && location.state.background;
+    
+    let location = useLocation();
+    let background = location.state && location.state.background;
   
-  let ModalRouter = GetModalRouter(background)
+    let ModalRouter = GetModalRouter(location)
+          
 
-    /*if (!background) {
-        
-        setTimeout(()=> {
-        ModalManager.close(); 
-        }, 500);
-    }*/
-  
+     
     return (
         <div>
         <Switch location={background || location}>

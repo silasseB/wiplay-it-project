@@ -17,19 +17,14 @@ import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
 
 class QuestionPage extends Component {
+    
 
     constructor(props) {
         super(props);
-
-        var { state } = props.location;
-        let question  = null;
-
-        if (state) {
-            question = state.question;
-        }
+        
 
         this.state = {
-            question,
+            question      : '',
             isQuestionBox : true, 
             pageName      : "Question", 
             questionById  : '',
@@ -39,50 +34,32 @@ class QuestionPage extends Component {
     };
 
     componentWillUnmount() {
-        this.unsubscribe();
+        //this.unsubscribe();
     };
 
-
-    onQuestionUpdate = () =>{
- 
-        const onStoreChange = () => {
-            var now = new Date();
-            let storeUpdate   = store.getState();
-            let {entyties }   = storeUpdate;
-            let {questionById}  =  this.state;
-
-            let question      =  entyties.question.byId[questionById];
-
-            if (question && !question.isLoading && !question.timeStamp) {
-               console.log(question)
-
-                LocalCache('question', question.question);
-            }
-        };
-        this.unsubscribe = store.subscribe(onStoreChange);
-    };
-
-  
-    
 
     componentDidMount() {
-        console.log(this.props)
-        this.onQuestionUpdate()
-            
-        let { cachedEntyties } = this.props;
+        
+                   
+        let { entities } = this.props;
         let { slug, id } = this.props.match.params;
         let  questionById = `question${id}`;
 
         
 
-        if (cachedEntyties) {
-            let { question, currentUser } = cachedEntyties;
+        if (entities) {
+            let { question, currentUser } = entities;
+            question = question && question[questionById]
+
             console.log(question)
 
-
-            if(question && question.id == id){
-                var now = new Date();
+            if(question){
                 let timeStamp = question.timeStamp;
+
+                question = question.question;
+            
+                var now = new Date();
+                
 
                 let msDiff   = now.getTime() - timeStamp
                 let secDiff  = msDiff / 1000
@@ -131,8 +108,8 @@ class QuestionPage extends Component {
     render() {
         let props = this.getProps();
         var questionById = props.questionById;
-        var question = props.entyties.question;
-        question = question.byId[questionById]
+        var {question} = props.entities;
+        question = question[questionById]
         console.log(question)
                  
         return (
@@ -177,9 +154,10 @@ export default  withHigherOrderIndexBox(QuestionPage);
 
 export const Questions = props => {
    var questionById = props.questionById;
-   var questionEntytie = props.entyties.question;
-   questionEntytie = questionEntytie.byId[questionById]
-   var question =questionEntytie.question
+   let question = props.entities.question;
+   question = question[questionById]
+   question = question.question
+
    let questionProps = { question};
    console.log(question)
    Object.assign(questionProps, props) 

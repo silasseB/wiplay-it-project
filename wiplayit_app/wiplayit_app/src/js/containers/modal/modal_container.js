@@ -11,11 +11,13 @@ import {
   useLocation,
   useParams
 } from "react-router-dom";
+
+import {showModal}  from '../../actions/actionCreators';
+
 import {history} from "../../index" 
-
-
+import { store } from "../../configs/store-config";
 import Assign from 'lodash.assign';
-//import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
+
 
 const prefix = require('react-prefixr');
 
@@ -74,6 +76,7 @@ class ModalBox extends Component{
         if(!this.props.onRequestClose || this.props.onRequestClose()){
            
            let background = this.props;
+           store.dispatch(showModal(false))
            ModalManager.close(background);
        }
    }
@@ -108,6 +111,7 @@ class ModalBox extends Component{
     }
 
     render(){
+      console.log(this.props)
       const {style,effect} = this.props;
       const { open } = this.state;
 
@@ -168,12 +172,14 @@ export const ModalManager = {
        modals.push(component);
 
        if(modals.length == 1){ // render the modal only if there is no other showing modals
+          store.dispatch(showModal(true))
           renderModal();
        }
     },
     close(background){
         
         onClose && onClose(() => {
+            store.dispatch(showModal(false))
             
             background &&   history.goBack();
             ReactDOM.unmountComponentAtNode(node);

@@ -43,22 +43,18 @@ class UserProfileContainer extends Component {
 
             let { slug, id } = this.props.match.params;
             let storeUpdate  = store.getState();
-            let {entyties }  = storeUpdate;
+            let {entities }  = storeUpdate;
             let profileById  =  id? `userProfile${id}`:null;
 
-            let userProfile  = profileById? entyties.userProfile.byId[profileById]:null;
+            let userProfile  = profileById? entities.userProfile[profileById]:null;
 
             if (userProfile && userProfile.user) {
                 userProfile = userProfile.user;
+                console.log(userProfile)
 
-                if (userProfile.answers) {
+                //this._dispatchUserProfileItems(userProfile);
 
-                    //let userProfileAnswerParams =  this._userProfileAnswerParams(userProfile)
-                    //this.showUserItems(userProfileAnswerParams)
-
-                    this._dispatchUserProfileItems(userProfile);
-                    LocalCache('userProfile', userProfile);
-                }
+                
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -74,17 +70,19 @@ class UserProfileContainer extends Component {
     componentDidMount() {
         this.onProfileUpdate();
         
-        let { cachedEntyties } = this.props;
+        let { cacheEntities } = this.props;
         let { slug, id } = this.props.match.params;
         let  profileById = `userProfile${id}`;
 
-        if (cachedEntyties) {
-            let { userProfile, currentUser, auth } = cachedEntyties;
+        if (cacheEntities) {
+            let { userProfile, currentUser, auth } = cacheEntities;
+            userProfile = userProfile && userProfile[profileById]
 
-            if(userProfile && userProfile.id == id){
+            if(userProfile){
                 var curentTimeStamp = new Date();
 
                 let timeStamp = userProfile.timeStamp;
+                console.log(timeStamp)
 
                 let msDiff   = curentTimeStamp.getTime() - timeStamp
                 let secDiff  = msDiff / 1000
@@ -94,15 +92,14 @@ class UserProfileContainer extends Component {
 
                 console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
         
-                if (hourDiff < 1) {
-                    profileById = `userProfile${id}`;
-                    this.setState({profileById })
+                profileById = `userProfile${id}`;
+                this.setState({profileById })
         
-                    console.log('userProfile found from cachedEntyties')
-                    store.dispatch(action.getUserProfilePending(id));
-                    store.dispatch(action.getUserProfileSuccess(userProfile));
-                    return this._dispatchUserProfileItems(userProfile);
-                }
+                console.log('userProfile found from cachedEntyties')
+                store.dispatch(action.getUserProfilePending(id));
+                store.dispatch(action.getUserProfileSuccess(userProfile));
+                return this._dispatchUserProfileItems(userProfile);
+                
             }
         }
 
@@ -112,11 +109,11 @@ class UserProfileContainer extends Component {
     };
 
     _dispatchUserProfileItems(userProfile){
-        let answers      = this.props.entyties.answers;
+        let answers      = this.props.cacheEntities.answers;
 
         if (userProfile && userProfile.answers && userProfile.answers.length) {
             var byId         =`usersAnswers${userProfile.id}`;
-            answers          = answers.byId[byId]
+            answers          = answers[byId]
             var usersAnswers = userProfile.answers;
 
             if (!answers) {
@@ -208,7 +205,7 @@ class UserProfileContainer extends Component {
     render() {
         let   props = this.getProps();
         var   profileById = props.profileById;
-        const userProfile = props.entyties.userProfile.byId[profileById];
+        const userProfile = props.entities.userProfile[profileById];
       
           
 
@@ -249,41 +246,6 @@ export default withHigherOrderIndexBox(UserProfileContainer);
 
 
 
-
-
-
-
-export const ModalLink = (props) =>{
-    return(
-        <div>
-        <Link to={`${props.match.url}edit`}>Edit Profile</Link>
-
-        <Route
-          path={`${props.match.url}edit`}
-          render={() => {
-            return (
-              <Modal
-                onClick={() => {
-                  props.history.push(props.match.url);
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: '100%'
-                  }}
-                >
-                  Edit Profile Modal!
-                </div>
-              </Modal>
-            );
-          }}
-        />
-      </div>
-        )
-}
 
 
 

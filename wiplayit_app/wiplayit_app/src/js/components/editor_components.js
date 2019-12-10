@@ -183,7 +183,7 @@ export const DraftEditor = props => {
          </div>
     
          <div className="editors-box">
-            {props.onPost?
+            {props.objName == "Post"?
                <div>
                  <TextareaAutosize   {...props.textAreaProps} rows={1}/>
             

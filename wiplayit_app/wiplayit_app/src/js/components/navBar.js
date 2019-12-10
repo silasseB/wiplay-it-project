@@ -11,11 +11,13 @@ import { GetModalLinkProps } from "../components/component-props";
 
 let createPostProps = {
         objName     : 'Post',
-        isPost       : true,
+        linkName    : 'Post',
+        isPost      : true,
             };
      let createQuestionProps = {
-        objName     : 'Question',
-        isPost       : true,
+        objName   : 'Question',
+        isPost    : true,
+        linkName  : "Ask",
       };
 
 createQuestionProps = GetModalLinkProps.props(createQuestionProps)

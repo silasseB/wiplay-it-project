@@ -31,7 +31,7 @@ export default class Api{
        return api; 
     }
 
-    createPostCommentReplyApi(id){
+    createPostReplyApi(id){
        var api = `/api/create/post/comment/${id}/reply/`;
         return api;
     }

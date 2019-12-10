@@ -249,11 +249,19 @@ export function handleSubmit(props) {
     console.log(props)
     const axiosInstance = new Axios(true);
     const instance      = axiosInstance.axiosInstance();
-    let { actionType, byId, objName, formData, apiUrl } = props;
+    let { 
+        actionType,
+        byId,
+        objName, 
+        formData,
+        apiUrl,
+        IsModal } = props;
 
 
    
     byId = byId?byId:"newObject"; 
+    IsModal = IsModal || false;
+
     let updateProps = {
         actionType,
         byId,
@@ -268,40 +276,38 @@ export function handleSubmit(props) {
     } 
          
     if (props.isPut) {
-   	return dispatch => {
-        dispatch(action.ModalSubmitPending())
-     	dispatch(action.updateActionPending(updateProps))
+   	    return dispatch => {
+            dispatch(action.updateActionPending(updateProps))
 
-		instance.put(apiUrl, formData)
-		.then(response => {
-		 
-            updateProps['data'] = prepPayLoad(objName, response.data);
-            dispatch(action.ModalSubmitSuccess(updateProps))
-			dispatch(action.updateActionSuccess(updateProps));
+		    instance.put(apiUrl, formData)
+		    .then(response => {
+		        
+                updateProps['data'] = prepPayLoad(objName, response.data);
+                IsModal && dispatch(action.ModalSubmitSuccess(updateProps))
+			    dispatch(action.updateActionSuccess(updateProps));
 			
-		})
-		.catch(error => {
-			console.log(error)
-			dispatch(action.hideModal())
-
-			if (error.response && error.response.data) {
-               createProps['error'] = error.response.data;
-               dispatch(action.ModalSubmitError(updateProps))
-			   dispatch(action.updateActionError(updateProps));
-			}else{
-      		dispatch(action.handleError(error.request))
-      	}
-	   })
+		    })
+		    .catch(error => {
+			    console.log(error)
+			
+			    if (error.response && error.response.data) {
+                   createProps['error'] = error.response.data;
+                   IsModal && dispatch(action.ModalSubmitError(updateProps))
+			       dispatch(action.updateActionError(updateProps));
+			    }else{
+      		       dispatch(action.handleError(error.request))
+      	        }
+	        })
 
 	}
-   }else if (props.isPost) {
+    }else if (props.isPost) {
         return dispatch => {
      	    dispatch(action.createActionPending(createProps ))
 
 		    instance.post(props.apiUrl, props.formData)
 		    .then(response => {
-			    createProps['data'] = response.data; 
-                dispatch(action.ModalSubmitSuccess(createProps))
+			    createProps['data'] = prepPayLoad(objName, response.data); 
+                IsModal && dispatch(action.ModalSubmitSuccess(createProps))
 			    dispatch(action.createActionSuccess(createProps));
                 
 		    })
@@ -310,22 +316,22 @@ export function handleSubmit(props) {
 				
 			    if (error.response && error.response.data) {
                     createProps['error'] = error.response.data;
-                    dispatch(action.ModalSubmitError(createProps))
+                    IsModal && dispatch(action.ModalSubmitError(createProps))
 				    dispatch(action.createActionError(createProps));
       		
          	    }else{
       	        	dispatch(action.handleError(error.request))
       	        }
 
-			    dispatch(action.hideModal())
+			   
 	        })
    	}
 
-   }else{
+    }else{
 
-      return dispatch =>{
+        return dispatch =>{
  		   dispatch(action.handleError())
- 	   }
+ 	    }
  	}
 };
 
@@ -375,7 +381,7 @@ const prepPayLoad = (objName, data)=>{
 		data = { reply : data };
 	}
 	else if(objName === "Post"){
-		data = { postObj : data };
+		data = { post : data };
 	}
 
 	else if(objName === "UserProfile"){

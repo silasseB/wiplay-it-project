@@ -36,13 +36,9 @@ class  PostPage extends Component  {
             let storeUpdate   = store.getState();
             let {entyties }   = storeUpdate;
             let {postById}  =  this.state;
-            let post      =  entyties.post.byId[postById];
+            let post      =  cacheEntities.post[postById];
 
-            if (post && !post.isLoading && !post.timeStamp) {
-
-                console.log(post)
-                LocalCache('post', post.post );
-            }
+            
         };
 
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -52,7 +48,7 @@ class  PostPage extends Component  {
     
 
     componentDidMount() {
-        let { cachedEntyties } = this.props;
+        let { cacheEntities } = this.props;
         let { slug, id } = this.props.match.params;
         let  postById = `post${id}`;
 
@@ -102,9 +98,9 @@ class  PostPage extends Component  {
     render() {
         let props = this.getProps();
         var postById = props.postById;
-        var post = props.entyties.post;
+        var post = props.cacheEntities.post;
         console.log(post, props)
-        post = post.byId[postById]
+        post = post[postById]
         console.log(post)                 
         return (
             <div>
@@ -144,7 +140,7 @@ export default withHigherOrderIndexBox(PostPage);
 
 export const Post = props => {
 	var postById = props.postById;
-   var postState = props.entyties.post.byId[postById];
+   var postState = props.cacheEntities.post[postById];
    let post      = postState.post;
    var postProps = Object.assign({post},props)
 	return(

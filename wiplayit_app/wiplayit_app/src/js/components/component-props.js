@@ -94,13 +94,15 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
  	    case 'Comment':
  	       
  	        if (isPut) {
-
+ 	        	
                apiUrl = obj.post || obj.add_post? 
                             api.updatePostCommentApi(id)
                             :
                             api.updateAnswerCommentApi(id);
 
  	        }else {
+ 	        	
+ 	        	id = obj.answer || obj.post;
  	        	apiUrl = obj.post || obj.add_post?
  	        	            api.createPostCommentApi(id)
  	        	            :

@@ -33,14 +33,16 @@ button:focus, button:active {
 
 button {
   border: none;
-  box-shadow: none !important; 
-  text-align: center !important;
-  outline: 0px transparent white;
-  cursor: pointer;
+  box-shadow : none !important; 
+  text-align : center !important;
+  background :  none;
+  outline    : 0px transparent white;
+  cursor     : pointer;
+  
  }
 
 a:focus,a:active {
-	outline: none !important;;
+	outline: none !important;
 	box-shadow: none !important;
 	text-decoration: none !important;
 	

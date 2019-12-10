@@ -66,8 +66,8 @@ class ReplyGrandChildrenBox extends Component {
    render() { 
      
       let props      =   this.getProps();
-      var replies    =   props.entyties.replies;
-      replies        =   replies.byId[props.grandChildById];
+      var replies    =   props.entities.replies;
+      replies        =   replies[props.grandChildById];
       console.log(replies) 
       
       return (

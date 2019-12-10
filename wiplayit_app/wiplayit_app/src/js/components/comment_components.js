@@ -42,7 +42,7 @@ export const CommentsComponent = props => {
     const editorState = EditorState.createWithContent(contentState);
 
 
-    let pathToUpvoters ;
+    let pathToUpvoters;
 
    
     

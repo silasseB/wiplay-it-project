@@ -28,7 +28,7 @@ const api      = new Api();
 
 
 export const AnswersComponent = props => {
-   console.log(props)
+   //console.log(props)
    var { answer, answerListById, currentUser } = props;
    
   let pathToUpvoters =  `/answer/${props.answer.id}/upvoters/`;
