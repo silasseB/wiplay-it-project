@@ -39,8 +39,9 @@ class PasswordResetPage extends Component{
 
         return (
             <div>
-                <NavBar {...props}/>
-                <EmailFormComponent {...props}/>
+                <div className="registration-container">
+                  <EmailFormComponent {...props}/>
+                </div>
             </div>
         )
     };

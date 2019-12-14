@@ -13,8 +13,8 @@ export class PasswordChangePage extends Component{
 
       this.state = {
          navbarTitle        : 'Password Change',
-         formTitle          :  'Password Change',
-         formDescription    : ['Fill in the form bellow with your new account password and submit.'],
+         formTitle          : 'Password Change',
+         formDescription    : 'Fill in the form bellow with your new account password and submit.',
                             
       };
    }
@@ -32,8 +32,7 @@ export class PasswordChangePage extends Component{
       console.log(props)
       return (
          <div>
-            <NavBar {...props.passwordChangeStateForm}/> 
-
+            
             <div className="registration-page">
                <div className="password-change-container registration-container">
                   <PassWordChangeForm {...props}/>

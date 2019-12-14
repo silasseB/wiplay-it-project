@@ -1,4 +1,6 @@
 import React from 'react';
+import { ModalManager}   from  "../containers/modal/modal_container";
+
 import LinkInput from '../containers/input';
 import { Editor,Entity,CompositeDecorator } from 'draft-js';
 import TextareaAutosize from 'react-autosize-textarea';
@@ -115,6 +117,43 @@ export const ToolBar = props => {
 
 
 
+export const EditorNavBar = props  => {
+    console.log(props)
+    let background = props.background;
+    
+    return (
+        <div id="editor-nav-bar" className="fixed-top">
+        <div className="editor-navbar"> 
+            <div className="back-btn-box">
+           
+                <button type="button" className="editor-custom-back-btn custom-back-btn "
+                  onClick={()=> ModalManager.close(background)} >
+                <span className="editor-arrow material-icons ">arrow_back</span>
+                </button>
+            
+            </div>
+
+            <div className="page-name-box">
+               <b className="page-name">{props.formName}</b>  
+            </div>
+         
+            <div className="submit-btn-box">
+                <button type="button" onClick={()=> props.subimtCleanForm()}
+                  className="editor-submit-btn submit-btn">
+                  Submit
+                </button>
+           
+            </div>
+        </div>
+        <div className="editor-btns-box">
+            <ToolBar {...props}/>
+        </div>
+        </div>    
+    ); 
+}
+
+
+
 
 
 const ImageButton = props => {
@@ -178,19 +217,15 @@ export const TextAreaEditor = props => {
 export const DraftEditor = props => {
 	return (
 		<div>
-         <div className="editor-btns-box">
-            <ToolBar {...props}/>
-         </div>
-    
-         <div className="editors-box">
-            {props.objName == "Post"?
-               <div>
-                 <TextareaAutosize   {...props.textAreaProps} rows={1}/>
+            <div className="editors-box">
+               { props.objName == "Post"?
+                    <div>
+                        <TextareaAutosize   {...props.textAreaProps} rows={1}/>
             
-               </div>
-              :
-              ""
-            }
+                    </div>
+                :
+                ""
+                }
          
             <Editor 
                editorState={props.editorState} 
@@ -201,9 +236,9 @@ export const DraftEditor = props => {
                blockStyleFn={props.blockStyleFn}
                placeholder={props.editorPlaceHolder}
             />
-         </div>
-      </div>
-   );
+            </div>
+        </div>
+    );
 }
 
 

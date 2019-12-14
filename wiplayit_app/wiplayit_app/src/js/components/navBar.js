@@ -69,7 +69,7 @@ export const NavBarSmallScreen = props => {
                     <div className="item-box">
 
                     <Link className="navigation-item"
-                         to={ {pathname:"/post/list/", state } }>
+                         to={ {pathname:"/posts/", state } }>
                         Posts
                        </Link>
                     </div>
@@ -144,7 +144,7 @@ export const NavBarBigScreen = props => {
                  Profile
              </Link>
 
-             <Link  className="navigation-item btn-sm" to={ {pathname:"/post/list/", state } }>
+             <Link  className="navigation-item btn-sm" to={ {pathname:"/posts/", state } }>
                Posts
             </Link>
 
@@ -248,38 +248,6 @@ export const PartalNavigationBar = MatchMediaHOC(PartialNavBar, '(max-width: 500
 export const NavigationBarBigScreen = MatchMediaHOC(NavBarBigScreen, '(min-width: 800px)');
 export const NavigationBarSmallScreen = MatchMediaHOC(NavBarSmallScreen, '(max-width: 500px)');
 
-
-
-export const EditorNavBar = props  => {
-   console.log(props)
-   let background = props.background;
-   return (
-   <div id="editor-nav-bar" className="fixed-top">
-      <div className="editor-navbar"> 
-         <div className="back-btn-box">
-           
-	            <button type="button" className="editor-custom-back-btn custom-back-btn "
-                  onClick={()=> ModalManager.close(background)}  data-dismiss="moda">
-	            <span className="editor-arrow material-icons ">arrow_back</span>
-	            </button>
-            
-         </div>
-
-         <div className="page-name-box">
-            <b className="page-name">{props.formName}</b>  
-         </div>
-	     
-         <div className="submit-btn-box">
-            <button type="button" onClick={()=> props.subimtCleanForm()}
-                className="editor-submit-btn submit-btn">
-                  Submit
-            </button>
-           
-         </div>
-      </div>
-   </div>    
-) 
-}
 
 
 export const EditProfileNavBar = props  => {

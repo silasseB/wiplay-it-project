@@ -9,8 +9,12 @@ import rootReducer from '../reducers/index';
 const persistStore = () => (next) => (reducer, initialState, enhancer) => {
     let store;
     if (typeof initialState !== 'function') {
-        const preloadedState = initialState ||
-        JSON.parse(localStorage.getItem('@@CacheEntities') || {});
+
+        let cacheEntities = localStorage.getItem('@@CacheEntities');
+        cacheEntities     = cacheEntities && JSON.parse(cacheEntities || {}) || {};
+
+        const preloadedState = initialState || cacheEntities;
+
         let entities = Object.defineProperty({}, "entities", {
                                                value : preloadedState,
                                                writable     : true,
@@ -29,7 +33,7 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
         const preloadedState = initialState ||
         JSON.parse(localStorage.getItem('@@CacheEntities') || {})
         store = next(reducer, preloadedState, enhancer);
-        //alert('hello')
+        
     }
 
     

@@ -41,7 +41,7 @@ const defaultStyles = {
     position                : 'relative',
     margin                  : '15% auto',
     width                   : '60%',
-    border                  : '1px solid rgba(0, 0, 0, .2)',
+   
     background              : '#fff',
     overflow                : 'auto',
     borderRadius            : '4px',
@@ -84,6 +84,10 @@ class ModalBox extends Component{
    handleKeyDown(event){
       if (event.keyCode == 27 /*esc*/) this.close();
    }
+
+    componentDidUpdate(prevProps, nextProps) {
+      console.log(prevProps)
+    }
 
    componentDidMount(){
     console.log(this.props)
@@ -167,12 +171,11 @@ const renderModal = () => {
 
 export const ModalManager = {
 
-    open(component){
+    open(component, background=null){
 
        modals.push(component);
 
        if(modals.length == 1){ // render the modal only if there is no other showing modals
-          store.dispatch(showModal(true))
           renderModal();
        }
     },

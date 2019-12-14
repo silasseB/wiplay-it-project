@@ -124,16 +124,15 @@ export function entities(state=InitialState(), action) {
           return state;
 
       case types.GET_USER_PROFILE.SUCCESS:
-            //console.log(action, state)
-            let newState = state;
+            console.log(action, state)
 
             if (state.userProfile[action.profileById]) {
                 //console.log(newState ,action) 
               
-               Object.assign(newState.userProfile[action.profileById], action.payload);
+               Object.assign(state.userProfile[action.profileById], action.payload);
             }
 
-        return newState;
+        return state;
 
       case types.GET_USER_PROFILE.ERROR:
          Object.assign(state.userProfile[action.profileById], action.payload);
@@ -145,7 +144,7 @@ export function entities(state=InitialState(), action) {
          if (!state.users[action.byId]) {
             Object.defineProperty(state.users, action.byId,
                                              {value : action.payload,
-                                                writable     : true,
+                                                writable    : true,
                                                configurable : true,
                                                enumerable   : true,
                                              });
@@ -510,6 +509,57 @@ export function entities(state=InitialState(), action) {
       case types.UPDATE_USER_LIST.ERROR:
          Object.assign(state.users[action.byId], {error: action.payload});
         return state;  
+      
+      
+       case types.UPDATE_POST.PENDING:
+        console.log(action, state.post)
+        if (state.post[action.byId]) {
+           Object.assign(state.post[action.byId], action.payload);
+
+        }else if(state.posts[action.byId]){
+            Object.assign(state.posts[action.byId], action.payload);
+        }
+        return state;
+
+    case types.UPDATE_POST.SUCCESS:
+   
+        if (state.post[action.byId]) {
+            let post = state.post[action.byId]
+            post     = post.post;
+           
+            post = {
+                isUpdating : false,
+                post   : Object.assign(post, action.payload.post),
+            
+            } 
+        
+           Object.assign(state.post[action.byId], post);
+
+        }else if(state.posts[action.byId]){
+            let post = action.payload.post;
+            
+            var posts = state.posts[action.byId];
+            let postList = posts && posts.postList;
+            
+            helper.updateReducerListEntynties(postList, post);
+
+        };
+        return state;                  
+      
+
+    case types.UPDATE_POST.ERROR:
+        
+        if (state.post[action.byId]) {
+           Object.assign(state.post[action.byId], action.payload);
+
+        }else if(state.posts[action.byId]){
+            Object.assign(state.posts[action.byId], action.payload);
+        };
+
+        return state;   
+
+
+
 
 
       case types.UPDATE_QUESTION.PENDING:

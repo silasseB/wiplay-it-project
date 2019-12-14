@@ -52,7 +52,7 @@ class PostReplyUpVotersBox extends Component {
         var props = this.getProps()
         console.log(props)
         var usersById = props.usersById;
-        const users = props.entyties.users.byId[usersById];
+        const users = props.entities.users[usersById];
         //userProfile = userProfile.user;
         //console.log(users)
    

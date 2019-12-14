@@ -6,6 +6,7 @@ import {handleSubmit, getCurrentUser,getPost, getUserList,
          getUserProfile,getPostList,getQuestion,getReplyList,getReplyChildrenList,
          getQuestionList as _getQuestionList,getCommentList, getIndex }  from "../../dispatch/index"
 import  * as action  from '../../actions/actionCreators';
+import { ModalManager}   from  "../../containers/modal/modal_container";
 
 import { AlertComponent } from "../../components/partial_components";
 import { ModalOptionsMenu } from "../../components/buttons";
@@ -71,10 +72,8 @@ export function withHigherOrderIndexBox(Component) {
                 currentUser = currentUser && currentUser.user;
             }
             
-            if (currentUser) {
-                this.setState({currentUser})
-            }
-
+            this.setState({currentUser})
+            
             return currentUser;  
         };
 
@@ -123,6 +122,10 @@ export function withHigherOrderIndexBox(Component) {
                    this.setState({ modalIsOpen : modal.modalIsOpen }) 
                 }
 
+                if (currentUser && currentUser.user) {
+                    this.getCurrentUser(currentUser.user)
+                }
+
                 if( data && !data.successMessageAlerted){
                     let successMessage = modal.successMessage;
                     data['successMessageAlerted'] = true;
@@ -136,7 +139,7 @@ export function withHigherOrderIndexBox(Component) {
                
 
                 this.forceUpdate()
-               
+
                 }
             };
 
@@ -157,12 +160,21 @@ export function withHigherOrderIndexBox(Component) {
 
         componentDidUpdate(prevProps, nextProps) {
             //console.log(prevProps, nextProps, this.props)
+            let { action } = prevProps.history;
+
+            let { entities }  = prevProps;
+                let { modal } = entities
+            
+            if (action === "POP" && modal && modal.modalIsOpen) {
+                console.log(prevProps, action) 
+                ModalManager.close();
+            }
         }
 
         componentDidMount() {
             this._isMounted = true;
-            this.onStoreUpdate() //Subscribe on store change  
-             
+            this.onStoreUpdate() //Subscribe on store change 
+            console.log(this.props)            
       
             if (!this.isAuthenticated()) {
                //User is not authenticated,so redirect to authentication page.

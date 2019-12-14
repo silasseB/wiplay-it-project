@@ -117,14 +117,15 @@ export function getQuestion(id) {
     const instance = axiosInstance.axiosInstance();
       
     let apiUrl = api.getQuestionApi(id);
+    let questionById = `question${id}`;
 
     return dispatch => {
-      dispatch(action.getQuestionPending(id))
+      dispatch(action.getQuestionPending(questionById))
 	   instance.get(apiUrl)
-      .then(response => dispatch(action.getQuestionSuccess(response.data)))
+      .then(response => dispatch(action.getQuestionSuccess( questionById, response.data)))
       .catch(error => {
            console.log(error)
-           dispatch(action.getQuestionError(id, error));
+           dispatch(action.getQuestionError( questionById, error));
        })
    }
 };
@@ -135,12 +136,13 @@ export function getPost(id) {
      const axiosInstance = new Axios(true);
     const instance = axiosInstance.axiosInstance();
     let apiUrl = api.getPostApi(id);
+    let postById = `post${id}`
 
     return dispatch => {
-      dispatch(action.getPostPending(id))
+      dispatch(action.getPostPending(postById))
 	   instance.get(apiUrl)
-      .then(response => dispatch(action.getPostSuccess(response.data)))
-      .catch(error => dispatch(action.getPostError(id, error))) 
+      .then(response => dispatch(action.getPostSuccess(postById, response.data)))
+      .catch(error => dispatch(action.getPostError(postById ,error))) 
    }
 };
 
@@ -154,22 +156,23 @@ export function getUserProfile(id, apiUrl) {
     if (!apiUrl) {
         apiUrl    =   api.getProfileApi(id);
     }
+    let profileById = `userProfile${id}`;
 
     console.log(apiUrl, id)
 
     return dispatch => {
 
-        dispatch(action.getUserProfilePending(id))
+        dispatch(action.getUserProfilePending(profileById))
 	    instance.get(apiUrl)
         .then(response => {
         	console.log(response.data.profile)
-            dispatch(action.getUserProfileSuccess(response.data));
+            dispatch(action.getUserProfileSuccess( profileById ,response.data));
         })
         .catch(error => {
       	
       	    if (error.response) {
       		    console.log(error.response.data)
-      	        dispatch(action.getUserProfileError(id, error.response.data));
+      	        dispatch(action.getUserProfileError( profileById ,error.response.data));
             }else{
          	    console.log(error)
          	    dispatch(action.handleError(error.request));

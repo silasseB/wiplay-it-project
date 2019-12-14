@@ -57,11 +57,13 @@ class EditProfile extends Component{
     onProfileUpdate = () =>{
  
         const onStoreChange = () => {
+
+            let { cacheEntities } = this.props; 
             let { slug, id } = this.props.match.params;
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
             let byId         =  id? `userProfile${id}`:null;
-
+            
             let userProfile = byId? entities.userProfile[byId]:null;
            
 
@@ -71,6 +73,12 @@ class EditProfile extends Component{
                 this.setState({ submitting : userProfile.submitting});
 
                 if (user) {
+                    let { currentUser} = cacheEntities;
+
+                    if (currentUser && currentUser.id === user.id) {
+                       store.dispatch(action.getCurrentUserSuccess(user))
+                    }
+
                     this.populateEditForm(user);
                 }
             }
@@ -87,14 +95,15 @@ class EditProfile extends Component{
     componentDidMount() {
         this.onProfileUpdate();
         let { cacheEntities } = this.props; 
-        let { slug, id } = this.props.match.params;
+        let { userProfile }   = cacheEntities
+        let { slug, id }      = this.props.match.params;
                           
         if (id ) {
             let profileById = `userProfile${id}`;
             
-            let  {userProfile, currentUser, auth} = cachedEntyties;
+            
             userProfile = userProfile && userProfile[profileById]
-            userProfile = userProfile.user
+        
 
             console.log(userProfile)
 
@@ -393,10 +402,11 @@ export class DropImage extends React.Component {
         const onStoreChange = () => {
             let storeUpdate   = store.getState();
 
-            let {entyties} = storeUpdate
-            let {modal} = entyties
+            let {entities} = storeUpdate
+            let {modal} = entities
             let {background} = this.props;
             this.setState({submitting : modal.submitting});
+            console.log(modal)
 
             if (modal && modal.successMessage) {
                 ModalManager.close(background)
@@ -430,7 +440,7 @@ export class DropImage extends React.Component {
         let file = this.state.file;
         
         let formData = helper.createFormData({'profile_picture': file});
-        let submitProps = Object.assign({formData}, this.props)
+        let submitProps = Object.assign({formData, IsModal  : true}, this.props)
         console.log(submitProps, this.props)        
         store.dispatch(handleSubmit(submitProps));
        

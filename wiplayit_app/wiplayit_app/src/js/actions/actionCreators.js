@@ -163,44 +163,30 @@ export const getIndexSuccess = (data) => {
 };
 
 
-export const getQuestionPending = (id) => {
+export const getQuestionPending = (questionById) => {
   // console.log(actionType)
-  var questionById = `question${id}`;
-   return{
-      type: types.GET_QUESTION.PENDING,
-      questionById,
-      payload: {
-         isLoading : true,
-         question           : "",
-         newObject          : "",
-         answerList         : [],
-         answer             : "",  
-         questionHasAnswer  : false,
-         userHasAnswer      : false,
-         userAnswer         : '',
-         visited            : false,
-         error              : '',
-      }
-   }
+  
+    return{
+        type: types.GET_QUESTION.PENDING,
+        questionById,
+        payload: {
+           isLoading : true,
+        }
+    }
 };
 
 
 
-export const getQuestionSuccess = (question) => {
-   //@userAnswer is for what
-   // 
-   var userAnswer = getUserAnswer(question.answers);
-   var id = question.id;
-   var questionById = `question${id}`;
-   var answerById = `answer${id}`;
-
-
-   return{
+export const getQuestionSuccess = ( questionById, question) => {
+    //@userAnswer is for what
+    // 
+    var userAnswer = getUserAnswer(question.answers);
+   
+    return{
       type: types.GET_QUESTION.SUCCESS,
       questionById,
       payload: {
          question, 
-         answerList        : [answerById],
          userAnswer        : userAnswer,
          userHasAnswer     : userAnswer?true:false,
          questionHasAnswer : question.answers.length?true:false,
@@ -212,9 +198,9 @@ export const getQuestionSuccess = (question) => {
 
 
 
-export const getQuestionError = (id, error) => ({
+export const getQuestionError = (questionById, error) => ({
    type         : types.GET_QUESTION.ERROR,
-   questionById : `question${id}`,
+   questionById ,
    payload: {
       error     : error, 
       isLoading : false,
@@ -225,58 +211,55 @@ export const getQuestionError = (id, error) => ({
 
 
 
-export const getPostPending = (id) => {
-   var postById = `post${id}`;
-   return{
-      type: types.GET_POST.PENDING,
-      postById,
-      payload: {
-         isLoading          : true,
-         post               : "",
-         newObject          : "",
-         commentList        : [],
-         visited            : false,
-         error              : '',
-      }
-   }
-};
-
-
-
-export const getPostSuccess = (post) => {
-   var id = post.id;
-   var postById = `post${id}`;
-   var commentById = `commentsPost${id}`;
+export const getPostPending = (postById) => {
    
-   return{
-      type: types.GET_POST.SUCCESS,
-      postById,
-      payload: {
-         post              : post, 
-         commentList       : [commentById],
-         isLoading         : false,
-
-      }
-   };
+    return{
+        type: types.GET_POST.PENDING,
+        postById,
+        payload: {
+           isLoading          : true,
+           post               : "",
+           newObject          : "",
+           commentList        : [],
+           visited            : false,
+           error              : '',
+        }
+    }
 };
 
 
 
-export const getPostError = (id, error) => ({
-  type: types.GET_POST.ERROR,
-  postById : `post${id}`,
-  payload: {
-     error     : error, 
-     isLoading : false,
-  }
+export const getPostSuccess = (postById ,post) => {
+   
+      
+    return{
+        type: types.GET_POST.SUCCESS,
+        postById,
+        payload: {
+            post              : post, 
+            isLoading         : false,
+
+        }
+    };
+};
+
+
+
+export const getPostError = (postById, error) => ({
+    type: types.GET_POST.ERROR,
+    postById,
+    payload: {
+       error     : error, 
+       isLoading : false,
+    }
 });
 
 
 
 
 
-export const getUserProfilePending = (id) => {
-   var profileById = `userProfile${id}`;
+export const getUserProfilePending = (profileById) => {
+   console.log(profileById)
    return{
       type: types.GET_USER_PROFILE.PENDING,
       profileById,
@@ -288,21 +271,14 @@ export const getUserProfilePending = (id) => {
 
 
 
-export const getUserProfileSuccess = (userProfile) => {
-    console.log(userProfile)
-    var id = userProfile.id;
-    var profileById = `userProfile${id}`;
-
+export const getUserProfileSuccess = (profileById, userProfile ) => {
+    console.log(userProfile, profileById)
+    
     return{
         type: types.GET_USER_PROFILE.SUCCESS,
         profileById,
         payload: {
-            user         : userProfile, 
-            questions    : userProfile.questions,
-            answers      : userProfile.answers,
-            posts        : userProfile.posts,
-            followers    : userProfile.followers,
-            followings   : userProfile.followings,
+            ...userProfile,
             isLoading    : false,
         }
     };
@@ -310,9 +286,9 @@ export const getUserProfileSuccess = (userProfile) => {
 
 
 
-export const getUserProfileError = (id, error) => ({
+export const getUserProfileError = ( profileById, error) => ({
   type: types.GET_USER_PROFILE.ERROR,
-  profileById : `userProfile${id}`,
+  profileById,
   payload: {
      error     : error, 
      isLoading : false,
@@ -374,11 +350,11 @@ export const getQuestionListSuccess = (byId, questionList) => {
 
 export const getQuestionListPending = (byId) => ({
 	type: types.GET_QUESTION_LIST.PENDING,
-   byId,
-   payload: {
-      isLoading    : true,
+    byId,
+    payload: {
+        isLoading    : true,
       
-   }
+    }
 });
 
 
@@ -395,7 +371,7 @@ export const getQuestionListError = (byId, error) =>({
 
 
 
-export const getPostListSuccess = (byId, postList) => {
+export const getPostListSuccess = ( byId, postList) => {
     return{
       type: types.GET_POST_LIST.SUCCESS,
       byId,
@@ -823,12 +799,14 @@ export const getReplyChildLindData = (props) => {
 };
 
 
-export const showModal = (value) =>{
+export const showModal = (value, background) =>{
+    console.log(background)
    
     return {
       type: 'MODAL_ROUTER',
       payload : {
         modalIsOpen  : value,
+        background ,
       }
    };
 };

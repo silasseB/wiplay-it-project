@@ -61,7 +61,7 @@ def get_objects_perms(perms_for=None):
 
 		'draft_editor_contents_perms' : {
 		    'edit_perms': ['delete_drafteditormediacontnent' ,'change_drafteditormediacontnent',
-		                                                         'view_drafteditormediacontnent'],
+		                            'view_draft_editor_files', 'view_drafteditormediacontnent'],
 		}
     }
 		         

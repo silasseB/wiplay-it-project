@@ -37,15 +37,15 @@ export const PostComponent = props => {
               margin     : '0 0 2px'
    }
 
-   let {post, currentUser, postById}     =    props;
+   let {post, currentUser, postById, postListById}     =    props;
 
 
-   let   storedState    =  JSON.parse(post.add_post);
-   const contentState   =  convertFromRaw(storedState);
-   const editorState    =  EditorState.createWithContent(contentState);
+   let   storedState    = post && post.add_post && JSON.parse(post.add_post);
+   const contentState   = storedState && convertFromRaw(storedState);
+   const editorState    = contentState && EditorState.createWithContent(contentState);
 
-   let   postPath       = `/post/${post.slug}/${post.id}/`;
-   let   pathToUpvoters =  `/post/${post.id}/upvotes/`;
+   let   postPath       = post && `/post/${post.slug}/${post.id}/`;
+   let   pathToUpvoters = post && `/upvoters/post/${post.id}/`;
    let state = {
             post,
             usersIsFor : 'postUpVoters', 
@@ -54,7 +54,7 @@ export const PostComponent = props => {
         objName     : 'Post',
         isPut       : true,
         obj         : post, 
-        byId        : postById,
+        byId        : postById || postListById,
         currentUser,
     };
 
@@ -72,8 +72,7 @@ export const PostComponent = props => {
 
     editPostProps = GetModalLinkProps.props(editPostProps)
     editCommentProps = GetModalLinkProps.props(editCommentProps)
-   
-
+       
     let EditorModalLink = <EditorLink {...editCommentProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editPostProps}/>
     
@@ -108,6 +107,7 @@ export const PostComponent = props => {
 
     return (
       <div>
+        { editorState?
           <div className="post-contents">
             <div className="post-box">
                <div className="post"> 
@@ -143,6 +143,10 @@ export const PostComponent = props => {
                </div>
             <CommentsBox {...props}/>
           </div>
+
+          :
+          ""
+        }
       </div>
     );
 
@@ -153,66 +157,79 @@ export const PostComponent = props => {
 export const PostPageComponent = props => {
 
    return (
-      <div>
-         <div className="post-contents">
-            <div className="post-box">
-               <div className="post"> 
+        <div>
 
-                  { props.isPostBox? 
-                     <b className="">
-                        { props.post.add_title }
+            { editorState?
+                <div className="post-contents">
+                    <div className="post-box">
+                        <div className="post"> 
+
+                            { props.isPostBox? 
+                                <b className="">
+                                   { props.post.add_title }
                   
-                     </b>
-                     :
+                                </b>
+                            :
 
-                     <b className="">
-                        <Link to={{ pathname : props.postPath, state : props.state }} className="question-link">
-                           { props.post.add_title }
-                        </Link>
-                     </b>
-                  }
-               </div>
+                            <b className="">
+                                <Link 
+                                    to={{ pathname : props.postPath, state : props.state }}
+                                    className="question-link">
+                                    { props.post.add_title }
+                                </Link>
+                            </b>
+                            }
+                        </div>
 
-               <div className="post-body">
-                  <Editor
-                     blockRendererFn={pageMediaBlockRenderer}
-                     editorState={props.editorState} 
-                     readOnly={true} 
-                  />
-               </div>
-                  <ButtonsBox {...props.btnsProps}/>
-            </div>
-            <CommentsBox {...props}/>
-         </div>
-      </div>
-   );
+                        <div className="post-body">
+                            <Editor
+                                blockRendererFn={pageMediaBlockRenderer}
+                                editorState={props.editorState} 
+                                readOnly={true} 
+                            />
+                        </div>
+                        <ButtonsBox {...props.btnsProps}/>
+                    </div>
+                    <CommentsBox {...props}/>
+                </div>
+            
+            :
+            ""
+
+            }
+        </div>
+    );
 }; 
 
 
 export const PostListComponent = props => {
 
-  return (
-      <div className="post-list-page">
-         <div className="post-list-content">
-            <div className="post-box">
-               <div className="post">  
-               </div>
-               <div className="post-body">
-                  <Editor
-                     blockRendererFn={pageMediaBlockRenderer}
-                     editorState={props.editorState} 
-                     readOnly={true} 
-                  />
-               </div>
+    return (
+        <div className="post-list-page">
+           { editorState?
+                <div className="post-list-content">
+                   <div className="post-box">
+                        <div className="post">  
+                        </div>
+                        <div className="post-body">
+                            <Editor
+                                blockRendererFn={pageMediaBlockRenderer}
+                                editorState={props.editorState} 
+                                readOnly={true} 
+                            />
+                        </div>
     
-            <ButtonsBox {...props.btnsProps}/>
-         </div>
-         <CommentsBox {...props}/>
+                        <ButtonsBox {...props.btnsProps}/>
+                    </div>
+                    <CommentsBox {...props}/>
       
-      </div>
-      </div>
+                </div>
 
-   );
+                :
+                ""
+            }
+        </div>
+    );
 }; 
 
 

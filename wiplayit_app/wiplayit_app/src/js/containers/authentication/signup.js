@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { MatchMediaHOC } from 'react-match-media';
+import RegistrationPage from "../../containers/authentication/registration";
+
 import  withAuthentication   from '../../containers/authentication/index'; 
-import { SignUpFormComponent, NavBar }  from '../../components/registration'; 
+import { SignUpFormComponent,RegistrationComponent, NavBar }  from '../../components/registration'; 
 
 
 
@@ -12,7 +15,7 @@ class SignUpPage extends Component {
 
         super(props);
         this.state = {
-            navbarTitle : 'Signing on Wiplayit',
+            navbarTitle : 'Sign Up ',
         };
     };
 
@@ -31,33 +34,40 @@ class SignUpPage extends Component {
       
     };
 
-
-
-
-   render() {
+    render() {
      
-    let props = this.getProps(); 
+        let props = this.getProps(); 
            
+        return (
+            <div> 
+                <SignUpFormSmallScreen {...props}/>
+                <RegistrationBigScreen/>
+            </div>
+
+        );
+    };
+};
+
+
+export default withAuthentication(SignUpPage);
+
+
+
+const SignUpForm = (props) => {
     return (
-          <div className="login-page"> 
-            <div>
-              <NavBar {...props}/>
-            </div>
-          
+        <div className="login-page"> 
             <div className="registration-container">
-              
-              <SignUpFormComponent {...props}/>
-              
-
+                <SignUpFormComponent {...props}/>
             </div>
+        </div>
+
+    );
+
+};
 
 
-          </div>
 
-       );
-  };
-  }
+const SignUpFormSmallScreen = MatchMediaHOC(SignUpForm, '(max-width : 800px)');
+const RegistrationBigScreen = MatchMediaHOC(RegistrationPage, "(min-width : 900px)");
 
-
-  export default withAuthentication(SignUpPage);
 

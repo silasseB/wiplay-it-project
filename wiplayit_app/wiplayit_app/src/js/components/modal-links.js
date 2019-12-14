@@ -21,17 +21,26 @@ export const EditorLink = props => {
         background : props.background || location,
         modalProps
     } 
-   
     
+
+    let buildLinkName =()=> {
+        let Edit = props.isPut && "Edit " || "";
+        return `${Edit}${props.objName}`;
+    };
+
+    let linkName = props.linkName;
+    linkName = linkName?linkName:buildLinkName();
+       
     return(
         <button className=""  onClick={()=> {
+                        store.dispatch(showModal(true, state.background))
                         setTimeout(()=> {
                             
                             history.push({ pathname: pathname, state}); 
                         }, 500);
 
                     }}>
-                    { props.linkName || props.objName } 
+                    { linkName } 
         </button>
         
     );

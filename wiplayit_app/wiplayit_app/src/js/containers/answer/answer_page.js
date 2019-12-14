@@ -28,12 +28,13 @@ class AnswersBox extends Component {
     componentDidMount() {
       let {questionById, cacheEntities } = this.props;
       let { question } =  cacheEntities;
+      console.log(question);
         question = question[questionById];
 
-        question  =  question.question;
-        var answerListById   = `answers${question.id}`;
+        question  = question && question.question;
+        var answerListById   = question && `answers${question.id}`;
 
-        if (question.answers) {
+        if (question && question.answers) {
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, question.answers));
 
@@ -56,6 +57,7 @@ class AnswersBox extends Component {
 
    render() { 
       const props =  this.getProps();
+      console.log(props)
       var answers      = props.entities.answers;
       
       answers          = answers[props.answerListById]

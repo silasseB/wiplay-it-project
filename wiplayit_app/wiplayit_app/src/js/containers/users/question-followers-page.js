@@ -50,7 +50,7 @@ class QuestionFollowersBox extends Component {
         var props = this.getProps()
         
         var usersById = props.usersById;
-        const users = props.entyties.users.byId[usersById];
+        const users = props.entities.users[usersById];
         
    
         return (

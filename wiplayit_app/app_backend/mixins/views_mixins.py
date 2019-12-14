@@ -41,18 +41,15 @@ class BaseMixin(object):
     	else:
     		data[text_field ]  = self.request.data.get(text_field, False)
     		add_post     = self.request.data.get("add_post", False)
-    		    		
-    		if instance is not None:
-    			data['slug']   = self.update_slug_field(instance)
-    			
-    		if add_post:
-    			data['add_title'] = self.request.data.get("add_title") 
-    		   		
-    	
-    	if related_field and instance:
-    		data[related_field] = instance.id
+    		add_question     = self.request.data.get("add_question", False)
 
-    	
+    		if add_question or add_post:
+
+    			if instance is not None:
+    				data['slug']   = self.update_slug_field(instance)
+
+    			if add_post:
+    				data['add_title'] = self.request.data.get("add_title") 
     	return data
 
 
@@ -280,8 +277,12 @@ class UpdateObjectMixin(BaseMixin):
 class CreateMixin(BaseMixin):
 	
 	def post(self, request, *args, **kwargs):
-		instance = self.get_object()
-		data = self.update_text_field(instance)
+		instance       = self.get_object()
+		related_field  = self.fields_to_update.get('related_field', False)
+		data           = self.update_text_field(instance)
+
+		if related_field and instance:
+			data[related_field] = instance.id
 		
 		serializer = self.create(data)
 		return serializer
@@ -301,9 +302,11 @@ class CreateMixin(BaseMixin):
 
 			
 		instance = serializer.save(created_by=self.request.user)
+		print(edit_perms)
 
 		if edit_perms is not None:
 			for perm in edit_perms:
+				print(perm)
 				self.assign_perm(perm, instance)
 						
 		return Response(serializer.data, status=status.HTTP_201_CREATED)

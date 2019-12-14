@@ -29,15 +29,24 @@ class  PostListPage extends Component  {
    }
   
       
-   componentDidMount() {
-      console.log(this.props)
-      var postListById = this.state.postListById;
+    componentDidMount() {
+        console.log(this.props)
+        var postListById = this.state.postListById;
+        let { cacheEntities } = this.props;
+        let { posts, currentUser } = cacheEntities;
+        
       
-      var posts = this.props.entyties.posts;
-      posts = posts.byId[postListById]
+        posts = posts[postListById]
+
+        if (posts) {
+            console.log(posts)
+            store.dispatch(action.getPostListPending(postListById));
+            store.dispatch(action.getPostListSuccess( postListById ,posts.postList));
+            return
+        }
       
 
-      this.props.getPostList(postListById);                           
+        this.props.getPostList(postListById);                           
       
           
    }
@@ -57,9 +66,9 @@ class  PostListPage extends Component  {
    render() {
       let props = this.getProps();
       //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
-      var posts  = props.entyties.posts;
+      var posts  = props.entities.posts;
        console.log(posts)
-      posts  = posts.byId[props.postListById];
+      posts  = posts[props.postListById];
       console.log(props, posts)
       return (
          <div style={{}}>
@@ -96,11 +105,13 @@ export default withHigherOrderIndexBox(PostListPage);
 
 const Posts = props => {
 
-   var posts  = props.entyties.posts;
-   posts  = posts.byId[props.postListById];
+   var posts  = props.entities.posts;
+   posts  = posts[props.postListById];
+   console.log(posts)
 
    return (
       <div>
+       {posts && posts.postList?
          <div className="home-page-contents">
 
             { posts.postList.map(( post, index )  => {
@@ -116,6 +127,9 @@ const Posts = props => {
             )}
 
          </div>
+         :
+         ""
+        }
       </div>        
    )
 }

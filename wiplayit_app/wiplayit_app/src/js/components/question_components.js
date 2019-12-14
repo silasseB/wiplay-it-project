@@ -18,7 +18,7 @@ import  * as types  from '../actions/types';
 
 export const QuestionComponent = props => {
     
-    let { question, questionById, isQuestionBox, currentUser }    = props;
+    let { question, questionById,questionListById, isQuestionBox, currentUser }    = props;
 
 
 
@@ -44,12 +44,12 @@ export const QuestionComponent = props => {
     let getObj = ()=>{
 
         if (isQuestionBox && question.user_has_answer) {
-            var questionEntytie = props.cacheEntities.question;
-            questionEntytie = questionEntytie[questionById];
+            let questionEntitie  = props.entities.question;
+            questionEntitie  = questionEntitie[questionById];
 
-            return questionEntytie.userAnswer;
+            return questionEntitie.userAnswer;
         }
-        return null;
+        return question;
     }
 
 
@@ -57,7 +57,7 @@ export const QuestionComponent = props => {
         objName     : 'Question',
         isPut       : true,
         obj         : question, 
-        byId        : questionById,
+        byId        : questionById || questionListById,
         currentUser,
     };
 
@@ -79,7 +79,7 @@ export const QuestionComponent = props => {
     let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editQuestionProps}/>
     
-
+  
 
    let btnsProps = {
             editAnswerProps,

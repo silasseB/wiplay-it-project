@@ -34,9 +34,9 @@ class  PostPage extends Component  {
         const onStoreChange = () => {
 
             let storeUpdate   = store.getState();
-            let {entyties }   = storeUpdate;
+            let {entities }   = storeUpdate;
             let {postById}  =  this.state;
-            let post      =  cacheEntities.post[postById];
+            let post      =  entities.post[postById];
 
             
         };
@@ -52,10 +52,10 @@ class  PostPage extends Component  {
         let { slug, id } = this.props.match.params;
         let  postById = `post${id}`;
 
-        let { post, currentUser } = cachedEntyties;
+        let { post, currentUser } = cacheEntities;
         console.log(post)
 
-        if(post && post.id == id){
+        if(post){
                 var now = new Date();
                 let timeStamp = post.timeStamp;
 
@@ -98,7 +98,7 @@ class  PostPage extends Component  {
     render() {
         let props = this.getProps();
         var postById = props.postById;
-        var post = props.cacheEntities.post;
+        var post = props.entities.post;
         console.log(post, props)
         post = post[postById]
         console.log(post)                 
@@ -140,7 +140,7 @@ export default withHigherOrderIndexBox(PostPage);
 
 export const Post = props => {
 	var postById = props.postById;
-   var postState = props.cacheEntities.post[postById];
+   var postState = props.entities.post[postById];
    let post      = postState.post;
    var postProps = Object.assign({post},props)
 	return(

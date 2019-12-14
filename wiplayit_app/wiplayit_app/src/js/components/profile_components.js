@@ -25,10 +25,12 @@ const api      = new Api();
 
 
 export const ProfileComponent = props => {
-    console.log(props)
+    
     var profileById = props.profileById;
     var userProfile = props.entities.userProfile[profileById];
-    userProfile = userProfile.user;
+    userProfile = userProfile;
+
+    console.log(props, userProfile)
     let currentUser = props.currentUser;
      
     let  state = {
@@ -205,7 +207,7 @@ export const ProfileComponent = props => {
 export const UserList = props => {
     console.log(props)
     var usersById = props.usersById;
-    const users   = props.cacheEntities.users[usersById];
+    const users   = props.entities.users[usersById];
 
     return (
       <div>
@@ -258,7 +260,7 @@ export const UserfollowersNum = props => {
 
 export const UserAnswers = props =>{
    var profileById    = props.profileById;
-   let userProfile    = props.entities.userProfile[profileById].user;
+   let userProfile    = props.entities.userProfile[profileById];
    var byId           = `usersAnswers${userProfile.id}`
    var answers        = props.entities.answers;
    
@@ -314,7 +316,7 @@ export const UserAnswers = props =>{
 
 export const UserQuestions = props => {
    var profileById = props.profileById;
-   let userProfile = props.entities.userProfile[profileById].user;
+   let userProfile = props.entities.userProfile[profileById];
    var byId     = `usersQuestions${userProfile.id}`
    var questions  = props.entities.questions;
    questions      = questions[byId]
@@ -349,7 +351,7 @@ export const UserQuestions = props => {
 
 export const UserPosts = props => {
    var profileById = props.profileById;
-   let userProfile = props.entities.userProfile[profileById].user;
+   let userProfile = props.entities.userProfile[profileById];
    var byId     = `usersPosts${userProfile.id}`
    var posts  = props.entities.posts;
    posts      = posts[byId]
@@ -466,7 +468,7 @@ export const UsersComponent = props => {
 
 export const UserFollowings = props => {
    var profileById = props.profileById;
-   let userProfile = props.entities.userProfile[profileById].user;
+   let userProfile = props.entities.userProfile[profileById];
    var usersById   = `usersFollowings${userProfile.id}`;
    var users       = props.entities.users[usersById];
     console.log(users,usersById, props.entyties)
@@ -505,7 +507,7 @@ export const UserFollowings = props => {
 
 export const UserFollowers = props => {
    var profileById = props.profileById;
-   let userProfile = props.entities.userProfile[profileById].user;
+   let userProfile = props.entities.userProfile[profileById];
    var usersById   = `usersFollowers${userProfile.id}`
    var users       = props.entities.users[usersById];
 
@@ -543,7 +545,7 @@ export const UserFollowers = props => {
 export const UserActivitiesBtns = props => {
     var profileById = props.profileById;
     var userProfile = props.entities.userProfile[profileById];
-    var user        = userProfile.user;
+    var user        = userProfile;
 
     console.log(userProfile)
 
@@ -590,7 +592,8 @@ export const UserActivitiesBtns = props => {
     let totalFollowers = userProfile && userProfile.followers && userProfile.followers.length || 0;
     let totalFollowings = userProfile && userProfile.followings && userProfile.followings.length || 0;
 
-   
+    
+    
     return (
         <div className="user-activities">
 

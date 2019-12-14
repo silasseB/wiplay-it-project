@@ -10,11 +10,13 @@ import  AjaxLoader from "../components/ajax-loader";
 
 export const  LoginFormComponent = props => {
     console.log(props)
-    let { submitting, onSignUpForm, formIsValid, formName, error, form, validateForm} = props;
+    let { submitting, onSignUpForm,onLoginForm, formIsValid, formName, form, validateForm} = props;
+
 
     form = form && form.loginForm? 
                            form.loginForm:null;
 
+    let error = form && form.error; 
     formIsValid  = !onSignUpForm? validateForm(form, formName):false;
 
     let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
@@ -33,14 +35,15 @@ export const  LoginFormComponent = props => {
             <p className="login-form-title label">Login</p>
 
             <form onSubmit={props.onSubmit} className="login-form">
+               <NavBarSmallScreen {...props}/>
              
-              <fieldset style={ fieldSetStyles}
+                <fieldset style={ fieldSetStyles}
                         disabled={ submitting || onSignUpForm }
                         className="fieldset-login">
                     {error && error.non_field_errors && error.non_field_errors.length?
                             <div>
                                 { error.non_field_errors.map(( error, index) =>
-                                   <li key={index} className="email-error">{error}</li>
+                                   <li key={index} className="form-errors">{error}</li>
                                 )}
                             </div>
                             :
@@ -48,10 +51,10 @@ export const  LoginFormComponent = props => {
                     }        
                                
                <div className="login-box">
-                    {error && error.email && error.email.length?
+                    {onLoginForm && error && error.email && error.email.length?
                             <div>
                                 { error.email.map(( error, index) =>
-                                   <li key={index} className="email-error">{error}</li>
+                                   <li key={index} className="form-errors">{error}</li>
                                 )}
                             </div>
                             :
@@ -65,7 +68,6 @@ export const  LoginFormComponent = props => {
                       name="email"
                       value={form.email}
                       onChange={props.handleFormChange} 
-                      autoFocus 
                       required
                       
                     />
@@ -79,7 +81,6 @@ export const  LoginFormComponent = props => {
                       name="password"
                       value={form.password}
                       onChange={props.handleFormChange} 
-                      autoFocus
                       required
                       
                     />
@@ -87,28 +88,21 @@ export const  LoginFormComponent = props => {
                   </div>
     
                   <div className="registration-btn-box">  
-                     <button type="submit" className="btn-sm  btn-submit"
-                             style={ submitButtonStyles }
-                             disabled={ submitting || onSignUpForm || !formIsValid} >
-
-                       Submit
-
-                     </button>
+                    <SubmitBtnBigScreen {...props}/>
                     <PasswordChangeSmall {...props}/>
                     <PasswordChangeBig {...props}/>
                   </div>
                 </div>
    
              </fieldset>
-          </form>
+            </form>
 
-          { onSignUpForm?
-            
-            ""
-            :
-            <SpinLoader {...props}/> 
+            { onSignUpForm?
+                ""
+                :
+                <SpinLoader {...props}/> 
               
-          } 
+            } 
          
         </div>
       :
@@ -131,10 +125,12 @@ export default LoginFormComponent;
 export const  SignUpFormComponent = props => {
     console.log(props)
 
-    let { submitting, form, onSignUpForm, formName, formIsValid,error, validateForm } = props;
+    let { submitting, form, onSignUpForm, formName, formIsValid, validateForm } = props;
 
     form = form && form.signUpForm? 
                            form.signUpForm:null;
+
+    let error = form && form.error; 
     
     formIsValid = onSignUpForm? validateForm(form, formName):false;
     let submitButtonStyles = submitting || !formIsValid?{opacity:'0.60'}:{};
@@ -149,10 +145,11 @@ export const  SignUpFormComponent = props => {
           <p className="signup-form-title">Sign Up</p>
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
-                {error && error.non_field_errors && error.non_field_errors.length?
+            <NavBarSmallScreen {...props}/>
+                { error && error.non_field_errors && error.non_field_errors.length?
                             <div>
                                 { error.non_field_errors.map(( error, index) =>
-                                   <li key={index} className="email-error">{error}</li>
+                                   <li key={index} className="form-errors">{error}</li>
                                 )}
                             </div>
                             :
@@ -176,7 +173,6 @@ export const  SignUpFormComponent = props => {
                         name="first_name"
                         value={form.first_name}
                         onChange={props.handleFormChange}
-                        autoFocus 
                         required
                       />
 
@@ -189,7 +185,6 @@ export const  SignUpFormComponent = props => {
                         name="last_name"
                         value={form.last_name}
                         onChange={props.handleFormChange}
-                        autoFocus 
                         required
                       />
                       
@@ -199,10 +194,10 @@ export const  SignUpFormComponent = props => {
                </div>
 
                <div  className="email-fields signup-fields">
-                    {error && error.email && error.email.length?
+                    { error && error.email && error.email.length?
                             <div>
                                 { error.email.map(( error, index) =>
-                                   <li key={index} className="email-error">{error}</li>
+                                   <li key={index} className="form-errors">{error}</li>
                                 )}
                             </div>
                             :
@@ -217,7 +212,6 @@ export const  SignUpFormComponent = props => {
                       name="email"
                       value={form.email}
                       onChange={props.handleFormChange}
-                      autoFocus 
                       required 
                     />
 
@@ -233,18 +227,13 @@ export const  SignUpFormComponent = props => {
                         name="password"
                         value={form.password}
                         onChange={props.handleFormChange}
-                        autoFocus 
                         required
                       />
 
                   </div>
                </div>
             </div>
-            <button type="submit" className="btn-submit btn-sm"
-                       style={submitButtonStyles} 
-                       disabled={submitting || !formIsValid}>
-                  Submit
-              </button>
+              <SubmitBtnBigScreen {...props}/>
               <CancelFormBtn {...props}/>          
             </fieldset>
           </form>
@@ -272,7 +261,7 @@ export const  SignUpFormComponent = props => {
 
 export const PassWordChangeForm = props => {
     let { submitting, form, formName,
-          onSignUpForm,onPasswordChangeForm, error,
+          onSignUpForm,onPasswordChangeForm,
            formIsValid , validateForm, successMessage } = props;
 
     let disabledStyle = submitting || onSignUpForm? 
@@ -281,6 +270,7 @@ export const PassWordChangeForm = props => {
     
     form = form && form.passwordChangeForm? 
                            form.passwordChangeForm:null;
+    let error = form && form.error; 
 
     formIsValid = onPasswordChangeForm? validateForm(form, formName):false;
 
@@ -311,17 +301,17 @@ export const PassWordChangeForm = props => {
             :
 
             <form className="password-change-form" onSubmit={props.onSubmit} >
+                <NavBarSmallScreen {...props}/>
 
-               { props.formDescription.map(( description, index) =>
-                  <li key={index} className="password-form-description">{description}</li>
-               )}
+                <li className="password-form-description">{props.Description}</li>
+               
 
                <fieldset style={ fieldSetStyles}
                 disabled={ submitting || onSignUpForm}>
                    {error && error.non_field_errors && error.non_field_errors.length?
                             <div>
                                 { error.non_field_errors.map(( error, index) =>
-                                   <li key={index} className="email-error">{error}</li>
+                                   <li key={index} className="form-errors">{error}</li>
                                 )}
                             </div>
                             :
@@ -337,7 +327,6 @@ export const PassWordChangeForm = props => {
                            name="new_password1"
                            value={form.new_password1}
                            onChange={props.handleFormChange}
-                           autoFocus 
                            required
                         />
                      </div>
@@ -351,19 +340,12 @@ export const PassWordChangeForm = props => {
                            name="new_password2"
                            value={form.new_password2}
                            onChange={props.handleFormChange}
-                           autoFocus 
                            required
                         />
                      </div>
 
                      <div className="submit-box">  
-                        <button type="submit" 
-                                style={ submitButtonStyles }
-                                disabled={ submitting || onSignUpForm || !formIsValid} 
-                                className="btn-sm  btn-submit" >
-
-                              Submit
-                        </button>
+                        <SubmitBtnBigScreen {...props}/>
                      </div>
       
                   </div>
@@ -388,11 +370,11 @@ export const EmailFormComponent = props => {
 
     let { submitting ,onSignUpForm,
           onPasswordResetForm, successMessage,
-          onEmailResendForm, form,error,
-          formIsValid, formName, validateForm } = props;
+          onEmailResendForm, form, formIsValid, formName, validateForm } = props;
 
     form = form && form[formName]? 
                            form[formName]:null;
+    let error = form && form.error; 
 
     formIsValid =  onPasswordResetForm || onEmailResendForm?
                              validateForm(form, formName):false;
@@ -431,10 +413,12 @@ export const EmailFormComponent = props => {
             :
 
             <form className="email-form" onSubmit={props.onSubmit}>
+                <NavBarSmallScreen {...props}/> 
+                 <li className="password-form-description">{props.formDescription}</li>
                     {error && error.non_field_errors && error.non_field_errors.length?
                             <div>
                                 { error.non_field_errors.map(( error, index) =>
-                                   <li key={index} className="email-error">{error}</li>
+                                   <li key={index} className="form-errors">{error}</li>
                                 )}
                             </div>
                             :
@@ -463,7 +447,6 @@ export const EmailFormComponent = props => {
                                name="email"
                                value={form.email}
                                onChange={props.handleFormChange}
-                               autoFocus 
                                required
                        
                             />
@@ -472,12 +455,8 @@ export const EmailFormComponent = props => {
                     </div>
 
                     <div className="registration-btn-box">
-                        <button type="submit" 
-                            style={submitButtonStyles} 
-                            disabled={submitting || onSignUpForm || !formIsValid }
-                            className="btn-submit btn-sm">
-                            Submit
-                        </button>
+                        <SubmitBtnBigScreen {...props}/>
+                        
                         <CancelEmailForm {...props}/>
                   
                     </div>
@@ -506,12 +485,32 @@ export const EmailFormComponent = props => {
 }
 
 
+export const RegistrationComponent = (props)=>{
+
+    return(
+        <div> 
+            <div>
+                <NavBar {...props}/>
+            </div>
+
+            <div className="registration-page">
+                      
+                <div className="registration-container">
+                    <MainRegistrationComponent {...props}/>         
+
+                </div>
+            
+            </div>
+
+        </div>
+    );
+}
 
 
 
 
 
-export const RegistrationComponent = props => {
+export const MainRegistrationComponent = props => {
   
    return(
   
@@ -524,12 +523,12 @@ export const RegistrationComponent = props => {
 
 
 const RegistrationSmall = props => (
-    <React.Fragment>
+    <div className="">
 
         <div className="registration-welcome-box">
             <h1 className="welcome-message">
-              Welcome to latiro, a  place for football lovers,
-              Join in and share your opinion with other fellow football fans 
+              Welcome to Wiplayit, a  place for football lovers,
+              Join in and share your opinion with other fellow football lovers 
            </h1>
          </div>
 
@@ -544,7 +543,7 @@ const RegistrationSmall = props => (
 
         <TermsAndContionTextComponent/>
       </div>
-    </React.Fragment>
+    </div>
 );
 
 
@@ -555,7 +554,8 @@ const RegistrationBig = props => {
    console.log(props)
    
    return(
-      <div className="registration-box">
+
+       <div className="registration-box">
          <div className="registration-welcome-box">
             <h1 className="welcome-message">
               Welcome to latiro, a  place for football lovers,
@@ -714,24 +714,50 @@ const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 900px)')
 
 export const  NavBar   = props => {
     
+    console.log(props)
+    
     return (
         <div className="navigation-bar fixed-top">
-
-            <div className="navbar-box1">
-               
-            </div>
-
-            <div className="navbar-box2 navbar-title-box">
-                <p className="" >{props.navbarTitle}</p>
-            </div>
-              
-            <div className="navbar-box3">
-               {props.nabarLink}
-               
+            <div className="navbar-box">
+               <div className="navbar-title-box">
+                   <p className="" >{props.navbarTitle}</p>
+                </div>
             </div>
         </div>    
     );
 };
+
+
+
+export const  NavBarSmall   = props => {
+    let { submitting, formIsValid, formName, form, validateForm} = props;
+    formIsValid  = validateForm(form, formName) || false;
+
+    let submitButtonStyles = submitting || !formIsValid? {opacity:'0.60'}: {};
+    
+    console.log(props, !formIsValid)
+    
+    return (
+        <div className="navigation-bar fixed-top">
+         <div className="navbar-box">
+            <div className="navbar-sm-title-box">
+                <p className="" >{props.navbarTitle}</p>
+            </div>
+              
+            <div className="navbar-submit-box">
+                <button type="submit" 
+                    style={submitButtonStyles} 
+                    disabled={submitting || !formIsValid}
+                    className="navbar-submit btn-submit btn-sm">
+                    Submit
+                </button>
+               
+            </div>
+          </div>
+        </div>    
+    );
+};
+
 
 
 
@@ -760,9 +786,11 @@ const  PasswordChangeButton  = props => {
 };
 
 const  PasswordChangeLink  = props => (
-   <Link className="password-change" to="/user/account/password/reset/"> 
-   Forgot Password ?
-   </Link>
+    <div className="password-change-link-box">
+        <Link className="password-change-link" to="/user/account/password/reset/"> 
+            Forgot Password ?
+        </Link>
+    </div>
 );
 
 
@@ -789,14 +817,34 @@ const  CancelPasswordResetBtn  = props => {
     );
 };
 
-const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 900px)');
 
 
-const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 800px)');
-const CancelEmailForm = MatchMediaHOC(CancelPasswordResetBtn , '(min-width: 900px)');
+const  SubmitBtn  = props => {
+    let submitButtonStyles = props.submitting? {opacity:'0.60'}: {};
+   
+    return(
+        <button type="submit" 
+                style={submitButtonStyles} 
+                disabled={props.submitting}
+                className="btn-submit btn-sm">
+            Submit
+        </button>
+    )
+};
 
-const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , '(max-width: 500px)');
-const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton , '(min-width: 800px)');
 
-const RegistrationSmallScreen = MatchMediaHOC(RegistrationSmall, '(max-width: 500px)')
-const RegistrationBigScreen   = MatchMediaHOC(RegistrationBig, '(min-width: 900px)')
+export const  SubmitBtnSmallScreen = MatchMediaHOC(SubmitBtn, '(max-width: 800px)') 
+export const  SubmitBtnBigScreen = MatchMediaHOC(SubmitBtn, '(min-width: 900px)') 
+export const NavBarSmallScreen = MatchMediaHOC(NavBarSmall, '(max-width : 800px)')
+
+export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 900px)');
+
+
+export const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 800px)');
+export const CancelEmailForm = MatchMediaHOC(CancelPasswordResetBtn , '(min-width: 900px)');
+
+export const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , '(max-width: 500px)');
+export const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton , '(min-width: 800px)');
+
+export const RegistrationSmallScreen = MatchMediaHOC(RegistrationSmall, '(max-width: 500px)')
+export const RegistrationBigScreen   = MatchMediaHOC(RegistrationBig, '(min-width: 900px)')

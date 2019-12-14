@@ -306,6 +306,8 @@ class DraftEditorMediaContent(models.Model):
         db_table = "draft_editor_contents"
         permissions = (
             ('view_draft_editor_files', 'Can View Draft Editor Files'),
+            ('edit_draft_editor_files', 'Can Edit Draft Editor Files'),
+            ('delete_draft_editor_files', 'Can Delete Draft Editor Files'),
         )
     
     def __str__(self):

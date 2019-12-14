@@ -10,11 +10,10 @@ import { ModalManager}   from  "../containers/modal/modal_container";
 import { List, Repeat } from 'immutable';
 import Axios from '../axios_instance'
 import  Helper from '../containers/utils/helpers';
-import {TextAreaEditor, DraftEditor } from  "../components/editor_components";
+import {TextAreaEditor, DraftEditor, EditorNavBar } from  "../components/editor_components";
 import { AlertComponent } from "../components/partial_components";
 import {showModal}  from '../actions/actionCreators';
 
-import { EditorNavBar } from "../components/navBar";
 import {store} from '../configs/store-config';
 import { history } from "../index";
 import Api from '../api';
@@ -175,7 +174,7 @@ export default  class AppEditor extends Component{
                 {
                     submitting   : true,
                     hasErrors    : true,
-                    errorMessage : 'You cannot submint empty form'
+                    errorMessage : 'You cannot submit empty form'
                 });
 
             setTimeout(()=> {
@@ -205,14 +204,18 @@ export default  class AppEditor extends Component{
                 let storeUpdate   = store.getState();
             
                 let {entities} = storeUpdate
-                let {modal} = entyties
+                let {modal} = entities
                 let { redirected, submited } = this.state
                 let {background, isPost} = this.props;
 
                 console.log(modal, this.state, this.props)
 
                 if (modal) {
-                    this.setState({ submitting : modal.submitting });
+                    !modal.modalIsOpen && setTimeout(()=> {
+                        //ModalManager.close()
+                    }, 2000);
+
+                    this.setState({ submitting : modal.submitting || false });
 
                     if (modal.successMessage && !submited) {
 
@@ -236,7 +239,7 @@ export default  class AppEditor extends Component{
                                                             : pathToPost;
                             setTimeout(()=> {
                                 history.push(redirectTo); 
-                            }, 1000);
+                            }, 2000  );
   
                         }
                     }
@@ -349,6 +352,7 @@ export default  class AppEditor extends Component{
         let name = e.target.name;
       
         console.log(file)
+        alert('hi')
 
             
         reader.onloadend = () => {

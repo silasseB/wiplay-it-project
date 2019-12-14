@@ -20,62 +20,70 @@ html, body {
 }
 
 
-.navbar-box1, .navbar-box3 {
-  width: 25%;
-  border: px solid black;
-}
-
-.navbar-box2 {
-   width: 50%;
-
-}
 
 .navbar-title-box {
-   border:px solid red;
-     
+   width  : 100%;  
  }
 
-
-.navbar-title-box p {
-   color: white;
-   border: px solid blue;
-   padding: 10px 0 10px 16%;
-   margin:  0; 
-   font-size: 17px;
-
- }
-
-.navbar-box3 {
-   border: px solid black;
-   padding: 10px 0 0 8%; 
+.navbar-sm-title-box{
+    width:  70%;
+    margin: 0;
+    border: px solid black;
 }
 
 
-.navbar-signup-link, .navbar-login-link{
+.navbar-submit-box {
+   width:  30%;
    border: px solid red;
-   font-size: 13px;
-   color: #5384e5;
-   font-weight: bold;
- }
+}
+
+.navbar-sm-title-box p, .navbar-title-box p  {
+    color: #ffff;
+    font-size: 17px;
+    width: 100% auto;
+    border: px solid black;
+
+}
+
+.navbar-sm-title-box p{
+   margin : 0 15%; 
+}
+
+.navbar-title-box p{
+   margin:  0 20%;
+   padding-left: 20px;
+  
+}
+
+.navbar-box {
+    margin  : 5px;
+    display : flex;
+    width   : 100%;
+    border: px solid red;
+    
+}
+
+.navbar-submit {
+  margin : 0 20% !important; 
+  
+}
 
 
 .login-page{
   width: 100%; 
   min-height: 500px;
   background:#edf0f3;
-  border: px solid black;
-
+  
 }
 
  
-
-
 
 .registration-container {
   width      : 100%;
   height     : auto;
   background : #edf0f3;
-  padding    : 7% 0px;
+  padding    : 17% 0px;
+  margin-top: 20px; 
 }
 
 .email-form-box {
@@ -103,7 +111,6 @@ html, body {
 } 
 
 .login-fields {
-  border : px solid black;
   padding: 10px;
   margin: 4px;
     
@@ -147,18 +154,10 @@ input:focus {
 
 
 .change-password-box {
-  border: px solid blue;
+  border: 1px solid blue;
   margin: 8px;
     
 }
-
-.last-name-input {
-   
- }
-
-.first-name-input {
-      
- }
 
 
 .email-fields, .password-fields {
@@ -168,11 +167,9 @@ input:focus {
 
 
 .btn-submit, .resend-email-btn {
-  width: 50%;
-  margin: 20px 24%;
-  color: white;
+  color: #A33F0B;
+  background: white;
   border: none;
-  background: #A33F0B;
 
 }
 
@@ -199,20 +196,20 @@ input:focus {
 
 
 .email-form-description,.password-form-description {
-  font-size: 11px;
+  font-size: 13px;
   list-style-type : none; 
 }
-
-
-  {
-  font-weight: bold;
-  font-size: 10px;
-  margin: 0;
-  padding:0 37%;
-  border: 1px solid blue !important;
+.password-change-link-box{
+   border  : px solid red;   
+   padding : 10px;
+   margin  : 4px;
+   font    : 13px;
 }
 
+.password-change-link{
+    border    : px solid red;
 
+}
 
 .message-success {
   background: #edf0f3;
@@ -220,11 +217,11 @@ input:focus {
   font-size: 14px;
 } 
 
-.login-errors {
+.form-errors {
   color     : red;
-  border    : px solid blue;
-  font-size : 11px;
-  margin    : 0 5%;  
+  font-size : 13px;
+  margin    : 0 5%; 
+  list-style-type : none;  
  
 }
 
@@ -291,7 +288,8 @@ input:focus {
  
 .create-account,.login-link {
   border: px solid red;
-  color: white;
+  font: 14px;
+  color: #ffff;
   float: right;
   margin-right: 14px;
   margin-top: 4px;

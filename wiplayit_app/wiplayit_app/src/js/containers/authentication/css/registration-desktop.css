@@ -50,31 +50,29 @@
 }
 
 
-.navbar-box1,  .navbar-box3 {
-  width:  25%;
-}
 
-
-.navbar-box2 {
-  width: 50%;
-
-}
-
-
-.navbar-title-box p {
-  color: white;
-  margin: 10px 0 10px 40%;
-  font-size: 17px;
-
+.navbar-title-box {
+   width  : 100%;  
+   border: px solid black;
  }
 
-.navbar-link-box {
-    display: none;
-    border: 1px solid black;
-   
-    
 
-   
+
+.navbar-title-box p  {
+    color: #ffff;
+    font-size: 20px;
+    margin:  0 40%;
+    padding: 0 30px;
+    border: px solid blue;
+
+}
+
+
+.navbar-box {
+    margin  : 5px;
+    display : flex;
+    width   : 100%;
+    border  : px solid black;
 }
 
 
@@ -208,6 +206,15 @@ input {
 .resend-email-btn {
   border: 1px solid blue;
   
+}
+
+.form-errors {
+  color     : red;
+  border    : px solid blue;
+  font-size : 14px;
+  margin    : 0 5%; 
+  list-style-type : none;  
+ 
 }
 
 

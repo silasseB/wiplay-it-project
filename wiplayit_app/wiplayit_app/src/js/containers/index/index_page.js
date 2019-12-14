@@ -82,7 +82,7 @@ class IndexBox extends Component {
 
     
     componentDidMount() {
-        //console.log(this.props)
+        console.log(this.props)
             
         this.onIndexUpdate();
 
@@ -102,9 +102,9 @@ class IndexBox extends Component {
                 let hourDiff = menDiff/60
                 let dayDiff  = hourDiff/24
 
-                //console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                               
-                if (menDiff <= 3) {
+                if (menDiff <= 10) {
 
                     console.log('Index found from cachedEntyties')
                     store.dispatch(action.getIndexPending());

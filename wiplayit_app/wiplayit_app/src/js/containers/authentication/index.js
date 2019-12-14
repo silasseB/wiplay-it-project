@@ -53,7 +53,7 @@ export function withAuthentication(Component) {
             this.formConstructor          = this.formConstructor.bind(this);  
             this.onSubmit                 = this.onSubmit.bind(this);
             this.handleFormChange         = this.handleFormChange.bind(this); 
-            this. confirmUser             = this.confirmUser.bind(this);
+            this.confirmUser              = this.confirmUser.bind(this);
             this.responseFacebook         = this.responseFacebook.bind(this);
             this.responseTwitter          = this.responseTwitter.bind(this);
             this.responseGoogle           = this.responseGoogle.bind(this);  
@@ -151,14 +151,17 @@ export function withAuthentication(Component) {
             const onStoreChange = () => {
                 let  storeUpdate = store.getState(); 
                 let { entities } =  storeUpdate;
-                var { userAuth } = entities;
+                let { userAuth } = entities;
+                let { form, formName } = this.state;
 
                 if (userAuth && userAuth.auth) {
                     let { auth } = userAuth;
                     console.log(auth)                    
                     let {  error, isLoggedIn, tokenKey, successMessage , email} = auth;
+                   
+                    form[formName]['error'] = error;
                             
-                    this.setState({ submitting : false, successMessage, error, email })             
+                    this.setState({ submitting : false, successMessage, error, email, form })             
                     
 
                     if( isLoggedIn && tokenKey){
@@ -179,6 +182,7 @@ export function withAuthentication(Component) {
 
         handleFormChange(e){
             e.preventDefault()
+
             let  { form, formName } = this.state;
           
             
@@ -203,16 +207,21 @@ export function withAuthentication(Component) {
                 let formKeys = Object.keys(form);
                 let formIsValid = true;
                
-                for (var key in formKeys) {
-                    key = formKeys[key]
+                for (var key in form) {
+                    let formValue = form[key]
+                    console.log(form,formValue)
+                    console.log(/^ *$/.test(formValue))
 
-                    if(/^ *$/.test(form[key])){
-                        formIsValid = false 
-                        break
+                    if(/^ *$/.test(formValue)){
+                        formIsValid = false;
+                        return formIsValid;
+                         
                     }
+                    
                 }
-
-                return formIsValid;
+                console.log(formIsValid) 
+                return formIsValid
+                             
 
             }else{
                 return false

@@ -22,25 +22,33 @@ class  QuestionListPage extends Component  {
 
       this.state = {
          isQuestionListBox   : true,
-         questionListById : 'questionList'
+         questionListById    : 'filteredQuestions',
 
       }
      
    }
   
       
-   componentDidMount() {
-      console.log(this.props)
-      var questionListById = this.state.questionListById;
-      
-      var questions = this.props.entyties.questions;
-      questions = questions.byId[questionListById]
+    componentDidMount() {
+        
+        var questionListById = this.state.questionListById;
+        let { cacheEntities } = this.props;
+        let { questions, currentUser } = cacheEntities;
+        
+             
+        questions = questions[questionListById]
+
+        if (questions) {
+            console.log(questions) 
+            store.dispatch(action.getQuestionListPending(questionListById));
+            store.dispatch(action.getQuestionListSuccess( questionListById, questions.questionList));
+            return
+        }
       
 
-      this.props.getQuestionList(questionListById);                           
+        this.props.getQuestionList(questionListById);                           
       
-          
-   }
+    };
 
    
 
@@ -56,9 +64,9 @@ class  QuestionListPage extends Component  {
    render() {
       let props = this.getProps();
       //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
-      var questions  = props.entyties.questions;
+      var { questions }  = props.entities;
       
-      questions  = questions.byId[props.questionListById];
+      questions  = questions[props.questionListById];
       console.log(props, questions)
       return (
          <div style={{}}>
@@ -95,8 +103,8 @@ export default withHigherOrderIndexBox(QuestionListPage);
 
 const Questions = props => {
 
-   var questions  = props.entyties.questions;
-   questions  = questions.byId[props.questionListById];
+   var questions  = props.entities.questions;
+   questions  = questions[props.questionListById];
 
    return (
       <div>

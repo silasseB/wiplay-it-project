@@ -75,7 +75,7 @@ class UserProfileContainer extends Component {
         let  profileById = `userProfile${id}`;
 
         if (cacheEntities) {
-            let { userProfile, currentUser, auth } = cacheEntities;
+            let { userProfile, currentUser} = cacheEntities;
             userProfile = userProfile && userProfile[profileById]
 
             if(userProfile){
@@ -96,19 +96,24 @@ class UserProfileContainer extends Component {
                 this.setState({profileById })
         
                 console.log('userProfile found from cachedEntyties')
-                store.dispatch(action.getUserProfilePending(id));
-                store.dispatch(action.getUserProfileSuccess(userProfile));
-                return this._dispatchUserProfileItems(userProfile);
+                store.dispatch(action.getUserProfilePending(profileById));
+
+                store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
+
+                this._dispatchUserProfileItems(userProfile);
+                this.forceUpdate()
+                return
                 
             }
         }
 
         this.setState({profileById })
-        return this.props.getUserProfile(id);
+        this.props.getUserProfile(id);
 
     };
 
     _dispatchUserProfileItems(userProfile){
+        console.log(userProfile)
         let answers      = this.props.cacheEntities.answers;
 
         if (userProfile && userProfile.answers && userProfile.answers.length) {
@@ -116,7 +121,8 @@ class UserProfileContainer extends Component {
             answers          = answers[byId]
             var usersAnswers = userProfile.answers;
 
-            if (!answers) {
+            if (usersAnswers) {
+                console.log(usersAnswers)
                 store.dispatch(action.getAnswerListPending(byId));
                 store.dispatch(action.getAnswerListSuccess(byId, usersAnswers));
            }
@@ -207,7 +213,7 @@ class UserProfileContainer extends Component {
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
       
-          
+        console.log(userProfile)  
 
         return (
            <div id="profile-page">

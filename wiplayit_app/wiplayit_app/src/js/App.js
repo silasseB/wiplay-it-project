@@ -49,13 +49,16 @@ let storeUpdate = store.getState();
 
 let GetModalRouter = (location)=>{
     let background = location.state && location.state.background;
-    
-    if (!background ) {
-           
-        setTimeout( () => {
-            ModalManager.close(); 
-        }, 100);
 
+    let modalIsOpen = true;
+    
+    if (!background && modalIsOpen) {
+        modalIsOpen = false;
+        
+        setTimeout(()=> {
+            store.dispatch(showModal(false))
+        }, 2000);
+        
         return '';
     }
 
@@ -79,7 +82,7 @@ function App() {
     return (
         <div>
         <Switch location={background || location}>
-            <Route exact path="/" children={<IndexBox/>}/>
+            <Route exact path="/" component={IndexBox}/>
                    
             <Route  path="/profile/:id/:slug/" component={UserProfileContainer}/>
             <Route  path="/question/:slug/:id/" component={QuestionPage}/>
@@ -94,7 +97,7 @@ function App() {
             <Route  path="/answer/:id/upvoters/" component={AnswerUpVotersBox} />
             <Route  path="/answer/comment/:id/upvoters/" component={AnswerCommentUpVotersBox} />
             <Route  path="/answer/reply/:id/upvoters/" component={AnswerReplyUpVotersBox} />
-            <Route  path="/post/:id/upvoters/" component={PostUpVotersBox} />
+            <Route  path="/upvoters/post/:id/" component={PostUpVotersBox} />
             <Route  path="/post/comment/:id/upvoters/" component={PostCommentUpVotersBox} />
             <Route  path="/post/reply/:id/upvoters/" component={PostReplyUpVotersBox} />
             <Route  path="/modal/router/" component={Modal} />

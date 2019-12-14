@@ -29,7 +29,7 @@ export function Modal(props) {
         dropImageProps, 
                         } = props && props.modalProps;
 
-    //console.log(props, modalType)
+    console.log(props, modalType)
     
     let back = e => {
        e.stopPropagation();
@@ -151,7 +151,6 @@ export const edit_modal_styles = {
   content: {
     width                   : '100%',
     margin                  : '0% auto',
-    border                  : '1px solid rgba(0, 0, 0, .2)',
     background              : '#fff',
     overflow                : 'none',
     borderRadius            : '4px',
@@ -163,6 +162,7 @@ export const edit_modal_styles = {
     position                : 'fixed',
     right                   : 'auto',
     left                    : 'auto',
+   
    }
 };
 
