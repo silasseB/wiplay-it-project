@@ -8,6 +8,13 @@ from mptt.admin import MPTTModelAdmin
 from .models import *
 
 # Register your models here.
+class DraftEditorMediaContentAdmin(admin.ModelAdmin):
+    fields = ['draft_editor_file']
+
+admin.site.register( DraftEditorMediaContent, DraftEditorMediaContentAdmin)
+
+           
+
 class PostAdmin(admin.ModelAdmin):
     fields =  ['add_post','add_title', 'created_by','upvotes', 'deleted']
 

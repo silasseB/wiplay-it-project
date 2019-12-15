@@ -352,9 +352,7 @@ export default  class AppEditor extends Component{
         let name = e.target.name;
       
         console.log(file)
-        alert('hi')
-
-            
+                    
         reader.onloadend = () => {
             let apiUrl     = api.createDraftEditorContentsApi(this);
             let form = { 'draft_editor_file': file}

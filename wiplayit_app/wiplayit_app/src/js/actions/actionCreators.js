@@ -614,7 +614,7 @@ export const authenticationPending = () => ({
 
 
 export const authenticationSuccess = (successResponse) => {
-  console.log(successResponse)
+      console.log(successResponse)
       
       var isLoggedIn = successResponse && successResponse.key?true:false;
 
@@ -800,8 +800,7 @@ export const getReplyChildLindData = (props) => {
 
 
 export const showModal = (value, background) =>{
-    console.log(background)
-   
+       
     return {
       type: 'MODAL_ROUTER',
       payload : {

@@ -9,7 +9,7 @@ import  AjaxLoader from "../components/ajax-loader";
 
 
 export const  LoginFormComponent = props => {
-    console.log(props)
+    //console.log(props)
     let { submitting, onSignUpForm,onLoginForm, formIsValid, formName, form, validateForm} = props;
 
 
@@ -734,8 +734,7 @@ export const  NavBarSmall   = props => {
     formIsValid  = validateForm(form, formName) || false;
 
     let submitButtonStyles = submitting || !formIsValid? {opacity:'0.60'}: {};
-    
-    console.log(props, !formIsValid)
+        
     
     return (
         <div className="navigation-bar fixed-top">
@@ -747,7 +746,7 @@ export const  NavBarSmall   = props => {
             <div className="navbar-submit-box">
                 <button type="submit" 
                     style={submitButtonStyles} 
-                    disabled={submitting || !formIsValid}
+                    disabled={submitting}
                     className="navbar-submit btn-submit btn-sm">
                     Submit
                 </button>

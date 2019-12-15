@@ -2,8 +2,9 @@ import React from 'react';
 import { ModalManager}   from  "../containers/modal/modal_container";
 
 import LinkInput from '../containers/input';
-import { Editor,Entity,CompositeDecorator } from 'draft-js';
+import { Editor, Entity,CompositeDecorator, EditorState } from 'draft-js';
 import TextareaAutosize from 'react-autosize-textarea';
+
 
 
 
@@ -279,8 +280,10 @@ const Video = (props) => {
    return <video controls src={props.src} style={styles.media} />;
 };
 
+//const contentState = EditorState.getCurrentContent();
+
 const Media = (props) => {
-   const entity = Entity.get(props.block.getEntityAt(0));
+   const entity = props.contentState.getEntity(props.block.getEntityAt(0));
    const {src} = entity.getData();
    const type = entity.getType();
    let media;
@@ -295,9 +298,12 @@ const Media = (props) => {
 };
 
 const MediaPage = (props) => {
-   const entity = Entity.get(props.block.getEntityAt(0));
-   const {src} = entity.getData();
-   const type = entity.getType();
+
+   
+   // contentState.getEntity
+   const entity = props.contentState.getEntity(props.block.getEntityAt(0));
+   const {src}  = entity.getData();
+   const type   = entity.getType();
    let media;
        
    if (type === 'image') {
@@ -350,7 +356,8 @@ const styles = {
    },
 
    mediaPage: {
-      width     : '70%',
+      width     : '100%',
+      maxWidth  : '100%',
       height    : 'auto',
       objectFit : 'cover',
    },

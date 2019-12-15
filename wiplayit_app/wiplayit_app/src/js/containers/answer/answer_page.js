@@ -26,10 +26,11 @@ class AnswersBox extends Component {
 
 
     componentDidMount() {
+      console.log(this.props)
       let {questionById, cacheEntities } = this.props;
       let { question } =  cacheEntities;
       console.log(question);
-        question = question[questionById];
+        question = question && question[questionById];
 
         question  = question && question.question;
         var answerListById   = question && `answers${question.id}`;

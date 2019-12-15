@@ -42,12 +42,19 @@ class BaseApiView(BaseView, viewsets.ModelViewSet):
     
 
 class UserView(BaseApiView):
-	queryset = User.objects.exclude(first_name="Anonymous")
+	#queryset = User.objects.exclude(first_name="Anonymous")
 	serializer_class = UserSerializer
 	is_user = True
 	permissions      = get_objects_perms('user_perms')
 	fields_to_update = get_model_fields('user_model_fields') 
-	
+
+	def get_queryset(self):
+		users = User.objects.filter(
+			is_superuser=False
+			).exclude(
+			first_name="Anonymous"
+			)
+		return users	
 
   
 

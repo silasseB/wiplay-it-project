@@ -85,6 +85,7 @@ export function entities(state=InitialState(), action) {
 
         case types.USER_AUTHENTICATION.SUCCESS:
          Object.assign(state.userAuth, action.payload);
+         console.log(state, action.payload)
          return state;              
 
       case types.USER_AUTHENTICATION.ERROR:
@@ -371,7 +372,7 @@ export function entities(state=InitialState(), action) {
 
       case types.CREATE_ANSWER.PENDING:
          if (!state.answers[action.ById]) {
-            Object.defineProperty(state.answers.byId, action.ById,
+            Object.defineProperty(state.answers, action.ById,
                                        {value:action.payload,
                                         writable     : true,
                                         configurable : true,

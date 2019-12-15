@@ -60,11 +60,7 @@ def get_objects_perms(perms_for=None):
 		},
 
 		'draft_editor_contents_perms' : {
-		    'edit_perms': ['delete_drafteditormediacontent' ,'change_drafteditormediacontent',
-		                   'edit_draft_editor_files','view_draft_editor_files', 
-		                   'delete_draft_editor_files', 'edit_drafteditormediacontent'
-		                   
-		                   ],
+		    'edit_perms': [ 'edit_draft_editor_files','view_draft_editor_files', 'delete_draft_editor_files' ],
 		}
     }
 		         

@@ -41,8 +41,7 @@ const defaultStyles = {
     position                : 'relative',
     margin                  : '15% auto',
     width                   : '60%',
-   
-    background              : '#fff',
+    background              : '#F6F6F6',
     overflow                : 'auto',
     borderRadius            : '4px',
     outline                 : 'none',

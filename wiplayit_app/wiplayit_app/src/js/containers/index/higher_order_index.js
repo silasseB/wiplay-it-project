@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import {handleSubmit, getCurrentUser,getPost, getUserList,
          getUserProfile,getPostList,getQuestion,getReplyList,getReplyChildrenList,
-         getQuestionList as _getQuestionList,getCommentList, getIndex }  from "../../dispatch/index"
+         getQuestionList as _getQuestionList,getCommentList, getIndex, authenticate }  from "../../dispatch/index"
 import  * as action  from '../../actions/actionCreators';
 import { ModalManager}   from  "../../containers/modal/modal_container";
 
@@ -15,12 +15,13 @@ import AppEditor  from '../../containers/editor'
 import {store} from "../../configs/store-config";
 import {history} from "../../index";
 import {LocalCache} from  "../../utils/storage";
+import Api from '../../api';
 
 import Helper from '../../containers/utils/helpers';
 
 
 
-
+const api      = new Api();
 const helper   = new Helper();
 
 
@@ -114,9 +115,11 @@ export function withHigherOrderIndexBox(Component) {
                 let storeUpdate = store.getState();
                 var timeStamp = new Date();
                 let { entities } = storeUpdate;
-                let { currentUser,modal, index, question, userProfile } = entities
+                let { currentUser,modal, index, question, userProfile, userAuth } = entities
                
                 let data = modal && modal.data;
+
+                this.confirmLogout(userAuth)
 
                 if (modal) {
                    this.setState({ modalIsOpen : modal.modalIsOpen }) 
@@ -136,7 +139,7 @@ export function withHigherOrderIndexBox(Component) {
                     }, 5000);
                 }
                 
-               
+                
 
                 this.forceUpdate()
 
@@ -146,6 +149,18 @@ export function withHigherOrderIndexBox(Component) {
             this.unsubscribe = store.subscribe(onStoreChange);
 
         };
+
+        confirmLogout(userAuth){
+            let auth = userAuth && userAuth.auth;
+            if (auth && !auth.isLoggedIn) {
+                console.log(userAuth)
+
+               localStorage.removeItem('@@CacheEntities');       
+               history.push('/user/registration')
+
+            }
+            
+        }
 
         
       
@@ -189,20 +204,11 @@ export function withHigherOrderIndexBox(Component) {
 
 
         logout = () => {
-            localStorage.removeItem('@@CacheEntities');
 
-            if (this.isAuthenticated()) {
-                localStorage.removeItem('@@CacheEntities');
-
-                history.push('/user/registration')
-
-            }
-            else{
-        	   localStorage.removeItem('@@CacheEntities');       
-               history.push('/user/registration')
-
-            }
-           
+            let apiUrl =  api.logoutUser();
+            store.dispatch(action.authenticationPending());
+            authenticate(apiUrl, null, store.dispatch)
+            
         }
 
      

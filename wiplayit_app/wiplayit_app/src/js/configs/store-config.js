@@ -22,9 +22,7 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
                                                enumerable   : true,
                                             });;
 
-        console.log(entities)
-
-       store = next(reducer, initialState, enhancer);
+        store = next(reducer, initialState, enhancer);
        
        
     } 
@@ -80,18 +78,19 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
         let storeUpdate = store.getState();
         let { entities } = storeUpdate;
         let storeEntities = entities;
-        
 
-        if (cacheEntities && Object.keys(cacheEntities).length) {
-          
+
+        
+        
+ 
             let storeData 
             let cacheData;
             let _cacheMerge;
 
             for(var entitieKey in storeEntities){
 
-                storeData = storeEntities && storeEntities[entitieKey]
-                cacheData = cacheEntities && cacheEntities[entitieKey];
+                storeData = storeEntities && storeEntities[entitieKey] || {}
+                cacheData = cacheEntities && cacheEntities[entitieKey] || {};
 
                 let storeDataKeys = storeData && Object.keys(storeData);
                                  
@@ -116,19 +115,19 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
                     cacheEntities[entitieKey] = Object.assign(cacheData, _cacheMerge)
                    
                 }
-            }
+            } 
 
-                      
-        }else{
-            cacheEntities =  Object.assign(cacheEntities, entities);
-        } 
+            if (cacheEntities.userAuth) {
+                let auth = cacheEntities.userAuth.auth;
+                
+                if (auth && auth.isLoggedIn === false) {
+                    cacheEntities = {};
+                }
+            }   
+                       
       
-        localStorage.setItem('@@CacheEntities',JSON.stringify(cacheEntities));  
+           localStorage.setItem('@@CacheEntities',JSON.stringify(cacheEntities));  
     })
-
-
-
-
 
 
     return store;

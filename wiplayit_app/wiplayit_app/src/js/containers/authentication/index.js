@@ -209,8 +209,8 @@ export function withAuthentication(Component) {
                
                 for (var key in form) {
                     let formValue = form[key]
-                    console.log(form,formValue)
-                    console.log(/^ *$/.test(formValue))
+                    //console.log(form,formValue)
+                    //console.log(/^ *$/.test(formValue))
 
                     if(/^ *$/.test(formValue)){
                         formIsValid = false;
@@ -219,7 +219,7 @@ export function withAuthentication(Component) {
                     }
                     
                 }
-                console.log(formIsValid) 
+                //console.log(formIsValid) 
                 return formIsValid
                              
 

@@ -243,10 +243,10 @@ export const PartialNavBar = props =>{
 
 
 
-export const PartalNavigationBar = MatchMediaHOC(PartialNavBar, '(max-width: 500px)');
+export const PartalNavigationBar = MatchMediaHOC(PartialNavBar, '(max-width: 900px)');
 
-export const NavigationBarBigScreen = MatchMediaHOC(NavBarBigScreen, '(min-width: 800px)');
-export const NavigationBarSmallScreen = MatchMediaHOC(NavBarSmallScreen, '(max-width: 500px)');
+export const NavigationBarBigScreen = MatchMediaHOC(NavBarBigScreen, '(min-width: 900px)');
+export const NavigationBarSmallScreen = MatchMediaHOC(NavBarSmallScreen, '(max-width: 900px)');
 
 
 
