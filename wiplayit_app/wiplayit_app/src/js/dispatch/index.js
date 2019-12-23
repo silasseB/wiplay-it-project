@@ -253,9 +253,9 @@ export function handleSubmit(props) {
     const axiosInstance = new Axios(true);
     const instance      = axiosInstance.axiosInstance();
     let { 
-        actionType,
+        actionType, 
         byId,
-        objName, 
+        objName,  
         formData,
         apiUrl,
         IsModal } = props;

@@ -180,9 +180,9 @@ export const getQuestionPending = (questionById) => {
 export const getQuestionSuccess = ( questionById, question) => {
     //@userAnswer is for what
     // 
-    let userAnswer = question.answers  && getUserAnswer(question.answers);
-    let userHasAnswer      userAnswer?true:false,
-    let questionHasAnswer = question.answers && question.answers.length && true ||false,
+    let userAnswer        = question.answers  && getUserAnswer(question.answers);
+    let userHasAnswer     =     userAnswer?true:false;
+    let questionHasAnswer = question.answers && question.answers.length && true ||false;
    
     return{
         type: types.GET_QUESTION.SUCCESS,

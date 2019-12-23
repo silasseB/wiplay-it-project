@@ -70,7 +70,7 @@ class QuestionPage extends Component {
                 console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                 
                
-                if (menDiff < 1) {
+                if (menDiff < 10) {
                     questionById = `question${id}`;
                     this.setState({questionById })
                     console.log('Question found from cachedEntyties')
