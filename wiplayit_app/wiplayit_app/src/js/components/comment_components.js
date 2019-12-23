@@ -145,7 +145,7 @@ export const CommentsComponent = props => {
         </div>
                                
     );
-}
+};
 
 
 

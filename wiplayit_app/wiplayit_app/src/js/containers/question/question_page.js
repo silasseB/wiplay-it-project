@@ -74,8 +74,8 @@ class QuestionPage extends Component {
                     questionById = `question${id}`;
                     this.setState({questionById })
                     console.log('Question found from cachedEntyties')
-                    store.dispatch(action.getQuestionPending(id));
-                    store.dispatch(action.getQuestionSuccess(question));
+                    store.dispatch(action.getQuestionPending(questionById));
+                    store.dispatch(action.getQuestionSuccess(questionById, question));
                     return 
                 }
                

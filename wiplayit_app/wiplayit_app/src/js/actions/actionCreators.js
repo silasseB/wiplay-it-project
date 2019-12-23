@@ -180,17 +180,19 @@ export const getQuestionPending = (questionById) => {
 export const getQuestionSuccess = ( questionById, question) => {
     //@userAnswer is for what
     // 
-    var userAnswer = getUserAnswer(question.answers);
+    let userAnswer = question.answers  && getUserAnswer(question.answers);
+    let userHasAnswer      userAnswer?true:false,
+    let questionHasAnswer = question.answers && question.answers.length && true ||false,
    
     return{
-      type: types.GET_QUESTION.SUCCESS,
-      questionById,
-      payload: {
-         question, 
-         userAnswer        : userAnswer,
-         userHasAnswer     : userAnswer?true:false,
-         questionHasAnswer : question.answers.length?true:false,
-         isLoading         : false,
+        type: types.GET_QUESTION.SUCCESS,
+        questionById,
+        payload: {
+            question, 
+            questionHasAnswer,
+            userAnswer,
+            userHasAnswer,
+            isLoading         : false,
 
       }
    };
