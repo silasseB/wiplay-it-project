@@ -212,7 +212,8 @@ export default  class AppEditor extends Component{
 
                 if (modal) {
                     !modal.modalIsOpen && setTimeout(()=> {
-                        //ModalManager.close()
+                        console.log(modal, background)
+                        !background && ModalManager.close();
                     }, 2000);
 
                     this.setState({ submitting : modal.submitting || false });

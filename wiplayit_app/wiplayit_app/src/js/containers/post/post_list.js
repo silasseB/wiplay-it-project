@@ -36,9 +36,11 @@ class  PostListPage extends Component  {
         let { posts, currentUser } = cacheEntities;
         
       
-        posts = posts[postListById]
+        
 
         if (posts) {
+
+            posts  =  posts[postListById]
             console.log(posts)
             store.dispatch(action.getPostListPending(postListById));
             store.dispatch(action.getPostListSuccess( postListById ,posts.postList));

@@ -65,18 +65,32 @@ class EditProfile extends Component{
             let byId         =  id? `userProfile${id}`:null;
             
             let userProfile = byId? entities.userProfile[byId]:null;
+            let { currentUser} = cacheEntities;
+            let { modal } = entities;
            
+        
 
             if (userProfile) {
-
-                let user = userProfile.user;
+                console.log(userProfile)
+                               
                 this.setState({ submitting : userProfile.submitting});
 
-                if (user) {
-                    let { currentUser} = cacheEntities;
+                if (userProfile) {
+                    //console.log(userProfile, userProfile.submitting)
+                    let user = userProfile.user;
+                    currentUser =  currentUser && currentUser.user;
+                    
+                    if ( user && currentUser && currentUser.id === user.id) {
 
-                    if (currentUser && currentUser.id === user.id) {
-                       store.dispatch(action.getCurrentUserSuccess(user))
+                        //console.log(currentUser, user);
+                        if (userProfile.submitting != undefined && !currentUser.upDated) {
+                            currentUser['upDated'] = true;
+                            //console.log(userProfile)
+                            store.dispatch(action.getCurrentUserPending())
+                            store.dispatch(action.getCurrentUserSuccess(user));
+
+                            delete currentUser.upDated;
+                        }
                     }
 
                     this.populateEditForm(user);
@@ -110,7 +124,10 @@ class EditProfile extends Component{
             this.setState({profileById});
 
             if (userProfile) {
+                userProfile = userProfile.user
                 console.log('userProfile found from cachedEntyties')
+                store.dispatch(action.getUserProfilePending(profileById));
+                store.dispatch(action.getUserProfileSuccess(profileById, userProfile));
                 this.populateEditForm(userProfile);
 
             }else {
@@ -120,6 +137,7 @@ class EditProfile extends Component{
         }
     };
 
+    
     populateEditForm(userProfile ){
         
         if (userProfile) {
@@ -393,6 +411,7 @@ export class DropImage extends React.Component {
    }
 
     componentDidMount(){
+      
         this.onImageDropUpdate();
     }
     
@@ -404,11 +423,13 @@ export class DropImage extends React.Component {
 
             let {entities} = storeUpdate
             let {modal} = entities
-            let {background} = this.props;
+            let { background } = this.props;
             this.setState({submitting : modal.submitting});
+            
             console.log(modal)
+            if (modal && modal.successMessage && !modal.profilePictureUpdate && modal.background) {
 
-            if (modal && modal.successMessage) {
+                modal['profilePictureUpdate'] = true; 
                 ModalManager.close(background)
             }
         };
@@ -416,6 +437,10 @@ export class DropImage extends React.Component {
     };
 
     componentWillUnmount() {
+        let storeUpdate   = store.getState();
+        let {entities} = storeUpdate
+        let {modal} = entities;
+        modal && modal.profilePictureUpdate && delete modal.profilePictureUpdate;
         this.unsubscribe();
     };
   
@@ -441,7 +466,7 @@ export class DropImage extends React.Component {
         
         let formData = helper.createFormData({'profile_picture': file});
         let submitProps = Object.assign({formData, IsModal  : true}, this.props)
-        console.log(submitProps, this.props)        
+        //console.log(submitProps, this.props)        
         store.dispatch(handleSubmit(submitProps));
        
 

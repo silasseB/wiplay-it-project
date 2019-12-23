@@ -54,6 +54,15 @@ const InitialState = () => {
 
 
 export function entities(state=InitialState(), action) {
+
+    var currentTimeStamp = new Date();
+    if ( action.payload) {
+        action.payload['timeStamp'] = currentTimeStamp.getTime();
+
+
+    }
+
+
     switch (action.type){
 
         case 'MODAL_ROUTER':
@@ -96,10 +105,9 @@ export function entities(state=InitialState(), action) {
 
       
 
-      case types.GET_CURRENT_USER.SUCCESS:
-         Object.assign(state.currentUser, action.payload)
-         
-         return state;   
+        case types.GET_CURRENT_USER.SUCCESS:
+            Object.assign(state.currentUser, action.payload)
+            return state;   
                   
 
       case types.GET_CURRENT_USER.ERROR:
@@ -439,7 +447,7 @@ export function entities(state=InitialState(), action) {
       
       case types.UPDATE_USER_PROFILE.PENDING:
            
-        console.log(state, action)
+        //console.log(state, action)
         let payload = action.payload;
 
         if (!state.userProfile[action.byId]) {
@@ -451,15 +459,20 @@ export function entities(state=InitialState(), action) {
                      configurable : true,
                      enumerable   : true,} 
                 );
+        }else{
+          Object.assign(state.userProfile[action.byId], action.payload);
         }
         console.log(state,action)
 
         return state;
 
       case types.UPDATE_USER_PROFILE.SUCCESS:
-           console.log(state)
+           console.log(state, action)
+
 
            if (!state.userProfile[action.byId]) {
+                //console.log(state, action)
+                
                 Object.defineProperty(
                    state.userProfile, 
                    action.byId,
@@ -470,7 +483,15 @@ export function entities(state=InitialState(), action) {
                 );
 
             }else{
+
+                let profileToUpdate =state.userProfile[action.byId];
+                let updatedUserProfile = action.payload.user;
+                profileToUpdate = profileToUpdate.user;
+                let user = Object.assign(profileToUpdate, updatedUserProfile)
+                action.payload.user = user;
+
                 Object.assign(state.userProfile[action.byId], action.payload);
+                //console.log(state.userProfile)
             }
 
         return state;  

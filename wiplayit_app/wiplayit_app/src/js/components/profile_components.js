@@ -28,17 +28,17 @@ export const ProfileComponent = props => {
     
     var profileById = props.profileById;
     var userProfile = props.entities.userProfile[profileById];
-    userProfile = userProfile;
+    userProfile     = userProfile && userProfile.user;
 
     console.log(props, userProfile)
     let currentUser = props.currentUser;
      
     let  state = {
-         usersIsFor : 'userProfileFollowers',
-         userProfile 
-     };
+            usersIsFor : 'userProfileFollowers',
+            userProfile 
+    };
 
-      let optionsBtnStyles = {
+    let optionsBtnStyles = {
               fontSize   : '8px',
               background : 'white',
               fontWeight : 'bold',
@@ -50,9 +50,9 @@ export const ProfileComponent = props => {
             
 
         let editUserProfileProps = {
-            objName    : 'UserProfile',
-            isPut      : true,
-            obj        : userProfile, 
+            objName     : 'UserProfile',
+            isPut       : true,
+            obj         : userProfile, 
             byId        : profileById,
             currentUser,
 
@@ -61,7 +61,7 @@ export const ProfileComponent = props => {
       editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
       let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;
       
-      let pathToUserFollowers =  `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
+      let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
 
       let btnsProps = {
          editUserProfileProps,
@@ -71,11 +71,13 @@ export const ProfileComponent = props => {
 
       Object.assign(btnsProps, props);
 
-      var followers_text =   userProfile.profile.followers > 1? 'Followers' : 'Follower'  
+      var followers_text =  userProfile && userProfile.profile && userProfile.profile.followers > 1?
+                                                                      'Followers' : 'Follower';  
 
 
       let userProfileFollowers = <Link to={{ pathname : pathToUserFollowers ,state }}>
-                                    { userProfile.profile.followers}   {followers_text}
+                                    { userProfile && userProfile.profile && userProfile.profile.followers} 
+                                    {followers_text}
 
                                 </Link>;
 
@@ -91,7 +93,7 @@ export const ProfileComponent = props => {
 
 
       let  profile_picture = userProfile && userProfile.profile?
-                         userProfile.profile.profile_picture:null;
+                             userProfile.profile.profile_picture : null;
                  
 
       return (
@@ -261,11 +263,12 @@ export const UserfollowersNum = props => {
 export const UserAnswers = props =>{
    var profileById    = props.profileById;
    let userProfile    = props.entities.userProfile[profileById];
+   userProfile        = userProfile.user;
    var byId           = `usersAnswers${userProfile.id}`
    var answers        = props.entities.answers;
    
    var usersAnswers   = answers[byId]
-
+   console.log(props, answers)
    
    return (
         <div>
@@ -315,17 +318,19 @@ export const UserAnswers = props =>{
 
 
 export const UserQuestions = props => {
-   var profileById = props.profileById;
-   let userProfile = props.entities.userProfile[profileById];
-   var byId     = `usersQuestions${userProfile.id}`
-   var questions  = props.entities.questions;
-   questions      = questions[byId]
-   console.log(questions, byId, props)
+    var profileById = props.profileById;
+    let userProfile = props.entities.userProfile[profileById];
+    userProfile    = userProfile.user;
+
+    var byId     = `usersQuestions${userProfile.id}`
+    var questions  = props.entities.questions;
+    questions      = questions[byId]
+    console.log(questions, byId, props)
     
-   return (
-      <div className="question-container">
+    return (
+        <div className="question-container">
          <div className="number-question-box">
-            { questions.questionList.length? 
+            {questions && questions.questionList && questions.questionList.length? 
                <p className="items-count">{questions.questionList.length } Questions</p>
                :
                <p className="items-count">{questions.questionList.length } Question</p>
@@ -352,7 +357,9 @@ export const UserQuestions = props => {
 export const UserPosts = props => {
    var profileById = props.profileById;
    let userProfile = props.entities.userProfile[profileById];
-   var byId     = `usersPosts${userProfile.id}`
+   userProfile    = userProfile.user;
+
+   var byId     = `usersPosts${userProfile.id}`;
    var posts  = props.entities.posts;
    posts      = posts[byId]
    
@@ -469,6 +476,8 @@ export const UsersComponent = props => {
 export const UserFollowings = props => {
    var profileById = props.profileById;
    let userProfile = props.entities.userProfile[profileById];
+   userProfile    = userProfile.user;
+
    var usersById   = `usersFollowings${userProfile.id}`;
    var users       = props.entities.users[usersById];
     console.log(users,usersById, props.entyties)
@@ -508,6 +517,8 @@ export const UserFollowings = props => {
 export const UserFollowers = props => {
    var profileById = props.profileById;
    let userProfile = props.entities.userProfile[profileById];
+   userProfile    = userProfile.user;
+
    var usersById   = `usersFollowers${userProfile.id}`
    var users       = props.entities.users[usersById];
 
@@ -545,13 +556,13 @@ export const UserFollowers = props => {
 export const UserActivitiesBtns = props => {
     var profileById = props.profileById;
     var userProfile = props.entities.userProfile[profileById];
-    var user        = userProfile;
+    var userProfile = userProfile.user;
 
     console.log(userProfile)
 
     var usersAnswers = {
       component      : UserAnswers,
-      byId           : `usersAnswers${user.id}`,
+      byId           : `usersAnswers${userProfile.id}`,
       data           :  userProfile.answers,
       items          : 'isUsersAnswers',
 
@@ -559,21 +570,21 @@ export const UserActivitiesBtns = props => {
    
     var usersQuestions = {
       component        : UserQuestions,
-      byId             : `usersQuestions${user.id}`,
+      byId             : `usersQuestions${userProfile.id}`,
       data             :  userProfile.questions, 
       items            : 'isUsersQuestions',
      }
 
     var usersPosts = {
       component      : UserPosts,
-      byId           : `usersPosts${user.id}`,
+      byId           : `usersPosts${userProfile.id}`,
       data           :  userProfile.posts,
       items          : 'isUsersPosts',
     }
    
     var usersFollowers = {
       component          : UserFollowers,
-      byId               : `usersFollowers${user.id}`,
+      byId               : `usersFollowers${userProfile.id}`,
       data               :  userProfile.followers,
       items              : 'isUsersFollowers'
     }
@@ -581,7 +592,7 @@ export const UserActivitiesBtns = props => {
 
     var usersFollowings = {
       component           :  UserFollowings,
-      byId                :  `usersFollowings${user.id}`,
+      byId                :  `usersFollowings${userProfile.id}`,
       data                :   userProfile.followings,
       items               : 'isUsersFollowings'
     }

@@ -67,9 +67,8 @@ class IndexBox extends Component {
 
             
 
-            if (index && index.isSuccess && !index.timeStamp) {
-                var timeStamp = new Date();
-                index['timeStamp'] = timeStamp.getTime();
+            if (index && index.isSuccess) {
+                index.isSuccess = false;
              
                 this.updateIndexEntities(index);
                
@@ -82,7 +81,7 @@ class IndexBox extends Component {
 
     
     componentDidMount() {
-        console.log(this.props)
+        //console.log(this.props)
             
         this.onIndexUpdate();
 
@@ -94,8 +93,7 @@ class IndexBox extends Component {
                        
             if(index){
                 let timeStamp = index.timeStamp;
-                //console.log(timeStamp)
-
+          
                 let msDiff   = now.getTime() - timeStamp
                 let secDiff  = msDiff / 1000
                 let menDiff  = secDiff / 60
@@ -114,6 +112,7 @@ class IndexBox extends Component {
                 }
             }
         }
+        console.log('Fetching index data form the server')
         this.props.getIndex();
         
     };
@@ -178,7 +177,7 @@ class IndexBox extends Component {
   
         let { entities }  = props ;
         var { index }          = entities;
-        
+        //console.log(props, index)
                      
         return (
 

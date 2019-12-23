@@ -45,14 +45,22 @@ class UserProfileContainer extends Component {
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
             let profileById  =  id? `userProfile${id}`:null;
+            let answers      = entities.answers;
 
             let userProfile  = profileById? entities.userProfile[profileById]:null;
 
             if (userProfile && userProfile.user) {
+
                 userProfile = userProfile.user;
+                let answersById  =  `usersAnswers${userProfile.id}`;
+                answers          = answers[answersById];
                 console.log(userProfile)
 
-                //this._dispatchUserProfileItems(userProfile);
+                if (!answers) {
+                    console.log(userProfile, answers)
+
+                    this._dispatchUserProfileItems(userProfile);
+                }
 
                 
             }
@@ -91,18 +99,20 @@ class UserProfileContainer extends Component {
                 let dayDiff  = hourDiff/24
 
                 console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
-        
-                profileById = `userProfile${id}`;
-                this.setState({profileById })
-        
-                console.log('userProfile found from cachedEntyties')
-                store.dispatch(action.getUserProfilePending(profileById));
 
-                store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
+                if ( menDiff <= 3) {
+                    profileById = `userProfile${id}`;
+                    this.setState({profileById });
+                    userProfile = userProfile.user;
 
-                this._dispatchUserProfileItems(userProfile);
-                this.forceUpdate()
-                return
+                    console.log('userProfile found from cachedEntyties')
+                    store.dispatch(action.getUserProfilePending(profileById));
+
+                    store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
+
+                    return this._dispatchUserProfileItems(userProfile);
+                }
+            
                 
             }
         }
@@ -116,16 +126,17 @@ class UserProfileContainer extends Component {
         console.log(userProfile)
         let answers      = this.props.cacheEntities.answers;
 
+
         if (userProfile && userProfile.answers && userProfile.answers.length) {
             var byId         =`usersAnswers${userProfile.id}`;
             answers          = answers[byId]
             var usersAnswers = userProfile.answers;
 
             if (usersAnswers) {
-                console.log(usersAnswers)
+                console.log(usersAnswers, answers)
                 store.dispatch(action.getAnswerListPending(byId));
                 store.dispatch(action.getAnswerListSuccess(byId, usersAnswers));
-           }
+            }
         }
 
     }
@@ -144,6 +155,7 @@ class UserProfileContainer extends Component {
 
    
     showUserItems(params) {
+        //console.log(params)
         let {items, component, byId, data } = params;
         this.setState({userItemsComponent : component})
 

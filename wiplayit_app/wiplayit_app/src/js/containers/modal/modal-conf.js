@@ -29,7 +29,7 @@ export function Modal(props) {
         dropImageProps, 
                         } = props && props.modalProps;
 
-    console.log(props, modalType)
+    //console.log(props, modalType)
     
     let back = e => {
        e.stopPropagation();

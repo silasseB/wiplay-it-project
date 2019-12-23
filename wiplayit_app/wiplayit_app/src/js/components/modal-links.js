@@ -30,9 +30,10 @@ export const EditorLink = props => {
 
     let linkName = props.linkName;
     linkName = linkName?linkName:buildLinkName();
+    let styles = props.editorLinkStyles || {};
        
     return(
-        <button className=""  onClick={()=> {
+        <button style={styles} className="btn-sm"  onClick={()=> {
                         store.dispatch(showModal(true, state.background))
                         setTimeout(()=> {
                             
@@ -66,7 +67,7 @@ export const OptionsModalLink = props => {
         
     return(
         <button className="btn btn-sm"    onClick={()=> {
-                        
+                        store.dispatch(showModal(true, state.background))
                         setTimeout(()=> {
 
                             history.push({ pathname: pathname, state}); 
@@ -96,7 +97,7 @@ export const ChangeImageLink = props => {
     return(
        
         <button className="btn-sm edit-img-btn "   onClick={()=> {
-                        
+                        store.dispatch(showModal(true, state.background))
                         setTimeout(()=> {
                             
                             history.push({ pathname: pathname, state}); 

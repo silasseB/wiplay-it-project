@@ -8,104 +8,129 @@ import {EditorLink } from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
 
 
+let editorLinkStyles = {
+    background : '#A33F0B !important',
+    color      : '#fefefe', 
+        
+}
+
 
 let createPostProps = {
         objName     : 'Post',
         linkName    : 'Post',
         isPost      : true,
-            };
-     let createQuestionProps = {
+        editorLinkStyles,
+    };
+
+let createQuestionProps = {
         objName   : 'Question',
         isPost    : true,
         linkName  : "Ask",
-      };
+        editorLinkStyles,
+    };
 
-createQuestionProps = GetModalLinkProps.props(createQuestionProps)
-createPostProps = GetModalLinkProps.props(createPostProps)
 
-export const NavBarSmallScreen = props => {
-    
-    var { currentUser } = props;
-    var   path_to_profile = null;
-    ;
-   
+createQuestionProps = GetModalLinkProps.props(createQuestionProps);
+createPostProps = GetModalLinkProps.props(createPostProps);
+
+const NavBarDropDown = props => {
+    let { currentUser } = props;
+    let  path_to_profile = null;
+      
     let state = {userProfile:currentUser}
     
     if (currentUser) {
         path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
-        createPostProps['currentUser'] = currentUser;
-       createQuestionProps['currentUser'] = currentUser;
         
     }
-    
-   
 
-    return (
-		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
-            <Link to="/" className="logo"><strong>Wiplayit</strong></Link>
-              <div className="mobile-navbar-center">
-                <div className="create-post-box">
-                 <EditorLink {...createQuestionProps}/>
-    
-                  <p>Or</p>
-                  <EditorLink  {...createPostProps}/>
-                </div>
-              </div>
-
-              <div className="mobile-navbar-bottom">
-
-                <div className="navigation-menu">
-                   <div className="item-box">
-                      <Link className="navigation-item " to="/">Home</Link>
-                   </div>
-
-                   <div className="item-box">
-                       <Link className="navigation-item "
-                        to={{pathname:"/users/",state:{ isUsersList : true }}}> 
-                          Notif
-                        </Link>
-                    </div>
-
-                    <div className="item-box">
-
-                    <Link className="navigation-item"
-                         to={ {pathname:"/posts/", state } }>
-                        Posts
-                       </Link>
-                    </div>
-
-                    <div className="item-box">
-                      <Link className="navigation-item" to="/questions/">Quest</Link>
-                    </div>
-
-                </div>
-
-                <div className="navbar-dropdown-sm navbar-dropdown">
-                  <div className="img-box img-container-sm navigation-item" id="navBardropdown" 
-                              data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
+    return(
+        <div className="navigation-img-box">
+                    
+            <div className="" id="navBardropdown" 
+                           data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
+                <div className="navBar-img"> 
                     { currentUser && currentUser.profile && currentUser.profile.profile_picture?
                         <img alt="" src={currentUser.profile.profile_picture} className="profile-photo"/>
                         :
                         <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/> 
 
                     }
-                  </div>
-      
-                  <div className="dropdown-menu" aria-labelledby="navBardropdown">
+                </div>
+            </div>
+                    
 
-                    <Link to={ {pathname : path_to_profile,state }} className="dropdown-item"> 
-                    	Profile
-                    </Link>
-                    <button onClick={props.logout} className="dropdown-item" >Logout</button>
-                  </div>
+            <div className="dropdown-menu" aria-labelledby="navBardropdown">
+                <Link to={ {pathname : path_to_profile,state }} className="dropdown-item"> 
+                    Profile
+                </Link>
+                <button onClick={props.logout} className="dropdown-item" >Logout</button>
+            </div>
+        </div>
+    )
+}
+
+
+export const NavBarSmallScreen = props => {
+    
+    var { currentUser } = props;
+    createPostProps['currentUser'] = currentUser;
+    createQuestionProps['currentUser'] = currentUser;
+    let state = {currentUser};
+     
+
+    return (
+		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
+            <Link to="/" className="logo"><strong>Wiplayit</strong></Link>
+              <div className="mobile-navbar-center">
+                <div className="post-question-btn-box">
+                    <div className="create-question-btn-box">
+                        <EditorLink {...createQuestionProps}/>
+                    </div>
+    
+                    <p>Or</p>
+                    <div className="create-post-btn-box">
+                        <EditorLink {...createPostProps}/>
+                    </div>
+                </div>
+              </div>
+
+              <div className="mobile-navbar-bottom">
+
+                <div className="navigation-menu">
+                    <ul  className="navigation-item">
+                       <li>
+                            <Link className="items" 
+                                  to={ {pathname:"/posts/", state } }>
+                                Posts
+                            </Link>
+                        </li>
+                    </ul>
+
+                    <ul  className="navigation-item">
+                        <li>
+                            <Link className="items"
+                            to="/questions/">Questions</Link>
+                        </li>
+                    </ul>
+                    
+                    <ul  className="navigation-item">
+                        <li>
+                            <Link className="items"
+                                to={{pathname:"/users/",state:{ isUsersList : true }}}> 
+                                Notifications
+                            </Link>
+                        </li>
+                    </ul>
+
+                    <NavBarDropDown {...props}/>
+
                 </div>
 
-              </div>
-            </nav>
-            
-
-			); 
-   }
+            </div>
+        </nav>
+    ); 
+};
 
 
 
@@ -208,35 +233,22 @@ export const PartialNavBar = props =>{
 
        
     return (
-        <div className="partial-page-navbar fixed-top">
-         <div className="back-btn-box">
-            <CustomBackBtn {...props}/> 
-         </div>
 
-         <div className="page-name-box">
-            <b className="page-name">{props.pageName}</b>  
-         </div>
-         
-         <div className="home-link-box">
-            <div className="img-box img-container-sm"
-               id="navBardropdown"  data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
-               { userProfile && userProfile.profile_picture?
-                   <img alt="" className="profile-photo" src={userProfile.profile_picture}/>
-                    :
-                   <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/>  
-                }
+        <div className="partial-page-navbar fixed-top">
+            <div className="back-btn-box">
+                <CustomBackBtn {...props}/> 
             </div>
 
-            <div className="dropdown-menu" aria-labelledby="navBardropdown">
-                <Link to={ {pathname :path_to_profile, state }} className="dropdown-item"> 
-                    Profile
-                </Link>
-
-                <button onClick={props.logout} className="dropdown-item" >Logout</button>
-            </div>          
+            <div className="page-name-box">
+                <b className="page-name">{props.pageName}</b>  
+            </div>
+         
+            <div className="home-link-box">
+                <NavBarDropDown {...props}/>
+            
             </div>
         </div>
-   );
+    );
 
 };
 

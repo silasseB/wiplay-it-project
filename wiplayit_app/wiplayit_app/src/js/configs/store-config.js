@@ -37,7 +37,7 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
     
 
     let UpdateKeyedLocalCache =(storeData, cacheData)=> {
-        //console.log(cachedKeys, )
+        //console.log(storeData, cacheData )
         let cacheMerge;
         let storeDataKeys = storeData && Object.keys(storeData);
          

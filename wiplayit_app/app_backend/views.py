@@ -49,9 +49,7 @@ class UserView(BaseApiView):
 	fields_to_update = get_model_fields('user_model_fields') 
 
 	def get_queryset(self):
-		users = User.objects.filter(
-			is_superuser=False
-			).exclude(
+		users = User.objects.exclude(
 			first_name="Anonymous"
 			)
 		return users	

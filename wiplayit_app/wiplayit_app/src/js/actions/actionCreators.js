@@ -278,8 +278,8 @@ export const getUserProfileSuccess = (profileById, userProfile ) => {
         type: types.GET_USER_PROFILE.SUCCESS,
         profileById,
         payload: {
-            ...userProfile,
-            isLoading    : false,
+            user      : userProfile,
+            isLoading : false,
         }
     };
 };

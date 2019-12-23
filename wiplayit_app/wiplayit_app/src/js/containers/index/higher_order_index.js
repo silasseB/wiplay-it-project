@@ -122,7 +122,13 @@ export function withHigherOrderIndexBox(Component) {
                 this.confirmLogout(userAuth)
 
                 if (modal) {
-                   this.setState({ modalIsOpen : modal.modalIsOpen }) 
+                    if (modal.modalIsOpen) {
+                        const scrollY = document.body.style.top;
+                        document.body.style.position = '';
+                        document.body.style.top = '';
+                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                    }
+                    this.setState({ modalIsOpen : modal.modalIsOpen }) 
                 }
 
                 if (currentUser && currentUser.user) {
@@ -140,8 +146,7 @@ export function withHigherOrderIndexBox(Component) {
                 }
                 
                 
-
-                this.forceUpdate()
+                this.forceUpdate()               
 
                 }
             };

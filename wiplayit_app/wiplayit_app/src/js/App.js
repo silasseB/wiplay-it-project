@@ -45,18 +45,20 @@ import PostUpVotersBox  from "./containers/users/post-upvoters-page";
 import PostCommentUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
 import PostReplyUpVotersBox  from "./containers/users/post-comment-upvoters-page"; 
 
-let storeUpdate = store.getState();
+let storeUpdate = store.getState().entities;
 
 let GetModalRouter = (location)=>{
     let background = location.state && location.state.background;
+    
 
     let modalIsOpen = true;
     
-    if (!background && modalIsOpen) {
+    if (!background) {
+        console.log(location, storeUpdate.modal)
         modalIsOpen = false;
         
         setTimeout(()=> {
-            store.dispatch(showModal(false))
+           // store.dispatch(showModal(false))
         }, 2000);
         
         return '';

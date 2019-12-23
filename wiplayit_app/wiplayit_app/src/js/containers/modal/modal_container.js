@@ -12,9 +12,9 @@ import {
   useParams
 } from "react-router-dom";
 
-import {showModal}  from '../../actions/actionCreators';
+import { showModal }  from '../../actions/actionCreators';
 
-import {history} from "../../index" 
+import { history } from "../../index" 
 import { store } from "../../configs/store-config";
 import Assign from 'lodash.assign';
 
@@ -34,7 +34,9 @@ const defaultStyles = {
     zIndex          : 99999999,
     overflow        : 'hidden',
     perspective     :  1300,
-    backgroundColor : 'rgba(0, 0, 0, 0.3)'
+    backgroundColor : 'rgba(0, 0, 0, 0.3)',
+    height          : '100vh',
+    overflowY       : 'hidden',
   },
 
   content: {
@@ -50,8 +52,8 @@ const defaultStyles = {
 };
 
 const defaultTransition = {
-   property : 'all',
-   duration : 300,
+   property       : 'all',
+   duration       : 300,
    timingfunction : 'linear',
 };
 
@@ -81,15 +83,15 @@ class ModalBox extends Component{
    }
 
    handleKeyDown(event){
-      if (event.keyCode == 27 /*esc*/) this.close();
+      if (event.keyCode === 27 /*esc*/) this.close();
    }
 
     componentDidUpdate(prevProps, nextProps) {
-      console.log(prevProps)
+      //console.log(prevProps)
     }
 
    componentDidMount(){
-    console.log(this.props)
+    //console.log(this.props)
       const transitionTimeMS = this.getTransitionDuration();
       setTimeout(() => this.setState({open : true}),0);
       onClose = (callback) => {
@@ -114,7 +116,7 @@ class ModalBox extends Component{
     }
 
     render(){
-      console.log(this.props)
+      //console.log(this.props)
       const {style,effect} = this.props;
       const { open } = this.state;
 
@@ -155,7 +157,7 @@ var modals = [];
 
 const renderModal = () => {
    
-   if(modals.length == 0)
+   if(modals.length === 0)
       return;
 
    const component = modals.shift();
@@ -174,7 +176,7 @@ export const ModalManager = {
 
        modals.push(component);
 
-       if(modals.length == 1){ // render the modal only if there is no other showing modals
+       if(modals.length === 1){ // render the modal only if there is no other showing modals
           renderModal();
        }
     },
@@ -183,7 +185,7 @@ export const ModalManager = {
         onClose && onClose(() => {
             store.dispatch(showModal(false))
             
-            background &&   history.goBack();
+            background && background != undefined  && history.goBack();
             ReactDOM.unmountComponentAtNode(node);
            //renderModal();// render the other modals which are waiting.
        });

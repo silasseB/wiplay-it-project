@@ -121,31 +121,30 @@ export const CommentsComponent = props => {
 
     
 
-   return(
+    return(
       
-      <div  className="comment-box" id="comment-box">
-         <div className="user-box">
-
-            <UserComponentSmall {...userProps }
-            />
-           
-          </div>
+        <div  className="comment-box" id="comment-box">
+            <div className="user-box">
+                <UserComponentSmall {...userProps }/>
+            </div>
     
-         <div className="comment">
-            <Editor
-              blockRendererFn={pageMediaBlockRenderer}
-              editorState={editorState} 
-              readOnly={true} />
-         </div>
-         <ButtonsBox {...btnsList}/>
-          { props.comment.replies.length?
-            <RepliesBox {...props}/>
-            :
-            ""
-          }
-      </div>
+            <div className="comment">
+                <Editor
+                   blockRendererFn={pageMediaBlockRenderer}
+                   editorState={editorState} 
+                   readOnly={true}
+                />
+            </div>
+
+            <ButtonsBox {...btnsList}/>
+            { props.comment.replies.length?
+                <RepliesBox {...props}/>
+                :
+                ""
+            }
+        </div>
                                
-   )
+    );
 }
 
 

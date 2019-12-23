@@ -86,7 +86,7 @@
   height: 100px !important; 
 }
 
-.partial-page-navbar, .form-navbar, #editor-nav-bar {
+.partial-page-navbar, .form-navbar, #editor-nav-bar, #navigation-mobile {
    background:  #fefefe;
    -webkit-box-shadow: 0px 3px 5px -1px rgba(202,202,202,1);
    -moz-box-shadow: 0px 3px 5px -1px rgba(202,202,202,1);

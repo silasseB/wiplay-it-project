@@ -4,6 +4,7 @@ import {history} from "../index"
 
 import { ModalManager}   from  "../containers/modal/modal_container";
 import { store } from "../configs/store-config";
+import {showModal} from '../actions/actionCreators';
 
 
 
@@ -307,6 +308,7 @@ export const AnswerOptModalBtns = props => {
     let modalPath = `/compose/${'answer'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
     let state = { background, modalProps} 
+    console.log(props)
    
    return(
       <div>
@@ -314,6 +316,8 @@ export const AnswerOptModalBtns = props => {
             <div>
                <button className="btn-sm edit-question" onClick={()=>{
                         ModalManager.close(props.background) 
+                        store.dispatch(showModal(true, background));
+
                         setTimeout(()=> {
 
                            history.push({ pathname: modalPath, state}); 
