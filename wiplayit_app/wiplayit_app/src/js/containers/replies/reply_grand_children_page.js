@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import  AjaxLoader from "../../components/ajax-loader";
-import {ReplyGrandChildernComponent,GrandChildRepliesLink  } from "../../components/reply_components"
+import {Reply,GrandChildRepliesLink  } from "../../components/reply_components"
 import  * as action  from '../../actions/actionCreators';
 import {store} from "../../configs/store-config";
+import ReplyGreatGrandChildBox from "../../containers/replies/reply_great_grand_child_page";
 
 
 
@@ -14,7 +15,9 @@ class ReplyGrandChildrenBox extends Component {
 
       this.state = {
          isReplyGrandChildBox : true,
-         byId                 : '',
+         childParent          : '',
+         replyChildById       : '',
+         newChildRepliesById : '',
       };
    };
 
@@ -23,85 +26,171 @@ class ReplyGrandChildrenBox extends Component {
       console.log(error, info);
    }
 
-   componentDidMount() {
-      console.log(this.props)
-      var reply    = this.props.reply;
-      var { post } = this.props.props;
+    componentDidMount() {
+        //console.log(this.props)
+        let {reply, post, answer} = this.props; 
 
-      if (reply) {
+        if (reply) {
+            let replyChildById  = post && `postReplyGrandChild${reply.id}` 
+                                  || answer && `answerReplyGrandChild${reply.id}`; 
+            
+            let newChildRepliesById  =  `newReplies${reply.id}`; 
+
+            this.setState({replyChildById, newChildRepliesById, childParent:reply});
          
-         var byId  = '';
+            let props = {
+                actionType : 'GET_REPLY_CHILD_LINK_DATA',
+                reply,
+                byId: replyChildById, 
+            }
+            reply.has_children && store.dispatch(action.getReplyChildLindData(props)); 
+        }     
+    }; 
 
-         if (post) {
-             byId = `postReplyGrandChild${reply.id}`;
-         }else{
-             byId = `answerReplyGrandChild${reply.id}`;
-         }
-
-         this.setState({byId});
-         var props = {
-            actionType : 'GET_REPLY_CHILD_LINK_DATA',
-            reply,
-            byId, 
-         }
-         store.dispatch(action.getReplyChildLindData(props)); 
-      }     
-   }; 
-
-   componentDidUpdate(nextProps, prevState) {
+    componentDidUpdate(nextProps, prevState) {
       
-   }; 
+    }; 
   
-   getProps() {
-      let props = {
-         isReplyGrandChildBox  : this.state.isReplyGrandChildBox,
-         grandChildParent      : this.props.reply,
-         grandChildById        : this.state.byId,
-      } 
-      return Object.assign(props, this.props.props);
-   };
+    getProps() {
+        return {...this.props, ...this.state};
+    };
 
 
 
-   render() { 
+    render() { 
      
-      let props      =   this.getProps();
-      var replies    =   props.entities.replies;
-      replies        =   replies[props.grandChildById];
-      console.log(replies) 
+        let props      =   this.getProps();
+        let {
+            replies,
+            entities,
+            replyChildById,
+            newChildRepliesById } =   props;
+
+        
+        replies         =  entities && entities.replies;
+        let newReplies  =  replies && replies[newChildRepliesById];
+
+        let repliesList =  replies && replies[replyChildById]; 
+
+        //console.log(props, repliesList,newReplies ,replyChildById,newChildRepliesById )
       
-      return (
-         <div>
-         {replies?
+        return (
             <div>
-               { replies.showLink?
-                  <GrandChildRepliesLink {...props}/>
-                  :
-                  <div>
-                     { replies.isLoading?
-                        <div className="spin-loader-box">
-                           <AjaxLoader/>
-                        </div>
-                     :
-                        <div>
-                           <ReplyGrandChildernComponent {...props}/>
-                        </div>
-                     }
-                  </div>
-               }
-            </div>
-            :
-            ""
-         }
-         </div>
-      )
-   };    
+                <div>
+                    {newReplies && newReplies.replyList?
+                        <NewAddedReplies {...props}/>
+                        :
+                        ""
+                    }
+                </div>
+
+                <div>
+                    { repliesList?
+                        <ViewedReplies {...props}/>
+                        :
+                        ""
+                    }
+                </div>
+            </div>  
+        );
+    };    
 };
 
 
 
 
 export default ReplyGrandChildrenBox;
+
+
+
+
+
+const NewAddedReplies = props => {
+   let {entities, newChildRepliesById} = props;
+   let replies = entities.replies[newChildRepliesById]; 
+   let isNewReplies = true;
+
+   let replyList = replies.replyList && replies.replyList.length && replies.replyList;  
+   return Replies(props, replyList, isNewReplies);
+};
+
+
+const ViewedReplies = props => {
+    let {entities, replyChildById } = props;
+    let replies = entities.replies[replyChildById]; 
+    let replyList =  replies && replies.replyList && replies.replyList.length && replies.replyList;  
+
+    return(
+        <div>
+            { replies.showLink?
+                <GrandChildRepliesLink {...props}/>
+                :
+                <div>
+                    { replies.isLoading?
+                        <div className="spin-loader-box">
+                            <AjaxLoader/>
+                        </div>
+                        :
+                        <div>
+                          { Replies(props, replyList)}
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+    )
+};
+
+const Replies = (props, replyList, isNewReplies) => {
+    //console.log(replyList);
+    let { 
+        replyChildById,
+        newChildRepliesById,
+        childParent,
+                    } = props;
+
+    let replyStyles = {
+            border    : 'px solid red',
+            margin    : '15px 22px 10px 60px',
+        };     
+
+    return(
+        <div>
+            { replyList && replyList.map( (reply, index) => {
+                let replyProps = {
+                        reply,
+                        byId : replyChildById,
+                        index,
+                        newRepliesById: newChildRepliesById,
+                        replyStyles,
+                        
+                };
+
+                let replyChildProps = {...props, reply}
+                //console.log(replyChildProps, childParent.id === reply.parent)
+
+
+                return (
+                    <div  key={index} >
+                        { childParent.id === reply.parent?
+                            <div className="reply-child-container">
+                                <div className="reply-child-contents">  
+                                    { Reply( props, replyProps, isNewReplies) }
+                                    <ReplyGreatGrandChildBox {...replyChildProps}/>
+                                </div>
+                            </div>
+                            :
+                            ""
+                        } 
+                    </div> 
+                ); 
+            })}
+        </div>
+    );
+};
+
+
 
 
 

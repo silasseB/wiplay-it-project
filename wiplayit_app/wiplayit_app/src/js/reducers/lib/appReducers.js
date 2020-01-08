@@ -3,22 +3,19 @@ import  * as types  from '../../actions/types';
 
 
 const helper   = new Helper();
-/*
-const populateInitialState = (params)=> {
-    
+const CreateNewEntities = (stateEntintie, action)=>{
+        let {byId, payload} = action;
 
-   var questions = {
-         isLoading          : false,
-         question           : "",
-         newObject          : "",
-         answerList         : [],
-         answer             : "",  
-         questionHasAnswer  : false,
-         userHasAnswer      : false,
-         visited            : false,
-         error              : '',
-      }
-}*/
+        Object.defineProperty(
+            stateEntintie, 
+            byId,
+            { value : payload,
+              writable     : true,
+              configurable : true,
+              enumerable   : true,
+            }
+        );
+};
 
 const InitialState = () => {
   
@@ -55,35 +52,51 @@ const InitialState = () => {
 
 export function entities(state=InitialState(), action) {
 
+    
+    let updateStateEntyties = (stateEntintie, params )=>{
+
+          if (!state[params.byId]) {
+                CreateNewEntities(
+                       stateEntintie,
+                       {byId : params.byId, payload : params.payload}
+                    ) 
+            
+            }else{
+                Object.assign(stateEntintie[modalType], params.payload) ;  
+            }
+
+    };
+
+
+    let { modalType, payload, byId, type } = action;
+
     var currentTimeStamp = new Date();
-    if ( action.payload) {
-        action.payload['timeStamp'] = currentTimeStamp.getTime();
+    if ( payload) {
+        payload['timeStamp'] = currentTimeStamp.getTime();
 
 
     }
 
-
-    switch (action.type){
+    switch (type){
 
         case 'MODAL_ROUTER':
-            Object.assign(state.modal, action.payload) ;  
+            updateStateEntyties(state.modal, {byId : modalType, payload} )
+
             return state;
 
 
         case "SUBMIT_PENDING":
-            console.log(action, state)
-            Object.assign(state.modal, action.payload)
-
-           return state;
+            updateStateEntyties(state.modal, {byId : modalType, payload} )
+            return state;
 
         case "SUBMIT_SUCESS":
-            console.log(action, state)
-            Object.assign(state.modal, action.payload)
-
-           return state;
+            updateStateEntyties(state.modal, {byId : modalType, payload} )
+            return state;
 
         case "SUBMIT_ERROR":
-            Object.assign(state.modal, action.payload)
+            updateStateEntyties(state.modal, {byId : modalType, payload} )
+            return state;
+            
 
            return state;
     
@@ -93,14 +106,14 @@ export function entities(state=InitialState(), action) {
             return state; 
 
         case types.USER_AUTHENTICATION.SUCCESS:
-         Object.assign(state.userAuth, action.payload);
-         console.log(state, action.payload)
-         return state;              
+            Object.assign(state.userAuth, action.payload);
+            console.log(state, action.payload)
+            return state;              
 
-      case types.USER_AUTHENTICATION.ERROR:
-         Object.assign(state.userAuth, action.payload)
-         console.log(state)
-         return state;
+        case types.USER_AUTHENTICATION.ERROR:
+            Object.assign(state.userAuth, action.payload)
+            console.log(state)
+            return state;
           
 
       
@@ -110,62 +123,43 @@ export function entities(state=InitialState(), action) {
             return state;   
                   
 
-      case types.GET_CURRENT_USER.ERROR:
-         Object.assign(state.currentUser, action.payload)
-         return state;    
+        case types.GET_CURRENT_USER.ERROR:
+            Object.assign(state.currentUser, action.payload)
+            return state;    
 
-      case types.GET_CURRENT_USER.PENDING:
-        Object.assign(state.currentUser, action.payload)
-        return state;    
-
-
-      case types.GET_USER_PROFILE.PENDING:
+        case types.GET_CURRENT_USER.PENDING:
+            Object.assign(state.currentUser, action.payload)
+            return state;    
 
 
-          if (!state.userProfile[action.profileById]) {
-              Object.defineProperty(state.userProfile, action.profileById,
-                                         {  value : action.payload,
-                                            writable     : true,
-                                            configurable : true,
-                                            enumerable   : true,
-                                         });
-          }
-          return state;
+        case types.GET_USER_PROFILE.PENDING:
+            updateStateEntyties(state.userProfile, {byId , payload} )
 
-      case types.GET_USER_PROFILE.SUCCESS:
+            return state;
+
+
+        case types.GET_USER_PROFILE.SUCCESS:
             console.log(action, state)
+            updateStateEntyties(state.userProfile, {byId , payload} )
 
-            if (state.userProfile[action.profileById]) {
-                //console.log(newState ,action) 
-              
-               Object.assign(state.userProfile[action.profileById], action.payload);
-            }
+            return state;
 
-        return state;
-
-      case types.GET_USER_PROFILE.ERROR:
-         Object.assign(state.userProfile[action.profileById], action.payload);
-         return state;
+        case types.GET_USER_PROFILE.ERROR:
+            updateStateEntyties(state.userProfile, {byId , payload} )
+            return state;
               
 
-      case types.GET_USER_LIST.PENDING:
-         //console.log(state, action)
-         if (!state.users[action.byId]) {
-            Object.defineProperty(state.users, action.byId,
-                                             {value : action.payload,
-                                                writable    : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                             });
-         }
-         return state;
+        case types.GET_USER_LIST.PENDING:
+            //console.log(state, action)
+            updateStateEntyties(state.users, {byId , payload} )
+            return state;
 
-      case types.GET_USER_LIST.SUCCESS:
-         Object.assign(state.users[action.byId], action.payload);
-         return state;
+        case types.GET_USER_LIST.SUCCESS:
+             updateStateEntyties(state.users, {byId , payload} );
+            return state;
 
       case types.GET_USER_LIST.ERROR:
-         Object.assign(state.users[action.byId], action.payload);
+          updateStateEntyties(state.users, {byId , payload} );
          return state;
 
 
@@ -173,392 +167,255 @@ export function entities(state=InitialState(), action) {
          Object.assign(state.index, action.payload);
          return state;       
 
-      case types.GET_INDEX.SUCCESS:
-         //console.log(state, action)
-         Object.assign(state.index, action.payload);   
-         return state;    
-
-      case types.GET_INDEX.ERROR:
-         Object.assign(state.index, action.payload);
-         return state;           
-
-
-      case types.GET_QUESTION_LIST.PENDING:
-         console.log(state, action)
-         if (!state.questions[action.byId]) {
-            Object.defineProperty(state.questions, action.byId, 
-                                                {value : action.payload,
-                                                    writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                                });
-         }
-         return state;       
-
-      case types.GET_QUESTION_LIST.SUCCESS:
-            Object.assign(state.questions[action.byId], action.payload);  
-
+        case types.GET_INDEX.SUCCESS:
+            //console.log(state, action)
+            Object.assign(state.index, action.payload);   
             return state;    
 
-      case types.GET_QUESTION_LIST.ERROR:
-         Object.assign(state.questions[action.byId], action.payload);
-         return state;            
+        case types.GET_INDEX.ERROR:
+            Object.assign(state.index, action.payload);
+            return state;           
+
+
+        case types.GET_QUESTION_LIST.PENDING:
+            //console.log(state, action)
+            updateStateEntyties(state.questions, {byId , payload} )
+            return state;       
+
+        case types.GET_QUESTION_LIST.SUCCESS:
+            updateStateEntyties(state.userProfile, {byId , payload} )
+            return state;    
+
+        case types.GET_QUESTION_LIST.ERROR:
+            updateStateEntyties(state.questions, {byId , payload} );
+            return state;            
        
 
 
 
-      case types.GET_QUESTION.PENDING:
-
-         if (!state.question[action.questionById]) {
-            Object.defineProperty(state.question, action.questionById, 
-                                                {value : action.payload,
-                                                    writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                                });
-         }
-         return state;      
+        case types.GET_QUESTION.PENDING:
+            updateStateEntyties(state.question, {byId , payload} )
+            return state;      
       
-      case types.GET_QUESTION.SUCCESS:
-            Object.assign(state.question[action.questionById], action.payload);
-         return state; 
+        case types.GET_QUESTION.SUCCESS:
+            updateStateEntyties(state.question, {byId , payload} );
+            return state; 
 
-      case types.GET_QUESTION.ERROR:
-         if (state.question[action.questionById]) {
-            Object.assign(state.question[action.questionById], action.payload);
-         }
+        case types.GET_QUESTION.ERROR:
+            updateStateEntyties(state.question, {byId , payload} )
          return state;
 
 
-      case types.GET_POST_LIST.PENDING:
-         //console.log(state, action)
-         if (!state.posts[action.byId]) {
-            Object.defineProperty(state.posts, action.byId, 
-                                          {value : action.payload,
-                                            writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                          });
-         }
-         return state;       
+        case types.GET_POST_LIST.PENDING:
+            updateStateEntyties(state.posts, {byId , payload} )
+            return state;       
 
-      case types.GET_POST_LIST.SUCCESS:
-         //console.log(state, action)
-         Object.assign(state.posts[action.byId], action.payload);   
-         return state;    
+        case types.GET_POST_LIST.SUCCESS:
+            updateStateEntyties(state.posts, {byId , payload} );   
+            return state;    
 
-      case types.GET_POST_LIST.ERROR:
-         Object.assign(state.posts[action.byId], action.payload);
-         return state;              
+        case types.GET_POST_LIST.ERROR:
+            updateStateEntyties(state.posts, {byId , payload} );
+            return state;              
 
 
-      case types.GET_POST.PENDING:
-         if (!state.post[action.postById]) {
-            Object.defineProperty(state.post, action.postById,
-                                  {value : action.payload,
-                                    writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                  });
-         }
-         return state;
+        case types.GET_POST.PENDING:
+            updateStateEntyties(state.post, {byId , payload} )
+            return state;
 
-      case types.GET_POST.SUCCESS:
-         var post = action.payload.post;
-         //var commentById = `commentsPost${post.id}`;
-         //console.log(state, post)
-         /*
-         var commentsState = {
-            commentList      : post.comments,
-            showLink         : post.comments.length?true:false,
-            isLoading        : false,
-            error            : '',
-            linkData : {
-               comment       : post.comments[0],
-               numOfComments : post.comments.length,
-            },
-         };*/
+        case types.GET_POST.SUCCESS:
+            updateStateEntyties(state.post, {byId , payload} )
+            return state;
 
-         Object.assign(state.post[action.postById], action.payload);
-         if (post.comments.length) {
-            //Object.defineProperty(state.comments.byId, commentById, {value : commentsState});
-         }
-         return state;
-
-      case types.GET_POST.ERROR:
-         Object.assign(state.post[action.postById], action.payload);
-         return state; 
+        case types.GET_POST.ERROR:
+            updateStateEntyties(state.post, {byId , payload} )
+            return state; 
 
 
-      case types.GET_ANSWER_LIST.PENDING:
-         if (!state.answers[action.byId]) {
-            Object.defineProperty(state.answers, action.byId, 
-                                             {value : action.payload,
-                                                writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                             });
-         }
-         return state;
+        case types.GET_ANSWER_LIST.PENDING:
+           updateStateEntyties(state.answers, {byId , payload} )
+           return state;
 
 
-      case types.GET_ANSWER_LIST.SUCCESS:
-         //console.log(state.answers, action)
-         Object.assign(state.answers[action.byId],action.payload);
-         return state; 
+        case types.GET_ANSWER_LIST.SUCCESS:
+            updateStateEntyties(state.answers, {byId , payload} )
+            return state; 
 
-      case types.GET_ANSWER_LIST.ERROR:
-         Object.assign(state.answers[action.byId],action.payload);
-         return state;     
+        case types.GET_ANSWER_LIST.ERROR:
+            updateStateEntyties(state.answers, {byId , payload} ) 
+            return state;     
 
-      case 'GET_COMMENT_LINK_DATA':
-         if (!state.comments[action.byId]) {
-            Object.defineProperty(state.comments, action.byId,
-                                               {value :action.payload,
-                                                writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                               });
-                
-         } 
-         return state; 
+        case 'GET_COMMENT_LINK_DATA':
+            updateStateEntyties(state.comments, {byId , payload} )
+            return state; 
 
-      case 'GET_REPLY_LINK_DATA':
-         //console.log(action)
-         if (!state.replies[action.byId]) {
-            Object.defineProperty(state.replies, action.byId,
-                                       { value :action.payload,
-                                         writable     : true,
-                                         configurable : true,
-                                         enumerable   : true,
-                                       });  
-            
-         }
+        case 'GET_REPLY_LINK_DATA':
+        case 'GET_REPLY_CHILD_LINK_DATA':
+           updateStateEntyties(state.replies, {byId , payload} )
+           return state; 
 
-         return state; 
+     
+        case types.CREATE_QUESTION.PENDING:
+            updateStateEntyties(state.question, {byId , payload} );
+            return state;
 
-      case 'GET_REPLY_CHILD_LINK_DATA':
-         //console.log(action, state.replies)
-         if (!state.replies.byId[action.byId]) {
-           Object.defineProperty(state.replies, action.byId,
-                        {   value : action.payload,
-                            writable     : true,
-                            configurable : true,
-                            enumerable   : true,
-                        });
-           
-         }
-         return state;
-
-      case types.CREATE_QUESTION.PENDING:
-         //console.log(action)
-         var questionById = action.ById? action.ById:
-                                                   "creatingNewQuestion";
-         if (!state.question[questionById]) {
-            Object.defineProperty(state.question, action.ById,
-                                {value:action.payload,
-                                    writable     : true,
-                                               configurable : true,
-                                               enumerable   : true,
-                                } );
-         }
-
-         return state;
-
-      case types.CREATE_QUESTION.SUCCESS:
-         Object.assign(state.question[action.ById], state, action.payload);
-         return state;
+        case types.CREATE_QUESTION.SUCCESS:
+            updateStateEntyties(state.question, {byId , payload} );
+            return state;
       
-      case types.CREATE_QUESTION.ERROR:
-        //console.log(action)
-        //Object.assign(state.question.byId[action.ById], action.payload);
-        return state;  
+        case types.CREATE_QUESTION.ERROR:
+           updateStateEntyties(state.question, {byId , payload} );;
+           return state;  
 
-      case 'VIEW_NEW_QUESTION':
-         Object.assign(state.question[action.questionById], action.payload);
-         return state;  
+        case 'VIEW_NEW_QUESTION':
+            Object.assign(state.question[action.byId], action.payload);
+            return state;  
 
-      case types.CREATE_ANSWER.PENDING:
-         if (!state.answers[action.ById]) {
-            Object.defineProperty(state.answers, action.ById,
-                                       {value:action.payload,
-                                        writable     : true,
-                                        configurable : true,
-                                        enumerable   : true,
-                                       } );
-         }
-         return state;
+        case types.CREATE_ANSWER.PENDING:
+            updateStateEntyties(state.answers, {byId , payload} );
+            return state;
 
-      case types.CREATE_ANSWER.SUCCESS:
-         Object.assign(state.answers[action.ById], action.payload)
-         return state;
+        case types.CREATE_ANSWER.SUCCESS:
+            let newAnswer           =  payload.answer;
+            let newAnswerList       = [newAnswer];
+            let currentNewAnswers = state.answers[byId];
+            newAnswerList = currentNewAnswers && currentNewAnswers.unshift(newAnswer)
+                                                  || newAnswerList;
+
+            Array.isArray(newAnswerList) && updateStateEntyties(
+                                                state.answers,
+                                                { byId, payload:{answerList: newAnswerList} }
+                                            );  
+            return state;
       
-      case types.CREATE_ANSWER.ERROR:
-        Object.assign(state.answers[action.ById], action.payload)
-        return state;     
-     /* 
-      case types.CREATE_COMMENT.PENDING:
-         Object.assign(state.comments.byId[action.commentById], action.payload)
-         return state;
-
-      case types.CREATE_COMMENT.SUCCESS:
-         Object.assign(state.comments.byId[action.commentById], action.payload)
-         return state;
+        case types.CREATE_ANSWER.ERROR:
+            updateStateEntyties(state.answers, {byId , payload} );  
+            return state;     
       
-      case types.CREATE_COMMENT.ERROR:
-        Object.assign(state.comments.byId[action.commentById], action.payload)
-        return state;  
-        */
+        case types.CREATE_COMMENT.PENDING:
+            updateStateEntyties(state.comments, {byId , payload} );   
+            return state;
 
-      case types.GET_COMMENT_LIST.PENDING:
-         
-         Object.assign(state.comments[action.byId], action.payload)
-         console.log(action, state.comments)
-         return state;    
 
-      case types.GET_REPLY_LIST.PENDING:
-         //console.log(action)
-         Object.assign(state.replies[action.byId], action.payload)
-         return state;    
+        case types.CREATE_COMMENT.SUCCESS:
+       
+        let newComment      = action.payload.comment;
+        let newComments     = [newComment];  
 
-      case  types.GET_REPLY_CHILD_LIST.PENDING:
-         Object.assign(state.replies[action.byId],action.payload);
-         return state; 
+        let currentNewComments = state.comments[action.byId];
+        currentNewComments = currentNewComments.commentList;
 
-      case  types.GET_REPLY_CHILD_LIST.SUCCESS:
-         Object.assign(state.replies[action.byId],action.payload);
-         return state;
-      
-      case  types.GET_REPLY_CHILD_LIST.ERROR:
-         Object.assign(state.replies[action.byId],action.payload);
-         return state;     
-         
-      case types.CREATE_REPLY.PENDING:
-         Object.assign(state.replies[action.replyById], action.payload)
-         return state;
-
-      case types.CREATE_REPLY.SUCCESS:
-         Object.assign(state.replies[action.replyById], state, action.payload)
-         return state;
-      
-      case types.CREATE_REPLY.ERROR:
-         Object.assign(state.replies[action.replyById], action.payload)
-         return state;  
-      
-      case types.UPDATE_USER_PROFILE.PENDING:
-           
-        //console.log(state, action)
-        let payload = action.payload;
-
-        if (!state.userProfile[action.byId]) {
-            Object.defineProperty(
-                   state.userProfile, 
-                   action.byId,
-                   { value : payload,
-                     writable     : true,
-                     configurable : true,
-                     enumerable   : true,} 
-                );
-        }else{
-          Object.assign(state.userProfile[action.byId], action.payload);
-        }
-        console.log(state,action)
-
+        newComments = currentNewComments && currentNewComments.unshift(newComment)
+                                                  || newComments;
+        
+        Array.isArray(newComments) &&   updateStateEntyties(
+                                            state.comments,
+                                            { byId, payload:{answerList: newAnswerList} }
+                                        );
+          
         return state;
 
-      case types.UPDATE_USER_PROFILE.SUCCESS:
-           console.log(state, action)
+      
+        case types.GET_COMMENT_LIST.PENDING:
+        case types.CREATE_COMMENT.ERROR:
+        case types.GET_COMMENT_LIST.SUCCESS:
+            updateStateEntyties(state.comments, {byId , payload} );  
+            return state; 
+      
+
+        case types.GET_REPLY_LIST.PENDING:
+        case  types.GET_REPLY_CHILD_LIST.PENDING:
+        case  types.GET_REPLY_CHILD_LIST.SUCCESS:
+        case  types.GET_REPLY_CHILD_LIST.ERROR:
+            updateStateEntyties(state.replies, {byId , payload} );  
+            return state;    
+
+        
+              
+        case types.CREATE_REPLY.PENDING:
+        case types.CREATE_REPLY.ERROR:
+            updateStateEntyties(state.replies, {byId , payload} );   
+            return state;
+
+        case types.CREATE_REPLY.SUCCESS:
+            let newReply = action.payload.reply;
+            let newReplies     = [newReply];
+            let currentNewReplies = state.replies[action.byId];
+            currentNewReplies     = currentNewReplies.replyList;
+
+            newReplies = currentNewReplies && currentNewReplies.unshift(newReply)
+                                                  || newReplies;  
+            Array.isArray(newReplies)  &&   updateStateEntyties(
+                                                    state.replies,
+                                                    { byId , payload : {replyList:newReplies}}
+                                            );           
+            return state;
+      
+          
+      
+        case types.UPDATE_USER_PROFILE.PENDING:
+        case types.UPDATE_USER_PROFILE.ERROR:
+            updateStateEntyties(state.userProfile, {byId , payload} );
+            return state;
+
+        case types.UPDATE_USER_PROFILE.SUCCESS:
+            let profileToUpdate    = state.userProfile[byId];
+            let updatedUserProfile = action.payload.user;
+            profileToUpdate = profileToUpdate.user;
+
+            let user = {...profileToUpdate, ...updatedUserProfile}
+            action.payload.user = user;
+
+            updateStateEntyties(state.userProfile, action );
+            return state;  
+
+          
 
 
-           if (!state.userProfile[action.byId]) {
-                //console.log(state, action)
-                
-                Object.defineProperty(
-                   state.userProfile, 
-                   action.byId,
-                   {value : action.payload,
-                    writable     : true,
-                    configurable : true,
-                    enumerable   : true,} 
-                );
+        case types.UPDATE_USER_LIST.PENDING:
+            updateStateEntyties(state.users, action );
+            return state;
 
-            }else{
+        case types.UPDATE_USER_LIST.SUCCESS:
+             var  updatedUser     = action.payload && action.payload.user;
 
-                let profileToUpdate =state.userProfile[action.byId];
-                let updatedUserProfile = action.payload.user;
-                profileToUpdate = profileToUpdate.user;
-                let user = Object.assign(profileToUpdate, updatedUserProfile)
-                action.payload.user = user;
-
-                Object.assign(state.userProfile[action.byId], action.payload);
-                //console.log(state.userProfile)
+            if (state.users[action.byId]) {
+               var usersToUpdate = state.users[action.byId];
+               usersToUpdate = usersToUpdate.userList
+               console.log(usersToUpdate)
+               helper.updateReducerListEntynties(usersToUpdate, updatedUser);
             }
-
-        return state;  
-
-      case types.UPDATE_USER_PROFILE.ERROR:
-         var profileToUpdate =state.userProfile[action.byId];
-         
-         if (profileToUpdate && profileToUpdate.user && profileToUpdate.user.user_is_following) {
-            profileToUpdate.user.is_following = true
-
-         }else{
-            profileToUpdate.user.is_following = false
-         }
-
-        Object.assign(state.userProfile[action.byId], { ...profileToUpdate, error: action.payload});
-        return state;  
-
-
-      case types.UPDATE_USER_LIST.PENDING:
-         if (state.users[action.byId]) {
-            Object.assign(state.users[action.byId], action.payload);
-         }
-        return state;
-
-      case types.UPDATE_USER_LIST.SUCCESS:
-         var  updatedUser     = action.payload && action.payload.user;
-
-        if (state.users[action.byId]) {
-            var usersToUpdate = state.users[action.byId];
-            usersToUpdate = usersToUpdate.userList
-            console.log(usersToUpdate)
-            helper.updateReducerListEntynties(usersToUpdate, updatedUser);
-        }
                   
-        return state;  
+            return state;  
 
-      case types.UPDATE_USER_LIST.ERROR:
-         Object.assign(state.users[action.byId], {error: action.payload});
-        return state;  
+        case types.UPDATE_USER_LIST.ERROR:
+            Object.assign(state.users[action.byId], {error: action.payload});
+            return state;  
       
       
        case types.UPDATE_POST.PENDING:
-        console.log(action, state.post)
-        if (state.post[action.byId]) {
-           Object.assign(state.post[action.byId], action.payload);
+       case types.UPDATE_POST.ERROR:
 
-        }else if(state.posts[action.byId]){
-            Object.assign(state.posts[action.byId], action.payload);
-        }
-        return state;
+            !state.post[byId]  && updateStateEntyties(state.post, action );
+            !state.posts[byId] && updateStateEntyties(state.posts, action );
+            return state;
 
-    case types.UPDATE_POST.SUCCESS:
+        case types.UPDATE_POST.SUCCESS:
    
         if (state.post[action.byId]) {
             let post = state.post[action.byId]
             post     = post.post;
            
-            post = {
+            action = {
                 isUpdating : false,
                 post   : Object.assign(post, action.payload.post),
             
             } 
         
-           Object.assign(state.post[action.byId], post);
+           updateStateEntyties(state.post, action) 
 
         }else if(state.posts[action.byId]){
-            let post = action.payload.post;
+            let post = payload.post;
             
             var posts = state.posts[action.byId];
             let postList = posts && posts.postList;
@@ -569,30 +426,12 @@ export function entities(state=InitialState(), action) {
         return state;                  
       
 
-    case types.UPDATE_POST.ERROR:
-        
-        if (state.post[action.byId]) {
-           Object.assign(state.post[action.byId], action.payload);
+        case types.UPDATE_QUESTION.PENDING:
+        case types.UPDATE_QUESTION.ERROR:
 
-        }else if(state.posts[action.byId]){
-            Object.assign(state.posts[action.byId], action.payload);
-        };
-
-        return state;   
-
-
-
-
-
-      case types.UPDATE_QUESTION.PENDING:
-        console.log(action, state.question)
-        if (state.question[action.byId]) {
-           Object.assign(state.question[action.byId], action.payload);
-
-        }else if(state.questions[action.byId]){
-            Object.assign(state.questions[action.byId], action.payload);
-        }
-        return state;
+            !state.question[byId] &&  updateStateEntyties(state.question, action );
+            !state.questions[byId] && updateStateEntyties(state.questions, action );
+            return state;
 
     case types.UPDATE_QUESTION.SUCCESS:
         let updatedQuestion = action.payload && action.payload.question
@@ -650,8 +489,9 @@ export function entities(state=InitialState(), action) {
                       
       
       case types.UPDATE_COMMENT.PENDING:
-         Object.assign(state.comments[action.byId], action.payload );
-         return state
+          console.log(state,action)
+          Object.assign(state.comments[action.byId], action.payload );
+          return state
 
       case types.UPDATE_COMMENT.SUCCESS:
 

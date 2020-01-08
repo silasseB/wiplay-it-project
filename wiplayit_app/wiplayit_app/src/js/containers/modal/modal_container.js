@@ -76,9 +76,10 @@ class ModalBox extends Component{
        
         if(!this.props.onRequestClose || this.props.onRequestClose()){
            
-           let background = this.props;
-           store.dispatch(showModal(false))
-           ModalManager.close(background);
+           let { background, modalType} = this.props;
+           console.log(this.props)
+          
+           ModalManager.close(modalType, background);
        }
    }
 
@@ -180,10 +181,15 @@ export const ModalManager = {
           renderModal();
        }
     },
-    close(background){
+    close(modalType, background){
         
         onClose && onClose(() => {
-            store.dispatch(showModal(false))
+          let modalParams = {
+            boolValue: false, 
+             background,
+             modalType,
+          }
+            store.dispatch(showModal(modalParams))
             
             background && background != undefined  && history.goBack();
             ReactDOM.unmountComponentAtNode(node);

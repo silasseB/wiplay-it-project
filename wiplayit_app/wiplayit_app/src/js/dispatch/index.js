@@ -201,9 +201,9 @@ export function getReplyList(props) {
 
 export function getReplyChildrenList(props) {
     let {actionType, byId, apiUrl, children } = props;
-    const instance = axiosApi.axiosInstance();
+    //const instance = axiosApi.axiosInstance();
 
-    console.log(props)
+    //console.log(props)
 
     if (children && children.length) {
         return dispatch => {
@@ -258,7 +258,8 @@ export function handleSubmit(props) {
         objName,  
         formData,
         apiUrl,
-        IsModal } = props;
+        IsModal,
+        modalType } = props;
 
 
    
@@ -266,17 +267,20 @@ export function handleSubmit(props) {
     IsModal = IsModal || false;
 
     let updateProps = {
-        actionType,
-        byId,
-        objName,
-        isUpdating:true,
-        }
+            actionType,
+            byId,
+            objName,
+            modalType,
+            isUpdating:true,
+        };
+
     let createProps = {
-        actionType,
-        byId,
-        objName,
-        isCreating: true, 
-    } 
+            actionType,
+            byId,
+            objName,
+            modalType,
+            isCreating: true, 
+        }; 
          
     if (props.isPut) {
    	    return dispatch => {

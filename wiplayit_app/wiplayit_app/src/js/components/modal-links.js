@@ -4,39 +4,55 @@ import { Link, useLocation } from "react-router-dom";
 import { store } from "../configs/store-config";
 import {showModal} from '../actions/actionCreators';
 import {history} from "../index" 
+import { ModalManager}   from  "../containers/modal/modal_container";
 
 
 
 export const EditorLink = props => {
+    console.log(props)
 	
-    let location = useLocation();
-    let  modalProps = {
-            editorProps : {...props},
+    let {modalProps} = props ;
+    let { background, modalPath } =  props;
+    
+    let editorProps = modalProps && modalProps.editorProps || {...props};
+
+    modalProps = {
+            editorProps,
             modalType   : 'editor', 
         };
 
-    let context = props.objName.toLowerCase();
-    let pathname =  `/compose/${context}/${'1'}/`
+    
+    let {objName, isPut, linkName, editorLinkStyles} = editorProps;
+    let context   = objName && objName.toLowerCase();
+    let pathname  = modalPath || `/compose/${context}/${'1'}/`;
+
     let state = { 
-        background : props.background || location,
+        background : background || useLocation(),
         modalProps
     } 
     
 
     let buildLinkName =()=> {
-        let Edit = props.isPut && "Edit " || "";
-        return `${Edit}${props.objName}`;
+        let Edit = isPut && "Edit " || "";
+        return `${Edit}${objName}`;
     };
 
-    let linkName = props.linkName;
+    
     linkName = linkName?linkName:buildLinkName();
-    let styles = props.editorLinkStyles || {};
+    let styles = editorProps.editorLinkStyles || {};
+
+    let madalParams = {
+            boolValue   : true,
+            modalType   : 'editor',
+            background  : state.background,
+        }
        
     return(
         <button style={styles} className="btn-sm"  onClick={()=> {
-                        store.dispatch(showModal(true, state.background))
+                        ModalManager.close('optionsMenu', state.background)
+                       
                         setTimeout(()=> {
-                            
+                            store.dispatch(showModal(madalParams));
                             history.push({ pathname: pathname, state}); 
                         }, 500);
 
@@ -63,11 +79,17 @@ export const OptionsModalLink = props => {
         background : props.background || location,
         modalProps
     } 
+
+    let madalParams = {
+            boolValue : true,
+            modalType   : 'optionsMenu',
+            background  : state.background,
+        }
         
         
     return(
         <button className="btn btn-sm"    onClick={()=> {
-                        store.dispatch(showModal(true, state.background))
+                        store.dispatch(showModal(madalParams))
                         setTimeout(()=> {
 
                             history.push({ pathname: pathname, state}); 
@@ -86,6 +108,7 @@ export const OptionsModalLink = props => {
 
 export const ChangeImageLink = props => {
     let location = useLocation();
+    //console.log(props)
 
     let  modalProps = {
             dropImageProps : {...props},
@@ -94,10 +117,17 @@ export const ChangeImageLink = props => {
     let pathname = `/compose/${'profile-pic'}/${'1'}/`;
     let state    = { background: location, modalProps };
 
+    let madalParams = {
+            boolValue : true,
+            modalType   : 'dropImage',
+            background  : state.background,
+        }
+
     return(
        
         <button className="btn-sm edit-img-btn "   onClick={()=> {
-                        store.dispatch(showModal(true, state.background))
+                        store.dispatch(showModal(madalParams))
+
                         setTimeout(()=> {
                             
                             history.push({ pathname: pathname, state}); 

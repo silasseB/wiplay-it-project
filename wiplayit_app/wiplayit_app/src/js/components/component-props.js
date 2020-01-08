@@ -92,6 +92,7 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
 
  	    case 'Comment':
+ 	    //console.log(obj, isPut, isPost)
  	       
  	        if (isPut) {
  	        	
@@ -102,7 +103,7 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
  	        }else {
  	        	
- 	        	id = obj.answer || obj.post;
+ 	        	//id = obj.answer || obj.post;
  	        	apiUrl = obj.post || obj.add_post?
  	        	            api.createPostCommentApi(id)
  	        	            :

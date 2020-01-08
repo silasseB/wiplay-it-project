@@ -66,6 +66,7 @@ export const QuestionComponent = props => {
     let editAnswerProps = {
         objName           : 'Answer',
         obj               : getObj(),
+        byId              : `newAnswers${question.id}`,
         isPost            : !question.user_has_answer,
         isPut             : question.user_has_answer, 
         currentUser,  

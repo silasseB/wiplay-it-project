@@ -6,7 +6,7 @@ import { ChangeImageLink } from "../../components/modal-links"
 import { GetModalLinkProps } from "../../components/component-props";
 
 import { EditProfileNavBar, NavigationBarBigScreen } from "../../components/navBar";
-import {  ModalCloseBtn  } from "../../components/buttons";
+//import {  ModalCloseBtn  } from "../../components/buttons";
 import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
 import  * as types  from '../../actions/types';
@@ -50,8 +50,7 @@ class EditProfile extends Component{
            },
         };
      
-        this.handleChange   =  this.handleChange.bind(this)
-        this.handleImageAdd =  this.handleImageAdd.bind(this)
+        this.handleChange   =  this.handleChange.bind(this);
     }; 
 
     onProfileUpdate = () =>{
@@ -71,7 +70,7 @@ class EditProfile extends Component{
         
 
             if (userProfile) {
-                console.log(userProfile)
+                //console.log(userProfile)
                                
                 this.setState({ submitting : userProfile.submitting});
 
@@ -119,7 +118,7 @@ class EditProfile extends Component{
             userProfile = userProfile && userProfile[profileById]
         
 
-            console.log(userProfile)
+            //console.log(userProfile)
 
             this.setState({profileById});
 
@@ -162,27 +161,17 @@ class EditProfile extends Component{
       this.setState({form})
     }
 
-    handleImageAdd(params){
-
-        let { byId, form } = this.state;
-        
-        form['profile_picture'] = params.file;
-        let submitProps = this.submitProps(form);
-        this.props.submit(submitProps);
-       
-
-    };
+    
 
 
     getProps(){
         
         let props = {
-           handleChange   : this.handleChange, 
-           handleImageAdd : this.handleImageAdd,
-           textAreaProps  : this.textAreaProps(),
-           submitProps    : this.submitProps(),
-           editUserProfileProps : this.getUserEditProps(),
-           ...this.state,
+            handleChange   : this.handleChange, 
+            textAreaProps  : this.textAreaProps(),
+            submitProps    : this.submitProps(),
+            editUserProfileProps : this.getUserEditProps(),
+            ...this.state,
         }
 
         return Object.assign(props, this.props);
@@ -211,6 +200,7 @@ class EditProfile extends Component{
     getUserEditProps(){
         let { profileById, userProfile } = this.state;
         let currentUser = this.props.currentUser;
+
         let editUserProfileProps = {
                 objName     : 'UserProfile',
                 isPut       : true,
@@ -255,7 +245,7 @@ export default withHigherOrderIndexBox(EditProfile);
 
 const ProfileEditComponent = props => {
     
-    let {submitting, userProfile } = props;
+    let {submitting, userProfile, editUserProfileProps } = props;
     userProfile = userProfile;
     
     let submitButtonStyles = submitting?{opacity:'0.60'}:{};
@@ -288,7 +278,7 @@ const ProfileEditComponent = props => {
                      </div> 
                   }
                 
-               <ChangeImageLink {...props.editUserProfileProps}/>
+               <ChangeImageLink {...editUserProfileProps}/>
                </div>
                
             </div>
@@ -424,13 +414,16 @@ export class DropImage extends React.Component {
             let {entities} = storeUpdate
             let {modal} = entities
             let { background } = this.props;
-            this.setState({submitting : modal.submitting});
             
-            console.log(modal)
-            if (modal && modal.successMessage && !modal.profilePictureUpdate && modal.background) {
+            
+            
+            modal = modal && modal['dropImage'];
+            this.setState({submitting : modal.submitting});
+            //console.log(modal)
 
-                modal['profilePictureUpdate'] = true; 
-                ModalManager.close(background)
+            if (modal && modal.successMessage) {
+                !modal.profilePictureUpdate && ModalManager.close('dropImage' , background)
+                 modal['profilePictureUpdate'] = true;
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -440,6 +433,8 @@ export class DropImage extends React.Component {
         let storeUpdate   = store.getState();
         let {entities} = storeUpdate
         let {modal} = entities;
+        modal = modal && modal['dropImage'];
+
         modal && modal.profilePictureUpdate && delete modal.profilePictureUpdate;
         this.unsubscribe();
     };
@@ -461,12 +456,19 @@ export class DropImage extends React.Component {
   
     }
 
-    handleImageAdd(params){
+    handleImageAdd = (params)=>{
         let file = this.state.file;
         
         let formData = helper.createFormData({'profile_picture': file});
-        let submitProps = Object.assign({formData, IsModal  : true}, this.props)
-        //console.log(submitProps, this.props)        
+        let submitProps = {
+               formData,
+               IsModal   : true,
+               modalType : 'dropImage',
+            };
+
+        submitProps = Object.assign(submitProps , this.props)
+        console.log(submitProps)
+               
         store.dispatch(handleSubmit(submitProps));
        
 
@@ -503,7 +505,10 @@ export class DropImage extends React.Component {
                <div className="upload-preview">
                   <div className="drop-image-btns">
                      <div className="dismiss-box">
-                     <button  type="button" onClick={()=> ModalManager.close(background)} className="btn-sm image-drop-dismiss">
+                     <button  type="button" 
+                              onClick={()=> ModalManager.close('dropImage',background)}
+                              className="btn-sm image-drop-dismiss">
+
                         <span className="dismiss">&times;</span>
                      </button>
                      </div>

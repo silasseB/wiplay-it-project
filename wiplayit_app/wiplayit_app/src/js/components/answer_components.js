@@ -29,9 +29,14 @@ const api      = new Api();
 
 export const AnswersComponent = props => {
    //console.log(props)
-   var { answer, answerListById, currentUser } = props;
+   var {
+        answer, 
+        answerListById,
+        newAnswerListById,
+        isNewAnswers, 
+        currentUser } = props;
    
-  let pathToUpvoters =  `/answer/${props.answer.id}/upvoters/`;
+  let pathToUpvoters =  `/answer/${answer.id}/upvoters/`;
 
    let optionsBtnStyles = {
          fontSize   : '8px',
@@ -62,7 +67,7 @@ export const AnswersComponent = props => {
         linkName    : 'Edit Answer',
         isPut       : true,
         obj         : answer, 
-        byId        : answerListById,
+        byId        : isNewAnswers && newAnswerListById || answerListById,
         currentUser,
     };
 
@@ -73,7 +78,7 @@ export const AnswersComponent = props => {
         obj               : answer,
         isPost            : true,
         currentUser,
-        byId              : answerListById,
+        byId              : `newAnswerComments${answer.id}`,
         
     };
 

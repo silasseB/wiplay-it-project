@@ -7,7 +7,7 @@ import {  CommentsComponent } from "../../components/comment_components"
 //import { UserComponentSmall } from "components/profile_components";
 import {Editor, EditorState, convertFromRaw} from 'draft-js';
 import {pageMediaBlockRenderer} from '../../components/editor_components';
-import {store, useStoreUpdate} from "../../configs/store-config";
+import {store} from "../../configs/store-config";
 
 
 
@@ -21,9 +21,10 @@ class CommentsBox extends Component {
       super(props);
 
       this.state = {
-         isCommentBox  : true,
-         commentById   : '',
-         parent        : '',
+         isCommentBox    : true,
+         commentsById    : '',
+         newCommentsById : '',
+         parent          : '',
 
       };
    
@@ -36,92 +37,72 @@ class CommentsBox extends Component {
 
    
 
-   componentDidMount() {
-      let { answer, post } = this.props;
-            
-      var parent      = post?post:answer;
-      let comments    = parent.comments;
-      var commentById = answer?`commentsAnswer${parent.id}`:`commentsPost${parent.id}`;
-                           
-      if (comments) {
-         if (comments.length) {
-            this.setState({commentById, parent});
-            store.dispatch(action.getCommentLindData(commentById, comments));
-         } 
-      }
-   };
-
-
-   componentDidUpdate(nextProps, prevState) {
-     
-   } 
-   
+    componentDidMount() {
        
-   getProps() {
+        let { answer, post } = this.props;
+            
+        var parent       = post   && post || answer && answer;
+        let comments     = parent && parent.comments;
+        var commentsById = answer && `commentsAnswer${parent.id}` || post && `commentsPost${parent.id}`;
+        let newCommentsById = answer && `newAnswerComments${parent.id}` 
+                                || post && `newPostComments${parent.id}`;
 
-      let props = {
-         isCommentBox    : this.state.isCommentBox,
-         parent       : this.state.parent,
-         commentById  : this.state.commentById,
-      }
-      return Object.assign(props, this.props); 
-   }
+        this.setState({commentsById, newCommentsById, parent});
+                           
+        if (comments && comments.length) {
+            store.dispatch(action.getCommentLindData(commentsById, comments));
+        }
+    };
+
+
+    componentDidUpdate(nextProps, prevState) {
+       
+    } 
+          
+    getProps() {
+        return {...this.props, ...this.state};
+    }; 
+   
 
 
    render() { 
-      let props  = this.getProps();
-      let commentsUpdate = useStoreUpdate('comments')
-      
-      var comments    = props.entities.comments;
-      comments = comments[props.commentById]
-      
-       
-      
-      return (
-         <div>
-         {comments?
-            <div>   
-               { comments.showLink?
-                  <CommentsLink {...props}/>
-                  :
-                  <div>
-                     {comments.isLoading?
-                        <div className="spin-loader-box">
-                           <AjaxLoader/>
-                        </div>
+        let props  = this.getProps();
+        //console.log(this.props)
+        let {entities, newCommentsById, commentsById} = props;
+            
+        var {comments}  = entities  && entities;
+        let newComments = comments && comments[newCommentsById]; 
+        comments        = comments && comments[commentsById]
+               
+        //console.log(comments, newComments)
+        return (
+            <div>
+                <div>
+                    { newComments?
+                        <NewAddedComments {...props}/>
                         :
-                        <div>
-                           {props.answer?
-                              <AnswerComments {...props}/>
-                              :
-                              ""
-                           }
-                                        
-                           { props.post?
-                              <PostComments {...props}/>
-                              :
-                              ""
-                           }
-                        </div> 
-                     }
-                  </div>  
-               }
+                        ""       
+                    }
+                </div>
+               
+                <div>
+                    { comments?  
+                        <ViewedComments {...props}/>
+                        :
+                        ""
+                    }
+                </div>  
             </div>
-            :
-            ""
-         }
-         </div>
-
-      )
+        );
    };
-}
+};
 
 
 export default CommentsBox;
 
 
 export const CommentsLink = props => {
-   var byId = props.commentById;
+   var byId = props.commentsById;
    var comments    = props.entities.comments;
    comments = comments[byId]
    let styles ={
@@ -154,79 +135,77 @@ export const CommentsLink = props => {
    )
 }
 
-
-
-
-const AnswerComments = props => {
+const NewAddedComments = props => {
+   let {entities, newCommentsById} = props;
+   let comments = entities.comments[newCommentsById]; 
    
-   var comments    = props.entities.comments;
-   comments = comments[props.commentById]
-   return (
-      <div >
-        
-         { comments.commentList.map( (comment, index) => {
-            let commentProps = {comment, index};  
-            Object.assign(commentProps, props);
-            return(
-               <div  key={index} >
-                  { props.answer.id === comment.answer?
-                     <div className="comments-container">
-                        <div className="comment-contents">
-                           <CommentsComponent {...commentProps}/>
+   let commentsProps = Object.assign({isNewComments:true}, props)
+
+   let commentList = comments.commentList && comments.commentList.length && comments.commentList;  
+   return Comments(commentsProps, commentList);
+};
+
+
+const ViewedComments = props => {
+   let {entities, commentsById, parent} = props;
+   let comments = entities.comments[commentsById]; 
+
+   let commentList = comments.commentList &&  comments.commentList.length && comments.commentList;
+
+   return(
+        <div>
+            { comments.showLink?
+                <CommentsLink {...props}/>
+                :
+                <div>
+                    { comments.isLoading?
+                        <div className="spin-loader-box">
+                            <AjaxLoader/>
                         </div>
-                     </div>  
+                        :
+                        <div>
+                          { Comments(props, commentList)}
+                        </div>
+                    }
+                </div>
+            }
 
-                     : ""
-                  } 
-               </div>
-            )
-         })}
+        </div>
+    )
+
       
+};
 
-   </div>
+const Comments = (props, commentList) => {
 
-   );
+   let {parent} = props;
+                                 
+    return (
+        <div>
+            { commentList && commentList.map( (comment, index) => {
+                let commentProps = {comment, index};  
+                Object.assign(commentProps, props);
+                //console.log(commentProps)
+
+                return(
+                    <div  key={index} >
+                        { parent.id === comment.answer || parent.id === comment.post?
+                            <div className="comments-container">
+                                <div className="comment-contents">
+                                    <CommentsComponent {...commentProps}/>
+                                </div>
+                            </div>  
+                            :
+                            ""
+                        } 
+                    </div>
+                )
+            })}
+        </div>
+    );
 }
 
 
-
-
-
-
-const PostComments = props => {
-   var commentById = `commentsPost${props.post.id}`;
-   var comments    = props.entities.comments;
-   comments       = comments[commentById]
-   return (
-      <div>
-
-      { comments.commentList.map( (comment, index) => {
-          
-       let commentProps = {comment, index};  
-       Object.assign(commentProps, props)
-       console.log(commentProps)
-
-       return(
-            <div  key={index}>
-               { props.post.id === comment.post?
-                  <div className="comments-container">
-                     <div className="comment-contents">
-                        <CommentsComponent {...commentProps}/>
-                     </div>
-                  </div>  
-
-                  : ""
-               } 
-            </div>
-         )
-      }
-
-      )}
-
-   </div>
-
-   );
-}
 
 
 

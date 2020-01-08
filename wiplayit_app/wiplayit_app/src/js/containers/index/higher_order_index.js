@@ -115,19 +115,25 @@ export function withHigherOrderIndexBox(Component) {
                 let storeUpdate = store.getState();
                 var timeStamp = new Date();
                 let { entities } = storeUpdate;
-                let { currentUser,modal, index, question, userProfile, userAuth } = entities
+                let { currentUser,modal, index, question, userProfile, userAuth } = entities;
+                modal && modal['editor']; 
                
                 let data = modal && modal.data;
 
                 this.confirmLogout(userAuth)
 
-                if (modal) {
-                    if (modal.modalIsOpen) {
+                if (modal ) {
+                    let {objName, data, isCreating} = modal;
+                                                            
+                    if (isCreating && objName === 'Question' || objName === 'Post' ) {
+                        //console.log(modal)
                         const scrollY = document.body.style.top;
                         document.body.style.position = '';
                         document.body.style.top = '';
                         window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                        
                     }
+
                     this.setState({ modalIsOpen : modal.modalIsOpen }) 
                 }
 
@@ -146,7 +152,7 @@ export function withHigherOrderIndexBox(Component) {
                 }
                 
                 
-                this.forceUpdate()               
+                //this.forceUpdate()               
 
                 }
             };
@@ -179,22 +185,32 @@ export function withHigherOrderIndexBox(Component) {
         }
 
         componentDidUpdate(prevProps, nextProps) {
-            //console.log(prevProps, nextProps, this.props)
-            let { action } = prevProps.history;
+            let { entities,history }  = prevProps;
+            let { modal } = entities;
 
-            let { entities }  = prevProps;
-                let { modal } = entities
+             let { action } = history;
             
-            if (action === "POP" && modal && modal.modalIsOpen) {
-                console.log(prevProps, action) 
-                ModalManager.close();
+            if (action === "POP") {
+                console.log(action, prevProps, this.props, modal)
+
+                let optionsModal = modal && modal['optionsMenu'];
+                let editor       = modal && modal['editor'];
+                let dropImage    = modal && modal['dropImage'];
+
+
+                editor       && editor.modalIsOpen && ModalManager.close('editor');
+                optionsModal && optionsModal.modalIsOpen && ModalManager.close('optionsMenu');
+                dropImage    && dropImage.modalIsOpen    && ModalManager.close('dropImage'); 
+
+            }else{
+                console.log(action, prevProps, this.props, modal)
             }
         }
 
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
-            console.log(this.props)            
+            //console.log(this.props)            
       
             if (!this.isAuthenticated()) {
                //User is not authenticated,so redirect to authentication page.

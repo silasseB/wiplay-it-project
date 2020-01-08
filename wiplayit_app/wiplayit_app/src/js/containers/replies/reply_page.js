@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import  AjaxLoader from "../../components/ajax-loader";
-import { RepliesComponent,CommentsReplyLink } from "../../components/reply_components"
+import { RepliesComponent,CommentsReplyLink, Reply } from "../../components/reply_components"
 import  * as action  from '../../actions/actionCreators';
+import ReplyChildrenBox from "../../containers/replies/reply_children_page";
+
 import {store} from "../../configs/store-config";
 
 
@@ -16,33 +18,33 @@ class RepliesBox extends Component {
    constructor(props) {
       super(props);
 
-      this.state = {
-         isReplyBox : true,
-         
-      };
-   };
+        this.state = {
+            isReplyBox : true,
+            comment    : undefined,  
+        };
+    };
 
      
-   componentDidMount() {
-      let { comment } = this.props; 
-      var replies  = comment.replies;
-      let byId = '';
-      
-      if (replies.length) {
-         if (comment && comment.answer) {
-            byId = `answerReplies${comment.id}`;
-         }else{
-            byId = `postReplies${comment.id}`;
-         }
+    componentDidMount() {
+        let { comment } = this.props; 
+        let replies  = comment &&  comment.replies;
+     
+        let repliesById = comment &&  comment.answer &&  `answerReplies${comment.id}` ||
+                 comment &&  comment.post   &&  `postReplies${comment.id}`; 
 
-         this.setState({byId});
-         var props = {
-            actionType : 'GET_REPLY_LINK_DATA',
-            replies,
-            byId,
-         }
-         store.dispatch(action.getRepliesLindData(props)); 
-      }
+        let newRepliesById  =  `newCommentsReplies${comment.id}`;   
+
+        this.setState({repliesById, newRepliesById, comment});                    
+      
+        if (replies && replies.length) {
+                 
+           let props = {
+                   actionType : 'GET_REPLY_LINK_DATA',
+                   replies,
+                   byId: repliesById,
+            }
+            store.dispatch(action.getRepliesLindData(props)); 
+        }
      
    };
 
@@ -55,49 +57,48 @@ class RepliesBox extends Component {
    }; 
    
 
-   getProps() {
-      let props = {
-         isReplyBox  : this.state.isReplyBox,
-         replies     : this.props.comment.replies,
-         repliesById : this.state.byId,
-      } 
-      return Object.assign(props, this.props);
-   };
+    getProps() {
+        return {...this.props, ...this.state};
+    };
+        
 
+    render() { 
+        let props  = this.getProps();
+        let {
+            replies,
+            entities,
+            repliesById,
+            newRepliesById } =   props;
 
-   render() { 
-      let props  = this.getProps();
-      //var replyState = props.replyState;
-      var replies    =   props.entities.replies;
-      replies        =  replies[props.repliesById];
+        
+        replies        =  entities && entities.replies;
+        let newReplies =  entities.replies[newRepliesById];
+
+        let repliesList        =  replies[repliesById];
+        
+        //console.log(props,repliesList, newReplies);
                  
-      return (
-         <div>
-         {replies?
+        return (
             <div>
-            { replies.showLink?
-               <CommentsReplyLink {...props}/>
-                     :
-                     <div>
-                        { replies.isLoading?
-                           <div className="spin-loader-box">
-                              <AjaxLoader/>
-                           </div>
-                           :
-                           <div>
-                              <RepliesComponent {...props}/>
-                           </div>
-                        }
-                     </div>
-                  }
+                <div>
+                    {newReplies && newReplies.replyList?
+                        <NewAddedReplies {...props}/>
+                        :
+                        ""
+                    }
+                </div>
+
+                <div>
+                    { repliesList?
+                        <ViewedReplies {...props}/>
+                        :
+                        ""
+                    }
+                </div>
             </div>
-         :
-         ""
-         }
-         </div>
-      );
-   };
-}
+        );
+    };
+};
 
 
 export default RepliesBox;
@@ -105,4 +106,83 @@ export default RepliesBox;
 
 
 
+
+
+const NewAddedReplies = props => {
+   let {entities, newRepliesById} = props;
+   let replies = entities.replies[newRepliesById]; 
+   let isNewReplies = true;
+
+   let replyList = replies.replyList && replies.replyList.length && replies.replyList;  
+   return Replies(props, replyList, isNewReplies);
+};
+
+
+const ViewedReplies = props => {
+    let {entities, repliesById} = props;
+    let replies = entities.replies[repliesById]; 
+
+    let replyList = replies.replyList && replies.replyList.length && replies.replyList;  
+    return(
+        <div>
+            { replies.showLink?
+                <CommentsReplyLink {...props}/>
+                :
+                <div>
+                    { replies.isLoading?
+                        <div className="spin-loader-box">
+                            <AjaxLoader/>
+                        </div>
+                        :
+                        <div>
+                          { Replies(props, replyList)}
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+    )
+};
+
+const Replies = (props, replyList, isNewReply=false) => {
+    let {comment, repliesById, newRepliesById} = props;
+   
+    let replyStyles = {
+         border     : 'px solid black',
+         margin     : '15px 22px',
+    };
+
+    return(
+        <div>
+            { replyList && replyList.map( (reply, index) => {
+                let replyProps = {
+                        reply,
+                        byId : repliesById,
+                        newRepliesById, 
+                        index,
+                        replyStyles,
+                };
+
+                let replyChildProps = {...props, reply}
+                //console.log(replyChildProps)
+
+                return (
+                    <div  key={index} >
+                        { comment.id === reply.comment?
+                            <div className="reply-container">
+                                <div className="reply-contents"> 
+                                    { Reply( props, replyProps, isNewReply) }
+                                    <ReplyChildrenBox {...replyChildProps}/>
+                                </div>
+                            </div>
+                            :
+                            ""
+                        } 
+                    </div> 
+                ); 
+            })}
+        </div>
+    );
+};
 

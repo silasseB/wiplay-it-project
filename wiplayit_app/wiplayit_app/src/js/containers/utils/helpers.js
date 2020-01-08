@@ -5,37 +5,9 @@ import {convertToRaw} from 'draft-js';
 
 export default class Helper {
 
-   downVote(self,context ) {
-      let upvotes     =   context.obj.upvotes  - 1;
-      var formData    =   this.createFormData({upvotes});
-      return formData;
-   }
-
-
-   upVote(self , context ) {
-      let upvotes         =   context.obj.upvotes + 1;
-      context['formData'] =  this.createFormData({upvotes});
-      return this.sendRequest(self, context);
-   }
-
-
-   unFollow(self, context) {
-      let followers       =  context.obj.followers - 1;
-      context['formData'] =  this.createFormData({followers});
-      this.sendRequest(self, context); 
-   }
-
-
-    follow(self,context) {
-        let followers = context.obj.followers + 1;
-        context['formData'] =  this.createFormData({followers});
-        this.sendRequest(self, context); 
-    }
-
-
-
+   
     updateReducerListEntynties(listItems, obj) {
-      
+        console.log(obj)
         listItems.map(( item, index) => {
             if (item.id  === obj.id) {
                 Object.assign(listItems[index], obj)
@@ -63,15 +35,15 @@ export default class Helper {
         let blockText     =  "";    
 
         for (var i = blocks.length - 1; i >= 0; i--) {
-           console.log(blocks[i].text)
+           //console.log(blocks[i].text)
            let text = blocks[i].text;
 
             if (! /^ *$/.test(text)) {
-                console.log(text)
+                //console.log(text)
                 blockText = text;  
             }
             else{
-                console.log(blocks[i].text)
+                //console.log(blocks[i].text)
                 blockText = "";
             }
         }

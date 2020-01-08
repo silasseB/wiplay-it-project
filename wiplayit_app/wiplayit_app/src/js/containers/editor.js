@@ -205,47 +205,21 @@ export default  class AppEditor extends Component{
             
                 let {entities} = storeUpdate
                 let {modal} = entities
-                let { redirected, submited } = this.state
+                let { submited } = this.state
                 let {background, isPost} = this.props;
-
-                console.log(modal, this.state, this.props)
+                modal = modal['editor']
 
                 if (modal) {
-                    !modal.modalIsOpen && setTimeout(()=> {
-                        console.log(modal, background)
-                        !background && ModalManager.close();
-                    }, 2000);
 
                     this.setState({ submitting : modal.submitting || false });
 
                     if (modal.successMessage && !submited) {
 
                         this.setState({submited : true});
-                        ModalManager.close(background)
-
-                        let {objName, data} = modal;
-                        let canRedirect = objName === "Question" || objName === "Post" || false;
-                        isPost = isPost || false;
-
-                        if (canRedirect  && isPost && !redirected) {
-                            this.setState({ redirected : true});
-
-                            let obj = data.question || data.post;
-                            console.log(obj, data)
-
-                            let pathToPost     = `post/${obj.slug}/${obj.id}/`
-                            let pathToQuestion = `question/${obj.slug}/${obj.id}/`
-
-                            let redirectTo = objName === "Question" ? pathToQuestion
-                                                            : pathToPost;
-                            setTimeout(()=> {
-                                history.push(redirectTo); 
-                            }, 2000  );
-  
-                        }
+                        ModalManager.close('editor' ,background)
                     }
 
-                    return;
+
 
                 }
             }
@@ -352,7 +326,7 @@ export default  class AppEditor extends Component{
         var file = e.target.files[0];
         let name = e.target.name;
       
-        console.log(file)
+        //console.log(file)
                     
         reader.onloadend = () => {
             let apiUrl     = api.createDraftEditorContentsApi(this);
@@ -490,14 +464,15 @@ export default  class AppEditor extends Component{
       else if(objName === "Reply"){
          validForm   =  {reply : validatedForm.data};    
       }
-      console.log(validForm, validatedForm) 
+      //console.log(validForm, validatedForm) 
       return helper.createFormData(validForm);
    };
 
    getSubmitProps = () =>{
       return Object.assign({
                        formData : this.getFormData(), 
-                       IsModal  : true
+                       IsModal  : true,
+                       modalType: 'editor',
                     }, this.props);
    }
 
@@ -551,7 +526,7 @@ export default  class AppEditor extends Component{
                                                      { display : 'none' };
        
 
-        console.log(props)
+        //console.log(props)
         return (
             <div className="editors-page" onClick={this.focus}>
                 <fieldset style={onSubmitStyles} 

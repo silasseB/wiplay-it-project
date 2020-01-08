@@ -26,6 +26,7 @@ const api      = new Api();
 
 
 export const CommentsComponent = props => {
+    //console.log(props)
     let optionsBtnStyles = {
               fontSize   : '11px',
               background : ' #F5F5F5',
@@ -35,7 +36,15 @@ export const CommentsComponent = props => {
               margin     : '0 0 2px'
     }
 
-    let { isAnswerBox,post, answer, comment, commentById, currentUser} = props;
+    let { 
+        isAnswerBox,
+        post,
+        answer,
+        comment, 
+        newCommentsById, 
+        commentsById, 
+        currentUser, 
+        isNewComments, } = props;
    
     let storedState = JSON.parse(comment.comment)
     const contentState = convertFromRaw(storedState);
@@ -44,7 +53,7 @@ export const CommentsComponent = props => {
 
     let pathToUpvoters;
 
-   
+    let commentRepliesById = isAnswerBox && `answerReplies${comment.id}` || `postReplies${comment.id}`;
     
     let state = {
             comment,
@@ -59,12 +68,14 @@ export const CommentsComponent = props => {
         
        pathToUpvoters =  `/post/comment/${comment.id}/upvoters/`;
     }
+
+    let byId = isNewComments && newCommentsById || commentsById;
    
     let editCommentProps = {
         objName     : 'Comment',
         isPut       : true,
         obj         : comment, 
-        byId        : commentById,
+        byId,
         currentUser,
     };
 
@@ -75,7 +86,7 @@ export const CommentsComponent = props => {
         obj               : comment,
         isPost            : true,
         currentUser,
-        byId : commentById,
+        byId              : `newCommentsReplies${comment.id}`,
         
     };
 
@@ -137,11 +148,8 @@ export const CommentsComponent = props => {
             </div>
 
             <ButtonsBox {...btnsList}/>
-            { props.comment.replies.length?
-                <RepliesBox {...props}/>
-                :
-                ""
-            }
+            <RepliesBox {...props}/>
+            
         </div>
                                
     );

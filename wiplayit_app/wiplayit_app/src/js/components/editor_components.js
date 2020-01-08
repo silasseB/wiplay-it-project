@@ -119,7 +119,7 @@ export const ToolBar = props => {
 
 
 export const EditorNavBar = props  => {
-    console.log(props)
+    //console.log(props)
     let background = props.background;
     
     return (
@@ -128,7 +128,7 @@ export const EditorNavBar = props  => {
             <div className="back-btn-box">
            
                 <button type="button" className="editor-custom-back-btn custom-back-btn "
-                  onClick={()=> ModalManager.close(background)} >
+                  onClick={()=> ModalManager.close('editor', background)} >
                 <span className="editor-arrow material-icons ">arrow_back</span>
                 </button>
             

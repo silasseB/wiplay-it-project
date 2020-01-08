@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation, Router } from "react-router-dom";
 import {history} from "../index" 
+import { EditorLink } from "../components/modal-links"
 
 import { ModalManager}   from  "../containers/modal/modal_container";
 import { store } from "../configs/store-config";
@@ -274,22 +275,12 @@ export const QuestionOptModalBtns = props => {
     let {background} = props
     let modalPath = `/compose/${'question'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
-    let state = { background, modalProps} 
+    let state = { background, modalPath, modalProps} 
     return (
         <div>
            { props.obj.created_by.id === props.currentUser.id? 
            <div>
-            <button className="btn-sm edit-question" onClick={() => {
-                       
-                        ModalManager.close(props.background) 
-
-                        setTimeout(()=> {
-                           history.push({ pathname: modalPath, state} ); 
-                        }, 1000);
-                    }}>
-                Edit Question
-            </button>
-
+            <EditorLink {...state}/>
             <button type="button" className="btn-sm  delete-question" >
               Delete 
             </button>
@@ -307,24 +298,14 @@ export const AnswerOptModalBtns = props => {
     let {background} = props
     let modalPath = `/compose/${'answer'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
-    let state = { background, modalProps} 
+    let state = { background,modalPath, modalProps} 
     console.log(props)
    
    return(
       <div>
          { props.obj.created_by.id === props.currentUser.id?
             <div>
-               <button className="btn-sm edit-question" onClick={()=>{
-                        ModalManager.close(props.background) 
-                        store.dispatch(showModal(true, background));
-
-                        setTimeout(()=> {
-
-                           history.push({ pathname: modalPath, state}); 
-                        }, 1000);
-                    }}>
-                  Edit Answer
-               </button>
+               <EditorLink {...state}/>
                <button type="button" className="btn-sm  delete-question" >
                   Delete 
                </button>
@@ -343,20 +324,13 @@ export const CommentOptModalBtns = props => {
     let {background} = props
     let modalPath = `/compose/${'comment'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
-    let state = { background, modalProps} 
+    let state = { background, modalPath, modalProps} 
    
     return(
         <div>
             { props.obj.created_by.id === props.currentUser.id?
                 <div>
-                    <button className="btn-sm"  onClick={()=>{
-                        ModalManager.close(props.background) 
-                        setTimeout(()=> {
-                           history.push({ pathname: modalPath, state}); 
-                        }, 1000);
-                    }}>
-                        Edit Comment
-                    </button>
+                   <EditorLink {...state}/>
                     <button type="button" className="btn-sm  delete-question" >
                        Delete 
                     </button>
@@ -376,22 +350,13 @@ export const ReplyOptModalBtns = props => {
     let {background} = props
     let modalPath = `/compose/${'reply'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
-    let state = { background, modalProps}; 
+    let state = { background, modalPath, modalProps}; 
 
     return(
         <div>
             {props.obj.created_by.id === props.currentUser.id?
                 <div>
-                    <button className="btn-sm" onClick={()=>{
-                        ModalManager.close(props.background) 
-                        setTimeout(()=> {
-                           history.push({ pathname: modalPath, state }); 
-                        }, 1000);
-                        }}
-                        >
-                         Edit Reply
-                    </button>
- 
+                    <EditorLink {...state}/> 
                     <button type="button" className="btn-sm  delete-question" >
                         Delete 
                     </button>
@@ -430,7 +395,7 @@ export const ProfileOptsModalBtns = props => {
          { props.obj && props.obj.user_can_edit?   
             <button className="btn-sm edit-user-profile"
                 onClick={()=>{
-                       ModalManager.close(props.background) 
+                       ModalManager.close('optionsMenu', props.background) 
                         setTimeout(()=> {
                            history.push(pathToEditProfile); 
                         }, 500);
@@ -492,7 +457,7 @@ export const ModalOptionsMenu = props => {
    console.log(props)
    return(
       <div className="modal-menu  modal-body">
-       <ModalCloseBtn {...props}/>
+       <ModalMenuHeader {...props}/>
       { props.objName === 'UserProfile'?
          <ProfileOptsModalBtns {...props}/>
          :
@@ -550,16 +515,20 @@ export const ModalOptionsMenu = props => {
 
 
 
-export const ModalCloseBtn = props => (
+export const ModalMenuHeader = props => (
  
-  <div className="menu-dismiss-box">
-    <div className="menu-helper-text" >
-        <p>Choose category</p>
-     </div>
-      <button  type="button"  onClick={()=> ModalManager.close(props.background)}  className="btn-sm menu-dismiss">
-         <span className="dismiss">&times;</span>
-    </button>
-  </div>
+   <div className="menu-dismiss-box">
+        <div className="menu-helper-text" >
+            <p>Choose category</p>
+        </div>
+        <button 
+            type="button" 
+            onClick={()=> ModalManager.close('optionsMenu' ,props.background)}
+            className="btn-sm menu-dismiss">
+
+            <span className="dismiss">&times;</span>
+        </button>
+    </div>
 )
 
 

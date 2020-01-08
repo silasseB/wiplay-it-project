@@ -20,21 +20,18 @@ import * as Effects from '../../containers/modal/Effects';
 
 
 export function Modal(props) {
-    let history = useHistory();
-    let {background} = props || props.modalProps;
+    
+    let {background, modalProps} = props;
+
     let {
         modalType, 
         editorProps,
         optionsMenuProps,
         dropImageProps, 
-                        } = props && props.modalProps;
+                        } = modalProps && modalProps;
 
     //console.log(props, modalType)
-    
-    let back = e => {
-       e.stopPropagation();
-       history.goBack();
-    };
+        
 
     let getModalType = (type) => {
 
@@ -131,6 +128,7 @@ export const OptionModal = props => {
       effect         : Effects.SlideFromBottom,
       modalContents  : props.modalContents,
       background     : props.background,
+      modalType      : 'optionsMenu',
     };
 
     modal_props =Object.assign(modal_props, props)
@@ -173,6 +171,7 @@ export const EditModal = props => {
        effect         : Effects.SlideFromBottom ,
        modalContents  : props.modalContents,
        background     : props.background,
+       modalType      : 'editor', 
 
     }; 
 
@@ -212,6 +211,7 @@ export const DropImageModal = props => {
       effect         : Effects.ScaleUp,
       modalContents  : props.modalContents,
       background     : props.background,
+      modalType      : 'dropImage',
    }; 
 
    return(

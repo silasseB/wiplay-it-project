@@ -23,8 +23,8 @@ export const createActionSuccess = (params) => {
       type: params.actionType && params.actionType.SUCCESS,
       byId: params.byId,
       payload: {
-         newObject   : params.data, 
-         isCreating   : false,
+        ...params.data, 
+        isCreating   : false,
 
       }
    };
@@ -93,17 +93,19 @@ export const ModalSubmitPending = () => ({
 
 export const ModalSubmitSuccess = (params) => {
 
-    let {objName, isPut, isPost} = params;
-    let action = isPost?'created':'edited'
+    let {objName, isUpdating, isCreating, modalType } = params;
+    let action = isCreating &&'created' || isUpdating && 'edited';
     let successMessage = `${objName} successefully ${action}`
 
     return{
         type: "SUBMIT_SUCESS",
-        payload: {
-           ...params,
-           submitting : false,
-           successMessage : successMessage,
+        modalType,
+        payload : {
+            ...params,
+            submitting     : false,
+            successMessage : successMessage,
         }
+        
     };
 };
 
@@ -163,12 +165,11 @@ export const getIndexSuccess = (data) => {
 };
 
 
-export const getQuestionPending = (questionById) => {
-  // console.log(actionType)
-  
+export const getQuestionPending = (byId) => {
+   
     return{
         type: types.GET_QUESTION.PENDING,
-        questionById,
+        byId,
         payload: {
            isLoading : true,
         }
@@ -177,7 +178,7 @@ export const getQuestionPending = (questionById) => {
 
 
 
-export const getQuestionSuccess = ( questionById, question) => {
+export const getQuestionSuccess = ( byId, question) => {
     //@userAnswer is for what
     // 
     let userAnswer        = question.answers  && getUserAnswer(question.answers);
@@ -186,7 +187,7 @@ export const getQuestionSuccess = ( questionById, question) => {
    
     return{
         type: types.GET_QUESTION.SUCCESS,
-        questionById,
+        byId,
         payload: {
             question, 
             questionHasAnswer,
@@ -200,24 +201,24 @@ export const getQuestionSuccess = ( questionById, question) => {
 
 
 
-export const getQuestionError = (questionById, error) => ({
-   type         : types.GET_QUESTION.ERROR,
-   questionById ,
-   payload: {
+export const getQuestionError = ( byId, error) => ({
+    type         : types.GET_QUESTION.ERROR,
+    byId ,
+    payload: {
       error     : error, 
       isLoading : false,
-   }
+    }
 });
 
 
 
 
 
-export const getPostPending = (postById) => {
+export const getPostPending = (byId) => {
    
     return{
         type: types.GET_POST.PENDING,
-        postById,
+        byId,
         payload: {
            isLoading          : true,
            post               : "",
@@ -236,7 +237,7 @@ export const getPostSuccess = (postById ,post) => {
       
     return{
         type: types.GET_POST.SUCCESS,
-        postById,
+        byId,
         payload: {
             post              : post, 
             isLoading         : false,
@@ -249,7 +250,7 @@ export const getPostSuccess = (postById ,post) => {
 
 export const getPostError = (postById, error) => ({
     type: types.GET_POST.ERROR,
-    postById,
+    byId,
     payload: {
        error     : error, 
        isLoading : false,
@@ -260,25 +261,25 @@ export const getPostError = (postById, error) => ({
 
 
 
-export const getUserProfilePending = (profileById) => {
-   console.log(profileById)
-   return{
-      type: types.GET_USER_PROFILE.PENDING,
-      profileById,
-      payload: {
-         isLoading          : true,
-      }
-   }
+export const getUserProfilePending = (byId) => {
+   
+    return{
+        type: types.GET_USER_PROFILE.PENDING,
+        byId,
+        payload: {
+            isLoading          : true,
+        }
+    };
 };
 
 
 
-export const getUserProfileSuccess = (profileById, userProfile ) => {
-    console.log(userProfile, profileById)
+export const getUserProfileSuccess = ( byId, userProfile ) => {
+    console.log(userProfile, byId)
     
     return{
         type: types.GET_USER_PROFILE.SUCCESS,
-        profileById,
+        byId,
         payload: {
             user      : userProfile,
             isLoading : false,
@@ -289,12 +290,12 @@ export const getUserProfileSuccess = (profileById, userProfile ) => {
 
 
 export const getUserProfileError = ( profileById, error) => ({
-  type: types.GET_USER_PROFILE.ERROR,
-  profileById,
-  payload: {
-     error     : error, 
-     isLoading : false,
-  }
+    type: types.GET_USER_PROFILE.ERROR,
+    byId,
+    payload: {
+       error     : error, 
+       isLoading : false,
+    }
 });
 
 
@@ -452,9 +453,8 @@ export const getCommentListSuccess = (byId, commentList) => {
         type: types.GET_COMMENT_LIST.SUCCESS,
         byId,
         payload: {
-            comments        : commentList,
-            isLoading       : false,
-            hasCommentsLink : false,
+            comments : commentList,
+            showLink : false,
         }
     };
 };
@@ -732,8 +732,17 @@ export const getCurrentUserError = (error) => {
   };
 };
 
+export const AddNewContents =(byId, contents) =>{
+     return {
+        type : 'ADD_NEW_CONTENTS',
+        byId,
+        payload : {
+            comments,
+        }
+     }
+};
 
-export const getCommentLindData = (byId,comments) => {
+export const getCommentLindData = (byId, comments) => {
       
     return {     
         type   : 'GET_COMMENT_LINK_DATA',
@@ -782,13 +791,13 @@ export const getRepliesLindData = (props) => {
 export const getReplyChildLindData = (props) => {
    var reply = props.reply;
    var byId = props.byId;
-   console.log(props, reply)
+   //console.log(props, reply)
 
    return {
       type        : props.actionType,
       byId,
       payload : {
-      replyList    : [],
+      replyList    : reply.children,
       error        : '',
       showLink     : reply.has_children,
       isLoading    : false,
@@ -801,12 +810,14 @@ export const getReplyChildLindData = (props) => {
 };
 
 
-export const showModal = (value, background) =>{
+export const showModal = (params) =>{
+    let {background, modalType, boolValue} = params; 
        
     return {
       type: 'MODAL_ROUTER',
+      modalType,
       payload : {
-        modalIsOpen  : value,
+        modalIsOpen  : boolValue,
         background ,
       }
    };

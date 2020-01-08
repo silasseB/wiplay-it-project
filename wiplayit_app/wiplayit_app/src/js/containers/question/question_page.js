@@ -51,7 +51,7 @@ class QuestionPage extends Component {
             let { question, currentUser } = entities;
             question = question && question[questionById]
 
-            console.log(question)
+            //console.log(question)
 
             if(question){
                 let timeStamp = question.timeStamp;
@@ -110,7 +110,7 @@ class QuestionPage extends Component {
         var questionById = props.questionById;
         var {question} = props.entities;
         question = question[questionById]
-        console.log(question)
+        //console.log(question)
                  
         return (
 
@@ -153,14 +153,21 @@ export default  withHigherOrderIndexBox(QuestionPage);
 
 
 export const Questions = props => {
-   var questionById = props.questionById;
-   let question = props.entities.question;
-   question = question[questionById]
-   question = question.question
+   var {questionById, entities} = props;
+   let {question, answers} = entities;
+   
+   question = question && question[questionById];
+   question = question && question.question;
+
+   let newAnswerListById = question && `newAnswers${question.id}`;
+   let newAnswers        = answers  && answers[newAnswerListById];
+   let newAnswersLength  = newAnswers &&  newAnswers.answerList && newAnswers.answerList.length || 0;
+
+   let totalAnswersLength = question.answer_count + newAnswersLength;
 
    let questionProps = { question};
-   console.log(question)
-   Object.assign(questionProps, props) 
+   //console.log(newAnswers)
+   questionProps = Object.assign(questionProps, props); 
 
    
    return (
@@ -168,13 +175,13 @@ export const Questions = props => {
          <div>
             <QuestionComponent {...questionProps}/>
 
-            { question.answers?
+            { question.answers || newAnswers?
                 <div>
                 <div className="number-answers-box">
-                    { question.answer_count > 1? 
-                        <p className="items-count">{question.answer_count }  Answers</p>
+                    { totalAnswersLength > 1? 
+                        <p className="items-count">{totalAnswersLength  }  Answers</p>
                         :
-                        <p className="items-count">{ question.answer_count } Answer</p>
+                        <p className="items-count">{ totalAnswersLength } Answer</p>
                     }
                 </div>
 

@@ -218,7 +218,7 @@ export const NavBarBigScreen = props => {
 
 
 export const PartialNavBar = props =>{
-   console.log(props)
+   //console.log(props)
    var {currentUser } = props;
 
    let path_to_profile = `/`;

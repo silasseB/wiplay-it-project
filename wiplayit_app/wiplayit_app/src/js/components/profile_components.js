@@ -264,10 +264,10 @@ export const UserAnswers = props =>{
    var profileById    = props.profileById;
    let userProfile    = props.entities.userProfile[profileById];
    userProfile        = userProfile.user;
-   var byId           = `usersAnswers${userProfile.id}`
+   var answerListById = `usersAnswers${userProfile.id}`
    var answers        = props.entities.answers;
    
-   var usersAnswers   = answers[byId]
+   var usersAnswers   = answers[answerListById]
    console.log(props, answers)
    
    return (
@@ -287,7 +287,7 @@ export const UserAnswers = props =>{
 
                     <div>
                         { usersAnswers.answerList.map((answer, index) => {
-                            let answerProps = {answer}
+                            let answerProps = {answer, answerListById }
                             Object.assign(answerProps, props)
 
                             return(
@@ -322,10 +322,10 @@ export const UserQuestions = props => {
     let userProfile = props.entities.userProfile[profileById];
     userProfile    = userProfile.user;
 
-    var byId     = `usersQuestions${userProfile.id}`
+    var questionListById     = `usersQuestions${userProfile.id}`
     var questions  = props.entities.questions;
-    questions      = questions[byId]
-    console.log(questions, byId, props)
+    questions      = questions[questionListById]
+    console.log(questions,  props)
     
     return (
         <div className="question-container">
@@ -338,7 +338,7 @@ export const UserQuestions = props => {
          </div> 
      
          {  questions.questionList.map((question, index) => {
-            let questionProps = {question, questionById : byId }
+            let questionProps = {question, questionListById }
             Object.assign(questionProps, props)
             return (
                <div key={question.id} className="profile-activites"> 
@@ -359,9 +359,9 @@ export const UserPosts = props => {
    let userProfile = props.entities.userProfile[profileById];
    userProfile    = userProfile.user;
 
-   var byId     = `usersPosts${userProfile.id}`;
+   var postListById     = `usersPosts${userProfile.id}`;
    var posts  = props.entities.posts;
-   posts      = posts[byId]
+   posts      = posts[postListById]
    
    return(
      <div className="post-container">
@@ -374,7 +374,7 @@ export const UserPosts = props => {
          </div> 
       
          { posts.postList.map((post, index) => {
-            let postProps = { post, postById : byId}
+            let postProps = { post, postListById}
             Object.assign(postProps, props)
             return(
                <div key={index} className="profile-activites"> 

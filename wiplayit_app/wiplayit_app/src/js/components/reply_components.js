@@ -47,22 +47,14 @@ export const RepliesComponent = props => {
                          
          return (
             <div key={index} >
-               { props.comment.id === reply.comment?
-                  <div  className="reply-container">
-                     <div  className="reply-contents"> 
-                     
-                        <Reply {...replyProps}/>
-                
-                        { reply.has_children?
-                           <ReplyChildrenBox {...replyProps}/>
-       
-                           :
-                           ""
-                        }
+                { props.comment.id === reply.comment?
+                    <div  className="reply-container">
+                        <div  className="reply-contents"> 
+                            <Reply {...replyProps}/>
+                            <ReplyChildrenBox {...replyProps}/>
+                        </div>
 
-                     </div>
-
-                  </div>
+                    </div>
 
                :""
 
@@ -85,19 +77,19 @@ export const RepliesComponent = props => {
 
 
 export const ReplyChildernComponent = props => {
-  //console.log(props)
+    //console.log(props)
 
-  let replyStyles = {
+    let replyStyles = {
              
                border     : 'px solid blue',
                margin     : '15px 22px 10px  38px',
-   };
+    };
      
-   var replies   =   props.entities.replies;
-   replies =  replies[props.replyChildrenById];
+    var replies   =   props.entities.replies;
+    replies =  replies[props.replyChildrenById];
 
-   return(
-      <div >
+    return(
+        <div>
 
          { replies.replyList.map( (reply, index) => {
             let replyProps = {
@@ -113,7 +105,7 @@ export const ReplyChildernComponent = props => {
                <div  key={index} >
                     { props.childParent.id === reply.parent?
 
-                  <div className="reply-child-container">
+                    <div className="reply-child-container">
                   
                      <div className="reply-child-contents"> 
                         <Reply {...replyProps}/>
@@ -257,20 +249,27 @@ export const ReplyGreatGrandChildComponent = props => {
 
 
 
-export const Reply = props => {
-
-   let optionsBtnStyles = {
+export const Reply = (props, replyProps=undefined, isNewReply=false) => {
+  
+    let optionsBtnStyles = {
               fontSize   : '11px',
               background : ' #F5F5F5',
               fontWeight : 'bold',
               width      : '40px',
               color      : '#4A4A4A',
               margin     : '0 0 2px'
-   }
+    }
 
-   let {answer, post, currentUser } = props.props;
-   let { byId } = props || props.props 
-   var reply = props.reply;
+   let {answer, post, currentUser } = props;
+
+   let {
+        byId,
+        newRepliesById, 
+        reply,
+        replyStyles } = replyProps && replyProps  
+        //console.log(props, newRepliesById, isNewReply) 
+
+   
    let storedState = JSON.parse(reply.reply)
    const contentState = convertFromRaw(storedState);
    const editorState = EditorState.createWithContent(contentState);
@@ -298,6 +297,7 @@ export const Reply = props => {
       createApiUrl = api.createPostReplyChildApi(reply.id);
       
    }
+   byId = isNewReply && newRepliesById || byId;
      
     let editReplyProps = {
         objName     : 'Reply',
@@ -314,7 +314,7 @@ export const Reply = props => {
         objName           : 'Reply',
         obj               : reply,
         isPost            : true,
-        byId,
+        byId              :  `newReplies${reply.id}`,
         currentUser,
         apiUrl            : createApiUrl,
         
@@ -336,7 +336,7 @@ export const Reply = props => {
          btnText : 'More', 
       }; 
 
-   Object.assign(btnsProps, props.props)
+   Object.assign(btnsProps, props)
    let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
                          { reply.upvotes }  Upvotes
                      </Link>;
@@ -358,22 +358,12 @@ export const Reply = props => {
 
 
    return (
-         <div style={ props.replyStyles}  className="reply-box" id="reply-box">
+         <div style={ replyStyles}  className="reply-box" id="reply-box">
             <div className="user-box">
-
-              <UserComponentSmall {...
-                     {
-                        user         : reply.created_by,
-                        currentUser : props.props.currentUser, 
-
-                     }
-                  }
-            />
-               
+                <UserComponentSmall {...{ user : reply.created_by, currentUser }}/>
             </div>
 
-
-            
+         
             <div className="reply">
                <Editor
                  blockRendererFn={pageMediaBlockRenderer}
@@ -519,11 +509,11 @@ export const CommentsReplyLink = props => {
 
 
 export const ChildRepliesLink = props => {
-   var byId = props.replyChildrenById;
-   var replyState = props.entities.replies[byId]
+   var byId     = props.replyChildById;
+   var replies  = props.entities.replies[byId]
    
-   var linkData  = replyState.linkData;
-   var reply =   props.childParent;
+   var linkData = replies.linkData;
+   var reply    = props.childParent;
     
    var apiUrl = '';
    if (props.isAnswerBox) { 
@@ -551,8 +541,8 @@ export const ChildRepliesLink = props => {
 
 
 export const GrandChildRepliesLink = props => {
-   var reply = props.grandChildParent;
-   var byId = props.grandChildById ;
+   var reply     = props.childParent;
+   var byId      = props.replyChildById ;
    var replies   = props.entities.replies[byId]
    var linkData  = replies.linkData;
   
@@ -584,7 +574,7 @@ export const GrandChildRepliesLink = props => {
 
 
 export const GreatGrandChildRepliesLink = props => {
-   var byId = props.byId;
+   var byId = props.replyChildById;
    var replyState = props.entities.replies[byId];
 
    var linkData  = replyState.linkData;

@@ -50,21 +50,6 @@ let storeUpdate = store.getState().entities;
 let GetModalRouter = (location)=>{
     let background = location.state && location.state.background;
     
-
-    let modalIsOpen = true;
-    
-    if (!background) {
-        console.log(location, storeUpdate.modal)
-        modalIsOpen = false;
-        
-        setTimeout(()=> {
-           // store.dispatch(showModal(false))
-        }, 2000);
-        
-        return '';
-    }
-
-    
     let state = location && location.state;
     return <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
 }

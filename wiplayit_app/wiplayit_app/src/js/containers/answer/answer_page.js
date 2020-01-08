@@ -12,9 +12,10 @@ class AnswersBox extends Component {
         super(props);
 
         this.state = {
-            isAnswerBox : true,
-            question : '',
-            answerListById  : '', 
+            isAnswerBox       : true,
+            question          : '',
+            answerListById    : '', 
+            newAnswerListById : '',
         };
     };
    
@@ -26,58 +27,64 @@ class AnswersBox extends Component {
 
 
     componentDidMount() {
-      console.log(this.props)
+      //console.log(this.props)
       let {questionById, question, cacheEntities } = this.props;
-      //let { question } =  cacheEntities;
       
-        //question = question && question[questionById];
+        let answerListById      = question && `answers${question.id}`;
+        let newAnswerListById   = question && `newAnswers${question.id}`;
 
-        var answerListById   = question && `answers${question.id}`;
-        console.log(question)
-
+        this.setState({answerListById, newAnswerListById, question });
+        
         if (question && question.answers) {
-            console.log(question);
+            //console.log(question);
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, question.answers));
 
         }
 
-        this.setState({answerListById, question })
+        
     };
 
        
- 
     getProps() {
-   
-        let props = {
-            ...this.state
-        };
-
-        return Object.assign(props, this.props)
-    };
+        return {...this.props, ...this.state};
+    };    
 
 
-   render() { 
+    render() { 
       const props =  this.getProps();
-      console.log(props)
-      var answers      = props.entities.answers;
+      let {entities, newAnswerListById, answerListById} = props;
       
-      answers          = answers[props.answerListById]
+      let {answers}    =  entities;
+      
+      let questionAnswerList   = answers && answers[answerListById];
+      let newAnswers   = answers && answers[newAnswerListById];
+      //console.log(answers, answerListById) 
+      //console.log(newAnswers, newAnswerListById)
          
-      return (
-         <div>
-            { answers?
-               <div>
-                  {answers.answerList.length?
-                     <Answers {...props}/>
-                     :
-                     ""  
-                  }
-               </div>
-              :
-              ""
-            }
-         </div>
+        return (
+            <div>
+                <div>
+                    { newAnswers?
+                        <NewAddedAnswers {...props}/>
+                        :
+                        "" 
+                    }
+                </div>
+
+                <div>
+                   { questionAnswerList &&  questionAnswerList.answerList.length?
+                        <div>
+                            <AvailableAnswers {...props}/>
+                        </div>
+                        :
+                        ""
+                    }
+                </div>
+
+                
+            </div>
+
       );        
    };
 };
@@ -86,37 +93,38 @@ class AnswersBox extends Component {
 export default AnswersBox;
 
 
-export const Answers = props => {
-    var answers = props.entities.answers;
-    answers = answers[props.answerListById]
-         
+const NewAddedAnswers = props => {
+   let {entities, newAnswerListById} = props;
+   let answers = entities && entities.answers[newAnswerListById]; 
+   let isNewAnswers = true;
+
+   let answerList = answers.answerList && answers.answerList.length && answers.answerList;  
+   return Answers(props, answerList, isNewAnswers);
+};
+
+const AvailableAnswers = props => {
+   let {entities, answerListById} = props;
+   let answers = entities && entities.answers[answerListById]; 
+   
+   let answerList = answers.answerList && answers.answerList.length && answers.answerList;  
+   return Answers(props, answerList);
+};
+
+
+export const Answers = (props, answerList, isNewAnswers=false) => {
+             
     return(
-        <div>
-
-            {answers && answers.answerList?
-
-                <div className="answer-container">
-                    
-                    { answers.answerList.map((answer, index) => {
-
-                        let answerProps = { answer };
-
-                        Object.assign(answerProps, props); 
+        <div className="answer-container">
+            { answerList && answerList.map((answer, index) => {
+                let answerProps = { answer, isNewAnswers };
+                answerProps = {...props, ...answerProps}; 
       
-                        return ( 
-                            <div key={index} className="answer-contents"> 
-                                <AnswersComponent {...answerProps}/>
-                            </div>
-                        );
-                    }
-                    )}
-                </div>
-
-                :
-
-                ""
-            }
-
+                return ( 
+                   <div key={index} className="answer-contents"> 
+                        <AnswersComponent {...answerProps}/>
+                    </div>
+                );
+            })}
         </div> 
     )
 };
