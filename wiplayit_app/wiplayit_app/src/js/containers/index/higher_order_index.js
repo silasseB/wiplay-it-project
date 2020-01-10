@@ -117,12 +117,13 @@ export function withHigherOrderIndexBox(Component) {
                 let { entities } = storeUpdate;
                 let { currentUser,modal, index, question, userProfile, userAuth } = entities;
                 modal = modal && modal['editor']; 
+                //console.log(userAuth)
 
-                userAuth && userAuth.auth &&  this.confirmLogout(userAuth.auth);
+                this.confirmLogout(userAuth.auth);
                 
 
                 if (modal && Object.keys(modal).length) {
-                    console.log(modal)
+                    //console.log(modal)
                     let {objName, data, isCreating} = modal;
                     this.setState({ modalIsOpen : modal.modalIsOpen })
                                                             
@@ -163,14 +164,13 @@ export function withHigherOrderIndexBox(Component) {
         confirmLogout(auth){
             
             if (auth && !auth.isLoggedIn) {
-                console.log(userAuth)
+                console.log('User is logging out')
 
                localStorage.removeItem('@@CacheEntities');       
-               history.push('/user/registration')
-
+               history.push('/user/registration');
             }
             
-        }
+        };
 
         
       

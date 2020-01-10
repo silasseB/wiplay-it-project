@@ -80,7 +80,7 @@ class IndexBox extends Component {
 
         let { cacheEntities } = this.props;
         var now = new Date();
-     
+        
         if (cacheEntities) {
             let { index, currentUser } = cacheEntities;
                        
@@ -98,9 +98,10 @@ class IndexBox extends Component {
                 if (menDiff <= 3) {
 
                     console.log('Index found from cachedEntyties')
-                    store.dispatch(action.getIndexPending());
-                    store.dispatch(action.getIndexSuccess(index,));
+                    //store.dispatch(action.getIndexPending());
+                    //store.dispatch(action.getIndexSuccess(index,));
                     this.updateIndexEntities(index)
+                    this.forceUpdate()
                     return;
                 }
             }
@@ -127,7 +128,7 @@ class IndexBox extends Component {
         let indexPosts     = { filteredPosts     : posts};
         let indexUsers     = { filteredUsers    : users};
 
-               
+        console.log(index)      
         if (questions && questions.length ) {
            
             store.dispatch(action.getQuestionListPending(questionListById));
