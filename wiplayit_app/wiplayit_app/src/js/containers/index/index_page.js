@@ -18,6 +18,7 @@ import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
 
 class IndexBox extends Component {
+    isMounted = false;
 
     constructor(props) {
         super(props);
@@ -45,6 +46,7 @@ class IndexBox extends Component {
     }
 
     componentWillUnmount() {
+        this.isMounted = false;
         this.unsubscribe();
     };
 
@@ -75,38 +77,48 @@ class IndexBox extends Component {
     
     componentDidMount() {
         //console.log(this.props)
+        this.isMounted = true;
             
         this.onIndexUpdate();
 
-        let { cacheEntities } = this.props;
-        var now = new Date();
+        let { cacheEntities, entities } = this.props;
+        let index       = entities.index;
+        let cathedIndex = cacheEntities.index; 
+        let now = new Date();
+        console.log(Object.keys(index))
         
-        if (cacheEntities) {
-            let { index, currentUser } = cacheEntities;
-                       
-            if(index){
-                let timeStamp = index.timeStamp;
+        if (Object.keys(cathedIndex).length && !Object.keys(index).length) {
+            console.log(cathedIndex)
+            let timeStamp = cathedIndex.timeStamp;
           
-                let msDiff   = now.getTime() - timeStamp
-                let secDiff  = msDiff / 1000
-                let menDiff  = secDiff / 60
-                let hourDiff = menDiff/60
-                let dayDiff  = hourDiff/24
+            let msDiff   = now.getTime() - timeStamp
+            let secDiff  = msDiff / 1000
+            let menDiff  = secDiff / 60
+            let hourDiff = menDiff/60
+            let dayDiff  = hourDiff/24
 
-                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+            console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                               
-                if (menDiff <= 3) {
+            if (menDiff <= 3) {
 
-                    console.log('Index found from cachedEntyties')
-                    //store.dispatch(action.getIndexPending());
-                    //store.dispatch(action.getIndexSuccess(index,));
-                    this.updateIndexEntities(index)
-                    this.forceUpdate()
-                    return;
-                }
+                console.log('Index found from cachedEntyties')
+                //store.dispatch(action.getIndexPending());
+                //store.dispatch(action.getIndexSuccess(index,));
+                this.updateIndexEntities(cathedIndex);
+                this.isMounted &&  this.forceUpdate();
+                return;
             }
         }
-        console.log('Fetching index data form the server')
+        
+        if (Object.keys(index).length) {
+            console.log(index)
+            this.updateIndexEntities(index);
+            this.isMounted &&  this.forceUpdate();
+
+            return;
+        }
+
+        console.log('Fetching index data form the server' )
         this.props.getIndex();
         
     };
@@ -115,41 +127,43 @@ class IndexBox extends Component {
    
 
     updateIndexEntities(index){
+        let {entities} = this.props;
+
         var { questionListById,
               answerListById, 
               postListById,
               userListById,
             } = this.state;
 
-        let {questions, posts, answers, users} =  index && index;
+        let {questions, posts, answers, users} =  entities;
 
-        let indexQuestions = { filteredQuestions : questions};
-        let indexAnswers   = { filteredAnswers   : answers};
-        let indexPosts     = { filteredPosts     : posts};
-        let indexUsers     = { filteredUsers    : users};
+        let indexQuestions =  index.questions;
+        let indexAnswers   =  index.answers;
+        let indexPosts     =  index.posts;
+        let indexUsers     =  index.users;
 
         console.log(index)      
-        if (questions && questions.length ) {
+        if (!questions[questionListById] && indexQuestions && indexQuestions.length ) {
            
             store.dispatch(action.getQuestionListPending(questionListById));
-            store.dispatch(action.getQuestionListSuccess(questionListById, questions));
+            store.dispatch(action.getQuestionListSuccess(questionListById, indexQuestions));
             
         }
-        if (answers && answers.length) {
+        if (!answers[answerListById] && indexAnswers && indexAnswers.length) {
             store.dispatch(action.getAnswerListPending(answerListById));
-            store.dispatch(action.getAnswerListSuccess(answerListById, answers));
+            store.dispatch(action.getAnswerListSuccess(answerListById, indexAnswers));
            
 
         }
-        if (posts && posts.length){
+        if (!posts[postListById] && indexPosts && posts.length){
            store.dispatch(action.getPostListPending(postListById));
-           store.dispatch(action.getPostListSuccess(postListById, posts));
+           store.dispatch(action.getPostListSuccess(postListById, indexPosts));
            
         }
 
-        if (users && users.length){
+        if (!users[userListById] && indexUsers && indexUsers.length){
            store.dispatch(action.getUserListPending(userListById));
-           store.dispatch(action.getUserListSuccess(userListById, users));
+           store.dispatch(action.getUserListSuccess(userListById, indexUsers));
            
 
         }

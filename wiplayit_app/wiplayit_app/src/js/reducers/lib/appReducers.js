@@ -80,13 +80,15 @@ export function entities(state=InitialState(), action) {
             newState[stateEntintieKey] =  stateEntintie
             fakeState                  = {...fakeState, ...newState};
 
-            //console.log(newState, fakeState)
+            console.log(newState, fakeState)
             
             return fakeState;
     };
    
     let newStateEntintie;
     let {byId, payload} = action;
+    let updateAction    = {byId};
+    let createAction    = {byId};
 
     switch (action.type){
 
@@ -123,9 +125,9 @@ export function entities(state=InitialState(), action) {
 
         case types.UPDATE_USER_PROFILE.SUCCESS:
             
-            let profileToUpdate =state.userProfile[action.byId];
-            let updatedUserProfile = action.payload.user;
-            profileToUpdate = profileToUpdate.user;
+            let profileToUpdate    = state.userProfile[byId];
+            let updatedUserProfile = payload.user;
+            profileToUpdate        = profileToUpdate.user;
             let user = Object.assign(profileToUpdate, updatedUserProfile)
             action.payload.user = user;
 
@@ -144,18 +146,18 @@ export function entities(state=InitialState(), action) {
 
 
         case types.UPDATE_USER_LIST.SUCCESS:
-            let updatedUser     = action.payload && action.payload.user;
-            let source = {byId : action.byId};
+                        
+            if (state.users[byId]) {
+                let updatedUser    = payload.user;
+                let usersToUpdate  = state.users[byId];
 
-            if (state.users[action.byId]) {
-                let usersToUpdate = state.users[action.byId];
-                usersToUpdate     = usersToUpdate.userList
+                usersToUpdate      = usersToUpdate.userList
                  
-                source['userList'] = helper.updateReducerListEntynties(usersToUpdate, updatedUser);
-
+                payload['userList'] = helper.updateReducerListEntynties(usersToUpdate, updatedUser);
+                delete payload.user
             }
-                  
-            return updateStateEntyties('users', source);  
+            console.log(payload)      
+            return updateStateEntyties('users', {byId, payload});  
 
       
         
@@ -189,24 +191,24 @@ export function entities(state=InitialState(), action) {
             
 
         case types.UPDATE_QUESTION.SUCCESS:
-            let updatedQuestion = action.payload && action.payload.question;
-            let updatedQuestionState ={byId, isUpdating:false};
-
-            if (state.question[action.byId]) {
-
-                let question = state.question[action.byId]
-                question     = question.question;
-                updatedQuestionState['question']   = {...question, ...updatedQuestion}
-              
-                return updateStateEntyties('question', updatedQuestionState);
-
-            }else if(state.questions[action.byId]){
+            let updatedQuestion = payload.question;
             
-                let questions = state.questions[action.byId];
-                let questionList = questions && questions.questionList || [];
-                updatedQuestionState['questionList'] = helper.updateReducerListEntynties(questionList, updatedQuestion);
+            if (state.question[byId]) {
 
-                return updateStateEntyties('questions', updatedQuestionState);
+                let question        = state.question[byId]
+                question            = question.question;
+                payload['question'] = {...question, ...updatedQuestion}
+              
+                return updateStateEntyties('question', {byId, payload});
+
+            }else if(state.questions[byId]){
+            
+                let questions = state.questions[byId];
+                let questionList = questions && questions.questionList || [];
+                payload['questionList'] = helper.updateReducerListEntynties(questionList, updatedQuestion);
+                delete payload.question;
+
+                return updateStateEntyties('questions', {byId, payload});
 
             };
             return state;
@@ -237,22 +239,23 @@ export function entities(state=InitialState(), action) {
 
         case types.UPDATE_POST.SUCCESS:
             let updatedPost = payload.post;
-            let updatedPostState ={byId, isUpdating:false};
-
-            if (state.post[byId]) {
-                let post = state.post[byId]
-                post     = post.post;
            
-                updatedQuestionState['post']   = {...post, ...updatedPost}
+            if (state.post[byId]) {
+
+                let post        = state.post[byId]
+                post            = post.post;
+                payload['post'] = {...post, ...updatedPost}
               
-                return updateStateEntyties('post', updatedQuestionState);
+                return updateStateEntyties('post', {byId, payload});
 
             }else if(state.posts[byId]){
             
-                var posts = state.posts[byId];
-                let postList = posts && posts.postList || [];
-                updatedPostState['postList'] = helper.updateReducerListEntynties(postList, updatedPost);
-                return updateStateEntyties('posts', updatedPostState);
+                let posts           = state.posts[byId];
+                let postList        = posts && posts.postList || [];
+                payload['postList'] = helper.updateReducerListEntynties(postList, updatedPost);
+                delete payload.post;
+
+                return updateStateEntyties('posts', {byId, payload});
 
             };
             return state;                 
@@ -273,27 +276,30 @@ export function entities(state=InitialState(), action) {
 
 
         case types.CREATE_ANSWER.SUCCESS:
-            let createdAnswerState = {isCreating : false}   
-            let newAnswer           =  payload.answer;
-            let newAnswerList       = [newAnswer];
-            let currentNewAnswers = state.answers[byId];
-            newAnswerList = currentNewAnswers && currentNewAnswers.unshift(newAnswer)
-                                                  || newAnswerList;
+               
+            let newAnswer         =  payload.answer;
+            let newAnswerList     =  [newAnswer];
+            let currentNewAnswers =  state.answers[byId];
+            currentNewAnswers     =  currentNewAnswers && currentNewAnswers.answerList;
 
-            createdAnswerState['answerList'] = Array.isArray(newAnswerList) && newAnswerList;
-            return  updateStateEntyties('answers', {byId, payload:createdAnswerState})|| state;  
+            newAnswerList         =  currentNewAnswers && currentNewAnswers.length &&
+                                     currentNewAnswers.unshift(newAnswer) || newAnswerList;
+
+            payload['answerList'] = Array.isArray(newAnswerList) && newAnswerList;
+            delete payload.answer; 
+            return  updateStateEntyties('answers', {byId, payload})|| state;  
             
 
 
         case types.UPDATE_ANSWER.SUCCESS:
-            let updatedAnswerState = {byId, isUpdating : false} 
-            let updatedAnswer = action.payload.answer;
+            
+            let updatedAnswer = payload.answer;
             var answers = state.answers[action.byId];
             answers = answers.answerList;
 
-            updatedAnswerState['answerList'] = helper.updateReducerListEntynties(answers, updatedAnswer);
-         
-            return  updateStateEntyties('answers',  {byId, payload : updatedAnswerState})|| state;
+            payload['answerList'] = helper.updateReducerListEntynties(answers, updatedAnswer);
+            delete payload.answer;
+            return  updateStateEntyties('answers',  {byId, payload })|| state;
 
 
         case types.CREATE_COMMENT.PENDING:
@@ -310,31 +316,32 @@ export function entities(state=InitialState(), action) {
 
 
         case types.CREATE_COMMENT.SUCCESS:
-            let createdCommentsState = {isCreating : false }; 
+             
             let newComment           = payload.comment;
             let newComments          = [newComment];  
 
             let currentNewComments = state.comments[byId];
             currentNewComments = currentNewComments.commentList;
 
-            newComments = currentNewComments && currentNewComments.unshift(newComment)
-                                                  || newComments;
+            newComments = currentNewComments && currentNewComments.length &&
+                                  currentNewComments.unshift(newComment) || newComments;
          
             
-            createdCommentsState['commentList'] = Array.isArray(newComments) && newComments;
-            return updateStateEntyties('comments', {byId, payload : createdCommentsState})|| state; 
+            payload['commentList'] = Array.isArray(newComments) && newComments;
+            delete payload.comment;
+            return updateStateEntyties('comments', { byId, payload })|| state; 
 
 
 
         case types.UPDATE_COMMENT.SUCCESS:
-            let updatedCommentsState = {byId, isUpdating : false }; 
-
+            
             let updatedComment = payload.comment;
             let comments = state.comments[byId];
             comments = comments.commentList
-            updatedCommentsState['commentList'] = helper.updateReducerListEntynties(comments, updatedComment);
+            payload['commentList'] = helper.updateReducerListEntynties(comments, updatedComment);
+            delete payload.comment;
          
-            return updateStateEntyties('comments', {byId, payload : updatedCommentsState})|| state; 
+            return updateStateEntyties('comments', {byId, payload })|| state; 
       
 
 
@@ -354,7 +361,7 @@ export function entities(state=InitialState(), action) {
 
 
         case types.CREATE_REPLY.SUCCESS:
-            let createdRepliesState = {byId, isCreating : false }; 
+             
             let newReply            = payload.reply;
             let newReplies          = [newReply];
             let currentNewReplies   = state.replies[action.byId];
@@ -363,25 +370,27 @@ export function entities(state=InitialState(), action) {
             newReplies = currentNewReplies && currentNewReplies.unshift(newReply)
                                                   || newReplies;  
                        
-            createdRepliesState['replyList'] = Array.isArray(newReplies) && newReplies;
-            return updateStateEntyties('replies', {byId, payload : createdRepliesState})|| state;    
+            payload['replyList'] = Array.isArray(newReplies) && newReplies;
+            delete payload.reply;
+            return updateStateEntyties('replies', {byId, payload })|| state;    
 
       
         
       
 
         case types.UPDATE_REPLY.SUCCESS:
-            let updatedRepliesState = { isUpdating : false };
+            
             let repliesToUpdate     = state.replies[action.byId]; 
             let updatedReply        = payload.reply;
         
            
-            updatedRepliesState['commentList'] = helper.updateReducerListEntynties(
+            payload['commentList'] = helper.updateReducerListEntynties(
                                                                 repliesToUpdate.replyList, 
                                                                 updatedReply
                                                             );
+            delete payload.reply;
          
-            return updateStateEntyties('replies', {byId, payload : updatedRepliesState})|| state
+            return updateStateEntyties('replies', {byId, payload})|| state
             
             
 

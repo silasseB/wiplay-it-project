@@ -141,7 +141,7 @@ export function withHigherOrderIndexBox(Component) {
                        data['successMessageAlerted'] = true;
                        this.setState({ showSuccessMessage : true, successMessage });
 
-                        setTimeout(()=> {
+                +        setTimeout(()=> {
                            
                            this.setState({showSuccessMessage:false}); 
                         }, 5000);
@@ -161,7 +161,7 @@ export function withHigherOrderIndexBox(Component) {
 
         };
 
-        confirmLogout(auth){
+        confirmLogout =(auth)=>{
             
             if (auth && !auth.isLoggedIn) {
                 console.log('User is logging out')
@@ -174,14 +174,6 @@ export function withHigherOrderIndexBox(Component) {
 
         
       
-
-        disableBack(e) {
-            if (this.state.modalIsOpen) {
-                e.returnValue = '';
-            }
-
-            e.preventDefault()
-        }
 
         componentDidUpdate(prevProps, nextProps) {
             let { entities,history }  = prevProps;

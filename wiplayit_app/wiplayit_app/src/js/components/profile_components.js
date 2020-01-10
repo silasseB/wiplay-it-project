@@ -268,7 +268,7 @@ export const UserAnswers = props =>{
    var answers        = props.entities.answers;
    
    var usersAnswers   = answers[answerListById]
-   console.log(props, answers)
+   //console.log(props, answers)
    
    return (
         <div>
@@ -322,22 +322,23 @@ export const UserQuestions = props => {
     let userProfile = props.entities.userProfile[profileById];
     userProfile    = userProfile.user;
 
-    var questionListById     = `usersQuestions${userProfile.id}`
-    var questions  = props.entities.questions;
+    let  questionListById     = `usersQuestions${userProfile.id}`
+    let questions  = props.entities.questions;
     questions      = questions[questionListById]
-    console.log(questions,  props)
+    let questionList = questions && questions.questionList;  
+    //console.log(questions,  props)
     
     return (
         <div className="question-container">
          <div className="number-question-box">
-            {questions && questions.questionList && questions.questionList.length? 
-               <p className="items-count">{questions.questionList.length } Questions</p>
+            {questionList && questionList.length? 
+               <p className="items-count">{questionList.length } Questions</p>
                :
-               <p className="items-count">{questions.questionList.length } Question</p>
+               <p className="items-count">{questionList.length } Question</p>
             }
          </div> 
      
-         {  questions.questionList.map((question, index) => {
+         {  questionList && questionList.map((question, index) => {
             let questionProps = {question, questionListById }
             Object.assign(questionProps, props)
             return (
@@ -480,7 +481,7 @@ export const UserFollowings = props => {
 
    var usersById   = `usersFollowings${userProfile.id}`;
    var users       = props.entities.users[usersById];
-    console.log(users,usersById, props.entyties)
+   //console.log(users,usersById, props.entyties)
    let userListProps = { usersById };
 
    Object.assign( userListProps, props);
@@ -558,7 +559,7 @@ export const UserActivitiesBtns = props => {
     var userProfile = props.entities.userProfile[profileById];
     var userProfile = userProfile.user;
 
-    console.log(userProfile)
+    //console.log(userProfile)
 
     var usersAnswers = {
       component      : UserAnswers,

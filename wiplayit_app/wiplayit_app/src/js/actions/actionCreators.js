@@ -154,7 +154,7 @@ export const getIndexError = ( error) => ({
 
 
 export const getIndexSuccess = (data) => {
-      
+        
     return {
         type         : types.GET_INDEX.SUCCESS,
    

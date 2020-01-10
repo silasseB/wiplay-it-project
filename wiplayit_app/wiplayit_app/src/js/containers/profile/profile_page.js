@@ -122,7 +122,7 @@ class UserProfileContainer extends Component {
     };
 
     _dispatchUserProfileItems(userProfile){
-        console.log(userProfile)
+        //console.log(userProfile)
         let answers      = this.props.cacheEntities.answers;
 
 
@@ -132,7 +132,7 @@ class UserProfileContainer extends Component {
             var usersAnswers = userProfile.answers;
 
             if (usersAnswers) {
-                console.log(usersAnswers, answers)
+                ///console.log(usersAnswers, answers)
                 store.dispatch(action.getAnswerListPending(byId));
                 store.dispatch(action.getAnswerListSuccess(byId, usersAnswers));
             }
@@ -217,7 +217,7 @@ class UserProfileContainer extends Component {
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
       
-        console.log(userProfile)  
+        //console.log(userProfile)  
 
         return (
            <div id="profile-page">
