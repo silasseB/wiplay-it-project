@@ -191,7 +191,7 @@ export default  class AppEditor extends Component{
         }
 
         let submitProps = this.getSubmitProps();
-        store.dispatch(ModalSubmitPending());
+        store.dispatch(ModalSubmitPending('editor'));
         store.dispatch(handleSubmit(submitProps));
 
     }

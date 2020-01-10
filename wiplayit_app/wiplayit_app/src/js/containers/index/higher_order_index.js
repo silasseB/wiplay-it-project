@@ -116,53 +116,52 @@ export function withHigherOrderIndexBox(Component) {
                 var timeStamp = new Date();
                 let { entities } = storeUpdate;
                 let { currentUser,modal, index, question, userProfile, userAuth } = entities;
-                modal && modal['editor']; 
-               
-                let data = modal && modal.data;
+                modal = modal && modal['editor']; 
 
-                this.confirmLogout(userAuth)
+                userAuth && userAuth.auth &&  this.confirmLogout(userAuth.auth);
+                
 
-                if (modal ) {
+                if (modal && Object.keys(modal).length) {
+                    console.log(modal)
                     let {objName, data, isCreating} = modal;
+                    this.setState({ modalIsOpen : modal.modalIsOpen })
                                                             
                     if (isCreating && objName === 'Question' || objName === 'Post' ) {
                         //console.log(modal)
-                        const scrollY = document.body.style.top;
-                        document.body.style.position = '';
-                        document.body.style.top = '';
-                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                        //const scrollY = document.body.style.top;
+                        //document.body.style.position = '';
+                        //document.body.style.top = '';
+                        //window.scrollTo(0, parseInt(scrollY || '0') * -1);
                         
                     }
 
-                    this.setState({ modalIsOpen : modal.modalIsOpen }) 
+                    if ( data && !data.successMessageAlerted){
+                       let successMessage = modal.successMessage;
+                       data['successMessageAlerted'] = true;
+                       this.setState({ showSuccessMessage : true, successMessage });
+
+                        setTimeout(()=> {
+                           
+                           this.setState({showSuccessMessage:false}); 
+                        }, 5000);
+                    }
+                   
                 }
 
                 if (currentUser && currentUser.user) {
                     this.getCurrentUser(currentUser.user)
                 }
 
-                if( data && !data.successMessageAlerted){
-                    let successMessage = modal.successMessage;
-                    data['successMessageAlerted'] = true;
-                    this.setState({ showSuccessMessage : true, successMessage });
-
-                    setTimeout(()=> {
-                       this.setState({showSuccessMessage:false}); 
-                    }, 5000);
-                }
-                
-                
-                //this.forceUpdate()               
-
-                }
+                                
+            }
             };
 
             this.unsubscribe = store.subscribe(onStoreChange);
 
         };
 
-        confirmLogout(userAuth){
-            let auth = userAuth && userAuth.auth;
+        confirmLogout(auth){
+            
             if (auth && !auth.isLoggedIn) {
                 console.log(userAuth)
 
@@ -188,10 +187,10 @@ export function withHigherOrderIndexBox(Component) {
             let { entities,history }  = prevProps;
             let { modal } = entities;
 
-             let { action } = history;
+            let { action } = history;
             
             if (action === "POP") {
-                console.log(action, prevProps, this.props, modal)
+                ///console.log(action, prevProps, this.props, modal)
 
                 let optionsModal = modal && modal['optionsMenu'];
                 let editor       = modal && modal['editor'];
@@ -203,7 +202,7 @@ export function withHigherOrderIndexBox(Component) {
                 dropImage    && dropImage.modalIsOpen    && ModalManager.close('dropImage'); 
 
             }else{
-                console.log(action, prevProps, this.props, modal)
+                //console.log(action, prevProps, this.props, modal)
             }
         }
 
@@ -290,7 +289,7 @@ export function withHigherOrderIndexBox(Component) {
                                                               { display : 'none' };
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',}
                                               : {opacity:'2',};
-            //console.log(props)
+            console.log(props)
             return (
                 <div>
                     <fieldset style={ onModalStyles } 

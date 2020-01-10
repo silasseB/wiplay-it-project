@@ -30,7 +30,7 @@ export const ProfileComponent = props => {
     var userProfile = props.entities.userProfile[profileById];
     userProfile     = userProfile && userProfile.user;
 
-    console.log(props, userProfile)
+    //console.log(props, userProfile)
     let currentUser = props.currentUser;
      
     let  state = {
@@ -207,15 +207,15 @@ export const ProfileComponent = props => {
 
 
 export const UserList = props => {
-    console.log(props)
+    //console.log(props)
     var usersById = props.usersById;
     const users   = props.entities.users[usersById];
 
     return (
       <div>
-         { users.userList.length?
+         { users && users.userList && users.userList.length?
          <div>
-           { users.userList.map(( user, index )  => {
+           {  users.userList.map(( user, index )  => {
                let userProps = {user  : user, objIndex:index};
 
                Object.assign(userProps, props);           

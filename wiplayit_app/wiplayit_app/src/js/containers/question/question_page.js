@@ -24,7 +24,6 @@ class QuestionPage extends Component {
         
 
         this.state = {
-            question      : '',
             isQuestionBox : true, 
             pageName      : "Question", 
             questionById  : '',
@@ -82,6 +81,7 @@ class QuestionPage extends Component {
             }
         }
 
+        console.log('Fetching question data form the server') 
         this.setState({questionById})
         return this.props.getQuestion(id);
     };
@@ -93,24 +93,16 @@ class QuestionPage extends Component {
         console.log(error, info);
     }
     
-    getProps(){
-        //Collect all state data and props.
-        let props = {
-            isQuestionBox     : this.state.isQuestionBox,
-            pageName          : this.state.pageName,
-            questionById      : this.state.questionById
-        };
-
-        return Object.assign(props, this.props );  
-     
+    getProps() {
+        return {...this.props, ...this.state};
     };
 
     render() {
         let props = this.getProps();
-        var questionById = props.questionById;
-        var {question} = props.entities;
-        question = question[questionById]
-        //console.log(question)
+        let { questionById, entities} = props;
+        let { question } = entities && entities;
+        question = question && question[questionById]
+        console.log(props, questionById, question)
                  
         return (
 
@@ -167,7 +159,7 @@ export const Questions = props => {
 
    let questionProps = { question};
    //console.log(newAnswers)
-   questionProps = Object.assign(questionProps, props); 
+   questionProps = {...props, ...questionProps}; 
 
    
    return (

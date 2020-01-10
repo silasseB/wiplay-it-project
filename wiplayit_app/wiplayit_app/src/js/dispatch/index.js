@@ -153,19 +153,17 @@ export function getUserProfile(id, apiUrl) {
     const axiosInstance = new Axios(true);
     const instance = axiosInstance.axiosInstance();
 
-    if (!apiUrl) {
-        apiUrl    =   api.getProfileApi(id);
-    }
+    apiUrl    = !apiUrl && api.getProfileApi(id) || apiUrl;
+    
     let profileById = `userProfile${id}`;
-
-    console.log(apiUrl, id)
+    
 
     return dispatch => {
 
         dispatch(action.getUserProfilePending(profileById))
 	    instance.get(apiUrl)
         .then(response => {
-        	console.log(response.data.profile)
+        	//console.log(response.data.profile)
             dispatch(action.getUserProfileSuccess( profileById ,response.data));
         })
         .catch(error => {

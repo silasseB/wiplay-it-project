@@ -60,7 +60,7 @@ class AnswersBox extends Component {
       let questionAnswerList   = answers && answers[answerListById];
       let newAnswers   = answers && answers[newAnswerListById];
       //console.log(answers, answerListById) 
-      //console.log(newAnswers, newAnswerListById)
+      console.log(props, newAnswers, newAnswerListById)
          
         return (
             <div>

@@ -3,19 +3,8 @@ import  * as types  from '../../actions/types';
 
 
 const helper   = new Helper();
-const CreateNewEntities = (stateEntintie, action)=>{
-        let {byId, payload} = action;
 
-        Object.defineProperty(
-            stateEntintie, 
-            byId,
-            { value : payload,
-              writable     : true,
-              configurable : true,
-              enumerable   : true,
-            }
-        );
-};
+
 
 const InitialState = () => {
   
@@ -52,481 +41,351 @@ const InitialState = () => {
 
 export function entities(state=InitialState(), action) {
 
-    
-    let updateStateEntyties = (stateEntintie, params )=>{
-
-          if (!state[params.byId]) {
-                CreateNewEntities(
-                       stateEntintie,
-                       {byId : params.byId, payload : params.payload}
-                    ) 
-            
-            }else{
-                Object.assign(stateEntintie[modalType], params.payload) ;  
-            }
-
-    };
-
-
-    let { modalType, payload, byId, type } = action;
-
     var currentTimeStamp = new Date();
-    if ( payload) {
-        payload['timeStamp'] = currentTimeStamp.getTime();
-
-
+    if ( action.payload) {
+        action.payload['timeStamp'] = currentTimeStamp.getTime();
     }
 
-    switch (type){
 
-        case 'MODAL_ROUTER':
-            updateStateEntyties(state.modal, {byId : modalType, payload} )
+    const CreateNewEntities = (stateEntintie, action)=>{
+        let {byId, payload} = action;
+        
+       return  Object.defineProperty(
+            stateEntintie, 
+            byId,
+            { value : payload,
+              writable     : true,
+              configurable : true,
+              enumerable   : true,
+            }
+        );
+        //console.log(stateEntintie, action)
+   };
+    
 
-            return state;
-
-
-        case "SUBMIT_PENDING":
-            updateStateEntyties(state.modal, {byId : modalType, payload} )
-            return state;
-
-        case "SUBMIT_SUCESS":
-            updateStateEntyties(state.modal, {byId : modalType, payload} )
-            return state;
-
-        case "SUBMIT_ERROR":
-            updateStateEntyties(state.modal, {byId : modalType, payload} )
-            return state;
+    const updateStateEntyties = (stateEntintieKey,  params )=>{
+            let {byId, payload} = params
+            let fakeState = state;
+            let stateEntintie = fakeState[stateEntintieKey]
+            let newState = {};
             
 
-           return state;
+            if (!stateEntintie[byId]) {
+                stateEntintie = CreateNewEntities(stateEntintie, {byId, payload});
+                                    
+            }else{
+                stateEntintie[byId]        = {...stateEntintie[byId], ...payload};
+            }
+
+            newState[stateEntintieKey] =  stateEntintie
+            fakeState                  = {...fakeState, ...newState};
+
+            //console.log(newState, fakeState)
+            
+            return fakeState;
+    };
+   
+    let newStateEntintie;
+    let {byId, payload} = action;
+
+    switch (action.type){
+
+        case 'MODAL_ROUTER':
+        case "MODAL_SUBMIT_PENDING":
+        case "MODAL_SUBMIT_SUCESS":
+        case "MODAL_SUBMIT_ERROR":
+            return updateStateEntyties('modal', action);
+
+            
     
         case types.USER_AUTHENTICATION.PENDING :
-            Object.assign(state.userAuth, action.payload)
-            console.log(state.userAuth, action)
-            return state; 
-
         case types.USER_AUTHENTICATION.SUCCESS:
-            Object.assign(state.userAuth, action.payload);
-            console.log(state, action.payload)
-            return state;              
-
         case types.USER_AUTHENTICATION.ERROR:
-            Object.assign(state.userAuth, action.payload)
-            console.log(state)
-            return state;
-          
-
+            return {...state, userAuth :action.payload}
       
 
         case types.GET_CURRENT_USER.SUCCESS:
-            Object.assign(state.currentUser, action.payload)
-            return state;   
-                  
-
         case types.GET_CURRENT_USER.ERROR:
-            Object.assign(state.currentUser, action.payload)
-            return state;    
-
         case types.GET_CURRENT_USER.PENDING:
-            Object.assign(state.currentUser, action.payload)
-            return state;    
+            return {...state, currentUser :action.payload}
+          
 
-
-        case types.GET_USER_PROFILE.PENDING:
-            updateStateEntyties(state.userProfile, {byId , payload} )
-
-            return state;
-
-
-        case types.GET_USER_PROFILE.SUCCESS:
-            console.log(action, state)
-            updateStateEntyties(state.userProfile, {byId , payload} )
-
-            return state;
-
-        case types.GET_USER_PROFILE.ERROR:
-            updateStateEntyties(state.userProfile, {byId , payload} )
-            return state;
               
+       
+        case types.GET_USER_PROFILE.PENDING: 
+        case types.GET_USER_PROFILE.SUCCESS:
+        case types.GET_USER_PROFILE.ERROR:
+        case types.UPDATE_USER_PROFILE.PENDING:
+        case types.UPDATE_USER_PROFILE.ERROR:
+            return updateStateEntyties('userProfile', action);
+            
+            
 
-        case types.GET_USER_LIST.PENDING:
-            //console.log(state, action)
-            updateStateEntyties(state.users, {byId , payload} )
-            return state;
+        case types.UPDATE_USER_PROFILE.SUCCESS:
+            
+            let profileToUpdate =state.userProfile[action.byId];
+            let updatedUserProfile = action.payload.user;
+            profileToUpdate = profileToUpdate.user;
+            let user = Object.assign(profileToUpdate, updatedUserProfile)
+            action.payload.user = user;
+
+            return updateStateEntyties('userProfile', action);  
+
 
         case types.GET_USER_LIST.SUCCESS:
-             updateStateEntyties(state.users, {byId , payload} );
-            return state;
+        case types.GET_USER_LIST.PENDING:
+        case types.GET_USER_LIST.ERROR:
+        case types.UPDATE_USER_LIST.PENDING:
+        case types.UPDATE_USER_LIST.ERROR:
+            return updateStateEntyties('users', action);
 
-      case types.GET_USER_LIST.ERROR:
-          updateStateEntyties(state.users, {byId , payload} );
-         return state;
+            
 
 
-      case types.GET_INDEX.PENDING:
-         Object.assign(state.index, action.payload);
-         return state;       
 
+        case types.UPDATE_USER_LIST.SUCCESS:
+            let updatedUser     = action.payload && action.payload.user;
+            let source = {byId : action.byId};
+
+            if (state.users[action.byId]) {
+                let usersToUpdate = state.users[action.byId];
+                usersToUpdate     = usersToUpdate.userList
+                 
+                source['userList'] = helper.updateReducerListEntynties(usersToUpdate, updatedUser);
+
+            }
+                  
+            return updateStateEntyties('users', source);  
+
+      
+        
+        case types.GET_INDEX.PENDING:
         case types.GET_INDEX.SUCCESS:
-            //console.log(state, action)
-            Object.assign(state.index, action.payload);   
-            return state;    
-
         case types.GET_INDEX.ERROR:
-            Object.assign(state.index, action.payload);
-            return state;           
-
-
-        case types.GET_QUESTION_LIST.PENDING:
-            //console.log(state, action)
-            updateStateEntyties(state.questions, {byId , payload} )
-            return state;       
+            return {...state, index :action.payload}
+                       
 
         case types.GET_QUESTION_LIST.SUCCESS:
-            updateStateEntyties(state.userProfile, {byId , payload} )
-            return state;    
-
+        case types.GET_QUESTION_LIST.PENDING:
         case types.GET_QUESTION_LIST.ERROR:
-            updateStateEntyties(state.questions, {byId , payload} );
-            return state;            
+        case types.UPDATE_QUESTION.ERROR:
+        case types.UPDATE_QUESTION.PENDING:
+           
+            return updateStateEntyties('questions', action);
+           
        
 
 
-
+        case types.CREATE_QUESTION.PENDING:
+        case types.CREATE_QUESTION.SUCCESS:
+        case types.CREATE_QUESTION.ERROR:
         case types.GET_QUESTION.PENDING:
-            updateStateEntyties(state.question, {byId , payload} )
-            return state;      
-      
         case types.GET_QUESTION.SUCCESS:
-            updateStateEntyties(state.question, {byId , payload} );
-            return state; 
-
         case types.GET_QUESTION.ERROR:
-            updateStateEntyties(state.question, {byId , payload} )
-         return state;
+        case types.UPDATE_QUESTION.ERROR:
+        case types.UPDATE_QUESTION.PENDING:
+            return updateStateEntyties('question', action);
+
+            
+
+        case types.UPDATE_QUESTION.SUCCESS:
+            let updatedQuestion = action.payload && action.payload.question;
+            let updatedQuestionState ={byId, isUpdating:false};
+
+            if (state.question[action.byId]) {
+
+                let question = state.question[action.byId]
+                question     = question.question;
+                updatedQuestionState['question']   = {...question, ...updatedQuestion}
+              
+                return updateStateEntyties('question', updatedQuestionState);
+
+            }else if(state.questions[action.byId]){
+            
+                let questions = state.questions[action.byId];
+                let questionList = questions && questions.questionList || [];
+                updatedQuestionState['questionList'] = helper.updateReducerListEntynties(questionList, updatedQuestion);
+
+                return updateStateEntyties('questions', updatedQuestionState);
+
+            };
+            return state;
+        
+
+
 
 
         case types.GET_POST_LIST.PENDING:
-            updateStateEntyties(state.posts, {byId , payload} )
-            return state;       
-
         case types.GET_POST_LIST.SUCCESS:
-            updateStateEntyties(state.posts, {byId , payload} );   
-            return state;    
-
         case types.GET_POST_LIST.ERROR:
-            updateStateEntyties(state.posts, {byId , payload} );
-            return state;              
-
+        case types.UPDATE_POST.ERROR:
+        case types.UPDATE_POST.PENDING:
+            return updateStateEntyties('posts', action);
+            
+                
+         
 
         case types.GET_POST.PENDING:
-            updateStateEntyties(state.post, {byId , payload} )
-            return state;
-
         case types.GET_POST.SUCCESS:
-            updateStateEntyties(state.post, {byId , payload} )
-            return state;
-
         case types.GET_POST.ERROR:
-            updateStateEntyties(state.post, {byId , payload} )
-            return state; 
+        case types.UPDATE_POST.ERROR:
+        case types.UPDATE_POST.PENDING:
+            return updateStateEntyties('post', action);
+        
+        
+        
+
+        case types.UPDATE_POST.SUCCESS:
+            let updatedPost = payload.post;
+            let updatedPostState ={byId, isUpdating:false};
+
+            if (state.post[byId]) {
+                let post = state.post[byId]
+                post     = post.post;
+           
+                updatedQuestionState['post']   = {...post, ...updatedPost}
+              
+                return updateStateEntyties('post', updatedQuestionState);
+
+            }else if(state.posts[byId]){
+            
+                var posts = state.posts[byId];
+                let postList = posts && posts.postList || [];
+                updatedPostState['postList'] = helper.updateReducerListEntynties(postList, updatedPost);
+                return updateStateEntyties('posts', updatedPostState);
+
+            };
+            return state;                 
 
 
-        case types.GET_ANSWER_LIST.PENDING:
-           updateStateEntyties(state.answers, {byId , payload} )
-           return state;
-
-
-        case types.GET_ANSWER_LIST.SUCCESS:
-            updateStateEntyties(state.answers, {byId , payload} )
-            return state; 
 
         case types.GET_ANSWER_LIST.ERROR:
-            updateStateEntyties(state.answers, {byId , payload} ) 
-            return state;     
-
-        case 'GET_COMMENT_LINK_DATA':
-            updateStateEntyties(state.comments, {byId , payload} )
-            return state; 
-
-        case 'GET_REPLY_LINK_DATA':
-        case 'GET_REPLY_CHILD_LINK_DATA':
-           updateStateEntyties(state.replies, {byId , payload} )
-           return state; 
-
-     
-        case types.CREATE_QUESTION.PENDING:
-            updateStateEntyties(state.question, {byId , payload} );
-            return state;
-
-        case types.CREATE_QUESTION.SUCCESS:
-            updateStateEntyties(state.question, {byId , payload} );
-            return state;
-      
-        case types.CREATE_QUESTION.ERROR:
-           updateStateEntyties(state.question, {byId , payload} );;
-           return state;  
-
-        case 'VIEW_NEW_QUESTION':
-            Object.assign(state.question[action.byId], action.payload);
-            return state;  
-
+        case types.GET_ANSWER_LIST.PENDING:
+        case types.GET_ANSWER_LIST.SUCCESS:
         case types.CREATE_ANSWER.PENDING:
-            updateStateEntyties(state.answers, {byId , payload} );
-            return state;
+        case types.CREATE_ANSWER.ERROR:
+        case types.UPDATE_ANSWER.PENDING:
+        case types.UPDATE_ANSWER.ERROR:
+            return updateStateEntyties('answers', action);
+          
+            
+          
+
 
         case types.CREATE_ANSWER.SUCCESS:
+            let createdAnswerState = {isCreating : false}   
             let newAnswer           =  payload.answer;
             let newAnswerList       = [newAnswer];
             let currentNewAnswers = state.answers[byId];
             newAnswerList = currentNewAnswers && currentNewAnswers.unshift(newAnswer)
                                                   || newAnswerList;
 
-            Array.isArray(newAnswerList) && updateStateEntyties(
-                                                state.answers,
-                                                { byId, payload:{answerList: newAnswerList} }
-                                            );  
-            return state;
-      
-        case types.CREATE_ANSWER.ERROR:
-            updateStateEntyties(state.answers, {byId , payload} );  
-            return state;     
-      
+            createdAnswerState['answerList'] = Array.isArray(newAnswerList) && newAnswerList;
+            return  updateStateEntyties('answers', {byId, payload:createdAnswerState})|| state;  
+            
+
+
+        case types.UPDATE_ANSWER.SUCCESS:
+            let updatedAnswerState = {byId, isUpdating : false} 
+            let updatedAnswer = action.payload.answer;
+            var answers = state.answers[action.byId];
+            answers = answers.answerList;
+
+            updatedAnswerState['answerList'] = helper.updateReducerListEntynties(answers, updatedAnswer);
+         
+            return  updateStateEntyties('answers',  {byId, payload : updatedAnswerState})|| state;
+
+
         case types.CREATE_COMMENT.PENDING:
-            updateStateEntyties(state.comments, {byId , payload} );   
-            return state;
+        case types.CREATE_COMMENT.ERROR:
+        case types.GET_COMMENT_LIST.PENDING:
+        case types.GET_COMMENT_LIST.SUCCESS:
+        case types.GET_COMMENT_LIST.ERROR: 
+        case types.UPDATE_COMMENT.PENDING:
+        case types.UPDATE_COMMENT.ERROR:
+        case 'GET_COMMENT_LINK_DATA':
+            return updateStateEntyties('comments', action);
+
+           
 
 
         case types.CREATE_COMMENT.SUCCESS:
-       
-        let newComment      = action.payload.comment;
-        let newComments     = [newComment];  
+            let createdCommentsState = {isCreating : false }; 
+            let newComment           = payload.comment;
+            let newComments          = [newComment];  
 
-        let currentNewComments = state.comments[action.byId];
-        currentNewComments = currentNewComments.commentList;
+            let currentNewComments = state.comments[byId];
+            currentNewComments = currentNewComments.commentList;
 
-        newComments = currentNewComments && currentNewComments.unshift(newComment)
+            newComments = currentNewComments && currentNewComments.unshift(newComment)
                                                   || newComments;
-        
-        Array.isArray(newComments) &&   updateStateEntyties(
-                                            state.comments,
-                                            { byId, payload:{answerList: newAnswerList} }
-                                        );
-          
-        return state;
+         
+            
+            createdCommentsState['commentList'] = Array.isArray(newComments) && newComments;
+            return updateStateEntyties('comments', {byId, payload : createdCommentsState})|| state; 
 
-      
-        case types.GET_COMMENT_LIST.PENDING:
-        case types.CREATE_COMMENT.ERROR:
-        case types.GET_COMMENT_LIST.SUCCESS:
-            updateStateEntyties(state.comments, {byId , payload} );  
-            return state; 
+
+
+        case types.UPDATE_COMMENT.SUCCESS:
+            let updatedCommentsState = {byId, isUpdating : false }; 
+
+            let updatedComment = payload.comment;
+            let comments = state.comments[byId];
+            comments = comments.commentList
+            updatedCommentsState['commentList'] = helper.updateReducerListEntynties(comments, updatedComment);
+         
+            return updateStateEntyties('comments', {byId, payload : updatedCommentsState})|| state; 
       
 
-        case types.GET_REPLY_LIST.PENDING:
+
+        case  types.GET_REPLY_LIST.PENDING:
         case  types.GET_REPLY_CHILD_LIST.PENDING:
         case  types.GET_REPLY_CHILD_LIST.SUCCESS:
         case  types.GET_REPLY_CHILD_LIST.ERROR:
-            updateStateEntyties(state.replies, {byId , payload} );  
-            return state;    
+        case  types.CREATE_REPLY.PENDING:
+        case  types.CREATE_REPLY.ERROR:
+        case  types.UPDATE_REPLY.PENDING:
+        case  types.UPDATE_REPLY.ERROR:
+        case  'GET_REPLY_LINK_DATA':
+        case  'GET_REPLY_CHILD_LINK_DATA':
+            return updateStateEntyties('replies', action);
 
-        
-              
-        case types.CREATE_REPLY.PENDING:
-        case types.CREATE_REPLY.ERROR:
-            updateStateEntyties(state.replies, {byId , payload} );   
-            return state;
+           
+
 
         case types.CREATE_REPLY.SUCCESS:
-            let newReply = action.payload.reply;
-            let newReplies     = [newReply];
-            let currentNewReplies = state.replies[action.byId];
-            currentNewReplies     = currentNewReplies.replyList;
+            let createdRepliesState = {byId, isCreating : false }; 
+            let newReply            = payload.reply;
+            let newReplies          = [newReply];
+            let currentNewReplies   = state.replies[action.byId];
+            currentNewReplies       = currentNewReplies.replyList;
 
             newReplies = currentNewReplies && currentNewReplies.unshift(newReply)
                                                   || newReplies;  
-            Array.isArray(newReplies)  &&   updateStateEntyties(
-                                                    state.replies,
-                                                    { byId , payload : {replyList:newReplies}}
-                                            );           
-            return state;
+                       
+            createdRepliesState['replyList'] = Array.isArray(newReplies) && newReplies;
+            return updateStateEntyties('replies', {byId, payload : createdRepliesState})|| state;    
+
       
-          
-      
-        case types.UPDATE_USER_PROFILE.PENDING:
-        case types.UPDATE_USER_PROFILE.ERROR:
-            updateStateEntyties(state.userProfile, {byId , payload} );
-            return state;
-
-        case types.UPDATE_USER_PROFILE.SUCCESS:
-            let profileToUpdate    = state.userProfile[byId];
-            let updatedUserProfile = action.payload.user;
-            profileToUpdate = profileToUpdate.user;
-
-            let user = {...profileToUpdate, ...updatedUserProfile}
-            action.payload.user = user;
-
-            updateStateEntyties(state.userProfile, action );
-            return state;  
-
-          
-
-
-        case types.UPDATE_USER_LIST.PENDING:
-            updateStateEntyties(state.users, action );
-            return state;
-
-        case types.UPDATE_USER_LIST.SUCCESS:
-             var  updatedUser     = action.payload && action.payload.user;
-
-            if (state.users[action.byId]) {
-               var usersToUpdate = state.users[action.byId];
-               usersToUpdate = usersToUpdate.userList
-               console.log(usersToUpdate)
-               helper.updateReducerListEntynties(usersToUpdate, updatedUser);
-            }
-                  
-            return state;  
-
-        case types.UPDATE_USER_LIST.ERROR:
-            Object.assign(state.users[action.byId], {error: action.payload});
-            return state;  
-      
-      
-       case types.UPDATE_POST.PENDING:
-       case types.UPDATE_POST.ERROR:
-
-            !state.post[byId]  && updateStateEntyties(state.post, action );
-            !state.posts[byId] && updateStateEntyties(state.posts, action );
-            return state;
-
-        case types.UPDATE_POST.SUCCESS:
-   
-        if (state.post[action.byId]) {
-            let post = state.post[action.byId]
-            post     = post.post;
-           
-            action = {
-                isUpdating : false,
-                post   : Object.assign(post, action.payload.post),
-            
-            } 
         
-           updateStateEntyties(state.post, action) 
-
-        }else if(state.posts[action.byId]){
-            let post = payload.post;
-            
-            var posts = state.posts[action.byId];
-            let postList = posts && posts.postList;
-            
-            helper.updateReducerListEntynties(postList, post);
-
-        };
-        return state;                  
       
 
-        case types.UPDATE_QUESTION.PENDING:
-        case types.UPDATE_QUESTION.ERROR:
-
-            !state.question[byId] &&  updateStateEntyties(state.question, action );
-            !state.questions[byId] && updateStateEntyties(state.questions, action );
-            return state;
-
-    case types.UPDATE_QUESTION.SUCCESS:
-        let updatedQuestion = action.payload && action.payload.question
-
-        if (state.question[action.byId]) {
-            let question = state.question[action.byId]
-            question     = question.question;
-           
-            let updatedQuestionState = {
-                isUpdating : false,
-                question   : Object.assign(question, updatedQuestion),
-            
-            } 
+        case types.UPDATE_REPLY.SUCCESS:
+            let updatedRepliesState = { isUpdating : false };
+            let repliesToUpdate     = state.replies[action.byId]; 
+            let updatedReply        = payload.reply;
         
-           Object.assign(state.question[action.byId], updatedQuestionState);
-
-        }else if(state.questions[action.byId]){
-            
-            var questions = state.questions[action.byId];
-            let questionList = questions && questions.questionList;
-            helper.updateReducerListEntynties(questionList, updatedQuestion);
-
-        };
-        return state;                  
-      
-
-    case types.UPDATE_QUESTION.ERROR:
-        let { error } = action.payload
-
-        if (state.question[action.byId]) {
-           Object.assign(state.question[action.byId], action.payload);
-
-        }else if(state.questions[action.byId]){
-            Object.assign(state.questions[action.byId], action.payload);
-        };
-
-        return state;   
-
-
-      case types.UPDATE_ANSWER.PENDING:
-         Object.assign(state.answers[action.byId], action.payload);
-         return state;
-
-      case types.UPDATE_ANSWER.SUCCESS:
-         let updatedAnswer = action.payload.answer;
-         var answers = state.answers[action.byId];
-         helper.updateReducerListEntynties(answers.answerList, updatedAnswer);
+           
+            updatedRepliesState['commentList'] = helper.updateReducerListEntynties(
+                                                                repliesToUpdate.replyList, 
+                                                                updatedReply
+                                                            );
          
-         return state;                  
-      
+            return updateStateEntyties('replies', {byId, payload : updatedRepliesState})|| state
+            
+            
 
-      case types.UPDATE_ANSWER.ERROR:
-         Object.assign(state.answers[action.byId], action.payload);
-         return state;     
-                      
-      
-      case types.UPDATE_COMMENT.PENDING:
-          console.log(state,action)
-          Object.assign(state.comments[action.byId], action.payload );
-          return state
-
-      case types.UPDATE_COMMENT.SUCCESS:
-
-         let updatedComment = action.payload.comment;
-         var comments = state.comments[action.byId];
-         comments = comments.commentList
-         helper.updateReducerListEntynties(comments, updatedComment);
-         console.log(action, updatedComment, comments)
-         return state
-      
-      case types.UPDATE_COMMENT.ERROR:
-         Object.assign(state.comments[action.byId], action.payload );
-         return state       
-      
-
-
-      case types.UPDATE_REPLY.PENDING:
-         Object.assign(state.replies[action.byId], action.payload );
-         return state
-
-      case types.UPDATE_REPLY.SUCCESS:
-         var repliesToUpdate = state.replies[action.byId]; 
-         let updatedReply = action.payload.reply;
-        
-         helper.updateReducerListEntynties(repliesToUpdate.replyList, updatedReply);
-         return state
-    
-      case types.UPDATE_REPLY.ERROR:
-         Object.assign(state.replies[action.byId], action.payload );
-         return state
-       
-
-      default:
-         return state; 
-   }
+        default:
+            return state; 
+    }
 }
-
-   

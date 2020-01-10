@@ -7,16 +7,19 @@ export default class Helper {
 
    
     updateReducerListEntynties(listItems, obj) {
-        console.log(obj)
-        listItems.map(( item, index) => {
-            if (item.id  === obj.id) {
-                Object.assign(listItems[index], obj)
-            }
-            return listItems;
-        });
+        console.log(listItems,obj)
+        if (Array.isArray(listItems) && obj ) {
 
-        return listItems;
-    }
+            listItems.map(( item, index) => {
+                if ( item.id  === obj.id) {
+                    Object.assign(listItems[index], obj)
+                }
+                return listItems;
+            });
+
+            return listItems;
+        }
+    };
       
    createFormData(data ) {
       var formData    =   new FormData();

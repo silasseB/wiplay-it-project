@@ -32,7 +32,6 @@ class UserProfileContainer extends Component {
             profileById        : '',
         } 
 
-        this.redirectToEdit =  this.redirectToEdit.bind(this);
     };
 
     
@@ -54,10 +53,10 @@ class UserProfileContainer extends Component {
                 userProfile = userProfile.user;
                 let answersById  =  `usersAnswers${userProfile.id}`;
                 answers          = answers[answersById];
-                console.log(userProfile)
+                //console.log(userProfile)
 
                 if (!answers) {
-                    console.log(userProfile, answers)
+                    //console.log(userProfile, answers)
 
                     this._dispatchUserProfileItems(userProfile);
                 }
@@ -90,7 +89,7 @@ class UserProfileContainer extends Component {
                 var curentTimeStamp = new Date();
 
                 let timeStamp = userProfile.timeStamp;
-                console.log(timeStamp)
+                //console.log(timeStamp)
 
                 let msDiff   = curentTimeStamp.getTime() - timeStamp
                 let secDiff  = msDiff / 1000
@@ -191,18 +190,12 @@ class UserProfileContainer extends Component {
                 return;  
 
             default:
-                console.log(data, items)
+                //console.log(data, items)
                 return;  
         };
     };
 
-
-    redirectToEdit(params){
-
-        ModalManager.close();
-        console.log(this.props)
-        history.push(params.pathToEditProfile)
-    };    
+       
 
     getProps(){
 
@@ -211,11 +204,10 @@ class UserProfileContainer extends Component {
             userItemsComponent : this.state.userItemsComponent,
             showUserItems      : this.showUserItems.bind(this),
             isProfileBox       : this.state.isProfileBox, 
-            redirectToEdit     : this.redirectToEdit,
             profileById        : this.state.profileById,
         };
 
-        return Object.assign(props, this.props);
+        return {...this.props, ...props};
     };
   
 

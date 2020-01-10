@@ -9,7 +9,7 @@ import { ModalManager}   from  "../containers/modal/modal_container";
 
 
 export const EditorLink = props => {
-    console.log(props)
+    //console.log(props)
 	
     let {modalProps} = props ;
     let { background, modalPath } =  props;

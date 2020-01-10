@@ -81,13 +81,14 @@ export const updateActionError = (params) => ({
 });
 
 
-export const ModalSubmitPending = () => ({
-  type: "SUBMIT_PENDING",
-  payload: {
-      submitting     : true,
-      data           : null,
-      successMessage : null,
-  }
+export const ModalSubmitPending = (byId) => ({
+    type: "MODAL_SUBMIT_PENDING",
+    byId,
+    payload: {
+        submitting     : true,
+        data           : null,
+        successMessage : null,
+    }
 });
 
 
@@ -98,8 +99,8 @@ export const ModalSubmitSuccess = (params) => {
     let successMessage = `${objName} successefully ${action}`
 
     return{
-        type: "SUBMIT_SUCESS",
-        modalType,
+        type : "MODAL_SUBMIT_SUCESS",
+        byId : modalType,
         payload : {
             ...params,
             submitting     : false,
@@ -115,7 +116,8 @@ export const ModalSubmitSuccess = (params) => {
 export const ModalSubmitError = (params) => {
 
     return{
-        type    : "SUBMIT_ERROR",
+        type    : "MODAL_SUBMIT_ERROR",
+        byId    : params.modalType, 
         payload : {
             error   : params.error,
             submitting : false,
@@ -814,8 +816,8 @@ export const showModal = (params) =>{
     let {background, modalType, boolValue} = params; 
        
     return {
-      type: 'MODAL_ROUTER',
-      modalType,
+      type : 'MODAL_ROUTER',
+      byId : modalType,
       payload : {
         modalIsOpen  : boolValue,
         background ,

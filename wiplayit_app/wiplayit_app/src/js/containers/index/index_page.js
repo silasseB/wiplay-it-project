@@ -58,14 +58,7 @@ class IndexBox extends Component {
                questions,
                posts, 
                answers }   = entities && entities;
-            
-            var { questionListById,
-              answerListById, 
-              postListById,
-              userListById,
-            } = this.state;
-
-            
+                     
 
             if (index && index.isSuccess) {
                 index.isSuccess = false;
@@ -215,25 +208,27 @@ export default  withHigherOrderIndexBox(IndexBox);
 
 
 export const IndexComponent = props => {
-    let location = useLocation();
-      
-   return(
-     <div className="home-page-contents" id="home-page-contents">
-        <Answers {...props}/>
-        <Posts {...props}/>
-        <Questions {...props}/>
 
-     </div>
-   )
+    //console.log(props)
+      
+    return(
+        <div className="home-page-contents" id="home-page-contents">
+           <Answers {...props}/>
+           <Posts {...props}/>
+           <Questions {...props}/>
+
+        </div>
+    )
 
 }
 
 
 export const Questions = props => {
    
-    var { questionListById, entities } = props;
+    let { questionListById, entities } = props;
 
-    var questions = entities.questions[questionListById];
+    let questions = entities.questions[questionListById];
+    //console.log(questions)
    
   
     return (
@@ -324,7 +319,7 @@ export const Posts = props => {
 export const Answers = props => {
     var { answerListById, entities } = props;
     var answers   = entities.answers[answerListById]; 
-         
+    //console.log(answers)     
     return(
         <div>
 
