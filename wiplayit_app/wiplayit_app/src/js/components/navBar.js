@@ -8,25 +8,35 @@ import {EditorLink } from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
 
 
-let editorLinkStyles = {
+let editorLinkMobileStyles = {
     background : '#A33F0B !important',
     color      : '#fefefe', 
         
 }
 
+let editorLinkDesktopStyles = {
+       background : '#A33F0B',
+       color      : '#fefefe',
+       width      : '80px',
+       height     : '30px',
+       margin     : '15px 7px 0',
+
+}
 
 let createPostProps = {
         objName     : 'Post',
         linkName    : 'Post',
         isPost      : true,
-        editorLinkStyles,
+        editorLinkDesktopStyles,
+        editorLinkMobileStyles,
     };
 
 let createQuestionProps = {
         objName   : 'Question',
         isPost    : true,
         linkName  : "Ask",
-        editorLinkStyles,
+        editorLinkMobileStyles,
+        editorLinkDesktopStyles,
     };
 
 
@@ -136,8 +146,8 @@ export const NavBarSmallScreen = props => {
 
 
 export const NavBarBigScreen = props => {
-    var {currentUser}    = props;
-    let path_to_profile = `/`;
+    var {currentUser}       = props;
+    let path_to_profile     = `/`;
     var userProfile = null;
     
     var state   = { currentUser, userProfile : currentUser};
@@ -153,65 +163,62 @@ export const NavBarBigScreen = props => {
         
 	return(
 			
-        <nav className="navigation navbar-expand-lg navbar-light" id="navigation">
-        <div className="navigation-boX">
-          <div className="navigation-menu">
-            <div className="iterm-box">
-            
-            <Link className="navigation-item btn-sm" to="/">Home</Link>
+        <nav className="navigation fixed-top" id="navigation">
+            <div className="navigation-box">
+                <div className="navigation-menu">
+                    <div className="logo-box">
+                        <Link className="logo" to="/">Wiplayit</Link>
+                    </div>
 
-             <Link className="navigation-item btn-sm" to={{pathname:"/users/list/", state:{currentUser}}}>
-                  Notifications
-             </Link>
+                    <div className="nav-menu">
+                    
+                    <ul  className="navigation-item">
+                        <li>
+                            <Link className="items" 
+                                to={ {pathname:"/posts/", state } }>
+                                Posts
+                            </Link>
+                        </li>
+                    </ul>
 
-             <Link className="navigation-item btn-sm" 
-                          to={ {pathname: path_to_profile, state:{ currentUser, userProfile:currentUser } }}>
-                 Profile
-             </Link>
-
-             <Link  className="navigation-item btn-sm" to={ {pathname:"/posts/", state } }>
-               Posts
-            </Link>
-
-             <Link className="navigation-item btn-sm" to="/">Questions</Link>
-             
-          </div>
-          <Link className="logo" to="/">LATIRO</Link>
-             
-              <div className="img-box img-container-sm dropdown-toggl"
-               id="dropdownMenuButton"  data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
-                { userProfile && !userProfile.profile_picture?
-                     <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/> 
-                      :
-                     <img alt="" src={userProfile.profile_picture} className="profile-photo"/>
-                }
-
-              </div>
-       <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <Link 
-             to={ {pathname: path_to_profile, state }} className="dropdown-item">
-            Profile
-        </Link>
-
-         <button onClick={props.logout} className="dropdown-item" >Logout</button>
-      </div>
-
-       
-    <div className="btn-box" >
-      <EditorLink {...createQuestionProps}/>
-                 <strong>Or</strong>
-      <EditorLink  {...createPostProps}/>
-       
-    </div>
+                    <ul  className="navigation-item">
+                        <li>
+                            <Link className="items"  to="/questions/">Questions</Link>
+                        </li>
+                    </ul>
+                    
+                    <ul  className="navigation-item">
+                        <li>
+                            <Link className="items"
+                                to={{pathname:"/users/",state:{ isUsersList : true }}}> 
+                                Notifications
+                            </Link>
+                        </li>
+                    </ul> 
+                    </div>            
+                
+                           
+                    <NavBarDropDown {...props}/>
+                    
+                
+               
+              
+                    <div className="post-question-btn-box">
+                        <div className="create-question-btn-box">
+                            <EditorLink {...createQuestionProps}/>
+                        </div>
     
-       
-   </div>
-  </div>
-  </nav>
-
-
-  )
-}
+                        <p>Or</p>
+                        <div className="create-post-btn-box">
+                            <EditorLink {...createPostProps}/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </nav>
+    );
+};
 
 
 

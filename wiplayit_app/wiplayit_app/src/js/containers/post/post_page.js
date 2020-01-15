@@ -107,7 +107,7 @@ class  PostPage extends Component  {
                <PartalNavigationBar {...props}/>
                <NavigationBarBigScreen {...props} />
                { post?
-                    <div>
+                    <div  className="app-box-container">
                     { post.isLoading?
                         <div className="page-spin-loder-box">
                            <AjaxLoader/>

@@ -73,7 +73,7 @@ class  QuestionListPage extends Component  {
             <PartalNavigationBar {...props}/>
                <NavigationBarBigScreen {...props} /> 
                {questions?
-                  <div>
+                  <div  className="app-box-container">
                      { questions.isLoading? 
                         <div  className="page-spin-loder-box">
                            <AjaxLoader/>

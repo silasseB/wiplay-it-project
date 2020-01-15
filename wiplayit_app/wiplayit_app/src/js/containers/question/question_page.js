@@ -112,7 +112,7 @@ class QuestionPage extends Component {
 
                 { question?
 
-                    <div>
+                    <div className="app-box-container">
                         { question.isLoading?
                             <div className="page-spin-loader-box">
                                 <AjaxLoader/>

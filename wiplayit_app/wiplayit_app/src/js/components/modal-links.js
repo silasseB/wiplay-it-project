@@ -37,9 +37,17 @@ export const EditorLink = props => {
         return `${Edit}${objName}`;
     };
 
+    let getEditorStyles = ()=>{
+            if (window.matchMedia("(min-width: 900px)").matches) {
+               return props.editorLinkDesktopStyles || {};
+            } else {
+              return props.editorLinkMobileStyles || {};
+            } 
+        };
+
     
-    linkName = linkName?linkName:buildLinkName();
-    let styles = editorProps.editorLinkStyles || {};
+    linkName   = linkName?linkName:buildLinkName();
+    let styles = getEditorStyles();
 
     let madalParams = {
             boolValue   : true,

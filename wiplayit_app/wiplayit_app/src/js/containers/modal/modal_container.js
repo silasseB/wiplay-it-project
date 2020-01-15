@@ -96,9 +96,9 @@ class ModalBox extends Component{
       const transitionTimeMS = this.getTransitionDuration();
       setTimeout(() => this.setState({open : true}),0);
       onClose = (callback) => {
-         this.setState({open: false}, () => {
-           this.closeTimer = setTimeout(callback, transitionTimeMS);
-         });
+          this.setState({open: false}, () => {
+             this.closeTimer = setTimeout(callback, transitionTimeMS);
+          });
       };
     }
 

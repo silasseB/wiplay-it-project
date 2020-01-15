@@ -39,17 +39,17 @@ export function Modal(props) {
             switch(type){
          
                 case 'editor':
-                    editorProps['background'] = background;
+                    editorProps['background']    = background;
                     editorProps['modalContents'] =  <AppEditor {...editorProps}/>;
                     return ModalOpener.editorModal(editorProps);
 
                 case 'optionsMenu':
-                   optionsMenuProps['background'] = background;
-                   optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
+                    optionsMenuProps['background']    = background;
+                    optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
                    return ModalOpener.optionsMenuModal(optionsMenuProps);
 
                 case 'dropImage':
-                    dropImageProps['background'] = background;
+                    dropImageProps['background']    = background;
                     dropImageProps['modalContents'] = <DropImage {...dropImageProps}/>
                     return ModalOpener.dropImageModal(dropImageProps);
 
@@ -75,8 +75,8 @@ export const ModalOpener = {
 
     optionsMenuModal(contents) {
         return ModalManager.open(
-              <OptionModal {...contents} onRequestClose={() => true}/>
-            );
+            <OptionModal {...contents} onRequestClose={() => true}/>
+        );
     },
 
 
@@ -124,11 +124,11 @@ const option_modal_styles = {
 export const OptionModal = props => {
     
     let modal_props = {
-      modal_styles   : option_modal_styles,
-      effect         : Effects.SlideFromBottom,
-      modalContents  : props.modalContents,
-      background     : props.background,
-      modalType      : 'optionsMenu',
+        modalStyles    : option_modal_styles,
+        effect         : Effects.SlideFromBottom,
+        modalContents  : props.modalContents,
+        background     : props.background,
+        modalType      : 'optionsMenu',
     };
 
     modal_props =Object.assign(modal_props, props)
@@ -144,7 +144,7 @@ export const OptionModal = props => {
 
 
 
-export const edit_modal_styles = {
+export const mobileModalStyles = {
   
   content: {
     width                   : '100%',
@@ -164,11 +164,41 @@ export const edit_modal_styles = {
    }
 };
 
+let desktopModalStyles  = {
+    content: {
+       position                : 'relative',
+        margin                  : '15% auto',
+        width                   : '60%',
+        background              : '#F6F6F6',
+        overflow                : 'auto',
+        borderRadius            : '4px',
+        outline                 : 'none',
+        boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
+        height                  : '200px',
+    }
+}; 
+
+let getEditorStyles = ()=>{
+        if (window.matchMedia("(min-width: 900px)").matches) {
+            return desktopModalStyles;
+        } else {
+            return mobileModalStyles;
+        } 
+    };
+
+let getModalEffect =()=> {
+        if (window.matchMedia("(min-width: 900px)").matches) {
+            return Effects.ScaleUp;
+        } else {
+            return Effects.SlideFromBottom;
+        } 
+
+};
 
 export const EditModal = props => {
     let modal_props = {
-       modal_styles   : edit_modal_styles,
-       effect         : Effects.SlideFromBottom ,
+       modalStyles    : getEditorStyles(),
+       effect         : getModalEffect() ,
        modalContents  : props.modalContents,
        background     : props.background,
        modalType      : 'editor', 
@@ -207,7 +237,7 @@ const image_modal_styles = {
 
 export const DropImageModal = props => {
    let modal_props = {
-      modal_styles   : image_modal_styles,
+      modalStyles    : image_modal_styles,
       effect         : Effects.ScaleUp,
       modalContents  : props.modalContents,
       background     : props.background,
@@ -230,12 +260,19 @@ export const DropImageModal = props => {
 export function  ModalContainer(props)  {
    
    //Render modal with pass its contents
-    const { modalContents, modal_styles ,effect, onRequestClose, background } = props;
+    const {
+            modalContents,
+            modalStyles,
+            modalType,
+            effect, 
+            onRequestClose,
+            background } = props;
     
     return (
         <ModalBox
-            style={modal_styles}
+            style={modalStyles}
             background={background}
+            modalType={modalType}
             onRequestClose={onRequestClose}
             effect={effect}>
 

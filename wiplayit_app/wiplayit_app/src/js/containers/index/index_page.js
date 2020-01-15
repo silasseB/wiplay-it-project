@@ -99,7 +99,7 @@ class IndexBox extends Component {
 
             console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                               
-            if (menDiff <= 3) {
+            if (menDiff <= 10) {
 
                 console.log('Index found from cachedEntyties')
                 //store.dispatch(action.getIndexPending());
@@ -112,8 +112,8 @@ class IndexBox extends Component {
         
         if (Object.keys(index).length) {
             console.log(index)
-            this.updateIndexEntities(index);
-            this.isMounted &&  this.forceUpdate();
+            //this.updateIndexEntities(index);
+            //this.isMounted &&  this.forceUpdate();
 
             return;
         }
@@ -196,7 +196,7 @@ class IndexBox extends Component {
 
                 { index?
 
-                    <div>
+                    <div className="app-box-container">
                         {index && index.isLoading?
                             <div className="page-spin-loader-box">
                                 <AjaxLoader/>

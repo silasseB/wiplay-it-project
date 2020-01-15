@@ -226,7 +226,7 @@ class UserProfileContainer extends Component {
                <NavigationBarBigScreen {...props} />
 
                { userProfile?
-                    <div>
+                    <div  className="app-box-container"> 
                         {userProfile.isLoading?
                             <div className="page-spin-loder-box">
                                  <AjaxLoader/>

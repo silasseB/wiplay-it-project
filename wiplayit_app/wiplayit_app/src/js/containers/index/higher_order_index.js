@@ -283,9 +283,10 @@ export function withHigherOrderIndexBox(Component) {
                                               : {opacity:'2',};
             console.log(props)
             return (
-                <div>
+                <div className="app-container">
                     <fieldset style={ onModalStyles } 
                       disabled={ props.modalIsOpen } >
+                      <p>Home</p>
 
                         <Component {...props}/>
 
