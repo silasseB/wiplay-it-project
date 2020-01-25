@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, BrowserRouter  } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 
-import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import {EditorLink, OptionsModalLink, UsersModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
 import { UpVoteAnswerBtn, DownVoteAnswerBtn} from '../components/buttons';
 
@@ -28,30 +28,34 @@ const api      = new Api();
 
 
 export const AnswersComponent = props => {
-   //console.log(props)
-   var {
+    //console.log(props)
+    var {
         answer, 
         answerListById,
         newAnswerListById,
         isNewAnswers, 
         currentUser } = props;
    
-  let pathToUpvoters =  `/answer/${answer.id}/upvoters/`;
+    let pathToUpvoters =  `/answer/${answer.id}/upvoters/`;
 
-   let optionsBtnStyles = {
+    let optionsBtnStyles = {
          fontSize   : '8px',
          background : 'white',
          fontFamily : 'Mukta',
          fontWeight : 'bold',
          color      : '#4A4A4A',
          margin     : '0 0 2px'
-   };
+    };
   
 
-   let storedState = JSON.parse( answer.add_answer);
+    let storedState = JSON.parse( answer.add_answer);
    
-   const contentState = convertFromRaw(storedState);
-   const editorState = EditorState.createWithContent(contentState);
+    const contentState = convertFromRaw(storedState);
+    const editorState = EditorState.createWithContent(contentState);
+
+    let usersById =  answer && `answerUpVoters${answer.id}`;
+    let apiUrl    = answer && api.getAnswerUpVotersListApi(answer.id);
+    let linkName = answer.upvotes > 1 && `${answer.upvotes} Upvoters` || `${answer.upvotes} Upvoter`;
    
     let state = {
             answer,
@@ -60,7 +64,13 @@ export const AnswersComponent = props => {
 
 
    
-
+    let answerUpvotersProps = {
+            apiUrl,
+            byId      : usersById,
+            obj       : answer,
+            currentUser,
+            linkName,
+        };
 
     let editAnswerProps = {
         objName     : 'Answer',
@@ -83,12 +93,14 @@ export const AnswersComponent = props => {
     };
 
 
-    editAnswerProps = GetModalLinkProps.props(editAnswerProps)
-    editCommentProps = GetModalLinkProps.props(editCommentProps)
-   
+    editAnswerProps = GetModalLinkProps.props(editAnswerProps);
+    editCommentProps = GetModalLinkProps.props(editCommentProps);
+    
 
     let EditorModalLink = <EditorLink {...editCommentProps}/>; 
-    let MenuModalLink   = <OptionsModalLink {...editAnswerProps}/>
+    let MenuModalLink   = <OptionsModalLink {...editAnswerProps}/>;
+    let AnswerUpVotersLink =  answer.upvotes !== 0 && <UsersModalLink {...answerUpvotersProps}/> 
+   
     
 
    let btnsProps = {
@@ -108,7 +120,7 @@ export const AnswersComponent = props => {
               
    
    const btnsList   = { 
-            itemsCounter : itemsCounter,
+            itemsCounter : AnswerUpVotersLink,
             btn1   : UpVoteBtn,
             btn2   : EditorModalLink,
             btn3   : MenuModalLink,

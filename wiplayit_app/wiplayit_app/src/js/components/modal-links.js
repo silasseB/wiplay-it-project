@@ -12,7 +12,9 @@ export const EditorLink = props => {
     //console.log(props)
 	
     let {modalProps} = props ;
-    let { background, modalPath } =  props;
+    let { background, modalPath, className } =  props;
+
+    background && console.log(background)
     
     let editorProps = modalProps && modalProps.editorProps || {...props};
 
@@ -56,13 +58,14 @@ export const EditorLink = props => {
         }
        
     return(
-        <button style={styles} className="btn-sm"  onClick={()=> {
-                        ModalManager.close('optionsMenu', state.background)
+        <button  className={className}   onClick={()=> {
+                        background &&  ModalManager.close('optionsMenu', background)
+                        let timer = isPut && 1500 || 100;
                        
                         setTimeout(()=> {
                             store.dispatch(showModal(madalParams));
                             history.push({ pathname: pathname, state}); 
-                        }, 500);
+                        }, timer);
 
                     }}>
                     { linkName } 
@@ -118,10 +121,11 @@ export const ChangeImageLink = props => {
     let location = useLocation();
     //console.log(props)
 
-    let  modalProps = {
+    let modalProps = {
             dropImageProps : {...props},
             modalType   : 'dropImage', 
         }; 
+
     let pathname = `/compose/${'profile-pic'}/${'1'}/`;
     let state    = { background: location, modalProps };
 
@@ -144,8 +148,47 @@ export const ChangeImageLink = props => {
                     }}>
             Change  
         </button>
-   );
+    );
 };
 
+
+
+
+
+export const UsersModalLink = props => {
+    let location = useLocation();
+    let pathname = `/compose/${'user'}/${props.obj.id}/`;
+
+    let modalProps = {
+            userListProps : {...props},
+            modalType     : 'userList', 
+        }; 
+
+    let state = { 
+        background : props.background || location,
+        modalProps
+    } 
+
+    let madalParams = {
+            boolValue : true,
+            modalType   : 'userList',
+            background  : state.background,
+        }
+        
+        
+    return(
+        <button className="btn-sm"    onClick={()=> {
+                        store.dispatch(showModal(madalParams))
+                        setTimeout(()=> {
+
+                            history.push({ pathname: pathname, state}); 
+                        }, 500);
+
+                    }}>
+            {props.linkName}  
+        </button>
+        
+    );
+};
 
 

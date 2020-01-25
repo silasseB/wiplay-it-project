@@ -76,30 +76,28 @@ class ModalBox extends Component{
        
         if(!this.props.onRequestClose || this.props.onRequestClose()){
            
-           let { background, modalType} = this.props;
-           console.log(this.props)
+          let { background, modalType} = this.props;
+          console.log(this.props)
           
-           ModalManager.close(modalType, background);
-       }
+          ModalManager.close(modalType, background);
+        }
    }
 
    handleKeyDown(event){
       if (event.keyCode === 27 /*esc*/) this.close();
    }
+    
 
-    componentDidUpdate(prevProps, nextProps) {
-      //console.log(prevProps)
-    }
+    componentDidMount(){
+        //console.log(this.props)
+        const transitionTimeMS = this.getTransitionDuration();
 
-   componentDidMount(){
-    //console.log(this.props)
-      const transitionTimeMS = this.getTransitionDuration();
-      setTimeout(() => this.setState({open : true}),0);
-      onClose = (callback) => {
-          this.setState({open: false}, () => {
-             this.closeTimer = setTimeout(callback, transitionTimeMS);
-          });
-      };
+        setTimeout(() => this.setState({open : true}),0);
+            onClose = (callback) => {
+                this.setState({open: false}, () => {
+                this.closeTimer = setTimeout(callback, transitionTimeMS);
+            });
+        };
     }
 
     componentWillUnmount(){
@@ -133,11 +131,13 @@ class ModalBox extends Component{
 
         return (
             <div
+               id="modal-overlay"
                ref="overlay"
                style={prefix(Assign({},defaultStyles.overlay,style ? (style.overlay ? style.overlay : {}) : {},{ transition: 'opacity '+(transition.duration / 1000) + 's'+' linear',opacity: open ? 1 : 0}))}
                onClick={this.close.bind(this)}>
 
                <div
+                  id="modal-content"
                   ref="content"
                   style={prefix(Assign({},defaultStyles.content,style ? (style.content ? style.content : {}) : {},transition_style,open ? effect.end : effect.begin))}
                   onClick={stopPropagation}
@@ -173,23 +173,26 @@ const renderModal = () => {
 
 export const ModalManager = {
 
-    open(component, background=null){
+    open(component, props){
+        let {background, modalType} = props;
+        modals.push(component);
 
-       modals.push(component);
-
-       if(modals.length === 1){ // render the modal only if there is no other showing modals
-          renderModal();
-       }
+        if(modals.length === 1){ // render the modal only if there is no other showing modals
+            renderModal();
+        }
     },
     close(modalType, background){
         
         onClose && onClose(() => {
-          let modalParams = {
-            boolValue: false, 
-             background,
-             modalType,
-          }
-            store.dispatch(showModal(modalParams))
+            console.log(modalType, background);
+
+            let modalParams = {
+                boolValue: false, 
+                background:undefined,
+                modalType,
+            };
+
+            store.dispatch(showModal(modalParams));
             
             background && background != undefined  && history.goBack();
             ReactDOM.unmountComponentAtNode(node);

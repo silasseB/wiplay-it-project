@@ -11,12 +11,46 @@
     }
 
     .page-spin-loader-box {
-	    border: px solid blue;
-	    width:  auto;
-	    margin: 56px 50% 0; 
+	    border  : px solid blue;
+	    width   : auto;
+	    margin  : 66px 45% 0; 
+	    padding : 25px 0  10px 30px;  
+    }
+
+    .index-box{
+    	border      : px solid blue;
+    	padding-top : 40px; 
     }
 
 }
+
+
+
+@media (max-width: 900px) {
+	.app-container{
+		border: 1px solid blue;
+		padding-top : 67px;
+	}
+
+	.app-box-container {
+     	border  : 1px solid  red;
+    }
+
+    .page-spin-loader-box {
+	    border  : px solid blue;
+	    width   : auto;
+	    margin  : 28px 35% 0; 
+	    padding : 25px 0  10px 15px;  
+    }
+
+
+    .index-box{
+    	border      : 1px solid black;
+    	margin-top : 85px; 
+    }
+
+}
+
 
 body {
    margin     : 0;
@@ -26,8 +60,8 @@ body {
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
     background : #F9F7F7;
-    overflow-x : hidden !important;
-    overflow-y : scroll !important;
+    overflow-x : hidden;
+    overflow-y : scroll;
     min-height : 100vh;   
    
 }
@@ -63,17 +97,17 @@ button {
   
  }
 
-a:focus,a:active {
-	outline: none !important;
-	box-shadow: none !important;
-	text-decoration: none !important;
-	
-}
+
 
 a:hover, a:hover {
     cursor:pointer; 
 }
 
+ul {
+	list-style-type : none;
+	padding         : 0;
+	margin          : 0;   
+}
 
 .facebook-login {
   background: #3B5998;

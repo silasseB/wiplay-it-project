@@ -63,39 +63,41 @@ class  PostListPage extends Component  {
          postListById   : this.state.postListById,
       }
       return Object.assign(props,this.props);
-   };
+    };
 
-   render() {
-      let props = this.getProps();
-      //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
-      var posts  = props.entities.posts;
-       console.log(posts)
-      posts  = posts[props.postListById];
-      console.log(props, posts)
-      return (
-         <div style={{}}>
-            <PartalNavigationBar {...props}/>
-               <NavigationBarBigScreen {...props} /> 
-               {posts?
-                  <div>
-                     { posts.isLoading? 
-                        <div  className="page-spin-loder-box">
-                           <AjaxLoader/>
-                        </div>
-                        : 
-                        <div>
-                           <Posts {...props}/>   
-                        </div>
-                     }
-                  </div>
-               :
-               ""
-            }
-         </div>
-      );
-  };
+    render() {
+        let props = this.getProps();
+        //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
+        var posts  = props.entities.posts;
+        console.log(posts)
+        posts  = posts[props.postListById];
+        console.log(props, posts)
 
-}
+        return (
+            <div>
+                <PartalNavigationBar {...props}/>
+                <NavigationBarBigScreen {...props} /> 
+                
+                { posts?
+                    <div className="app-box-container">
+                        { posts.isLoading? 
+                            <div  className="page-spin-loader-box">
+                                <AjaxLoader/>
+                            </div>
+                            : 
+                            <div>
+                                <Posts {...props}/>   
+                            </div>
+                        }
+                    </div>
+                    :
+                    ""
+                }
+            </div>
+        );
+    };
+
+};
 
 
 export default withHigherOrderIndexBox(PostListPage);
@@ -107,34 +109,33 @@ export default withHigherOrderIndexBox(PostListPage);
 
 const Posts = props => {
 
-   var posts  = props.entities.posts;
-   posts  = posts[props.postListById];
-   console.log(posts)
+    var posts  = props.entities.posts;
+    posts  = posts[props.postListById];
+    console.log(posts)
 
-   return (
-      <div>
-       {posts && posts.postList?
-         <div className="home-page-contents">
+    return (
+        <div>
+            {posts && posts.postList?
+                <div className="">
 
-            { posts.postList.map(( post, index )  => {
-               let postProps = {post:post} 
-               Object.assign(postProps, props);
+                    { posts.postList.map(( post, index )  => {
+                        let postProps = {post:post} 
+                        Object.assign(postProps, props);
                
-               return (
-                  <div key={post.id} >
-                    <PostComponent {...postProps}/>
-                  </div>
-                  )
-               }
-            )}
+                        return (
+                            <div key={post.id}  className="post-list-page" >
+                                <PostComponent {...postProps}/>
+                            </div>
+                        );
+                    })}
 
-         </div>
-         :
-         ""
-        }
-      </div>        
-   )
-}
+                </div>
+                :
+                ""
+            }
+        </div>        
+    );
+};
 
 
 

@@ -59,8 +59,7 @@ export function entities(state=InitialState(), action) {
               enumerable   : true,
             }
         );
-        //console.log(stateEntintie, action)
-   };
+    };
     
 
     const updateStateEntyties = (stateEntintieKey,  params )=>{
@@ -80,7 +79,7 @@ export function entities(state=InitialState(), action) {
             newState[stateEntintieKey] =  stateEntintie
             fakeState                  = {...fakeState, ...newState};
 
-            console.log(newState, fakeState)
+            //console.log(newState, fakeState)
             
             return fakeState;
     };

@@ -3,7 +3,7 @@ import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { UpVoteCommentBtn, DownVoteCommentBtn  } from '../components/buttons';
 
-import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import {EditorLink, OptionsModalLink,UsersModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
 
 import {ButtonsBox} from "../components/partial_components";
@@ -68,8 +68,22 @@ export const CommentsComponent = props => {
         
        pathToUpvoters =  `/post/comment/${comment.id}/upvoters/`;
     }
+    let usersById =  comment && isAnswerBox && `answerCommentUpVoters${comment.id}` ||
+                    comment &&  `postCommentUpVoters${comment.id}`;
+
+    let apiUrl    = comment && isAnswerBox && api.getAnswerCommentUpVotersListApi(comment.id) ||
+                    comment && api.getPostCommentUpVotersListApi(comment.id);
+    let linkName  = comment.upvotes > 1 && `${comment.upvotes} Upvoters` || `${comment.upvotes} Upvoter`;
 
     let byId = isNewComments && newCommentsById || commentsById;
+
+    let commentUpvotersProps = {
+            apiUrl,
+            byId      : usersById,
+            obj       : comment,
+            currentUser,
+            linkName,
+        };
    
     let editCommentProps = {
         objName     : 'Comment',
@@ -91,11 +105,12 @@ export const CommentsComponent = props => {
     };
 
 
-    editCommentProps = GetModalLinkProps.props( editCommentProps)
-    editReplyProps = GetModalLinkProps.props(editReplyProps)
+    editCommentProps  = GetModalLinkProps.props( editCommentProps)
+    editReplyProps    = GetModalLinkProps.props(editReplyProps)
     
-    let EditorModalLink = <EditorLink {...editReplyProps}/>; 
-    let MenuModalLink   = <OptionsModalLink {...editCommentProps}/>
+    let EditorModalLink     = <EditorLink {...editReplyProps}/>; 
+    let MenuModalLink       = <OptionsModalLink {...editCommentProps}/>;
+    let CommentUpVotersLink = comment.upvotes !== 0 &&  <UsersModalLink {...commentUpvotersProps}/>; 
     
 
 
@@ -119,7 +134,7 @@ export const CommentsComponent = props => {
    
               
     const btnsList  = {
-        itemsCounter :  itemsCounter,
+        itemsCounter :  CommentUpVotersLink,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalLink,
         btn3         :  MenuModalLink,

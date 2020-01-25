@@ -61,37 +61,37 @@ class  QuestionListPage extends Component  {
       return Object.assign(props,this.props);
    };
 
-   render() {
+    render() {
       let props = this.getProps();
       //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
       var { questions }  = props.entities;
       
       questions  = questions[props.questionListById];
       console.log(props, questions)
-      return (
-         <div style={{}}>
-            <PartalNavigationBar {...props}/>
-               <NavigationBarBigScreen {...props} /> 
-               {questions?
-                  <div  className="app-box-container">
-                     { questions.isLoading? 
-                        <div  className="page-spin-loder-box">
-                           <AjaxLoader/>
-                        </div>
-                        : 
-                        <div>
-                           <Questions {...props}/>   
-                        </div>
-                     }
-                  </div>
-               :
-               ""
-            }
-         </div>
-      );
-  };
+        return (
+            <div style={{}}>
+                <PartalNavigationBar {...props}/>
+                <NavigationBarBigScreen {...props} /> 
+                { questions?
+                    <div  className="app-box-container">
+                        { questions.isLoading? 
+                            <div  className="page-spin-loder-box">
+                                <AjaxLoader/>
+                            </div>
+                            : 
+                            <div>
+                                <Questions {...props}/>   
+                            </div>
+                        }
+                   </div>
+                   :
+                   ""
+                }
+            </div>
+        );
+    };
 
-}
+};
 
 
 export default withHigherOrderIndexBox(QuestionListPage);
@@ -106,25 +106,22 @@ const Questions = props => {
    var questions  = props.entities.questions;
    questions  = questions[props.questionListById];
 
-   return (
-      <div>
-         <div className="home-page-contents">
+    return (
+        <div className="">
 
             { questions.questionList.map(( question, index )  => {
                let questionProps = {question} 
                Object.assign( questionProps, props);
                
                return (
-                  <div key={question.id} >
+                  <div key={question.id} className="question-list-page">
                     <QuestionComponent {...questionProps}/>
                   </div>
                   )
                }
             )}
-
-         </div>
-      </div>        
-   )
+        </div>
+    );
 }
 
 

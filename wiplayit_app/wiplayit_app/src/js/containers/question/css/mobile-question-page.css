@@ -1,6 +1,6 @@
 
 @media (max-width: 900px) {
-  body {
+    body {
        background: #ffff;
        overflow-x: hidden !important;
        overflow-y: scroll !important;
@@ -9,69 +9,49 @@
        min-height: 100vh;
        width:    100%;
        padding:  0px;
-
-
-    
- }
-
-
-.spin-loader-box {
-   padding  : 12px 40%;
-   margin   : 10px 0; 
-}
-
-.page-spin-loader-box{
-  margin: 50% 40%;
-  
-}
-
-
-.post-box-container{
-   border-top   : 9px solid  #D5D7D5;
-
-}
-
-#question-page {  
-  background: white;
-  padding-top: 80px !important;
-  border: 1px solid blue;
-  
-}
-
-#post-list-page,#home-page-contents{
-  border: px solid black;
-  margin-top: 116px;
-
-}
-
-.index-posts-box, .index-questions-box,.index-answers-box  {
-    border      : 1px solid #D5D7D5;
-    margin  : 9px 0px;
-    padding : 0px 0px 4px; 
-}
+    }
 
 
 
+    .post-box-container{
+        border-top   : 9px solid  #D5D7D5;
 
-.index-questions-box {
-   border      : px solid black;
+    }
+
+    #question-page {  
+        background: white;
+    }
+
+    #post-list-page,#home-page-contents{
+        border: px solid black;
+    }
+
+    .index-posts-box, .index-questions-box,.index-answers-box  {
+        border      : 1px solid #D5D7D5;
+        margin  : 9px 0px;
+        padding : 0px 0px 4px; 
+    }
+
+
+    .index-questions-box {
+        border      : px solid black;
    
-}
+    }
 
  
-.index-answers-box {
-   border      : px solid blue;
-}
+    .index-answers-box {
+        border      : px solid blue;
+    }
 
-.index-posts-box {
-   border      : px solid red;
- }
+    .index-posts-box {
+        border      : px solid red;
+    }
 
 
-.post-contents,.question-contents {
-   background : white;
+    .post-contents,.question-contents {
+        background : white;
 
-}
+    }
 
 .index-items-label {
      border      : 1px solid #D5D7D5;
@@ -116,14 +96,13 @@
 }
 
 .question-link {
-   color: black;
+   color : black;
 
 }
 
 .question-link:active, .question-link:focus {
-   color: black;
-   background: #EBEBEB;
-   
+   color      : black;
+   background : #EBEBEB;
 }
 
 
@@ -133,8 +112,6 @@
   overflow: hidden;
 
 }
-
-
 
 
 .user-box {

@@ -115,46 +115,108 @@ export const ToolBar = props => {
       )
 } 
 
-
-
-
-export const EditorNavBar = props  => {
-    //console.log(props)
+export const ModalCloseButton = props => {
     let background = props.background;
+
+    return(
+        <button type="button" className="modal-custom-back-btn custom-back-btn "
+                  onClick={()=> ModalManager.close('editor', background)} >
+            <span className="modal-close-icon material-icons ">arrow_back</span>
+        </button>
+    )
+ 
+};
+
+
+export const DesktopModalCloseBtn = props => {
+    let background = props.background;
+    return(
+        <button  type="button" 
+                onClick={()=> ModalManager.close('editor',background)}
+                className="btn-sm modal-custom-back-btn custom-back-btn">
+
+            <span className="modal-close-icon">&times;</span>
+        </button>
+        )
+ 
+};
+
+
+
+export const MobileModalNavBar = props  => {
+    //console.log(props)
+    let {isPut, isPost, modalTitle, objName } = props;
+    let action = isPut && "Edit" || isPost && "Create";
+
+    modalTitle = !modalTitle &&  `${action} ${objName}` ||  modalTitle;
+
+    let SubmitBtn = ()=>(
+            <button type="button" onClick={()=> props.subimtCleanForm()}
+                            className="editor-submit-btn submit-btn">
+                        Submit
+            </button>
+        )
+    
+    let DoneBtn = ()=>(
+            <button  type="button" 
+                onClick={()=> ModalManager.close('editor',props.background)}
+                className="btn-sm modal-custom-back-btn custom-back-btn">
+                Done
+            </button>
+        )
     
     return (
-        <div id="editor-nav-bar" className="fixed-top">
-        <div className="editor-navbar"> 
-            <div className="back-btn-box">
-           
-                <button type="button" className="editor-custom-back-btn custom-back-btn "
-                  onClick={()=> ModalManager.close('editor', background)} >
-                <span className="editor-arrow material-icons ">arrow_back</span>
-                </button>
-            
+        <div id="modal-navbar-container" className="fixed-top">
+            <div className="modal-navbar-box"> 
+                <div className="back-btn-box">
+                    <ModalCloseButton {...props}/>      
+                </div>
+
+                <div className="modal-title-box">
+                    <p className="modal-title">{modalTitle}</p>  
+                </div>
+         
+                <div className="submit-btn-box">
+                    { props.isDraftEditor?
+                        <SubmitBtn/>
+                        :
+                        <DoneBtn/>
+                    }
+         
+                </div>
             </div>
 
-            <div className="page-name-box">
-               <b className="page-name">{props.formName}</b>  
-            </div>
-         
-            <div className="submit-btn-box">
-                <button type="button" onClick={()=> props.subimtCleanForm()}
-                  className="editor-submit-btn submit-btn">
-                  Submit
-                </button>
-           
-            </div>
-        </div>
-        <div className="editor-btns-box">
-            <ToolBar {...props}/>
-        </div>
+            { props.isDraftEditor?
+                <div className="editor-btns-box">
+                    <ToolBar {...props}/>
+                </div>
+                :
+                ""
+            }
         </div>    
     ); 
 }
 
 
+export const DesktopModalNavBar = (props) => {
+    
+    let {isPut, isPost, modalTitle, objName } = props;
+    let action = isPut && "Edit" || isPost && "Create";
 
+    modalTitle = !modalTitle &&  `${action} ${objName}` ||  modalTitle;
+
+    return(
+        <div className="modal-navbar-top">
+            <div className="modal-title-box">
+                <p className="modal-title">{modalTitle}</p>
+            </div>
+
+            <div className="modal-close-btn-box">
+                <DesktopModalCloseBtn  {...props}/>
+            </div>
+        </div>
+    )  
+};
 
 
 const ImageButton = props => {
@@ -203,7 +265,7 @@ export const TextAreaEditor = props => {
    return (
       <div className="textarea-form">
          <form className="">
-            <div className="textarea-box">
+            <div style={props.editorsBoxStyles} className="textarea-box" id="editors-box">
                <TextareaAutosize
                      {...props.textAreaProps} 
                         rows={1}/>
@@ -217,10 +279,9 @@ export const TextAreaEditor = props => {
 
 export const DraftEditor = props => {
 	return (
-		<div>
-            <div className="editors-box">
+		<div style={props.editorsBoxStyles} id="editors-box" className="editors-box">
                { props.objName == "Post"?
-                    <div>
+                    <div className="post-textarea-box textarea-box">
                         <TextareaAutosize   {...props.textAreaProps} rows={1}/>
             
                     </div>
@@ -236,9 +297,11 @@ export const DraftEditor = props => {
                decorators={CompositeDecorator}
                blockStyleFn={props.blockStyleFn}
                placeholder={props.editorPlaceHolder}
+               onFocus={props.handleFocus()}
+               onBlur={props.handleBlur()}
             />
-            </div>
         </div>
+        
     );
 }
 
@@ -306,33 +369,33 @@ const MediaPage = (props) => {
    const type   = entity.getType();
    let media;
        
-   if (type === 'image') {
-      media = <div style={styles.imageBox}>
+    if (type === 'image') {
+        media = <div style={styles.imageBox}>
                  <img alt="" src={src} style={styles.mediaPage}/>
              </div>;
-   }
-   else if (type === 'video') {
-      media = <div style={styles.imageBox}>
+    }
+    else if (type === 'video') {
+        media = <div style={styles.imageBox}>
                <video controls src={src} style={styles.mediaPage} />;
             </div>;
-   }
-   return media;
+    }
+    return media;
 };
     
 
 const styles = {
-   root: {
-      fontFamily: '\'Georgia\', serif',
-      padding: 20,
-      width: 600,
-   },
-   buttons: {
-      marginBottom: 10,
-   },
-   urlInputContainer: {
-      marginBottom: 10,
-   },
-   urlInput: {
+    root: {
+       fontFamily: '\'Georgia\', serif',
+       padding: 20,
+       width: 600,
+    },
+    buttons: {
+       marginBottom: 10,
+    },
+    urlInputContainer: {
+       marginBottom: 10,
+    },
+    urlInput: {
       fontFamily: '\'Georgia\', serif',
       marginRight: 10,
       padding: 3,

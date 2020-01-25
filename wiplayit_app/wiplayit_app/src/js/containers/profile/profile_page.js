@@ -217,18 +217,15 @@ class UserProfileContainer extends Component {
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
       
-        //console.log(userProfile)  
-
         return (
-           <div id="profile-page">
-           
-               <PartalNavigationBar {...props}/>
-               <NavigationBarBigScreen {...props} />
+            <div>
+                <PartalNavigationBar {...props}/>
+                <NavigationBarBigScreen {...props} />
 
-               { userProfile?
+                { userProfile?
                     <div  className="app-box-container"> 
                         {userProfile.isLoading?
-                            <div className="page-spin-loder-box">
+                            <div className="page-spin-loader-box">
                                  <AjaxLoader/>
                             </div>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import Api from '../api';
-import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import {EditorLink, OptionsModalLink, UsersModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
 
 import  * as types  from '../actions/types';
@@ -28,29 +28,42 @@ const api      = new Api();
 
 export const PostComponent = props => {
 
-   let optionsBtnStyles = {
+    let optionsBtnStyles = {
               fontSize   : '8px',
               background : 'white',
               fontWeight : 'bold',
               width      : '40px',
               color      : '#4A4A4A',
               margin     : '0 0 2px'
-   }
+    }
 
-   let {post, currentUser, postById, postListById}     =    props;
+    let {post, currentUser, postById, postListById}     =    props;
 
 
-   let   storedState    = post && post.add_post && JSON.parse(post.add_post);
-   const contentState   = storedState && convertFromRaw(storedState);
-   const editorState    = contentState && EditorState.createWithContent(contentState);
+    let   storedState    = post && post.add_post && JSON.parse(post.add_post);
+    const editorState    = contentState && EditorState.createWithContent(contentState);
 
-   let   postPath       = post && `/post/${post.slug}/${post.id}/`;
-   let   pathToUpvoters = post && `/upvoters/post/${post.id}/`;
-   let state = {
+    let  postPath       = post && `/post/${post.slug}/${post.id}/`;
+    let  pathToUpvoters = post && `/upvoters/post/${post.id}/`;
+
+    let usersById       = post && `postUpVoters${post.id}`;
+    let apiUrl          = post && api.getpostUpVotersListApi(post.id);
+    let linkName = post.upvotes > 1 && `${post.upvotes} Upvoters` || `${post.upvotes} Upvoter`;
+
+    let state = {
             post,
             usersIsFor : 'postUpVoters', 
         }
-     let editPostProps = {
+
+    let postUpvotersProps = {
+            apiUrl,
+            byId      : usersById,
+            obj       : post,
+            currentUser,
+            linkName,
+        };
+
+    let editPostProps = {
         objName     : 'Post',
         isPut       : true,
         obj         : post, 
@@ -73,8 +86,10 @@ export const PostComponent = props => {
     editPostProps = GetModalLinkProps.props(editPostProps)
     editCommentProps = GetModalLinkProps.props(editCommentProps)
        
-    let EditorModalLink = <EditorLink {...editCommentProps}/>; 
-    let MenuModalLink   = <OptionsModalLink {...editPostProps}/>
+    let EditorModalLink  = <EditorLink {...editCommentProps}/>; 
+    let MenuModalLink    = <OptionsModalLink {...editPostProps}/>;
+    let PostUpVotersLink = post.upvotes !== 0 &&  <UsersModalLink {...postUpvotersProps}/>; 
+   
     
 
    let btnsProps = {
@@ -95,7 +110,7 @@ export const PostComponent = props => {
 
 
    const btnsList   = { 
-            itemsCounter : itemsCounter,
+            itemsCounter : PostUpVotersLink,
             btn1   : UpVoteBtn,
             btn2   : EditorModalLink,
             btn3   : MenuModalLink,

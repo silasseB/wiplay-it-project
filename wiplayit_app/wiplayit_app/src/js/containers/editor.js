@@ -10,9 +10,14 @@ import { ModalManager}   from  "../containers/modal/modal_container";
 import { List, Repeat } from 'immutable';
 import Axios from '../axios_instance'
 import  Helper from '../containers/utils/helpers';
-import {TextAreaEditor, DraftEditor, EditorNavBar } from  "../components/editor_components";
+import {TextAreaEditor,
+        DraftEditor,
+        ToolBar,
+        MobileModalNavBar,
+        DesktopModalNavBar } from  "../components/editor_components";
+
 import { AlertComponent } from "../components/partial_components";
-import {showModal}  from '../actions/actionCreators';
+import { showModal }  from '../actions/actionCreators';
 
 import {store} from '../configs/store-config';
 import { history } from "../index";
@@ -70,27 +75,29 @@ export default  class AppEditor extends Component{
 
 
       
-      this.state = {
-         editorState        : EditorState.createEmpty(decorator),
-         form               : {textarea   :  "", },
-         editorPlaceHolder  : "", 
-         postTitle          : "",
-         showURLInput       : false,
-         showImage          : false,
-         url                : '',
-         urlType            : '',
-         urlValue           : '',
-         italicOnClick      : false,
-         boldOnClick        : false,
-         onLinkInput        : false, 
-         onPost             : false,
-         contentIsEmpty     : true,
-         submitting         : false,
-         showSuccessMessage : false,
-         hasErrors          : false,  
-         errorMessage       : null,
-         submited           : false,
-         redirected         : false, 
+    this.state = {
+        editorState        : EditorState.createEmpty(decorator),
+        form               : {textarea   :  "", },
+        editorPlaceHolder  : "", 
+        postTitle          : "",
+        showURLInput       : false,
+        showImage          : false,
+        url                : '',
+        urlType            : '',
+        urlValue           : '',
+        italicOnClick      : false,
+        boldOnClick        : false,
+        onLinkInput        : false, 
+        onPost             : false,
+        contentIsEmpty     : true,
+        submitting         : false,
+        showSuccessMessage : false,
+        hasErrors          : false,  
+        errorMessage       : null,
+        submited           : false,
+        redirected         : false, 
+        editorsBoxStyles   : undefined,
+        isDraftEditor      : true, 
 
         
 
@@ -235,6 +242,10 @@ export default  class AppEditor extends Component{
     };
 
     
+    componentDidUpdate(prevProps, nextProps) {
+        
+       //console.log()
+    }
 
     componentDidMount(){
         this._isMounted = true;
@@ -483,13 +494,44 @@ export default  class AppEditor extends Component{
            value       : this.state.form.textarea,
            onChange    : this.onTextAreaChange,
            name        : "textarea",
-           className   : "create-question-form",
+           className   : "textarea-form-field",
            placeholder : this.props.editorPlaceHolder,
         };
 
         return props;
     };
 
+    handleScroll=(event)=>{
+        let isDesktopScreenSize = window.matchMedia("(min-width: 900px)").matches;
+
+        if (isDesktopScreenSize) {
+            let modalContent   = document.getElementById('modal-content')
+            let modalContentsRect = modalContent && modalContent.getBoundingClientRect();
+
+            if (modalContent && modalContentsRect) {
+                let modalOverlay              = document.getElementById('modal-overlay')
+                let modalContentClientHeight  = parseInt(modalContent.clientHeight) + parseInt(modalContentsRect.top);
+               
+
+                if (modalContentClientHeight >= modalOverlay.clientHeight - 30) {
+                    let editorsBox       = document.getElementById('editors-box')
+                    let editorsBoxStyles = editorsBox && {height:editorsBox.clientHeight };
+
+                    !this.state.editorsBoxStyles &&  this.setState({editorsBoxStyles})
+                }
+            
+            }
+        }
+
+    };
+
+    handleFocus =()=>{
+        //console.log('focused')
+    }
+
+    handleBlur =()=>{
+        //console.log('Blured')
+    }
 
 
     getProps() {
@@ -510,6 +552,9 @@ export default  class AppEditor extends Component{
             subimtCleanForm   : this.subimtCleanForm.bind(this),
             submitProps       : this.getSubmitProps.bind(this),
             textAreaProps     : this.getTextAreaProps(), 
+            handleScroll      : this.handleScroll.bind(this), 
+            handleFocus       : this.handleFocus.bind(this),
+            handleBlur        : this.handleBlur.bind(this),
             ...this.state,
         } 
       
@@ -526,18 +571,17 @@ export default  class AppEditor extends Component{
                                                      { display : 'none' };
        
 
-        //console.log(props)
+        console.log(props)
         return (
-            <div className="editors-page" onClick={this.focus}>
+            <div
+                className="modal-editor"
+                id="modal-editor"
+                onClick={this.focus}
+                onScroll={props.handleScroll()}
+                >
                 <fieldset style={onSubmitStyles} 
                       disabled={ props.submitting } >
-                    <EditorNavBar {...props}/>
-
-                    { props.objName === "Question"?
-                        <TextAreaEditor {...props}/>
-                        :
-                        <DraftEditor {...props}/>
-                    }
+                    <EditorCommponent {...props}/>
                 </fieldset>
 
                 <div style={showAlertMessageStiles}>
@@ -549,7 +593,88 @@ export default  class AppEditor extends Component{
     }
 };
 
+const EditorCommponent = (props)=>{
+    if (window.matchMedia("(min-width: 900px)").matches) {
+            return DesktopEditorComponent(props);
+        } else {
+            return MobileEditorComponent(props);
+        } 
+    
+};
 
+
+export const MobileEditorComponent =(props)=>{
+    
+
+    return(
+        <div className="editors-page" id="editors-page">
+            <MobileModalNavBar {...props}/>
+            { props.objName === "Question"?
+                <TextAreaEditor {...props}/>
+                :
+                <DraftEditor {...props}/>
+            }
+
+        </div>
+        )
+};
+
+
+
+export const DesktopEditorComponent =(props)=>{
+    let {currentUser, objName} = props;
+    console.log(props.toolBarStyles)
+
+    return(
+
+        <div className="desktop-editor">
+            <DesktopModalNavBar {...props}/>
+
+            <div className="modal-user-box">
+                <div className="editor-img-box">
+                    { currentUser.profile && currentUser.profile.profile_picture?
+                        <img alt="" src={currentUser.profile.profile_picture} className="profile-photo"/>
+                        :
+                        <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/> 
+                    }
+                </div>
+
+                <ul className="editor-username-box">
+                    <li className="editor-username" >
+                        {currentUser.first_name}  {currentUser.last_name} 
+                    </li>
+                </ul>
+
+            </div>
+
+            <div className="editors-page">
+                { objName === "Question"?
+                    <TextAreaEditor {...props}/>
+                    :
+                    <DraftEditor {...props}/>
+                }
+            </div>
+
+            <div className="editor-navbar-bottom">
+                <div className="toolbar-box">
+                    { objName === "Question"?
+                        ""
+                        :
+                        <ToolBar {...props}/>
+                    }
+                </div>
+
+                <div className="editor-submit-btn-box">
+                    <button type="button" onClick={()=> props.subimtCleanForm()}
+                           className="editor-submit-btn ">
+                            Submit
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    );
+};
 
 
 

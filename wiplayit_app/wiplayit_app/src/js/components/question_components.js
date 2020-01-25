@@ -1,6 +1,6 @@
 import React from 'react';
 import { GetModalLinkProps } from "../components/component-props";
-import {EditorLink, OptionsModalLink} from "../components/modal-links"
+import {EditorLink, OptionsModalLink, UsersModalLink} from "../components/modal-links"
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { FollowQuestionBtn, UnfollowQuestionBtn} from '../components/buttons';
@@ -8,11 +8,14 @@ import { FollowQuestionBtn, UnfollowQuestionBtn} from '../components/buttons';
 import {ButtonsBox, Styles } from "../components/partial_components";
 //import AnswersBox from "containers/answer/answer_page";
 import  * as types  from '../actions/types';
+import Api from '../api';
+
 
 //const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
 //const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
 
 
+const api      = new Api();
 
 
 
@@ -53,6 +56,21 @@ export const QuestionComponent = props => {
     }
 
 
+    let usersById =  question && `questionFollowers${question.id}`;
+    let apiUrl    = question && api.getQuestionFollowersListApi(question.id);
+    let linkName = question.followers > 1 && `${question.followers} Followers` || `${question.followers} Follower`;
+    //console.log(linkName) 
+
+    let questionFollowersProps = {
+            apiUrl,
+            byId      : usersById,
+            obj       : question,
+            currentUser,
+            linkName  : linkName,
+           
+        };
+
+
     let editQuestionProps = {
         objName     : 'Question',
         isPut       : true,
@@ -79,6 +97,7 @@ export const QuestionComponent = props => {
  
     let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
     let MenuModalLink   = <OptionsModalLink {...editQuestionProps}/>
+    let questionFollowersLink = question.followers !== 0 &&  <UsersModalLink {...questionFollowersProps}/> 
     
   
 
@@ -101,7 +120,7 @@ export const QuestionComponent = props => {
 
 
    const btnsList  = {
-            itemsCounter : questionFollowers,
+            itemsCounter : questionFollowersLink,
             btn1         : EditorModalLink,
             btn2         : unfollowOrFollowQuestionBtn,
             btn3         : MenuModalLink,
@@ -112,50 +131,45 @@ export const QuestionComponent = props => {
    Object.assign(QuestionProps, props)
 
    let styles = {
-     questionBox:{
-        border     : '1px solid  #D5D7D5',
-        margin     : '12px  5px 7px',
-        paddingTop : '8px'
+         questionBox:{
+            border     : '1px solid  #D5D7D5',
+            margin     : '12px  5px 7px',
+            paddingTop : '8px'
 
-     },
+        },
 
-     questionContents : {
-        borderTop     : '3px solid  #D5D7D5',
-        
-     }
-  }
+        questionContents : {
+            borderTop     : '3px solid  #D5D7D5',
+        }
+    }
 
-   return(
-      <div key={question.id}>
-         <div>
-         <div style={styles.questionContents} className="question-content">
+    return(
+        <div key={question.id}>
+            <div className="question-content">
 
-            <div style={styles.questionBox} className="question-bo ">
-               <div className="question">
-               {props.isQuestionBox?
-                   <b className="">
-                     { question.add_question }
-                  </b>
-                  :
-                  <b className="">
-                     <Link className="question-link"  to={{pathname: questionPath,  state:{...state}}}>
-                        { question.add_question }
-                     </Link>
-                  </b>
-               }
+                <div className="question-box ">
+                    <div className="question">
+                        {props.isQuestionBox?
+                            <b className="">
+                                { question.add_question }
+                            </b>
+                            :
+                            <b className="">
+                                <Link className="question-link"  to={{pathname: questionPath,  state:{...state}}}>
+                                    { question.add_question }
+                                </Link>
+                            </b>
+                        }
 
-               </div>
+                    </div>
 
-               <ButtonsBox {...btnsList}/>
+                    <ButtonsBox {...btnsList}/>
 
+                </div>
+                
             </div>
-
-            
-         </div>
-      </div>
-      </div>
-      
-   );
+        </div>
+    );
 };
 
 

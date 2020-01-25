@@ -26,8 +26,10 @@ class UserListBox extends Component {
   
     componentDidMount() {
         console.log(this.props)
-        let usersById = this.state.usersById;
-        let apiUrl    = api.getUserListApi();
+        let { apiUrl, byId} = this.props;
+        usersById = !usersById && this.state.usersById || byId;
+        apiUrl    = !apiUrl && api.getUserListApi() || apiUrl;
+        this.setState({usersById})
         
         this.props.getUserList({usersById, apiUrl});
                 
@@ -54,15 +56,15 @@ class UserListBox extends Component {
             <div>
                 <PartalNavigationBar {...props}/>
                 {users?
-                    <div>
+                    <div className="app-box-container">
                         {users.isLoading?
-                            <div className="page-spin-loder-box">
+                            <div className="page-spin-loader-box">
                                 <AjaxLoader/>
                             </div>
 
                             :
 
-                            <div style={{ paddingTop : '70px'}}>
+                            <div>
                                 <UserList {...props}/>
                             </div>
                         }

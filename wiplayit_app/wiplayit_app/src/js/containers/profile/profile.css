@@ -1,16 +1,16 @@
 @media (max-width: 900px) {
 
-.unfollow-user-2,.unfollow-user { 
-    background-color:  #A33F0B !important; 
-    border: 1PX solid  #A33F0B !important;
-    color:  white !important;
+    .unfollow-user-2,.unfollow-user { 
+        background-color :  #A33F0B !important; 
+        border           : 1PX solid  #A33F0B !important;
+        color            :  white !important;
   }
 
 
-  .follow-user-2, .follow-user{ 
-    background-color:  white !important; 
-    border: 1PX solid  #A33F0B !important;
-  color: #A33F0B !important;
+    .follow-user-2, .follow-user{ 
+        background-color :  white !important; 
+        border           : 1PX solid  #A33F0B !important;
+        color            : #A33F0B !important;
 }
 
 .f-box button, .follow-btn-sm button {
@@ -30,11 +30,10 @@
 
 
 
-.profile-contents {
-  background: white;
-  padding-top: 70px;
-  
-}
+    .profile-contents {
+        background : white;
+        border     : 1px solid red;
+    }
 
 
 .profile-activites {
@@ -52,10 +51,8 @@
 }
 
 .profile-section-top {
-  border:px solid black;
-  width: 44%;
- 
-
+  border : 1px solid black;
+  width  : 44%;
 }
 
 .profile-container {
@@ -63,7 +60,7 @@
   margin:  auto;
   border: px solid blue;
 
- }
+}
 
 .profile {
   border-bottom:  6PX solid  #D5D7D5; 
@@ -111,18 +108,34 @@
 }
 
 
-.user-name-container {
-    margin-left: 7px;
-    margin-top: 7px;
 
+.profile-img-box {
+    border : 1px solid   #D5D7D5;
+    margin : 0 10px 0 20%; 
+    
+    
 }
 
-.user-name {
-   margin:10PX 10% 10px;
-   padding-left: 7PX;
-   font-size: 10px;
+.profile-image {
+    border        : 1px solid #F9F7F7;
+    border-radius : 50%;
+    width         : 70px;
+    height        : 70px;
+    max-width     : 100%;
+    object-fit    : cover;
+}
+
+.profile-name-box {
+    border          : 1px solid red;
+    list-style-type :  none;
+}
+
+.profile-name {
+    margin:10PX 10% 10px;
+    padding-left: 7PX;
+    font-size: 10px;
     color: black;
-    border: px solid blue;
+    border: 1px solid blue;
     font-family: 'Ubuntu';
     font-weight: bold;
    
@@ -219,24 +232,6 @@
 }
 
 
-.img-box {
-    border: 1px solid   #D5D7D5;/*#F9F7F7;*/
-    border-radius: 100%;
-    width: 54%;
-    max-width: 100%;
-    margin: 0% 0 0 20% ;
-    
-}
-
-.profile-image {
-    border: 1px solid #F9F7F7;
-    border-radius: 100%;
-    width: 100%;
-    height: 59px;
-    object-fit:cover;
-    
-    
-}
 
 
 .edit-user-profile {
@@ -262,8 +257,6 @@
     
     
 }
-
-
 
 .credentials-menu {
    border-bottom: 1px solid #D5D7D5;;
@@ -328,21 +321,85 @@
     
 }
 
-.img-container-s {
- border:  px solid blue;
- }
+.users-modal-container {
+    border      :  1px solid blue;
+    padding-top : 50px; 
 
-.img-box-s {
-  border: px solid red;
-  margin: 8PX 7PX 0 8pX;
 }
 
-.user-photo {
-    border-radius: 50%;
-    width: 40px;
-    height:40px;
-    object-fit: cover;
+
+.user-list-box {
+   background: #ffff;
+   border: 1px solid black
+   
 }
+
+
+
+.user-list-container {
+   background: #ffff;
+   border: 1px solid black
+   
+}
+
+
+.user-list-box {
+  border: 1px solid red;
+  margin: 10px 0;
+  width: 100%;
+
+}
+
+
+.user-list-contents {
+    display : flex;
+    width   : auto;
+    border  : 1px solid  #D5D7D5; 
+    margin  : 2% !important;
+    padding : 3px;
+}
+
+
+.about-user {
+  border: px solid blue;
+  font-size: 10px;
+
+  
+}
+
+
+.user-name-box {
+    border: px solid red;
+    width: 80%;
+
+}
+
+.user-list-img-box {
+    border:  1px solid blue;
+ 
+}
+
+
+.user-list-img {
+    border : 1px solid green; 
+}
+
+
+
+.nav-bar-img {
+    border-radius : 50%;
+    width         : 27px;
+    height        : 27px;
+    object-fit    : cover;
+}
+
+
+    .user-list-photo {
+        border-radius : 50%;
+        width         : 30px;
+        height        : 30px;
+        object-fit    : cover;
+    }
 
 
 .follow-box {
@@ -351,7 +408,7 @@
 }
 
 .user-credentials  {
-   border: pX solid red;
+   border: px solid red;
    font-size: 13PX;
 }
 
@@ -360,10 +417,6 @@
 }
 
 
-.user-list-box {
-   background: #ffff;
-   
-}
 
 .user-container-sm {
   border-top:  1px solid  #D5D7D5;
@@ -580,34 +633,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 @media (min-width: 980px) {
-  body {
-       margin-top: 0px !important;
-       background: #F4F2F1 !important;
-       width:100%;
-       overflow-x: hidden !important;
-      border:px solid green;/*white;*/
-       
-      
- }
+  
 
-.navigbar {
-  border: PX solid red !important;
-
- 
- }
  
 .profile-page {
   border:px solid blue; /*#F9F7F7;*/
@@ -682,6 +710,42 @@
   width: 30%;
   border: PX solid blue;
  }
+
+
+.profile-img-box {
+    border : 1px solid   #D5D7D5;
+    margin : 0 10px 0 20%; 
+    
+    
+}
+
+.profile-image {
+    border        : 1px solid #F9F7F7;
+    border-radius : 50%;
+    width         : 70px;
+    height        : 70px;
+    max-width     : 100%;
+    object-fit    : cover;
+}
+
+.profile-name-box {
+    border          : 1px solid red;
+    list-style-type :  none;
+}
+
+.profile-name {
+    margin:10PX 10% 10px;
+    padding-left: 7PX;
+    font-size: 10px;
+    color: black;
+    border: 1px solid blue;
+    font-family: 'Ubuntu';
+    font-weight: bold;
+   
+}
+.user-list-name {
+    border:  1px solid green;
+}
 
 .profi-credential-container {
   border: px solid black;
@@ -792,6 +856,7 @@
   width: 100%;
   display: flex;
 }
+
 .about-user-box {
   border: px solid blue;
   margin: 14px 5%;
@@ -842,38 +907,32 @@
    
 }
 
- 
-.user-box {
-  display: flex;
-  border: px solid red;
-
-
-}
-
 .user-name-container {
     margin-left: 7px;
     margin-top: 7px;
 
 }
-.user-name-box {
-  border: 1px solid red;
+
+.user-extra-data-box {
+  border : 1px solid red;
+  width  : 100%; 
 } 
 
 .user-name {
-    font-size: 12px;
-    color: black;
-   font-family: 'Ubuntu';
-   font-weight: bold;
-   line-height: 1;
-   margin:18px 10% 7px !important;
-   padding: 0px 25%;
-   display: flex; 
+    font-size   : 12px;
+    color       : black;
+    font-family : 'Ubuntu';
+    font-weight : bold;
+    line-height : 1;
+    margin      : 18px 10% 7px !important;
+    padding     : 0px 25%;
+    display     : flex; 
    
    
 }
 
-.follow-box {
-
+.user-follow-box {
+    border : 1px solid black;
 }
 
 .profile-name-box {
@@ -923,55 +982,33 @@
 }
 
 
-.img-box {
-    border: 1px solid   #D5D7D5;/*#F9F7F7;*/
-    border-radius: 100%;
-    width: 48%;
-    max-width: 100%;
-    margin: 10% 25% 0;
-    
+.users-modal-container {
+    border      :  px solid blue;
 }
 
-.profile-image {
-    border: 1px solid    #D5D7D5;
-    border-radius: 100%;
-    width: 100%;
-    height: 100px;
-    object-fit:cover;
-    
-    
+.user-list-container {
+   background: #ffff;
+   border: 1px solid black
+   
 }
 
 
-
-.user-photo {
-    border-radius: 50%;
-    width: 40px;
-    height:40px;
-    object-fit: cover;
-}
-.user-container-sm {
-  border: 1px solid white;
+.user-list-box {
+  border: 1px solid red;
   margin: 10px 0;
   width: 100%;
 
 }
 
 
-.user-box-sm {
-  display: flex;
-  width:auto;
-  border: 1px solid  #D5D7D5; 
-  margin: 2% !important;
-  padding: 3px;
- }
-
-.user-box {
-  display: flex;
-  width:70%;
-  border: px solid black;
-
+.user-list-contents {
+    display : flex;
+    width   : auto;
+    border  : 1px solid  #D5D7D5; 
+    margin  : 2% !important;
+    padding : 3px;
 }
+
 
 .about-user {
   border: px solid blue;
@@ -986,12 +1023,22 @@
     width: 80%;
 
 }
-.img-container-s {
- border:  px solid blue;
- width: 20%;
+
+.user-list-img-box {
+    border:  1px solid blue;
+ 
 }
-.img-box-s {
-  border: px solid red;
+
+
+.user-list-img {
+    border : 1px solid green; 
+}
+
+.user-list-photo {
+    border-radius: 50%;
+    width: 40px;
+    height:40px;
+    object-fit: cover;
 }
 
 .profile-name {
@@ -1007,19 +1054,12 @@
   color: black;
   text-decoration: none;
 
-}
-
-
-
-.follow-box {
-  border: px solid black;
-  width: 30%;
 
 }
 
 
 .follow-btn-sm {
-  border: px solid blue;
+  border: 1px solid blue;
   
 }
 

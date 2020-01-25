@@ -6,27 +6,37 @@ import { SubmitBtn  } from "../components/buttons";
 import { ModalManager}   from  "../containers/modal/modal_container";
 import {EditorLink } from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
+import { store } from "../configs/store-config";
+import {showModal} from '../actions/actionCreators';
+import {history} from "../index" 
 
 
 let editorLinkMobileStyles = {
-    background : '#A33F0B !important',
-    color      : '#fefefe', 
+        background : '#A33F0B !important',
+        color      : '#fefefe', 
+        border     : '1px solid blue',
+        marginTop  : '7px',  
+        fontWeight : 'bold',
+        fontSize   : '12px',
+        display    : 'flex',
+        maxWidth   : '100%',
+        width      : '100px', 
         
-}
+    }
 
 let editorLinkDesktopStyles = {
-       background : '#A33F0B',
-       color      : '#fefefe',
-       width      : '80px',
-       height     : '30px',
-       margin     : '15px 7px 0',
-
-}
+       background  : '#A33F0B',
+       color       : '#fefefe',
+       height      : '30px',
+       margin      : '15px 7px 0',
+       fontWeight  : 'bold',
+    }
 
 let createPostProps = {
         objName     : 'Post',
-        linkName    : 'Post',
+        linkName    : 'Add Post',
         isPost      : true,
+        className   : "create-post-btn btn-sm",
         editorLinkDesktopStyles,
         editorLinkMobileStyles,
     };
@@ -34,7 +44,8 @@ let createPostProps = {
 let createQuestionProps = {
         objName   : 'Question',
         isPost    : true,
-        linkName  : "Ask",
+        linkName  : "Ask Question",
+        className : "create-question-btn btn-sm",
         editorLinkMobileStyles,
         editorLinkDesktopStyles,
     };
@@ -43,27 +54,25 @@ let createQuestionProps = {
 createQuestionProps = GetModalLinkProps.props(createQuestionProps);
 createPostProps = GetModalLinkProps.props(createPostProps);
 
+
+
 const NavBarDropDown = props => {
     let { currentUser } = props;
-    let  path_to_profile = null;
-      
-    let state = {userProfile:currentUser}
+          
+    let state = {userProfile:currentUser};
     
-    if (currentUser) {
-        path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
-        
-    }
-
+    let path_to_profile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
+ 
     return(
         <div className="navigation-img-box">
                     
             <div className="" id="navBardropdown" 
                            data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
-                <div className="navBar-img"> 
+                <div className="nav-bar-img-box"> 
                     { currentUser && currentUser.profile && currentUser.profile.profile_picture?
-                        <img alt="" src={currentUser.profile.profile_picture} className="profile-photo"/>
+                        <img alt="" src={currentUser.profile.profile_picture} className="nav-bar-img"/>
                         :
-                        <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/> 
+                        <img alt="" src={require("../images/user-avatar.png")} className="nav-bar-img"/> 
 
                     }
                 </div>
@@ -82,28 +91,57 @@ const NavBarDropDown = props => {
 
 
 export const NavBarSmallScreen = props => {
+
     
     var { currentUser } = props;
-    createPostProps['currentUser'] = currentUser;
-    createQuestionProps['currentUser'] = currentUser;
-    let state = {currentUser};
+    
+    createPostProps     = {...createPostProps, currentUser};
+    createQuestionProps = {...createQuestionProps, currentUser};
+    let styles = {
+        width     : '100%',
+        border    : 'px solid red',
+        
+    };
+
+    let modalProps = {
+            userListProps : {currentUser},
+            modalType     : 'userList', 
+        }; 
+
+    let state = { 
+        background : props.location,
+        modalProps
+    } 
+
+
+    let madalParams = {
+        boolValue : true,
+        modalType   : 'userList',
+        background  : props.location,
+    }
+    let pathname = `/compose/${'user'}/${1}/`;
      
 
     return (
 		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
             <Link to="/" className="logo"><strong>Wiplayit</strong></Link>
-              <div className="mobile-navbar-center">
-                <div className="post-question-btn-box">
-                    <div className="create-question-btn-box">
-                        <EditorLink {...createQuestionProps}/>
-                    </div>
-    
-                    <p>Or</p>
-                    <div className="create-post-btn-box">
-                        <EditorLink {...createPostProps}/>
-                    </div>
+                <div className="mobile-navbar-center">
+                    <ul style={styles}>
+
+                    </ul>                    
+                    <ul className="post-question-btn-box">
+                        <li className="create-question-btn-box">
+                            <EditorLink {...createQuestionProps}/>
+                        </li>
+
+                        <p>Or</p>
+
+                        
+                        <li className="create-post-btn-box">
+                            <EditorLink {...createPostProps}/>
+                        </li>
+                    </ul>
                 </div>
-              </div>
 
               <div className="mobile-navbar-bottom">
 
@@ -126,14 +164,21 @@ export const NavBarSmallScreen = props => {
                     
                     <ul  className="navigation-item">
                         <li>
-                            <Link className="items"
-                                to={{pathname:"/users/",state:{ isUsersList : true }}}> 
-                                Notifications
-                            </Link>
+                            <button className="items btn-sm"    onClick={()=> {
+                                                store.dispatch(showModal(madalParams))
+                                                setTimeout(()=> {
+                                                    history.push({ pathname: pathname, state}); 
+                                                }, 500);
+
+                                            }}>
+                                    Notifications  
+                            </button>
+                           
                         </li>
                     </ul>
-
-                    <NavBarDropDown {...props}/>
+                    <div className="navigation-img-item">
+                        <NavBarDropDown {...props}/>
+                    </div>
 
                 </div>
 
@@ -148,17 +193,16 @@ export const NavBarSmallScreen = props => {
 export const NavBarBigScreen = props => {
     var {currentUser}       = props;
     let path_to_profile     = `/`;
-    var userProfile = null;
-    
+   
     var state   = { currentUser, userProfile : currentUser};
 
-    if (currentUser) {
-        path_to_profile = `/profile/${currentUser.id}/${currentUser.slug}/`;
-        userProfile = currentUser.profile;
-        createPostProps['currentUser'] = currentUser;
-        createQuestionProps['currentUser'] = currentUser;  
+    let pathToProfile = currentUser  && `/profile/${currentUser.id}/${currentUser.slug}/`;
+    let userProfile   = currentUser  && currentUser.profile;
+      
 
-    }
+    createPostProps     = {...createPostProps, currentUser};
+    createQuestionProps = {...createQuestionProps, currentUser};
+    //console.log(createQuestionProps, createPostProps)
     
         
 	return(
@@ -195,13 +239,12 @@ export const NavBarBigScreen = props => {
                             </Link>
                         </li>
                     </ul> 
-                    </div>            
-                
+                    </div> 
+
                            
                     <NavBarDropDown {...props}/>
                     
-                
-               
+                 
               
                     <div className="post-question-btn-box">
                         <div className="create-question-btn-box">
@@ -250,7 +293,7 @@ export const PartialNavBar = props =>{
                 <b className="page-name">{props.pageName}</b>  
             </div>
          
-            <div className="home-link-box">
+            <div className="navigation-img-item">
                 <NavBarDropDown {...props}/>
             
             </div>

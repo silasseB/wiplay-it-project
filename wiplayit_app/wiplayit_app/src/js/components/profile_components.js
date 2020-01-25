@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 
 
@@ -45,43 +45,43 @@ export const ProfileComponent = props => {
               width      : '40px',
               color      : '#4A4A4A',
               margin     : '0 0 2px'
-      }
+    }
 
             
 
-        let editUserProfileProps = {
+    let editUserProfileProps = {
             objName     : 'UserProfile',
             isPut       : true,
             obj         : userProfile, 
             byId        : profileById,
             currentUser,
 
-        }
+    }
 
-      editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-      let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;
+    editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+    let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;
       
-      let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
+    let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
 
-      let btnsProps = {
-         editUserProfileProps,
-         btnStyles:optionsBtnStyles,
-         btnText : <i className="material-icons ">more_horiz</i>,  
-      };
+    let btnsProps = {
+        editUserProfileProps,
+        btnStyles : optionsBtnStyles,
+        btnText   : <i className="material-icons ">more_horiz</i>,  
+    };
 
-      Object.assign(btnsProps, props);
+    Object.assign(btnsProps, props);
 
-      var followers_text =  userProfile && userProfile.profile && userProfile.profile.followers > 1?
+    var followers_text =  userProfile && userProfile.profile && userProfile.profile.followers > 1?
                                                                       'Followers' : 'Follower';  
 
 
-      let userProfileFollowers = <Link to={{ pathname : pathToUserFollowers ,state }}>
+    let userProfileFollowers = <Link to={{ pathname : pathToUserFollowers ,state }}>
                                     { userProfile && userProfile.profile && userProfile.profile.followers} 
                                     {followers_text}
 
                                 </Link>;
 
-        let unfollowOrFollowUserBtn =  userProfile.user_is_following? 
+    let unfollowOrFollowUserBtn =  userProfile.user_is_following? 
                                          <UnfollowUserBtn {...btnsProps} />
                                        :
                                          <FollowUserBtn {...btnsProps}/>;
@@ -89,127 +89,117 @@ export const ProfileComponent = props => {
         
       
       
-      const UserItemsComponent = props.userItemsComponent;   
+    const UserItemsComponent = props.userItemsComponent;   
 
 
-      let  profile_picture = userProfile && userProfile.profile?
-                             userProfile.profile.profile_picture : null;
+    let  profile_picture = userProfile && userProfile.profile?
+                            userProfile.profile.profile_picture : null;
                  
 
-      return (
-      
-      <div>
-         <div className="profile-contents">
+    return (
+        <div className="profile-contents">
             <div className="profile">
-               <div className="profile-box">
-                  <div className="profile-section-top">
-                 
-                     <div className="img-box">
-                     { profile_picture? 
-                       <img alt="" src={`${profile_picture}`} className="profile-image"/>
+                <div className="profile-box">
+                    <div className="profile-section-top">
+                        <div className="profile-img-box">
+                            { profile_picture? 
+                                <img alt="" src={`${profile_picture}`} className="profile-image"/>
 
-                      :
-                        <img alt="" src={require("../images/user-avatar.png")}
-                                     className="profile-image"/>
-                     }
-                     </div>
-                        <p className="user-name">
-                          {userProfile.first_name}  {userProfile.last_name} 
-                       </p>
-                  </div>
-                
-                  <div className="profi-credential-container"> 
-                     <div className="profi-credential-box">
-                        
-                        <p className="user-credential">{userProfile.profile.credential}</p>
-                     </div>
-                   
-                     <div className="relation-box">
-                      {  userProfile.email === props.currentUser.email?
-                        
-                           <div className="num-followers-box inline">
-                              {userProfileFollowers}
-                           </div>
-
-                        :
-                        
-                        <div className="f-box">
-                         { unfollowOrFollowUserBtn }     
+                                :
+                                <img alt="" src={require("../images/user-avatar.png")} className="profile-image"/>
+                            }
                         </div>
+                        <ul className="profile-name-box">
+                            <li className="profile-name">
+                                { userProfile.first_name }  { userProfile.last_name } 
+                            </li>
+                        </ul>
+                    </div>
+                
+                    <div className="profi-credential-container"> 
+                        <div className="profi-credential-box">
+                            <p className="user-credential">{userProfile.profile.credential}</p>
+                        </div>
+                   
+                        <div className="relation-box">
+                            {  userProfile.email === props.currentUser.email?
+                        
+                                <div className="num-followers-box inline">
+                                    {userProfileFollowers}
+                                </div>
+                                :
+                        
+                                <div className="f-box">
+                                    { unfollowOrFollowUserBtn }     
+                                </div>
 
-                        }
+                            }
                         
                            
-                        <div className="user-relation-box">
-                           <div className="prof-option options-box">
-                              {MenuModalLink}
-                           </div>
+                            <div className="user-relation-box">
+                                <div className="prof-option options-box">
+                                    {MenuModalLink}
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
 
-               <div className="follow-teams"> 
-                  <p></p>  
-               </div>
+                <div className="follow-teams"> 
+                    <p></p>  
+                </div>
 
             </div>
      
           
             <div className="credentials-container" >
-               <div className="credentials-box">
-                  <div className="credentials-menu">
-                     <div className="about-box">
-                       <p className="about">About</p>
-                     </div>
+                <div className="credentials-box">
+                    <div className="credentials-menu">
+                        <div className="about-box">
+                            <p className="about">About</p>
+                        </div>
               
-                       
-                  </div>
+                    </div>
 
-                  <div className="about-user-box">
-                     <span  className="location-icon material-icons  ">location_on</span>
-                     <p className="user-location">
-                     Live {userProfile.profile.country },   {userProfile.profile.live } 
-                     </p>
-                  </div>
+                    <div className="about-user-box">
+                        <span  className="location-icon material-icons  ">location_on</span>
+                        <p className="user-location">
+                             Live {userProfile.profile.country },   {userProfile.profile.live } 
+                        </p>
+                    </div>
                   
-                  <div className="about-user-box">
-                     <p className="user-fav-quote">
-                       Bio {userProfile.profile.favorite_quote }
-                     </p>
-                  </div> 
-               </div>
+                    <div className="about-user-box">
+                        <p className="user-fav-quote">
+                             Bio {userProfile.profile.favorite_quote }
+                        </p>
+                    </div> 
+                </div>
         
-               <div className="user-activities-box">
+                <div className="user-activities-box">
+                    <UserActivitiesBtns {...props} />
 
-                   <UserActivitiesBtns {...props} />
-
-                  <div className="answers-flex-box" id="activities-box">
-                      <UserItemsComponent {...props}/>                    
-                  </div>
+                    <div className="answers-flex-box" id="activities-box">
+                        <UserItemsComponent {...props}/>                    
+                    </div>
                     
-           
-               </div> 
+                </div> 
       
                <div className="teams-box">
                </div>
        
             </div>
-         </div>
-      </div>
+        </div>
+    );
 
-
-   )
-
-}
+};
 
 
 
 
 export const UserList = props => {
     //console.log(props)
-    var usersById = props.usersById;
-    const users   = props.entities.users[usersById];
+    let {entities,users, usersById } = props
+    users   = entities && entities.users[usersById] || users[usersById];
 
     return (
       <div>
@@ -220,11 +210,15 @@ export const UserList = props => {
 
                Object.assign(userProps, props);           
                return(
-                  <div  key={index} className="user-list-box">
-                     <UsersComponent{...userProps}/>
+                    <div style={props.userListBoxStyles}
+                         key={index}
+                         className="user-list-container"
+                         id="user-list-container">
 
-                  </div>
-               )
+                        <UsersComponent{...userProps}/>
+
+                    </div>
+                )
             }
       
           )}
@@ -391,6 +385,7 @@ export const UserPosts = props => {
 };
 
 export const UsersComponent = props => {
+
     let {user, usersById, currentUser} = props
 
     let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
@@ -404,73 +399,64 @@ export const UsersComponent = props => {
             obj        : user, 
             byId       : usersById,
             currentUser,
-
-      }
+    }
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-    var btnsProps = {editUserProfileProps}
+    var btnsProps = {editUserProfileProps};
       
-   Object.assign(btnsProps, props)
+    Object.assign(btnsProps, props)
+    console.log(user)
 
 
-   let unfollowOrFollowUserBtn =    user.user_is_following? 
+    let unfollowOrFollowUserBtn =    user.user_is_following? 
                                          <UnfollowUserBtn {...btnsProps} />
                                        :
                                          <FollowUserBtn {...btnsProps}/>;
-   return (
-      <div className="user-container-sm">
-         <div className="user-box-sm">
-            <div className="user-box">
-               <div className="img-container-s">
-                  <div className="img-box-s user-img">
-          <Link  to={{ pathname: pathToProfile,state,}}>  
-          {user && profile_picture? 
-            <img  src={`${profile_picture}`} alt="" className="user-photo"/> 
-
-               
-            :
-             <img alt="" src={require("../images/user-avatar.png")} className="user-photo"/>  
+    return (
+        <BrowserRouter>
+        <div className="user-list-box">
+            <div className="user-list-contents">
+                <div className="user-list-img-box">
+                    <div className="user-list-img">
+                        <Link  to={{ pathname: pathToProfile,state,}}>  
+                            { user && profile_picture? 
+                                <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
+                                :
+                                <img alt="" src={require("../images/user-avatar.png")} className="user-photo"/>  
             
-            }        
-          </Link>
-        </div>
-      </div> 
+                            }        
+                        </Link>
+                    </div>
+                </div> 
 
-      <div className="user-name-box">
+                <div className="user-name-box user-extra-data-box">
+                    <Link className="user-list-name" to={{ pathname: pathToProfile,state,}}>
+                        { user.first_name }   {user.last_name }
+                    </Link>
 
-        <Link className="profile-name" to={{ pathname: pathToProfile,state,}}>
+                    <div className="user-credentials">
+                        <p className="relatio about-user">{ user.profile.credential }</p>
+                    </div>
 
-          {user.first_name }   {user.last_name }
-          {user.followed }
-        </Link>
+                </div>
 
-        <div className="user-credentials">
-         <p> {user.profile.followers } Followers</p>
-          <p className="relatio about-user"></p>
-        </div>
+                <div className="follow-box user-follow-box" >
+                    { user.email !== props.currentUser.email?
+                        <div className="follow-btn-sm">
+                            { unfollowOrFollowUserBtn }
+                        </div>
+                        :
+                        <p> {user.profile.followers } Followers</p>
+                    } 
 
-      </div>
+                </div>
 
-    </div>
-    
-    <div className="follow-box" >
-         { user.email !== props.currentUser.email?
-            <div className="follow-btn-sm">
-               { unfollowOrFollowUserBtn }
             </div>
-         :
-            ""
-         } 
-
-    </div>
-
-  </div>
-</div>
-
-
-  )
+        </div>
+        </BrowserRouter>
+    );
    
-}
+};
 
 
 

@@ -1,70 +1,59 @@
  
 @media (min-width:980px) {
   
-body {
+    body {
+        background: #F9F7F7;
+    }
 
-       background: #F9F7F7;
-       }
-
-#home-page-contents {
-  border: 1px solid red;
-}
-
-#question-page {  
-  background: white;
-  width:100%;
-  margin:  auto;
-    
-}
-#home-page-contents,
-.post-contents,.question-contents {
-  border:1px solid green !important; /*#F9F7F7;/* #D5D7D5;*/
-  width: 100%;
-  background: white;
-  width:40%;
-  margin:  0px 30% !important;  
-  
-  
-}
+    #home-page-contents {
+        border: 1px solid red;
+    }
 
 
-
+    #home-page-contents, .question-page, .post-contents,
+    .question-list-page, .post-list-page {
+        border     : 1px solid  #D5D7D5;
+        background : white;
+        width      : 40%;
+        margin     : 20px 30% !important;  
+    }
 
   
-.post-box,.question-box {
-  border:px solid blue;/* #D5D7D5;*/
-  
-    
-} 
+    .post-box,.question-box {
+        border:px solid blue;
+    } 
   
 
-.post ,.question {
-  border:px solid black;
-  font-size: 17px;
-  margin:18px 18px 0px;
-  font-family: 'Ropa Sans'
-}
-.post-title {
-   border: px solid blue; 
-}
-.main-post  {
-  border:px solid red;
-  width: 100%;
-  font-size: 17px;
-}
-.main-post img {
-  border: px solid blue;
-   max-width: 100%;
-   height: auto;
-   width: 500px;
-  object-fit: cover;
+    .post ,.question {
+        border:px solid black;
+        font-size: 17px;
+        margin:18px 18px 0px;
+        font-family: 'Ropa Sans'
+    }
 
-}
-.main-post p:nth-child(2) {
-  border: px solid black;
-  height: auto; ;
-  margin-left: 0px;
-  }
+    .post-title {
+        border: px solid blue; 
+    }
+
+    .main-post  {
+        border:px solid red;
+        width: 100%;
+        font-size: 17px;
+    }
+
+    .main-post img {
+        border: px solid blue;
+        max-width: 100%;
+        height: auto;
+        width: 500px;
+        object-fit: cover;
+    }
+
+    .main-post p:nth-child(2) {
+        border: px solid black;
+        height: auto; ;
+        margin-left: 0px;
+    }
 
 .main-post p:nth-child(3) {
    border: 1px solid red;

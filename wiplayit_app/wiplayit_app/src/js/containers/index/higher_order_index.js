@@ -41,8 +41,7 @@ export function withHigherOrderIndexBox(Component) {
                 successMessage     : null,
                 modalIsOpen        : false,
             };
-            this.onStoreUpdate     = this.onStoreUpdate.bind(this);
-             
+          
         };
 
 
@@ -116,16 +115,32 @@ export function withHigherOrderIndexBox(Component) {
                 var timeStamp = new Date();
                 let { entities } = storeUpdate;
                 let { currentUser,modal, index, question, userProfile, userAuth } = entities;
-                modal = modal && modal['editor']; 
+
+                let editorModal  = modal['editor']; 
+                let optionsModal = modal['optionsMenu'];
+                let dropImageModal = modal['dropImage'];
+                let userListModal = modal['userList'];
+
+                if (editorModal && editorModal.modalIsOpen || optionsModal &&  optionsModal.modalIsOpen ||
+                    dropImageModal && dropImageModal.modalIsOpen || userListModal && userListModal.modalIsOpen  ) {
+                    //alert(e.modalIsOpen)
+                    document.body.style['overflow-y'] = 'hidden';
+                    document.body.style['overflow-x'] = 'hidden';
+                }else{
+                    document.body.style['overflow-y'] = 'scroll';
+                    document.body.style['overflow-x'] = 'scroll';
+                }
                 //console.log(userAuth)
 
                 this.confirmLogout(userAuth.auth);
                 
 
-                if (modal && Object.keys(modal).length) {
+                if (editorModal && Object.keys(editorModal).length) {
                     //console.log(modal)
-                    let {objName, data, isCreating} = modal;
-                    this.setState({ modalIsOpen : modal.modalIsOpen })
+                    let {objName, data, isCreating, modalIsOpen} = editorModal;
+                    this.setState({ modalIsOpen : modalIsOpen });
+
+                    
                                                             
                     if (isCreating && objName === 'Question' || objName === 'Post' ) {
                         //console.log(modal)
@@ -141,7 +156,7 @@ export function withHigherOrderIndexBox(Component) {
                        data['successMessageAlerted'] = true;
                        this.setState({ showSuccessMessage : true, successMessage });
 
-                +        setTimeout(()=> {
+                        setTimeout(()=> {
                            
                            this.setState({showSuccessMessage:false}); 
                         }, 5000);
@@ -181,36 +196,66 @@ export function withHigherOrderIndexBox(Component) {
 
             let { action } = history;
             
-            if (action === "POP") {
-                ///console.log(action, prevProps, this.props, modal)
+            if (modal && action === "POP") {
+                console.log(action, modal)
+                let{background} = modal;
 
-                let optionsModal = modal && modal['optionsMenu'];
-                let editor       = modal && modal['editor'];
-                let dropImage    = modal && modal['dropImage'];
+                let optionsModal   = modal['optionsMenu'];
+                let editorModal    = modal['editor'];
+                let dropImageModal = modal['dropImage'];
+                let userListModal = modal['userList'];
 
 
-                editor       && editor.modalIsOpen && ModalManager.close('editor');
-                optionsModal && optionsModal.modalIsOpen && ModalManager.close('optionsMenu');
-                dropImage    && dropImage.modalIsOpen    && ModalManager.close('dropImage'); 
+                editorModal    && editorModal.modalIsOpen    && ModalManager.close('editor', background);
+                optionsModal   && optionsModal.modalIsOpen   && ModalManager.close('optionsMenu', background);
+                dropImageModal && dropImageModal.modalIsOpen && ModalManager.close('dropImage', background); 
+                userListModal  && userListModal.modalIsOpen  && ModalManager.close('userList', background); 
 
             }else{
                 //console.log(action, prevProps, this.props, modal)
             }
-        }
+        };
+
 
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
-            //console.log(this.props)            
-      
+            //console.log(this.props)  
+            let { entities } = this.props;
+            window.addEventListener("beforeunload",(event)=>{
+                
+                let { modal } = entities;
+
+                let optionsModal   = modal && modal['optionsMenu'];
+                let editorModal    = modal && modal['editor'];
+                let dropImageModal = modal && modal['dropImage'];
+
+                console.log('Im reloading',optionsModal,  editorModal, dropImageModal)
+
+                editorModal    && editorModal.modalIsOpen    && ModalManager.close(
+                                                                            'editor',
+                                                                            editorModal.background
+                                                                        );
+                optionsModal   && optionsModal.modalIsOpen   && ModalManager.close(
+                                                                        'optionsMenu',
+                                                                        optionsModal.background
+                                                                    );
+                dropImageModal && dropImageModal.modalIsOpen && ModalManager.close(
+                                                                            'dropImage',
+                                                                            dropImageModal.background
+                                                                        ); 
+                //event.returnValue = '';
+                
+            });
+ 
+            
             if (!this.isAuthenticated()) {
                //User is not authenticated,so redirect to authentication page.
                 history.push('/user/registration/')
             }
 
             if(!this.getCurrentUser()){
-
-        	    store.dispatch(getCurrentUser());
+       	    store.dispatch(getCurrentUser());
             }
         };
 
@@ -237,7 +282,7 @@ export function withHigherOrderIndexBox(Component) {
         
 
         editfollowersOrUpVoters = (params) =>{
-            console.log(params)
+            //console.log(params)
             params = this._getFormData(params);
             this.props.submit(params); 
         }
@@ -273,6 +318,10 @@ export function withHigherOrderIndexBox(Component) {
             Object.assign(props, this.props );
             return props;  
         };
+
+        onBeforeUnload =()=>{
+            console.log('Component is unloading')
+        }
   
 
         render() {
@@ -281,14 +330,12 @@ export function withHigherOrderIndexBox(Component) {
                                                               { display : 'none' };
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',}
                                               : {opacity:'2',};
-            console.log(props)
+            //console.log(props, window)
             return (
-                <div className="app-container">
+                <div  className="app-container">
                     <fieldset style={ onModalStyles } 
                       disabled={ props.modalIsOpen } >
-                      <p>Home</p>
-
-                        <Component {...props}/>
+                      <Component {...props}/>                    
 
                     </fieldset>
 

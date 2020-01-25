@@ -12,7 +12,7 @@ import ReplyChildrenBox from "../containers/replies/reply_children_page";
 import ReplyGrandChildrenBox from "../containers/replies/reply_grand_children_page";
 import ReplyGreatGrandChildBox from "../containers/replies/reply_great_grand_child_page";
 
-import {EditorLink, OptionsModalLink} from "../components/modal-links";
+import {EditorLink, OptionsModalLink, UsersModalLink} from "../components/modal-links";
 import { GetModalLinkProps } from "../components/component-props";
 import { UserComponentSmall } from "../components/profile_components";
 
@@ -260,7 +260,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
               margin     : '0 0 2px'
     }
 
-   let {answer, post, currentUser } = props;
+   let {answer, post, currentUser, isAnswerBox, isPostBox } = props;
 
    let {
         byId,
@@ -284,20 +284,39 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
    var createApiUrl = '';
    var updateUrl    = ''; 
 
-   if (answer) {
+    if (answer) {
 
-      pathToUpvoters =  `/answer/reply/${reply.id}/upvoters/`;
-      updateUrl    = api.updateAnswerReplyApi(reply.id);
-      createApiUrl = api.createAnswerReplyChildApi(reply.id);
+        pathToUpvoters =  `/answer/reply/${reply.id}/upvoters/`;
+        updateUrl    = api.updateAnswerReplyApi(reply.id);
+        createApiUrl = api.createAnswerReplyChildApi(reply.id);
       
-   }
-   else{
+    }
+    else{
       pathToUpvoters =  `/post/reply/${reply.id}/upvoters/`;
       updateUrl    = api.updatePostReplyApi(reply.id);
       createApiUrl = api.createPostReplyChildApi(reply.id);
       
-   }
-   byId = isNewReply && newRepliesById || byId;
+    }
+
+    let usersById = reply && isAnswerBox && `answerReplyUpVoters${reply.id}` ||
+                    reply &&  `postReplyUpVoters${reply.id}`;
+
+    let apiUrl    = reply && isAnswerBox && api.getAnswerReplyUpVotersListApi(reply.id) ||
+                    reply && api.getPostReplyUpVotersListApi(reply.id);
+
+    let linkName = reply.upvotes > 1 && `${reply.upvotes} Upvoters` || `${reply.upvotes} Upvoter`;
+
+    byId = isNewReply && newRepliesById || byId;
+
+
+    let replyUpvotersProps = {
+            apiUrl,
+            byId      : usersById,
+            obj       : reply,
+            currentUser,
+            linkName,
+        };
+   
      
     let editReplyProps = {
         objName     : 'Reply',
@@ -325,8 +344,10 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
     editReplyProps = GetModalLinkProps.props(editReplyProps)
     
 
-    let EditorModalLink = <EditorLink {...editReplyChildProps}/>; 
-    let MenuModalLink   = <OptionsModalLink {...editReplyProps}/>
+    let EditorModalLink   = <EditorLink {...editReplyChildProps}/>; 
+    let MenuModalLink     = <OptionsModalLink {...editReplyProps}/>;
+    let ReplyUpVotersLink = reply.upvotes !== 0 && <UsersModalLink {...replyUpvotersProps}/> 
+
     
 
    let btnsProps = {
@@ -341,15 +362,14 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
                          { reply.upvotes }  Upvotes
                      </Link>;
 
-   let upvoteBtn =  reply.upvoted? <DownVoteReplytBtn {...btnsProps}/>
-               : <UpVoteReplyBtn {...btnsProps}/>
+   let upvoteBtn =  reply.upvoted && <DownVoteReplytBtn {...btnsProps}/> || <UpVoteReplyBtn {...btnsProps}/>
 
                          
               
    
 
    const btnsList  = {
-        itemsCounter :  itemsCounter,
+        itemsCounter :  ReplyUpVotersLink,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalLink,
         btn3         :  MenuModalLink,

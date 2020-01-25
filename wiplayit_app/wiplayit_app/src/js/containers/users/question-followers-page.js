@@ -57,7 +57,7 @@ class QuestionFollowersBox extends Component {
             <div>
                 <PartalNavigationBar {...props}/>
                 {users?
-                    <div>
+                    <div className="app-box-container">
                         {users.isLoading?
                             <div className="page-spin-loder-box">
                                 <AjaxLoader/>
@@ -65,7 +65,7 @@ class QuestionFollowersBox extends Component {
 
                             :
 
-                            <div style={{ paddingTop : '70px'}}>
+                            <div>
                                 <UserList {...props}/>
                             </div>
                         }

@@ -49,7 +49,7 @@ let storeUpdate = store.getState().entities;
 
 let GetModalRouter = (location)=>{
     let background = location.state && location.state.background;
-    
+    //console.log(location)
     let state = location && location.state;
     return <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
 }
@@ -87,7 +87,6 @@ function App() {
             <Route  path="/upvoters/post/:id/" component={PostUpVotersBox} />
             <Route  path="/post/comment/:id/upvoters/" component={PostCommentUpVotersBox} />
             <Route  path="/post/reply/:id/upvoters/" component={PostReplyUpVotersBox} />
-            <Route  path="/modal/router/" component={Modal} />
             <Route  path="/user/profile/:slug/:id/followers/" component={ProfileFollowersBox} />
             <Route  path="/user/profile/:slug/:id/followings/" component={ProfileFollowingsBox} />
             <Route  path="/users/" component={UserListBox}/>

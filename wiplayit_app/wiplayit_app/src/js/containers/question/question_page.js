@@ -158,13 +158,12 @@ export const Questions = props => {
    let totalAnswersLength = question.answer_count + newAnswersLength;
 
    let questionProps = { question};
-   //console.log(newAnswers)
+   
    questionProps = {...props, ...questionProps}; 
 
    
-   return (
-      <div className="question-page" id="question-page">
-         <div>
+    return (
+        <div className="question-page" id="question-page">
             <QuestionComponent {...questionProps}/>
 
             { question.answers || newAnswers?
@@ -183,9 +182,8 @@ export const Questions = props => {
                :
                <p className="items-count">No answer yet</p>
             }
-         </div>
-      </div>
-   );
+        </div>
+    );
    
 };
 
