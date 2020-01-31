@@ -4,7 +4,7 @@ import { MatchMediaHOC } from 'react-match-media';
 
 import {EditorLink, OptionsModalLink, UsersModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
-import { UpVoteAnswerBtn, DownVoteAnswerBtn} from '../components/buttons';
+import { UpVoteAnswerBtn, DownVoteAnswerBtn, OptionsDropDownBtn} from '../components/buttons';
 
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import  * as types  from '../actions/types';
@@ -18,10 +18,8 @@ import { UserComponentSmall } from "../components/profile_components";
 
 
 
-
-
-//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
 
@@ -98,7 +96,16 @@ export const AnswersComponent = props => {
     
 
     let EditorModalLink = <EditorLink {...editCommentProps}/>; 
-    let MenuModalLink   = <OptionsModalLink {...editAnswerProps}/>;
+    let MenuModalLink   = <OptBtnSmallScreen {...editAnswerProps}/>;
+    let MenuDropdownLink = <OptBtnBigScreen {...editAnswerProps}/>;
+
+    let optionsBtn = ()=>(
+        <div>
+            {MenuModalLink}
+            {MenuDropdownLink}
+        </div>
+        )
+
     let AnswerUpVotersLink =  answer.upvotes !== 0 && <UsersModalLink {...answerUpvotersProps}/> 
    
     
@@ -123,7 +130,7 @@ export const AnswersComponent = props => {
             itemsCounter : AnswerUpVotersLink,
             btn1   : UpVoteBtn,
             btn2   : EditorModalLink,
-            btn3   : MenuModalLink,
+            btn3   : optionsBtn(),
             Styles : Styles
          };
 

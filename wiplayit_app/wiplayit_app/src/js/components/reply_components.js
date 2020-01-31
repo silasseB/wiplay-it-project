@@ -3,7 +3,7 @@ import { BrowserRouter,Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from '../components/editor_components';
-import { UpVoteReplyBtn, DownVoteReplytBtn} from '../components/buttons';
+import { UpVoteReplyBtn, DownVoteReplytBtn, OptionsDropDownBtn} from '../components/buttons';
 
 import {ButtonsBox} from "../components/partial_components";
 import Api from '../api';
@@ -17,8 +17,9 @@ import { GetModalLinkProps } from "../components/component-props";
 import { UserComponentSmall } from "../components/profile_components";
 
 
-//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+
+const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
 
@@ -345,7 +346,16 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
     
 
     let EditorModalLink   = <EditorLink {...editReplyChildProps}/>; 
-    let MenuModalLink     = <OptionsModalLink {...editReplyProps}/>;
+    let MenuModalLink     = <OptBtnSmallScreen {...editReplyProps}/>;
+    let MenuDropdownLink    = <OptBtnBigScreen {...editReplyProps}/>;
+
+    let optionsBtn = ()=>(
+        <div>
+            {MenuModalLink}
+            {MenuDropdownLink}
+        </div>
+        )
+
     let ReplyUpVotersLink = reply.upvotes !== 0 && <UsersModalLink {...replyUpvotersProps}/> 
 
     
@@ -372,7 +382,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         itemsCounter :  ReplyUpVotersLink,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalLink,
-        btn3         :  MenuModalLink,
+        btn3         :  optionsBtn(),
       } 
  
 

@@ -3,7 +3,7 @@ import { GetModalLinkProps } from "../components/component-props";
 import {EditorLink, OptionsModalLink, UsersModalLink} from "../components/modal-links"
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { FollowQuestionBtn, UnfollowQuestionBtn} from '../components/buttons';
+import { FollowQuestionBtn, UnfollowQuestionBtn, OptionsDropDownBtn} from '../components/buttons';
 
 import {ButtonsBox, Styles } from "../components/partial_components";
 //import AnswersBox from "containers/answer/answer_page";
@@ -11,9 +11,8 @@ import  * as types  from '../actions/types';
 import Api from '../api';
 
 
-//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
-
+const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 
 const api      = new Api();
 
@@ -96,7 +95,17 @@ export const QuestionComponent = props => {
     editQuestionProps = GetModalLinkProps.props(editQuestionProps)
  
     let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
-    let MenuModalLink   = <OptionsModalLink {...editQuestionProps}/>
+
+    let MenuModalLink    = <OptBtnSmallScreen {...editQuestionProps}/>;
+    let MenuDropdownLink = <OptBtnBigScreen {...editQuestionProps}/>;
+
+    let optionsBtn = ()=>(
+        <div>
+            {MenuModalLink}
+            {MenuDropdownLink}
+        </div>
+        )
+
     let questionFollowersLink = question.followers !== 0 &&  <UsersModalLink {...questionFollowersProps}/> 
     
   
@@ -123,7 +132,7 @@ export const QuestionComponent = props => {
             itemsCounter : questionFollowersLink,
             btn1         : EditorModalLink,
             btn2         : unfollowOrFollowQuestionBtn,
-            btn3         : MenuModalLink,
+            btn3         : optionsBtn(),
             Styles       : Styles,
         }
 

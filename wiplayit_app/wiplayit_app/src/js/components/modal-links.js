@@ -99,7 +99,7 @@ export const OptionsModalLink = props => {
         
         
     return(
-        <button className="btn btn-sm"    onClick={()=> {
+        <button className="btn-sm"    onClick={()=> {
                         store.dispatch(showModal(madalParams))
                         setTimeout(()=> {
 
@@ -146,7 +146,7 @@ export const ChangeImageLink = props => {
                         }, 500);
 
                     }}>
-            Change  
+            Edit  
         </button>
     );
 };

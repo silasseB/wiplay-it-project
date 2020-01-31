@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {  Link } from "react-router-dom";
+import {  Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { SubmitBtn  } from "../components/buttons";
 import { ModalManager}   from  "../containers/modal/modal_container";
@@ -64,6 +64,7 @@ const NavBarDropDown = props => {
     let path_to_profile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
  
     return(
+        
         <div className="navigation-img-box">
                     
             <div className="" id="navBardropdown" 
@@ -124,7 +125,7 @@ export const NavBarSmallScreen = props => {
 
     return (
 		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
-            <Link to="/" className="logo"><strong>Wiplayit</strong></Link>
+            <button onClick={()=>props.reloadPage()}  className="logo"><strong>Wiplayit</strong></button>
                 <div className="mobile-navbar-center">
                     <ul style={styles}>
 
@@ -211,7 +212,7 @@ export const NavBarBigScreen = props => {
             <div className="navigation-box">
                 <div className="navigation-menu">
                     <div className="logo-box">
-                        <Link className="logo" to="/">Wiplayit</Link>
+                        <button onClick={()=> props.reloadPage()} className="logo">Wiplayit</button>
                     </div>
 
                     <div className="nav-menu">

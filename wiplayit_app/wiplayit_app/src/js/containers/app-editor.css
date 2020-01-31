@@ -465,17 +465,16 @@ div.public-DraftEditor-content {
 
     .modal-title-box {
         width   : 100%;
-        padding : 5px 14px; 
-        border  : px solid blue;
-                   
+                          
     }
     
     .modal-title {
-        border      : px solid black;
+        border      : 1px solid black;
         font-size   : 11px;
         color       : #fff;
         display     :  flex;
         font-weight : bolder;
+        margin      : 10px 0 0; 
     }
 
 

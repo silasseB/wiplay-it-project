@@ -13,7 +13,7 @@ import {
 
 import { store } from "../../configs/store-config";
 import { ModalOptionsMenu } from "../../components/buttons";
-import { DropImage } from "../../containers/profile/edit_profile";
+import EditProfile, { DropImage } from "../../containers/profile/edit_profile";
 import UserListBox from "../../containers/users/modal_user_list"; 
 
 import AppEditor  from '../../containers/editor';
@@ -36,14 +36,25 @@ export function Modal(props) {
     console.log(props, modalType)
 
     let modalStoreParams = { background, modalType  };
+
+    let getEditorContents = ()=>{
+        let { objName } = editorProps;
+        return objName === 'UserProfile' && <EditProfile {...editorProps}/> || <AppEditor {...editorProps}/>
+    }
         
 
     let getModalType = (type) => {
+        
 
         if (background) {
             switch(type){
          
                 case 'editor':
+                    editorProps['background']    = background;
+                    editorProps['modalContents'] = getEditorContents();
+                    return ModalOpener.editorModal(editorProps, modalStoreParams);
+
+                case 'userProfile':
                     editorProps['background']    = background;
                     editorProps['modalContents'] =  <AppEditor {...editorProps}/>;
                     return ModalOpener.editorModal(editorProps, modalStoreParams);

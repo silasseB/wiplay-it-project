@@ -7,19 +7,22 @@ import Api from '../api';
 import  * as types  from '../actions/types';
 
 
-import { UnfollowUserBtn, FollowUserBtn,EditUserDropDownbutton } from "../components/buttons"; 
+import { UnfollowUserBtn, FollowUserBtn, OptionsDropDownBtn} from "../components/buttons"; 
 
 import{ QuestionComponent } from "../components/question_components"
 
 import{ PostComponent } from "../components/post_components"
 import { GetModalLinkProps } from "../components/component-props";
-import { OptionsModalLink} from "../components/modal-links"
-
 import  { AnswersComponent } from "../components/answer_components";
+import { 
+    OptionsModalLink,
+    EditorLink, 
+    ChangeImageLink,
+    UsersModalLink } from "../components/modal-links";
 
 
-//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-//const OptBtnBigScreen = MatchMediaHOC(EditUserDropDownbutton, '(min-width: 800px)');
+const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
 
@@ -37,6 +40,20 @@ export const ProfileComponent = props => {
             usersIsFor : 'userProfileFollowers',
             userProfile 
     };
+    let profile = userProfile.profile;
+
+    let apiUrl   = userProfile && api.getQuestionFollowersListApi(userProfile.id);
+    let linkName = profile.followers > 1 && `${profile.followers} Followers` || `${profile.followers} Follower`;
+
+    let userProfileFollowersProps = {
+            apiUrl,
+            byId      : `userProfileFollowers${userProfile.id}`,
+            obj       : userProfile,
+            currentUser,
+            linkName  : linkName,
+           
+        };
+    
 
     let optionsBtnStyles = {
               fontSize   : '8px',
@@ -54,13 +71,19 @@ export const ProfileComponent = props => {
             isPut       : true,
             obj         : userProfile, 
             byId        : profileById,
+            linkName    : 'Edit',
             currentUser,
 
     }
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-    let MenuModalLink   = <OptionsModalLink {...editUserProfileProps}/>;
-      
+
+    let EditorModalLink = <EditorLink {...editUserProfileProps}/>;
+    let MenuModalLink    = <OptBtnSmallScreen {...editUserProfileProps}/>;
+    let MenuDropdownLink = <OptBtnBigScreen {...editUserProfileProps}/>;
+
+    let UserProfileFollowersLink = profile.followers !== 0 &&  <UsersModalLink {...userProfileFollowersProps}/>; 
+
     let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
 
     let btnsProps = {
@@ -81,10 +104,11 @@ export const ProfileComponent = props => {
 
                                 </Link>;
 
-    let unfollowOrFollowUserBtn =  userProfile.user_is_following? 
+    let UnfollowOrFollowUserBtn =  userProfile.user_is_following? 
                                          <UnfollowUserBtn {...btnsProps} />
                                        :
                                          <FollowUserBtn {...btnsProps}/>;
+    let ChangeImageBtn = MatchMediaHOC(ChangeImageLink, '(min-width: 980px)')
 
         
       
@@ -101,48 +125,59 @@ export const ProfileComponent = props => {
             <div className="profile">
                 <div className="profile-box">
                     <div className="profile-section-top">
-                        <div className="profile-img-box">
-                            { profile_picture? 
-                                <img alt="" src={`${profile_picture}`} className="profile-image"/>
+                        <div className="profile-img-container">
+                            <div className="profile-img-box">
+                                { profile_picture? 
+                                    <img alt="" src={`${profile_picture}`} className="profile-image"/>
 
-                                :
-                                <img alt="" src={require("../images/user-avatar.png")} className="profile-image"/>
-                            }
-                        </div>
-                        <ul className="profile-name-box">
-                            <li className="profile-name">
-                                { userProfile.first_name }  { userProfile.last_name } 
-                            </li>
-                        </ul>
-                    </div>
-                
-                    <div className="profi-credential-container"> 
-                        <div className="profi-credential-box">
-                            <p className="user-credential">{userProfile.profile.credential}</p>
-                        </div>
-                   
-                        <div className="relation-box">
-                            {  userProfile.email === props.currentUser.email?
+                                    :
+                                    <img alt="" src={require("../images/user-avatar.png")} className="profile-image"/>
+                                }
+                            </div>
+                        </div>    
+
+                                            
+                        <div className="profile-credential-box">
+                            <ul className="profile-name-box">
+                                <li className="profile-name">
+                                    { userProfile.first_name }  { userProfile.last_name } 
+                                </li>
+
+                                { userProfile.profile.credential?
+                                    <li className="user-credential">
+                                        {userProfile.profile.credential}
+                                    </li>
+                                    :
+                                    ""
+                                }
+                            </ul>
+
+                            <div className="relation-box">
+                                <div className="user-profile-followers-box">
+                                    {  userProfile.email === props.currentUser.email?
+                                        <div className="numb-followers-box">
+                                            { UserProfileFollowersLink }
+                                        </div>
+                                        :
                         
-                                <div className="num-followers-box inline">
-                                    {userProfileFollowers}
-                                </div>
-                                :
-                        
-                                <div className="f-box">
-                                    { unfollowOrFollowUserBtn }     
+                                        <div className="follow-user-profile-box">
+                                            { UnfollowOrFollowUserBtn }     
+                                        </div>
+
+                                    }
                                 </div>
 
-                            }
-                        
-                           
-                            <div className="user-relation-box">
-                                <div className="prof-option options-box">
-                                    {MenuModalLink}
+                                <div className="user-profile-options-box">
+                                    { MenuModalLink }
+                                    { MenuDropdownLink }
                                 </div>
                             </div>
+                            
                         </div>
+
                     </div>
+                                  
+
                 </div>
 
                 <div className="follow-teams"> 
@@ -157,6 +192,9 @@ export const ProfileComponent = props => {
                     <div className="credentials-menu">
                         <div className="about-box">
                             <p className="about">About</p>
+                        </div>
+                        <div className="edit-credential-btn-box">
+                        {EditorModalLink}
                         </div>
               
                     </div>
@@ -390,8 +428,10 @@ export const UsersComponent = props => {
 
     let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
     let profile_picture = user.profile.profile_picture;
+    let profile = user.profile;
         
-    let state        = { userProfile : user}
+    let state    = { userProfile : user}
+
 
     let editUserProfileProps = {
             objName    : 'UsersList',
@@ -406,12 +446,14 @@ export const UsersComponent = props => {
       
     Object.assign(btnsProps, props)
     console.log(user)
+    let UnfollowBtn = MatchMediaHOC(UnfollowUserBtn, '(min-width: 980px)');
+    let FollowBtn = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
 
 
     let unfollowOrFollowUserBtn =    user.user_is_following? 
-                                         <UnfollowUserBtn {...btnsProps} />
-                                       :
-                                         <FollowUserBtn {...btnsProps}/>;
+                                         <UnfollowBtn {...btnsProps}/>
+                                         :
+                                         <FollowBtn {...btnsProps}/>;
     return (
         <BrowserRouter>
         <div className="user-list-box">
@@ -429,7 +471,7 @@ export const UsersComponent = props => {
                     </div>
                 </div> 
 
-                <div className="user-name-box user-extra-data-box">
+                <div className="user-list-name-box user-extra-data-box">
                     <Link className="user-list-name" to={{ pathname: pathToProfile,state,}}>
                         { user.first_name }   {user.last_name }
                     </Link>

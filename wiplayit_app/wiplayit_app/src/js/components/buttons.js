@@ -271,11 +271,12 @@ const getModalProps = (props)=>{
 }
 
 export const QuestionOptModalBtns = props => {
-    console.log(props)
+    //console.log(props)
     let {background} = props
     let modalPath = `/compose/${'question'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
-    let state = { background, modalPath, modalProps} 
+    let state = { background, modalPath, modalProps};
+
     return (
         <div>
            { props.obj.created_by.id === props.currentUser.id? 
@@ -299,7 +300,7 @@ export const AnswerOptModalBtns = props => {
     let modalPath = `/compose/${'answer'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
     let state = { background,modalPath, modalProps} 
-    console.log(props)
+    //console.log(props)
    
    return(
       <div>
@@ -320,7 +321,7 @@ export const AnswerOptModalBtns = props => {
 
 
 export const CommentOptModalBtns = props => {
-    console.log(props);
+    //console.log(props);
     let {background} = props
     let modalPath = `/compose/${'comment'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
@@ -388,17 +389,17 @@ export const ProfileOptsModalBtns = props => {
             byId        : props.byId,
         }
 
-    console.log(props)
+    //console.log(props)
 
     return (
       <div>
          { props.obj && props.obj.user_can_edit?   
             <button className="btn-sm edit-user-profile"
                 onClick={()=>{
-                       ModalManager.close('optionsMenu', props.background) 
-                        setTimeout(()=> {
-                           history.push(pathToEditProfile); 
-                        }, 500);
+                    ModalManager.close('optionsMenu', props.background) 
+                    setTimeout(()=> {
+                        history.push(pathToEditProfile); 
+                    }, 500);
                       
                     }
                 }>
@@ -421,7 +422,7 @@ export const ProfileOptsModalBtns = props => {
 
 
 export const EditUserButtons = props => {
-  console.log(props)
+  //console.log(props)
   const pathToEditProfile = `/edit/profile/${props.userProfile.slug}/`;
   let state = { userProfile : props.userProfile, currentUser : props.currentUser}
   
@@ -453,64 +454,63 @@ export const EditUserButtons = props => {
   )
 }
 
-export const ModalOptionsMenu = props => {
-   console.log(props)
-   return(
-      <div className="modal-menu  modal-body">
-       <ModalMenuHeader {...props}/>
-      { props.objName === 'UserProfile'?
-         <ProfileOptsModalBtns {...props}/>
-         :
+
+export const OptionsMenuBtns = props => {
+    //console.log(props);
+    return(
+        <div>
+            { props.objName === 'UserProfile'?
+                <ProfileOptsModalBtns {...props}/>
+                :
          
-      <div>
-      {props.objName === 'Question'?
-          <QuestionOptModalBtns {...props}/>
-          :
-          ""
-       }
+                <div>
+                    { props.objName === 'Question'?
+                        <QuestionOptModalBtns {...props}/>
+                        :
+                        ""
+                    }
        
-       {props.objName === 'Answer'?
-          <AnswerOptModalBtns {...props}/>
-          :
-          ""
-       }
+                    { props.objName === 'Answer'?
+                        <AnswerOptModalBtns {...props}/>
+                        :
+                        ""
+                    }
 
-       {props.objName === 'Comment'?
-          <CommentOptModalBtns {...props}/>
-          :
-          ""
-       }
+                    {props.objName === 'Comment'?
+                        <CommentOptModalBtns {...props}/>
+                        :
+                        ""
+                    }
 
-       {props.objName === 'Reply'?
-          <ReplyOptModalBtns {...props}/>
-          :
-          ""
-       }
+                    { props.objName === 'Reply'?
+                        <ReplyOptModalBtns {...props}/>
+                        :
+                        ""
+                    }
 
-       {props.objName === 'Post'?
-          <PostOptModalBtns {...props}/>
-          :
-          ""
-       }
+                    {props.objName === 'Post'?
+                        <PostOptModalBtns {...props}/>
+                        :
+                        ""
+                    }
 
-       {props.objName === 'postComment'?
-          <PostOptModalBtns {...props}/>
-          :
-          ""
-       }
+                    {props.objName === 'postComment'?
+                        <PostOptModalBtns {...props}/>
+                        :
+                        ""
+                    }
       
-         <button  type="button" className="btn-sm  bookmark" >
-            Bookmark 
-         </button>
-         <button  type="button" className="btn-sm  bookmark">
-            Share 
-         </button>
-         </div>
-      }
+                    <button  type="button" className="btn-sm  bookmark" >
+                        Bookmark 
+                    </button>
+                    <button  type="button" className="btn-sm  bookmark">
+                        Share 
+                    </button>
+                </div>
+            }
  
-   </div>  
-   
-   ); 
+        </div>  
+    ); 
 };
 
 
@@ -532,17 +532,32 @@ export const ModalMenuHeader = props => (
 )
 
 
+export const ModalOptionsMenu = props => {
+    return (
+        <div className="modal-menu  modal-body">
+            <ModalMenuHeader {...props}/>
+            <OptionsMenuBtns {...props}/>
+        </div>
+    );
+};
 
 
-export const EditUserDropDownbutton = props => (
-  <div>
-    <button className="btn-sm profile-opt-btn options-btn" id="userMenuButton"
-              data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" type="button" >
-            <i className="material-icons ">more_horiz</i>
-    </button>
-  </div>
-    
-)
+
+
+export const OptionsDropDownBtn = props => {
+    return(
+        <div>
+            <button className="btn-sm options-btn" id="options-menu"
+                  data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" type="button" >
+                <i className="material-icons ">more_horiz</i>
+            </button>
+            <div className="dropdown-menu" aria-labelledby="options-menu">
+                <OptionsMenuBtns {...props}/>
+            </div>
+        </div>
+    )
+}
+
 
 export const QuestionOptDropDownBtn = props => (
   <div>
@@ -556,14 +571,14 @@ export const QuestionOptDropDownBtn = props => (
 
 
 export const EditProfileDropDownButton = props => (
-  <div>
-    <button className="btn-sm profile-opt-btn options-btn " id="profileMenuButton"
+    <div>
+        <button className="btn-sm profile-opt-btn options-btn " id="profileMenuButton"
            data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" type="button" >
-        <i className="material-icons ">more_horiz</i>
-    </button>
-  </div>
+            <i className="material-icons ">more_horiz</i>
+        </button>
+    </div>
 
-)
+);
 
 
 

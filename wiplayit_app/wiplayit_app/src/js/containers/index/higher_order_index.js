@@ -191,7 +191,7 @@ export function withHigherOrderIndexBox(Component) {
       
 
         componentDidUpdate(prevProps, nextProps) {
-            let { entities,history }  = prevProps;
+            let { entities, history }  = prevProps;
             let { modal } = entities;
 
             let { action } = history;
@@ -203,7 +203,7 @@ export function withHigherOrderIndexBox(Component) {
                 let optionsModal   = modal['optionsMenu'];
                 let editorModal    = modal['editor'];
                 let dropImageModal = modal['dropImage'];
-                let userListModal = modal['userList'];
+                let userListModal  = modal['userList'];
 
 
                 editorModal    && editorModal.modalIsOpen    && ModalManager.close('editor', background);
@@ -268,6 +268,11 @@ export function withHigherOrderIndexBox(Component) {
             
         }
 
+        reloadPage(){
+            console.log(this.props,window.location, 'Im reloading this page')
+            window.location.reload();
+        };
+
      
         redirecToQuestionPage  = (questionObj) => {
             questionObj = questionObj.newObject;
@@ -312,6 +317,7 @@ export function withHigherOrderIndexBox(Component) {
             let props = {
                 logout                  : this.logout,
                 editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
+                reloadPage              : this.reloadPage.bind(this),
                 ...this.state,
             };
          

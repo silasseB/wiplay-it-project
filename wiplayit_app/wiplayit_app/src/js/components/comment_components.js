@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { UpVoteCommentBtn, DownVoteCommentBtn  } from '../components/buttons';
+import { UpVoteCommentBtn, DownVoteCommentBtn, OptionsDropDownBtn } from '../components/buttons';
 
 import {EditorLink, OptionsModalLink,UsersModalLink} from "../components/modal-links"
 import { GetModalLinkProps } from "../components/component-props";
@@ -16,8 +16,10 @@ import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from '../components/editor_components';
 
 
-//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-//const OptBtnBigScreen = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+
+
+const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen   = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
 
@@ -109,7 +111,16 @@ export const CommentsComponent = props => {
     editReplyProps    = GetModalLinkProps.props(editReplyProps)
     
     let EditorModalLink     = <EditorLink {...editReplyProps}/>; 
-    let MenuModalLink       = <OptionsModalLink {...editCommentProps}/>;
+    let MenuModalLink       = <OptBtnSmallScreen {...editCommentProps}/>;
+    let MenuDropdownLink    = <OptBtnBigScreen {...editCommentProps}/>;
+
+    let optionsBtn = ()=>(
+        <div>
+            {MenuModalLink}
+            {MenuDropdownLink}
+        </div>
+        )
+
     let CommentUpVotersLink = comment.upvotes !== 0 &&  <UsersModalLink {...commentUpvotersProps}/>; 
     
 
@@ -137,7 +148,7 @@ export const CommentsComponent = props => {
         itemsCounter :  CommentUpVotersLink,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalLink,
-        btn3         :  MenuModalLink,
+        btn3         :  optionsBtn(),
       } 
 
       const userProps  = {

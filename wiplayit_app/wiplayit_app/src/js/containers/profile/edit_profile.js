@@ -5,15 +5,14 @@ import {ModalManager} from "../../containers/modal/modal_container";
 import { ChangeImageLink } from "../../components/modal-links"
 import { GetModalLinkProps } from "../../components/component-props";
 
-import { EditProfileNavBar, NavigationBarBigScreen } from "../../components/navBar";
+import { EditProfileNavBar } from "../../components/navBar";
 //import {  ModalCloseBtn  } from "../../components/buttons";
-import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
+//import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
 import  * as types  from '../../actions/types';
 import  * as action  from '../../actions/actionCreators';
 import {store} from "../../configs/store-config";
-import {LocalCache} from  "../../utils/storage";
-import { handleSubmit }  from "../../dispatch/index"
+import { handleSubmit, getUserProfile }  from "../../dispatch/index"
 
 import  AjaxLoader from "../../components/ajax-loader";
 
@@ -57,14 +56,13 @@ class EditProfile extends Component{
  
         const onStoreChange = () => {
 
-            let { cacheEntities } = this.props; 
-            let { slug, id } = this.props.match.params;
+            let {obj, currentUser}        = this.props;
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
-            let byId         =  id? `userProfile${id}`:null;
+            let byId         = obj && `userProfile${obj.id}`;
             
-            let userProfile = byId? entities.userProfile[byId]:null;
-            let { currentUser} = cacheEntities;
+            let userProfile = byId && entities.userProfile[byId];
+            //let { currentUser} = cacheEntities;
             let { modal } = entities;
            
         
@@ -77,7 +75,8 @@ class EditProfile extends Component{
                 if (userProfile) {
                     //console.log(userProfile, userProfile.submitting)
                     let user = userProfile.user;
-                    currentUser =  currentUser && currentUser.user;
+                    //currentUser =  currentUser && currentUser.user;
+                    this.setState({userProfile:user})
                     
                     if ( user && currentUser && currentUser.id === user.id) {
 
@@ -107,33 +106,29 @@ class EditProfile extends Component{
 
     componentDidMount() {
         this.onProfileUpdate();
-        let { cacheEntities } = this.props; 
-        let { userProfile }   = cacheEntities
-        let { slug, id }      = this.props.match.params;
+        //let { cacheEntities } = this.props; 
+        //let { userProfile }   = cacheEntities
+        let { obj, currentUser, apiUrl }      = this.props;
+        console.log(this.props)
                           
-        if (id ) {
-            let profileById = `userProfile${id}`;
-            
-            
-            userProfile = userProfile && userProfile[profileById]
         
+        let userProfile = obj
+        let profileById = userProfile && `userProfile${obj.id}`;
 
-            //console.log(userProfile)
+        //console.log(userProfile)
 
-            this.setState({profileById});
+        this.setState({profileById, userProfile});
 
-            if (userProfile) {
-                userProfile = userProfile.user
-                console.log('userProfile found from cachedEntyties')
-                store.dispatch(action.getUserProfilePending(profileById));
-                store.dispatch(action.getUserProfileSuccess(profileById, userProfile));
-                this.populateEditForm(userProfile);
+        if (userProfile) {
+            store.dispatch(action.getUserProfilePending(profileById));
+            store.dispatch(action.getUserProfileSuccess(profileById, userProfile));
+            this.populateEditForm(userProfile);
 
-            }else {
-                let apiUrl = api.updateProfileApi(id)
-                this.props.getUserProfile(id, apiUrl);
-            }
+        }else {
+                let apiUrl = api.updateProfileApi(userProfile.id)
+                getUserProfile(userProfile.id, apiUrl);
         }
+        
     };
 
     
@@ -167,9 +162,10 @@ class EditProfile extends Component{
     getProps(){
         
         let props = {
-            handleChange   : this.handleChange, 
-            textAreaProps  : this.textAreaProps(),
-            submitProps    : this.submitProps(),
+            handleChange         : this.handleChange, 
+            textAreaProps        : this.textAreaProps(),
+            submitProps          : this.submitProps(),
+            submit               : this.submit.bind(this), 
             editUserProfileProps : this.getUserEditProps(),
             ...this.state,
         }
@@ -212,6 +208,10 @@ class EditProfile extends Component{
 
     }
 
+    submit(params){
+        store.dispatch(handleSubmit(params));
+    };
+
     render() {
       let props = this.getProps();
           
@@ -220,7 +220,7 @@ class EditProfile extends Component{
       return (
         <div>
             <EditProfileNavBar {...props}/>
-            <NavigationBarBigScreen {...props} />
+            
             <div>
                 { userProfile?
                     <div>
@@ -241,7 +241,7 @@ class EditProfile extends Component{
     
 
 
-export default withHigherOrderIndexBox(EditProfile);
+export default EditProfile;
 
 const ProfileEditComponent = props => {
     
@@ -261,30 +261,6 @@ const ProfileEditComponent = props => {
                       disabled={ submitting} >
 
       
-         <div className="edit-img-container">
-            <div className="item-title-box">
-               <b className="item-title">Photo</b>
-            </div>
-
-            <div className="item-title-container">
-               <div className="image-contain">
-                  { userProfile && userProfile.profile.profile_picture?
-                     <div className="edit-image-box">
-                        <img alt="" className="edit-image" src={ userProfile.profile.profile_picture }/>
-                     </div>
-                     :
-                     <div className="avatar-image-box">
-                        <img alt="" src={require("../../images/user-avatar.png")} className="avatar-image"/> 
-                     </div> 
-                  }
-                
-               <ChangeImageLink {...editUserProfileProps}/>
-               </div>
-               
-            </div>
-
-         </div>   
-
             
          <div className="edit-name-box">
             <div className="item-title-container">
@@ -543,13 +519,34 @@ export class DropImage extends React.Component {
 
                </div>
                </fieldset>
-
-         </div>  
-      );
-    }
-}
-
+            </div>  
+        );
+    };
+};
 
 
+/*
+         <div className="edit-img-container">
+            <div className="item-title-box">
+               <b className="item-title">Photo</b>
+            </div>
+
+            <div className="item-title-container">
+               <div className="image-contain">
+                    { userProfile && userProfile.profile.profile_picture?
+                        <div className="edit-image-box">
+                            <img alt="" className="edit-image" src={ userProfile.profile.profile_picture }/>
+                        </div>
+                        :
+                        <div className="avatar-image-box">
+                            <img alt="" src={require("../../images/user-avatar.png")} className="avatar-image"/> 
+                        </div> 
+                    }
+                </div>
+               
+            </div>
+
+         </div>   
+*/
 
 //const EditBtnSmallScreen = MatchMediaHOC(EditBtn, '(max-width: 500px)');

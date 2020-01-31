@@ -7,7 +7,7 @@ import { GetModalLinkProps } from "../components/component-props";
 
 import  * as types  from '../actions/types';
 
-import {DownVotePostBtn,UpVotePostBtn} from '../components/buttons';
+import {DownVotePostBtn,UpVotePostBtn, OptionsDropDownBtn} from '../components/buttons';
 import CommentsBox from "../containers/comment/comment_page";
 import {pageMediaBlockRenderer} from '../components/editor_components';
 import {Editor,EditorState, convertFromRaw} from 'draft-js';
@@ -19,8 +19,8 @@ import { UserComponentSmall } from "../components/profile_components";
 
 
 
-//const OptBtnSmallScreen = MatchMediaHOC(OpenModalButton, '(max-width: 500px)');
-//const OptBtnBigScreen   = MatchMediaHOC(QuestionOptDropDownBtn, '(min-width: 800px)');
+const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
 
@@ -87,7 +87,16 @@ export const PostComponent = props => {
     editCommentProps = GetModalLinkProps.props(editCommentProps)
        
     let EditorModalLink  = <EditorLink {...editCommentProps}/>; 
-    let MenuModalLink    = <OptionsModalLink {...editPostProps}/>;
+    let MenuModalLink    = <OptBtnSmallScreen {...editPostProps}/>;
+    let MenuDropdownLink = <OptBtnBigScreen {...editPostProps}/>;
+
+    let optionsBtn = ()=>(
+        <div>
+            {MenuModalLink}
+            {MenuDropdownLink}
+        </div>
+        )
+
     let PostUpVotersLink = post.upvotes !== 0 &&  <UsersModalLink {...postUpvotersProps}/>; 
    
     
@@ -113,7 +122,7 @@ export const PostComponent = props => {
             itemsCounter : PostUpVotersLink,
             btn1   : UpVoteBtn,
             btn2   : EditorModalLink,
-            btn3   : MenuModalLink,
+            btn3   : optionsBtn(),
             Styles : Styles
          };
 
