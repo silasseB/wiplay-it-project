@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
+import {history} from "../index" 
 
 
 import Api from '../api';
@@ -17,14 +18,18 @@ import  { AnswersComponent } from "../components/answer_components";
 import { 
     OptionsModalLink,
     EditorLink, 
-    ChangeImageLink,
+    ChangeImageBtn,
     UsersModalLink } from "../components/modal-links";
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
-const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
+const OptBtnSmallScreen   = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnBigScreen     = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
+const EditorLinkBigScreen = MatchMediaHOC(EditorLink, '(min-width: 980px)') 
 const api      = new Api();
 
+   
+
+ 
 
 
 export const ProfileComponent = props => {
@@ -78,13 +83,28 @@ export const ProfileComponent = props => {
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
 
-    let EditorModalLink = <EditorLink {...editUserProfileProps}/>;
-    let MenuModalLink    = <OptBtnSmallScreen {...editUserProfileProps}/>;
-    let MenuDropdownLink = <OptBtnBigScreen {...editUserProfileProps}/>;
+    let EditorModalBtnBigScreen   = <EditorLinkBigScreen {...editUserProfileProps}/>;
+    let MenuModalBtn              = <OptBtnSmallScreen {...editUserProfileProps}/>;
+    let MenuDropdownBtn           = <OptBtnBigScreen {...editUserProfileProps}/>;
+
+    let EditorModalBtnSmallScreen = ()=>{
+        
+            return(
+                <button className="btn-sm edit-user-profile"
+                        onClick={()=>{
+                            history.push(pathToEditProfile, {...editUserProfileProps}); 
+                        }
+                }>
+                    Edit
+                </button>
+            )
+    
+    }
 
     let UserProfileFollowersLink = profile.followers !== 0 &&  <UsersModalLink {...userProfileFollowersProps}/>; 
 
     let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
+    const pathToEditProfile = `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
 
     let btnsProps = {
         editUserProfileProps,
@@ -104,11 +124,8 @@ export const ProfileComponent = props => {
 
                                 </Link>;
 
-    let UnfollowOrFollowUserBtn =  userProfile.user_is_following? 
-                                         <UnfollowUserBtn {...btnsProps} />
-                                       :
-                                         <FollowUserBtn {...btnsProps}/>;
-    let ChangeImageBtn = MatchMediaHOC(ChangeImageLink, '(min-width: 980px)')
+    let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
+    let ChangeImageBtnBigScreen = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)')
 
         
       
@@ -117,7 +134,7 @@ export const ProfileComponent = props => {
 
 
     let  profile_picture = userProfile && userProfile.profile?
-                            userProfile.profile.profile_picture : null;
+                           userProfile.profile.profile_picture : null;
                  
 
     return (
@@ -129,7 +146,6 @@ export const ProfileComponent = props => {
                             <div className="profile-img-box">
                                 { profile_picture? 
                                     <img alt="" src={`${profile_picture}`} className="profile-image"/>
-
                                     :
                                     <img alt="" src={require("../images/user-avatar.png")} className="profile-image"/>
                                 }
@@ -154,22 +170,16 @@ export const ProfileComponent = props => {
 
                             <div className="relation-box">
                                 <div className="user-profile-followers-box">
-                                    {  userProfile.email === props.currentUser.email?
-                                        <div className="numb-followers-box">
-                                            { UserProfileFollowersLink }
-                                        </div>
-                                        :
-                        
-                                        <div className="follow-user-profile-box">
-                                            { UnfollowOrFollowUserBtn }     
-                                        </div>
+                                    <div className="follow-user-profile-box">
+                                        { UnfollowOrFollowUserBtn }     
+                                    </div>
 
                                     }
                                 </div>
 
                                 <div className="user-profile-options-box">
-                                    { MenuModalLink }
-                                    { MenuDropdownLink }
+                                    { MenuModalBtn }
+                                    { MenuDropdownBtn }
                                 </div>
                             </div>
                             
@@ -193,9 +203,16 @@ export const ProfileComponent = props => {
                         <div className="about-box">
                             <p className="about">About</p>
                         </div>
-                        <div className="edit-credential-btn-box">
-                        {EditorModalLink}
-                        </div>
+                        
+                        { userProfile && userProfile.user_can_edit?
+                            <div className="edit-credential-btn-box">
+
+                                {EditorModalBtnBigScreen }
+                                {EditorModalBtnSmallScreen() }
+                            </div>
+                            :
+                            ""
+                        }
               
                     </div>
 
@@ -431,29 +448,26 @@ export const UsersComponent = props => {
     let profile = user.profile;
         
     let state    = { userProfile : user}
-
-
+    
     let editUserProfileProps = {
             objName    : 'UsersList',
             isPut      : true,
             obj        : user, 
             byId       : usersById,
             currentUser,
+            
     }
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-    var btnsProps = {editUserProfileProps};
+    var btnsProps   = {...props, editUserProfileProps};
       
-    Object.assign(btnsProps, props)
-    console.log(user)
     let UnfollowBtn = MatchMediaHOC(UnfollowUserBtn, '(min-width: 980px)');
-    let FollowBtn = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
+    let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
 
 
-    let unfollowOrFollowUserBtn =    user.user_is_following? 
-                                         <UnfollowBtn {...btnsProps}/>
-                                         :
-                                         <FollowBtn {...btnsProps}/>;
+    let unfollowOrFollowUserBtn =    <FollowBtn {...btnsProps}/>;
+    
+
     return (
         <BrowserRouter>
         <div className="user-list-box">
@@ -464,33 +478,30 @@ export const UsersComponent = props => {
                             { user && profile_picture? 
                                 <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
-                                <img alt="" src={require("../images/user-avatar.png")} className="user-photo"/>  
+                                <img alt="" src={require("../images/user-avatar.png")} className="user-list-photo"/>  
             
                             }        
                         </Link>
                     </div>
                 </div> 
 
-                <div className="user-list-name-box user-extra-data-box">
-                    <Link className="user-list-name" to={{ pathname: pathToProfile,state,}}>
-                        { user.first_name }   {user.last_name }
-                    </Link>
+                <div className="user-list-credentials-box">
+                    <div className="user-list-credentials-contents">
+                        <Link className="user-list-name" to={{ pathname: pathToProfile,state,}}>
+                            { user.first_name }   {user.last_name }
+                        </Link>
 
-                    <div className="user-credentials">
-                        <p className="relatio about-user">{ user.profile.credential }</p>
+                        <div className="">
+                            <p className="user-list-credentials">{ user.profile.credential }</p>
+                        </div>
                     </div>
 
                 </div>
 
-                <div className="follow-box user-follow-box" >
-                    { user.email !== props.currentUser.email?
-                        <div className="follow-btn-sm">
-                            { unfollowOrFollowUserBtn }
-                        </div>
-                        :
-                        <p> {user.profile.followers } Followers</p>
-                    } 
-
+                <div className="user-list-follow-box" >
+                    <div className="user-list-follow-btn-box">
+                            <FollowBtn {...btnsProps}/>
+                    </div>
                 </div>
 
             </div>

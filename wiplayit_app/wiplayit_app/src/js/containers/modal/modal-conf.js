@@ -25,6 +25,7 @@ import { showModal }  from '../../actions/actionCreators';
 export function Modal(props) {
     
     let {background, modalProps} = props;
+    console.log(props)
 
     let {
         modalType, 

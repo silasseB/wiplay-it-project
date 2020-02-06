@@ -11,7 +11,9 @@ import "./containers/question/css/mobile-question-page.css";
 import "./containers/question/css/desktop-question-page.css";
 
 import "./containers/main-sm-screen.css";
-import "./containers/profile/profile-edit.css"
+import "./containers/profile/profile-edit.css";
+import "./containers/profile/user-list.css";
+
 import "./containers/profile/profile.css"
 
 import './containers/authentication/css/registration-mobile.css';

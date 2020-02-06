@@ -1,8 +1,9 @@
+import { MatchMediaHOC } from 'react-match-media';
 
 import React, { Component } from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
 import {ModalManager} from "../../containers/modal/modal_container";
-import { ChangeImageLink } from "../../components/modal-links"
+import { ChangeImageBtn } from "../../components/modal-links"
 import { GetModalLinkProps } from "../../components/component-props";
 
 import { EditProfileNavBar } from "../../components/navBar";
@@ -21,6 +22,7 @@ import Api from '../../api';
 
 
 
+const ChangeImageBtnSmallScreen = MatchMediaHOC(ChangeImageBtn, '(max-width: 980px)');
 const api = new Api();
 
 const helper   = new Helper();  
@@ -56,7 +58,7 @@ class EditProfile extends Component{
  
         const onStoreChange = () => {
 
-            let {obj, currentUser}        = this.props;
+            let { obj, currentUser, apiUrl }      =  this.props.location && this.props.location.state || this.props;
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
             let byId         = obj && `userProfile${obj.id}`;
@@ -106,18 +108,19 @@ class EditProfile extends Component{
 
     componentDidMount() {
         this.onProfileUpdate();
+        console.log(this.props)
         //let { cacheEntities } = this.props; 
         //let { userProfile }   = cacheEntities
-        let { obj, currentUser, apiUrl }      = this.props;
-        console.log(this.props)
+        let { obj, currentUser, apiUrl }      =  this.props.location && this.props.location.state || this.props;
+               
                           
         
         let userProfile = obj
-        let profileById = userProfile && `userProfile${obj.id}`;
+        let profileById = userProfile && `userProfile${userProfile.id}`;
 
         //console.log(userProfile)
 
-        this.setState({profileById, userProfile});
+        this.setState({profileById, userProfile, currentUser});
 
         if (userProfile) {
             store.dispatch(action.getUserProfilePending(profileById));
@@ -125,8 +128,9 @@ class EditProfile extends Component{
             this.populateEditForm(userProfile);
 
         }else {
-                let apiUrl = api.updateProfileApi(userProfile.id)
-                getUserProfile(userProfile.id, apiUrl);
+            //let {id, slug} = this.props.match && this.props.match.params && this.props.match.params;
+            //let apiUrl = api.updateProfileApi(id)
+            //getUserProfile(id, apiUrl);
         }
         
     };
@@ -194,8 +198,8 @@ class EditProfile extends Component{
     };
 
     getUserEditProps(){
-        let { profileById, userProfile } = this.state;
-        let currentUser = this.props.currentUser;
+        let { profileById, userProfile, currentUser } = this.state;
+        //let currentUser = this.props.currentUser || this.props.location.state;
 
         let editUserProfileProps = {
                 objName     : 'UserProfile',
@@ -260,7 +264,7 @@ const ProfileEditComponent = props => {
           <fieldset style={ fieldSetStyles} 
                       disabled={ submitting} >
 
-      
+            <EditProfilePicSmalScreen {...props}/>
             
          <div className="edit-name-box">
             <div className="item-title-container">
@@ -344,6 +348,40 @@ const ProfileEditComponent = props => {
 };
 
 
+const EditProfilePicture = (props)=>{
+
+        let {userProfile, editUserProfileProps } = props;
+        let profile = userProfile && userProfile.profile;
+
+        return(
+            <div className="edit-img-container">
+            <div className="item-title-box">
+               <b className="item-title">Photo</b>
+            </div>
+
+            <div className="item-title-container">
+               <div className="image-contain">
+                    { profile && profile.profile_picture?
+                        <div className="edit-image-box">
+                            <img alt="" className="edit-image" src={profile.profile_picture }/>
+                        </div>
+                        :
+                        <div className="avatar-image-box">
+                            <img alt="" src={require("../../images/user-avatar.png")} className="avatar-image"/> 
+                        </div> 
+
+                    }
+                </div>
+                 <ChangeImageBtn {...editUserProfileProps}/>
+               
+            </div>
+
+         </div>   
+        )
+};
+
+const EditProfilePicSmalScreen = MatchMediaHOC(EditProfilePicture, '(max-width:980px)')
+
 export const NavBarTitle = props  => (
   <div className="navbar-title-box">
    <b className="navbar-title">Edit Profile</b>  
@@ -377,6 +415,8 @@ export class DropImage extends React.Component {
    }
 
     componentDidMount(){
+        console.log(this.props)
+
       
         this.onImageDropUpdate();
     }
@@ -385,17 +425,34 @@ export class DropImage extends React.Component {
     onImageDropUpdate = () =>{
  
         const onStoreChange = () => {
-            let storeUpdate   = store.getState();
+            let storeUpdate          = store.getState();
+            let {currentUser, obj}   = this.props; 
+            let {entities}           = storeUpdate
+            let {modal, userProfile} = entities
+            let { background }       = this.props;
+            let byId                 = obj && `userProfile${obj.id}`;
+            userProfile              = userProfile[byId];
+            let user                 = userProfile && userProfile.user;
+            console.log(userProfile, currentUser, this.props)
 
-            let {entities} = storeUpdate
-            let {modal} = entities
-            let { background } = this.props;
+            if ( user && currentUser && currentUser.id === user.id) {
+                console.log(user);
+
+                if (userProfile.submitting != undefined && !currentUser.upDated) {
+                    currentUser['upDated'] = true;
+                    //console.log(userProfile)
+                    store.dispatch(action.getCurrentUserPending())
+                    store.dispatch(action.getCurrentUserSuccess(user));
+                    delete currentUser.upDated;
+                }
+            }
             
             
             
             modal = modal && modal['dropImage'];
             this.setState({submitting : modal.submitting});
             //console.log(modal)
+
 
             if (modal && modal.successMessage) {
                 !modal.profilePictureUpdate && ModalManager.close('dropImage' , background)

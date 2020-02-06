@@ -8,31 +8,55 @@ import { store } from "../configs/store-config";
 import {showModal} from '../actions/actionCreators';
 
 
+ let unfollowedBtnStyles = {
+        backgroundColor : '#E3EBF2', 
+        color           : '#288FF0',
+        border          : '1px solid #B7D5F0'
+    };
+
+    let  followedBtnStyles = {
+        backgroundColor : '#EFEEEE', 
+        color           : '#999999',
+        border          : '1px solid #CFCFCF'
+    };
 
 
-
-
-export const UnfollowUserBtn = props => {
-   
-    return(
-      <div className="f-box">
-         <button type="button" onClick={ () => props.editfollowersOrUpVoters(props.editUserProfileProps) }  
-                 className="unfollow-user" >
-            Following             
-         </button>
-      </div>
-    );
-};
 
 export const FollowUserBtn = props => {
     
+    let {currentUser, editUserProfileProps,editfollowersOrUpVoters } = props;
+    let { obj } = editUserProfileProps && editUserProfileProps;
+    //console.log(props)
+    let btnText = obj.user_is_following && "Following" || "Follow";
+    let styles  = obj.user_is_following && followedBtnStyles || unfollowedBtnStyles;
+    
+   
     return(
-    <div className="f-box">
-      <button   type="button" onClick={ () => props.editfollowersOrUpVoters(props.editUserProfileProps) }
-                className="follow-user" >
-       Follow 
+        <div className="user-list-follow-btn-box">
+            { obj.email !== currentUser.email?
+                <button style={styles} type="button" 
+                    className="follow-user-btn"
+                    onClick={ () => editfollowersOrUpVoters(editUserProfileProps) }  
+                    >
+                    {btnText}             
+                </button>
+                :
+                <button style={unfollowedBtnStyles} type="button" className="num-followers-btn">
+                    {obj.profile.followers } Followers
+                </button>
+            }
+        </div>
+    );
+};
+
+export const UnfollowUserBtn = props => {
+    
+    return(
+        <button   type="button" onClick={ () => props.editfollowersOrUpVoters(props.editUserProfileProps) }
+               className="unfollow-user">
+            Follow 
       </button>
-   </div> 
+    
   )
 }                           
 
@@ -40,14 +64,12 @@ export const FollowUserBtn = props => {
 export const FollowQuestionBtn = props => {
     //console.log(props.editQuestionProps)
     return(
-      <div>
-         <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editQuestionProps)}
+        <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editQuestionProps)}
             className="btn-sm follow-question" >
 
             Follow <span className="fa fa-rss icon-color"></span>            
-         </button>
-      </div>
-  )
+        </button>
+    )
 }
 
 

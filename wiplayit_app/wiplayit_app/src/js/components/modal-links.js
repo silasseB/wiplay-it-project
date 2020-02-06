@@ -117,7 +117,7 @@ export const OptionsModalLink = props => {
 
 
 
-export const ChangeImageLink = props => {
+export const ChangeImageBtn = props => {
     let location = useLocation();
     //console.log(props)
 
@@ -157,7 +157,8 @@ export const ChangeImageLink = props => {
 
 export const UsersModalLink = props => {
     let location = useLocation();
-    let pathname = `/compose/${'user'}/${props.obj.id}/`;
+    
+    let pathname =  `/compose/${'user'}/${props.obj.id}/`;
 
     let modalProps = {
             userListProps : {...props},

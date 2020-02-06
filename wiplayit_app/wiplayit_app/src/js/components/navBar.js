@@ -195,14 +195,30 @@ export const NavBarBigScreen = props => {
     var {currentUser}       = props;
     let path_to_profile     = `/`;
    
-    var state   = { currentUser, userProfile : currentUser};
-
     let pathToProfile = currentUser  && `/profile/${currentUser.id}/${currentUser.slug}/`;
     let userProfile   = currentUser  && currentUser.profile;
       
 
     createPostProps     = {...createPostProps, currentUser};
     createQuestionProps = {...createQuestionProps, currentUser};
+    
+    let modalProps = {
+            userListProps : {currentUser},
+            modalType     : 'userList', 
+        }; 
+
+    let state = { 
+        background : props.location,
+        modalProps
+    } 
+
+    let madalParams = {
+        boolValue : true,
+        modalType   : 'userList',
+        background  : props.location,
+    }
+    let pathname = `/compose/${'user'}/${1}/`;
+
     //console.log(createQuestionProps, createPostProps)
     
         
@@ -234,10 +250,16 @@ export const NavBarBigScreen = props => {
                     
                     <ul  className="navigation-item">
                         <li>
-                            <Link className="items"
-                                to={{pathname:"/users/",state:{ isUsersList : true }}}> 
-                                Notifications
-                            </Link>
+                            <button className="items btn-sm"    onClick={()=> {
+                                                store.dispatch(showModal(madalParams))
+                                                setTimeout(()=> {
+                                                    history.push({ pathname: pathname, state}); 
+                                                }, 500);
+
+                                            }}>
+                                    Notifications  
+                            </button>
+
                         </li>
                     </ul> 
                     </div> 

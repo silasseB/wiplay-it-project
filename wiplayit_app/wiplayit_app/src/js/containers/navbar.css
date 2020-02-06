@@ -108,14 +108,23 @@
     }
 
     #navBardropdown{
-        border    : px solid blue;
-        padding   : 12px  12px 0; 
+        border        : 1px solid #D5D7D5;
+        padding       : 12px  12px 0;
+        border-radius : 50%;
+        width         : 27px;
+        height        : 27px; 
     }
 
+    
+
+
     .nav-bar-img {
-        border : 1px solid #D5D7D5;/*#F9F7F7;*/
-       
+        border-radius : 50%;
+        width         : 27px;
+        height        : 27px;
+        object-fit    : cover;
     }
+
 
    .items {
         font-family     : 'Jura';

@@ -79,21 +79,22 @@ code {
 
 
 button:focus, button:active {
-	outline: 0px transparent !important;
-	box-shadow: none !important;
-	border:none !important;
+	outline    : 0px transparent !important;
+	box-shadow : none !important;
+	border     : none;
 	
 
 }
 
 
 button {
-  border: none;
-  box-shadow : none !important; 
-  text-align : center !important;
-  background :  none;
-  outline    : 0px transparent white;
-  cursor     : pointer;
+  border      : none;
+  box-shadow  : none !important; 
+  text-align  : center !important;
+  background  : none;
+  outline     : 0px transparent white !important;
+  cursor      : pointer;
+  white-space : nowrap;
   
  }
 
