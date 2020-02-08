@@ -265,7 +265,8 @@ export const TextAreaEditor = props => {
    return (
       <div className="textarea-form">
          <form className="">
-            <div style={props.editorsBoxStyles} className="textarea-box" id="editors-box">
+            <div style={props.editorsBoxStyles} 
+                 className="textarea-box" id="editors-box" >
                <TextareaAutosize
                      {...props.textAreaProps} 
                         rows={1}/>
@@ -281,7 +282,7 @@ export const DraftEditor = props => {
 	return (
 		<div style={props.editorsBoxStyles} id="editors-box" className="editors-box">
                { props.objName == "Post"?
-                    <div className="post-textarea-box textarea-box">
+                    <div className="post-textarea-box">
                         <TextareaAutosize   {...props.textAreaProps} rows={1}/>
             
                     </div>
@@ -297,8 +298,8 @@ export const DraftEditor = props => {
                decorators={CompositeDecorator}
                blockStyleFn={props.blockStyleFn}
                placeholder={props.editorPlaceHolder}
-               onFocus={props.handleFocus()}
-               onBlur={props.handleBlur()}
+               onFocus={props.handleFocus}
+               onBlur={props.handleBlur}
             />
         </div>
         

@@ -137,7 +137,7 @@ export const ChangeImageBtn = props => {
 
     return(
        
-        <button className="btn-sm edit-img-btn "   onClick={()=> {
+        <button className="edit-img-btn"   onClick={()=> {
                         store.dispatch(showModal(madalParams))
 
                         setTimeout(()=> {

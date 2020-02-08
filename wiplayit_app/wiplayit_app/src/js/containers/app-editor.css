@@ -469,7 +469,7 @@ div.public-DraftEditor-content {
     }
     
     .modal-title {
-        border      : 1px solid black;
+        border      : px solid black;
         font-size   : 11px;
         color       : #fff;
         display     :  flex;
@@ -486,7 +486,7 @@ div.public-DraftEditor-content {
    font-size     : 11px;  
    font-family   : 'Play'; 
    font-weight   : bold; 
-   width: 
+    
 }
 
 
@@ -581,7 +581,6 @@ div.public-DraftEditor-content {
 
 .textarea-form {
     border: 1px solid blue;
-    margin-top: 50px;
     width: 100%;
     padding: 10px;
 }

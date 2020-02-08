@@ -73,9 +73,7 @@
     }
 
     .profile-credential-box {
-        border: px solid black;
-        width: 100%;
-    
+        width        : 100%;
     }
 
 
@@ -89,20 +87,22 @@
 
     .profile-img-container {
         border    : px solid black;
+        margin    : 0 6px 0 16px;
     }
 
 
 
     .user-credential {
-        border     :px solid blue;
-        font-size  : 12px; 
+        border     : px solid blue;
+        font-size  : 13px; 
         display    : block;
         word-break : break-all;
+        font-family : 'Cambay'
     }
 
 
     .profile-img-box {
-        border : 1px solid   #D5D7D5;
+        border        : 1px solid   #D5D7D5;
         border-radius : 50%;
         width         : 70px;
         height        : 70px;
@@ -121,7 +121,7 @@
 
     .profile-name-box {
         border  : px solid red;
-        padding : 6px  8px 0;  
+        padding : 6px  14px 0 4px;  
     }
 
     .profile-name {
@@ -236,13 +236,6 @@
      border: 1pX solid #D5D7D5  !important;
     
 }
-
-
-.follow-box {
-  border: px solid black;
-  padding: 10PX 0PX 0PX;
-}
-
 
 
 .default-user-box {
@@ -478,7 +471,7 @@
 
     .profile-img-container {
         border         : px solid red;
-        margin         : 0 14px 0 20px;
+        margin         : 0 28px 0 40px;
         padding-bottom : 5px;    
          
     }
@@ -491,6 +484,11 @@
         height        : 140px;
     }
 
+    .profile-img-box:hover {
+        cursor : pointer; 
+
+    }
+
     .profile-image {
         border        : 1px solid #F9F7F7;
         border-radius : 50%;
@@ -498,15 +496,32 @@
         height        : 140px;
         max-width     : 100%;
         object-fit    : cover;
-        position      :  absolute; 
+        position      : absolute; 
+    }
+
+    .edit-img-btn-box {
+        border      : px solid blue;
+        position    : absolute;
+        z-index     : 4;
+        top         : 195px; 
+        left        : 120; 
+        margin-left : 3%;
+    };
+
+    .edit-img-btn-box button {
+        background-color :  rgba(0, 0, 0, 0.3) !important; 
+        font-size : 25px !important;
+        color     : #999999;
+        width     : 85px;
+        height    : 30px;
+        font-weight: bold;
+  
     }
 
     .profile-name-box {
-        border : px solid red;
-
-
-         
-                
+        border      : px solid red;
+        min-height  : 90px;
+        padding-top : 8px;  
     }
 
     .profile-name {
@@ -519,7 +534,8 @@
     }
 
     .user-credential {
-        margin      :  0 10px 0;
+        margin         :  0 10px 0;
+        border         : px solid red;
     }
 
     .user-profile-options-box  {
@@ -529,16 +545,12 @@
 
 
     .relation-box {
-        border     : px solid blue;
         display    : flex;
-        margin-top : 36px; 
-        
     }
 
-
     .profile-credential-box {
-        border   : px solid green;
-        width    : 100%;  
+        width    : 100%;
+        border   : px solid black;  
         
     }
 
@@ -547,12 +559,9 @@
 
     }
 
-    
 
-
-
-    .numb-followers-box, .follow-user-profile-box  {
-        border  : px solid blue;/* #D5D7D5;*/
+    .follow-user-profile-btn-box  {
+        margin         :  0 10px 0;
     }
 
     .credentials-container {

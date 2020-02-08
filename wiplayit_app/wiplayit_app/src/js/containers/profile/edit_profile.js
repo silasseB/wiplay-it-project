@@ -266,17 +266,17 @@ const ProfileEditComponent = props => {
 
             <EditProfilePicSmalScreen {...props}/>
             
-         <div className="edit-name-box">
+         <div className="profile-name-edit-box">
             <div className="item-title-container">
                <div className="item-title-box">
                  <b className="item-title"> Name</b>
                </div>
             </div>
 
-            <div className="name-box">
+            <div className="profile-name-input-box">
                <input
                   type="text" 
-                  className="user-profile-name"
+                  className="profile-name-input"
                   name="first_name"
                   value={props.form.first_name}
                   onChange={props.handleChange}
@@ -284,7 +284,7 @@ const ProfileEditComponent = props => {
 
                <input
                   type="text" 
-                  className="user-profile-name"
+                  className="profile-name-input"
                   name="last_name"
                   value={props.form.last_name}
                   onChange={props.handleChange}
@@ -355,28 +355,30 @@ const EditProfilePicture = (props)=>{
 
         return(
             <div className="edit-img-container">
-            <div className="item-title-box">
-               <b className="item-title">Photo</b>
-            </div>
-
-            <div className="item-title-container">
-               <div className="image-contain">
-                    { profile && profile.profile_picture?
-                        <div className="edit-image-box">
-                            <img alt="" className="edit-image" src={profile.profile_picture }/>
-                        </div>
-                        :
-                        <div className="avatar-image-box">
-                            <img alt="" src={require("../../images/user-avatar.png")} className="avatar-image"/> 
-                        </div> 
-
-                    }
+                <div className="item-title-container">
+                    <div className="item-title-box">
+                        <b className="item-title">Photo</b>
+                    </div>
                 </div>
-                 <ChangeImageBtn {...editUserProfileProps}/>
-               
-            </div>
 
-         </div>   
+                <div className="edit-image-container">
+                    <div className="edit-profile-image-box">
+                            <div className="edit-image-btn-box">
+                                { profile && profile.profile_picture?
+                                    <img alt="" 
+                                         className="edit-image" 
+                                         src={profile.profile_picture }/>
+                                    :
+                                    <img alt="" 
+                                         src={require("../../images/user-avatar.png")} 
+                                         className="edit-image"/> 
+                                }
+                            </div>
+                    </div>
+                    <ChangeImageBtn {...editUserProfileProps}/>
+                </div>
+
+            </div>   
         )
 };
 
@@ -538,29 +540,30 @@ export class DropImage extends React.Component {
                <div className="upload-preview">
                   <div className="drop-image-btns">
                      <div className="dismiss-box">
-                     <button  type="button" 
+                        <button  type="button" 
                               onClick={()=> ModalManager.close('dropImage',background)}
-                              className="btn-sm image-drop-dismiss">
+                              className="image-drop-dismiss-btn">
 
-                        <span className="dismiss">&times;</span>
-                     </button>
+                            <span className="image-drop-dismiss-icon dismiss">&times;</span>
+                        </button>
                      </div>
 
                   
-                  { this.state.imagePreviewUrl?
-                     <div className="add-image-box">
-                     <button  type="button" onClick={()=>this.handleImageAdd()} className="btn-sm image-add-btn">
-                       Add
-                     </button>
-                     </div>
-                     :
-                     ""
-                  }
+                    { this.state.imagePreviewUrl?
+                        <div className="add-image-btn-box">
+                            <button  type="button" onClick={()=>this.handleImageAdd()}
+                                  className="btn-sm image-add-btn">
+                                Add
+                            </button>
+                        </div>
+                        :
+                        ""
+                    }
                   </div>
 
                   { this.state.imagePreviewUrl?
-                     <div className="image-preview-box">
-                        <div className="edit-image-box">
+                     <div className="image-preview-container">
+                        <div className="image-preview-box">
                             <img className="image-preview" alt="" src={this.state.imagePreviewUrl} />
                         </div>
                      </div>

@@ -32,7 +32,7 @@ export function Modal(props) {
         editorProps,
         optionsMenuProps,
         dropImageProps,
-        userListProps } = modalProps && modalProps;
+        userListProps } = modalProps !== undefined && modalProps;
 
     console.log(props, modalType)
 
@@ -217,7 +217,7 @@ let desktopModalStyles  = {
 }; 
 
 let getEditorStyles = ()=>{
-        if (window.matchMedia("(min-width: 900px)").matches) {
+        if (window.matchMedia("(min-width: 980px)").matches) {
             return desktopModalStyles;
         } else {
             return mobileModalStyles;
@@ -225,7 +225,7 @@ let getEditorStyles = ()=>{
     };
 
 let getModalEffect =()=> {
-        if (window.matchMedia("(min-width: 900px)").matches) {
+        if (window.matchMedia("(min-width: 980px)").matches) {
             return Effects.ScaleUp;
         } else {
             return Effects.SlideFromBottom;
@@ -252,7 +252,7 @@ export const EditModal = props => {
 
 
 
-const image_modal_styles = {
+const mobileImageModalStyles  = {
   
   content: {
     width                   : '90%',
@@ -263,7 +263,25 @@ const image_modal_styles = {
     borderRadius            : '4px',
     outline                 : 'none',
     boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
-    position                : 'relative !important',
+    position                : 'relative',
+   
+   
+   }
+};
+
+
+const desktopImageModalStyles  = {
+  
+  content: {
+    width                   : '90%',
+    margin                  : '35%auto',
+    border                  : 'px solid rgba(0, 0, 0, .2)',
+    background              : '#fff',
+    overflow                : 'none',
+    borderRadius            : '4px',
+    outline                 : 'none',
+    boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
+    position                : 'relative',
    
    
    }
@@ -271,12 +289,19 @@ const image_modal_styles = {
 
 
 
+let getDropImageStyles = ()=>{
+        if (window.matchMedia("(min-width: 980px)").matches) {
+            return desktopModalStyles;
+        } else {
+            return mobileImageModalStyles;
+        } 
+    };
 
 
 export const DropImageModal = props => {
 
     let modal_props = {
-        modalStyles    : image_modal_styles,
+        modalStyles    : getDropImageStyles(),
         effect         : Effects.ScaleUp,
         modalContents  : props.modalContents,
         background     : props.background,

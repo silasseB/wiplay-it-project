@@ -496,12 +496,15 @@ export default  class AppEditor extends Component{
            name        : "textarea",
            className   : "textarea-form-field",
            placeholder : this.props.editorPlaceHolder,
+           onFocus     : this.handleFocus,
+           onBlur      : this.handleBlur,
         };
 
         return props;
     };
 
-    handleScroll=(event)=>{
+    handleScroll=()=>{
+        //console.log(event)
         let isDesktopScreenSize = window.matchMedia("(min-width: 900px)").matches;
 
         if (isDesktopScreenSize) {
@@ -525,19 +528,20 @@ export default  class AppEditor extends Component{
 
     };
 
-    handleFocus =()=>{
-        //console.log('focused')
+    handleFocus =()=> {
+        console.log('focused')
+        //alert('focused')
     }
 
-    handleBlur =()=>{
-        //console.log('Blured')
+    handleBlur =()=> {
+        console.log('Blured')
     }
 
 
     getProps() {
-       let currentContent   = this.state.editorState.getCurrentContent();
-       let editorContents = convertToRaw(currentContent);
-       editorContents =  JSON.stringify(editorContents)
+        let currentContent   = this.state.editorState.getCurrentContent();
+        let editorContents   = convertToRaw(currentContent);
+        editorContents       =  JSON.stringify(editorContents)
     
         let props =  {
             onChange          : this.onChange,
@@ -552,9 +556,9 @@ export default  class AppEditor extends Component{
             subimtCleanForm   : this.subimtCleanForm.bind(this),
             submitProps       : this.getSubmitProps.bind(this),
             textAreaProps     : this.getTextAreaProps(), 
-            handleScroll      : this.handleScroll.bind(this), 
-            handleFocus       : this.handleFocus.bind(this),
-            handleBlur        : this.handleBlur.bind(this),
+            handleScroll      : this.handleScroll, 
+            handleFocus       : this.handleFocus,
+            handleBlur        : this.handleBlur,
             ...this.state,
         } 
       
@@ -623,7 +627,7 @@ export const MobileEditorComponent =(props)=>{
 
 export const DesktopEditorComponent =(props)=>{
     let {currentUser, objName} = props;
-    console.log(props.toolBarStyles)
+    //console.log(props.toolBarStyles)
 
     return(
 

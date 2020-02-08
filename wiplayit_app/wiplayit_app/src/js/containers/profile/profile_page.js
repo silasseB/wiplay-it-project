@@ -30,6 +30,7 @@ class UserProfileContainer extends Component {
             isProfileBox       : true,
             pageName           : "Profile", 
             profileById        : '',
+            isMouseInside      : false
         } 
 
     };
@@ -195,16 +196,27 @@ class UserProfileContainer extends Component {
         };
     };
 
+    mouseEnter = () =>{
+        //alert('Mouse is entering')
+        this.setState({isMouseInside: true})
+    } 
+
+
+    mouseLeave = ()=>{
+        //alert('Mouse is leaving')
+        this.setState({isMouseInside : false})
+    } 
+
+
        
 
     getProps(){
 
         let props = {
-            pageName           : this.state.pageName,
-            userItemsComponent : this.state.userItemsComponent,
             showUserItems      : this.showUserItems.bind(this),
-            isProfileBox       : this.state.isProfileBox, 
-            profileById        : this.state.profileById,
+            mouseEnter         : this.mouseEnter,
+            mouseLeave         : this.mouseLeave,
+            ...this.state, 
         };
 
         return {...this.props, ...props};
