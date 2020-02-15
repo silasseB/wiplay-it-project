@@ -36,8 +36,8 @@ export const FollowUserBtn = props => {
         <div className="follow-btn-box">
             { obj.email !== currentUser.email?
                 <button style={styles} type="button" 
-                    className="follow-user-btn"
-                    onClick={ () => editfollowersOrUpVoters(editUserProfileProps) }  
+                        className="follow-user-btn"
+                        onClick={ () => editfollowersOrUpVoters(editUserProfileProps) }  
                     >
                     {btnText}             
                 </button>

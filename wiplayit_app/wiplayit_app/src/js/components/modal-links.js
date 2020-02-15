@@ -157,8 +157,9 @@ export const ChangeImageBtn = props => {
 
 export const UsersModalLink = props => {
     let location = useLocation();
+    let {obj, background, linkName} = props
     
-    let pathname =  `/compose/${'user'}/${props.obj.id}/`;
+    let pathname =  `/compose/${'user'}/${obj && obj.id || 1}/`;
 
     let modalProps = {
             userListProps : {...props},
@@ -166,7 +167,7 @@ export const UsersModalLink = props => {
         }; 
 
     let state = { 
-        background : props.background || location,
+        background : background || location,
         modalProps
     } 
 
@@ -186,7 +187,7 @@ export const UsersModalLink = props => {
                         }, 500);
 
                     }}>
-            {props.linkName}  
+            {linkName}  
         </button>
         
     );

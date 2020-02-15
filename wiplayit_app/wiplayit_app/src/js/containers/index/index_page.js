@@ -28,7 +28,7 @@ class IndexBox extends Component {
             questionListById : 'filteredQuestions',
             postListById     : 'filteredPosts',
             answerListById   : 'filteredAnswers',
-            userListById     : 'filteredUserss'
+            userListById     : 'filteredUsers'
 
 
         } 
@@ -82,8 +82,9 @@ class IndexBox extends Component {
         this.onIndexUpdate();
 
         let { cacheEntities, entities } = this.props;
-        let index       = entities.index;
-        let cathedIndex = cacheEntities.index; 
+        let { index}                    = entities;
+       
+        let cathedIndex                 = cacheEntities.index; 
         let now = new Date();
         console.log(Object.keys(index))
         
@@ -99,7 +100,7 @@ class IndexBox extends Component {
 
             console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                               
-            if (hourDiff <= 1) {
+            if (menDiff <= 1) {
 
                 console.log('Index found from cachedEntyties')
                 //store.dispatch(action.getIndexPending());

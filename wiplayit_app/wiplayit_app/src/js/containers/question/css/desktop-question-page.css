@@ -64,7 +64,6 @@
 .answer-container {
   border:px solid blue;/*#D5D7D5;*/
   /*border-bottom: 1px solid #D5D7D5;*/
-  margin-top:  PX;/*auto;*/
   background: white;
   padding: 10px 0px;
   
@@ -107,23 +106,22 @@
 
 }
 .answer-contents {
-     border-top:5px solid #D5D7D5;
-     border:px solid red;
-     padding:0px 0px;
+    border:px solid red;
+    padding:0px 0px;
   
 
 }
 
 
 .number-answers-box {
-  border: 1px solid red !important;
+  border: px solid red;
 } 
 
 .answer-count {
      list-style-type: none; 
      padding-left:6px ;
      margin-top:7px;
-     border: 1px solid blue !important;
+     border: 1px solid blue;
 
 
 } 

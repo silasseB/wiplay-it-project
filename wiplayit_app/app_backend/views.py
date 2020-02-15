@@ -50,8 +50,13 @@ class UserView(BaseApiView):
 
 	def get_queryset(self):
 		users = User.objects.exclude(
-			first_name="Anonymous"
-			)
+						first_name="Anonymous"
+					).filter(
+						is_confirmed=True
+					).filter(
+						is_superuser=False
+					)
+
 		return users	
 
   

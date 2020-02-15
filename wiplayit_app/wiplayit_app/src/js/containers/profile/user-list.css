@@ -146,76 +146,101 @@
 @media (min-width: 980px) {
   
 
-.users-modal-container {
-    border      :  px solid blue;
-}
+    .users-modal-container {
+        border      :  px solid blue;
+    }
 
-.user-list-container {
-   background: #ffff;
-   border: px solid black
-   
-}
+    .user-list-container {
+        background: #ffff;
+        border: px solid black
+    }
 
-
-.user-list-box {
-  border: px solid red;
-  margin: 10px 0;
-  width: 100%;
-
-}
+    .user-list-box, .partial-user-list-box {
+        border  : px solid red;
+        margin  : 10px 0;
+        width   : 100%;
+        
+    }
 
 
-.user-list-contents {
-    display : flex;
-    width   : auto;
-    border  : 1px solid  #D5D7D5; 
-    margin  : 2% !important;
-    padding : 3px;
-}
+
+    .user-list-contents {
+        display : flex;
+        width   : auto;
+        border  : 1px solid  #D5D7D5; 
+        margin  : 2%;
+        padding : 3px;
+    }
+
+    .partial-user-list-contents {
+        border-bottom  : 1px solid  #D5D7D5;
+        display        : flex;
+        padding        : 3px 6px;
+        background     : #F4F2F1; 
+         
+    }
+
+    .partial-user-list-box-header {
+        border-bottom  : 1px solid  #D5D7D5;
+         
+    }
+
+    .partial-user-list-box-bottom button {
+        border  : 1px solid  #D5D7D5; 
+        margin  : 12px;
+        color   : #288FF0; 
+
+    }
+
+    .partial-user-list-box-header p {
+        font-weight : bold;
+        font-size   : 19px;
+        color       : black;
+        font-family : 'Ubuntu'; 
+        margin      : 10px 10px 0; 
+    }
 
 
-.about-user {
-  border: px solid blue;
-  font-size: 10px;
+    .about-user {
+        border: px solid blue;
+        font-size: 10px;
 
   
-}
+    }
 
-.user-list-credentials-box {
-    width: 100%;
-    border: px solid blue;
-}
+    .user-list-credentials-box {
+        width: 100%;
+        border: px solid blue;
+    }
 
-.user-list-credentials-contents {
-    border : px solid green;
-    width  : 95%;
-    margin : 9px; 
+    .user-list-credentials-contents {
+        border : px solid green;
+        margin : 9px; 
+    }
 
-}
-
-.user-list-img-box {
-    border :  px solid blue;
-    width  : 11%; 
-}
+    .user-list-img-box {
+        border :  px solid blue;
+     
+    }
 
 
-.user-list-img {
-    border-radius : 50%;
-    border        : 1px solid  #D5D7D5;
-    width         : 40px;
-    height        : 40px;
-    margin        : 7px 5px;  
-}
+    .user-list-img {
+        border-radius : 50%;
+        border        : 1px solid  #D5D7D5;
+        width         : 40px;
+        height        : 40px;
+        margin        : 7px 5px;  
+    }
 
-.user-list-photo {
-    border-radius: 50%;
-    width: 40px;
-    height:40px;
-    object-fit: cover;
-}
+    .user-list-photo {
+        border-radius: 50%;
+        width: 40px;
+        height:40px;
+        object-fit: cover;
+    }
 
     .user-list-name {
-        font-size: 16px;
+        font-size: 12px;
         color: black;
         font-family: 'Nunito';
         border: px solid blue;
@@ -236,7 +261,7 @@
 
 
     .user-list-follow-box {
-        width  : 20%;
+        border : px solid red;
  
     }
 

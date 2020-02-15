@@ -271,6 +271,10 @@
   color:black;
 }
 
+    .user-activities-title-box{
+        display    : none; 
+    }
+
 
 .activities-counter {
   border:  px solid #D5D7D5;
@@ -444,21 +448,28 @@
         background: #F4F2F1;
     }
 
+    #profile-box {
+        border       : px solid red;
+        width        : 70.9%;
+        margin-right : 20px; 
+    }
+
     .profile-box {
-        width              : 70.9%;
-        border             : 1px solid #D5D7D5; 
+        width              : 100%;
+        border-bottom      : 2px solid #D5D7D5; 
         background         : white;
-        -webkit-box-shadow : -2px 8px 18px -5px rgba(138,138,138,1);
+       /* -webkit-box-shadow : -2px 8px 18px -5px rgba(138,138,138,1);
         -moz-box-shadow    : -2px 8px 18px -5px rgba(138,138,138,1);
-        box-shadow         : -2px 8px 18px -5px rgba(138,138,138,1);
+        box-shadow         : -2px 8px 18px -5px rgba(138,138,138,1);*/
     }
 
 
     .profile-contents {
-        border  : px solid blue;
-        width   : 75%;
-        padding : 10px;
-        margin  : 0px 12.5%;
+        border      : px solid blue;
+        width       : 75%;
+        padding     : 25px 10px 15px;
+        margin      : 0px 12.5%;
+        display     : flex; 
     }
  
     .profile-section-top {
@@ -539,7 +550,8 @@
     }
 
     .user-profile-options-box  {
-        border : px solid black;
+        border  : px solid black;
+         
     }
 
 
@@ -565,43 +577,65 @@
     }
 
     .credentials-container {
-        border   :  px solid #D5D7D5;
-        display  : flex;
-        width    : 100%;
+        border     :  px solid #D5D7D5;
+        display    :  flex;
+        width      :  100%;
+        margin-top :  20px; 
     }
 
+    #credentials-box {
+        border    : px solid  #D5D7D5;
+    }
+
+
     .credentials-box {
-        border:  px solid red !important;
+        border       :  px solid red;
+        width        :  40% !important;
+        margin-right :  20px;
     }
 
     .user-activities {
-        border: 1px solid  #D5D7D5; 
-        background: white;
+        border-bottom :  1px solid  #D5D7D5; 
+        background    : white;
+        margin-top    : 18px; 
+        display       : flex; 
+        /*
         -webkit-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
         -moz-box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
-        box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);
+        box-shadow: -2px 8px 18px -5px rgba(138,138,138,1);*/
     }
 
 
-    #activities-box {
-        border     : px solid blue;
-        margin     : 10px 0px;
-        background : #F4F2F1;
-    }
+    
 
 
     .user-activities-box {
-        width: 50%;
-        margin: 4px 1%;
-        background: #F4F2F1;
+        width      : 100%;
+        border     : px solid blue;
+    }
+
+    .user-activities-title-box{
+        border-bottom :  1px solid  #D5D7D5; 
+    }
+
+    .user-activities-title-box p {
+        border     : px solid red;
+        margin     : 10px 0 0; 
+    }
+
+    .user-activities-btn-box {
+        border-bottom : 2px solid #A33F0B;
+         margin-right  : 14px;
+        margin-bottom : 5px;
     }
 
     .activities {
-        color       :  grey; /*#f0eeed;*/
-        font-family : 'Kanit';
-        background  :  #fefbfa;
-        border      : none;
-        width       : auto;
+        color         :  grey; /*#f0eeed;*/
+        font-family   : 'Kanit';
+        background    :  #fefbfa;
+        border        : none;
+        width         : auto;
+         
     }
 
 
@@ -641,12 +675,13 @@
         padding   : 7px 7px;
     }
 
+   
 
 
-    .teams-box, .credentials-box {
+      {
         border             : 1px solid  #D5D7D5; 
-        height             : 270px; 
-        width              : 20%;
+        width              : 30%;
+        min-height         : 0 !important;  
         background         : white;
         margin             : 4px 0 0;
         -webkit-box-shadow : -2px 8px 18px -5px rgba(138, 138, 138, 1);
@@ -654,12 +689,21 @@
         box-shadow         : -2px 8px 18px -5px rgba(138, 138, 138, 1);
     }
 
-    .follow-teams {
-        width      : 20%;
-        margin     : 0 0 0 1%;
-        background : white;
-        border     : 1px solid  #D5D7D5;  
+    .profile-user-list-container {
+        width      : 30%;
+        border    : px solid  blue;
+        padding   : 10px 0; 
+
     }
+
+    .profile-user-list-box{
+        border         : px solid  #D5D7D5;
+        background     : #F4F2F1;
+        border-radius  : 10px; 
+    }
+
+
+    
 
     .user-name-container {
         margin-left : 7px;
@@ -671,18 +715,17 @@
         width  : 100%; 
     } 
 
-.user-name {
-    font-size   : 12px;
-    color       : black;
-    font-family : 'Ubuntu';
-    font-weight : bold;
-    line-height : 1;
-    margin      : 18px 10% 7px !important;
-    padding     : 0px 25%;
-    display     : flex; 
-   
-   
-}
+
+    .user-name {
+        font-size   : 12px;
+        color       : black;
+        font-family : 'Ubuntu';
+        font-weight : bold;
+        line-height : 1;
+        margin      : 18px 10% 7px !important;
+        padding     : 0px 25%;
+        display     : flex; 
+    }
 
 .user-follow-box {
     border : 1px solid black;

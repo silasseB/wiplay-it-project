@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply, DraftEditorMediaContent)
+	                  PostComment, PostReply, DraftEditorMediaContent, User)
 
 from .mixins.serializer_mixins import SerializerMixin, ModelSerializerMixin
 from .auth_serializers import  BaseUserSerializer
@@ -320,6 +320,7 @@ class IndexSerializer(SerializerMixin, serializers.Serializer):
 	questions = serializers.SerializerMethodField()
 	answers   = serializers.SerializerMethodField()
 	posts     = serializers.SerializerMethodField() 
+	users     = serializers.SerializerMethodField()
 	
 	
 	def get_questions(self, obj):
@@ -340,6 +341,19 @@ class IndexSerializer(SerializerMixin, serializers.Serializer):
 		self.update_serializer_obj_perms('post_perms')
 
 		return PostReadSerializer(posts, context=self.context, many=True).data
+
+	def get_users(self, obj):
+		self.update_serializer_obj_perms('user_perms')
+		users = User.objects.exclude(
+						first_name="Anonymous"
+					).filter(
+						is_confirmed=True
+					).filter(
+						is_superuser=False
+					)
+
+		user_list = UserSerializer(users, context=self.context, many=True).data
+		return user_list
 		
 		
 	

@@ -118,7 +118,8 @@ export const ProfileComponent = props => {
     let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
    
 
-    let ChangeImageBtnBigScreen = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)')
+    let ChangeImageBtnBigScreen = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
+    let UserList = MatchMediaHOC(UserProfileFollwingList, '(min-width: 980px)')
 
       
     const UserItemsComponent = props.userItemsComponent;   
@@ -131,120 +132,122 @@ export const ProfileComponent = props => {
     
     return (
         <div className="profile-contents">
-            <div className="profile">
-                <div className="profile-box">
-                    <div className="profile-section-top">
-                        <div className="profile-img-container">
-                            <div onMouseEnter={props.mouseEnter}
-                                 onMouseLeave={props.mouseLeave} 
-                                 className="profile-img-box">
+            <div id="profile-box">
+                <div className="profile">
+                    <div className="profile-box">
+                        <div className="profile-section-top">
+                            <div className="profile-img-container">
+                                <div onMouseEnter={props.mouseEnter}
+                                     onMouseLeave={props.mouseLeave} 
+                                     className="profile-img-box">
 
-                                { profile_picture? 
-                                    <img alt="" src={`${profile_picture}`} className="profile-image"/>
-                                    :
-                                    <img alt="" src={require("../images/user-avatar.png")} className="profile-image"/>
-                                }
-                                
-                            </div>
-                            {props.isMouseInside && userProfile.user_can_edit?
-                                <div
-                                    onMouseEnter={props.mouseEnter}
-                                    onMouseLeave={props.mouseLeave}
-                                    className="edit-img-btn-box"
-                                    >
-                                    <ChangeImageBtnBigScreen {...editUserProfileProps}/>
+                                    { profile_picture? 
+                                        <img alt=""
+                                             src={`${profile_picture}`}
+                                             className="profile-image"/>
+                                        :
+                                        <img alt=""
+                                             src={require("../images/user-avatar.png")} 
+                                             className="profile-image"/>
+                                    }
                                 </div>
-                                :
-                                null
-                            }
-                        </div>    
+
+                                {props.isMouseInside && userProfile.user_can_edit?
+                                    <div
+                                        onMouseEnter={props.mouseEnter}
+                                        onMouseLeave={props.mouseLeave}
+                                        className="edit-img-btn-box">
+
+                                        <ChangeImageBtnBigScreen {...editUserProfileProps}/>
+                                    </div>
+                                    :
+                                    null
+                                }
+                            </div>    
 
                                             
-                        <div className="profile-credential-box">
-                            <ul className="profile-name-box">
-                                <li className="profile-name">
-                                    { userProfile.first_name }  { userProfile.last_name } 
-                                </li>
+                            <div className="profile-credential-box">
+                                <ul className="profile-name-box">
+                                    <li className="profile-name">
+                                        { userProfile.first_name }  { userProfile.last_name } 
+                                    </li>
 
-                                <li className="user-credential">
-                                    {userProfile.profile.credential}
-                                </li>
-                               
-                            </ul>
+                                    <li className="user-credential">
+                                        {userProfile.profile.credential}
+                                    </li>
+                                </ul>
 
-                            <div className="relation-box">
-                                <div className="user-profile-followers-box">
-                                    <div className="follow-user-profile-btn-box">
-                                        { UnfollowOrFollowUserBtn }     
-                                    </div>
+                                <div className="relation-box">
+                                    <div className="user-profile-followers-box">
+                                        <div className="follow-user-profile-btn-box">
+                                            { UnfollowOrFollowUserBtn }     
+                                        </div>
                                     
-                                </div>
+                                    </div>
 
-                                <div className="user-profile-options-box">
-                                    { MenuModalBtn }
-                                    { MenuDropdownBtn }
+                                    <div className="user-profile-options-box">
+                                        { MenuModalBtn }
+                                        { MenuDropdownBtn }
+                                    </div>
                                 </div>
                             </div>
-                            
                         </div>
 
+
                     </div>
-                                  
-
                 </div>
-
-                <div className="follow-teams"> 
-                    <p></p>  
-                </div>
-
-            </div>
      
           
-            <div className="credentials-container" >
-                <div className="credentials-box">
-                    <div className="credentials-menu">
-                        <div className="about-box">
-                            <p className="about">About</p>
-                        </div>
+                <div className="credentials-container" >
+                    <div className="credentials-box">
+                        <div id="credentials-box">
+                            <div className="credentials-menu">
+                                <div className="about-box">
+                                    <p className="about">About</p>
+                                </div>
                         
-                        { userProfile && userProfile.user_can_edit?
-                            <div className="edit-credential-btn-box">
+                                { userProfile && userProfile.user_can_edit?
+                                    <div className="edit-credential-btn-box">
 
-                                {EditorModalBtnBigScreen }
-                                <EditorModalBtnSmallScreen/>
+                                        {EditorModalBtnBigScreen }
+                                        <EditorModalBtnSmallScreen/>
+                                    </div>
+                                    :
+                                    ""
+                                }
                             </div>
-                            :
-                            ""
-                        }
-              
-                    </div>
 
-                    <div className="about-user-box">
-                        <span  className="location-icon material-icons  ">location_on</span>
-                        <p className="user-location">
-                             Live {userProfile.profile.country },   {userProfile.profile.live } 
-                        </p>
-                    </div>
+                            <div className="about-user-box">
+                                <span  className="location-icon material-icons">location_on</span>
+                                <p className="user-location">
+                                     Live {userProfile.profile.country },   {userProfile.profile.live } 
+                                </p>
+                            </div>
                   
-                    <div className="about-user-box">
-                        <p className="user-fav-quote">
-                             Bio {userProfile.profile.favorite_quote }
-                        </p>
+                            <div className="about-user-box">
+                                <p className="user-fav-quote">
+                                    Bio {userProfile.profile.favorite_quote }
+                                </p>
+                            </div> 
+                        </div>
+                    </div>
+        
+                    <div className="user-activities-box">
+                        <div className="user-activities-title-box">
+                            <p>Feeds</p>
+                        </div>
+                        <UserActivitiesBtns {...props} />
+
+                        <div className="answers-flex-box" id="activities-box">
+                            <UserItemsComponent {...props}/>                    
+                        </div>
                     </div> 
                 </div>
-        
-                <div className="user-activities-box">
-                    <UserActivitiesBtns {...props} />
+            </div>
 
-                    <div className="answers-flex-box" id="activities-box">
-                        <UserItemsComponent {...props}/>                    
-                    </div>
-                    
-                </div> 
-      
-               <div className="teams-box">
-               </div>
-       
+
+            <div className="profile-user-list-container">
+                <UserList {...props}/>
             </div>
         </div>
     );
@@ -252,6 +255,118 @@ export const ProfileComponent = props => {
 };
 
 
+export const UserProfileFollwingList = props => {
+    console.log(props)
+    let {
+        entities,
+        users,
+        currentUser,
+        usersById,
+        userProfile } = props;
+
+    users   = entities && entities.users[usersById] || users[usersById];
+    let userList = users && users.userList && users.userList.slice(0, 3);
+
+    let userProfileFollowersProps = {
+            byId      : usersById,
+            obj       : userProfile,
+            currentUser,
+            linkName  : `Show more`,
+           
+        };
+    let UserProfileFollowersLink =  <UsersModalLink {...userProfileFollowersProps}/>; 
+    //console.log(users.userList,userList)
+
+    return (
+        <div className="profile-user-list-box">
+            <div className="partial-user-list-box-header">
+                <p>You might follow </p>
+            </div>
+
+            { userList && userList.length?
+                <div>
+                    { userList.map(( user, index )  => {
+                        let userProps = {user  : user, objIndex:index};
+
+                        Object.assign(userProps, props);           
+                        return(
+                            <div style={props.userListBoxStyles}
+                                key={index}
+                                className="user-list-container"
+                                id="user-list-container">
+
+                                <PartialUserList {...userProps}/>
+
+                            </div>
+                        )
+                    })}
+                </div>
+                :
+                null   
+            }
+            <div className="partial-user-list-box-bottom">
+                {UserProfileFollowersLink}
+            </div>
+
+        </div>
+    )
+}
+
+export const PartialUserList = props => {
+        let {user, usersById, currentUser} = props
+
+        let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
+        let profile_picture = user.profile.profile_picture;
+        let profile = user.profile;
+
+        let editUserProfileProps = {
+            objName    : 'UsersList',
+            isPut      : true,
+            obj        : user, 
+            byId       : usersById,
+            currentUser,
+        }
+
+        editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+        var btnsProps   = {...props, editUserProfileProps};
+      
+        let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
+        console.log(props)
+
+        return (
+            <div className="partial-user-list-box">
+                <div className="partial-user-list-contents">
+                    <div className="partial-user-list-img-box">
+                        <div className="partail-user-list-img">
+                            { user && profile_picture? 
+                                <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
+                                :
+                                <img alt="" src={require("../images/user-avatar.png")} className="user-list-photo"/>  
+                            }        
+                        </div>
+                    </div>
+
+                    <div className="user-list-credentials-box">
+                        <div className="user-list-credentials-contents">
+                            <Link className="partial-user-list-name user-list-name"
+                                  to={{ pathname: pathToProfile,}}>
+                                { user.first_name }   {user.last_name }
+                            </Link>
+
+                        </div>
+
+                    </div>
+
+                    <div className="user-list-follow-box" >
+                        <div className="follow-user-list-box">
+                            <FollowBtn {...btnsProps}/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        )
+};
 
 
 export const UserList = props => {
@@ -346,7 +461,7 @@ export const UserAnswers = props =>{
                                 <div key={answer.id} className="answer-contents profile-activites "> 
                                     <div className="question">
                                         <b className="answer-question">
-                                            {answer.question.add_question}
+                                            {answer.question && answer.question.add_question}
                                         </b> 
                                     </div>
 
@@ -464,11 +579,9 @@ export const UsersComponent = props => {
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
     var btnsProps   = {...props, editUserProfileProps};
       
-    let UnfollowBtn = MatchMediaHOC(UnfollowUserBtn, '(min-width: 980px)');
     let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
 
-
-    let unfollowOrFollowUserBtn =    <FollowBtn {...btnsProps}/>;
+   
     
 
     return (
@@ -646,35 +759,46 @@ export const UserActivitiesBtns = props => {
     let totalFollowers = userProfile && userProfile.followers && userProfile.followers.length || 0;
     let totalFollowings = userProfile && userProfile.followings && userProfile.followings.length || 0;
 
-    
+        
     
     return (
         <div className="user-activities">
-
+            <div style={props.answersBtnStyles} className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersAnswers)} 
                              className="btn-sm activities user-answers" >
                 { totalAnswers } {totalAnswers <= 1? "Answer":"Answers"}
             </button>
+            </div>
 
+            <div  style={props.questionsBtnStyles}className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersQuestions)} 
                         className="btn-sm activities user-questions" >
                 { totalQuestions } {totalQuestions <= 1? "Question":"Questions"}
             </button>
 
+            </div>
+
+            <div style={props.postsBtnStyles} className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersPosts)} 
                                className="btn-sm activities user-posts">
                { totalPosts } {totalPosts <= 1? "Post":"Posts"}
             </button> 
+            </div>
 
+            <div style={props.followingsBtnStyles} className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersFollowings)} 
                             className="btn-sm activities user-following ">
                 { totalFollowings } {totalFollowings <= 1? "Following":"Followings"}
             </button>
+            </div>
+
+            <div style={props.followersBtnStyles} className="user-activities-btn-box">
          
             <button type="button" onClick={() => props.showUserItems(usersFollowers)} 
                             className="btn-sm activities user-followers " >
                { totalFollowers } {totalFollowers <= 1? "Follower":"Followers"}        
             </button>
+            </div>
 
         </div>
     );

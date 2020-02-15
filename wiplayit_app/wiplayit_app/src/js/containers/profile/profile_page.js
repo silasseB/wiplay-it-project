@@ -4,6 +4,7 @@ import {  Link,Route } from "react-router-dom";
 import {history} from "../../index" 
 
 import {ModalManager} from "../../containers/modal/modal_container";
+import { getUserList }  from "../../dispatch/index"
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navBar";
 
@@ -30,6 +31,7 @@ class UserProfileContainer extends Component {
             isProfileBox       : true,
             pageName           : "Profile", 
             profileById        : '',
+            usersById          : 'filteredUsers',
             isMouseInside      : false
         } 
 
@@ -77,12 +79,20 @@ class UserProfileContainer extends Component {
 
     componentDidMount() {
         this.onProfileUpdate();
-        
-        let { cacheEntities } = this.props;
-        let { slug, id } = this.props.match.params;
-        let  profileById = `userProfile${id}`;
+         let usersById     = this.state.usersById;
+        let { cacheEntities }    = this.props;
+        let { slug, id }         = this.props.match.params;
+        let  profileById         = `userProfile${id}`;
 
-        if (cacheEntities) {
+        let storeUpdate  = store.getState();
+        let {entities }  = storeUpdate;
+        let {users, userProfile}      = entities; 
+        userProfile = userProfile && userProfile[profileById];
+        users       = users[usersById];
+
+        !users && store.dispatch(getUserList({usersById}))
+
+        if (!userProfile) {
             let { userProfile, currentUser} = cacheEntities;
             userProfile = userProfile && userProfile[profileById]
 
@@ -118,7 +128,7 @@ class UserProfileContainer extends Component {
         }
 
         this.setState({profileById })
-        this.props.getUserProfile(id);
+        !userProfile && this.props.getUserProfile(id);
 
     };
 

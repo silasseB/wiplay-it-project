@@ -22,7 +22,7 @@ class UserListBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            usersById         : `allUsersList`,
+            usersById         : `filteredUsers`,
             modalTitle        : "Users",
             users             : undefined,
             userListBoxStyles : undefined
@@ -52,17 +52,21 @@ class UserListBox extends Component {
         let usersById = !byId && this.state.usersById || byId;
         apiUrl        = !apiUrl && api.getUserListApi() || apiUrl;
 
+        let storeUpdate  = store.getState();
+        let { entities } = storeUpdate;
+        let { users }    = entities && entities;
+
         this.setState({usersById})
         
-        store.dispatch(getUserList({usersById, apiUrl}));
+        !users[usersById] && store.dispatch(getUserList({usersById, apiUrl}))
+                          || this.setState({users});
                 
     }
 
     componentWillUnmount() {
         this.unsubscribe();
-          
-            
     };
+
 
     editfollowersOrUpVoters = (params) =>{
         let { objName, obj } = params;
@@ -112,29 +116,31 @@ class UserListBox extends Component {
         //console.log(props)
         var usersById = props.usersById;
         let users = props.users && props.users[usersById];
-        //console.log(users)
+        console.log(users)
    
         return (
             <div>
-                {users?
-                    <div onScroll={this.handleScroll()} className="users-modal-container">
-                        <UserListModalNavBar {...props}/>
+                <div onScroll={this.handleScroll()} className="users-modal-container">
+                    <UserListModalNavBar {...props}/>
+                    {users?
+                        <div>
 
-                        {users.isLoading?
-                            <div className="page-spin-loader-box">
-                                <AjaxLoader/>
-                            </div>
+                            {users.isLoading?
+                                <div className="page-spin-loader-box">
+                                    <AjaxLoader/>
+                                </div>
 
-                            :
+                                :
 
-                            <div>
-                                <UserList {...props}/>
-                            </div>
-                        }
-                    </div>
-                    :
-                    ""
-                }
+                                <div>
+                                    <UserList {...props}/>
+                                </div>
+                            }
+                        </div>
+                        :
+                        ""
+                    }
+                </div>
             </div>
         );
    };

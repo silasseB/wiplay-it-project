@@ -45,6 +45,7 @@ export function getUserList(props) {
     const instance = axiosInstance.axiosInstance();
   
     var { apiUrl, usersById } = props;
+    apiUrl = !apiUrl && api.getUserListApi() || apiUrl; 
 
     return dispatch => {
 

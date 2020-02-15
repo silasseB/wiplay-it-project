@@ -197,7 +197,7 @@ export function withHigherOrderIndexBox(Component) {
             let { action } = history;
             
             if (modal && action === "POP") {
-                console.log(action, modal)
+                //console.log(action, modal)
                 let{background} = modal;
 
                 let optionsModal   = modal['optionsMenu'];
@@ -336,7 +336,7 @@ export function withHigherOrderIndexBox(Component) {
                                                               { display : 'none' };
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',}
                                               : {opacity:'2',};
-            //console.log(props, window)
+            console.log(props, window)
             return (
                 <div  className="app-container">
                     <fieldset style={ onModalStyles } 
