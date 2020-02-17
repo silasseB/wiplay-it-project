@@ -171,7 +171,8 @@ export function getUserProfile(id, apiUrl) {
       	
       	    if (error.response) {
       		    console.log(error.response.data)
-      	        dispatch(action.getUserProfileError( profileById ,error.response.data));
+                let error = error.response.data;
+      	        dispatch(action.getUserProfileError( profileById ,error));
             }else{
          	    console.log(error)
          	    dispatch(action.handleError(error.request));

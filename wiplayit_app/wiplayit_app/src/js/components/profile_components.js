@@ -749,14 +749,14 @@ export const UserActivitiesBtns = props => {
     var usersFollowings = {
       component           :  UserFollowings,
       byId                :  `usersFollowings${userProfile.id}`,
-      data                :   userProfile.followings,
-      items               : 'isUsersFollowings'
+      data                :  userProfile.followings,
+      items               :  'isUsersFollowings'
     }
 
-    let totalAnswers   = userProfile && userProfile.answers && userProfile.answers.length || 0;
-    let totalQuestions = userProfile && userProfile.questions && userProfile.questions.length || 0;
-    let totalPosts     = userProfile && userProfile.posts && userProfile.posts.length || 0;
-    let totalFollowers = userProfile && userProfile.followers && userProfile.followers.length || 0;
+    let totalAnswers    = userProfile && userProfile.answers    && userProfile.answers.length || 0;
+    let totalQuestions  = userProfile && userProfile.questions  && userProfile.questions.length || 0;
+    let totalPosts      = userProfile && userProfile.posts      && userProfile.posts.length || 0;
+    let totalFollowers  = userProfile && userProfile.followers  && userProfile.followers.length || 0;
     let totalFollowings = userProfile && userProfile.followings && userProfile.followings.length || 0;
 
         

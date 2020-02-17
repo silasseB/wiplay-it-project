@@ -291,8 +291,8 @@ export const getUserProfileSuccess = ( byId, userProfile ) => {
 
 
 
-export const getUserProfileError = ( profileById, error) => ({
-    type: types.GET_USER_PROFILE.ERROR,
+export const getUserProfileError = ( byId, error) => ({
+    type : types.GET_USER_PROFILE.ERROR,
     byId,
     payload: {
        error     : error, 
