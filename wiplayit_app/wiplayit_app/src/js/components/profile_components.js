@@ -131,8 +131,10 @@ export const ProfileComponent = props => {
     console.log(props)
     
     return (
+        <div>
+        {userProfile?
         <div className="profile-contents">
-            {userProfile?
+            
             <div id="profile-box">
                 <div className="profile">
                     <div className="profile-box">
@@ -238,18 +240,10 @@ export const ProfileComponent = props => {
                         <div className="user-activities-title-box">
                             <p>Feeds</p>
                         </div>
-                        {userProfile?
-                            <UserActivitiesBtns {...props} />
-                            :
-                            null
-                        }
-
+                        <UserActivitiesBtns {...props} />
+                        
                         <div className="answers-flex-box" id="activities-box">
-                            {userProfile?
-                                <UserItemsComponent {...props}/> 
-                                :
-                                null                   
-                            }
+                            <UserItemsComponent {...props}/> 
                         </div>
                     </div> 
                 </div>
@@ -260,8 +254,10 @@ export const ProfileComponent = props => {
 
                 <UserList {...props}/>
             </div>
-            :
-            null
+
+        </div>
+        :
+        null
         }
         </div>
     );
