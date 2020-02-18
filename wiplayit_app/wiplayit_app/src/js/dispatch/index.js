@@ -168,9 +168,10 @@ export function getUserProfile(id, apiUrl) {
             dispatch(action.getUserProfileSuccess( profileById ,response.data));
         })
         .catch(error => {
+            console.log(error)
       	
-      	    if (error.response) {
-      		    console.log(error.response.data)
+      	    if (error && error.response) {
+      		    console.log(error.response)
                 let error = error.response.data;
       	        dispatch(action.getUserProfileError( profileById ,error));
             }else{

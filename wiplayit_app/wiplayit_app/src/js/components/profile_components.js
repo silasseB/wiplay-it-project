@@ -38,17 +38,18 @@ export const ProfileComponent = props => {
     var userProfile = props.entities.userProfile[profileById];
     userProfile     = userProfile && userProfile.user;
 
-    //console.log(props, userProfile)
+    console.log(props, userProfile)
     let currentUser = props.currentUser;
      
-    let profile = userProfile.profile;
+    let profile = userProfile && userProfile.profile;
 
     let apiUrl   = userProfile && api.getQuestionFollowersListApi(userProfile.id);
-    let linkName = profile.followers > 1 && `${profile.followers} Followers` || `${profile.followers} Follower`;
+    let linkName = profile && profile.followers > 1 && `${profile.followers} Followers` 
+                                                    || `${profile.followers} Follower`;
 
     let userProfileFollowersProps = {
             apiUrl,
-            byId      : `userProfileFollowers${userProfile.id}`,
+            byId      : userProfile && `userProfileFollowers${userProfile.id}`,
             obj       : userProfile,
             currentUser,
             linkName  : linkName,
@@ -99,10 +100,11 @@ export const ProfileComponent = props => {
 
     let EditorModalBtnSmallScreen = MatchMediaHOC(EditorModalBtnSmall, '(max-width: 980px)')
 
-    let UserProfileFollowersLink = profile.followers !== 0 &&  <UsersModalLink {...userProfileFollowersProps}/>; 
+    let UserProfileFollowersLink = profile && profile.followers !== 0 && 
+                                                 <UsersModalLink {...userProfileFollowersProps}/>; 
 
     let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
-    const pathToEditProfile = `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
+    const pathToEditProfile = userProfile  && `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
 
     let btnsProps = {
         editUserProfileProps,
@@ -112,8 +114,7 @@ export const ProfileComponent = props => {
 
     Object.assign(btnsProps, props);
 
-    var followers_text =  userProfile && userProfile.profile && userProfile.profile.followers > 1?
-                                                                      'Followers' : 'Follower';  
+    var followers_text =  profile && profile.followers > 1? 'Followers' : 'Follower';  
 
     let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
    
@@ -125,8 +126,7 @@ export const ProfileComponent = props => {
     const UserItemsComponent = props.userItemsComponent;   
 
 
-    let  profile_picture = userProfile && userProfile.profile?
-                           userProfile.profile.profile_picture : null;
+    let  profile_picture = profile && profile.profile_picture || null;
                  
     console.log(props)
     
@@ -152,7 +152,7 @@ export const ProfileComponent = props => {
                                     }
                                 </div>
 
-                                {props.isMouseInside && userProfile.user_can_edit?
+                                {props.isMouseInside && userProfile && userProfile.user_can_edit?
                                     <div
                                         onMouseEnter={props.mouseEnter}
                                         onMouseLeave={props.mouseLeave}
@@ -169,11 +169,12 @@ export const ProfileComponent = props => {
                             <div className="profile-credential-box">
                                 <ul className="profile-name-box">
                                     <li className="profile-name">
-                                        { userProfile.first_name }  { userProfile.last_name } 
+                                        { userProfile && userProfile.first_name }
+                                        { userProfile && userProfile.last_name } 
                                     </li>
 
                                     <li className="user-credential">
-                                        {userProfile.profile.credential}
+                                        {profile && profile.credential}
                                     </li>
                                 </ul>
 
@@ -220,13 +221,13 @@ export const ProfileComponent = props => {
                             <div className="about-user-box">
                                 <span  className="location-icon material-icons">location_on</span>
                                 <p className="user-location">
-                                     Live {userProfile.profile.country },   {userProfile.profile.live } 
+                                     Live {profile && profile.country },   {profile && profile.live } 
                                 </p>
                             </div>
                   
                             <div className="about-user-box">
                                 <p className="user-fav-quote">
-                                    Bio {userProfile.profile.favorite_quote }
+                                    Bio {profile && profile.favorite_quote }
                                 </p>
                             </div> 
                         </div>
