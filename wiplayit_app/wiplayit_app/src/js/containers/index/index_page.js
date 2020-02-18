@@ -100,7 +100,7 @@ class IndexBox extends Component {
 
             console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                               
-            if (menDiff <= 1) {
+            if (hourDiff <= 1) {
 
                 console.log('Index found from cachedEntyties')
                 //store.dispatch(action.getIndexPending());

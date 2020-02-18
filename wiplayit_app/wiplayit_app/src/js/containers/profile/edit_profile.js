@@ -261,87 +261,85 @@ const ProfileEditComponent = props => {
     return(
 
         <div  className="edit-profile-container" >
-          <fieldset style={ fieldSetStyles} 
+            <fieldset style={ fieldSetStyles} 
                       disabled={ submitting} >
-
-            <EditProfilePicSmalScreen {...props}/>
+                <EditProfilePicSmalScreen {...props}/>
             
-         <div className="profile-name-edit-box">
-            <div className="item-title-container">
-               <div className="item-title-box">
-                 <b className="item-title"> Name</b>
-               </div>
-            </div>
+                <div className="profile-name-edit-box">
+                    <ul className="item-title-box">
+                        <li className="item-title">
+                             Name
+                        </li>
+                    </ul>
 
-            <div className="profile-name-input-box">
-               <input
-                  type="text" 
-                  className="profile-name-input"
-                  name="first_name"
-                  value={props.form.first_name}
-                  onChange={props.handleChange}
-               />
+                    <div className="profile-name-input-box">
+                        <input
+                            type="text" 
+                            className="profile-name-input"
+                            name="first_name"
+                            value={props.form.first_name}
+                            onChange={props.handleChange}
+                        />
 
-               <input
-                  type="text" 
-                  className="profile-name-input"
-                  name="last_name"
-                  value={props.form.last_name}
-                  onChange={props.handleChange}
-               />
-            </div>
+                        <input
+                            type="text" 
+                            className="profile-name-input"
+                            name="last_name"
+                            value={props.form.last_name}
+                            onChange={props.handleChange}
+                        />
+                    </div>
 
-         </div>
-
-      
-         <div className="user-locacion-box">
-            <div className="item-title-container">
-               <div className="item-title-box">
-                 <b className="item-title">Live</b>
-               </div>
-       
-            </div>
-            <div className="input-box">
-               <input
-                 type="text" 
-                 className=""
-                 name="live"
-                 value={props.form.live}
-                 onChange={props.handleChange}
-               />
-            </div>        
-         </div>
-      
-         <div className="user-credential-box">
-            <div className="item-title-container">
-               <div className="item-title-box">
-                  <b className="item-title">Credentials</b>
-               </div>
-            </div>
-            <div className="input-box">
-            <input
-               type="text" 
-               className=""
-               name="credential"
-               value={props.form.credential}
-               onChange={props.handleChange}
-            />
-          </div>
-         </div>
+                </div>
 
       
-         <div className="user-favorite-quote-box">
-            <div className="item-title-container">
-               <div className="item-title-box">
-                  <b className="item-title">Quote</b>
-               </div>
-            </div>
+                <div className="user-locacion-box">
+                    <ul className="item-title-box">
+                        <li className="item-title">
+                            Live
+                        </li>
+                    </ul>
+                    <div className="input-box">
+                        <input
+                            type="text" 
+                            className=""
+                            name="live"
+                            value={props.form.live}
+                            onChange={props.handleChange}
+                        />
+                    </div>        
+                </div>
+      
+                <div className="user-credential-box">
+                    <ul className="item-title-box">
+                        <li className="item-title">
+                            Credentials
+                        </li>
+                    </ul>
+                    <div className="input-box">
+                        <input
+                            type="text" 
+                            className=""
+                            name="credential"
+                            value={props.form.credential}
+                            onChange={props.handleChange}
+                        />
+                    </div>
+                </div>
 
-            <div className="input-box">
-               <TextareaAutosize {...props.textAreaProps}  rows={3}/>  
-            </div>   
-         </div>
-         </fieldset>
+      
+                <div className="user-favorite-quote-box">
+                    <ul className="item-title-box">
+                        <li className="item-title">
+                            Quote
+                        </li>
+                    </ul>
+
+                    <div className="input-box">
+                        <TextareaAutosize {...props.textAreaProps}  rows={3}/>  
+                    </div>   
+                </div>
+            </fieldset>
     
         </div>
     );
@@ -351,15 +349,18 @@ const ProfileEditComponent = props => {
 const EditProfilePicture = (props)=>{
 
         let {userProfile, editUserProfileProps } = props;
-        let profile = userProfile && userProfile.profile;
+        let profile  = userProfile && userProfile.profile;
+        let linkName = `Change`; 
+
+        editUserProfileProps = {...editUserProfileProps, linkName}
 
         return(
             <div className="edit-img-container">
-                <div className="item-title-container">
-                    <div className="item-title-box">
-                        <b className="item-title">Photo</b>
-                    </div>
-                </div>
+                <ul className="item-title-box">
+                    <li className="item-title">
+                        Photo
+                    </li>
+                </ul>
 
                 <div className="edit-image-container">
                     <div className="edit-profile-image-box">
@@ -375,7 +376,9 @@ const EditProfilePicture = (props)=>{
                                 }
                             </div>
                     </div>
-                    <ChangeImageBtn {...editUserProfileProps}/>
+                    <div className="chang-img-btn-box">
+                        <ChangeImageBtn {...editUserProfileProps}/>
+                    </div>
                 </div>
 
             </div>   

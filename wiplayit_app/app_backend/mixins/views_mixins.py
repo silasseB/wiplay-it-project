@@ -139,8 +139,7 @@ class UpdateObjectMixin(BaseMixin):
 			
 
 			if user_is_following:
-				print(" Is Unfollowing")
-
+				
 				current_user.profile = self.modify_current_user_followings_field(instance.profile, decrem=True)
 				self.unfollow(instance.profile)
 
@@ -148,7 +147,6 @@ class UpdateObjectMixin(BaseMixin):
 				self.remove_perm(followings_perms, current_user, user=instance)
 				
 			else:
-				print(" Is Following")
 				current_user.profile = self.modify_current_user_followings_field(instance.profile, increm=True)
 				self.follow(instance.profile)
 
@@ -215,7 +213,7 @@ class UpdateObjectMixin(BaseMixin):
 
 		for field in profile_fields:
 			request_field = self.request.data.get(field, False)
-			print(request_field)
+			#print(request_field)
 			
 			if request_field:
 				profile[field]  = request_field
@@ -227,8 +225,7 @@ class UpdateObjectMixin(BaseMixin):
 		
 	def put(self, request, *args, **kwargs):
 	 	instance = self.get_object()
-	 	print(request.data)
-	 		 	
+	 		 		 	
 	 	if  request.data.get("followers", False):
 	 		kwargs['data'] = self.update_followers_fields(instance)
 	 		
@@ -245,8 +242,6 @@ class UpdateObjectMixin(BaseMixin):
 		data = kwargs.pop("data", False)
 		instance = self.get_object()
 
-		print(data)
-		
 		serializer = self.get_serializer(
             instance, 
             data     = data,
@@ -290,8 +285,8 @@ class CreateMixin(BaseMixin):
 		
 	def create(self, data):
 		edit_perms = self.permissions.get('edit_perms',None)
-		print(data)
-		print(self.request.data)
+		#print(data)
+		#print(self.request.data)
 
 		serializer = self.get_serializer(data=data)
 				
@@ -302,11 +297,9 @@ class CreateMixin(BaseMixin):
 
 			
 		instance = serializer.save(created_by=self.request.user)
-		print(edit_perms)
-
+		
 		if edit_perms is not None:
 			for perm in edit_perms:
-				print(perm)
 				self.assign_perm(perm, instance)
 						
 		return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -19,14 +19,14 @@
   padding-top: 50px;
 }
 
-.item-title-container {
-   border: 1px solid blue;
-   display: flex;
-}
-
 .item-title {
-  font-size: 14px;
+    font-size   : 14px;
+    font-weight : bold; 
  }
+
+.item-title-box {
+    border: px solid red;
+}
 
 .arrow {
     color: #A33F0B;
@@ -46,8 +46,8 @@
 }
 
 .custom-back-btn {
-  width: 50px;
-  height: 20px;
+  width  : 50px;
+  height : 20px;
   margin:7px ;
   border: none;
   color: #fff;
@@ -62,45 +62,45 @@
 
 .edit-img-container, .profile-name-edit-box,
 .user-phonenumber-box, .user-locacion-box,
-.user-credential-box, .user-favorite-quote-box {
+.user-credential-box, .user-favorite-quote-box,
+.image-preview-container  {
   border-bottom : 1px solid #F7F7F7;
   margin        : 5px;
   padding       : 10px;
-  border        : 1px solid blue; 
+  border        : px solid black; 
 }
 
 
 .edit-image-container {
-   border  : 1px solid  red;
+   border  : px solid  red;
    width   : 100%;
 }
 
  
+.edit-profile-image-box {
+    border: px solid blue;
+}
 
 
 
 
-.image-preview-box, .edit-image-btn-box{
+.image-preview-box, .edit-image-btn-box {
     border        : 1px solid #D5D7D5;
-    width         : 70px;
-    height        : 70px;
+    width         : 90px;
+    height        : 90px;
     border-radius : 50%;
-    margin        : 0 30%;
+    margin        : 0 32%;
 }
 
 .edit-image,.image-preview{
-  border        : 1px solid #D5D7D5;
-  width         : 70px;
-  height        : 70px;
+  width         : 90px;
+  height        : 90px;
   max-width     : 100%;
   object-fit    : cover;
   border-radius : 50%;
   
 }
 
-.edit-profile-image-box {
-    border: 1px solid blue;
-}
 
 .navbar-title-box {
   border: px solid red;
@@ -119,14 +119,9 @@
 }
 
 
-.item-title-box {
-  
-  width: 100%;
-  margin: 10px 0;
-}
 
 .edit-img-btn {
-  font-size: 10px;
+  font-size: 14px;
   color: black;
   width: 70px;
   height: 30px;
@@ -175,6 +170,11 @@
    width: 20%;
 }
 
+.chang-img-btn-box {
+    border: px solid blue;
+}
+
+
 .fileBox {
    background: #EEF2F1 !important;
    border: px solid red;
@@ -215,7 +215,7 @@
 
 
 .input-box input {
-  border: none !important; 
+   border : none !important; 
 }
 
 .profile-name-input-box input {
@@ -259,14 +259,16 @@
   padding-top: 50px;
 }
 
-.item-title-container {
-   border: px solid blue;
-   display: flex;
-}
+
 
 .item-title {
-  font-size: 14px;
+    font-size   : 14px;
+    font-weight : bold; 
  }
+
+.item-title-box {
+    border: px solid red;
+}
 
 .arrow {
     color: #A33F0B;
@@ -306,13 +308,13 @@
 }
 
 
-.edit-img-container, .edit-name-box,
+.edit-img-container, .edit-name-box,.profile-name-edit-box,
 .user-phonenumber-box, .user-locacion-box,
 .user-credential-box, .user-favorite-quote-box {
   border-bottom:   1px solid #F7F7F7;
   margin: 5px;
   padding: 10px;
-  border: 1px solid red;
+  border: px solid red;
 }
 
 

@@ -23,6 +23,7 @@ import {showModal} from '../actions/actionCreators';
 
 
 export const FollowUserBtn = props => {
+    console.log(props)
     
     let {currentUser, editUserProfileProps,editfollowersOrUpVoters } = props;
     let { obj } = editUserProfileProps && editUserProfileProps;

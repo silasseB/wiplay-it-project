@@ -135,6 +135,8 @@ export const ChangeImageBtn = props => {
             background  : state.background,
         }
 
+    let linkName = props.linkName || `Edit`;
+
     return(
        
         <button className="edit-img-btn"   onClick={()=> {
@@ -146,7 +148,7 @@ export const ChangeImageBtn = props => {
                         }, 500);
 
                     }}>
-            Edit  
+            {linkName}  
         </button>
     );
 };
@@ -172,7 +174,7 @@ export const UsersModalLink = props => {
     } 
 
     let madalParams = {
-            boolValue : true,
+            boolValue   : true,
             modalType   : 'userList',
             background  : state.background,
         }

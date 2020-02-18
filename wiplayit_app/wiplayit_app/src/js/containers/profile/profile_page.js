@@ -32,7 +32,8 @@ class UserProfileContainer extends Component {
             pageName           : "Profile", 
             profileById        : '',
             usersById          : 'filteredUsers',
-            isMouseInside      : false
+            isMouseInside      : false,
+            userItemsStyles    : {},  
         } 
 
     };
@@ -141,8 +142,12 @@ class UserProfileContainer extends Component {
             var byId         =`usersAnswers${userProfile.id}`;
             answers          = answers[byId]
             var usersAnswers = userProfile.answers;
+            let  answersBtnStyles = this._userActivitesStyle();
+            let userItemsStyles = {answersBtnStyles};
+            this.setState({userItemsStyles})
 
             if (usersAnswers) {
+
                 ///console.log(usersAnswers, answers)
                 store.dispatch(action.getAnswerListPending(byId));
                 store.dispatch(action.getAnswerListSuccess(byId, usersAnswers));
@@ -151,7 +156,7 @@ class UserProfileContainer extends Component {
 
     }
 
-    _userProfileAnswerParams=(userProfile)=>{
+    _userProfileAnswerParams = (userProfile)=>{
         if (userProfile) {
 
             return  {
@@ -163,14 +168,26 @@ class UserProfileContainer extends Component {
         }
     }
 
+    _userActivitesStyle = ()=>{
+        return {
+            borderBottom : '2px solid #A33F0B',
+            opacity      : '0.60',
+        }
+    }
+
    
     showUserItems(params) {
         //console.log(params)
         let {items, component, byId, data } = params;
-        this.setState({userItemsComponent : component})
+        this.setState({userItemsComponent : component});
+
+        let userItemsStyles; 
 
         switch(items){
             case 'isUsersAnswers':
+                let  answersBtnStyles = this._userActivitesStyle();
+                userItemsStyles       = {answersBtnStyles};
+                this.setState({userItemsStyles})
 
                 store.dispatch(action.getAnswerListPending(byId));
                 store.dispatch(action.getAnswerListSuccess(byId, data));
@@ -178,24 +195,35 @@ class UserProfileContainer extends Component {
 
 
             case 'isUsersQuestions':
+                let  questionsBtnStyles = this._userActivitesStyle();
+                userItemsStyles         = {questionsBtnStyles};
+                this.setState({userItemsStyles})
 
                 store.dispatch(action.getQuestionListPending(byId));
                 store.dispatch(action.getQuestionListSuccess(byId, data));
                 return;
             
             case 'isUsersPosts':
+                let  postsBtnStyles = this._userActivitesStyle();
+                userItemsStyles     = {postsBtnStyles};
+                this.setState({userItemsStyles})
 
                 store.dispatch(action.getPostListPending(byId));
                 store.dispatch(action.getPostListSuccess(byId, data));
                 return;
          
             case 'isUsersFollowings':
-                console.log(data, items)
+                let  followingsBtnStyles = this._userActivitesStyle();
+                userItemsStyles          = {followingsBtnStyles};
+                this.setState({userItemsStyles})
                 store.dispatch(action.getUserListPending(byId));
                 store.dispatch(action.getUserListSuccess(byId, data));
                 return;
 
             case 'isUsersFollowers':
+                let  followersBtnStyles = this._userActivitesStyle();
+                userItemsStyles          = {followersBtnStyles};
+                this.setState({userItemsStyles})
                 store.dispatch(action.getUserListPending(byId));
                 store.dispatch(action.getUserListSuccess(byId, data));  
                 return;  

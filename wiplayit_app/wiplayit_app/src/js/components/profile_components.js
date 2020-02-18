@@ -119,7 +119,7 @@ export const ProfileComponent = props => {
    
 
     let ChangeImageBtnBigScreen = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
-    let UserList = MatchMediaHOC(UserProfileFollwingList, '(min-width: 980px)')
+    let UserList                = MatchMediaHOC(UserProfileFollwingList, '(min-width: 980px)')
 
       
     const UserItemsComponent = props.userItemsComponent;   
@@ -759,18 +759,23 @@ export const UserActivitiesBtns = props => {
     let totalFollowers  = userProfile && userProfile.followers  && userProfile.followers.length || 0;
     let totalFollowings = userProfile && userProfile.followings && userProfile.followings.length || 0;
 
+    let {answersBtnStyles,
+        questionsBtnStyles,
+        postsBtnStyles,
+        followersBtnStyles,
+        followingsBtnStyles} = props.userItemsStyles && props.userItemsStyles;
         
-    
+    console.log(answersBtnStyles, props)
     return (
         <div className="user-activities">
-            <div style={props.answersBtnStyles} className="user-activities-btn-box">
+            <div style={answersBtnStyles} className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersAnswers)} 
                              className="btn-sm activities user-answers" >
                 { totalAnswers } {totalAnswers <= 1? "Answer":"Answers"}
             </button>
             </div>
 
-            <div  style={props.questionsBtnStyles}className="user-activities-btn-box">
+            <div  style={questionsBtnStyles}className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersQuestions)} 
                         className="btn-sm activities user-questions" >
                 { totalQuestions } {totalQuestions <= 1? "Question":"Questions"}
@@ -778,21 +783,21 @@ export const UserActivitiesBtns = props => {
 
             </div>
 
-            <div style={props.postsBtnStyles} className="user-activities-btn-box">
+            <div style={postsBtnStyles} className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersPosts)} 
                                className="btn-sm activities user-posts">
                { totalPosts } {totalPosts <= 1? "Post":"Posts"}
             </button> 
             </div>
 
-            <div style={props.followingsBtnStyles} className="user-activities-btn-box">
+            <div style={followingsBtnStyles} className="user-activities-btn-box">
             <button type="button" onClick={() => props.showUserItems(usersFollowings)} 
                             className="btn-sm activities user-following ">
                 { totalFollowings } {totalFollowings <= 1? "Following":"Followings"}
             </button>
             </div>
 
-            <div style={props.followersBtnStyles} className="user-activities-btn-box">
+            <div style={followersBtnStyles} className="user-activities-btn-box">
          
             <button type="button" onClick={() => props.showUserItems(usersFollowers)} 
                             className="btn-sm activities user-followers " >

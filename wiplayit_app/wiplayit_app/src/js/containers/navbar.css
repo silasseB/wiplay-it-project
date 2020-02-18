@@ -99,17 +99,23 @@
     }
 
     .navigation-img-item{
-        border: px solid black;
+        border   : px solid black;
+        padding  : 8px  15px 0;  
+    }
+
+    .page-name-box {
+        border  : px solid black;
+        width   : 100%;
+        padding : 10px 0 0 10px; 
     }
 
     .navigation-img-box{
-        border          : px solid red;
+        border  : px solid red;
     
     }
 
     #navBardropdown{
         border        : 1px solid #D5D7D5;
-        padding       : 12px  12px 0;
         border-radius : 50%;
         width         : 27px;
         height        : 27px; 

@@ -169,8 +169,10 @@ const UserListModalNavBar = (props)=> {
         if (isFollowers) {
             return usersLength > 1 && `${usersLength} Followers` || `${usersLength} Follower`;
 
-        }else{
+        }else if(isUpVoters){
             return usersLength > 1 && `${usersLength} Upvoters` || `${usersLength} Upvoter`;
+        }else{
+            return `Who to follow`;
         }
        
     }
