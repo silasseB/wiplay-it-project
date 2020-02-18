@@ -132,6 +132,7 @@ export const ProfileComponent = props => {
     
     return (
         <div className="profile-contents">
+            {userProfile?
             <div id="profile-box">
                 <div className="profile">
                     <div className="profile-box">
@@ -237,10 +238,18 @@ export const ProfileComponent = props => {
                         <div className="user-activities-title-box">
                             <p>Feeds</p>
                         </div>
-                        <UserActivitiesBtns {...props} />
+                        {userProfile?
+                            <UserActivitiesBtns {...props} />
+                            :
+                            null
+                        }
 
                         <div className="answers-flex-box" id="activities-box">
-                            <UserItemsComponent {...props}/>                    
+                            {userProfile?
+                                <UserItemsComponent {...props}/> 
+                                :
+                                null                   
+                            }
                         </div>
                     </div> 
                 </div>
@@ -248,8 +257,12 @@ export const ProfileComponent = props => {
 
 
             <div className="profile-user-list-container">
+
                 <UserList {...props}/>
             </div>
+            :
+            null
+        }
         </div>
     );
 
@@ -719,7 +732,7 @@ export const UserActivitiesBtns = props => {
 
     var usersAnswers = {
       component      : UserAnswers,
-      byId           : `usersAnswers${userProfile.id}`,
+      byId           : userProfile && `usersAnswers${userProfile.id}`,
       data           :  userProfile.answers,
       items          : 'isUsersAnswers',
 
