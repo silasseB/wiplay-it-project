@@ -45,7 +45,7 @@ export const ProfileComponent = props => {
 
     let apiUrl   = userProfile && api.getQuestionFollowersListApi(userProfile.id);
     let linkName = profile && profile.followers > 1 && `${profile.followers} Followers` 
-                                                    || `${profile.followers} Follower`;
+                                                    || profile && `${profile.followers} Follower`;
 
     let userProfileFollowersProps = {
             apiUrl,

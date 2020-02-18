@@ -266,6 +266,7 @@ class UserProfileContainer extends Component {
         let   props = this.getProps();
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
+        console.log(userProfile)
       
         return (
             <div>
