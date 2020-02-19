@@ -13,7 +13,7 @@ ALLOWED_HOSTS = ['valoi.pythonanywhere.com']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Valoi$wiplayit_project',
+        'NAME': 'Valoi$wiplayit',
         'USER': 'Valoi',
         'PASSWORD': 'siLasValoi9020$?',
         'HOST': 'Valoi.mysql.pythonanywhere-services.com',
