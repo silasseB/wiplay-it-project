@@ -24,7 +24,7 @@ app_name = 'retrive_apis'
 
 
 urlpatterns = [
-		path("", index, name='index'),
+		    path("", index, name='index'),
         path("api/main/", IndexView.as_view(), name='main'),
 
 
