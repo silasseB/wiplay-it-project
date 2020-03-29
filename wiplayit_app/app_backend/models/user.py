@@ -25,7 +25,7 @@ from app_backend.slug_generator import generate_unique_slug
 # Create your models here.
 
 
-class User(AbstractBaseUser,PermissionsMixin, GuardianUserMixin):
+class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
     email           = models.CharField(verbose_name='email address', max_length=50, unique=True )
     first_name      = models.CharField('first name', max_length=15,blank=True)
     last_name       = models.CharField('last name', max_length=15,blank=True)
