@@ -7,13 +7,13 @@ from wiplayit_app.settings.common import *
 DEBUG = False
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['valoi.pythonanywhere.com']
+ALLOWED_HOSTS = ['valoi.pythonanywhere.com', 'silasi.pythonanywhere.com']
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Valoi$wiplayit',
+        'NAME': 'Valoi$wiplayitdb',
         'USER': 'Valoi',
         'PASSWORD': 'siLasValoi9020$?',
         'HOST': 'Valoi.mysql.pythonanywhere-services.com',
