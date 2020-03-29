@@ -10,16 +10,16 @@ import  * as types  from 'actions/types';
 
 import { UnfollowUserBtn, FollowUserBtn, OptionsDropDownBtn} from "../components/buttons"; 
 
-import{ QuestionComponent } from "../components/question_components"
+import{ QuestionComponent } from "components/question_components"
 
-import { PostComponent } from "../components/post_components"
-import { GetModalLinkProps } from "../components/component-props";
-import { AnswersComponent  } from "../components/answer_components";
+import { PostComponent } from "components/post_components"
+import { GetModalLinkProps } from "components/component-props";
+import { AnswersComponent  } from "components/answer_components";
 import { 
     OptionsModalLink,
     EditorLink, 
     ChangeImageBtn,
-    UsersModalLink } from "../components/modal-links";
+    UsersModalLink } from "components/modal-links";
 
 
 const OptBtnSmallScreen   = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
@@ -150,7 +150,7 @@ export const ProfileComponent = props => {
                                              className="profile-image"/>
                                         :
                                         <img alt=""
-                                             src={require("../images/user-avatar.png")} 
+                                             src={require("media/user-image-placeholder.png")} 
                                              className="profile-image"/>
                                     }
                                 </div>
@@ -351,7 +351,9 @@ export const PartialUserList = props => {
                             { user && profile_picture? 
                                 <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
-                                <img alt="" src={require("../images/user-avatar.png")} className="user-list-photo"/>  
+                                <img alt="" 
+                                     src={require("media/user-image-placeholder.png")}
+                                     className="user-list-photo"/>  
                             }        
                         </div>
                     </div>
@@ -604,7 +606,9 @@ export const UsersComponent = props => {
                             { user && profile_picture? 
                                 <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
-                                <img alt="" src={require("../images/user-avatar.png")} className="user-list-photo"/>  
+                                <img alt=""
+                                     src={require("media/user-image-placeholder.png")}
+                                     className="user-list-photo"/>  
             
                             }        
                         </Link>

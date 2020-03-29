@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import 'draft-js/dist/Draft.css';
-import 'containers/app-editor.css';
+
 import { CharacterMetadata, CompositeDecorator, AtomicBlockUtils,
          RichUtils,convertToRaw, convertFromRaw,Entity,
          genKey, EditorState, ContentBlock} from 'draft-js';
@@ -639,7 +638,9 @@ export const DesktopEditorComponent =(props)=>{
                     { currentUser.profile && currentUser.profile.profile_picture?
                         <img alt="" src={currentUser.profile.profile_picture} className="profile-photo"/>
                         :
-                        <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/> 
+                        <img alt="" 
+                             src={require("media/user-image-placeholder.png")}
+                             className="profile-photo"/> 
                     }
                 </div>
 
