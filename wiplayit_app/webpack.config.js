@@ -6,9 +6,9 @@ var BundleTracker = require('webpack-bundle-tracker');
 let staticPath = `/Mywork/wiplay-it-project/wiplayit_app/app_backend/static/dist/`;
 
 const paths = {
-  STATIC: path.resolve(__dirname, 'app_backend/static/dist'),
-  SRC: path.resolve(__dirname, 'src'), // source folder path -> ADDED IN THIS STEP
-  JS: path.resolve(__dirname, 'src/'),
+  STATIC: path.resolve(__dirname, 'app_backend/static/app_frontend/'),
+  SRC: path.resolve(__dirname, 'app_frontend/'), // source folder path -> ADDED IN THIS STEP
+  JS: path.resolve(__dirname, 'app_frontend/'),
   NODE_MODULES: path.resolve(__dirname, 'node_modules'),
   
 };
@@ -17,7 +17,7 @@ const paths = {
 
   // Webpack configuration
   module.exports = {
-    entry: path.join(paths.JS, '/js/index.js'),
+    entry: path.join(paths.JS, 'src/index.js'),
     
     output: {
       path: paths.STATIC,
@@ -80,7 +80,23 @@ const paths = {
   resolve: {
   
     alias:{
-      wiplayit: path.resolve( __dirname, 'src', 'js' )
+      containers : path.resolve(paths.JS, 'src/containers/'),
+      templates  : path.resolve(paths.JS, 'src/templates/'),
+      components : path.resolve(paths.JS, 'src/components/'),
+      css        : path.resolve(paths.JS, 'src/css/'),
+      types      : path.resolve(paths.JS, 'src/types/'),
+      actions    : path.resolve(paths.JS, 'src/actions/'),
+      dispatch   : path.resolve(paths.JS, 'src/dispatch/'),
+      reducers   : path.resolve(paths.JS, 'src/reducers/'),
+      containers : path.resolve(paths.JS, 'src/containers/'),
+      apis       : path.resolve(paths.JS, 'src/apis/'),
+      media      : path.resolve(paths.JS, 'src/media/'),
+      helpers    : path.resolve(paths.JS, 'src/helpers/'),
+      utils      : path.resolve(paths.JS, 'src/utils/'),
+      store      : path.resolve(paths.JS, 'src/store/'),
+      App        : path.resolve(paths.JS, 'src/App.js'),
+      tests      : path.resolve(paths.JS, 'src/tests/'),
+      serviceWorker : path.resolve(paths.JS, 'src/serviceWorker.js/'),
     },
 
     extensions: ['*', '.js', '.jsx']

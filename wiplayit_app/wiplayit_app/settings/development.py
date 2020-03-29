@@ -38,7 +38,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'wiplayit_app',
         'USER': 'silasi',
-        'PASSWORD': 'siLasi9018$?',
+        'PASSWORD': 'sila9020@?',
         'HOST': 'localhost',
         'PORT': '',
     }

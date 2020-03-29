@@ -11,11 +11,13 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     def get_email_confirmation_url(self, request, emailconfirmation):
 
         host = settings.ALLOWED_HOSTS[0]
+        http = "https://"
 
         if settings.DEBUG:
-            host = host + ":8000"
+        	http = "http://"
+        	host = host + ":8000"
 
-        url = "https://" + host + "/registration/account/confirm/" + emailconfirmation.key + "/"
+        url = http + host + "/registration/account/confirm/" + emailconfirmation.key + "/"
 
         ret = build_absolute_uri(
             request,

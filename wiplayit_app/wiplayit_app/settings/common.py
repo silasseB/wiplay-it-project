@@ -32,6 +32,8 @@ EMAIL_USE_SSL=False
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'silassibaloy@gmail.com'
+
+EMAIL_HOST_USER = 'silassibaloy@gmail.com'
 EMAIL_HOST_PASSWORD = 'SilasValoi2020@?'
 EMAIL_PORT = 587
 
@@ -114,8 +116,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'webpack_loader',
     'app_backend',
-    'django_countries',
-    'twilio',
     'guardian',
     'mptt',
     'allauth',
@@ -132,7 +132,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -244,7 +243,7 @@ MEDIA_URL = '/media/'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'dist/',
+            'BUNDLE_DIR_NAME': 'app_frontend/',
             'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
             
             

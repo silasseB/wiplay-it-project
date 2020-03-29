@@ -109,7 +109,6 @@ class CustomPasswordResetSerializer (PasswordResetSerializer):
         
         email = value
         
-
         if not User.objects.filter(email=email).exists():
         	msg = _('Account with this email address does not exists.')
         	raise serializers.ValidationError(msg)
