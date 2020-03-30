@@ -1,13 +1,11 @@
 
-from app_backend.views import (UserView,PostView, PostCommentView, PostReplyView, 
+from app_backend.views import (PostView, PostCommentView, PostReplyView, 
                                 QuestionView, AnswerView, AnswerCommentView, AnswerReplyView )
 from app_backend.mixins.views_mixins import  UpdateObjectMixin
 
 
 				
-		
-class UpdateUserProfileView(UpdateObjectMixin, UserView):
-	pass
+
 		
 
 

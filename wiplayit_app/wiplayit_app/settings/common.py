@@ -21,11 +21,11 @@ SECRET_KEY = '(sm1(p$as-5c)a@)^vthx1g%t+kil^rzxx%mx*!vp@8rbqm7t2'
 
 #LOGOUT_REDIRECT_URL  = 'user_app:login'
 #LOGIN_REDIRECT_URL = 'user_app:api-login'
-AUTH_USER_MODEL = 'app_backend.User'
+AUTH_USER_MODEL = 'auth_backend.User'
 
 GUARDIAN_MONKEY_PATH = False
 ANONYMOUS_USER_NAME = "Anonymous"
-GUARDIAN_GET_INIT_ANONYMOUS_USER = 'app_backend.models.get_anonymous_user_instance'
+GUARDIAN_GET_INIT_ANONYMOUS_USER = 'auth_backend.models.get_anonymous_user_instance'
 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL=False
@@ -47,9 +47,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
-ACCOUNT_ADAPTER = 'app_backend.configs.custom_adapter.CustomAccountAdapter'
+ACCOUNT_ADAPTER = 'auth_backend.custom_adapter.CustomAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_ADAPTER = 'app_backend.configs.custom_adapter.CustomSocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'auth_backend.custom_adapter.CustomSocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -82,9 +82,9 @@ REST_FRAMEWORK = {
 
 
 REST_AUTH_SERIALIZERS = {
-   'USER_DETAILS_SERIALIZER'   : 'app_backend.auth_serializers.CustomRegisterSerializer',
-   'TOKEN_SERIALIZER'          : 'app_backend.auth_serializers.TokenSerializer',
-   'PASSWORD_RESET_SERIALIZER' : 'app_backend.auth_serializers.CustomPasswordResetSerializer',
+   'USER_DETAILS_SERIALIZER'   : 'auth_backend.serializers.CustomRegisterSerializer',
+   'TOKEN_SERIALIZER'          : 'auth_backend.serializers.TokenSerializer',
+   'PASSWORD_RESET_SERIALIZER' : 'auth_backend.serializers.CustomPasswordResetSerializer',
 }
 
 
@@ -102,20 +102,21 @@ JWT_AUTH = {
 
 
 INSTALLED_APPS = [
-    'rest_auth.registration',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'auth_backend',
+    'app_backend',
     'rest_framework',
     'rest_auth',
+    'rest_auth.registration',
     'rest_framework.authtoken',
     'corsheaders',
     'django.contrib.admin',
     'webpack_loader',
-    'app_backend',
     'guardian',
     'mptt',
     'allauth',

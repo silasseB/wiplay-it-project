@@ -14,8 +14,7 @@ from app_backend.api_views.api_detail_views import ( RetrievePostView, RetrieveP
                                                      RetrievePostCommentUpVoters, RetrievePostReplyUpVoters
                                                     )
 from app_backend.api_views.api_detail_views import ( index, IndexView )
-from app_backend.api_views.api_detail_views import ( UserView, RetrieveUserFollowers, RetrieveUserFollowings,
-                                                     RetrieveUserProfileView, retrieve_current_user ) 
+ 
 
 
 
@@ -24,7 +23,7 @@ app_name = 'retrive_apis'
 
 
 urlpatterns = [
-		    path("", index, name='index'),
+	    path("", index, name='index'),
         path("api/main/", IndexView.as_view(), name='main'),
 
 
@@ -54,17 +53,8 @@ urlpatterns = [
         path("api/post/comment/<int:pk>/upvoters/", RetrievePostCommentUpVoters.as_view({'get': 'list'})),
         path("api/post/reply/<int:pk>/upvoters/", RetrievePostReplyUpVoters.as_view({'get': 'list'})),
 
-        
-        
-        path("api/user/<int:pk>/followers/", RetrieveUserFollowers.as_view({'get': 'list'})),
-        path("api/user/<int:pk>/followings/", RetrieveUserFollowings.as_view({'get': 'list'})),  
-        path("api/current/user/", retrieve_current_user, name="api-current-user"),
-        path('api/profile/<int:pk>/', RetrieveUserProfileView.as_view({'get':'retrieve'}), name='profile'),
-        path('api/user/list/', UserView.as_view({'get': 'list'}), name="get-user-list"),
-           
-         
-
-        ]
+              
+    ]
 
 if settings.DEBUG:
     

@@ -6,7 +6,8 @@ from rest_framework import viewsets
 #from .permissions import CustomObjectPermissions
 
 from app_backend.helpers import get_objects_perms, get_model_fields
-from .models import ( User, Question, Post, Answer, AnswerComment, AnswerReply,
+from auth_backend.models import User
+from .models import ( Question, Post, Answer, AnswerComment, AnswerReply,
 	                  PostComment, PostReply, DraftEditorMediaContent )
 
 from app_backend.serializers import ( UserSerializer, QuestionSerializer, QuestionReadSerializer,
@@ -40,24 +41,7 @@ class BaseApiView(BaseView, viewsets.ModelViewSet):
         
     
     
-
-class UserView(BaseApiView):
-	#queryset = User.objects.exclude(first_name="Anonymous")
-	serializer_class = UserSerializer
-	is_user = True
-	permissions      = get_objects_perms('user_perms')
-	fields_to_update = get_model_fields('user_model_fields') 
-
-	def get_queryset(self):
-		users = User.objects.exclude(
-						first_name="Anonymous"
-					).filter(
-						is_confirmed=True
-					).filter(
-						is_superuser=False
-					)
-
-		return users	
+	
 
   
 

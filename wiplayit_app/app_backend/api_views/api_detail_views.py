@@ -9,16 +9,17 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 
 from app_backend.helpers import get_users_with_permissions
-from app_backend.models import ( User, Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply )
+from auth_backend.models import User  
+from app_backend.models import ( Post, Answer, AnswerComment, AnswerReply,
+	                             PostComment, PostReply )
 
-from app_backend.views import ( BaseView, UserView, QuestionView, PostDetailView,
+from app_backend.views import ( BaseView, QuestionView, PostDetailView,
                                 PostCommentDetailView,PostReplyDetailView,
 	                            QuestionDetailView, AnswerCommentDetailView, 
 	                            AnswerReplyDetailView )
 
-from app_backend.auth_serializers import BaseUserSerializer
-from app_backend.serializers import IndexSerializer, UserProfileSerializer
+from auth_backend.views import UserView
+from app_backend.serializers import IndexSerializer
 from app_backend.mixins.views_mixins import RetrieveMixin
 
 
@@ -192,39 +193,9 @@ class RetrievePostReplyUpVoters(RetrieveMixin, UserView):
 		
 
 		
-		
-class RetrieveUserFollowers(RetrieveMixin, UserView):
-	 
-	def get_queryset(self):
-		user = get_object_or_404(User, pk=self.kwargs['pk'])
-		followers_perms = self.get_obj_permissions('user_perms', 'followers_perms')
-		return get_users_with_permissions(user, followers_perms)
-		
 
-
-		
-class RetrieveUserFollowings(RetrieveMixin, UserView):
 	
-	def get_queryset(self):
-		user = get_object_or_404(User, pk=self.kwargs['pk'])
-		followings_perms = self.get_obj_permissions('user_perms', 'followings_perms')
-		return get_users_with_permissions(user, followings_perms)
-		
 	
-		
-
-class RetrieveUserProfileView(UserView):
-	serializer_class = UserProfileSerializer
-	
-
-		
-
-@api_view(['GET'])
-def retrieve_current_user(request):
-	#Determine the current user by their token, and return their data
-	serializer = BaseUserSerializer(request.user)
-	return Response(serializer.data)
-
 		
 		
 		

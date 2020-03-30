@@ -5,7 +5,7 @@ from django.urls import path
 
 from app_backend.api_views.api_update_views import ( UpdateQuestionView, UpdateAnswerView, UpdateAnswerCommentView,
                                           UpdateAnswerReplyView, UpdatePostView,UpdatePostCommentView,
-                                         UpdatePostReplyView, UpdateUserProfileView)
+                                         UpdatePostReplyView)
 
 app_name = 'update_apis'
 
@@ -22,8 +22,6 @@ urlpatterns = [
         path("api/post/comment/<int:pk>/edit/", UpdatePostCommentView.as_view({'get':'retrieve','put':'put' })),
         path("api/post/reply/<int:pk>/edit/", UpdatePostReplyView.as_view({'get':'retrieve','put':'put' })),
                         
-        path('api/profile/<int:pk>/edit/', UpdateUserProfileView.as_view({'get':'retrieve','put':'put' }), 
-                                                                             name='update-user-profile'), 
-
+       
         ]
 

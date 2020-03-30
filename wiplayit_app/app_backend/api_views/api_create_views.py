@@ -1,15 +1,20 @@
 
 from django.shortcuts import get_object_or_404
 from app_backend.helpers import get_objects_perms
-
-from app_backend.models import ( User, Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply, DraftEditorMediaContent )
 from app_backend.serializers import DraftEditorContentsSerializer
-
-from app_backend.views import (BaseApiView, PostView, PostCommentView, PostReplyView, PostChildReplyView,
-	                            QuestionView, AnswerView, AnswerCommentView, AnswerReplyView, AnswerChildReplyView)
 from app_backend.mixins.views_mixins import CreateMixin
 
+from app_backend.models import ( Question, Post,
+                                 Answer, AnswerComment, 
+                                 AnswerReply, PostComment,
+                                 PostReply, DraftEditorMediaContent )
+
+from app_backend.views import (BaseApiView, PostView,
+                               PostCommentView, PostReplyView,
+                               PostChildReplyView,
+	                           QuestionView, AnswerView,
+	                           AnswerCommentView, AnswerReplyView,
+	                           AnswerChildReplyView)
 
 
 

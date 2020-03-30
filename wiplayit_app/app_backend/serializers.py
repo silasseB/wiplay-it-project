@@ -1,43 +1,14 @@
 from rest_framework import serializers
+from auth_backend.models import User
 from .models import (Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply, DraftEditorMediaContent, User)
+	                  PostComment, PostReply, DraftEditorMediaContent)
 
-from .mixins.serializer_mixins import SerializerMixin, ModelSerializerMixin
-from .auth_serializers import  BaseUserSerializer
-from .helpers import get_users_with_permissions, permission_checker, has_perm
+from .mixins.serializer_mixins import  BaseSerializer
+from auth_backend.serializers import  BaseUserSerializer, UserSerializer
+from .helpers import get_users_with_permissions,  has_perm
 
 
 
-class BaseSerializer(ModelSerializerMixin, serializers.ModelSerializer):
-	user_can_edit   = serializers.SerializerMethodField()
-
-	def current_user(self):
-		request =  self.context.get('request', None)
-		if request:
-			return request.user
-		return None
-	
-	
-	def get_user_can_edit(self, obj):
-		current_user = self.current_user()
-				
-		edit_perms = self.get_obj_permissions('edit_perms')
-		
-		if edit_perms:
-			can_edit = has_perm(current_user, edit_perms[0], obj) or has_perm(current_user , edit_perms[1], obj)
-			return can_edit
-			
-		return False
-
-			
-	
-		
-	def get_obj_permissions(self, perm_to=None):
-		permissions = self.context.get('permissions', None)
-
-		return  permissions.get(perm_to, None)
-
-	
 		
 		 	
 	
@@ -56,17 +27,6 @@ class BaseChildSerializer(BaseSerializer):
 
 		
 	
-
-
-class UserSerializer(BaseSerializer, BaseUserSerializer):
-	user_is_following = serializers.SerializerMethodField()
-				                
-	def get_user_is_following(self, obj):
-		perms = self.get_obj_permissions('followers_perms')
-		return has_perm(self.current_user() ,perms, obj)
-	
-
-
 
 class BaseReplySerializer(BaseChildSerializer):
 	children     = serializers.SerializerMethodField()
@@ -262,61 +222,14 @@ class QuestionReadSerializer(QuestionSerializer):
 		self.update_serializer_obj_perms('answer_perms')
 		return AnswerReadSerializer(obj.answers, context=self.context, many=True).data
 	
-	
 
-class UserProfileSerializer(UserSerializer):
-	questions    = serializers.SerializerMethodField()
-	posts        = serializers.SerializerMethodField()
-	answers      = serializers.SerializerMethodField()
-	followers    = serializers.SerializerMethodField()
-	followings   = serializers.SerializerMethodField()
-	
-		
-			                
-	def get_questions(self, obj):
-		questions  =  Question.objects.filter(created_by=obj)
-		self.update_serializer_obj_perms('question_perms')
-		return QuestionSerializer(questions, context=self.context, many=True).data
-	  
-	def get_posts(self, obj):
-		posts  =  Post.objects.filter(created_by=obj)
-		self.update_serializer_obj_perms('post_perms')
-		return PostSerializer(posts, context=self.context ,many=True).data
-		
-		  
-	def get_answers(self, obj):
-		answers  =  Answer.objects.filter(created_by=obj)
-		self.update_serializer_obj_perms('answer_perms')
-		return AnswerSerializer(answers, context=self.context ,many=True).data
-		
-	  
-	def get_followers(self, obj):
-		users  = get_users_with_permissions(obj,  "change_user_followers")
-		self.update_serializer_obj_perms('user_perms')
-		return UserSerializer(users, context=self.context ,many=True).data
-	  
-	def get_followings(self, obj):
-		users  = get_users_with_permissions(obj, "change_user_followings")
-		self.update_serializer_obj_perms('user_perms')
-		return  UserSerializer(users,context=self.context , many=True).data 
-		
-			
-		
-		
-		
-	
-		
-class DraftEditorContentsSerializer(serializers.ModelSerializer):
+class DraftEditorContentsSerializer(BaseSerializer):
 	class Meta:
 		model = DraftEditorMediaContent
 		fields = '__all__'
 
 
-
-		
-
-
-class IndexSerializer(SerializerMixin, serializers.Serializer):
+class IndexSerializer(BaseSerializer, serializers.Serializer):
 	questions = serializers.SerializerMethodField()
 	answers   = serializers.SerializerMethodField()
 	posts     = serializers.SerializerMethodField() 
