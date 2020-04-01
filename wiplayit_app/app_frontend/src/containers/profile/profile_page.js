@@ -96,7 +96,7 @@ class UserProfileContainer extends Component {
             let { userProfile, currentUser} = cacheEntities;
             userProfile = userProfile && userProfile[profileById]
 
-            if(userProfile){
+            if(userProfile && userProfile.user){
                 var curentTimeStamp = new Date();
 
                 let timeStamp = userProfile.timeStamp;
