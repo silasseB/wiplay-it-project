@@ -274,7 +274,7 @@ export const UserProfileFollwingList = props => {
         usersById,
         userProfile } = props;
 
-    users   = entities && entities.users[usersById] || users[usersById];
+    users   = entities && entities.users[usersById] || users && users[usersById];
     let userList = users && users.userList && users.userList.slice(0, 3);
 
     let userProfileFollowersProps = {

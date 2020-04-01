@@ -296,6 +296,7 @@ class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 
 class UserSerializer(BaseUserSerializer):
 	user_is_following = serializers.SerializerMethodField()
+	user_can_edit   = serializers.SerializerMethodField()
 				                
 	def get_user_is_following(self, obj):
 		perms = self.get_obj_permissions('followers_perms')

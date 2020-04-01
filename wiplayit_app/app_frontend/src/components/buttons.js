@@ -30,12 +30,13 @@ export const FollowUserBtn = props => {
     
     let btnText        =  obj && obj.user_is_following && "Following" || "Follow";
     var followers_text =  obj && obj.profile && obj.profile.followers > 1? 'Followers' : 'Follower';  
-    let styles  = obj && obj.user_is_following && followedBtnStyles || unfollowedBtnStyles;
+    let styles         = obj && obj.user_is_following && followedBtnStyles || unfollowedBtnStyles;
     
-   
+    currentUser = currentUser && currentUser || {};
+    
     return(
         <div className="follow-btn-box">
-            { obj && obj.email !== currentUser && currentUser.email?
+            { obj && obj.email !== currentUser.email?
                 <button style={styles} type="button" 
                         className="follow-user-btn"
                         onClick={ () => editfollowersOrUpVoters(editUserProfileProps) }  
