@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { Router}  from "react-router-dom";
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import 'css/App.css';
 import 'draft-js/dist/Draft.css';
 import 'css/draft-editor/app-editor.css';
@@ -20,9 +24,6 @@ import "css/profile/profile.css"
 import 'css/authentication/registration-mobile.css';
 import 'css/authentication/registration-desktop.css';
 
-import 'font-awesome/css/font-awesome.min.css';
-import 'bootstrap/dist/js/bootstrap.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from 'utils/serviceWorker';
 import App, {history} from './App';
 import {store} from "store/index";

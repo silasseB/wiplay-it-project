@@ -3,16 +3,34 @@ from auth_backend.models import User
 from .models import (Question, Post, Answer, AnswerComment, AnswerReply,
 	                  PostComment, PostReply, DraftEditorMediaContent)
 
-from .mixins.serializer_mixins import  BaseSerializer
+from .mixins.serializer_mixins import   SerialiizerMixin
 from auth_backend.serializers import  BaseUserSerializer, UserSerializer
 from .helpers import get_users_with_permissions,  has_perm
 
 
 
+class BaseModelSerializer(SerialiizerMixin, serializers.ModelSerializer):
+	user_can_edit   = serializers.SerializerMethodField()
+
+		
+	def get_user_can_edit(self, obj):
+		current_user = self.current_user()
+		edit_perms = self.get_obj_permissions('edit_perms')
+		
+		if edit_perms:
+			can_edit = has_perm(current_user, edit_perms[0], obj) or has_perm(current_user , edit_perms[1], obj)
+			return can_edit
+		return False
+
+	
+
+
+class BaseSerializer(SerialiizerMixin, serializers.Serializer):
+	pass
 		
 		 	
 	
-class BaseChildSerializer(BaseSerializer):
+class BaseChildSerializer(BaseModelSerializer):
 	upvoted    = serializers.SerializerMethodField()
 	created_by = BaseUserSerializer(read_only=True)
 	
@@ -223,13 +241,13 @@ class QuestionReadSerializer(QuestionSerializer):
 		return AnswerReadSerializer(obj.answers, context=self.context, many=True).data
 	
 
-class DraftEditorContentsSerializer(BaseSerializer):
+class DraftEditorContentsSerializer(BaseModelSerializer):
 	class Meta:
 		model = DraftEditorMediaContent
 		fields = '__all__'
 
 
-class IndexSerializer(BaseSerializer, serializers.Serializer):
+class IndexSerializer(BaseSerializer):
 	questions = serializers.SerializerMethodField()
 	answers   = serializers.SerializerMethodField()
 	posts     = serializers.SerializerMethodField() 

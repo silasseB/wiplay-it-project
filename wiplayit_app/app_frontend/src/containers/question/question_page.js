@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 
-import  * as action  from '../../actions/actionCreators';
-import { getQuestion } from '../../dispatch/index';
-import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navBar";
-import  AjaxLoader from "../../components/ajax-loader";
-import { QuestionComponent} from "../../components/question_components"
-import {store} from "../../configs/store-config";
-import {LocalCache} from  "../../utils/storage";
+import  * as action  from 'actions/actionCreators';
+import { getQuestion } from 'dispatch/index';
+import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
+import  AjaxLoader from "components/ajax-loader";
+import { QuestionComponent} from "components/question_components"
+import {store} from "store/index";
+import AnswersBox from "containers/answer/answer_page";
 
-import AnswersBox from "../../containers/answer/answer_page";
-
-import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
+import withHigherOrderIndexBox from "containers/index/higher_order_index";
 
 
  

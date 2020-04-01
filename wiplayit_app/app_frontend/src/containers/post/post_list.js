@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import { PostComponent} from "../../components/post_components";
-import  * as action  from '../../actions/actionCreators';
-import {store} from "../../configs/store-config";
-import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
+import { PostComponent} from "components/post_components";
+import  * as action  from 'actions/actionCreators';
+import {store} from "store/index";
+import withHigherOrderIndexBox from "containers/index/higher_order_index";
 
-import {PartalNavigationBar,NavigationBarBigScreen } from "../../components/navBar";
-import  AjaxLoader from "../../components/ajax-loader";
+import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
+import  AjaxLoader from "components/ajax-loader";
  
 
 

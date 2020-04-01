@@ -8,10 +8,13 @@ from rest_framework.authtoken.models import Token
 from rest_auth.serializers import LoginSerializer,  PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer, SocialLoginSerializer
 
+from app_backend.models import Question, Post, Answer
 from .models import  User, Profile
-from app_backend.mixins.serializer_mixins import  BaseSerializer
-
+from app_backend.mixins.serializer_mixins import SerialiizerMixin
+from app_backend import serializers  as app_serializers
 from app_backend.helpers import  has_perm, get_users_with_permissions
+
+
 
 class TokenSerializer(serializers.ModelSerializer):
 
@@ -229,7 +232,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 			    
-class BaseUserSerializer(serializers.ModelSerializer):
+class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 	profile    = ProfileSerializer(read_only=False)
 	
 	class Meta():
@@ -291,7 +294,7 @@ class BaseUserSerializer(serializers.ModelSerializer):
 	
 
 
-class UserSerializer(BaseSerializer, BaseUserSerializer):
+class UserSerializer(BaseUserSerializer):
 	user_is_following = serializers.SerializerMethodField()
 				                
 	def get_user_is_following(self, obj):
@@ -314,18 +317,18 @@ class UserProfileSerializer(UserSerializer):
 	def get_questions(self, obj):
 		questions  =  Question.objects.filter(created_by=obj)
 		self.update_serializer_obj_perms('question_perms')
-		return QuestionSerializer(questions, context=self.context, many=True).data
+		return app_serializers.QuestionSerializer(questions, context=self.context, many=True).data
 	  
 	def get_posts(self, obj):
 		posts  =  Post.objects.filter(created_by=obj)
 		self.update_serializer_obj_perms('post_perms')
-		return PostSerializer(posts, context=self.context ,many=True).data
+		return app_serializers.PostSerializer(posts, context=self.context ,many=True).data
 		
 		  
 	def get_answers(self, obj):
 		answers  =  Answer.objects.filter(created_by=obj)
 		self.update_serializer_obj_perms('answer_perms')
-		return AnswerSerializer(answers, context=self.context ,many=True).data
+		return app_serializers.AnswerSerializer(answers, context=self.context ,many=True).data
 		
 	  
 	def get_followers(self, obj):

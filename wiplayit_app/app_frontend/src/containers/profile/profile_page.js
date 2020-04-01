@@ -90,7 +90,7 @@ class UserProfileContainer extends Component {
         userProfile = userProfile && userProfile[profileById];
         users       = users[usersById];
 
-        !users && store.dispatch(getUserList({usersById}))
+        //!users && store.dispatch(getUserList({usersById}))
 
         if (!userProfile) {
             let { userProfile, currentUser} = cacheEntities;

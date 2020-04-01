@@ -102,6 +102,7 @@ JWT_AUTH = {
 
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sites',
@@ -115,7 +116,6 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'rest_framework.authtoken',
     'corsheaders',
-    'django.contrib.admin',
     'webpack_loader',
     'guardian',
     'mptt',
