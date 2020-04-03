@@ -1,21 +1,12 @@
  
 @media (min-width:980px) {
   
-    body {
-        background: #F9F7F7;
-    }
-
-    #home-page-contents {
-        border: 1px solid red;
-    }
-
-
+        
     #home-page-contents, .question-page, .post-contents,
     .question-list-page, .post-list-page {
-        border     : 1px solid  #D5D7D5;
-        background : white;
-        width      : 40%;
-        margin     : 20px 30% !important;  
+        border     : px solid  #D5D7D5;
+        width      : 42%;
+        margin     : 35px 29%;  
     }
 
   
@@ -25,10 +16,11 @@
   
 
     .post ,.question {
-        border:px solid black;
-        font-size: 17px;
-        margin:18px 18px 0px;
-        font-family: 'Ropa Sans'
+        border      : px solid black;
+        font-size   : 17px;
+        margin      : 18px 0 0  8px;
+        font-family : 'Ropa Sans';
+        font-weight : bold;
     }
 
     .post-title {
@@ -60,12 +52,17 @@
    display: none; 
 }
 
+.index-questions, .index-answers, .index-posts {
+  border     : 1px solid #D5D7D5;
+  background : #ffff;
+  margin  : 10px 0;
+}
 
-.answer-container {
-  border:px solid blue;/*#D5D7D5;*/
-  /*border-bottom: 1px solid #D5D7D5;*/
-  background: white;
-  padding: 10px 0px;
+.answer-container, .question-container, .post-container {
+  border  : px solid blue;/*#D5D7D5;*/
+  padding : 10px 0px;
+  margin  : 0 10px; 
+  background: #ffff;
   
 
 
@@ -88,23 +85,22 @@
          
 }
 
-.user-box {
-     border:PX solid green;
-     display: flex;
-     padding:11px 0px 0px 18px;
-     margin: auto;
-
+.answer-detail-box {
+   margin  : 0 8px;
+   border  : PX solid green;
+   display : flex;
 }
+
+
 
 .answer-box {
   border:px solid #D5D7D5;
   /*background-color:#f0eeed;*/
   }
 .comment-box {
-  border:px solid red; /*#D5D7D5;*/
-
-
+   border : px solid red; /*#D5D7D5;*/
 }
+
 .answer-contents {
     border:px solid red;
     padding:0px 0px;
@@ -132,11 +128,12 @@
 }
 
 .answer {
-  border-bottom:px solid  #D5D7D5;
-  border:px solid black;
-  padding: 0px 18px;
-  font-size: 15px;
+    border      : px solid black;
+    margin-left : 8px; 
+    font-size   : 15px;
 }
+
+
 .answer-dropdown {
   padding-right: 34px; 
 }
@@ -211,6 +208,8 @@
 .reply-btn-box,.follow-btn-box, .comment-btn-box {
   }
 
+.contents-nav-container {
+  }
 
 
 .question-relation {

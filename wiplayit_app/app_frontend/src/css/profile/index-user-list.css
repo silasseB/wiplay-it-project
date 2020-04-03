@@ -1,0 +1,328 @@
+
+.follow-btn-box button {
+    font-size        : 15px;
+    font-family      : 'Teko';
+    border-radius    : 14px;
+    text-align       : center;
+    text-decoration  : none;
+    display          : inline-block;
+    padding          : 3px 6px; 
+}
+
+
+.follow-btn-box button:focus, .follow-btn-box button:active { 
+    border : 1px solid #B7D5F0 !important;
+}
+
+.user-list-follow-btn-box button  {
+        float     : right;
+}
+
+
+.index-user-list-title-box {
+    border      :  px solid red;
+    margin-left : 14px;
+}
+
+
+.index-user-list-title-box li {
+    font-size:  12px;
+}
+
+
+.index-user-list-container {
+    border      : px solid blue;
+    display     : flex; 
+    overflow-x  : scroll;
+    overflow-y  : hidden;
+    margin      : 0px 10px;
+}
+
+.index-user-list {
+    background : #ffff;
+    border     : 1px solid #D5D7D5;
+    margin     : 10px 0;
+}
+
+.index-user-list-box {
+    border-radius : 10px; 
+    border    : 1px solid  #D5D7D5;
+    margin    : 5px 8px; 
+    max-width : 150px;
+}
+
+
+.index-user-list-contents {
+   border : px solid black;
+}
+
+
+.index-user-credentials-box {
+    border      : px solid red;
+    min-height  : 100px; 
+    
+}
+
+.index-user-credentials-box p {
+    font-family   : 'Cambay';
+    border        : px solid blue;
+    margin        : 4px 8px; 
+}
+
+.index-user-list-img-container {
+    border  : px solid  red;
+    display : flex;
+    width   : 100%;
+
+}
+
+.index-user-img-box {
+    border  : px solid black;
+    padding : 5px 13px 8px 35px;
+}
+
+.index-user-list-img-box {
+    border-radius : 50%;
+    border        : 1px solid  #D5D7D5;
+    width         : 70px;
+    height        : 70px;
+   
+}
+
+
+.index-user-list-img {
+    width         : 70px;
+    height        : 70px;
+ }
+
+.index-user-name-box {
+    border: px solid blue;
+    margin: 4px 10px;
+
+}
+
+
+.index-user-name {
+    border      :  px solid red;
+    font-size   : 13px;
+    font-family : 'Ubuntu';
+    font-weight : bold;
+    margin-left : 22px;
+}
+
+
+.hid-user-btn-box {
+    border  : px solid red;
+    padding :  5px 3px;
+}
+
+.hid-user-btn {
+    border : px solid red; 
+    color  :  gray;
+
+}
+
+.hid-user-icon {
+    border      : px solid blue;
+    font-size   : 20px;
+    font-weight :  bold;
+}
+
+.index-user-follow-btn-box {
+    border  : px solid blue;
+    padding : 5px 35px 30px;
+}
+
+
+@media (max-width: 980px) {
+
+
+
+.user-list-credentials-contents {
+    border : px solid green;
+    width  : 95%;
+    margin : 9px; 
+
+}
+
+
+    .user-list-credentials {
+        border    : px solid black;
+        font-size : 13px;
+        font-family : 'Cambay';  
+    }
+    
+    .user-list-name:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+
+    .user-list-follow-box {
+        width  : 20%;
+ 
+    }
+
+    .follow-user-2,.follow-user { 
+        background-color:  white; 
+        color: #A33F0B;
+    }
+
+
+    .user-list-follow-btn-box {
+        border : px solid red; 
+        margin : 12px 7px 7px; 
+    }
+
+
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+@media (min-width: 980px) {
+  
+
+    .users-modal-container {
+        border      :  px solid blue;
+    }
+
+    .user-list-container {
+        background: #ffff;
+        border: px solid black
+    }
+
+    .user-list-box, .partial-user-list-box {
+        border  : px solid red;
+        margin  : 10px 0;
+        width   : 100%;
+        
+    }
+
+
+
+    .user-list-contents {
+        display : flex;
+        width   : auto;
+        border  : 1px solid  #D5D7D5; 
+        margin  : 2%;
+        padding : 3px;
+    }
+
+    .partial-user-list-contents {
+        border-bottom  : 1px solid  #D5D7D5;
+        display        : flex;
+        padding        : 3px 6px;
+        background     : #F4F2F1; 
+         
+    }
+
+    .partial-user-list-box-header {
+        border-bottom  : 1px solid  #D5D7D5 !important;
+        padding        : 10px 10px 5px;
+                 
+    }
+
+    .partial-user-list-box-bottom button {
+        border  : 1px solid  #D5D7D5; 
+        margin  : 12px;
+        color   : #288FF0; 
+
+    }
+
+    .partial-user-list-box-header p {
+        font-weight : bold;
+        font-size   : 19px;
+        color       : black;
+        font-family : 'Ubuntu'; 
+        border      : px solid blue;
+    }
+
+
+    .about-user {
+        border: px solid blue;
+        font-size: 10px;
+
+  
+    }
+
+    .user-list-credentials-box {
+        width: 100%;
+        border: px solid blue;
+    }
+
+    .user-list-credentials-contents {
+        border : px solid green;
+        margin : 9px; 
+    }
+
+    .user-list-img-box {
+        border :  px solid blue;
+     
+    }
+
+
+    .user-list-img {
+        border-radius : 50%;
+        border        : 1px solid  #D5D7D5;
+        width         : 40px;
+        height        : 40px;
+        margin        : 7px 5px;  
+    }
+
+    .user-list-photo {
+        border-radius: 50%;
+        width: 40px;
+        height:40px;
+        object-fit: cover;
+    }
+
+    .user-list-name {
+        font-size: 12px;
+        color: black;
+        font-family: 'Nunito';
+        border: px solid blue;
+        font-weight : bold; 
+   
+    }
+
+    .user-list-credentials {
+        border    : px solid black;
+        font-size : 13px;
+        font-family : 'Cambay';  
+    }
+    
+    .user-list-name:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+
+    .user-list-follow-box {
+        border : px solid red;
+ 
+    }
+
+    
+
+    .follow-user-list-box {
+        border : px solid red; 
+        margin : 12px 7px 7px; 
+    }
+
+
+
+    
+}
+
+
+

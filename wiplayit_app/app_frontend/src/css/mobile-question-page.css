@@ -1,8 +1,7 @@
 
 @media (max-width: 900px) {
     body {
-       background: #ffff;
-       overflow-x: hidden !important;
+        overflow-x: hidden !important;
        overflow-y: scroll !important;
        flex-direction: column;
        position: relative;

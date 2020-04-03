@@ -41,7 +41,7 @@ export const FollowUserBtn = props => {
                         className="follow-user-btn"
                         onClick={ () => editfollowersOrUpVoters(editUserProfileProps) }  
                     >
-                    {btnText}             
+                    {btnText} {obj && obj.profile &&  obj.profile.followers }             
                 </button>
                 :
                 <button style={unfollowedBtnStyles} type="button" className="num-followers-btn">

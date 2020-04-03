@@ -34,9 +34,11 @@ export const ButtonsBox = props => {
          <div className="contents-nav-container">
 
             <div className="items-counter-box">
-               <li  className="items-count">
-                  { props.itemsCounter }
-               </li>
+               <ul className="items-counter-box">
+                    <li  className="items-count">
+                        { props.itemsCounter }
+                    </li>
+               </ul>
             </div>
 
             <div style={styles} className="contents-nav-box" > 
@@ -63,10 +65,7 @@ export const ButtonsBox = props => {
 
 export const Styles = {
       contents : {
-         borderTop    : '1px solid  #D5D7D5',
-         borderBottom : '1px solid  #D5D7D5',
          display      : 'flex',
-         marginTop    : '4px',
          width        : '100%',
          
 

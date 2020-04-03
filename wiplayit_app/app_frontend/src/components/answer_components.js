@@ -142,7 +142,7 @@ export const AnswersComponent = props => {
    return (
 
       <div className="answer-box">     
-         <div className="user-box">
+         <div className="answer-detail-box">
          {props.isProfileBox?
             ""
             :
@@ -153,9 +153,9 @@ export const AnswersComponent = props => {
 
          <div className="answer">
             <Editor
-                  blockRendererFn={pageMediaBlockRenderer}
-                  editorState={editorState}
-                  readOnly={true}
+                blockRendererFn={pageMediaBlockRenderer}
+                editorState={editorState}
+                readOnly={true}
             />
          </div>
             <div>

@@ -103,13 +103,14 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
                     cacheEntities[entitieKey] = _cacheMerge;
                 }
                     
-            }else if(entitieKey === 'users' ||
-                     entitieKey === 'questions'  ||
-                     entitieKey === 'question'   ||
-                     entitieKey === 'answers'    ||
-                     entitieKey === 'posts'      ||  
-                     entitieKey === 'post'       ||   
-                     entitieKey === 'comments'      ||     
+            }else if(entitieKey === 'users'       ||
+                     entities   === 'userProfile' ||
+                     entitieKey === 'questions'   ||
+                     entitieKey === 'question'    ||
+                     entitieKey === 'answers'     ||
+                     entitieKey === 'posts'       ||  
+                     entitieKey === 'post'        ||   
+                     entitieKey === 'comments'    ||     
                      entitieKey === 'replies'){
 
                 _cacheMerge = UpdateKeyedLocalCache(storeData, cacheData)

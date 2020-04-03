@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import {NavigationBarSmallScreen,NavigationBarBigScreen } from "components/navBar";
 import {store } from "store/index";
+import { FollowUserBtn} from "components/buttons"; 
+import { GetModalLinkProps } from "components/component-props";
 
 import { QuestionComponent} from "components/question_components"
 import { PostComponent} from "components/post_components"
@@ -232,6 +234,7 @@ export const IndexComponent = props => {
     return(
         <div className="home-page-contents" id="home-page-contents">
            <Answers {...props}/>
+           <Users {...props}/>
            <Posts {...props}/>
            <Questions {...props}/>
 
@@ -251,34 +254,37 @@ export const Questions = props => {
   
     return (
 
-      <div>
-         { questions && questions.questionList && questions.questionList.length?
-         <div className="index-questions-box">
-            <div className="index-items-label">
-                <b>Questions</b>
-            </div>
+        <div >
+            { questions && questions.questionList && questions.questionList.length?
+                <div className="index-questions">
+                    <div className="index-questions-box">
+                        <div className="question-container">
+                            <div className="index-items-label">
+                                <b>Questions</b>
+                            </div>
 
-            { questions.questionList.map((question, index) => {
-                let contentsProps = {
-                    question,
-                    questionById :questionListById
-                };
+                            { questions.questionList.map((question, index) => {
+                                let contentsProps = {
+                                        question,
+                                        questionById :questionListById
+                                };
 
-                Object.assign(contentsProps, props)  
+                                Object.assign(contentsProps, props)  
 
-                return (
+                                return (
 
-                  <div key={index} >
-                     <QuestionComponent {...contentsProps}  />
-                  </div>
-               )
+                                    <div key={index} >
+                                        <QuestionComponent {...contentsProps}  />
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+                :
+                null
             }
-            )}
-         </div>
-         :
-         ""
-
-      }
        
       </div>
    );
@@ -297,34 +303,35 @@ export const Posts = props => {
   
     return (
 
-        <div >
+        <div>
             { posts && posts.postList && posts.postList.length?
-                <div  className="index-posts-box">
-                    <div className="index-items-label">
-                        <b>Posts</b>
-                    </div>
-
-                    { posts.postList.map((post, index) => {
-                        let contentsProps = {
-                            post,
-                            postById: postListById,
-                            };
-
-                        Object.assign(contentsProps, props)  
-
-                        return (
-                            <div key={index} >
-                                <PostComponent {...contentsProps}  />
+                <div className="index-posts">
+                    <div className="index-posts-box">
+                       <div className="post-container">
+                            <div className="index-items-label">
+                                <b>Posts</b>
                             </div>
-                        )
-                    })}
 
+                            { posts.postList.map((post, index) => {
+                                let contentsProps = {
+                                        post,
+                                        postById: postListById,
+                                };
+
+                                Object.assign(contentsProps, props)  
+
+                                return (
+                                    <div key={index} >
+                                        <PostComponent {...contentsProps}  />
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
                 </div>
                 :
-                ""
-
+                null
             }
-       
         </div>
     );
 };
@@ -340,42 +347,40 @@ export const Answers = props => {
     //console.log(answers)     
     return(
         <div>
-
             {answers && answers.answerList && answers.answerList?
-                <div className="index-answers-box">
+                <div className="index-answers">
+                    <div className="index-answers-box">
 
-                    <div className="answer-container">
-                        <div className="index-items-label">
-                           <b>Answers</b>
-                        </div>
+                        <div className="answer-container">
+                            <div className="index-items-label">
+                                <b>Answers</b>
+                             </div>
                   
-                        { answers.answerList.map((answer, index) => {
+                            { answers.answerList.map((answer, index) => {
 
-                            let answerProps = {
-                                    answer,
-                                };
+                                let answerProps = { answer };
                                 
-                            let question = answer.question;
-                            let questionPath = `/question/${question.slug}/${question.id}/`;
+                                let question = answer.question;
+                                let questionPath = `/question/${question.slug}/${question.id}/`;
 
-                            Object.assign(answerProps, props); 
+                                Object.assign(answerProps, props); 
       
-                            return ( 
-                                <div key={index} className="answer-contents"> 
-                                    <div>
-                                        <b className="">
-                                            <Link to={{pathname: questionPath, state : {question} }} 
+                                return ( 
+                                    <div key={index} className="answer-contents"> 
+                                        <div>
+                                            <p className="question">
+                                                <Link to={{pathname: questionPath, state : {question} }} 
                                                                       className="question-link">
-                                                { question.add_question }
-                                            </Link>
-                                        </b>
+                                                    { question.add_question }
+                                                </Link>
+                                            </p>
+                                        </div>
+
+                                        <AnswersComponent {...answerProps}/>
                                     </div>
-
-                                    <AnswersComponent {...answerProps}/>
-                                </div>
-                            );
-                        } )}
-
+                                );
+                            } )}
+                        </div>
                     </div>
                 </div>
 
@@ -386,6 +391,115 @@ export const Answers = props => {
         </div> 
     );
 };
+
+
+
+
+export const Users = props => {
+    let { userListById, entities, currentUser } = props;
+    let users  =  entities && entities.users 
+    users =  users[userListById]; 
+    //console.log(answers)     
+    return(
+        <div className="index-user-list">
+            <ul className="index-user-list-title-box">
+                <li>Discover New People</li>
+            </ul>
+
+            {users && users.userList && users.userList.length?
+                <div className="index-user-list-container">
+                       
+                    { users.userList.map((user, index) => {
+
+                        let userProps = { user };
+                        let pathToProfile = user    && `/profile/${user.id}/${user.slug}/`;
+                        let profile         = user    &&  user.profile;
+                        let profile_picture = profile &&  profile.profile_picture;
+
+                        let editUserProfileProps = {
+                            objName    : 'UsersList',
+                            isPut      : true,
+                            obj        : user, 
+                            byId       : userListById,
+                            currentUser,
+                        }
+
+                        editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+                            var btnsProps   = {...props, editUserProfileProps};
+                            let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
+
+                            Object.assign(userProps, props); 
+      
+                            return ( 
+                                <div key={index} className="index-user-list-box">
+                                    <div className="index-user-list-contents">
+
+                                        <div className="index-user-list-img-container">
+                                            <div className="index-user-img-box">
+                                                { profile_picture?
+                                                <div className="index-user-list-img-box"> 
+                                                    <Link to={{ pathname: pathToProfile,userProps,}}
+                                                          className="index-user-list-img-box">
+                                                        <img  src={`${profile_picture}`} 
+                                                              alt="" 
+                                                              className="index-user-list-img"/> 
+                                                    </Link>
+                                                    </div>
+                                                    :
+                                                    <div className="index-user-list-img-box">
+                                                    <Link to={{ pathname: pathToProfile,userProps,}}>
+                                                          
+                                                        <img alt="" 
+                                                             src={require("media/user-image-placeholder.png")}
+                                                            className="index-user-list-img"/>  
+                                                    </Link>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            <div className="hid-user-btn-box">
+                                                <button type="button" className="hid-user-btn btn-sm">
+                                                    <span className="hid-user-icon">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+
+                                        <div className="">
+                                            <ul className="index-user-name-box">
+                                                <li className="index-user-name">
+                                                    <Link to={{ pathname: pathToProfile,userProps,}}>
+                                                        {user.first_name} { user.last_name } 
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="index-user-credentials-box text-wrap">
+                                        <p>{user.profile.credential}</p>
+                                    </div>
+
+                                    <div className="index-user-follow-btn-box">
+                                        {UnfollowOrFollowUserBtn}
+                                    </div>
+                                    
+                                </div>
+                            );
+                    } )}
+                </div>
+
+                :
+               ""
+            }
+
+        </div> 
+    );
+};
+
+
+
 
 
 

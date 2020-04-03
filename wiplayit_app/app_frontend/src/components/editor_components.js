@@ -223,7 +223,7 @@ const ImageButton = props => {
    
    return (
      
-      <label  id="fileContainer" className="btn-sm toolbar-button">
+       <label  id="fileContainer" className="btn-sm toolbar-button">
          <input
             type="file"
             accept={props.accept} 

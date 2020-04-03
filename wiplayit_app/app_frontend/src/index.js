@@ -18,6 +18,7 @@ import "css/desktop-question-page.css";
 import "css/main-sm-screen.css";
 import "css/profile/profile-edit.css";
 import "css/profile/user-list.css";
+import "css/profile/index-user-list.css";
 
 import "css/profile/profile.css"
 

@@ -1,9 +1,8 @@
 
-@media (max-width: 500px) {
-    body {
-       
-     
-    
-   }
-
+  
+.index-questions, .index-answers, .index-posts {
+  border     : 1px solid red;
+  background : #ffff;
+  margin  : 10px 0;
 }
+

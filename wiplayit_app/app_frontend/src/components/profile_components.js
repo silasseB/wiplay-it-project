@@ -8,7 +8,7 @@ import Api from 'utils/api';
 import  * as types  from 'actions/types';
 
 
-import { UnfollowUserBtn, FollowUserBtn, OptionsDropDownBtn} from "../components/buttons"; 
+import { UnfollowUserBtn, FollowUserBtn, OptionsDropDownBtn} from "components/buttons"; 
 
 import{ QuestionComponent } from "components/question_components"
 
@@ -120,7 +120,7 @@ export const ProfileComponent = props => {
    
 
     let ChangeImageBtnBigScreen = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
-    let UserList                = MatchMediaHOC(UserProfileFollwingList, '(min-width: 980px)')
+    let UserList                = MatchMediaHOC(UserProfileFollowingList, '(min-width: 980px)')
 
       
     const UserItemsComponent = props.userItemsComponent;   
@@ -172,8 +172,7 @@ export const ProfileComponent = props => {
                             <div className="profile-credential-box">
                                 <ul className="profile-name-box">
                                     <li className="profile-name">
-                                        { userProfile && userProfile.first_name }
-                                        { userProfile && userProfile.last_name } 
+                                    {userProfile && userProfile.first_name} { userProfile && userProfile.last_name } 
                                     </li>
 
                                     <li className="user-credential">
@@ -265,7 +264,7 @@ export const ProfileComponent = props => {
 };
 
 
-export const UserProfileFollwingList = props => {
+export const UserProfileFollowingList = props => {
     console.log(props)
     let {
         entities,
@@ -325,9 +324,9 @@ export const UserProfileFollwingList = props => {
 export const PartialUserList = props => {
         let {user, usersById, currentUser} = props
 
-        let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
-        let profile_picture = user.profile.profile_picture;
-        let profile = user.profile;
+        let pathToProfile   =  `/profile/${user.id}/${user.slug}/`;
+        let profile         = user && user.profile;
+        let profile_picture = profile &&  profile.profile_picture;
 
         let editUserProfileProps = {
             objName    : 'UsersList',
@@ -348,7 +347,7 @@ export const PartialUserList = props => {
                 <div className="partial-user-list-contents">
                     <div className="partial-user-list-img-box">
                         <div className="partail-user-list-img">
-                            { user && profile_picture? 
+                            { profile_picture? 
                                 <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
                                 <img alt="" 
@@ -382,9 +381,10 @@ export const PartialUserList = props => {
 
 
 export const UserList = props => {
-    //console.log(props)
+    console.log(props)
     let {entities,users, usersById } = props
-    users   = entities && entities.users[usersById] || users[usersById];
+
+    users   = entities && entities.users && entities.users[usersById] || users && users[usersById];
 
     return (
       <div>
@@ -651,11 +651,9 @@ export const UserFollowings = props => {
    var usersById   = `usersFollowings${userProfile.id}`;
    var users       = props.entities.users[usersById];
    //console.log(users,usersById, props.entyties)
-   let userListProps = { usersById };
+   let userListProps = {...props, usersById};
 
-   Object.assign( userListProps, props);
-
-   return (
+    return (
       <div>
          { users?
             <div>
@@ -685,41 +683,38 @@ export const UserFollowings = props => {
 
 
 export const UserFollowers = props => {
-   var profileById = props.profileById;
-   let userProfile = props.entities.userProfile[profileById];
-   userProfile    = userProfile.user;
+    var profileById = props.profileById;
+    let userProfile = props.entities.userProfile[profileById];
+    userProfile    = userProfile.user;
 
-   var usersById   = `usersFollowers${userProfile.id}`
-   var users       = props.entities.users[usersById];
-
-   let userListProps = { usersById };
+    var usersById   = `usersFollowers${userProfile.id}`
+    var users       = props.entities.users[usersById];
+    let userListProps     = {...props, ...{ usersById }}
   
-   Object.assign( userListProps, props);
-
-   return (
-      <div>
-         { users?
-            <div>
-               { users.userList.length === 0?
-                  <p>No Followers Yet</p>
-                    :
-                  <div>
-                     <div className="number-answers-box">
-                        { users.userList.length > 1? 
-                           <p className="items-count">{ users.userList.length }  Followings</p>
-                             :
-                           <p className="items-count">{ users.userList.length } Following</p>
-                        }
-                     </div> 
-                     <UserList {...userListProps}/>
-                  </div>
-               }
-            </div>
-            :
-            ""
-         }
-      </div>
-   );
+    return (
+        <div>
+            { users?
+               <div>
+                    { users.userList.length === 0?
+                        <p>No Followers Yet</p>
+                        :
+                        <div>
+                            <div className="number-answers-box">
+                                { users.userList.length > 1? 
+                                    <p className="items-count">{ users.userList.length }  Followings</p>
+                                    :
+                                    <p className="items-count">{ users.userList.length } Following</p>
+                                }
+                            </div> 
+                            <UserList {...userListProps}/>
+                        </div>
+                    }
+                </div>
+                :
+                null
+            }
+        </div>
+    );
 };
 
 
@@ -829,12 +824,13 @@ export const UserActivitiesBtns = props => {
 
 
 export const UserComponentSmall = props => {
-   let pathToProfile =  `/profile/${props.user.id}/${props.user.slug}/`;
-   let state = {currentUser:props.currentUser, userProfile:props.user}
-   //console.log(props)
-   return (
+    let pathToProfile =  `/profile/${props.user.id}/${props.user.slug}/`;
+    let state = {currentUser:props.currentUser, userProfile:props.user}
+    //console.log(props)
 
-      <ul className="user-items" >
+    return (
+
+        <ul className="user-sm-items" >
                <li className="img-container-sm">
                   <Link  to={ {pathname: pathToProfile,state}}>
 
@@ -849,16 +845,14 @@ export const UserComponentSmall = props => {
 
                </li>
                
-               <li className="user-name-link">
-                  <Link className="profile-user-name" to={ {pathname: pathToProfile,state}}>
+               <li className="user-name-box-sm">
+                  <Link className="user-name-sm" to={ {pathname: pathToProfile,state}}>
                      { props.user.first_name}     { props.user.last_name }
                   </Link>
                </li>
-
-
-            </ul>
-      )
-} 
+        </ul>
+    );
+}; 
 
 
 
