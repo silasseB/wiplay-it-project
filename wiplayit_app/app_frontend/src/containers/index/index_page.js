@@ -102,7 +102,8 @@ class IndexBox extends Component {
             let dayDiff  = hourDiff/24
 
             console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
-            if(questions && questions.length && answers && answers.length && posts && posts.length ){
+            if(questions && questions.length || answers &&
+                answers.length || posts && posts.length || users && users.length ){
                 if (hourDiff <= 1) {
 
                     console.log('Index found from cachedEntyties')

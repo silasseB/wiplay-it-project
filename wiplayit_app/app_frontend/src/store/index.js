@@ -91,7 +91,6 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
             //console.log(entitieKey)
             if( entitieKey === 'userAuth'     ||
                 entitieKey === 'currentUser'  ||
-                entitieKey === 'userProfile'  ||
                 entitieKey === 'index'        ||      
                 entitieKey === 'modal' ) {
                    
