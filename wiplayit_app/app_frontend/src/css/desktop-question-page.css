@@ -2,16 +2,16 @@
 @media (min-width:980px) {
   
         
-    #home-page-contents, .question-page, .post-contents,
+    #home-page-contents, .question-page, .post-page,
     .question-list-page, .post-list-page {
-        border     : px solid  #D5D7D5;
+        border     : 1px solid  #D5D7D5;
         width      : 42%;
         margin     : 35px 29%;  
     }
 
   
-    .post-box,.question-box {
-        border:px solid blue;
+    .post-box,.question-box, .answer-box {
+        border : px solid blue;
     } 
   
 
@@ -55,14 +55,14 @@
 .index-questions, .index-answers, .index-posts {
   border     : 1px solid #D5D7D5;
   background : #ffff;
-  margin  : 10px 0;
+  margin     : 10px 0;
 }
 
 .answer-container, .question-container, .post-container {
-  border  : px solid blue;/*#D5D7D5;*/
-  padding : 10px 0px;
-  margin  : 0 10px; 
-  background: #ffff;
+  border     : px solid red;/*#D5D7D5;*/
+  padding    : 10px 0;
+  margin     : 0; 
+  background : #ffff;
   
 
 
@@ -85,7 +85,7 @@
          
 }
 
-.answer-detail-box {
+.answer-detail-box, .comment-detail-box, .post-detail-box {
    margin  : 0 8px;
    border  : PX solid green;
    display : flex;
@@ -101,9 +101,9 @@
    border : px solid red; /*#D5D7D5;*/
 }
 
-.answer-contents {
-    border:px solid red;
-    padding:0px 0px;
+.answer-contents, .post-contents,.question-contents {
+    border-top : px solid #D5D7D5;
+    padding    : 0px 10px;
   
 
 }
@@ -125,6 +125,10 @@
 .comment-contents {
       border-bottom:1px solid  #D5D7D5;
       background:     #f9f9f9
+}
+
+.comments-link:hover {
+    cursor:pointer;
 }
 
 .answer {

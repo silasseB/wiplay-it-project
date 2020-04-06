@@ -81,9 +81,9 @@ const NavBarDropDown = props => {
                     
 
             <div className="dropdown-menu" aria-labelledby="navBardropdown">
-                <Link to={ {pathname : path_to_profile,state }} className="dropdown-item"> 
+                <button onClick={() => history.push(path_to_profile, state) } className="dropdown-item"> 
                     Profile
-                </Link>
+                </button>
                 <button onClick={props.logout} className="dropdown-item" >Logout</button>
             </div>
         </div>
@@ -213,7 +213,7 @@ export const NavBarBigScreen = props => {
     } 
 
     let madalParams = {
-        boolValue : true,
+        boolValue   : true,
         modalType   : 'userList',
         background  : props.location,
     }

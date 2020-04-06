@@ -268,6 +268,16 @@ export function withHigherOrderIndexBox(Component) {
             
         }
 
+        push(params){
+            let path = params && params.path;
+            let state = params && params.state;
+
+            if (path) {
+                history.push(path, state);
+                //this.reloadPage();
+            }
+        };
+
         reloadPage(){
             console.log(this.props,window.location, 'Im reloading this page')
             window.location.reload();
@@ -318,6 +328,7 @@ export function withHigherOrderIndexBox(Component) {
                 logout                  : this.logout,
                 editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
                 reloadPage              : this.reloadPage.bind(this),
+                push                    : this.push.bind(this),
                 ...this.state,
             };
          
@@ -337,11 +348,13 @@ export function withHigherOrderIndexBox(Component) {
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',}
                                               : {opacity:'2',};
             console.log(props)
+            
             return (
                 <div  className="app-container">
                     <fieldset style={ onModalStyles } 
-                      disabled={ props.modalIsOpen } >
-                      <Component {...props}/>                    
+                              disabled={ props.modalIsOpen } >
+                        
+                        <Component {...props}/>                    
 
                     </fieldset>
 
@@ -393,6 +406,7 @@ const composedHoc = compose( connect(mapStateToProps, mapDispatchToProps), withH
 
 
 export default  composedHoc;
+
 
 
 

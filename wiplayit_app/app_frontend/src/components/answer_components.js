@@ -110,23 +110,21 @@ export const AnswersComponent = props => {
    
     
 
-   let btnsProps = {
+    let btnsProps = {
          editAnswerProps,
          editCommentProps, 
       }; 
 
-   Object.assign(btnsProps, props)
-   let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
+    Object.assign(btnsProps, props)
+    let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
                          { props.answer.upvotes }  Upvotes
                      </Link>;
     
-   let UpVoteBtn =  props.answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
+    let UpVoteBtn =  props.answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
                : <UpVoteAnswerBtn {...btnsProps}/>
-
-                          
-              
+          
    
-   const btnsList   = { 
+    const btnsList   = { 
             itemsCounter : AnswerUpVotersLink,
             btn1   : UpVoteBtn,
             btn2   : EditorModalLink,
@@ -134,36 +132,35 @@ export const AnswersComponent = props => {
             Styles : Styles
          };
 
-   const userProps  = {
+    const userProps  = {
               user        : props.answer.created_by,
               currentUser,
             };
 
-   return (
-
-      <div className="answer-box">     
-         <div className="answer-detail-box">
-         {props.isProfileBox?
-            ""
-            :
-             <UserComponentSmall {...userProps}/>
-         }
+    return (
+        <div className="answer-box">     
+            <div className="answer-detail-box">
+                {props.isProfileBox?
+                    ""
+                    :
+                    <UserComponentSmall {...userProps}/>
+                }
             
-         </div>
+            </div>
 
-         <div className="answer">
-            <Editor
-                blockRendererFn={pageMediaBlockRenderer}
-                editorState={editorState}
-                readOnly={true}
-            />
-         </div>
+            <div className="answer">
+                <Editor
+                    blockRendererFn={pageMediaBlockRenderer}
+                    editorState={editorState}
+                    readOnly={true}
+                />
+            </div>
             <div>
                <ButtonsBox {...btnsList}/>   
                <CommentsBox {...props}/>
             </div>
-      </div>
-  )       
+        </div>
+    );       
 };
 
 

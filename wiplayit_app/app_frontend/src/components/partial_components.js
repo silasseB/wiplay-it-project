@@ -125,3 +125,31 @@ export const AlertComponent =(props)=> {
 };
 
 
+
+
+export const UnconfirmedUserWarning =(props)=> {
+ 
+    let {cacheEntities} = props;
+    let currentUser = cacheEntities && cacheEntities.currentUser;
+    currentUser     = currentUser && currentUser.user;
+    console.log(currentUser)
+    
+    return(
+        <div>
+            {currentUser && !currentUser.is_confirmed &&
+            <div className="unconfirmed-user-warn-container">
+                <div className="unconfirmed-user-warn-box">
+                    <ul>
+                        <li>
+                        Your account has not been confirmed.
+                         Please go to your email { currentUser && currentUser.email } to
+                        confirm your account and start posting.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            }
+        </div>
+    );
+};

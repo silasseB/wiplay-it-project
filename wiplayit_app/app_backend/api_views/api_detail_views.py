@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from app_backend.helpers import get_users_with_permissions
 from auth_backend.models import User  
-from app_backend.models import ( Post, Answer, AnswerComment, AnswerReply,
+from app_backend.models import (Question, Post, Answer, AnswerComment, AnswerReply,
 	                             PostComment, PostReply )
 
 from app_backend.views import ( BaseView, QuestionView, PostDetailView,

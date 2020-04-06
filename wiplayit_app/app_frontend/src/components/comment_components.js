@@ -161,7 +161,7 @@ export const CommentsComponent = props => {
     return(
       
         <div  className="comment-box" id="comment-box">
-            <div className="user-box">
+            <div className="comment-detail-box">
                 <UserComponentSmall {...userProps }/>
             </div>
     

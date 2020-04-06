@@ -144,7 +144,7 @@ export const DesktopModalCloseBtn = props => {
 
 
 export const MobileModalNavBar = props  => {
-    //console.log(props)
+    console.log(props)
     let {isPut, isPost, modalTitle, objName } = props;
     let action = isPut && "Edit" || isPost && "Create";
 

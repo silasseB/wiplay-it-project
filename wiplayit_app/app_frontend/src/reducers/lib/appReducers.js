@@ -73,13 +73,13 @@ export function entities(state=InitialState(), action) {
             
                 if(stateEntintie[byId]){
 
-                    console.log(stateEntintie[byId], payLoad)
+                    //console.log(stateEntintie[byId], payLoad)
                     stateEntintie[byId] = {...stateEntintie[byId], ...payLoad};
                     fakeState = stateEntintie;
-                    console.log(fakeState)
+                    //console.log(fakeState)
 
                 }else {
-                    console.log(stateEntintie, payLoad)
+                    //console.log(stateEntintie, payLoad)
                     console.log('creating new state for ' + stateEntintieKey + ' with byId ' + byId )
 
                     fakeState = CreateNewEntities(fakeState, {byId, payLoad});

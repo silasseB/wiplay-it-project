@@ -7,6 +7,7 @@ import  AjaxLoader from "components/ajax-loader";
 import { QuestionComponent} from "components/question_components"
 import {store} from "store/index";
 import AnswersBox from "containers/answer/answer_page";
+import GetTimeStamp from 'utils/timeStamp';
 
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
 
@@ -54,15 +55,8 @@ class QuestionPage extends Component {
                 let timeStamp = question.timeStamp;
 
                 question = question.question;
-            
-                var now = new Date();
-                
-
-                let msDiff   = now.getTime() - timeStamp
-                let secDiff  = msDiff / 1000
-                let menDiff  = secDiff / 60
-                let hourDiff = menDiff/60
-                let dayDiff  = hourDiff/24
+                const getTimeState = new GetTimeStamp({timeStamp});
+                let menDiff        = parseInt(getTimeState.menutes());
 
                 console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                 
@@ -162,7 +156,8 @@ export const Questions = props => {
    
     return (
         <div className="question-page" id="question-page">
-            <QuestionComponent {...questionProps}/>
+            <div className="question-container">
+                <QuestionComponent {...questionProps}/>
 
             { question.answers || newAnswers?
                 <div>
@@ -180,6 +175,8 @@ export const Questions = props => {
                :
                <p className="items-count">No answer yet</p>
             }
+            </div>
+            
         </div>
     );
    

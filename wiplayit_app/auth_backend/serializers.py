@@ -145,6 +145,12 @@ class CustomLoginSerializer(LoginSerializer):
 			raise serializers.ValidationError(msg)
 
 		else:
+			'''_user = User.objects.get(email=email)
+
+			if not _user.is_confirmed:
+				msg = _('Your account has not been confirmed.')
+				raise exceptions.ValidationError(msg)'''
+
 			user = authenticate(email=email, password=password)
 			
 		return user
@@ -155,21 +161,12 @@ class CustomLoginSerializer(LoginSerializer):
 		email    = attrs.get('email')
 		password = attrs.get('password')
 		user     = None
-		
 		user = self._validate_email(email, password)
 
-
-		# Did we get back an confirmed user?
-		if user:
-			print(user)
-			if not user.is_confirmed:
-				msg = _('Your account has not been confirmed.')
-				raise exceptions.ValidationError(msg)
-
-		else:
+		# Did we get back an user?
+		if not user:
 			msg = _('Unable to log in with provided credentials.')
 			raise exceptions.ValidationError(msg)
-
 
 		attrs['user'] = user
 

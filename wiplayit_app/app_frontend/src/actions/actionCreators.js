@@ -216,11 +216,11 @@ export const getQuestionError = ( byId, error) => ({
 
 
 
-export const getPostPending = (byId) => {
+export const getPostPending = (postById) => {
    
     return{
-        type: types.GET_POST.PENDING,
-        byId,
+        type : types.GET_POST.PENDING,
+        byId : postById,
         payLoad: {
            isLoading          : true,
            post               : "",
@@ -238,11 +238,11 @@ export const getPostSuccess = (postById ,post) => {
    
       
     return{
-        type: types.GET_POST.SUCCESS,
-        byId,
+        type : types.GET_POST.SUCCESS,
+        byId : postById,
         payLoad: {
-            post              : post, 
-            isLoading         : false,
+            post, 
+            isLoading : false,
 
         }
     };
@@ -251,8 +251,8 @@ export const getPostSuccess = (postById ,post) => {
 
 
 export const getPostError = (postById, error) => ({
-    type: types.GET_POST.ERROR,
-    byId,
+    type : types.GET_POST.ERROR,
+    byId : postById,
     payLoad: {
        error     : error, 
        isLoading : false,
@@ -277,7 +277,7 @@ export const getUserProfilePending = (byId) => {
 
 
 export const getUserProfileSuccess = ( byId, userProfile ) => {
-    console.log(userProfile, byId)
+    //console.log(userProfile, byId)
     
     return{
         type: types.GET_USER_PROFILE.SUCCESS,

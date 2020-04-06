@@ -13,7 +13,7 @@ import { ProfileComponent, UserAnswers } from "components/profile_components";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
 
 import {store} from "store/index";
-
+import GetTimeStamp from 'utils/timeStamp';
 import  AjaxLoader from "components/ajax-loader";
 
 
@@ -40,7 +40,7 @@ class UserProfileContainer extends Component {
     
 
     onProfileUpdate = () =>{
- 
+        console.log(this.props)    
         const onStoreChange = () => {
 
             let { slug, id } = this.props.match.params;
@@ -54,7 +54,7 @@ class UserProfileContainer extends Component {
             if (userProfile && userProfile.user) {
 
                 userProfile = userProfile.user;
-                let answersById  =  `usersAnswers${userProfile.id}`;
+                let answersById  = `usersAnswers${userProfile.id}`;
                 answers          = answers[answersById];
                 //console.log(userProfile)
 
@@ -75,61 +75,98 @@ class UserProfileContainer extends Component {
     componentWillUnmount() {
             this.unsubscribe();
     };
-   
+    componentDidUpdate(prevProps, nextProps){
+        console.log(nextProps, this.props)
+        //this.props.reloadPage()
+        let { slug, id }  = this.props.match.params;
+        let profileById   = `userProfile${id}`;
+        let {state} = this;
+        let byId    =  state.profileById; 
+
+        if (byId && byId !== profileById) {
+            console.log(byId, profileById )
+
+            this.setState({profileById });
+            this.updateWithCacheData({profileById, id});
+            this.updateUsersStore();
+        }
+
+
+    }
 
     componentDidMount() {
         this.onProfileUpdate();
-         let usersById     = this.state.usersById;
-        let { cacheEntities }    = this.props;
-        let { slug, id }         = this.props.match.params;
-        let  profileById         = `userProfile${id}`;
+        
+        let { entities }    = this.props;
+        let { usersById }  = this.state;
+        let { slug, id }   = this.props.match.params;
+        let {users, userProfile}  = entities; 
 
-        let storeUpdate  = store.getState();
-        let {entities }  = storeUpdate;
-        let {users, userProfile}      = entities; 
+        let  profileById  = `userProfile${id}`;
+               
         userProfile = userProfile && userProfile[profileById];
         users       = users[usersById];
+        this.setState({profileById })
 
-        //!users && store.dispatch(getUserList({usersById}))
+        !userProfile  &&  this.updateWithCacheData({profileById, id});
+        !users        &&  this.updateUsersStore();
+                     
+    };
 
-        if (!userProfile) {
-            let { userProfile, currentUser} = cacheEntities;
-            userProfile = userProfile && userProfile[profileById]
+    updateUsersStore(params){
+        let { cacheEntities } = this.props;
+        let { usersById }     = this.state;
+        let { users }         = cacheEntities && cacheEntities;
+        users                 = users && users[usersById];
 
-            if(userProfile && userProfile.user){
-                var curentTimeStamp = new Date();
+        if (users && users.userList) {
+            store.dispatch(action.getUserListPending(usersById))
+            store.dispatch(action.getUserListSuccess(usersById, users.userList))
+            return
 
-                let timeStamp = userProfile.timeStamp;
-                //console.log(timeStamp)
+        }
 
-                let msDiff   = curentTimeStamp.getTime() - timeStamp
-                let secDiff  = msDiff / 1000
-                let menDiff  = secDiff / 60
-                let hourDiff = menDiff/60
-                let dayDiff  = hourDiff/24
+        store.dispatch(getUserList({usersById}))
+        return
+    }
 
-                console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
+    updateWithCacheData(params){
+        let { cacheEntities }        = this.props;
+        let { profileById, id }      = params;
+        let { usersById }            = this.state;
+        let { userProfile, users }   = cacheEntities
 
-                if ( menDiff <= 3) {
-                    profileById = `userProfile${id}`;
-                    this.setState({profileById });
-                    userProfile = userProfile.user;
+        userProfile = userProfile && userProfile[profileById];
+        
 
-                    console.log('userProfile found from cachedEntyties')
-                    store.dispatch(action.getUserProfilePending(profileById));
+        console.log(users, userProfile)
 
-                    store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
+        if (userProfile && userProfile.user) {
 
-                    return this._dispatchUserProfileItems(userProfile);
-                }
-            
-                
+            let timeStamp      = userProfile.timeStamp;
+            const getTimeState = new GetTimeStamp({timeStamp});
+            let menDiff        = parseInt(getTimeState.menutes());
+
+            console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
+            console.log(menDiff <= 3)
+
+            if ( menDiff <= 3) {
+                //userProfile = userProfile && userProfile.user;
+
+                console.log('userProfile found from cachedEntyties')
+                                
+                store.dispatch(action.getUserProfilePending(profileById));
+                store.dispatch(action.getUserProfileSuccess( profileById, userProfile.user));
+                this._dispatchUserProfileItems(userProfile.user);
+
+                return 
             }
         }
 
-        this.setState({profileById })
-        !userProfile && this.props.getUserProfile(id);
+        console.log('Fetching userProfile from the server')
+        id && this.props.getUserProfile(id);
 
+        return
     };
 
     _dispatchUserProfileItems(userProfile){
@@ -140,9 +177,9 @@ class UserProfileContainer extends Component {
         if (userProfile && userProfile.answers && userProfile.answers.length) {
             var byId         =`usersAnswers${userProfile.id}`;
             
-            var usersAnswers = userProfile.answers;
+            var usersAnswers      = userProfile.answers;
             let  answersBtnStyles = this._userActivitesStyle();
-            let userItemsStyles = {answersBtnStyles};
+            let userItemsStyles   = {answersBtnStyles};
             this.setState({userItemsStyles})
 
             if (usersAnswers) {
@@ -265,7 +302,7 @@ class UserProfileContainer extends Component {
         let   props = this.getProps();
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
-        console.log(userProfile)
+        console.log(userProfile, profileById)
       
         return (
             <div>

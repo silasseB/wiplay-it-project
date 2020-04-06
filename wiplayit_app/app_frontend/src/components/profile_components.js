@@ -38,7 +38,7 @@ export const ProfileComponent = props => {
     var userProfile = props.entities.userProfile[profileById];
     userProfile     = userProfile && userProfile.user;
 
-    console.log(props, userProfile)
+    //console.log(props, userProfile)
     let currentUser = props.currentUser;
      
     let profile = userProfile && userProfile.profile;
@@ -128,12 +128,12 @@ export const ProfileComponent = props => {
 
     let  profile_picture = profile && profile.profile_picture || null;
                  
-    console.log(props)
+    //console.log(props)
     
     return (
         <div>
-        {userProfile?
-        <div className="profile-contents">
+            {userProfile?
+            <div className="profile-contents">
             
             <div id="profile-box">
                 <div className="profile">
@@ -155,7 +155,7 @@ export const ProfileComponent = props => {
                                     }
                                 </div>
 
-                                {props.isMouseInside && userProfile && userProfile.user_can_edit?
+                                {userProfile.user_can_edit && props.isMouseInside && userProfile?
                                     <div
                                         onMouseEnter={props.mouseEnter}
                                         onMouseLeave={props.mouseLeave}
@@ -172,11 +172,11 @@ export const ProfileComponent = props => {
                             <div className="profile-credential-box">
                                 <ul className="profile-name-box">
                                     <li className="profile-name">
-                                    {userProfile && userProfile.first_name} { userProfile && userProfile.last_name } 
+                                    {userProfile.first_name} {userProfile.last_name } 
                                     </li>
 
                                     <li className="user-credential">
-                                        {profile && profile.credential}
+                                        {profile.credential}
                                     </li>
                                 </ul>
 
@@ -265,7 +265,7 @@ export const ProfileComponent = props => {
 
 
 export const UserProfileFollowingList = props => {
-    console.log(props)
+    //console.log(props)
     let {
         entities,
         users,
@@ -274,6 +274,7 @@ export const UserProfileFollowingList = props => {
         userProfile } = props;
 
     users   = entities && entities.users[usersById] || users && users[usersById];
+    console.log(users)
     let userList = users && users.userList && users.userList.slice(0, 3);
 
     let userProfileFollowersProps = {
@@ -321,6 +322,7 @@ export const UserProfileFollowingList = props => {
     )
 }
 
+
 export const PartialUserList = props => {
         let {user, usersById, currentUser} = props
 
@@ -340,7 +342,7 @@ export const PartialUserList = props => {
         var btnsProps   = {...props, editUserProfileProps};
       
         let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
-        console.log(props)
+        //console.log(props)
 
         return (
             <div className="partial-user-list-box">
@@ -348,9 +350,12 @@ export const PartialUserList = props => {
                     <div className="partial-user-list-img-box">
                         <div className="partail-user-list-img">
                             { profile_picture? 
-                                <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
+                                <img 
+                                    onClick={() => history.push(pathToProfile,user)}
+                                    src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
                                 <img alt="" 
+                                     onClick={() => props.push({path:pathToProfile,user})}
                                      src={require("media/user-image-placeholder.png")}
                                      className="user-list-photo"/>  
                             }        
@@ -359,10 +364,10 @@ export const PartialUserList = props => {
 
                     <div className="user-list-credentials-box">
                         <div className="user-list-credentials-contents">
-                            <Link className="partial-user-list-name user-list-name"
-                                  to={{ pathname: pathToProfile,}}>
+                            <p onClick={() => props.push({path:pathToProfile,user}) } 
+                                  className="partial-user-list-name user-list-name">
                                 { user.first_name }   {user.last_name }
-                            </Link>
+                            </p>
 
                         </div>
 
@@ -602,7 +607,7 @@ export const UsersComponent = props => {
             <div className="user-list-contents">
                 <div className="user-list-img-box">
                     <div className="user-list-img">
-                        <Link  to={{ pathname: pathToProfile,state,}}>  
+                        <div  onClick={() => props.push({path:pathToProfile,state})}>  
                             { user && profile_picture? 
                                 <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
@@ -611,15 +616,16 @@ export const UsersComponent = props => {
                                      className="user-list-photo"/>  
             
                             }        
-                        </Link>
+                        </div>
                     </div>
                 </div> 
 
                 <div className="user-list-credentials-box">
                     <div className="user-list-credentials-contents">
-                        <Link className="user-list-name" to={{ pathname: pathToProfile,state,}}>
+                        <p onClick={() => props.push({path:pathToProfile,state})}
+                           className="user-list-name">
                             { user.first_name }   {user.last_name }
-                        </Link>
+                        </p>
 
                         <div className="">
                             <p className="user-list-credentials">{ user.profile.credential }</p>
@@ -774,7 +780,7 @@ export const UserActivitiesBtns = props => {
         followersBtnStyles,
         followingsBtnStyles} = props.userItemsStyles && props.userItemsStyles;
         
-    console.log(answersBtnStyles, props)
+    //console.log(answersBtnStyles, props)
     return (
         <div className="user-activities">
             <div style={answersBtnStyles} className="user-activities-btn-box">

@@ -17,13 +17,9 @@ import { UserComponentSmall } from "components/profile_components";
 
 
 
-
-
 const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
-
-
 
 
 export const PostComponent = props => {
@@ -39,15 +35,15 @@ export const PostComponent = props => {
 
     let {post, currentUser, postById, postListById}     =    props;
 
-
     let   storedState    = post && post.add_post && JSON.parse(post.add_post);
+    const contentState   = convertFromRaw(storedState);
     const editorState    = contentState && EditorState.createWithContent(contentState);
 
     let  postPath       = post && `/post/${post.slug}/${post.id}/`;
     let  pathToUpvoters = post && `/upvoters/post/${post.id}/`;
 
     let usersById       = post && `postUpVoters${post.id}`;
-    let apiUrl          = post && api.getpostUpVotersListApi(post.id);
+    let apiUrl          = post && api.getPostUpVotersListApi(post.id);
     let linkName = post.upvotes > 1 && `${post.upvotes} Upvoters` || `${post.upvotes} Upvoter`;
 
     let state = {
@@ -130,48 +126,49 @@ export const PostComponent = props => {
   
 
     return (
-      <div>
+        <div>
         { editorState?
-          <div className="post-contents">
-            <div className="post-box">
-               <div className="post"> 
-                 <div className="user-box">
-                    <UserComponentSmall {...userProps}
-                    />
+            <div className="post-contents">
+                <div className="post-box">
+                    <div className="post"> 
+                        <div className="post-detail-box">
+                            {props.isProfileBox?
+                                ""
+                                :
+                                <UserComponentSmall {...userProps}/>
+                            }
            
-                  </div>
+                        </div>
 
-                  { props.isPostBox? 
-                     <b className="">
-                        { post.add_title }
-                  
-                     </b>
-                     :
+                        { props.isPostBox? 
+                            <b className="">
+                                { post.add_title }
+                            </b>
+                            :
 
-                     <b className="">
-                        <Link to={{pathname: postPath, state }} className="question-link">
-                           { post.add_title }
-                        </Link>
-                     </b>
-                  }
+                            <b className="">
+                                <Link to={{pathname: postPath, state }} className="question-link">
+                                        { post.add_title }
+                                </Link>
+                            </b>
+                        }
 
-                  </div>
-                  <div className="post-body">
-                     <Editor
-                        blockRendererFn={pageMediaBlockRenderer}
-                        editorState={editorState} 
-                        readOnly={true} 
-                     />
-                  </div>
-                  <ButtonsBox {...btnsList}/>
-               </div>
-            <CommentsBox {...props}/>
-          </div>
-
-          :
-          ""
+                    </div>
+                    <div className="post-body">
+                        <Editor
+                            blockRendererFn={pageMediaBlockRenderer}
+                            editorState={editorState} 
+                            readOnly={true} 
+                        />
+                    </div>
+                    <ButtonsBox {...btnsList}/>
+                </div>
+                <CommentsBox {...props}/>
+            </div>
+            :
+            ""
         }
-      </div>
+        </div>
     );
 
 };

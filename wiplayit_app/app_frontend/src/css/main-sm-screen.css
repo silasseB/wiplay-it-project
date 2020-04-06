@@ -116,17 +116,12 @@
 
 
 .submit-btn {
-    margin-right  :  3% !important;
-    background    : #A33F0B;  
     border-radius : 50px;
-    font-family   : 'Squada one';
     font-size     : 10px; 
     width         : 50px;
     height        : 23px;
     margin        : 7px ;
-    border        : none;
-    color         : #fff;
-  
+      
 }
 
 .submit-btn-box,.navbar-dropdown-sm  {

@@ -6,12 +6,14 @@ import {NavigationBarSmallScreen,NavigationBarBigScreen } from "components/navBa
 import {store } from "store/index";
 import { FollowUserBtn} from "components/buttons"; 
 import { GetModalLinkProps } from "components/component-props";
+import { UnconfirmedUserWarning } from "components/partial_components";
 
 import { QuestionComponent} from "components/question_components"
 import { PostComponent} from "components/post_components"
 
 import  AjaxLoader from "components/ajax-loader";
 import { AnswersComponent } from "components/answer_components";
+import GetTimeStamp from 'utils/timeStamp';
 
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
 
@@ -77,9 +79,7 @@ class IndexBox extends Component {
 
     
     componentDidMount() {
-        //console.log(this.props)
         this.isMounted = true;
-            
         this.onIndexUpdate();
 
         let { cacheEntities, entities } = this.props;
@@ -93,38 +93,25 @@ class IndexBox extends Component {
             //console.log(cachedIndex)
             let timeStamp = cachedIndex.timeStamp;
             let {questions, answers, posts, users} = cachedIndex && cachedIndex;
-            //console.log(questions, answers, users)
+            
+            const getTimeState = new GetTimeStamp({timeStamp});
+            let menDiff        = parseInt(getTimeState.menutes());
           
-            let msDiff   = now.getTime() - timeStamp
-            let secDiff  = msDiff / 1000
-            let menDiff  = secDiff / 60
-            let hourDiff = menDiff/60
-            let dayDiff  = hourDiff/24
 
-            console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+            console.log(menDiff  + ' ' + 'Menutes ago')
             if(questions && questions.length || answers &&
                 answers.length || posts && posts.length || users && users.length ){
-                if (hourDiff <= 1) {
+                if (menDiff <= 1) {
 
                     console.log('Index found from cachedEntyties')
-                    //stattore.dispatch(action.getIndexPending());
-                    //store.dispatch(action.getIndexSuccess(index,));
                     this.updateIndexEntities(cachedIndex);
                     this.isMounted &&  this.forceUpdate();
                     return;
                 }
             }
         }
-        
-        if (Object.keys(index).length) {
-            //console.log(index)
-            //this.updateIndexEntities(index);
-            //this.isMounted &&  this.forceUpdate();
-
-            return;
-        }
-
-        console.log('Fetching index data form the server' )
+               
+        console.log('Fetching index data from the server' )
         this.props.getIndex();
         
     };
@@ -143,10 +130,10 @@ class IndexBox extends Component {
 
         let {questions, posts, answers, users} =  entities;
 
-        let indexQuestions =  index.questions;
-        let indexAnswers   =  index.answers;
-        let indexPosts     =  index.posts;
-        let indexUsers     =  index.users;
+        let indexQuestions = index && index.questions;
+        let indexAnswers   = index && index.answers;
+        let indexPosts     = index && index.posts;
+        let indexUsers     = index && index.users;
 
         //console.log(index)      
         if (!questions[questionListById] && indexQuestions && indexQuestions.length ) {
@@ -158,12 +145,10 @@ class IndexBox extends Component {
         if (!answers[answerListById] && indexAnswers && indexAnswers.length) {
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, indexAnswers));
-           
-
         }
-        if (!posts[postListById] && indexPosts && posts.length){
-           store.dispatch(action.getPostListPending(postListById));
-           store.dispatch(action.getPostListSuccess(postListById, indexPosts));
+        if (!posts[postListById] && indexPosts && indexPosts.length){
+            store.dispatch(action.getPostListPending(postListById));
+            store.dispatch(action.getPostListSuccess(postListById, indexPosts));
            
         }
 
@@ -203,6 +188,8 @@ class IndexBox extends Component {
                 { index?
 
                     <div className="app-box-container index-box">
+                        <UnconfirmedUserWarning {...props}/>
+
                         {index && index.isLoading?
                             <div className="page-spin-loader-box">
                                 <AjaxLoader/>

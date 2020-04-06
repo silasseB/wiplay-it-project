@@ -154,7 +154,7 @@ export const QuestionComponent = props => {
 
     return(
         <div key={question.id}>
-            <div className="question-content">
+            <div className="question-contents">
 
                 <div className="question-box ">
                     <div className="question">

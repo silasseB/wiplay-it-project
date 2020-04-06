@@ -11,6 +11,7 @@ import withHigherOrderIndexBox from "containers/index/higher_order_index";
 import  * as action  from 'actions/actionCreators';
 import { getPost } from 'dispatch/index';
 import {store} from "store/index";
+import GetTimeStamp from 'utils/timeStamp';
 
 
 
@@ -53,30 +54,26 @@ class  PostPage extends Component  {
         let  postById = `post${id}`;
 
         let { post, currentUser } = cacheEntities;
+        post = post && post[postById];
         console.log(post)
 
         if(post){
-                var now = new Date();
-                let timeStamp = post.timeStamp;
+            let timeStamp = post.timeStamp;
 
-                let msDiff   = now.getTime() - timeStamp
-                let secDiff  = msDiff / 1000
-                let menDiff  = secDiff / 60
-                let hourDiff = menDiff/60
-                let dayDiff  = hourDiff/24
-
-                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+            const getTimeState = new GetTimeStamp({timeStamp});
+            let menDiff        = parseInt(getTimeState.menutes());
+            console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
                 
                
-            if (menDiff < 5) {
+            if (menDiff <= 5 && post.post) {
                 this.setState({postById })
                 console.log('Post found from cachedEntyties')
-                store.dispatch(action.getPostPending(id));
-                store.dispatch(action.getPostSuccess(post));
+                store.dispatch(action.getPostPending(postById));
+                store.dispatch(action.getPostSuccess(postById, post.post));
                 return 
             }
         }
-        
+        console.log('Fetching post from the server' )      
         this.setState({postById }) 
         store.dispatch(getPost(id));
     };
@@ -99,27 +96,21 @@ class  PostPage extends Component  {
         let props = this.getProps();
         var postById = props.postById;
         var post = props.entities.post;
-        console.log(post, props)
-        post = post[postById]
-        console.log(post)                 
+        post = post && post[postById]
+        console.log(post, props)       
+                  
         return (
             <div>
                <PartalNavigationBar {...props}/>
                <NavigationBarBigScreen {...props} />
-               { post?
+                { post?
                     <div  className="app-box-container">
                     { post.isLoading?
                         <div className="page-spin-loder-box">
                            <AjaxLoader/>
                         </div>
                         :
-                        <div style={{paddingTop:'70px'}}>
-                           { post.post?
-                               <Post {...props}/>
-                               :
-                               ""
-                            }
-                        </div>
+                        <Post {...props}/>
                     } 
                     </div>
                 :
@@ -140,13 +131,17 @@ export default withHigherOrderIndexBox(PostPage);
 
 export const Post = props => {
 	var postById = props.postById;
-   var postState = props.entities.post[postById];
-   let post      = postState.post;
-   var postProps = Object.assign({post},props)
+    var postState = props.entities.post[postById];
+    let post      = postState.post;
+    var postProps = {...props, post}
+
 	return(
-       <div className="post-page">  
-        <PostComponent {...postProps }  />
-      </div>
-    )
-}
+        <div className="post-page"> 
+            <div className="post-container"> 
+                <PostComponent {...postProps }  />
+            </div>
+        </div>
+    );
+};
+
 

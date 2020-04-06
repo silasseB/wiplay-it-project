@@ -134,17 +134,23 @@ export function getQuestion(id) {
 
 
 export function getPost(id) {
-     const axiosInstance = new Axios(true);
+    const axiosInstance = new Axios(true);
     const instance = axiosInstance.axiosInstance();
-    let apiUrl = api.getPostApi(id);
-    let postById = `post${id}`
+    let apiUrl     = id && api.getPostApi(id);
+    let postById   = id && `post${id}`
 
     return dispatch => {
-      dispatch(action.getPostPending(postById))
-	   instance.get(apiUrl)
-      .then(response => dispatch(action.getPostSuccess(postById, response.data)))
-      .catch(error => dispatch(action.getPostError(postById ,error))) 
-   }
+        dispatch(action.getPostPending(postById))
+
+	    instance.get(apiUrl)
+       .then(response =>{
+        console.log(response)
+            dispatch(action.getPostSuccess(postById, response.data));
+        })
+       .catch(error => {
+            dispatch(action.getPostError(postById ,error));
+       }) 
+   };
 };
 
 
