@@ -8,7 +8,7 @@ import { QuestionComponent} from "components/question_components"
 import {store} from "store/index";
 import AnswersBox from "containers/answer/answer_page";
 import GetTimeStamp from 'utils/timeStamp';
-
+import { UnconfirmedUserWarning } from "components/partial_components";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
 
 
@@ -105,6 +105,7 @@ class QuestionPage extends Component {
                 { question?
 
                     <div className="app-box-container">
+                        <UnconfirmedUserWarning {...props}/>
                         { question.isLoading?
                             <div className="page-spin-loader-box">
                                 <AjaxLoader/>
@@ -159,27 +160,25 @@ export const Questions = props => {
             <div className="question-container">
                 <QuestionComponent {...questionProps}/>
 
-            { question.answers || newAnswers?
-                <div>
-                <div className="number-answers-box">
-                    { totalAnswersLength > 1? 
-                        <p className="items-count">{totalAnswersLength  }  Answers</p>
-                        :
-                        <p className="items-count">{ totalAnswersLength } Answer</p>
-                    }
-                </div>
-
+                { question.answers || newAnswers?
+                    <div className="answer-list-container">
+                        <div className="number-answers-box">
+                            { totalAnswersLength > 1? 
+                                <p className="items-count">{totalAnswersLength}  Answers</p>
+                                :
+                                <p className="items-count">{ totalAnswersLength } Answer</p>
+                            }
+                        </div>
                 
-                <AnswersBox {...questionProps}/>
-                </div>
-               :
-               <p className="items-count">No answer yet</p>
-            }
+                        <AnswersBox {...questionProps}/>
+                    </div>
+                    :
+
+                    <p className="items-count">No answer yet</p>
+                }
             </div>
-            
         </div>
     );
-   
 };
 
 

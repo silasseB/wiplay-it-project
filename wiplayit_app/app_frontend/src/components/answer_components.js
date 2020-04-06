@@ -139,7 +139,7 @@ export const AnswersComponent = props => {
 
     return (
         <div className="answer-box">     
-            <div className="answer-detail-box">
+            <div className="autor-details-box answer-detail-box">
                 {props.isProfileBox?
                     ""
                     :

@@ -1,24 +1,29 @@
 
 @media (min-width: 980px) {
 	.app-container{
-		border: 1px solid blue;
+		border: px solid blue;
 	}
 
 	.app-box-container {
-     	border  : 1px solid  red;
+     	border      : px solid  red;
     	padding-top : 57px; 
 
     }
 
     .unconfirmed-user-warn-container {
-     	border  : 1px solid  red;
-    	padding-top : 20px; 
+     	border      : px solid  red;
+    	padding-top : 20px;
+    }
+
+    .unconfirmed-user-warn-box {
+    	border     : px solid red;
+    	margin     : 0px 10%;
+    	padding    : 10px 0 10px 80px; 
+    	/*background : #FCCACA;*/
+    	display: flex; 
 
     }
-    .unconfirmed-user-warn-box {
-    	border: 1px solid blue;
-    	margin     : 0px 20%;
-    }
+
     .page-spin-loader-box {
 	    border  : px solid blue;
 	    width   : auto;
@@ -37,11 +42,11 @@
 
 @media (max-width: 980px) {
 	.app-container{
-		border: 1px solid black;
+		border: px solid black;
 	}
 
-	.app-box-container, .unconfirmed-user-warn-container {
-     	border  : 1px solid  red;
+	.app-box-container {
+     	border  : px solid  red;
     }
 
     .page-spin-loader-box {
@@ -54,11 +59,36 @@
 
     .index-box{
     	padding-top : 150px; 
-    	border      : 1px solid black;
+    	border      : px solid black;
     }
 
+    .unconfirmed-user-warn-container {
+     	border  : px solid  red;
+    }
+
+    .unconfirmed-user-warn-box {
+    	border     : px solid red;
+    	display    : flex;
+    	margin     : 10px; 
+    }
+
+
+
+    .unconfirmed-user-warn {
+
+    }
+
+
+}
+.unconfirmed-user-email {
+	text-decoration:  underline;
+	text-decoration-color : v;
+	color : #558FF0; 
 }
 
+.unconfirmed-user-email:hover {
+	cursor : pointer;
+} 
 
 body {
    margin     : 0;

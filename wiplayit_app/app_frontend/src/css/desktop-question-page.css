@@ -4,16 +4,26 @@
         
     #home-page-contents, .question-page, .post-page,
     .question-list-page, .post-list-page {
-        border     : 1px solid  #D5D7D5;
         width      : 42%;
-        margin     : 35px 29%;  
+        margin     : 30px 29%;  
+    }
+
+    #home-page-contents {
+        border     : px solid  red;
+    }
+
+    .question-list-page, .post-list-page ,
+    .question-page, .post-page {
+        background : #ffff; 
+        border     : 1px solid  #D5D7D5;  
     }
 
   
-    .post-box,.question-box, .answer-box {
-        border : px solid blue;
+    .post-box, .question-box, .answer-box {
+        border-bottom : 0.5px solid #E8E8E8;
     } 
   
+     
 
     .post ,.question {
         border      : px solid black;
@@ -57,16 +67,22 @@
   background : #ffff;
   margin     : 10px 0;
 }
+.index-items-label {
+    border-bottom  : 1px solid #D5D7D5;
+    padding        : 0 15px; 
+    color          :  #A33F0B;
+    font-family    : 'Cabin'; 
+}
 
 .answer-container, .question-container, .post-container {
   border     : px solid red;/*#D5D7D5;*/
-  padding    : 10px 0;
-  margin     : 0; 
   background : #ffff;
-  
-
-
 }
+
+.answer-list-container {
+    border : px solid blue;
+}
+
 .reply-container,.comment-container {
   border:px solid blue; /*#D5D7D5;*/
   background:     #f9f9f9 ;/*  #fefbfa; /* #f0eeed;*/
@@ -85,16 +101,16 @@
          
 }
 
-.answer-detail-box, .comment-detail-box, .post-detail-box {
+.autor-details-box {
    margin  : 0 8px;
-   border  : PX solid green;
+   border  : px solid green;
    display : flex;
 }
 
 
 
 .answer-box {
-  border:px solid #D5D7D5;
+  border-bottom:1px solid #D5D7D5;
   /*background-color:#f0eeed;*/
   }
 .comment-box {
@@ -110,15 +126,15 @@
 
 
 .number-answers-box {
-  border: px solid red;
+   border-bottom :  1px solid #D5D7D5;
+   padding: 0 12px;
 } 
 
 .answer-count {
-     list-style-type: none; 
-     padding-left:6px ;
-     margin-top:7px;
-     border: 1px solid blue;
-
+    list-style-type: none; 
+    padding-left:6px ;
+    margin-top:7px;
+    border: 1px solid blue;
 
 } 
 

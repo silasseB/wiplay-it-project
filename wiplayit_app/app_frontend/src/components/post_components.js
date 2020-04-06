@@ -131,7 +131,7 @@ export const PostComponent = props => {
             <div className="post-contents">
                 <div className="post-box">
                     <div className="post"> 
-                        <div className="post-detail-box">
+                        <div className="autor-details-box post-detail-box">
                             {props.isProfileBox?
                                 ""
                                 :

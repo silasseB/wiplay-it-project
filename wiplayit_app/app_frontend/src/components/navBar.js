@@ -149,8 +149,7 @@ export const NavBarSmallScreen = props => {
                 <div className="navigation-menu">
                     <ul  className="navigation-item">
                        <li>
-                            <Link className="items" 
-                                  to={ {pathname:"/posts/", state } }>
+                            <Link className="items" to="/posts/">
                                 Posts
                             </Link>
                         </li>
@@ -235,8 +234,7 @@ export const NavBarBigScreen = props => {
                     
                     <ul  className="navigation-item">
                         <li>
-                            <Link className="items" 
-                                to={ {pathname:"/posts/", state } }>
+                            <Link className="items" to="/posts/">
                                 Posts
                             </Link>
                         </li>

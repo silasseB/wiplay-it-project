@@ -389,7 +389,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
 
    return (
          <div style={ replyStyles}  className="reply-box" id="reply-box">
-            <div className="user-box">
+            <div className="autor-details-box">
                 <UserComponentSmall {...{ user : reply.created_by, currentUser }}/>
             </div>
 

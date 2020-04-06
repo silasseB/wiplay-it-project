@@ -7,7 +7,8 @@ import  AjaxLoader from "components/ajax-loader";
 import { PostComponent} from "components/post_components"
 
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
- 
+import { UnconfirmedUserWarning } from "components/partial_components";
+
 import  * as action  from 'actions/actionCreators';
 import { getPost } from 'dispatch/index';
 import {store} from "store/index";
@@ -105,6 +106,7 @@ class  PostPage extends Component  {
                <NavigationBarBigScreen {...props} />
                 { post?
                     <div  className="app-box-container">
+                        <UnconfirmedUserWarning {...props}/>
                     { post.isLoading?
                         <div className="page-spin-loder-box">
                            <AjaxLoader/>

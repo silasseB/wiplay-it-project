@@ -23,10 +23,10 @@ export const DefaultWrongPage = props => {
 
 export const ButtonsBox = props => {
  
-    let styles = {};
-    if (props.Styles) {
-    	styles = props.Styles.contents;
-    }	
+    let styles = props && props.Styles;
+    styles     = styles && styles.contents;
+  	styles     = !styles && Styles.contents || styles;
+
 
       
     return (
@@ -67,7 +67,7 @@ export const Styles = {
       contents : {
          display      : 'flex',
          width        : '100%',
-         
+         border       : 'px solid red',
 
       }
    }
@@ -138,11 +138,16 @@ export const UnconfirmedUserWarning =(props)=> {
         <div>
             {currentUser && !currentUser.is_confirmed &&
             <div className="unconfirmed-user-warn-container">
-                <div className="unconfirmed-user-warn-box">
-                    <ul>
+                <div className="alert alert-warning unconfirmed-user-warn-box">
+                    <button type="bottom" className="">
+                        <span className="warning-icon material-icons">warning</span>
+                    </button>
+
+                    <ul className="unconfirmed-user-warn">
                         <li>
                         Your account has not been confirmed.
-                         Please go to your email { currentUser && currentUser.email } to
+                         Please go to your email <span className="unconfirmed-user-email">
+                         { currentUser && currentUser.email }</span> to
                         confirm your account and start posting.
                         </li>
                     </ul>

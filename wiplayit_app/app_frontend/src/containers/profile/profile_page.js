@@ -11,6 +11,7 @@ import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
 import  * as action  from 'actions/actionCreators';
 import { ProfileComponent, UserAnswers } from "components/profile_components";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
+import { UnconfirmedUserWarning } from "components/partial_components";
 
 import {store} from "store/index";
 import GetTimeStamp from 'utils/timeStamp';
@@ -310,7 +311,8 @@ class UserProfileContainer extends Component {
                 <NavigationBarBigScreen {...props} />
 
                 { userProfile?
-                    <div  className="app-box-container"> 
+                    <div  className="app-box-container">
+                        <UnconfirmedUserWarning {...props}/> 
                         {userProfile.isLoading?
                             <div className="page-spin-loader-box">
                                  <AjaxLoader/>

@@ -6,7 +6,7 @@ import { UpVoteCommentBtn, DownVoteCommentBtn, OptionsDropDownBtn } from 'compon
 import {EditorLink, OptionsModalLink,UsersModalLink} from "components/modal-links"
 import { GetModalLinkProps } from "components/component-props";
 
-import {ButtonsBox} from "components/partial_components";
+import {ButtonsBox, Styles} from "components/partial_components";
 import Api from 'utils/api';
 import  * as types  from 'actions/types';
 
@@ -149,6 +149,7 @@ export const CommentsComponent = props => {
         btn1         :  upvoteBtn,
         btn2         :  EditorModalLink,
         btn3         :  optionsBtn(),
+        Styles       : Styles,
       } 
 
       const userProps  = {
@@ -161,7 +162,7 @@ export const CommentsComponent = props => {
     return(
       
         <div  className="comment-box" id="comment-box">
-            <div className="comment-detail-box">
+            <div className="autor-details-box comment-detail-box">
                 <UserComponentSmall {...userProps }/>
             </div>
     
