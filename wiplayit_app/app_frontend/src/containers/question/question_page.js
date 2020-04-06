@@ -148,7 +148,7 @@ export const Questions = props => {
    let newAnswers        = answers  && answers[newAnswerListById];
    let newAnswersLength  = newAnswers &&  newAnswers.answerList && newAnswers.answerList.length || 0;
 
-   let totalAnswersLength = question.answer_count + newAnswersLength;
+   let totalAnswersLength = question && question.answer_count + newAnswersLength;
 
    let questionProps = { question};
    
@@ -160,7 +160,7 @@ export const Questions = props => {
             <div className="question-container">
                 <QuestionComponent {...questionProps}/>
 
-                { question.answers || newAnswers?
+                { question && question.answers || newAnswers?
                     <div className="answer-list-container">
                         <div className="number-answers-box">
                             { totalAnswersLength > 1? 

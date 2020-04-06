@@ -221,7 +221,7 @@ export const IndexComponent = props => {
       
     return(
         <div className="home-page-contents" id="home-page-contents">
-           <Answers {...props}/>
+           
            <Users {...props}/>
            <Posts {...props}/>
            <Questions {...props}/>
