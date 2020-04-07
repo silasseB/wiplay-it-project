@@ -46,6 +46,8 @@ const actionType = (type) => ({
 
 export const USER_AUTHENTICATION  = asyncActionType("USER_AUTHENTICATION");
 export const DEBUG                = asyncActionType('DEBUG'); 
+export const SERVER               = asyncActionType('SERVER'); 
+
 
 export const TOGGLE               = asyncActionToggleType("TOGGLE");
 

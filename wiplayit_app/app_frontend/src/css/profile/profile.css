@@ -529,18 +529,14 @@
     }
 
     .edit-img-btn-box {
-        border      : px solid blue;
-        position    : absolute;
-        z-index     : 4;
-        top         : 195px; 
-        left        : 120; 
-        margin-left : 3%;
+        border      :  px solid blue;
+        padding     :  6px 30%;
     };
 
     .edit-img-btn-box button {
         background-color :  rgba(0, 0, 0, 0.3) !important; 
         font-size : 25px !important;
-        color     : #999999;
+        color     : #F4F2F1; ;
         width     : 85px;
         height    : 30px;
         font-weight: bold;
@@ -549,8 +545,8 @@
 
     .profile-name-box {
         border      : px solid red;
-        min-height  : 90px;
-        padding-top : 8px;  
+        min-height  : 150px;
+        padding-top : 20px;  
     }
 
     .profile-name {
@@ -559,23 +555,24 @@
         border      : px solid blue;
         font-family : 'Ubuntu';
         font-weight : bold;
-        margin      :  0 10px 0;
+        margin      : 0 10px 0;
     }
 
     .user-credential {
-        margin         :  0 10px 0;
-        border         : px solid red;
+        margin   :  0 10px 0;
+        border   : px solid red;
     }
 
     .user-profile-options-box  {
-        border  : px solid black;
+        border  : px solid red;
          
     }
 
 
 
     .relation-box {
-        display    : flex;
+        display  : flex;
+        border   : px solid black;  
     }
 
     .profile-credential-box {
@@ -585,7 +582,8 @@
     }
 
     .user-profile-followers-box {
-        width  : 100%; 
+        width   : 100%; 
+        border  : px solid blue;
 
     }
 

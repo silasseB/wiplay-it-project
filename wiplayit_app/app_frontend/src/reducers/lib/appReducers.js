@@ -35,6 +35,7 @@ const InitialState = () => {
         replies     : {},
 
         modal       : {},
+        errors      : {},
     };
 };
 
@@ -80,7 +81,7 @@ export function entities(state=InitialState(), action) {
 
                 }else {
                     //console.log(stateEntintie, payLoad)
-                    console.log('creating new state for ' + stateEntintieKey + ' with byId ' + byId )
+                    //console.log('creating new state for ' + stateEntintieKey + ' with byId ' + byId )
 
                     fakeState = CreateNewEntities(fakeState, {byId, payLoad});
                 }
@@ -102,6 +103,9 @@ export function entities(state=InitialState(), action) {
     let createAction    = {byId};
 
     switch (action.type){
+        case "SERVER_ERROR":
+            console.log(action)
+            return updateStateEntyties('errors', action);
 
         case 'MODAL_ROUTER':
         case "MODAL_SUBMIT_PENDING":

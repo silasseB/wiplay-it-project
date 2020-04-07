@@ -115,7 +115,7 @@ export const AlertComponent =(props)=> {
             <div style={AlertStyles.alertMessageBox} className="alert-ms-box">
                 <ul style={AlertStyles.message}>
                     <li>
-                        { props.errorMessage || props.successMessage || defaulfMessage}
+                        { props.message || props.message || defaulfMessage}
                     </li>
                 </ul>
             </div>
@@ -132,7 +132,7 @@ export const UnconfirmedUserWarning =(props)=> {
     let {cacheEntities} = props;
     let currentUser = cacheEntities && cacheEntities.currentUser;
     currentUser     = currentUser && currentUser.user;
-    console.log(currentUser)
+    //console.log(currentUser)
     
     return(
         <div>

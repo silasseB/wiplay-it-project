@@ -16,17 +16,18 @@ export function getIndex(options) {
     let apiUrl     = api.getIndexApi(); 
 
     
-
+    //console.log(instance)
     return dispatch => {
        dispatch(action.getIndexPending());
        instance.get(apiUrl)
        .then(response => {
-            //console.log(response)  
+            console.log(response)  
             dispatch(action.getIndexSuccess(response.data)); 
 
            
         })
         .catch(error => {
+            console.log(error)
             if (error.response) {
                var { errors } =  error.response.data
                dispatch(action.getIndexError( errors ));
@@ -295,7 +296,7 @@ export function handleSubmit(props) {
 
 		    instance.put(apiUrl, formData)
 		    .then(response => {
-		        
+		        console.log(response)
                 updateProps['data'] = prepPayLoad(objName, response.data);
                 IsModal && dispatch(action.ModalSubmitSuccess(updateProps))
 			    dispatch(action.updateActionSuccess(updateProps));
@@ -308,8 +309,8 @@ export function handleSubmit(props) {
                    createProps['error'] = error.response.data;
                    IsModal && dispatch(action.ModalSubmitError(updateProps))
 			       dispatch(action.updateActionError(updateProps));
-			    }else{
-      		       dispatch(action.handleError(error.request))
+			    }else {
+      		       dispatch(action.handleError(error))
       	        }
 	        })
 

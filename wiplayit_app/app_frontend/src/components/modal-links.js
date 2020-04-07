@@ -11,7 +11,7 @@ import { ModalManager}   from  "containers/modal/modal_container";
 export const EditorLink = props => {
     //console.log(props)
 	
-    let {modalProps} = props ;
+    let {modalProps, currentUser} = props ;
     let { background, modalPath, className } =  props;
 
     background && console.log(background)
@@ -59,9 +59,13 @@ export const EditorLink = props => {
        
     return(
         <button  className={className}   onClick={()=> {
+                        if (!currentUser.is_confirmed) {
+                            return;   
+                        }
+
                         background &&  ModalManager.close('optionsMenu', background)
                         let timer = isPut && 1500 || 100;
-                       
+                    
                         setTimeout(()=> {
                             store.dispatch(showModal(madalParams));
                             history.push({ pathname: pathname, state}); 
@@ -100,6 +104,7 @@ export const OptionsModalLink = props => {
         
     return(
         <button className="btn-sm"    onClick={()=> {
+
                         store.dispatch(showModal(madalParams))
                         setTimeout(()=> {
 
@@ -120,6 +125,7 @@ export const OptionsModalLink = props => {
 export const ChangeImageBtn = props => {
     let location = useLocation();
     //console.log(props)
+    let {currentUser} = props && props;
 
     let modalProps = {
             dropImageProps : {...props},
@@ -140,10 +146,12 @@ export const ChangeImageBtn = props => {
     return(
        
         <button className="edit-img-btn"   onClick={()=> {
-                        store.dispatch(showModal(madalParams))
+                        if (!currentUser.is_confirmed) {
+                             return;   
+                        }
 
+                        store.dispatch(showModal(madalParams));
                         setTimeout(()=> {
-                            
                             history.push({ pathname: pathname, state}); 
                         }, 500);
 

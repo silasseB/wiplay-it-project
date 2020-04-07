@@ -155,13 +155,15 @@ export const ProfileComponent = props => {
                                     }
                                 </div>
 
-                                {userProfile.user_can_edit && props.isMouseInside && userProfile?
-                                    <div
-                                        onMouseEnter={props.mouseEnter}
-                                        onMouseLeave={props.mouseLeave}
-                                        className="edit-img-btn-box">
-
-                                        <ChangeImageBtnBigScreen {...editUserProfileProps}/>
+                                {userProfile.user_can_edit && props.isMouseInside?
+                                    <div className="edit-img-btn-box"
+                                         onMouseEnter={props.mouseEnter}
+                                         onMouseLeave={props.mouseLeave}>
+                                        <div className="" 
+                                             onMouseEnter={props.mouseEnter}
+                                             onMouseLeave={props.mouseLeave} >
+                                            <ChangeImageBtnBigScreen {...editUserProfileProps}/>
+                                        </div>
                                     </div>
                                     :
                                     null

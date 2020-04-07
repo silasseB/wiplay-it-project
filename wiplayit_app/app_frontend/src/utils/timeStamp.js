@@ -15,7 +15,6 @@ export default class GetTimeStamp {
     }
 
     milliSeconds(){
-        console.log(this)
         let currentTimeStamp = this.currentTimeStamp();
         return currentTimeStamp.getTime() - this.timeStamp
     }

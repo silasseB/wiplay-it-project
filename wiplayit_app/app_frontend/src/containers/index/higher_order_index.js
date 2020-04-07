@@ -35,10 +35,10 @@ export function withHigherOrderIndexBox(Component) {
 
             this.state = {
                 currentUser        : {},
-                cacheEntities     : this.cacheEntities(), 
+                cacheEntities      : this.cacheEntities(), 
                 isAuthenticated    : this.isAuthenticated(),
-                showSuccessMessage : false,
-                successMessage     : null,
+                displayMessage     : false,
+                message            : null,
                 modalIsOpen        : false,
             };
           
@@ -114,7 +114,13 @@ export function withHigherOrderIndexBox(Component) {
                 let storeUpdate = store.getState();
                 var timeStamp = new Date();
                 let { entities } = storeUpdate;
-                let { currentUser,modal, index, question, userProfile, userAuth } = entities;
+                let { currentUser,
+                      modal,
+                      index,
+                      question,
+                      userProfile,
+                      userAuth,
+                      errors } = entities;
 
                 let editorModal  = modal['editor']; 
                 let optionsModal = modal['optionsMenu'];
@@ -124,15 +130,21 @@ export function withHigherOrderIndexBox(Component) {
                 if (editorModal && editorModal.modalIsOpen || optionsModal &&  optionsModal.modalIsOpen ||
                     dropImageModal && dropImageModal.modalIsOpen || userListModal && userListModal.modalIsOpen  ) {
                     //alert(e.modalIsOpen)
-                    document.body.style['overflow-y'] = 'hidden';
-                    document.body.style['overflow-x'] = 'hidden';
+                    //document.body.style['overflow-y'] = 'hidden';
+                    //document.body.style['overflow-x'] = 'hidden';
                 }else{
-                    document.body.style['overflow-y'] = 'scroll';
-                    document.body.style['overflow-x'] = 'scroll';
+                    //document.body.style['overflow-y'] = 'scroll';
+                    //document.body.style['overflow-x'] = 'scroll';
                 }
                 //console.log(userAuth)
-
+                console.log(errors)
                 this.confirmLogout(userAuth.auth);
+
+                if (errors.error && !errors.displayErrors) {
+                    errors['displayErrors'] = true;
+                    this.displayErrorMessage(errors.error);
+                    delete errors.displayErrors;
+                }
                 
 
                 if (editorModal && Object.keys(editorModal).length) {
@@ -150,16 +162,14 @@ export function withHigherOrderIndexBox(Component) {
                         //window.scrollTo(0, parseInt(scrollY || '0') * -1);
                         
                     }
+                    
 
-                    if ( data && !data.successMessageAlerted){
-                       let successMessage = modal.successMessage;
-                       data['successMessageAlerted'] = true;
-                       this.setState({ showSuccessMessage : true, successMessage });
-
-                        setTimeout(()=> {
-                           
-                           this.setState({showSuccessMessage:false}); 
-                        }, 5000);
+                    if ( data && !data.displayMessage){
+                       let successMessage = modal && modal.successMessage;
+                       data['displayMessage'] = true;
+                       this.displayAlertMessage(successMessage)
+                       delete data.displayMessage;
+                       
                     }
                    
                 }
@@ -175,6 +185,18 @@ export function withHigherOrderIndexBox(Component) {
             this.unsubscribe = store.subscribe(onStoreChange);
 
         };
+
+        displayErrorMessage =(errorMessage)=>{
+            this.displayAlertMessage(errorMessage)
+        }
+
+        displayAlertMessage = (message) => {
+                       
+            this.setState({ displayMessage : true, message });
+                setTimeout(()=> {
+                    this.setState({displayMessage : false}); 
+                }, 5000);
+        }
 
         confirmLogout =(auth)=>{
             
@@ -216,11 +238,32 @@ export function withHigherOrderIndexBox(Component) {
             }
         };
 
+        updateIndicator(status) {
+            status && console.log(' internet is ' + status);
+            // Show a different icon based on offline/online
+        }
 
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
-            //console.log(this.props)  
+            // Update the online status icon based on connectivity
+            window.addEventListener('online',  this.updateIndicator('online'));
+            window.addEventListener('offline', this.updateIndicator('offline'));
+            //this.updateIndicator();
+
+
+            window.addEventListener("offline", function(e) {
+                alert('offline')
+                 console.log(' internet is offline');
+            });
+
+            // Add event listener online to detect network recovery.
+            window.addEventListener("online", function(e) {
+                alert('online')
+               console.log(' internet is online');
+            });
+
+            //console.log(this.props.entities)  
             let { entities } = this.props;
             window.addEventListener("beforeunload",(event)=>{
                 
@@ -255,8 +298,11 @@ export function withHigherOrderIndexBox(Component) {
             }
 
             if(!this.getCurrentUser()){
-       	    store.dispatch(getCurrentUser());
+       	        store.dispatch(getCurrentUser());
             }
+
+
+
         };
 
 
@@ -297,7 +343,12 @@ export function withHigherOrderIndexBox(Component) {
         
 
         editfollowersOrUpVoters = (params) =>{
-            //console.log(params)
+            console.log(params)
+            let {currentUser} = params || this.state;
+            if (!currentUser.is_confirmed) {
+               //return;   
+            }
+
             params = this._getFormData(params);
             this.props.submit(params); 
         }
@@ -343,11 +394,19 @@ export function withHigherOrderIndexBox(Component) {
 
         render() {
             let props = this.getProps();
-            let showAlertMessageStiles = props.showSuccessMessage?{ display : 'block'}:
-                                                              { display : 'none' };
-            let onModalStyles = props.modalIsOpen ? {opacity:'0.70',}
-                                              : {opacity:'2',};
+            let alertMessageStyles = props.displayMessage?{ display : 'block'}:
+                                                          { display : 'none' };
+
+            let onModalStyles = props.modalIsOpen ? {opacity:'0.70',} :
+                                                    {opacity:'2',};
             console.log(props)
+
+            var isOnline = window.navigator.onLine;
+            if (isOnline) {
+               // console.log('online');
+            } else {
+               // console.log('offline');
+            }
             
             return (
                 <div  className="app-container">
@@ -358,7 +417,7 @@ export function withHigherOrderIndexBox(Component) {
 
                     </fieldset>
 
-                    <div style={showAlertMessageStiles}>
+                    <div style={alertMessageStyles}>
                        <AlertComponent {...props}/>
                     </div>
                 </div> 

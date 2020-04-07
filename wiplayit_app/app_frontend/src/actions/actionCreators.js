@@ -561,12 +561,15 @@ export const getReplyChildListError = (actionType, byId, error) =>({
 
 
 
-export const handleError  = () => ({
-  type: types.DEBUG.ERROR,
-  payLoad: {
-    error: 'Some thing wrong happened into the code.',
-  }
-})
+export const handleError  = () => {
+    console.log(types.SERVER)
+    return {
+        type: types.SERVER.ERROR,
+        payLoad: {
+            error: 'Something wrong happened, please try again.',
+        }
+    };
+};
 
 
 
