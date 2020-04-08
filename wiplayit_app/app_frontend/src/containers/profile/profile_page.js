@@ -327,7 +327,8 @@ class UserProfileContainer extends Component {
                     </div>
 
                     :
-                    ""
+                    null
+
                 }
             </div>
         );

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { store } from "store/index";
-import {showModal} from 'actions/actionCreators';
+import {showModal, handleError} from 'actions/actionCreators';
 import {history} from "App" 
 import { ModalManager}   from  "containers/modal/modal_container";
 
@@ -60,6 +60,8 @@ export const EditorLink = props => {
     return(
         <button  className={className}   onClick={()=> {
                         if (!currentUser.is_confirmed) {
+                            let error = 'Sorry, you must confirm your account to start posting and editting ';
+                            store.dispatch(handleError(error));
                             return;   
                         }
 
@@ -147,7 +149,9 @@ export const ChangeImageBtn = props => {
        
         <button className="edit-img-btn"   onClick={()=> {
                         if (!currentUser.is_confirmed) {
-                             return;   
+                            let error = 'Sorry, you must confirm your account to to change photo ';
+                            store.dispatch(handleError(error));
+                            return;   
                         }
 
                         store.dispatch(showModal(madalParams));

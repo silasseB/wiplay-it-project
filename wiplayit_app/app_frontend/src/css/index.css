@@ -35,7 +35,18 @@
     	border      : px solid blue;
     	padding-top : 40px; 
     }
+    .alert-container {
+    	border  : px solid blue;
 
+    }
+    .alert-box {
+    	width      : 45%;
+        margin     : 0px 27.5%; 
+    }
+
+    .alert-message {
+    	font-size: 15px;
+    }
 }
 
 

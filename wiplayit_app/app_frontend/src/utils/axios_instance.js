@@ -13,12 +13,12 @@ export default class Axios {
 
     constructor(props){
         this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
-        this.withAuthentication = props;
-        this.baseURL        =  API_URL;
-        this.DOMAIN_URL  =  window.location.origin; 
+        this.baseURL       =  API_URL;
+        this.DOMAIN_URL    =  window.location.origin; 
+        this.useToken      =  props && props.useToken;
     }
 
-    getTokenKey(){
+    getTokenKey = () => {
         
         if (this.cacheEntities) {
             let {userAuth} = this.cacheEntities;
@@ -36,27 +36,30 @@ export default class Axios {
     };
 
 
-    axiosInstance(){
-       	let baseURL = this.DOMAIN_URL;
-        
-    	var instance = axios.create({
-            baseURL: baseURL,
+    instance = () => {
+     	        
+    	let instance = axios.create({
+            baseURL: this.DOMAIN_URL,
         });
 
-        if (this.withAuthentication) {
-            //retrive token from storage
-            var tokenKey = this.getTokenKey();
-         
-            if (tokenKey) {
-                tokenKey =`Token ${tokenKey}`;
-                instance.defaults.headers.common['Authorization'] = tokenKey;
+        //retrive token from storage
+        if (this.useToken) {
+
+            let tokenKey = this.getTokenKey();
+            //console.log(tokenKey)
+            if (!tokenKey) {
+                return
             }
+            
+            tokenKey =`Token ${tokenKey}`;
+            instance.defaults.headers.common['Authorization'] = tokenKey;
+            
         }
         
         instance.defaults.xsrfCookieName = csrftoken;
         instance.defaults.timeout = 30000;
         
-        console.log(instance.defaults)
+        //console.log(instance.defaults)
         return instance;
     };
 

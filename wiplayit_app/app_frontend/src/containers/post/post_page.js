@@ -107,16 +107,16 @@ class  PostPage extends Component  {
                 { post?
                     <div  className="app-box-container">
                         <UnconfirmedUserWarning {...props}/>
-                    { post.isLoading?
-                        <div className="page-spin-loder-box">
-                           <AjaxLoader/>
-                        </div>
-                        :
-                        <Post {...props}/>
-                    } 
+                        { post.isLoading?
+                            <div className="page-spin-loder-box">
+                                <AjaxLoader/>
+                            </div>
+                            :
+                            <Post {...props}/>
+                        } 
                     </div>
-                :
-                ""  
+                    :
+                    null  
                 }           
          </div>
 

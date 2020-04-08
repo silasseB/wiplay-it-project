@@ -42,6 +42,7 @@ export function withAuthentication(Component) {
                 formErrors           : null,
                 successMessage       : null,
                 email                : null,
+                cacheEntities        : JSON.parse(localStorage.getItem('@@CacheEntities')),
             
             };
 
@@ -151,7 +152,7 @@ export function withAuthentication(Component) {
                 let { entities } =  storeUpdate;
                 let { userAuth } = entities;
                 let { form, formName } = this.state;
-
+                console.log(entities)
                 if (userAuth && userAuth.auth) {
                     let { auth } = userAuth;
                     console.log(auth)                    
@@ -372,9 +373,6 @@ export function withAuthentication(Component) {
             if ( value) {
                 this.formConstructor(formName)
             }
-            
-
-           
         };
 
 
@@ -394,7 +392,7 @@ export function withAuthentication(Component) {
             })
             .catch(error => {
                 console.log(error) 
-                if (error.status === '400') {
+                if (error.status === 400) {
 
                    console.log(error) 
                    callback({ confirmed: false});

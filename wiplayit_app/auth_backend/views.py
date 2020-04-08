@@ -70,20 +70,12 @@ class CustomRegisterView(RegisterView):
 		
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
+		headers = self.get_success_headers(serializer.data)
+		user = self.perform_create(serializer)
 				
-		
-		user = serializer.save(request)
-		
 		user.set_password(request.data['password'])
 
 		user.save()
-
-		complete_signup(self.request._request, user,
-                        allauth_settings.EMAIL_VERIFICATION,
-                        None)
-		
-		headers = self.get_success_headers(serializer.data)
-
 
 		return Response(self.get_response_data(user),
                         status=status.HTTP_201_CREATED,

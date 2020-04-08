@@ -62,9 +62,10 @@ class IndexBox extends Component {
                index,
                questions,
                posts, 
-               answers }   = entities && entities;
+               answers, 
+               errors }   = entities && entities;
                      
-
+            console.log(errors)    
             if (index && index.isSuccess) {
                 index.isSuccess = false;
              
@@ -201,7 +202,7 @@ class IndexBox extends Component {
                     </div>
 
                     :
-                   ""  
+                    null  
                 }           
             </div>
         );
@@ -390,11 +391,13 @@ export const Users = props => {
     //console.log(answers)     
     return(
         <div className="index-user-list">
-            <ul className="index-user-list-title-box">
-                <li>Discover New People</li>
-            </ul>
-
+            
             {users && users.userList && users.userList.length?
+                <div>
+                <ul className="index-user-list-title-box">
+                    <li>Discover New People</li>
+                </ul>
+
                 <div className="index-user-list-container">
                        
                     { users.userList.map((user, index) => {
@@ -476,6 +479,7 @@ export const Users = props => {
                                 </div>
                             );
                     } )}
+                </div>
                 </div>
 
                 :

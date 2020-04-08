@@ -5,54 +5,74 @@ import Axios from 'utils/axios_instance';
 import  * as action  from 'actions/actionCreators';
 
 
-const axiosApi = new Axios(true);  
 const api = new Api();
 
+const _GetApi =(useToken=true) =>{
+    console.log(useToken) 
+    const axios     = new Axios({useToken});
+    return axios.instance()
+
+} 
 
 
 export function getIndex(options) {
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();  
-    let apiUrl     = api.getIndexApi(); 
+    let useToken=true
+    const Api  = _GetApi(useToken);
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
+    let apiUrl = api.getIndexApi(); 
 
     
     //console.log(instance)
     return dispatch => {
-       dispatch(action.getIndexPending());
-       instance.get(apiUrl)
-       .then(response => {
-            console.log(response)  
-            dispatch(action.getIndexSuccess(response.data)); 
+        dispatch(action.getIndexPending());
 
-           
-        })
-        .catch(error => {
-            console.log(error)
-            if (error.response) {
-               var { errors } =  error.response.data
-               dispatch(action.getIndexError( errors ));
+        Api.get(apiUrl)
+            .then(response => {
+                console.log(response)  
+                dispatch(action.getIndexSuccess(response.data)); 
+    
+            })
+            .catch(error => {
+                console.log(error)
+                if (error.response) {
+                    let { errors } =  error.response.data
+                    dispatch(action.getIndexError( errors ));
 
-            }else{
-                dispatch(action.handleError());
-         }
-      }); 
-   };
+                }else{
+                    dispatch(action.handleError());
+                }
+           }); 
+        
+    };
 };
 
 
 
+
 export function getUserList(props) {
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
-  
-    var { apiUrl, usersById } = props;
+    let useToken=true
+    const Api  = _GetApi(useToken);
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
+    let { apiUrl, usersById } = props;
     apiUrl = !apiUrl && api.getUserListApi() || apiUrl; 
 
     return dispatch => {
 
         dispatch(action.getUserListPending(usersById))
 
-	    instance.get(apiUrl)
+	    Api.get(apiUrl)
         .then(response => dispatch(action.getUserListSuccess(usersById, response.data)))
         .catch(error => {
 
@@ -68,13 +88,19 @@ export function getUserList(props) {
 
 
 export function getQuestionList(questionListById) {
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
+    let useToken=true
+    const Api  = _GetApi(useToken);  
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
     let apiUrl     = api.getQuestionListApi(); 
 
     return dispatch => {
       dispatch(action.getQuestionListPending(questionListById))
-	   instance.get(apiUrl)
+	   Api.get(apiUrl)
       .then(response => dispatch(action.getQuestionListSuccess(questionListById, response.data)))
       .catch(error => {
       	if (error.response) {
@@ -92,16 +118,22 @@ export function getQuestionList(questionListById) {
 
 export function getPostList(postListById) {
 
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
-     
-    let   apiUrl     = api.getPostListApi();
+    let useToken=true
+    const Api  = _GetApi(useToken);  
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
+    let   apiUrl  = api.getPostListApi();
 
     return dispatch => {
       dispatch(action.getPostListPending(postListById))
-	   instance.get(apiUrl)
-      .then(response => dispatch(action.getPostListSuccess(postListById, response.data)))
-      .catch(error => {
+	   Api.get(apiUrl)
+       .then(response => dispatch(action.getPostListSuccess(postListById, response.data)))
+       .catch(error => {
       	if (error.response) {
       	   dispatch(action.getPostListError(postListById, error.response.data));
          }else{
@@ -114,16 +146,21 @@ export function getPostList(postListById) {
 
 
 export function getQuestion(id) {
+    let useToken=true
+    const Api  = _GetApi(useToken); 
 
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    } 
       
     let apiUrl = api.getQuestionApi(id);
     let questionById = `question${id}`;
 
     return dispatch => {
       dispatch(action.getQuestionPending(questionById))
-	   instance.get(apiUrl)
+	   Api.get(apiUrl)
       .then(response => dispatch(action.getQuestionSuccess( questionById, response.data)))
       .catch(error => {
            console.log(error)
@@ -135,15 +172,22 @@ export function getQuestion(id) {
 
 
 export function getPost(id) {
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
+    let useToken=true
+    const Api  = _GetApi(useToken);  
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
     let apiUrl     = id && api.getPostApi(id);
     let postById   = id && `post${id}`
 
     return dispatch => {
         dispatch(action.getPostPending(postById))
 
-	    instance.get(apiUrl)
+	    Api.get(apiUrl)
        .then(response =>{
         console.log(response)
             dispatch(action.getPostSuccess(postById, response.data));
@@ -158,8 +202,14 @@ export function getPost(id) {
 
 
 export function getUserProfile(id, apiUrl) {
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance();
+    let useToken=true
+    const Api  = _GetApi(useToken);
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
 
     apiUrl    = !apiUrl && api.getProfileApi(id) || apiUrl;
     
@@ -169,7 +219,7 @@ export function getUserProfile(id, apiUrl) {
     return dispatch => {
 
         dispatch(action.getUserProfilePending(profileById))
-	    instance.get(apiUrl)
+	    Api.get(apiUrl)
         .then(response => {
         	//console.log(response.data.profile)
             dispatch(action.getUserProfileSuccess( profileById ,response.data));
@@ -220,10 +270,18 @@ export function getReplyChildrenList(props) {
         }
         
     }
+    let useToken = true
+    const Api    = _GetApi(useToken);  
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
 
     return dispatch => {
        dispatch(action.getReplyChildListPending(actionType, byId))
-	   instance.get(apiUrl)
+	   Api.get(apiUrl)
       .then(response => dispatch(action.getReplyChildListSuccess(actionType, byId, response.data)))
       .catch(error => dispatch(action.getReplyChildListError(actionType, byId, error))) 
    }
@@ -231,35 +289,56 @@ export function getReplyChildrenList(props) {
 
 
 export function getCurrentUser(tokenKey) {
-    const axiosInstance = new Axios(true);
-    const instance = axiosInstance.axiosInstance(); 
-	console.log(tokenKey)
-	
-	return dispatch => {
-	  	dispatch(action.getCurrentUserPending());
+    let useToken=true
+    const Api  = _GetApi(useToken); 
 
-		instance.get(`/api/current/user/`)
-      .then(response => {
-      	console.log(response)
-      	dispatch(action.getCurrentUserSuccess(response.data)) })
-      .catch(error =>{
-      	if (error.response && error.response.data) {
-      		dispatch(action.getCurrentUserError(error.response.data))
-      	}else{
-      		dispatch(action.handleError(error.request))
-      	}
-      });
-	}
-}
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }   
+
+    return dispatch => {
+	    dispatch(action.getCurrentUserPending());
+
+		Api.get(`/api/current/user/`)
+            .then(response => {
+      	        console.log(response)
+      	        dispatch(action.getCurrentUserSuccess(response.data)) 
+            })
+            .catch(error =>{
+      	        if (error.response && error.response.data) {
+      		        dispatch(action.getCurrentUserError(error.response.data));
+
+      	        }else{
+      		        dispatch(action.handleError(error.request))
+      	        }
+            });
+    };
+	
+};
 
 
 
 
 export function handleSubmit(props) {
-
     console.log(props)
-    const axiosInstance = new Axios(true);
-    const instance      = axiosInstance.axiosInstance();
+    let useToken=true
+    const Api  = _GetApi(useToken); 
+    if (!Api) {
+        return dispatch =>{ dispatch(action.handleError(error)) };
+    }
+
+    let { currentUser } = props;
+    if (currentUser && !currentUser.is_confirmed) {
+        let error = 'Sorry, you must confirm your account to post or edit ';
+        
+        return dispatch => {
+            dispatch(action.handleError(error));
+        }
+         
+    }
+     
     let { 
         actionType, 
         byId,
@@ -294,7 +373,7 @@ export function handleSubmit(props) {
    	    return dispatch => {
             dispatch(action.updateActionPending(updateProps))
 
-		    instance.put(apiUrl, formData)
+		    Api.put(apiUrl, formData)
 		    .then(response => {
 		        console.log(response)
                 updateProps['data'] = prepPayLoad(objName, response.data);
@@ -313,13 +392,13 @@ export function handleSubmit(props) {
       		       dispatch(action.handleError(error))
       	        }
 	        })
+        }
 
-	}
-    }else if (props.isPost) {
+	}else if (props.isPost) {
         return dispatch => {
      	    dispatch(action.createActionPending(createProps ))
 
-		    instance.post(props.apiUrl, props.formData)
+		    Api.post(props.apiUrl, props.formData)
 		    .then(response => {
 			    createProps['data'] = prepPayLoad(objName, response.data); 
                 IsModal && dispatch(action.ModalSubmitSuccess(createProps))
@@ -340,7 +419,7 @@ export function handleSubmit(props) {
 
 			   
 	        })
-   	}
+   	    }
 
     }else{
 
@@ -352,12 +431,11 @@ export function handleSubmit(props) {
 
 
 export function authenticate(apiUrl='', values={}, dispatch=function(){}){
-
-    const axiosApi = new Axios(false);
-    const instance = axiosApi.axiosInstance();
-     
+    let useToken=false
+    const Api  = _GetApi(useToken);   
+    //console.log(Api)    
     
-    return  instance.post(apiUrl, values)
+    return  Api.post(apiUrl, values)
             .then(response => {
 
                console.log(response)

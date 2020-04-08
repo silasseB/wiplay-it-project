@@ -4,6 +4,7 @@ import { QuestionComponent} from "components/question_components"
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
+import { UnconfirmedUserWarning } from "components/partial_components";
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
 import  AjaxLoader from "components/ajax-loader";
@@ -74,6 +75,8 @@ class  QuestionListPage extends Component  {
                 <NavigationBarBigScreen {...props} /> 
                 { questions?
                     <div  className="app-box-container">
+                        <UnconfirmedUserWarning {...props}/>
+                        
                         { questions.isLoading? 
                             <div  className="page-spin-loder-box">
                                 <AjaxLoader/>
@@ -85,7 +88,7 @@ class  QuestionListPage extends Component  {
                         }
                    </div>
                    :
-                   ""
+                   null
                 }
             </div>
         );

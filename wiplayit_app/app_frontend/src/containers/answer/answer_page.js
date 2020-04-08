@@ -77,7 +77,7 @@ class AnswersBox extends Component {
                             <AvailableAnswers {...props}/>
                         </div>
                         :
-                        ""
+                        null
                     }
                 </div>
 

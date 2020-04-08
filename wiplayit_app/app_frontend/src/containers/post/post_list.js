@@ -4,6 +4,7 @@ import { PostComponent} from "components/post_components";
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
+import { UnconfirmedUserWarning } from "components/partial_components";
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
 import  AjaxLoader from "components/ajax-loader";
@@ -117,6 +118,7 @@ const Posts = props => {
         <div>
             {posts && posts.postList?
                 <div className="">
+                    <UnconfirmedUserWarning {...props}/>
 
                     { posts.postList.map(( post, index )  => {
                         let postProps = {post:post} 
@@ -131,7 +133,7 @@ const Posts = props => {
 
                 </div>
                 :
-                ""
+                null
             }
         </div>        
     );

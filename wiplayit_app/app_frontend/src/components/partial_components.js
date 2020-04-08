@@ -79,12 +79,9 @@ const AlertStyles = {
   alertBox: {
     width                   : '100%',
     margin                  : 'auto',
-    border                  : '1px solid rgba(0, 0, 0, .2)',
-    background              : '#38B0F0',
     overflow                : 'none',
     borderRadius            : '4px',
     outline                 : 'none',
-    boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
     height                  : 'auto', 
     bottom                  :  0,
     top                     :  'auto', 
@@ -92,30 +89,25 @@ const AlertStyles = {
     right                   : 'auto',
     left                    : 'auto',
   },
-
-  alertMessageBox :{
-    color   : '#fff',
-    margin  : '5px 20px',
-    
-  },
-  message :{
-    listStyleType: 'none',
-    margin: 0,
-    padding: 0,
-
-  }
+ 
+  
 };
 
 
 export const AlertComponent =(props)=> {
-    let defaulfMessage = 'This is a warning message alert'
+    let defaulfMessage   = 'This is a warning message alert'
+    let { message }      = props; 
+    let  messageType     = message && message.messageType;
+    let alertBoxClass    = messageType === 'error'   && 'alert alert-danger alert-container'  ||
+                           messageType === 'success' && 'alert alert-success alert-container' || '';
+    //console.log(alertBoxClass, messageType)        
     
     return(
-        <div style={AlertStyles.alertBox} className="alert-box">
-            <div style={AlertStyles.alertMessageBox} className="alert-ms-box">
-                <ul style={AlertStyles.message}>
+        <div style={AlertStyles.alertBox} className={alertBoxClass}>
+            <div className="alert-box">
+                <ul className="alert-message">
                     <li>
-                        { props.message || props.message || defaulfMessage}
+                        { message && message.textMessage }
                     </li>
                 </ul>
             </div>
@@ -129,10 +121,12 @@ export const AlertComponent =(props)=> {
 
 export const UnconfirmedUserWarning =(props)=> {
  
-    let {cacheEntities} = props;
-    let currentUser = cacheEntities && cacheEntities.currentUser;
-    currentUser     = currentUser && currentUser.user;
-    //console.log(currentUser)
+    let {cacheEntities, currentUser} = props;
+    currentUser     = !currentUser && cacheEntities && 
+                       cacheEntities.currentUser && 
+                       cacheEntities.currentUser.user || currentUser;
+
+    console.log(currentUser)
     
     return(
         <div>

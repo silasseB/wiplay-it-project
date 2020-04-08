@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import  withAuthentication   from 'containers/authentication/index'; 
 import { NavBar, AccountConfirmationComponent } from 'components/registration'
-
+import {store} from "store/index";
 import Axios from 'utils/axios_instance'
-
+import { getCurrentUser }  from "dispatch/index"
 import Api from 'utils/api';
 
 
@@ -35,8 +35,14 @@ class AccountConfirmationPage extends Component{
 
 
     isConfirmed = (params)=>{
-      console.log(params)  
-      this.setState({...params});
+        let  { cacheEntities }  = this.props;
+        let  { currentUser }    = cacheEntities && cacheEntities; 
+        currentUser             = currentUser   && currentUser.user;
+
+        !currentUser && store.dispatch(getCurrentUser());
+        console.log(params)  
+        this.setState({...params});
+        
     };
 
    

@@ -354,12 +354,12 @@ export const EditProfileNavBar = props  => {
                <b className="page-name">Edit Profile</b>  
             </div>
 
-	         <div className="submit-btn-box">
+	         <div className="submit-profile-btn-box">
 		        <button type="submit" 
               style={submitButtonStyles} 
                             disabled={submitting}
               onClick={()=> props.submit(props.submitProps)}
-                       value="submit" className="submit-btn ">
+                       value="submit" className="submit-btn submit-profile-btn">
                        Submit
             </button>
 	         </div>

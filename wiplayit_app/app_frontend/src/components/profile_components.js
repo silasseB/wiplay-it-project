@@ -98,12 +98,13 @@ export const ProfileComponent = props => {
     
     }
 
-    let EditorModalBtnSmallScreen = MatchMediaHOC(EditorModalBtnSmall, '(max-width: 980px)')
+    let EditorModalBtnSmallScreen = MatchMediaHOC(EditorModalBtnSmall, '(max-width: 980px)');
+    let ChangeImageBtnBigScreen   = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
 
     let UserProfileFollowersLink = profile && profile.followers !== 0 && 
                                                  <UsersModalLink {...userProfileFollowersProps}/>; 
 
-    let pathToUserFollowers =  userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
+    let pathToUserFollowers = userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
     const pathToEditProfile = userProfile  && `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
 
     let btnsProps = {
@@ -118,8 +119,7 @@ export const ProfileComponent = props => {
 
     let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
    
-
-    let ChangeImageBtnBigScreen = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
+    
     let UserList                = MatchMediaHOC(UserProfileFollowingList, '(min-width: 980px)')
 
       

@@ -117,7 +117,7 @@ class QuestionPage extends Component {
                     </div>
 
                     :
-                   ""  
+                    null  
                 }           
             </div>
         );

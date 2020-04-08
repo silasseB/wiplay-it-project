@@ -14,6 +14,7 @@ import  * as types  from 'actions/types';
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
 import { handleSubmit, getUserProfile }  from "dispatch/index"
+import { AlertComponent } from "components/partial_components";
 
 import  AjaxLoader from "components/ajax-loader";
 
@@ -65,10 +66,17 @@ class EditProfile extends Component{
             
             let userProfile = byId && entities.userProfile[byId];
             //let { currentUser} = cacheEntities;
-            let { modal } = entities;
-           
-        
+            let { modal, errors } = entities;
 
+            if (errors.error && !errors.displayErrors) {
+                errors['displayErrors'] = true;
+                this.displayErrorMessage(errors.error);
+                delete errors.displayErrors;
+                delete errors.error;
+            }
+            
+        
+            console.log(entities)
             if (userProfile) {
                 //console.log(userProfile)
                                
@@ -99,6 +107,18 @@ class EditProfile extends Component{
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
+
+    displayErrorMessage =(errorMessage)=>{
+        let message = {textMessage:errorMessage, messageType:'error'}
+        this.displayAlertMessage(message)
+    }
+
+    displayAlertMessage = (message) => {
+        this.setState({ displayMessage : true, message });
+        setTimeout(()=> {
+            this.setState({displayMessage : false}); 
+            }, 5000);
+    }
 
 
     componentWillUnmount() {
@@ -218,6 +238,8 @@ class EditProfile extends Component{
 
     render() {
       let props = this.getProps();
+      let alertMessageStyles = props.displayMessage?{ display : 'block'}:
+                                                    { display : 'none' };
           
       var userProfile = props.userProfile
 
@@ -233,7 +255,11 @@ class EditProfile extends Component{
 
                     :
                     ""    
-                }           
+                }  
+
+                <div style={alertMessageStyles}>
+                    <AlertComponent {...props}/>
+                </div>         
             </div>
                    
         </div>
