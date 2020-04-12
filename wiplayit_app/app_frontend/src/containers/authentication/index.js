@@ -9,10 +9,9 @@ import {store} from "store/index";
 import Axios from 'utils/axios_instance';
 import Api from 'utils/api';
 import Helper from 'containers/utils/helpers';
-import {authenticate} from 'dispatch/index';
+import {authenticate, _GetApi} from 'dispatch/index';
 import { getCookie } from 'utils/csrf_token.js';
-
-
+import * as checkType from 'helpers/type_checkers'; 
 const helper   = new Helper();
 const api = new Api();
 
@@ -106,10 +105,10 @@ export function withAuthentication(Component) {
             
             let apiUrl =  api.facebookLoginApi();
             let accessToken =  response.accessToken
-            let formData = helper.createFormData({"access_token": accessToken});
+            let form = helper.createFormData({"access_token": accessToken});
            
             if (accessToken) {
-                return authenticate(apiUrl, formData, store.dispatch);
+                return this.props.authenticate({apiUrl, form,});
             }
 
             return ;
@@ -130,10 +129,10 @@ export function withAuthentication(Component) {
             console.log(response);
             var accessToken =  response.accessToken
             var apiUrl =  api.googleLoginApi();
-            let formData = helper.createFormData({"access_token": accessToken});
+            let form   = helper.createFormData({"access_token": accessToken});
 
             if (accessToken) {
-                return authenticate(apiUrl, formData, store.dispatch);
+                return this.props.authenticate({ apiUrl, form });
             }
 
             return ;
@@ -152,18 +151,26 @@ export function withAuthentication(Component) {
                 let { entities } =  storeUpdate;
                 let { userAuth } = entities;
                 let { form, formName } = this.state;
-                console.log(entities)
-                if (userAuth && userAuth.auth) {
-                    let { auth } = userAuth;
-                    console.log(auth)                    
-                    let {  error, isLoggedIn, tokenKey, successMessage , email} = auth;
-                   
-                    form[formName]['error'] = error;
-                            
-                    this.setState({ submitting : false, successMessage, error, email, form })             
-                    
+                console.log(userAuth)
 
-                    if( isLoggedIn && tokenKey){
+                let { auth, error, successMessage }  = userAuth;
+
+                if (form && error) {
+                    form[formName]['error'] = error;
+                    this.setState({form, submitting : false})
+                    
+                }
+                if(successMessage){
+                    this.setState({ submitting : false, successMessage}) 
+                }
+
+                if (auth) {
+                    console.log(auth)  
+                    let { isLoggedIn, tokenKey, email, confirmed} = auth;
+                         
+                    this.setState({ submitting : false,  error, email}) 
+
+                    if(!confirmed && isLoggedIn && tokenKey){
                         this._Redirect()
                     }
                 }
@@ -317,8 +324,10 @@ export function withAuthentication(Component) {
                     case 'passwordChangeForm':
                         let { uid, token } = this.props.match.params;
 
+
                         form = this.getFormFields().passwordChangeForm;
                         form = Object.assign({uid, token}, form);
+                        console.log(form)
 
                         this.setState({ onPasswordChangeForm : true});
                         
@@ -378,29 +387,69 @@ export function withAuthentication(Component) {
 
         confirmUser = ( key, callback )=>{
             
-            let withToken = false;
-            const axiosApi = new Axios(withToken);
-            const  apiUrl  = api.accountConfirmApi(key);
-            let instance   = axiosApi.axiosInstance();
+            //let withToken = false;
+            //const Api = new Axios(withToken);
+            let useToken = false;
+            const Api    = _GetApi(useToken);
+            if (!Api) {
+                return;
+            }
 
-            instance.get(apiUrl)
+            const  apiUrl  = api.accountConfirmApi(key);
+
+            Api.get(apiUrl)
             .then(response => { 
-                
-                let {detail} = response.data;
-                callback({ confirmed : true, successMessage : detail });
-                this.setState({ confirmed : true, successMessage : detail })
+                console.log(response)
+                let {data}  = response;
+               
+                let auth      = {};
+                let response_data = {};
+                let user      = data.user;
+
+                let isLoggedIn = data.key && true || data.token && true || false;
+                let tokenKey   = data.token || data.key  || null;
+
+                let successMessage = data.detail || null;
+
+                if (isLoggedIn) {
+                   auth = {isLoggedIn, tokenKey, confirmed : true}
+                   response_data = {auth}
+
+                }else if(successMessage){
+                    response_data = {successMessage}
+                }  
+
+                callback({...response_data });
+                this.setState({...response_data})
+
+                store.dispatch(action.authenticationSuccess(response_data));
+
+                if (user) {
+                    store.dispatch(action.getCurrentUserSuccess(user))
+                }
+
             })
             .catch(error => {
                 console.log(error) 
-                if (error.status === 400) {
+                if (error && error.response) {
 
-                   console.log(error) 
+                   error = "Unable to confirn your account" 
+                   console.log(error.response) 
                    callback({ confirmed: false});
-                   error = "Unable to confirn your account"
+                   
                    this.setState({ confirmed : false })
+
+                   store.dispatch(action.authenticationError(error.response.data));
+
+                }else if(error && error.request){
+                    store.dispatch(action.authenticationError(error.request))
+
+                }else{
+                    store.dispatch(action.handleError())
                 }
             });
-        } ;
+        
+        };
 
 
       
@@ -414,12 +463,12 @@ export function withAuthentication(Component) {
 
                 case 'signUpForm':
                     return api.createUser();
+                
+                case 'passwordResetForm':
+                    return api.passwordResetApi();
 
                 case 'passwordChangeForm':
                     return api.passwordResetConfirmApi();
-
-                case 'passwordResetForm':
-                    return api.passwordResetApi();
 
                 case 'emailResendForm':
                     return api.confirmationEmailResendApi();
@@ -451,12 +500,10 @@ export function withAuthentication(Component) {
                     }
 
                 }
-
-                store.dispatch(action.authenticationPending());
-                let formData = helper.createFormData({...form});
-
+                
+                form = helper.createFormData({...form});
                 this.setState({submitting : true})
-                return authenticate(apiUrl, formData, store.dispatch);
+                return this.props.authenticate({apiUrl, form,});
 
             }else{
                 
@@ -503,9 +550,10 @@ export function withAuthentication(Component) {
 //binds on `props` change
 const mapDispatchToProps = (dispatch, ownProps) => {
      
-   return {
-     togglePasswordReset  : (self , props)    => dispatch(action.togglePasswordResetForm(self, props)),
-     toggleSignUp         : (self , props)    => dispatch(action.toggleSignUpForm(self , props)),
+    return {
+        togglePasswordReset  : (self , props)    => dispatch(action.togglePasswordResetForm(self, props)),
+        toggleSignUp         : (self , props)    => dispatch(action.toggleSignUpForm(self , props)),
+        authenticate         : (props)           => dispatch(authenticate(props)),
      
    }
 

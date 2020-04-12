@@ -14,6 +14,7 @@ import { DropImage } from "containers/profile/edit_profile";
 import AppEditor  from 'containers/editor'
 import {store} from "store/index";
 import {history} from "App";
+import GetTimeStamp from 'utils/timeStamp';
 
 import Api from 'utils/api';
 
@@ -55,7 +56,7 @@ export function withHigherOrderIndexBox(Component) {
                     let { auth } = userAuth;
 
                     if (auth && auth.isLoggedIn && auth.tokenKey) {
-             		    return true;
+             		    return auth.tokenKey;
                     }
                	}
             }
@@ -136,9 +137,9 @@ export function withHigherOrderIndexBox(Component) {
                     //document.body.style['overflow-y'] = 'scroll';
                     //document.body.style['overflow-x'] = 'scroll';
                 }
-                //console.log(userAuth)
-                console.log(errors)
-                this.confirmLogout(userAuth.auth);
+                console.log(userAuth)
+                //console.log(entities)
+                this.confirmLogout(userAuth);
 
                 if (errors.error && !errors.displayErrors) {
                     errors['displayErrors'] = true;
@@ -201,19 +202,48 @@ export function withHigherOrderIndexBox(Component) {
                 }, 5000);
         }
 
-        confirmLogout =(auth)=>{
-            
-            if (auth && !auth.isLoggedIn) {
-                console.log('User is logging out')
+        confirmLogout =(userAuth)=>{
 
-               localStorage.removeItem('@@CacheEntities');       
-               history.push('/user/registration');
+            
+            if (userAuth) {
+                //Remove app cache and  clean the store
+                //and redirect the user to authentication page
+                 console.log('User is logging out', userAuth)
+
+                let {successMessage} = userAuth;
+
+                let isLoggedOut =  successMessage === 'Successfully logged out.'
+
+                if (isLoggedOut) {
+
+                    let storeUpdate = store.getState();
+                    let { entities } = storeUpdate;
+
+                    localStorage.removeItem('@@CacheEntities');
+                
+                    Object.keys(entities).forEach(key => {
+                        let entitie = entities[key]
+                   
+                        Object.keys(entitie).forEach(k => {
+                            delete entities[key][k]
+
+                        })
+                    })
+                
+                    history.push('/user/registration');
+                }
             }
             
         };
 
-        
-      
+        logout= () => {
+
+            let apiUrl   =  api.logoutUser();
+            let useToken = true;
+            this.props.authenticate({apiUrl, form:{}, useToken})
+            
+        }    
+          
 
         componentDidUpdate(prevProps, nextProps) {
             let { entities, history }  = prevProps;
@@ -290,35 +320,34 @@ export function withHigherOrderIndexBox(Component) {
                                                                             'dropImage',
                                                                             dropImageModal.background
                                                                         ); 
-                //event.returnValue = '';
+                event.returnValue = '';
                 
             });
+
+            //const getTimeState = new GetTimeStamp({timeStamp});
+            //let menDiff        = parseInt(getTimeState.menutes());
+
+            let token    = this.isAuthenticated();
+            let apiUrl   = api.refreshTokenApi();
+            let useToken = false; 
+
+            //this.props.authenticate({apiUrl, form:{token}, useToken})
  
             
             if (!this.isAuthenticated()) {
                 console.log(!this.isAuthenticated())
-               //User is not authenticated,so redirect to authentication page.
-                //history.push('/user/registration/')
+                //User is not authenticated,so redirect to authentication page.
+                history.push('/user/registration/')
             }
 
             let currentUser = this._SetCurrentUser();
             if(!currentUser){
-                console.log(currentUser) 
-       	        store.dispatch(getCurrentUser());
+                store.dispatch(getCurrentUser());
             }
 
 
 
         };
-
-
-        logout = () => {
-
-            let apiUrl =  api.logoutUser();
-            store.dispatch(action.authenticationPending());
-            authenticate(apiUrl, null, store.dispatch)
-            
-        }
 
         push(params){
             let path = params && params.path;
@@ -457,6 +486,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getReplyChildrenList : (reply)      => dispatch(getReplyChildrenList(reply)),
         getCurrentUser       : (apiUrl)     => dispatch(getCurrentUser()),
         submit               : (props )     => dispatch(handleSubmit(props)), 
+        authenticate         : (props)      => dispatch(authenticate(props)),
         
    }
 

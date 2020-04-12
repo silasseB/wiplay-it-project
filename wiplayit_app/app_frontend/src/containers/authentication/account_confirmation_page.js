@@ -38,8 +38,7 @@ class AccountConfirmationPage extends Component{
         let  { cacheEntities }  = this.props;
         let  { currentUser }    = cacheEntities && cacheEntities; 
         currentUser             = currentUser   && currentUser.user;
-
-        !currentUser && store.dispatch(getCurrentUser());
+        
         console.log(params)  
         this.setState({...params});
         

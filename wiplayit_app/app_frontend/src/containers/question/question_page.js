@@ -58,7 +58,7 @@ class QuestionPage extends Component {
                 const getTimeState = new GetTimeStamp({timeStamp});
                 let menDiff        = parseInt(getTimeState.menutes());
 
-                console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
+                console.log(menDiff  + ' ' + 'Menutes ago')
                 
                
                 if (menDiff < 10) {
@@ -94,7 +94,7 @@ class QuestionPage extends Component {
         let { questionById, entities} = props;
         let { question } = entities && entities;
         question = question && question[questionById]
-        console.log(props, questionById, question)
+        //console.log(props, questionById, question)
                  
         return (
 

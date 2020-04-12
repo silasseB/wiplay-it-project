@@ -31,8 +31,20 @@ export default class GetTimeStamp {
         return this.menutes()  / 60;
     }
 
-    timeStampByHours(){
+    days(){
         return this.hours() / 24
+    }
+
+    weeks(){
+        return this.days() / 7
+    }
+
+    months(){
+        return this.weeks() / 4
+    }
+
+    years(){
+        return this.months() / 12
     }
   
 }

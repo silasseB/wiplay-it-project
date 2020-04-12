@@ -143,14 +143,17 @@ export const getIndexPending = () => {
 
 
 
-export const getIndexError = ( error) => ({
-    type    : types.GET_INDEX.ERROR,
-    payLoad : {
-      error     : error, 
-      isLoading : false,
-      isSuccess : false,
+export const getIndexError = ( error) => {
+    console.log(error)
+    return{
+        type    : types.GET_INDEX.ERROR,
+        payLoad : {
+            error     : error, 
+            isLoading : false,
+            isSuccess : false,
+        }
     }
-});
+};
 
 
 export const getIndexSuccess = (data) => {
@@ -617,55 +620,39 @@ export const authenticationPending = () => ({
 });
 
 
-export const authenticationSuccess = (successResponse) => {
-      console.log(successResponse)
-      
-      var isLoggedIn = successResponse && successResponse.key?true:false;
-
-      let tokenKey = successResponse && successResponse.key?
-                                        successResponse.key:null;  
+export const authenticationSuccess = (data={}) => {
+    console.log(data)
     
-      let successMessage = successResponse && successResponse.detail?
-                                      successResponse.detail:null; 
-      let email = successResponse && successResponse.email?
-                                     successResponse.email:null;
-      return {
-         type   : types.USER_AUTHENTICATION.SUCCESS,
-         payLoad : {
-            auth :{
-                tokenKey,
-                isLoggedIn,
-                successMessage,
-            },
-
+    return {
+        type   : types.USER_AUTHENTICATION.SUCCESS,
+        payLoad : {
+            ...data,
             isLoading  : false,
-         }
-      };
+        }
+    };
 };
 
 
 export const authenticationError = (error) => {
-   console.log(error)
-   return {
-      type   : types.USER_AUTHENTICATION.ERROR,
-      payLoad : {
-        auth:{
-          error     : error.data || error,
-        },
-
-        isLoading : false,
-      }
-  };
+    console.log(error)
+    return {
+        type   : types.USER_AUTHENTICATION.ERROR,
+        payLoad : {
+            error     : error.data || error,
+            isLoading : false,
+        }
+    };
 };
 
 
 
 
-export const getCurrentUserSuccess = (response) => {
+export const getCurrentUserSuccess = (user) => {
+    console.log('current user is this: ', user)
    return {
       type    : types.GET_CURRENT_USER.SUCCESS,
       payLoad : {
-           user : response,
+           user,
            isLoading   : false,
       }
   };

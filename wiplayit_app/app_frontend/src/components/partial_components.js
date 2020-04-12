@@ -126,7 +126,7 @@ export const UnconfirmedUserWarning =(props)=> {
                        cacheEntities.currentUser && 
                        cacheEntities.currentUser.user || currentUser;
 
-    console.log(currentUser)
+    //console.log(currentUser)
     
     return(
         <div>

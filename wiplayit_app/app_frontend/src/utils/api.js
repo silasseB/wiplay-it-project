@@ -283,7 +283,7 @@ export default class Api{
     }
 
     confirmationEmailResendApi(){
-        return `rest-auth/resend/account/confirm/email/`;
+        return `/rest-auth/resend/account/confirm/email/`;
     }
 
     facebookLoginApi() {
@@ -306,6 +306,10 @@ export default class Api{
         var url = `/rest-auth/google/`;
         return url ;
          
+    }
+
+    refreshTokenApi(){
+        return `/api-token-refresh/`;
     }
 }
 

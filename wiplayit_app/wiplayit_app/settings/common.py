@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,16 +46,16 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
-ACCOUNT_ADAPTER = 'auth_backend.custom_adapter.CustomAccountAdapter'
-SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_ADAPTER = 'auth_backend.custom_adapter.CustomSocialAccountAdapter'
-SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET = False
-ACCOUNT_EMAIL_VERIFICATION = 'optinal'
+ACCOUNT_ADAPTER             = 'auth_backend.custom_adapter.CustomAccountAdapter'
+SOCIALACCOUNT_AUTO_SIGNUP   = False
+SOCIALACCOUNT_ADAPTER       = 'auth_backend.custom_adapter.CustomSocialAccountAdapter'
+SOCIALACCOUNT_QUERY_EMAIL   = True
+ACCOUNT_LOGOUT_ON_GET       = True
+ACCOUNT_EMAIL_VERIFICATION  =  'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 SOCIALACCOUNT_AVATAR_SUPPORT = True
- 
+#SOCIALACCOUNT_EMAIL_VERIFICATION
 
 APPEND_SLASH = True
 
@@ -68,11 +69,14 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         ),
 
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        #'rest_framework.permissions.IsAdminUser',
    ),
 
 
@@ -80,7 +84,7 @@ REST_FRAMEWORK = {
 
 
 REST_AUTH_SERIALIZERS = {
-   'USER_DETAILS_SERIALIZER'   : 'auth_backend.serializers.CustomRegisterSerializer',
+   'USER_DETAILS_SERIALIZER'   : 'auth_backend.serializers.BaseUserSerializer',
    'TOKEN_SERIALIZER'          : 'auth_backend.serializers.TokenSerializer',
    'PASSWORD_RESET_SERIALIZER' : 'auth_backend.serializers.CustomPasswordResetSerializer',
 }
@@ -90,10 +94,19 @@ REST_AUTH_REGISTER_SERIALIZERS = {
        
 }
 
+REST_USE_JWT       = True
+REST_SESSION_LOGIN = True
 
 JWT_AUTH = { 
-    'JWT_AUTH_HEADER_PREFIX': 'JWT'
-    #'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300)
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_ALLOW_REFRESH'     : True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=15),
+
+
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'auth_backend.views.jwt_response_payload_handler',
+    
 }
 
 # Application definition
@@ -142,6 +155,16 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
+CORS_ORIGIN_WHITELIST = [
+     'http://192.168.43.101:3000',
+     'http://127.0.0.1:8000',
+     'http://192.168.43.14:8000'
+     'http://localhost:3000', 
+     'https://baloyi.pythonanywhere.com',
+     'https://valoi.pythonanywhere.com', 
+     'https://silasi.pythonanywhere.com',
+
+    ]
 
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -164,6 +187,7 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
 )
 
+print(BASE_DIR)
 
 TEMPLATES = [
     {

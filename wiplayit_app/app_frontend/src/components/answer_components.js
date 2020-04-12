@@ -10,6 +10,7 @@ import { Editor, EditorState, convertFromRaw } from "draft-js";
 import  * as types  from 'actions/types';
 import CommentsBox from "containers/comment/comment_page";
 import {pageMediaBlockRenderer} from 'components/editor_components';
+import GetTimeStamp from 'utils/timeStamp';
 
 import {ButtonsBox, Styles } from "components/partial_components";
 import Api from 'utils/api';
@@ -136,16 +137,48 @@ export const AnswersComponent = props => {
               user        : props.answer.created_by,
               currentUser,
             };
+    
+    //answer && console.log(answer.created_at)
+    var created_at = answer && new Date(answer.created_at);
+    created_at && console.log(created_at)
 
+    let timeStamp = created_at && created_at.getTime()
+
+    const getTimeState = new GetTimeStamp({timeStamp});
+    let menDiff        = parseInt(getTimeState.menutes());
+    let hourDiff       = parseInt(getTimeState.hours());
+    let dayDiff        = parseInt(getTimeState.days());
+    let weekDiff       = parseInt(getTimeState.weeks());
+
+    //console.log(menDiff + ' menutes', hourDiff +' hourDiff', dayDiff + ' dayDiff', weekDiff + ' weeks' )
+
+
+    if (menDiff <= 59) {
+        created_at = `${menDiff} menutes ago`
+        console.log(created_at)
+
+    }else if(hourDiff <= 23){
+        created_at = `${hourDiff} hours ago`
+        console.log(created_at)
+
+    }else if(dayDiff <= 3){
+        created_at = `${dayDiff} days ago`
+        alert(created_at)
+        console.log(created_at)
+    }
+
+    console.log(dayDiff <= 3, dayDiff)
+
+    //<p>{created_at}</p>
     return (
         <div className="answer-box">     
             <div className="autor-details-box answer-detail-box">
-                {props.isProfileBox?
-                    ""
+                { props.isProfileBox?
+                    null
                     :
                     <UserComponentSmall {...userProps}/>
                 }
-            
+
             </div>
 
             <div className="answer">
@@ -155,7 +188,7 @@ export const AnswersComponent = props => {
                     readOnly={true}
                 />
             </div>
-            <div>
+            <div className="">
                <ButtonsBox {...btnsList}/>   
                <CommentsBox {...props}/>
             </div>

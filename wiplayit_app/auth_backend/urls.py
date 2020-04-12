@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+
 from .views import ( 
                    FacebookLogin, TwitterLogin, 
                    GoogleLogin ,  CustomRegisterView,
@@ -13,6 +15,8 @@ from .views import ( UserView, RetrieveUserProfileView,
 app_name = 'rest_auth_apis'
 
 urlpatterns = [
+    path('api-token-refresh/', refresh_jwt_token),
+    path('api-token-auth/', obtain_jwt_token),
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('rest-auth/twitter/', TwitterLogin.as_view(), name='twitter_login'),
     path('rest-auth/google/', GoogleLogin.as_view(), name='google_login'),

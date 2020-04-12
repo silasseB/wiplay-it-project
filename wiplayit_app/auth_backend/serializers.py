@@ -124,11 +124,26 @@ class CustomPasswordResetSerializer (PasswordResetSerializer):
         	if not self.reset_form.is_valid():
         		raise serializers.ValidationError(self.reset_form.errors)
 
-        return value    
+        return value  
 
 
+    def save(self):
+        request = self.context.get('request')
+        # Set some values to trigger the send_email method.
+        opts = {
+            'use_https': request.is_secure(),
+            'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
+            'request': request,
+            'email_template_name' : 'password_reset_email.html',
+        }
+
+        opts.update(self.get_email_options())
+        print(opts)
+        self.reset_form.save(**opts)  
+
+  
     
-    
+
 
 
 class CustomLoginSerializer(LoginSerializer):
@@ -293,7 +308,7 @@ class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 
 class UserSerializer(BaseUserSerializer):
 	user_is_following = serializers.SerializerMethodField()
-	user_can_edit   = serializers.SerializerMethodField()
+	user_can_edit     = serializers.SerializerMethodField()
 				                
 	def get_user_is_following(self, obj):
 		perms = self.get_obj_permissions('followers_perms')

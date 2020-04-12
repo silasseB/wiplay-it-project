@@ -3,12 +3,12 @@
 import Api from 'utils/api';
 import Axios from 'utils/axios_instance';
 import  * as action  from 'actions/actionCreators';
+import * as checkType from 'helpers/type_checkers'; 
 
 
 const api = new Api();
 
-const _GetApi =(useToken=true) =>{
-    console.log(useToken) 
+export const _GetApi =(useToken=true) =>{
     const axios     = new Axios({useToken});
     return axios.instance()
 
@@ -26,9 +26,7 @@ export function getIndex(options) {
     }
 
     let apiUrl = api.getIndexApi(); 
-
     
-    //console.log(instance)
     return dispatch => {
         dispatch(action.getIndexPending());
 
@@ -39,13 +37,14 @@ export function getIndex(options) {
     
             })
             .catch(error => {
-                console.log(error)
+                
                 if (error.response) {
-                    let { errors } =  error.response.data
-                    dispatch(action.getIndexError( errors ));
+                    console.log(error.response)
+                    dispatch(action.getIndexError(error.response.data ));
 
                 }else{
-                    dispatch(action.handleError());
+                    console.log(error.request)
+                    dispatch(action.handleError(error.request));
                 }
            }); 
         
@@ -79,7 +78,7 @@ export function getUserList(props) {
       	    if (error.response) {
       	        dispatch(action.getUserListError(usersById, error.response.data));
             }else{
-         	   dispatch(action.handleError());
+         	   dispatch(action.handleError(error.request));
             }
         }); 
     };
@@ -104,10 +103,10 @@ export function getQuestionList(questionListById) {
       .then(response => dispatch(action.getQuestionListSuccess(questionListById, response.data)))
       .catch(error => {
       	if (error.response) {
-      		var { errors } =  error.response.data
-      	   dispatch(action.getQuestionListError(questionListById, errors ));
+      		dispatch(action.getQuestionListError(questionListById, error.response.data));
+
          }else{
-         	dispatch(action.handleError());
+         	dispatch(action.handleError(error.request));
          }
       }); 
    };
@@ -134,10 +133,11 @@ export function getPostList(postListById) {
 	   Api.get(apiUrl)
        .then(response => dispatch(action.getPostListSuccess(postListById, response.data)))
        .catch(error => {
-      	if (error.response) {
-      	   dispatch(action.getPostListError(postListById, error.response.data));
-         }else{
-         	dispatch(action.handleError());
+      	    if (error.response) {
+      	        dispatch(action.getPostListError(postListById, error.response.data));
+
+            }else{
+         	  dispatch(action.handleError(error.request));
          }
       }); 
    };
@@ -159,14 +159,17 @@ export function getQuestion(id) {
     let questionById = `question${id}`;
 
     return dispatch => {
-      dispatch(action.getQuestionPending(questionById))
-	   Api.get(apiUrl)
-      .then(response => dispatch(action.getQuestionSuccess( questionById, response.data)))
-      .catch(error => {
-           console.log(error)
-           dispatch(action.getQuestionError( questionById, error));
-       })
-   }
+        dispatch(action.getQuestionPending(questionById))
+	    Api.get(apiUrl)
+            .then(response =>{
+                dispatch(action.getQuestionSuccess( questionById, response.data))
+
+            })
+            .catch(error => {
+                console.log(error)
+                dispatch(action.getQuestionError( questionById, error));
+            })
+    }
 };
 
 
@@ -227,12 +230,11 @@ export function getUserProfile(id, apiUrl) {
         .catch(error => {
             console.log(error)
       	
-      	    if (error && error.response) {
-      		    console.log(error)
-                let error = error && error.response && error.response.data;
-      	        dispatch(action.getUserProfileError( profileById ,error));
+      	    if (error.response) {
+      		    dispatch(action.getUserProfileError( profileById, error.response.data));
+
             }else{
-         	    console.log(error)
+         	    
          	    dispatch(action.handleError(error.request));
             }
         });
@@ -307,10 +309,13 @@ export function getCurrentUser(tokenKey) {
       	        dispatch(action.getCurrentUserSuccess(response.data)) 
             })
             .catch(error =>{
+                //console.log(error)
       	        if (error.response && error.response.data) {
+                    console.log(error.response)
       		        dispatch(action.getCurrentUserError(error.response.data));
 
       	        }else{
+                    console.log(error.request)
       		        dispatch(action.handleError(error.request))
       	        }
             });
@@ -326,7 +331,7 @@ export function handleSubmit(props) {
     let useToken=true
     const Api  = _GetApi(useToken); 
     if (!Api) {
-        return dispatch =>{ dispatch(action.handleError(error)) };
+        return dispatch =>{ dispatch(action.handleError()) };
     }
 
     let { currentUser } = props;
@@ -389,7 +394,7 @@ export function handleSubmit(props) {
                    IsModal && dispatch(action.ModalSubmitError(updateProps))
 			       dispatch(action.updateActionError(updateProps));
 			    }else {
-      		       dispatch(action.handleError(error))
+      		       dispatch(action.handleError(error.request))
       	        }
 	        })
         }
@@ -430,31 +435,70 @@ export function handleSubmit(props) {
 };
 
 
-export function authenticate(apiUrl='', values={}, dispatch=function(){}){
-    let useToken=false
-    const Api  = _GetApi(useToken);   
-    //console.log(Api)    
-    
-    return  Api.post(apiUrl, values)
-            .then(response => {
+export function authenticate(params={}){
+    let useTokenIsBolean = checkType.isBoolean(useToken)
+    useToken  = useTokenIsBolean &&  useToken || false;
 
-               console.log(response)
-               dispatch(action.authenticationSuccess(response.data));
+    const Api = _GetApi(useToken);   
+    if (!Api) {
+        console.log(Api)
+        return dispatch =>{ dispatch(action.handleError()) };
+    }
+
+    let {apiUrl, form, useToken} = params;
+    
+    console.log(params)    
+    
+    return dispatch => {
+        dispatch(action.authenticationPending());
+
+        Api.post(apiUrl, form)
+            .then(response => {
+                console.log(response)
+
+                let { data }  = response
+                let auth      = {};
+                let response_data = {};
+                let user      = data.user;
+
+                let isLoggedIn = data.key && true || data.token && true || false;
+                let tokenKey   = data.token || data.key  || null;
+
+                let successMessage = data.detail || null;
+
+                if (isLoggedIn) {
+                   auth = {isLoggedIn, tokenKey}
+                   response_data = {auth}
+
+                }else if(successMessage){
+                    response_data = {successMessage}
+                }  
+               
+                dispatch(action.authenticationSuccess(response_data));
+
+                if (user) {
+                    dispatch(action.getCurrentUserSuccess(user))
+                }
             }
         )
         .catch(error =>{
             let { response, request } = error
                 
-            if ( response && response.data) {
+            if ( error.response) {
                 console.log(response.data)
                 console.log(typeof response.data )
-                dispatch(action.authenticationError(response.data));
+                dispatch(action.authenticationError(error.response.data));
             }
-            else if (request) {
-                console.log(request)
-                dispatch(action.handleError(request))
+            else if (error.request)  {
+                console.log(error.request)
+                dispatch(action.authenticationError(error.response.data));
+
+            }else{
+                console.log(error)
+                dispatch(action.handleError());
             }
         });
+    }
    
 }; 
 

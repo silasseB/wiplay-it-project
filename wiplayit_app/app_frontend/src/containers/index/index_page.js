@@ -65,7 +65,7 @@ class IndexBox extends Component {
                answers, 
                errors }   = entities && entities;
                      
-            console.log(errors)    
+            //console.log(errors)    
             if (index && index.isSuccess) {
                 index.isSuccess = false;
              

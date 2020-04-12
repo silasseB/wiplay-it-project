@@ -115,8 +115,7 @@ def create_profile(sender, instance, created, **kwargs):
 
         if first_name != settings.ANONYMOUS_USER_NAME:
             profile.save()
-            Token.objects.get_or_create(user=instance)
-
+            
             assign_perm("change_user", instance,  instance)
             assign_perm("delete_user", instance,  instance)
 

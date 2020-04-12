@@ -123,7 +123,7 @@ export default LoginFormComponent;
 
 
 export const  SignUpFormComponent = props => {
-    console.log(props)
+    //console.log(props)
 
     let { submitting, form, onSignUpForm, formName, formIsValid, validateForm } = props;
 
