@@ -35,10 +35,7 @@ class AccountConfirmationPage extends Component{
 
 
     isConfirmed = (params)=>{
-        let  { cacheEntities }  = this.props;
-        let  { currentUser }    = cacheEntities && cacheEntities; 
-        currentUser             = currentUser   && currentUser.user;
-        
+             
         console.log(params)  
         this.setState({...params});
         
