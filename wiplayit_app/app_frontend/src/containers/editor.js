@@ -7,7 +7,7 @@ import  {ModalSubmitPending}  from 'actions/actionCreators';
 import { ModalManager}   from  "containers/modal/modal_container";
 
 import { List, Repeat } from 'immutable';
-import Axios from 'utils/axios_instance'
+
 import  Helper from 'containers/utils/helpers';
 import {TextAreaEditor,
         DraftEditor,
@@ -21,7 +21,9 @@ import { showModal }  from 'actions/actionCreators';
 import {store} from 'store/index';
 import { history } from "App";
 import Api from 'utils/api';
-import { handleSubmit }  from "dispatch/index"
+import { handleSubmit, _GetApi }  from "dispatch/index"
+import  * as action  from "actions/actionCreators";
+
 
 
   
@@ -342,11 +344,17 @@ export default  class AppEditor extends Component{
             let apiUrl     = api.createDraftEditorContentsApi(this);
             let form = { 'draft_editor_file': file}
             let fileForm   = helper.createFormData(form);
-            const axiosApi = new Axios(true);
-            let instance   = axiosApi.axiosInstance();  
 
+            let useToken=true
+            const Api = _GetApi(useToken);   
 
-            instance.post(apiUrl, fileForm)
+            if (!Api) {
+                console.log(Api)
+                 return store.dispatch(action.handleError());
+            }
+    
+
+            Api.post(apiUrl, fileForm)
         
             .then(response => {
             

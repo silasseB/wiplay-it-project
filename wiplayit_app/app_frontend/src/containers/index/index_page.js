@@ -10,6 +10,7 @@ import { UnconfirmedUserWarning } from "components/partial_components";
 
 import { QuestionComponent} from "components/question_components"
 import { PostComponent} from "components/post_components"
+import CommentsBox from "containers/comment/comment_page";
 
 import  AjaxLoader from "components/ajax-loader";
 import { AnswersComponent } from "components/answer_components";
@@ -302,16 +303,17 @@ export const Posts = props => {
                             </div>
 
                             { posts.postList.map((post, index) => {
-                                let contentsProps = {
+                                let postProps = {
                                         post,
                                         postById: postListById,
                                 };
 
-                                Object.assign(contentsProps, props)  
+                                Object.assign(postProps, props)  
 
                                 return (
-                                    <div key={index} >
-                                        <PostComponent {...contentsProps}  />
+                                    <div key={index} className="post-contents">
+                                        <PostComponent {...postProps}  />
+                                         <CommentsBox {...postProps}/>
                                     </div>
                                 )
                             })}
@@ -356,7 +358,7 @@ export const Answers = props => {
       
                                 return ( 
                                     <div key={index} className="answer-contents"> 
-                                        <div>
+                                        <div className="answer-question-box">
                                             <p className="question">
                                                 <Link to={{pathname: questionPath, state : {question} }} 
                                                                       className="question-link">
@@ -364,8 +366,8 @@ export const Answers = props => {
                                                 </Link>
                                             </p>
                                         </div>
-
                                         <AnswersComponent {...answerProps}/>
+                                        <CommentsBox {...answerProps}/>
                                     </div>
                                 );
                             } )}
@@ -428,13 +430,13 @@ export const Users = props => {
                                         <div className="index-user-list-img-container">
                                             <div className="index-user-img-box">
                                                 { profile_picture?
-                                                <div className="index-user-list-img-box"> 
-                                                    <Link to={{ pathname: pathToProfile,userProps,}}
+                                                    <div className="index-user-list-img-box"> 
+                                                        <Link to={{ pathname: pathToProfile,userProps,}}
                                                           className="index-user-list-img-box">
-                                                        <img  src={`${profile_picture}`} 
+                                                            <img  src={`${profile_picture}`} 
                                                               alt="" 
                                                               className="index-user-list-img"/> 
-                                                    </Link>
+                                                        </Link>
                                                     </div>
                                                     :
                                                     <div className="index-user-list-img-box">

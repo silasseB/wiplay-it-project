@@ -491,7 +491,7 @@ export function authenticate(params={}){
             }
             else if (error.request)  {
                 console.log(error.request)
-                dispatch(action.authenticationError(error.response.data));
+                dispatch(action.authenticationError(error.request));
 
             }else{
                 console.log(error)

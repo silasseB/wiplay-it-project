@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavBar } from '../components/registration'
+import {NavBar } from 'components/registration'
 
 
 
@@ -27,7 +27,7 @@ export const ButtonsBox = props => {
     styles     = styles && styles.contents;
   	styles     = !styles && Styles.contents || styles;
 
-
+   
       
     return (
 
@@ -41,19 +41,19 @@ export const ButtonsBox = props => {
                </ul>
             </div>
 
-            <div style={styles} className="contents-nav-box" > 
-               <div className="btn-box1">
+            <ul  className="contents-nav-box" > 
+               <li className="btn-box1">
                  { props.btn1 }
-               </div>
+               </li>
 
-               <div  className="btn-box2">
+               <li  className="btn-box2">
                   { props.btn2 }
-               </div>
+               </li>
 
-               <div className="options-box btn-box3">
+               <li className="options-box btn-box3">
                   { props.btn3 }
-               </div>
-            </div>
+               </li>
+            </ul>
             
          </div>   
       
@@ -66,8 +66,7 @@ export const ButtonsBox = props => {
 export const Styles = {
       contents : {
          display      : 'flex',
-         width        : '100%',
-         border       : 'px solid red',
+         border       : '1px solid red',
 
       }
    }

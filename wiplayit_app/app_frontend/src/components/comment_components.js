@@ -153,8 +153,10 @@ export const CommentsComponent = props => {
       } 
 
       const userProps  = {
-              user        : comment.created_by,
-              currentUser ,
+                obj    : comment,
+                time   : 'Commented',
+                currentUser ,
+
             };
 
     
@@ -163,7 +165,7 @@ export const CommentsComponent = props => {
       
         <div  className="comment-box" id="comment-box">
             <div className="autor-details-box comment-detail-box">
-                <UserComponentSmall {...userProps }/>
+                <UserComponentSmall {...userProps}/>
             </div>
     
             <div className="comment">

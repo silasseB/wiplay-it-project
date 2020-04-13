@@ -11,6 +11,7 @@ import  * as types  from 'actions/types';
 import { UnfollowUserBtn, FollowUserBtn, OptionsDropDownBtn} from "components/buttons"; 
 
 import{ QuestionComponent } from "components/question_components"
+import GetTimeStamp from 'utils/timeStamp';
 
 import { PostComponent } from "components/post_components"
 import { GetModalLinkProps } from "components/component-props";
@@ -832,33 +833,91 @@ export const UserActivitiesBtns = props => {
 
 
 export const UserComponentSmall = props => {
-    let pathToProfile =  `/profile/${props.user.id}/${props.user.slug}/`;
-    let state = {currentUser:props.currentUser, userProfile:props.user}
+    let {obj, currentUser} = props;
+    let author = obj.created_by;
+
+
+    let pathToProfile =  `/profile/${author.id}/${author.slug}/`;
+    let state = {currentUser, userProfile:author}
     //console.log(props)
+    
+    let currentdate = new Date();
+
+    let timeCreated = obj && new Date(obj.created_at);
+    //timeCreated && console.log(timeCreated)
+
+    let timeStamp = timeCreated && timeCreated.getTime()
+
+    const getTimeState = new GetTimeStamp({timeStamp});
+    let menDiff        = parseInt(getTimeState.menutes());
+    let hourDiff       = parseInt(getTimeState.hours());
+    let dayDiff        = parseInt(getTimeState.days());
+    let weekDiff       = parseInt(getTimeState.weeks());
+    
+
+    let created_at;
+    let dateOptions;
+
+    const getLocaleDateString=(dateOptions)=>{
+       return timeCreated.toLocaleDateString('en-GB', dateOptions)
+    }
+
+    let month = getLocaleDateString({'month':'short'}) 
+    let day   = getLocaleDateString({day : 'numeric'})
+    let year  = getLocaleDateString({year : 'numeric'})
+
+    if (menDiff <= 59) {
+        created_at = `${menDiff} menutes ago`
+
+    }else if(hourDiff <= 23){
+        created_at = `${hourDiff} hours ago`
+        
+    }else if(dayDiff <= 6){
+        dateOptions = {'weekday':'short'}
+        created_at = getLocaleDateString(dateOptions)
+
+    }else{
+        let yearCreated = timeCreated.getFullYear();
+        let currentYear = currentdate.getFullYear()
+        
+
+        if (yearCreated === currentYear) {
+            created_at = month + ' ' + day; 
+        }else{
+             created_at =  month + ' ' + day + ', ' + year;
+
+        }
+    }
+
+    //console.log(created_at)
 
     return (
+        <div className="author-box">
+            <ul className="author-img-box" >
+                <li className="author-img  img-container-sm">
+                    <Link  to={ {pathname: pathToProfile,state}}>
 
-        <ul className="user-sm-items" >
-               <li className="img-container-sm">
-                  <Link  to={ {pathname: pathToProfile,state}}>
-
-                     { props.user.profile.profile_picture === null?
-                        <img alt="" src={require("../images/user-avatar.png")} className="profile-photo"/>
+                        { author.profile.profile_picture === null?
+                            <img alt="" src={require("media/user-image-placeholder.png")}
+                             className="profile-photo"/>
              
-                        :  
-                        <img alt="" src={props.user.profile.profile_picture}
+                            :  
+                            <img alt="" src={ author.profile.profile_picture}
                                    className="profile-photo"/> 
-                     }
-                  </Link>
+                        }
+                    </Link>
+                </li>
+            </ul>
 
-               </li>
-               
-               <li className="user-name-box-sm">
-                  <Link className="user-name-sm" to={ {pathname: pathToProfile,state}}>
-                     { props.user.first_name}     { props.user.last_name }
-                  </Link>
-               </li>
-        </ul>
+            <ul className="author-properties-box">
+                <li className="author-name-box">
+                    <Link className="author-name" to={ {pathname: pathToProfile,state}}>
+                        { author.first_name}     { author.last_name }
+                    </Link>
+                </li>
+                <li className="time-created">{created_at}</li>
+            </ul>
+        </div>
     );
 }; 
 

@@ -137,9 +137,9 @@ export function withHigherOrderIndexBox(Component) {
                     //document.body.style['overflow-y'] = 'scroll';
                     //document.body.style['overflow-x'] = 'scroll';
                 }
-                console.log(userAuth)
+                
                 //console.log(entities)
-                this.confirmLogout(userAuth);
+                Object.keys(userAuth).length && this.confirmLogout(userAuth);
 
                 if (errors.error && !errors.displayErrors) {
                     errors['displayErrors'] = true;
@@ -208,7 +208,7 @@ export function withHigherOrderIndexBox(Component) {
             if (userAuth) {
                 //Remove app cache and  clean the store
                 //and redirect the user to authentication page
-                 console.log('User is logging out', userAuth)
+                //console.log('User is logging out', userAuth)
 
                 let {successMessage} = userAuth;
 
@@ -320,7 +320,7 @@ export function withHigherOrderIndexBox(Component) {
                                                                             'dropImage',
                                                                             dropImageModal.background
                                                                         ); 
-                event.returnValue = '';
+                //event.returnValue = '';
                 
             });
 

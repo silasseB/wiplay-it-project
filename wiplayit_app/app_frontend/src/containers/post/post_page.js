@@ -138,9 +138,11 @@ export const Post = props => {
     var postProps = {...props, post}
 
 	return(
-        <div className="post-page"> 
-            <div className="post-container"> 
-                <PostComponent {...postProps }  />
+        <div className="post-page" id="post-page">
+            <div className="post-container">
+                <div className="post-contents"> 
+                    <PostComponent {...postProps }  />
+                </div>
             </div>
         </div>
     );

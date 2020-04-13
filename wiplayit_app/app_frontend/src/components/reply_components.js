@@ -384,13 +384,19 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         btn2         :  EditorModalLink,
         btn3         :  optionsBtn(),
       } 
+
+
+   const userProps  = {
+            obj   : reply,
+            currentUser,
+        };
  
 
 
    return (
          <div style={ replyStyles}  className="reply-box" id="reply-box">
             <div className="autor-details-box">
-                <UserComponentSmall {...{ user : reply.created_by, currentUser }}/>
+                <UserComponentSmall {...userProps}/>
             </div>
 
          

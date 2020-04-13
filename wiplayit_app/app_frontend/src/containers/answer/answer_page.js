@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { AnswersComponent } from 'components/answer_components';
+import CommentsBox from "containers/comment/comment_page";
+
 import {store} from "store/index";
 import  * as action  from 'actions/actionCreators';
 
@@ -121,6 +123,7 @@ export const Answers = (props, answerList, isNewAnswers=false) => {
                 return ( 
                    <div key={index} className="answer-contents"> 
                         <AnswersComponent {...answerProps}/>
+                        <CommentsBox {...answerProps}/>
                     </div>
                 );
             })}

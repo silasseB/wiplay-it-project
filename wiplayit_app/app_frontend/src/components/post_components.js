@@ -122,14 +122,16 @@ export const PostComponent = props => {
             Styles : Styles
          };
 
-   const userProps  = {user : post.created_by, currentUser};
+   const userProps  = {
+            obj   : post,
+            currentUser
+        };
   
 
     return (
         <div>
         { editorState?
-            <div className="post-contents">
-                <div className="post-box">
+            <div className="post-box">
                     <div className="post"> 
                         <div className="autor-details-box post-detail-box">
                             {props.isProfileBox?
@@ -162,11 +164,10 @@ export const PostComponent = props => {
                         />
                     </div>
                     <ButtonsBox {...btnsList}/>
-                </div>
-                <CommentsBox {...props}/>
             </div>
+                 
             :
-            ""
+            null
         }
         </div>
     );

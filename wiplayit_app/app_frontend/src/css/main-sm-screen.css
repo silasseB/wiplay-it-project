@@ -1,19 +1,21 @@
 
 
 
-@media (max-width: 900px) {
-/*
-@font-face {
-  font-weight: 400;
-  font-style: normal;
-  display: none;
-  font-display:  block ;
-  color: #A33F0B;
-  font-family: 'Arvo';
-  font-display:  fallback;
-  src: local('Arvo'), url(https://fonts.gstatic.com/s/arvo/v9/rC7kKhY-eUDY-ucISTIf5PesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
-}*/
+.img-container-sm {
+    border        : 1px solid #D5D7D5;
+    border-radius : 50%;
+    width         : 40px;
+    height        : 40px;
+    
+}
 
+.profile-photo {
+    border: 1px solid #F9F7F7;
+    border-radius: 50%;
+}
+
+
+@media (max-width: 900px) {
 
 .arrow {
     color: #A33F0B;
@@ -45,41 +47,20 @@
 }
 
 
-.img-container-sm {
-    border: 1px solid #D5D7D5;/*#F9F7F7;*/
-    border-radius: 50%;
-    width: 30px;
-    height:30px;
-    
-}
-.img-container {
-    border: 1px solid  #D5D7D5;/*#F9F7F7;*/
-    border-radius: 100%;
-    width: 90px;
-    height:60px;
-    
-    
-}
-
-.profile-photo {
-    border: px solid #F9F7F7;
-    border-radius: 50%;
-    max-width: 100%; 
-    display:block; 
-    height: 100%;
-    object-fit: cover;
-    
-    
-}
-
-
-}
 .user-photo {
     border-radius: 50%;
     width: 40px;
     height:40px;
     object-fit: cover;
 }
+
+.img-container {
+    border: px solid  #D5D7D5;/*#F9F7F7;*/
+    border-radius: 100%;
+    width: 90px;
+    height:60px;
+}
+
 
 .mydropzone {
   border: 1px solid red !important;
@@ -322,10 +303,6 @@
   border:none;
   color: #807f7f; 
 }
- {
-  background: #D5D7D5;
-}
-
 
 .options-icon {
   font-size: 20px;
@@ -370,7 +347,7 @@
 
 }
  
-
+}
 
 
 

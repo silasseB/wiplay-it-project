@@ -31,7 +31,7 @@
 
 
 .index-user-list-container {
-    border      : 1px solid blue;
+    border      : px solid blue;
     display     : flex; 
     overflow-x  : scroll;
     overflow-y  : hidden;
@@ -93,6 +93,7 @@
 .index-user-list-img {
     width         : 70px;
     height        : 70px;
+    border-radius : 50%;
  }
 
 .index-user-name-box {

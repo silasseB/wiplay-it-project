@@ -86,6 +86,7 @@ export const QuestionComponent = props => {
         byId              : `newAnswers${question.id}`,
         isPost            : !question.user_has_answer,
         isPut             : question.user_has_answer, 
+        className         : 'btn-sm edit-answer', 
         currentUser,  
        
     };
@@ -139,19 +140,7 @@ export const QuestionComponent = props => {
    let QuestionProps = { questionPath, state, btnsList };
    Object.assign(QuestionProps, props)
 
-   let styles = {
-         questionBox:{
-            border     : '1px solid  #D5D7D5',
-            margin     : '12px  5px 7px',
-            paddingTop : '8px'
-
-        },
-
-        questionContents : {
-            borderTop     : '3px solid  #D5D7D5',
-        }
-    }
-
+   
     return(
         <div key={question.id}>
             <div className="question-contents">

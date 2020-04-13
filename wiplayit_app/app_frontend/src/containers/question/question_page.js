@@ -162,13 +162,13 @@ export const Questions = props => {
 
                 { question && question.answers || newAnswers?
                     <div className="answer-list-container">
-                        <div className="number-answers-box">
+                        <ul className="number-answers-box">
                             { totalAnswersLength > 1? 
-                                <p className="items-count">{totalAnswersLength}  Answers</p>
+                                <li className="number-of-answers">{totalAnswersLength}  Answers</li>
                                 :
-                                <p className="items-count">{ totalAnswersLength } Answer</p>
+                                <li className="number-of-answers">{ totalAnswersLength } Answer</li>
                             }
-                        </div>
+                        </ul>
                 
                         <AnswersBox {...questionProps}/>
                     </div>

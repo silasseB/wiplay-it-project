@@ -37,6 +37,7 @@ class CommentsBox extends Component {
    
 
     componentDidMount() {
+        console.log(this.props)
        
         let { answer, post } = this.props;
             
@@ -184,12 +185,12 @@ const Comments = (props, commentList) => {
             { commentList && commentList.map( (comment, index) => {
                 let commentProps = {comment, index};  
                 Object.assign(commentProps, props);
-                //console.log(commentProps)
+                console.log(commentProps)
 
                 return(
                     <div  key={index} >
                         { parent.id === comment.answer || parent.id === comment.post?
-                            <div className="comments-container">
+                            <div className="comment-container">
                                 <div className="comment-contents">
                                     <CommentsComponent {...commentProps}/>
                                 </div>

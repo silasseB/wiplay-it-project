@@ -1,20 +1,30 @@
 
-.user-sm-items {
+.author-box {
     border  : px solid  #A33F0B; 
     display : flex;
 }
 
-.user-name-sm {
+.author-img-box {
     border  : px solid blue;
 }
 
+.author-properties-box {
+    border  : px solid black;
+    margin  : 0 0 0 4px; 
+}
 
-.user-name-box-sm {
+.author-name-box {
     font-size   : 13px;
     color       : black;
     font-weight : bold;
-    margin      :  0 5px 0;
     font-family : 'Kanit';
+}
+
+.time-created {
+    border    : px solid red;
+    font-size : 13px;
+    color     : grey;
+    font-family : 'Open Sons Condensed';
 }
 
 @media (max-width: 980px) {

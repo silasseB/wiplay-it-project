@@ -68,7 +68,7 @@ export const FollowQuestionBtn = props => {
     //console.log(props.editQuestionProps)
     return(
         <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editQuestionProps)}
-            className="btn-sm follow-question" >
+            className="btn-sm follow-question-btn" >
 
             Follow <span className="fa fa-rss icon-color"></span>            
         </button>
@@ -79,13 +79,11 @@ export const FollowQuestionBtn = props => {
 export const UnfollowQuestionBtn = props => {
     //console.log(props.editQuestionProps)
     return(
-      <div>
-         <button  type="button" onClick={() =>  props.editfollowersOrUpVoters(props.editQuestionProps)}
-                               className="btn-sm  follow-question" >
+        <button  type="button" onClick={() =>  props.editfollowersOrUpVoters(props.editQuestionProps)}
+                               className="btn-sm  follow-question-btn" >
                Following <span className="fa fa-rss"></span>
          </button>
-      </div>
-    )
+      )
 };
 
 

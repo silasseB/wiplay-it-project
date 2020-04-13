@@ -1,6 +1,10 @@
+
+.answer-question-box {
+    padding    : 0px 10px;
+}
  
 @media (min-width:980px) {
-  
+
         
     #home-page-contents, .question-page, .post-page,
     .question-list-page, .post-list-page {
@@ -18,9 +22,10 @@
         border     : 1px solid  #D5D7D5;  
     }
 
-  
-    .post-box, .question-box, .answer-box {
+    
+    .post-box, .question-box, .answer-box, .comment-box, .reply-box {
         border-bottom : 0.5px solid #E8E8E8;
+        padding    : 0px 10px;
     } 
   
      
@@ -33,8 +38,8 @@
         font-weight : bold;
     }
 
-    .post-title {
-        border: px solid blue; 
+    .post-title,  .comment-box {
+        border-bottom : px solid blue; 
     }
 
     .main-post  {
@@ -84,15 +89,12 @@
 }
 
 .reply-container,.comment-container {
-  border:px solid blue; /*#D5D7D5;*/
-  background:     #f9f9f9 ;/*  #fefbfa; /* #f0eeed;*/
-  flex: 1;
-  
-  
+    background    : #f9f9f9;
+    border-bottom : 1px solid  #D5D7D5;
 }
-.comment-container {
-  border-bottom: 1px solid #D5D7D5;
-  
+
+.reply-container {
+   
 }
 
 .create-answer {
@@ -112,16 +114,16 @@
 .answer-box {
   border-bottom:1px solid #D5D7D5;
   /*background-color:#f0eeed;*/
-  }
+}
+
 .comment-box {
-   border : px solid red; /*#D5D7D5;*/
+   border  : px solid black; /*#D5D7D5;*/
+   padding : 0px 10px;
 }
 
 .answer-contents, .post-contents,.question-contents {
     border-top : px solid #D5D7D5;
-    padding    : 0px 10px;
-  
-
+    
 }
 
 
@@ -130,17 +132,17 @@
    padding: 0 12px;
 } 
 
-.answer-count {
-    list-style-type: none; 
+.number-of-answers {
     padding-left:6px ;
     margin-top:7px;
-    border: 1px solid blue;
-
+    
 } 
 
 .comment-contents {
-      border-bottom:1px solid  #D5D7D5;
-      background:     #f9f9f9
+      border-bottom : px solid  #D5D7D5;
+      background    : #f9f9f9;
+      border        : px solid red;
+     
 }
 
 .comments-link:hover {
@@ -157,18 +159,13 @@
 .answer-dropdown {
   padding-right: 34px; 
 }
-.reply {
+.reply, .comment {
     border:px solid red; 
     font-size: 13px;
-    /*margin: 0px 14px 0px 40px;*/
+    margin-left : 8px; 
     width: auto;
 }
 
-.reply p {
-  border: px solid blue;
-  line-height: 1.2;
-  margin:  0px 14px 0px 40px;
-}
     
 
 .reply-contents {
@@ -245,9 +242,10 @@
   }
 
 .comment-relation {
-  /*border: 1px solid #D5D7D5;*/
-  padding-left: px;
+    /*border: 1px solid #D5D7D5;*/
+    padding-left: px;
 }
+
 .reply-relation {
  /* border: 1px solid #D5D7D5;*/
  
