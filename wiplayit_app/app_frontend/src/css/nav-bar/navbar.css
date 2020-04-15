@@ -1,4 +1,22 @@
+.menu-img-box {
+        border-radius : 50%;
+        border        : 1px solid #D5D7D5;
+        width         : 35px;
+        height        : 35px; 
+    }
 
+    .menu-img {
+        border-radius : 50%;
+        width         : 35px;
+        height        : 35px; 
+
+    }
+
+    .menu-username-box {
+        font-weight : bold;
+        font-family : 'Ubuntu';
+        font-size   : 12px; 
+    }
 
  
 @media (max-width:900px) {
@@ -13,7 +31,7 @@
 
 
 
-    .mobile-navbar-center {
+    .mobile-navbar-center, .partial-page-navbar {
         display    : flex;
         width      : 100%;
         border     : px solid blue;
@@ -100,7 +118,7 @@
 
     .navigation-img-item{
         border   : px solid black;
-        padding  : 8px  15px 0;  
+        padding  : 10px  15px;  
     }
 
     .page-name-box {
@@ -122,7 +140,6 @@
     }
 
     
-
 
     .nav-bar-img {
         border-radius : 50%;

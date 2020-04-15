@@ -48,18 +48,18 @@ export function entities(state=InitialState(), action) {
     }
 
 
-    const CreateNewEntities = (stateEntintie, action)=>{
+    const CreateNewEntities = ( action)=>{
         let {byId, payLoad} = action;
-        
-        return  Object.defineProperty(
-            stateEntintie, 
-            byId,
-            { value : payLoad,
-              writable     : true,
-              configurable : true,
-              enumerable   : true,
+
+        let key = byId;
+        let value =  {
+                value        : payLoad, 
+                writable     : true,
+                configurable : true,
+                enumerable   : true,
             }
-        );
+        
+        return  Object.defineProperty({}, key,value  );
     };
     
 
@@ -68,30 +68,30 @@ export function entities(state=InitialState(), action) {
             let oldState = state;
             let newState = {};
             let stateEntintie = oldState[stateEntintieKey]
-            let fakeState = {};
-                              
+                                      
             if (byId) {
+                //console.log(oldState)
             
                 if(stateEntintie[byId]){
-
-                    //console.log(stateEntintie[byId], payLoad)
+                    //console.log(stateEntintie, payLoad)
+                    //console.log('Updating existing state for ' + stateEntintieKey + ' with byId ' + byId )
                     stateEntintie[byId] = {...stateEntintie[byId], ...payLoad};
-                    fakeState = stateEntintie;
-                    //console.log(fakeState)
+                    
 
                 }else {
                     //console.log(stateEntintie, payLoad)
                     //console.log('creating new state for ' + stateEntintieKey + ' with byId ' + byId )
-
-                    fakeState = CreateNewEntities(fakeState, {byId, payLoad});
+                    let newEntitie = CreateNewEntities(params);
+                    stateEntintie = {...stateEntintie, ...newEntitie}
+                    
                 }
 
             }else{
-                fakeState = {...stateEntintie,...payLoad}
+                stateEntintie = {...stateEntintie,...payLoad}
                 
             }
 
-            newState[stateEntintieKey] =  fakeState
+            newState[stateEntintieKey] =  stateEntintie;
             newState             = {...oldState, ...newState};
             //console.log(newState, oldState)
             return newState;

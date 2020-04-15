@@ -10,7 +10,12 @@
        padding:  0px;
     }
 
-
+    .question-page-loader, 
+    .question-list-page-loader,
+    .post-page-loader, 
+    .post-list-page-loader {
+        padding-top: 80px;
+    }
 
     .post-box-container{
         border-top   : 9px solid  #D5D7D5;
@@ -19,8 +24,8 @@
 
     #question-page, #post-page {  
         background : #fff;
-        border     : px solid  red;
-        margin     : 29px 0;  
+        border     : 1px solid  red;
+        padding-top: 70px; 
     }
 
     #post-list-page, #home-page-contents{
@@ -67,7 +72,7 @@
 
 .post-box, .question-box, .answer-box, .comment-box, .reply-box {
         border-bottom : 0.5px solid #E8E8E8;
-        padding    : 0px 10px;
+        padding    : 10px 10px;
  } 
   
 .question-box {
@@ -227,61 +232,25 @@
 }
 
 
-.contents-nav-container {
-    border: px solid blue;
+
+.edit-reply-btn,.upvote-comment {
+   background  :  #f7f7f7;
+   font-size   :   12px !important;
+   color       :   #4A4A4A;
 }
 
-.contents-nav-box {
-    border: px solid black;
+.edit-answer-btn, .follow-question-btn,
+.upvote-answer, .edit-comment-btn {
+    border           : px solid red;
+    font-family      : 'Ubuntu';
+    color            : grey;  
+    font-size        : 13px;
+    margin-top       : 3px; 
 }
 
-.btn-box1,.btn-box2 {
-      border :  px solid red;
-}
 
-.btn-box2 {
-  
-}
 
-.btn-box3 {
-   border  :   px solid blue;
-   width: 100%;
-   
-}
-
-.optionsBtn {
-  border  :   px solid black;
-  float   : right; 
-  
-
-}
-
-.create-reply,.upvote-comment {
-
-  background  :   #F5F5F5;
-  font-weight :   bold;
-  font-size   :   12px !important;
-  color       :   #4A4A4A;
-}
-
-.follow-question, .create-comment,
-    .upvote-answer, .create-answer {
-
-  background-color : white;
-  font-weight      : bold;
-  font-family      : 'Mukta';
-  color            : grey;  
-  font-size        : 13px !important;
-  max-width        : 100% !important;
-  display          : flex;
-  margin-top       : 3px; 
-}
-
-.edit-answer, .follow-question-btn {
-  border      : px solid red
-}
-
-.create-answer span,.follow-question span {
+.create-answer span, .follow-question-btn span {
   border      : px solid red;
   line-height : 1;
   margin      : 2px 3px 0; 

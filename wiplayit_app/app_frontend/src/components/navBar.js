@@ -65,7 +65,7 @@ const NavBarDropDown = props => {
  
     return(
         
-        <div className="navigation-img-box">
+        <div className="navigation-img-box ">
                     
             <div className="" id="navBardropdown" 
                            data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
@@ -73,18 +73,35 @@ const NavBarDropDown = props => {
                     { currentUser && currentUser.profile && currentUser.profile.profile_picture?
                         <img alt="" src={currentUser.profile.profile_picture} className="nav-bar-img"/>
                         :
-                        <img alt="" src={require("../images/user-avatar.png")} className="nav-bar-img"/> 
+                        <img alt="" src={require("media/user-image-placeholder.png")} className="nav-bar-img"/> 
 
                     }
                 </div>
             </div>
                     
 
-            <div className="dropdown-menu" aria-labelledby="navBardropdown">
-                <button onClick={() => history.push(path_to_profile, state) } className="dropdown-item"> 
-                    Profile
-                </button>
+            <div className="dropdown-menu " aria-labelledby="navBardropdown">
+                <div>
+                    <div className="menu-img-box" onClick={() => history.push(path_to_profile, state) }> 
+                    { currentUser && currentUser.profile && currentUser.profile.profile_picture?
+                        <img alt="" src={currentUser.profile.profile_picture} className="menu-img"/>
+                        :
+                        <img alt="" src={require("media/user-image-placeholder.png")} className="menu-img"/> 
+
+                    }
+                    </div>
+                    <ul className="menu-username-box">
+                        <li className="menu-username" >
+                          {currentUser.first_name}  {currentUser.last_name} 
+                        </li>
+                    </ul>
+                </div>
+                
+                <button  className="dropdown-item" >Help</button>
+               
+                <button  className="dropdown-item" >Settings</button>
                 <button onClick={props.logout} className="dropdown-item" >Logout</button>
+                <button  className="dropdown-item" >About</button>
             </div>
         </div>
     )
@@ -304,8 +321,7 @@ export const PartialNavBar = props =>{
 
        
     return (
-
-        <div className="partial-page-navbar fixed-top">
+        <nav className="navigation partial-page-navbar fixed-top" id="navigation">
             <div className="back-btn-box">
                 <CustomBackBtn {...props}/> 
             </div>
@@ -318,7 +334,7 @@ export const PartialNavBar = props =>{
                 <NavBarDropDown {...props}/>
             
             </div>
-        </div>
+        </nav>
     );
 
 };

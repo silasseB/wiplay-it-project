@@ -7,7 +7,7 @@ from wiplayit_app.settings.common import *
 DEBUG = False
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','valoi.pythonanywhere.com', 'silasi.pythonanywhere.com']
+ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','valoi.pythonanywhere.com', 'silasi.pythonanywhere.com' ]
 
 
 DATABASES = {

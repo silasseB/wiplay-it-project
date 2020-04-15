@@ -105,7 +105,7 @@ export const OptionsModalLink = props => {
         
         
     return(
-        <button className="btn-sm optionsBtn"    onClick={()=> {
+        <button className="btn-sm options-btn"    onClick={()=> {
 
                         store.dispatch(showModal(madalParams))
                         setTimeout(()=> {

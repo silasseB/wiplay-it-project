@@ -337,6 +337,8 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         byId              :  `newReplies${reply.id}`,
         currentUser,
         apiUrl            : createApiUrl,
+        className         : 'btn-sm edit-reply-btn',
+        
         
     };
 

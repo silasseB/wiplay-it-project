@@ -103,24 +103,23 @@ export const UpVotePostBtn = props => (
 
          
 export const DownVotePostBtn = props => (  
-<div>       
+      
     <button   type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editPostProps)}
                                          className="btn-sm icon-color upvote-answer" >
     Upvoted <span className=" fa fa-arrow-up icon-color"></span>
   </button>
-  </div>
- )
+);
 
 
             
 export const UpVoteAnswerBtn = props => (     
-   <div>    
+      
         <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
                                           className="btn-sm  upvote-answer" >
             Upvote <span className="fa fa-arrow-up"></span>
         </button>
-    </div>
-)
+   
+);
 
 
 

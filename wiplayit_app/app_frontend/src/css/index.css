@@ -190,6 +190,40 @@ ul {
 	margin          : 0;   
 }
 
+
+.contents-nav-container {
+    border  : px solid blue;
+    
+}
+
+.contents-nav-box {
+    border  : px solid black;
+    display : flex; 
+}
+
+.btn-box1,.btn-box2 {
+      border :  px solid red;
+}
+
+.btn-box2 {
+	margin: 0 14px;
+  
+}
+
+.btn-box3 {
+   border  :   px solid blue;
+   width: 100%;
+   
+}
+
+.options-btn {
+  border  :  px solid black;
+  float   :  right !important;
+  color   :  gray; 
+  
+
+}
+
 .facebook-login {
   background: #3B5998;
      

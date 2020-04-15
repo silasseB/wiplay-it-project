@@ -86,6 +86,7 @@ export const AnswersComponent = props => {
         isPost            : true,
         currentUser,
         byId              : `newAnswerComments${answer.id}`,
+        className         : 'btn-sm edit-comment-btn',
         
     };
 

@@ -103,6 +103,7 @@ export const CommentsComponent = props => {
         isPost            : true,
         currentUser,
         byId              : `newCommentsReplies${comment.id}`,
+        className         : 'btn-sm edit-reply-btn',
         
     };
 

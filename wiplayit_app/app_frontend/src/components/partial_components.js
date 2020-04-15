@@ -50,7 +50,7 @@ export const ButtonsBox = props => {
                   { props.btn2 }
                </li>
 
-               <li className="options-box btn-box3">
+               <li className="btn-box3">
                   { props.btn3 }
                </li>
             </ul>
@@ -66,7 +66,7 @@ export const ButtonsBox = props => {
 export const Styles = {
       contents : {
          display      : 'flex',
-         border       : '1px solid red',
+         border       : 'px solid red',
 
       }
    }

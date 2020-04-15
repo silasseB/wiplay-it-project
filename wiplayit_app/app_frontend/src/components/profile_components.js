@@ -273,11 +273,11 @@ export const UserProfileFollowingList = props => {
         entities,
         users,
         currentUser,
-        usersById,
         userProfile } = props;
 
+    let usersById = 'filteredUsers';    
     users   = entities && entities.users[usersById] || users && users[usersById];
-    console.log(users)
+    //console.log(users, entities.users)
     let userList = users && users.userList && users.userList.slice(0, 3);
 
     let userProfileFollowersProps = {
@@ -389,7 +389,7 @@ export const PartialUserList = props => {
 
 
 export const UserList = props => {
-    console.log(props)
+    //console.log(props)
     let {entities,users, usersById } = props
 
     users   = entities && entities.users && entities.users[usersById] || users && users[usersById];
@@ -495,7 +495,7 @@ export const UserAnswers = props =>{
                 </div>
 
                 :
-                <p>No Answers </p>
+                <p>No Answer </p>
             }
         </div>
     )
@@ -513,32 +513,37 @@ export const UserQuestions = props => {
     let questions  = props.entities.questions;
     questions      = questions[questionListById]
     let questionList = questions && questions.questionList;  
-    //console.log(questions,  props)
+    console.log(questionList,  props)
     
     return (
-        <div className="question-container">
-         <div className="number-question-box">
-            {questionList && questionList.length? 
-               <p className="items-count">{questionList.length } Questions</p>
-               :
-               <p className="items-count">{questionList.length } Question</p>
-            }
-         </div> 
+        <div>
+            {questions &&
+                <div className="question-container">
+                    <div className="number-question-box">
+                        { questionList && questionList.length? 
+                            <p className="items-count">{questionList.length } Questions</p>
+                            :
+                            <p className="items-count">{questionList.length } Question</p>
+                        }
+                    </div> 
      
-         {  questionList && questionList.map((question, index) => {
-            let questionProps = {question, questionListById }
-            Object.assign(questionProps, props)
-            return (
-               <div key={question.id} className="profile-activites"> 
-                  <QuestionComponent {...questionProps}/>
-               </div>
-            )
+                    {  questionList && questionList.map((question, index) => {
+                        let questionProps = {question, questionListById }
+                        Object.assign(questionProps, props)
 
+                        return (
+                            <div key={question.id} className="profile-activites"> 
+                                <QuestionComponent {...questionProps}/>
+                            </div>
+                        )
+                    })}
+
+                </div>
+                || 
+                <p>No Question </p>
             }
-           )}
-
         </div>
-   )
+    )
 };
 
 
@@ -549,30 +554,37 @@ export const UserPosts = props => {
 
    var postListById     = `usersPosts${userProfile.id}`;
    var posts  = props.entities.posts;
-   posts      = posts[postListById]
+   posts      = posts && posts[postListById]
    
    return(
-     <div className="post-container">
-         <div className="number-post-box">
-            {posts.postList.length > 1? 
-               <p className="items-count">{posts.postList.length } Posts</p>
-               :
-               <p className="items-count">{posts.postList.length } Post</p>
-            }
-         </div> 
-      
-         { posts.postList.map((post, index) => {
-            let postProps = { post, postListById}
-            Object.assign(postProps, props)
-            return(
-               <div key={index} className="profile-activites"> 
-                  <PostComponent {...postProps}  />
-               </div>
-            )
-         }
+        <div>
+            {posts &&
 
-      )}
-   </div>
+                <div className="post-container">
+                    <div className="number-post-box">
+                        {posts.postList.length > 1? 
+                            <p className="items-count">{posts.postList.length } Posts</p>
+                            :
+                            <p className="items-count">{posts.postList.length } Post</p>
+                        }
+                    </div> 
+      
+                    { posts.postList.map((post, index) => {
+                        let postProps = { post, postListById}
+                        Object.assign(postProps, props)
+                        return(
+                            <div key={index} className="profile-activites"> 
+                            <PostComponent {...postProps}  />
+                            </div>
+                        )
+                    })}
+                </div>
+
+                ||
+                <p>No Post </p>
+            }
+
+        </div>
  
    );
 };

@@ -108,7 +108,7 @@ class  PostPage extends Component  {
                     <div  className="app-box-container">
                         <UnconfirmedUserWarning {...props}/>
                         { post.isLoading?
-                            <div className="page-spin-loder-box">
+                            <div className="page-spin-loder-box post-page-loader">
                                 <AjaxLoader/>
                             </div>
                             :

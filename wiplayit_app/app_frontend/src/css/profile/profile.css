@@ -66,8 +66,10 @@
 
 
 #profile-page {
-   width:100%;
-   margin:  auto;
+   width  : 100%;
+   margin : auto;
+   border : 1px solid red;
+   padding-top: 70px;
     
 }
 
@@ -456,7 +458,7 @@
   
  
     .profile-page {
-        border     : px solid blue; /*#F9F7F7;*/
+        border     : 1px solid blue; /*#F9F7F7;*/
         background : #F9F7F7;
         margin     : auto;
         width      : 100%;
@@ -469,7 +471,7 @@
     } 
 
     .profile {
-        border: px solid red;
+        border: px solid blue;
         display: flex;
         width: 100%;
         margin-top:10px;
@@ -603,10 +605,10 @@
     }
 
     .credentials-container {
-        border     :  px solid #D5D7D5;
-        display    :  flex;
-        width      :  100%;
-        margin-top :  20px; 
+        border      :  px solid #D5D7D5;
+        display     :  flex;
+        width       :  100%;
+         
     }
 
     #credentials-box {
@@ -615,9 +617,11 @@
 
 
     .credentials-box {
-        border       :  px solid red;
+        border       :  px solid black;
         width        :  40% !important;
         margin-right :  20px;
+        height       :  99%;
+        background   :  #fff; 
     }
 
     .user-activities {
@@ -636,8 +640,10 @@
 
 
     .user-activities-box {
-        width      : 100%;
-        border     : px solid blue;
+        width       : 100%;
+        border      : 1px solid #D5D7D5;
+        background  : #fff; 
+
     }
 
     .user-activities-title-box{

@@ -99,26 +99,24 @@ class UserProfileContainer extends Component {
         this.onProfileUpdate();
         
         let { entities }    = this.props;
-        let { usersById }  = this.state;
         let { slug, id }   = this.props.match.params;
         let {users, userProfile}  = entities; 
 
         let  profileById  = `userProfile${id}`;
                
         userProfile = userProfile && userProfile[profileById];
-        users       = users[usersById];
         this.setState({profileById })
 
         !userProfile  &&  this.updateWithCacheData({profileById, id});
-        !users        &&  this.updateUsersStore();
+        !users['filteredUsers']        &&  this.updateUsersStore();
                      
     };
 
     updateUsersStore(params){
         let { cacheEntities } = this.props;
-        let { usersById }     = this.state;
-        let { users }         = cacheEntities && cacheEntities;
-        users                 = users && users[usersById];
+        let usersById     = 'filteredUsers';
+        let { users }     = cacheEntities && cacheEntities;
+        users             = users && users[usersById];
 
         if (users && users.userList) {
             store.dispatch(action.getUserListPending(usersById))
@@ -140,7 +138,7 @@ class UserProfileContainer extends Component {
         userProfile = userProfile && userProfile[profileById];
         
 
-        console.log(users, userProfile)
+        //console.log(users, userProfile)
 
         if (userProfile && userProfile.user) {
 
@@ -148,8 +146,8 @@ class UserProfileContainer extends Component {
             const getTimeState = new GetTimeStamp({timeStamp});
             let menDiff        = parseInt(getTimeState.menutes());
 
-            console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
-            console.log(menDiff <= 3)
+            //console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
+            //console.log(menDiff <= 3)
 
             if ( menDiff <= 3) {
                 //userProfile = userProfile && userProfile.user;
@@ -303,7 +301,7 @@ class UserProfileContainer extends Component {
         let   props = this.getProps();
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
-        console.log(userProfile, profileById)
+        //console.log(userProfile, profileById)
       
         return (
             <div>
@@ -319,7 +317,7 @@ class UserProfileContainer extends Component {
                             </div>
 
                             :
-                            <div>
+                            <div className="profile-page" id="profile-page">
                                <ProfileComponent {...props}/> 
                               
                             </div>

@@ -75,6 +75,8 @@ export const PostComponent = props => {
         isPost            : true,
         currentUser,
         byId        : postById,
+        className   : 'btn-sm edit-comment-btn',
+        
         
     };
 
