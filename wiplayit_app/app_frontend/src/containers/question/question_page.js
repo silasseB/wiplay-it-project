@@ -157,10 +157,11 @@ export const Questions = props => {
    
     return (
         <div className="question-page" id="question-page">
+        {question &&
             <div className="question-container">
                 <QuestionComponent {...questionProps}/>
 
-                { question && question.answers || newAnswers?
+                {  question.answers || newAnswers?
                     <div className="answer-list-container">
                         <ul className="number-answers-box">
                             { totalAnswersLength > 1? 
@@ -177,6 +178,8 @@ export const Questions = props => {
                     <p className="items-count">No answer yet</p>
                 }
             </div>
+            
+        }
         </div>
     );
 };

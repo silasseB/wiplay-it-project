@@ -33,8 +33,8 @@ export const QuestionComponent = props => {
         margin     : '0 0 2px'
     }
 
-    let questionPath = `/question/${question.slug}/${question.id}/`;
-    let pathToFollowers =  `/followers/${question.id}/${question.slug}/`;
+    let questionPath = question && `/question/${question.slug}/${question.id}/`;
+    let pathToFollowers =  question && `/followers/${question.id}/${question.slug}/`;
 
     let state = {
         question,
