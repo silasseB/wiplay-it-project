@@ -81,8 +81,10 @@ class  PostListPage extends Component  {
                 
                 { posts?
                     <div className="app-box-container">
+                        <UnconfirmedUserWarning {...props}/>
+                        
                         { posts.isLoading? 
-                            <div  className="page-spin-loader-box">
+                            <div  className="page-spin-loader-box post-list-page-loader">
                                 <AjaxLoader/>
                             </div>
                             : 
@@ -115,17 +117,17 @@ const Posts = props => {
     console.log(posts)
 
     return (
-        <div>
+        <div className="post-list-page" id="post-list-page">
             {posts && posts.postList?
                 <div className="">
-                    <UnconfirmedUserWarning {...props}/>
+                    
 
                     { posts.postList.map(( post, index )  => {
                         let postProps = {post:post} 
                         Object.assign(postProps, props);
                
                         return (
-                            <div key={post.id}  className="post-list-page" >
+                            <div key={post.id}>
                                 <PostComponent {...postProps}/>
                             </div>
                         );

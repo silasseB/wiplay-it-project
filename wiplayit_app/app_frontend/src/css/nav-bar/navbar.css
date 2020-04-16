@@ -1,24 +1,52 @@
+
+.menu-img-container {
+    border-bottom : 1px solid #D5D7D5;
+    padding : 0 0 12px ; 
+
+}
+
 .menu-img-box {
-        border-radius : 50%;
-        border        : 1px solid #D5D7D5;
-        width         : 35px;
-        height        : 35px; 
-    }
+    border-radius : 50%;
+    border        : 1px solid #D5D7D5;
+    width         : 35px;
+    height        : 35px; 
+    margin-left   : 18px; 
+}
 
-    .menu-img {
-        border-radius : 50%;
-        width         : 35px;
-        height        : 35px; 
+.menu-img {
+    border-radius : 50%;
+    width         : 35px;
+    height        : 35px; 
+}
 
-    }
+.menu-username {
+    font-weight : bold;
+    font-family : 'Ubuntu';
+    font-size   : 12px; 
+    margin-left : 18px; 
+    margin-top  : 8px;
+}
 
-    .menu-username-box {
-        font-weight : bold;
-        font-family : 'Ubuntu';
-        font-size   : 12px; 
-    }
+.menu-user-credential{
+    border        : px solid blue;
+    font-family : 'Cambay';
+    font-size   : 12px; 
+    margin-left   : 18px; 
 
+}
+
+.logout-btn {
+    border       : px solid blue;
+    width        : 100%; 
+    text-align   : left !important;
+    padding-left : 20px;
+}
  
+.menu-username-box:hover, .logout-btn:hover {
+    cursor     : pointer;
+    background :  #F7F7F7;
+}
+
 @media (max-width:900px) {
 
 
@@ -31,7 +59,7 @@
 
 
 
-    .mobile-navbar-center, .partial-page-navbar {
+    .mobile-navbar-center, .partial-page-navbar, .partial-form-navbar {
         display    : flex;
         width      : 100%;
         border     : px solid blue;

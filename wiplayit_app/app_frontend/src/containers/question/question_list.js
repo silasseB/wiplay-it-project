@@ -78,7 +78,7 @@ class  QuestionListPage extends Component  {
                         <UnconfirmedUserWarning {...props}/>
                         
                         { questions.isLoading? 
-                            <div  className="page-spin-loder-box">
+                            <div  className="page-spin-loader-box post-list-page-loader">
                                 <AjaxLoader/>
                             </div>
                             : 
@@ -110,14 +110,14 @@ const Questions = props => {
    questions  = questions[props.questionListById];
 
     return (
-        <div className="">
+        <div className="question-list-page" id="question-list-page">
 
             { questions.questionList.map(( question, index )  => {
                let questionProps = {question} 
                Object.assign( questionProps, props);
                
                return (
-                  <div key={question.id} className="question-list-page">
+                  <div key={question.id}>
                     <QuestionComponent {...questionProps}/>
                   </div>
                   )

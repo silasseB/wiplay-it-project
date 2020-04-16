@@ -54,10 +54,55 @@ let createQuestionProps = {
 createQuestionProps = GetModalLinkProps.props(createQuestionProps);
 createPostProps = GetModalLinkProps.props(createPostProps);
 
+const NavBarMenuItems = props => {
+    let { currentUser } = props;
+    let profile = currentUser && currentUser.profile;
+          
+    let state = {userProfile:currentUser};
+    
+    let path_to_profile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
+ 
+    return(
+        <div>
+            <div className="menu-img-container">
+                <div className="menu-img-box" onClick={() => history.push(path_to_profile, state) }> 
+                    { profile && profile.profile_picture?
+                        <img alt="" src={profile.profile_picture} className="menu-img"/>
+                        :
+                        <img alt="" src={require("media/user-image-placeholder.png")} className="menu-img"/> 
+
+                    }
+                </div>
+
+                <ul className="menu-username-box" onClick={() => history.push(path_to_profile, state)}>
+                    <li className="menu-username" >
+                        {currentUser.first_name}  {currentUser.last_name} 
+                    </li>
+                    <li className="menu-user-credential" >
+                        {profile.credential} 
+                    </li>
+                </ul>
+            </div>
+            <div className="menu-btn-container">
+                    <Link className="button" className="btn-sm dropdown-item" to="/help/">
+                        Help
+                    </Link>
+                    <Link type="button" className="btn-sm dropdown-item" to="/settings/">
+                        Settings
+                    </Link>
+                    <Link type='button' className="btn-sm dropdown-item" to="/about/">
+                        About
+                    </Link>
+                    <button  onClick={props.logout} className="btn-sm logout-btn">Logout</button>
+            </div>
+        </div>
+    )
+}
 
 
 const NavBarDropDown = props => {
     let { currentUser } = props;
+    let profile = currentUser && currentUser.profile;
           
     let state = {userProfile:currentUser};
     
@@ -70,38 +115,17 @@ const NavBarDropDown = props => {
             <div className="" id="navBardropdown" 
                            data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
                 <div className="nav-bar-img-box"> 
-                    { currentUser && currentUser.profile && currentUser.profile.profile_picture?
-                        <img alt="" src={currentUser.profile.profile_picture} className="nav-bar-img"/>
+                    { profile && profile.profile_picture?
+                        <img alt="" src={profile.profile_picture} className="nav-bar-img"/>
                         :
                         <img alt="" src={require("media/user-image-placeholder.png")} className="nav-bar-img"/> 
 
                     }
                 </div>
             </div>
-                    
-
             <div className="dropdown-menu " aria-labelledby="navBardropdown">
-                <div>
-                    <div className="menu-img-box" onClick={() => history.push(path_to_profile, state) }> 
-                    { currentUser && currentUser.profile && currentUser.profile.profile_picture?
-                        <img alt="" src={currentUser.profile.profile_picture} className="menu-img"/>
-                        :
-                        <img alt="" src={require("media/user-image-placeholder.png")} className="menu-img"/> 
-
-                    }
-                    </div>
-                    <ul className="menu-username-box">
-                        <li className="menu-username" >
-                          {currentUser.first_name}  {currentUser.last_name} 
-                        </li>
-                    </ul>
-                </div>
+                <NavBarMenuItems {...props}/>
                 
-                <button  className="dropdown-item" >Help</button>
-               
-                <button  className="dropdown-item" >Settings</button>
-                <button onClick={props.logout} className="dropdown-item" >Logout</button>
-                <button  className="dropdown-item" >About</button>
             </div>
         </div>
     )
@@ -358,30 +382,29 @@ export const EditProfileNavBar = props  => {
   let fieldSetStyles     = submitting? {opacity:'0.60'}:{};
 
 
-  return(
-     <div className="form-navbar fixed-top">
-        <div className="partial-form-navbar "> 
+    return(
+        <nav className="partial-form-navbar fixed-top"> 
 
             <div className="back-btn-box">
 	            <CustomBackBtn {...props}/>
-	         </div>
+	        </div>
 
             <div className="page-name-box">
-               <b className="page-name">Edit Profile</b>  
+                <b className="page-name">Edit Profile</b>  
             </div>
 
-	         <div className="submit-profile-btn-box">
+	        <div className="submit-profile-btn-box">
 		        <button type="submit" 
-              style={submitButtonStyles} 
-                            disabled={submitting}
-              onClick={()=> props.submit(props.submitProps)}
-                       value="submit" className="submit-btn submit-profile-btn">
-                       Submit
-            </button>
-	         </div>
-         </div>
-     </div>    
-  )
+                        style={submitButtonStyles} 
+                        disabled={submitting}
+                        onClick={()=> props.submit(props.submitProps)}
+                        value="submit" className="submit-btn submit-profile-btn">
+                    Submit
+                </button>
+	        </div>
+        </nav>
+            
+    )
 };
 
 
