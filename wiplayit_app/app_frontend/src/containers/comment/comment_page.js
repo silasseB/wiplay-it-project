@@ -31,13 +31,13 @@ class CommentsBox extends Component {
 
    componentDidCatch(error, info) {
      // You can also log the error to an error reporting service
-     console.log(error, info);
+     //console.log(error, info);
    };
 
    
 
     componentDidMount() {
-        console.log(this.props)
+        //console.log(this.props)
        
         let { answer, post } = this.props;
             

@@ -2,9 +2,15 @@ import React from 'react';
 import { Link, BrowserRouter  } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 
-import {EditorLink, OptionsModalLink, UsersModalLink} from "components/modal-links"
 import { GetModalLinkProps } from "components/component-props";
-import { UpVoteAnswerBtn, DownVoteAnswerBtn, OptionsDropDownBtn} from 'components/buttons';
+import { 
+        UpVoteAnswerBtn,
+        DownVoteAnswerBtn,
+        OptionsDropDownBtn,
+        OpenEditorBtn,
+        OpenOptionsModalBtn,
+        ChangeImageBtn,
+        OpenUsersModalBtn} from 'components/buttons';
 
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import  * as types  from 'actions/types';
@@ -17,7 +23,8 @@ import { UserComponentSmall } from "components/profile_components";
 
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
+
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
@@ -93,20 +100,20 @@ export const AnswersComponent = props => {
 
     editAnswerProps = GetModalLinkProps.props(editAnswerProps);
     editCommentProps = GetModalLinkProps.props(editCommentProps);
-    
 
-    let EditorModalLink = <EditorLink {...editCommentProps}/>; 
-    let MenuModalLink   = <OptBtnSmallScreen {...editAnswerProps}/>;
-    let MenuDropdownLink = <OptBtnBigScreen {...editAnswerProps}/>;
+    let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
+    let MenuModalBtn       = <OptBtnSmallScreen {...editAnswerProps}/>;
+    let MenuDropdownBtn    = <OptBtnBigScreen {...editAnswerProps}/>;
+    
 
     let optionsBtn = ()=>(
         <div>
-            {MenuModalLink}
-            {MenuDropdownLink}
+            {MenuModalBtn}
+            {MenuDropdownBtn}
         </div>
         )
 
-    let AnswerUpVotersLink =  answer.upvotes !== 0 && <UsersModalLink {...answerUpvotersProps}/> 
+    let AnswerUpVotersBtn =  answer.upvotes !== 0 && <OpenUsersModalBtn {...answerUpvotersProps}/> 
    
     
 
@@ -116,18 +123,16 @@ export const AnswersComponent = props => {
       }; 
 
     Object.assign(btnsProps, props)
-    let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
-                         { props.answer.upvotes }  Upvotes
-                     </Link>;
+   
     
     let UpVoteBtn =  props.answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
                : <UpVoteAnswerBtn {...btnsProps}/>
           
    
     const btnsList   = { 
-            itemsCounter : AnswerUpVotersLink,
+            itemsCounter : AnswerUpVotersBtn,
             btn1   : UpVoteBtn,
-            btn2   : EditorModalLink,
+            btn2   : EditorModalBtn,
             btn3   : optionsBtn(),
             Styles : Styles
          };

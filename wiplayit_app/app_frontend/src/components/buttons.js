@@ -3,9 +3,9 @@ import { Link, useLocation, Router } from "react-router-dom";
 import {history} from "App" 
 import { EditorLink } from "components/modal-links"
 
-import { ModalManager}   from  "containers/modal/modal_container";
+import { ModalManager, Modal }   from  "containers/modal/modal_container";
 import { store } from "store/index";
-import {showModal} from 'actions/actionCreators';
+import {showModal, handleError} from 'actions/actionCreators';
 
 
  let unfollowedBtnStyles = {
@@ -22,6 +22,8 @@ import {showModal} from 'actions/actionCreators';
 
 
 
+
+
 export const FollowUserBtn = props => {
     //console.log(props)
     
@@ -30,7 +32,7 @@ export const FollowUserBtn = props => {
     
     let btnText        =  obj && obj.user_is_following && "Following" || "Follow";
     var followers_text =  obj && obj.profile && obj.profile.followers > 1? 'Followers' : 'Follower';  
-    let styles         = obj && obj.user_is_following && followedBtnStyles || unfollowedBtnStyles;
+    let styles         =  obj && obj.user_is_following && followedBtnStyles || unfollowedBtnStyles;
     
     currentUser = currentUser && currentUser || {};
     
@@ -38,13 +40,13 @@ export const FollowUserBtn = props => {
         <div className="follow-btn-box">
             { obj && obj.email !== currentUser.email?
                 <button style={styles} type="button" 
-                        className="follow-user-btn"
+                        className="btn-sm follow-user-btn"
                         onClick={ () => editfollowersOrUpVoters(editUserProfileProps) }  
                     >
                     {btnText} {obj && obj.profile &&  obj.profile.followers }             
                 </button>
                 :
-                <button style={unfollowedBtnStyles} type="button" className="num-followers-btn">
+                <button style={unfollowedBtnStyles} type="button" className="btn-sm num-followers-btn">
                     {obj && obj.profile &&  obj.profile.followers } {followers_text}
                 </button>
             }
@@ -606,6 +608,14 @@ export const EditProfileDropDownButton = props => (
 
 
 
+export const ModalCloseBtn = props => {
+   console.log(props)
+    return(
+      <button type="button"  onClick={()=>window.history.back()} className="btn-sm custom-back-btn" >
+         {props.children}
+      </button>  
+  );
+}
 
 
 export const SubmitBtn = props => {
@@ -616,5 +626,146 @@ export const SubmitBtn = props => {
     </div>
  )
 }
+
+
+export const OpenEditorBtn = props => {
+    //console.log(props)
+  
+    let {modalProps, currentUser} = props ;
+    let { modalPath, className } =  props;
+
+      
+    let editorProps = modalProps && modalProps.editorProps || {...props};
+
+    modalProps = {
+            editorProps,
+            modalName   : 'editor', 
+        };
+
+    
+    let {objName, isPut, linkName, editorLinkStyles} = editorProps;
+    let context   = objName && objName.toLowerCase();
+    
+    let state = { modalProps } 
+    
+
+    let getButtonName =()=> {
+        let Edit = isPut && "Edit " || "";
+        return `${Edit}${objName}`;
+    };
+
+    let getEditorStyles = ()=>{
+            if (window.matchMedia("(min-width: 900px)").matches) {
+               return props.editorLinkDesktopStyles || {};
+            } else {
+              return props.editorLinkMobileStyles || {};
+            } 
+        };
+
+    
+    linkName   = linkName?linkName:getButtonName();
+    let styles = getEditorStyles();
+
+    //console.log(state)   
+    return(
+        <button  className={className}   onClick={()=> {
+                        if (!currentUser.is_confirmed) {
+                            let error = 'Sorry, you must confirm your account to start posting and editting ';
+                            store.dispatch(handleError(error));
+                            return;   
+                        }
+
+                      Modal(state) 
+
+                    }}>
+                    { linkName } 
+        </button>
+        
+    );
+};
+
+
+
+
+export const OpenOptionsModalBtn = props => {
+    
+    let  modalProps = {
+            optionsMenuProps : {...props},
+            modalName   : 'optionsMenu', 
+        }; 
+
+    let state = { modalProps  } 
+       
+        
+    return(
+        <button className="btn-sm options-btn"    onClick={()=> {  Modal(state) }}>
+             <i className="material-icons ">more_horiz</i>  
+        </button>
+        
+    );
+};
+
+
+
+
+
+export const ChangeImageBtn = props => {
+    let location = useLocation();
+    //console.log(props)
+    let {currentUser} = props && props;
+
+    let modalProps = {
+            dropImageProps : {...props},
+            modalName      : 'dropImage', 
+        }; 
+
+    let state    = { modalProps };
+
+
+    let linkName = props.linkName || `Edit`;
+
+    return(
+       
+        <button className="edit-img-btn"   onClick={()=> {
+                        if (!currentUser.is_confirmed) {
+                            let error = 'Sorry, you must confirm your account to to change photo ';
+                            store.dispatch(handleError(error));
+                            return;   
+                        }
+                        Modal(state)
+
+
+                    }}>
+            {linkName}  
+        </button>
+    );
+};
+
+
+
+
+
+export const OpenUsersModalBtn = props => {
+    let {obj, linkName} = props
+    
+    let modalProps = {
+            userListProps : {...props},
+            modalName     : 'userList', 
+        }; 
+
+    let state = { modalProps } 
+        
+        
+    return(
+        <button className="btn-sm"    onClick={()=> {
+                        Modal(state)
+
+                    }}>
+            {linkName}  
+        </button>
+        
+    );
+};
+
 
 

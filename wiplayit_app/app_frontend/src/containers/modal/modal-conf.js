@@ -12,83 +12,9 @@ import {
 } from "react-router-dom";
 
 import { store } from "store/index";
-import { ModalOptionsMenu } from "components/buttons";
-import EditProfile, { DropImage } from "containers/profile/edit_profile";
-import UserListBox from "containers/users/modal_user_list"; 
 
-import AppEditor  from 'containers/editor';
 import ModalBox,{ModalManager}  from "containers/modal/modal_container";
 import * as Effects from 'containers/modal/Effects';
-import { showModal }  from 'actions/actionCreators';
-
-
-export function Modal(props) {
-    
-    let {background, modalProps} = props;
-    console.log(props)
-
-    let {
-        modalType, 
-        editorProps,
-        optionsMenuProps,
-        dropImageProps,
-        userListProps } = modalProps !== undefined && modalProps;
-
-    console.log(props, modalType)
-
-    let modalStoreParams = { background, modalType  };
-
-    let getEditorContents = ()=>{
-        let { objName } = editorProps;
-        return objName === 'UserProfile' && <EditProfile {...editorProps}/> || <AppEditor {...editorProps}/>
-    }
-        
-
-    let getModalType = (type) => {
-        
-
-        if (background) {
-            switch(type){
-         
-                case 'editor':
-                    editorProps['background']    = background;
-                    editorProps['modalContents'] = getEditorContents();
-                    return ModalOpener.editorModal(editorProps, modalStoreParams);
-
-                case 'userProfile':
-                    editorProps['background']    = background;
-                    editorProps['modalContents'] =  <AppEditor {...editorProps}/>;
-                    return ModalOpener.editorModal(editorProps, modalStoreParams);
-
-                case 'optionsMenu':
-                    optionsMenuProps['background']    = background;
-                    optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
-                    return ModalOpener.optionsMenuModal(optionsMenuProps, modalStoreParams);
-
-                case 'dropImage':
-                    dropImageProps['background']    = background;
-                    dropImageProps['modalContents'] = <DropImage {...dropImageProps}/>
-                    return ModalOpener.dropImageModal(dropImageProps, modalStoreParams);
-
-                case 'userList':
-                    userListProps['background']    = background;
-                    userListProps['modalContents'] = <UserListBox {...userListProps}/>
-                    return ModalOpener.userListModal(userListProps, modalStoreParams);
-
-                default:
-                    return; 
-            }
-        
-        }
-    }; 
-
-    return (
-        <div>
-          {getModalType(modalType)}
-        </div>
-        )
-   
-}
 
 
 
@@ -97,37 +23,45 @@ export const ModalOpener = {
 
 
 
-    optionsMenuModal(contentsProps, modalStoreParams) {
+    optionsMenuModal(modalName, contentsProps) {
         return ModalManager.open(
             <OptionModal {...contentsProps} onRequestClose={() => true}/>,
-            modalStoreParams
+            modalName
 
         );
     },
 
 
-    editorModal(contents, modalStoreParams){
-        
+    editorModal(modalName, contentsProps){
+               
         return ModalManager.open(
-            <EditModal {...contents} onRequestClose={() => true}/>,
-            modalStoreParams
+            <EditModal {...contentsProps} onRequestClose={() => true}/>,
+            modalName
         );
     },
  
 
-    dropImageModal(contents, modalStoreParams){
+    dropImageModal(modalName, contentsProps){
 
         return ModalManager.open(
-            <DropImageModal {...contents} onRequestClose={() => true}/>,
-            modalStoreParams
+            <DropImageModal {...contentsProps} onRequestClose={() => true}/>,
+            modalName
         );
     },
 
-    userListModal(contents, modalStoreParams){
+    userListModal(modalName, contentsProps){
 
         return ModalManager.open(
-            <UserListModal {...contents} onRequestClose={() => true}/>,
-            modalStoreParams
+            <UserListModal {...contentsProps} onRequestClose={() => true}/>,
+            modalName
+        );
+    },
+
+    navBarMenuModal(modalName, contentsProps){
+        
+        return ModalManager.open(
+            <NavBarMenuModal {...contentsProps} onRequestClose={() => true}/>,
+            modalName
         );
     },
 };
@@ -157,14 +91,34 @@ const option_modal_styles = {
 };
 
 
+
+const nav_bar_modal_styles = {
+  
+  content: {
+    width                   : '70%',
+    margin                  : 'auto',
+    border                  : '1px solid rgba(0, 0, 0, .2)',
+    background              : '#fff',
+    overflow                : 'none',
+    borderRadius            : '4px',
+    outline                 : 'none',
+    boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
+    height                  : '100%', 
+    bottom                  : 'auto',
+    top                     : 'auto', 
+    position                : 'fixed',
+    right                   : 'auto',
+    left                    : 'auto',
+  }
+};
+
 export const OptionModal = props => {
     
     let modal_props = {
         modalStyles    : option_modal_styles,
         effect         : Effects.SlideFromBottom,
         modalContents  : props.modalContents,
-        background     : props.background,
-        modalType      : 'optionsMenu',
+        modalName      : 'optionsMenu',
     };
 
     modal_props =Object.assign(modal_props, props)
@@ -177,6 +131,25 @@ export const OptionModal = props => {
 
 
 
+
+export const NavBarMenuModal = props => {
+    
+    let modal_props = {
+        modalStyles    : nav_bar_modal_styles,
+        effect         : Effects.SideFall,
+        modalContents  : props.modalContents,
+        modalName      : 'navigationMenu',
+    };
+
+    modal_props =Object.assign(modal_props, props)
+
+    console.log(props)
+    return(
+        <div>
+            <ModalContainer {...modal_props} />
+        </div>
+    ); 
+};
 
 
 
@@ -234,17 +207,18 @@ let getModalEffect =()=> {
 };
 
 export const EditModal = props => {
-    let modal_props = {
-       modalStyles    : getEditorStyles(),
-       effect         : getModalEffect() ,
-       modalContents  : props.modalContents,
-       background     : props.background,
-       modalType      : 'editor', 
+    console.log(props)
+
+    let modalProps = {
+        modalStyles    : getEditorStyles(),
+        effect         : getModalEffect() ,
+        modalContents  : props.modalContents,
+        modalName      : 'editor', 
 
     }; 
 
     return(
-       <ModalContainer {...modal_props} />
+       <ModalContainer {...modalProps} />
     ); 
 };
 
@@ -304,8 +278,7 @@ export const DropImageModal = props => {
         modalStyles    : getDropImageStyles(),
         effect         : Effects.ScaleUp,
         modalContents  : props.modalContents,
-        background     : props.background,
-        modalType      : 'dropImage',
+        modalName      : 'dropImage',
     }; 
 
     return(
@@ -338,8 +311,7 @@ export const UserListModal = props => {
         modalStyles    : getEditorStyles(),
         effect         : Effects.ScaleUp ,
         modalContents  : props.modalContents,
-        background     : props.background,
-        modalType      : 'userList',
+        modalName      : 'userList',
     }; 
 
     return(
@@ -355,12 +327,13 @@ export const UserListModal = props => {
 
 
 export function  ModalContainer(props)  {
+    console.log(props)
    
    //Render modal with pass its contents
     const {
             modalContents,
             modalStyles,
-            modalType,
+            modalName,
             effect, 
             onRequestClose,
             background } = props;
@@ -368,8 +341,7 @@ export function  ModalContainer(props)  {
     return (
         <ModalBox
             style={modalStyles}
-            background={background}
-            modalType={modalType}
+            modalName={modalName}
             onRequestClose={onRequestClose}
             effect={effect}>
 

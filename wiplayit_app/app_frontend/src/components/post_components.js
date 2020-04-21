@@ -2,12 +2,19 @@ import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import Api from 'utils/api';
-import {EditorLink, OptionsModalLink, UsersModalLink} from "components/modal-links"
 import { GetModalLinkProps } from "components/component-props";
 
 import  * as types  from 'actions/types';
 
-import {DownVotePostBtn,UpVotePostBtn, OptionsDropDownBtn} from 'components/buttons';
+import {
+        DownVotePostBtn,
+        UpVotePostBtn,
+        OptionsDropDownBtn,
+        OpenEditorBtn,
+        OpenOptionsModalBtn,
+        ChangeImageBtn,
+        OpenUsersModalBtn,} from 'components/buttons';
+
 import CommentsBox from "containers/comment/comment_page";
 import {pageMediaBlockRenderer} from 'components/editor_components';
 import {Editor,EditorState, convertFromRaw} from 'draft-js';
@@ -16,8 +23,7 @@ import {ButtonsBox,Styles} from "components/partial_components";
 import { UserComponentSmall } from "components/profile_components";
 
 
-
-const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
@@ -83,19 +89,21 @@ export const PostComponent = props => {
 
     editPostProps = GetModalLinkProps.props(editPostProps)
     editCommentProps = GetModalLinkProps.props(editCommentProps)
-       
-    let EditorModalLink  = <EditorLink {...editCommentProps}/>; 
-    let MenuModalLink    = <OptBtnSmallScreen {...editPostProps}/>;
-    let MenuDropdownLink = <OptBtnBigScreen {...editPostProps}/>;
+
+    let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
+    let MenuModalBtn       = <OptBtnSmallScreen {...editPostProps}/>;
+    let MenuDropdownBtn    = <OptBtnBigScreen {...editPostProps}/>;
+
+     
 
     let optionsBtn = ()=>(
         <div>
-            {MenuModalLink}
-            {MenuDropdownLink}
+            {MenuModalBtn}
+            {MenuDropdownBtn}
         </div>
         )
 
-    let PostUpVotersLink = post.upvotes !== 0 &&  <UsersModalLink {...postUpvotersProps}/>; 
+    let PostUpVotersBtn = post.upvotes !== 0 &&  <OpenUsersModalBtn {...postUpvotersProps}/>; 
    
     
 
@@ -108,18 +116,15 @@ export const PostComponent = props => {
 
    
    Object.assign(btnsProps, props)
-   let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
-                         { post.upvotes }  Upvotes
-                     </Link>;
-
+   
    let UpVoteBtn =  post.upvoted? <DownVotePostBtn {...btnsProps}/>
                : <UpVotePostBtn {...btnsProps}/>
 
 
    const btnsList   = { 
-            itemsCounter : PostUpVotersLink,
+            itemsCounter : PostUpVotersBtn,
             btn1   : UpVoteBtn,
-            btn2   : EditorModalLink,
+            btn2   : EditorModalBtn,
             btn3   : optionsBtn(),
             Styles : Styles
          };

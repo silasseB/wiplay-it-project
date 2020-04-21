@@ -1,7 +1,7 @@
 
 .menu-img-container {
     border-bottom : 1px solid #D5D7D5;
-    padding : 0 0 12px ; 
+    padding : 0 0 20px ; 
 
 }
 
@@ -28,14 +28,14 @@
 }
 
 .menu-user-credential{
-    border        : px solid blue;
-    font-family : 'Cambay';
-    font-size   : 12px; 
-    margin-left   : 18px; 
+    border       : px solid blue;
+    font-family  : 'Cambay';
+    font-size    : 12px; 
+    margin-left  : 18px; 
 
 }
 
-.logout-btn {
+.logout-btn, .dropdown-item {
     border       : px solid blue;
     width        : 100%; 
     text-align   : left !important;
@@ -155,12 +155,48 @@
         padding : 10px 0 0 10px; 
     }
 
-    .navigation-img-box{
+    .navigation-img-box, #nav-bar-modal-men {
         border  : px solid red;
     
     }
 
-    #navBardropdown{
+    .nav-bar-modal-menu-box {
+        margin-top: 15px;
+
+    }
+
+    .nav-bar-menu-header {
+        display       : flex;
+        border-bottom : 1px solid  #D5D7D5; 
+        background    :  #F7F7F7; 
+    }
+    
+    .nav-bar-menu-title-box {
+        width : 100%;
+        border  : px solid blue;
+    }
+
+    .nav-bar-menu-title-box li {
+        border       : px solid black;
+        padding-left : 20px;
+        padding-top  : 7px;
+
+    }
+
+    .nav-bar-menu-close-btn {
+        float   : right;
+        border  : px solid blue;
+        margin  : 7px;
+
+    }
+
+    .dismiss-nav-bar-menu-icon {
+        font-size : 15px;
+        color     : gray;
+        font-weight: bold;;
+    }
+
+    #navBardropdown, .nav-bar-img-box{
         border        : 1px solid #D5D7D5;
         border-radius : 50%;
         width         : 27px;

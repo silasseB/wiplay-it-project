@@ -3,7 +3,10 @@ import { GetModalLinkProps } from "../components/component-props";
 import {EditorLink, OptionsModalLink, UsersModalLink} from "components/modal-links"
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { FollowQuestionBtn, UnfollowQuestionBtn, OptionsDropDownBtn} from 'components/buttons';
+import { OpenOptionsModalBtn,
+         FollowQuestionBtn,
+         UnfollowQuestionBtn,
+         OptionsDropDownBtn} from 'components/buttons';
 
 import {ButtonsBox, Styles } from "components/partial_components";
 //import AnswersBox from "containers/answer/answer_page";
@@ -11,7 +14,7 @@ import  * as types  from 'actions/types';
 import Api from 'utils/api';
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 
 const api      = new Api();
@@ -97,13 +100,13 @@ export const QuestionComponent = props => {
  
     let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
 
-    let MenuModalLink    = <OptBtnSmallScreen {...editQuestionProps}/>;
-    let MenuDropdownLink = <OptBtnBigScreen {...editQuestionProps}/>;
+    let MenuModalBtn    = <OptBtnSmallScreen {...editQuestionProps}/>;
+    let MenuDropdownBtn = <OptBtnBigScreen {...editQuestionProps}/>;
 
     let optionsBtn = ()=>(
         <div>
-            {MenuModalLink}
-            {MenuDropdownLink}
+            {MenuModalBtn}
+            {MenuDropdownBtn}
         </div>
         )
 

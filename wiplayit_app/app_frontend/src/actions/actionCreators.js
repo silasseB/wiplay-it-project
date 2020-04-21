@@ -799,15 +799,15 @@ export const getReplyChildLindData = (props) => {
 };
 
 
-export const showModal = (params) =>{
-    let {background, modalType, boolValue} = params; 
-       
+export const showModal = (modalName, isOpening) =>{
+    
+    console.log(modalName, isOpening)  
     return {
       type : 'MODAL_ROUTER',
-      byId : modalType,
+      byId : modalName,
       payLoad : {
-        modalIsOpen  : boolValue,
-        background ,
+        modalIsOpen  : isOpening,
+        
       }
    };
 };

@@ -133,10 +133,12 @@ const storeEnhancers = compose(
 );
 
 
-export const store = createStore(rootReducer, storeEnhancers);
+export const store = createStore(rootReducer, 
+                                window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+                                storeEnhancers);
 
 
-
+// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 
 
 

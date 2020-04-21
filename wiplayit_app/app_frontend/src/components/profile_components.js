@@ -7,25 +7,25 @@ import {history} from "App"
 import Api from 'utils/api';
 import  * as types  from 'actions/types';
 
-
-import { UnfollowUserBtn, FollowUserBtn, OptionsDropDownBtn} from "components/buttons"; 
-
 import{ QuestionComponent } from "components/question_components"
 import GetTimeStamp from 'utils/timeStamp';
 
 import { PostComponent } from "components/post_components"
 import { GetModalLinkProps } from "components/component-props";
 import { AnswersComponent  } from "components/answer_components";
-import { 
-    OptionsModalLink,
-    EditorLink, 
-    ChangeImageBtn,
-    UsersModalLink } from "components/modal-links";
+
+import { OpenEditorBtn,
+         OpenOptionsModalBtn,
+         ChangeImageBtn,
+         OpenUsersModalBtn,
+         OptionsDropDownBtn,
+         UnfollowUserBtn, 
+         FollowUserBtn } from "components/buttons";
 
 
-const OptBtnSmallScreen   = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnSmallScreen   = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen     = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
-const EditorLinkBigScreen = MatchMediaHOC(EditorLink, '(min-width: 980px)') 
+const EditorLinkBigScreen = MatchMediaHOC(OpenEditorBtn, '(min-width: 980px)') 
 const api      = new Api();
 
    
@@ -102,8 +102,8 @@ export const ProfileComponent = props => {
     let EditorModalBtnSmallScreen = MatchMediaHOC(EditorModalBtnSmall, '(max-width: 980px)');
     let ChangeImageBtnBigScreen   = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
 
-    let UserProfileFollowersLink = profile && profile.followers !== 0 && 
-                                                 <UsersModalLink {...userProfileFollowersProps}/>; 
+    let UserProfileFollowersBtn = profile && profile.followers !== 0 && 
+                                                 <OpenUsersModalBtn {...userProfileFollowersProps}/>; 
 
     let pathToUserFollowers = userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
     const pathToEditProfile = userProfile  && `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
@@ -287,7 +287,7 @@ export const UserProfileFollowingList = props => {
             linkName  : `Show more`,
            
         };
-    let UserProfileFollowersLink =  <UsersModalLink {...userProfileFollowersProps}/>; 
+    let UserProfileFollowersBtn =  <OpenUsersModalBtn {...userProfileFollowersProps}/>; 
     //console.log(users.userList,userList)
 
     return (
@@ -318,7 +318,7 @@ export const UserProfileFollowingList = props => {
                 null   
             }
             <div className="partial-user-list-box-bottom">
-                {UserProfileFollowersLink}
+                {UserProfileFollowersBtn}
             </div>
 
         </div>
@@ -342,7 +342,7 @@ export const PartialUserList = props => {
         }
 
         editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-        var btnsProps   = {...props, editUserProfileProps};
+        let btnsProps   = {...props, editUserProfileProps};
       
         let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
         //console.log(props)
@@ -636,22 +636,22 @@ export const UsersComponent = props => {
                 </div> 
 
                 <div className="user-list-credentials-box">
-                    <div className="user-list-credentials-contents">
-                        <p onClick={() => props.push({path:pathToProfile,state})}
+                    <ul className="user-list-credentials-contents">
+                        <li onClick={() => props.push({path:pathToProfile,state})}
                            className="user-list-name">
                             { user.first_name }   {user.last_name }
-                        </p>
+                        </li>
 
-                        <div className="">
-                            <p className="user-list-credentials">{ user.profile.credential }</p>
-                        </div>
-                    </div>
+                        <li className="user-list-credentials">
+                            { user.profile.credential }
+                        </li>
+                    </ul>
 
                 </div>
 
                 <div className="user-list-follow-box" >
-                    <div className="follow-user-list-box">
-                        <FollowBtn {...btnsProps}/>
+                    <div className="user-list-follow-btn-box">
+                        <FollowUserBtn {...btnsProps}/>
                     </div>
                 </div>
 

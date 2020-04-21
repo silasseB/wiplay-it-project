@@ -3,11 +3,11 @@ import { MatchMediaHOC } from 'react-match-media';
 import React, { Component } from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
 import {ModalManager} from "containers/modal/modal_container";
-import { ChangeImageBtn } from "components/modal-links"
+
 import { GetModalLinkProps } from "components/component-props";
 
 import { EditProfileNavBar } from "components/navBar";
-//import {  ModalCloseBtn  } from "../../components/buttons";
+import {  ChangeImageBtn  } from "components/buttons";
 //import withHigherOrderIndexBox from "../../containers/index/higher_order_index";
 
 import  * as types  from 'actions/types';

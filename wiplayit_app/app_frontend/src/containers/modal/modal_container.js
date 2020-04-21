@@ -13,7 +13,7 @@ import {
 } from "react-router-dom";
 
 import { showModal }  from 'actions/actionCreators';
-
+import {GetModalType} from 'containers/modal/modal-types'
 import { history } from "App" 
 import { store } from "store/index";
 import Assign from 'lodash.assign';
@@ -76,10 +76,11 @@ class ModalBox extends Component{
        
         if(!this.props.onRequestClose || this.props.onRequestClose()){
            
-          let { background, modalType} = this.props;
+          let { modalName} = this.props;
           console.log(this.props)
-          
-          ModalManager.close(modalType, background);
+          window.history.back();
+
+          ModalManager.close(modalName);
         }
    }
 
@@ -115,7 +116,7 @@ class ModalBox extends Component{
     }
 
     render(){
-      //console.log(this.props)
+      console.log(this.props)
       const {style,effect} = this.props;
       const { open } = this.state;
 
@@ -171,30 +172,27 @@ const renderModal = () => {
 }
 
 
+
 export const ModalManager = {
 
-    open(component, props){
-        let {background, modalType} = props;
+    open(component, modalName){
+
         modals.push(component);
 
         if(modals.length === 1){ // render the modal only if there is no other showing modals
             renderModal();
         }
+
+        window.history.pushState(null, null, window.location.href);
+
+        store.dispatch(showModal(modalName, true));
     },
-    close(modalType, background){
+    close(modalName){
         
         onClose && onClose(() => {
-            console.log(modalType, background);
+            console.log(modalName);
+           store.dispatch(showModal(modalName, false));
 
-            let modalParams = {
-                boolValue: false, 
-                background:undefined,
-                modalType,
-            };
-
-            store.dispatch(showModal(modalParams));
-            
-            background && background != undefined  && history.goBack();
             ReactDOM.unmountComponentAtNode(node);
            //renderModal();// render the other modals which are waiting.
        });
@@ -202,3 +200,19 @@ export const ModalManager = {
 }
 
 
+
+
+export const Modal=(props)=> {
+    
+    let {modalProps} = props;
+    console.log(props)
+
+    let modal = GetModalType(modalProps) 
+
+    return (
+        <div>
+          {modal}
+        </div>
+        )
+   
+}

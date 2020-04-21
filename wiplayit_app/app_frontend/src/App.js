@@ -27,8 +27,7 @@ import UserProfileContainer from "containers/profile/profile_page";
 import  PasswordChangePage from "containers/authentication/password_change_page";
 import EmailResendPage    from "containers/authentication/email_resend_page"
 import PasswordResetPage   from "containers/authentication/password_reset_page"
-import {Modal}   from  "containers/modal/modal-conf";
-import { ModalManager}   from  "containers/modal/modal_container";
+import { ModalManager, Modal}   from  "containers/modal/modal_container";
 
 import AccountConfirmationPage from "containers/authentication/account_confirmation_page"
 /*import UserListBox from "containers/users/user_list_page"; 

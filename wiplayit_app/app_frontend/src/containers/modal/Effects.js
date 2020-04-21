@@ -14,7 +14,24 @@ export const ScaleUp = {
         'transform': 'scale(1)',
         'opacity': 1
       }
-}
+};
+
+
+export const SlideFromLeft = {
+     transition : {
+        property : 'all',
+        duration : 300,
+        timingfunction : 'cubic-bezier(0.25, 0.5, 0.5, 0.9)'
+     },
+     begin : {
+       'transform': 'translateZ(35%)',
+       'opacity': 0
+     },
+     end : {
+       'transform': 'translateZ(0)',
+       'opacity': 1
+     }
+};
 
 export const SlideFromRight = {
      transition : {

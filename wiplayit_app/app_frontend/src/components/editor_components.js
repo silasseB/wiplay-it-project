@@ -1,7 +1,7 @@
 import React from 'react';
-import { ModalManager}   from  "../containers/modal/modal_container";
-
-import LinkInput from '../containers/input';
+import { ModalManager}   from  "containers/modal/modal_container";
+import { ModalCloseBtn } from "components/buttons"
+import LinkInput from 'containers/input';
 import { Editor, Entity,CompositeDecorator, EditorState } from 'draft-js';
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -159,7 +159,7 @@ export const MobileModalNavBar = props  => {
     
     let DoneBtn = ()=>(
             <button  type="button" 
-                onClick={()=> ModalManager.close('editor',props.background)}
+                onClick={()=> window.history.back()}
                 className="btn-sm modal-custom-back-btn custom-back-btn">
                 Done
             </button>
@@ -169,7 +169,9 @@ export const MobileModalNavBar = props  => {
         <div id="modal-navbar-container" className="fixed-top">
             <div className="modal-navbar-box"> 
                 <div className="back-btn-box">
-                    <ModalCloseButton {...props}/>      
+                    <ModalCloseBtn> 
+                     
+                    </ModalCloseBtn>     
                 </div>
 
                 <div className="modal-title-box">
@@ -212,7 +214,9 @@ export const DesktopModalNavBar = (props) => {
             </div>
 
             <div className="modal-close-btn-box">
-                <DesktopModalCloseBtn  {...props}/>
+                <ModalCloseBtn>
+                    {<span className="modal-close-icon">&times;</span>}
+                </ModalCloseBtn>    
             </div>
         </div>
     )  

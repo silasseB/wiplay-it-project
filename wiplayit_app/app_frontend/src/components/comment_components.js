@@ -1,9 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { UpVoteCommentBtn, DownVoteCommentBtn, OptionsDropDownBtn } from 'components/buttons';
+import {
+         UpVoteCommentBtn,
+         DownVoteCommentBtn,
+         OptionsDropDownBtn,
+         OpenEditorBtn,
+         OpenOptionsModalBtn,
+         ChangeImageBtn,
+         OpenUsersModalBtn, } from 'components/buttons';
 
-import {EditorLink, OptionsModalLink,UsersModalLink} from "components/modal-links"
+
 import { GetModalLinkProps } from "components/component-props";
 
 import {ButtonsBox, Styles} from "components/partial_components";
@@ -18,7 +25,7 @@ import {pageMediaBlockRenderer} from 'components/editor_components';
 
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen   = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
@@ -111,9 +118,9 @@ export const CommentsComponent = props => {
     editCommentProps  = GetModalLinkProps.props( editCommentProps)
     editReplyProps    = GetModalLinkProps.props(editReplyProps)
     
-    let EditorModalLink     = <EditorLink {...editReplyProps}/>; 
-    let MenuModalLink       = <OptBtnSmallScreen {...editCommentProps}/>;
-    let MenuDropdownLink    = <OptBtnBigScreen {...editCommentProps}/>;
+    let EditorModalBtn     = <OpenEditorBtn {...editReplyProps}/>; 
+    let MenuModalBtn       = <OptBtnSmallScreen {...editCommentProps}/>;
+    let MenuDropdownBtn    = <OptBtnBigScreen {...editCommentProps}/>;
 
     let optionsBtn = ()=>(
         <div>
@@ -122,7 +129,7 @@ export const CommentsComponent = props => {
         </div>
         )
 
-    let CommentUpVotersLink = comment.upvotes !== 0 &&  <UsersModalLink {...commentUpvotersProps}/>; 
+    let CommentUpVotersBtn = comment.upvotes !== 0 &&  <OpenUsersModalBtn {...commentUpvotersProps}/>; 
     
 
 
@@ -135,20 +142,16 @@ export const CommentsComponent = props => {
       }; 
 
    Object.assign(btnsProps, props)
-   
-    let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
-                          { props.comment.upvotes }  Upvotes
-                      </Link>;
-
+      
    let upvoteBtn =  props.comment.upvoted? <DownVoteCommentBtn {...btnsProps}/>
                : <UpVoteCommentBtn {...btnsProps}/>
 
    
               
     const btnsList  = {
-        itemsCounter :  CommentUpVotersLink,
+        itemsCounter :  CommentUpVotersBtn,
         btn1         :  upvoteBtn,
-        btn2         :  EditorModalLink,
+        btn2         :  EditorModalBtn,
         btn3         :  optionsBtn(),
         Styles       : Styles,
       } 

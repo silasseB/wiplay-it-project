@@ -3,12 +3,14 @@ import React from 'react';
 import {  Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { SubmitBtn  } from "components/buttons";
-import { ModalManager}   from  "containers/modal/modal_container";
-import {EditorLink } from "components/modal-links"
+import { ModalManager,Modal}   from  "containers/modal/modal_container";
+
+import { OpenEditorBtn } from "components/buttons";
+
 import { GetModalLinkProps } from "components/component-props";
 import { store } from "store/index";
-import {showModal} from 'actions/actionCreators';
-import {history} from "App" 
+import { showModal } from 'actions/actionCreators';
+import { history } from "App" 
 
 
 let editorLinkMobileStyles = {
@@ -54,28 +56,30 @@ let createQuestionProps = {
 createQuestionProps = GetModalLinkProps.props(createQuestionProps);
 createPostProps = GetModalLinkProps.props(createPostProps);
 
-const NavBarMenuItems = props => {
+export const NavBarMenuItems = props => {
     let { currentUser } = props;
     let profile = currentUser && currentUser.profile;
           
-    let state = {userProfile:currentUser};
+    let state = {userProfile : currentUser};
     
-    let path_to_profile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
+    let pathToProfile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
  
     return(
+        <BrowserRouter>
         <div>
-            <div className="menu-img-container">
-                <div className="menu-img-box" onClick={() => history.push(path_to_profile, state) }> 
-                    { profile && profile.profile_picture?
-                        <img alt="" src={profile.profile_picture} className="menu-img"/>
-                        :
-                        <img alt="" src={require("media/user-image-placeholder.png")} className="menu-img"/> 
 
-                    }
+            <div className="menu-img-container">
+                <div className="menu-img-box" onClick={() => props.push({path:pathToProfile,state})}> 
+                        { profile && profile.profile_picture?
+                            <img alt="" src={profile.profile_picture} className="menu-img"/>
+                            :
+                            <img alt="" src={require("media/user-image-placeholder.png")} className="menu-img"/> 
+
+                        }
                 </div>
 
-                <ul className="menu-username-box" onClick={() => history.push(path_to_profile, state)}>
-                    <li className="menu-username" >
+                <ul className="menu-username-box">
+                    <li className="menu-username"  onClick={() => props.push({path:pathToProfile,state})}>
                         {currentUser.first_name}  {currentUser.last_name} 
                     </li>
                     <li className="menu-user-credential" >
@@ -96,9 +100,26 @@ const NavBarMenuItems = props => {
                     <button  onClick={props.logout} className="btn-sm logout-btn">Logout</button>
             </div>
         </div>
+        </BrowserRouter>
     )
 }
 
+
+export const RedirectModalLinks = props => {
+    let {pathname, background, state} = props;
+
+    if (window.matchMedia("(max-width: 980px)").matches) {
+        ModalManager.close('navigationMenu') 
+
+        setTimeout(()=> {
+            history.push(pathname, state); 
+        }, 500);
+
+        return;
+    }
+
+    return;
+}
 
 const NavBarDropDown = props => {
     let { currentUser } = props;
@@ -131,6 +152,68 @@ const NavBarDropDown = props => {
     )
 }
 
+export const NavBarMenuModalItems = props =>{
+    console.log(props);
+    let { background } = props;
+
+
+    return(
+        <div className="">
+            <div className="nav-bar-menu-header">
+                <ul className="nav-bar-menu-title-box">
+                    <li>You Account</li>
+                </ul>
+
+                <button type='button' 
+                        onClick={()=>{
+                            window.history.back();
+                            ModalManager.close('navigationMenu')
+                        }}
+
+                        className="btn-sm nav-bar-menu-close-btn">
+                    <span className="dismiss-nav-bar-menu-icon">&times;</span>
+                </button>
+            </div>
+            <div className="nav-bar-modal-menu-box">
+                <NavBarMenuItems {...props}/>
+            </div>
+        </div>
+    )
+
+}
+
+
+const NavBarModalMenu = props => {
+    let { currentUser} = props;
+    let profile = currentUser && currentUser.profile;
+    
+    let modalProps = {
+            navBarMenuProps:{currentUser},
+            modalName   : 'navigationMenu', 
+        };
+
+    let state = { modalProps } 
+
+    return(
+        
+        <div className="navigation-img-box "
+             onClick={()=> Modal(state)}>
+                    
+            <div className="nav-bar-modal-menu" id="nav-bar-modal-menu">
+                <div className="nav-bar-img-box"> 
+                    { profile && profile.profile_picture?
+                        <img alt="" src={profile.profile_picture} className="nav-bar-img"/>
+                        :
+                        <img alt="" src={require("media/user-image-placeholder.png")} className="nav-bar-img"/> 
+
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
 
 export const NavBarSmallScreen = props => {
 
@@ -139,6 +222,7 @@ export const NavBarSmallScreen = props => {
     
     createPostProps     = {...createPostProps, currentUser};
     createQuestionProps = {...createQuestionProps, currentUser};
+
     let styles = {
         width     : '100%',
         border    : 'px solid red',
@@ -147,21 +231,11 @@ export const NavBarSmallScreen = props => {
 
     let modalProps = {
             userListProps : {currentUser},
-            modalType     : 'userList', 
+            modalName     : 'userList', 
         }; 
 
-    let state = { 
-        background : props.location,
-        modalProps
-    } 
+    let state = { modalProps } 
 
-
-    let madalParams = {
-        boolValue : true,
-        modalType   : 'userList',
-        background  : props.location,
-    }
-    let pathname = `/compose/${'user'}/${1}/`;
      
 
     return (
@@ -173,14 +247,14 @@ export const NavBarSmallScreen = props => {
                     </ul>                    
                     <ul className="post-question-btn-box">
                         <li className="create-question-btn-box">
-                            <EditorLink {...createQuestionProps}/>
+                            <OpenEditorBtn {...createQuestionProps}/>
                         </li>
 
                         <p>Or</p>
 
                         
                         <li className="create-post-btn-box">
-                            <EditorLink {...createPostProps}/>
+                            <OpenEditorBtn {...createPostProps}/>
                         </li>
                     </ul>
                 </div>
@@ -218,7 +292,7 @@ export const NavBarSmallScreen = props => {
                         </li>
                     </ul>
                     <div className="navigation-img-item">
-                        <NavBarDropDown {...props}/>
+                        <NavBarModalMenu{...props}/>
                     </div>
 
                 </div>
@@ -310,12 +384,12 @@ export const NavBarBigScreen = props => {
               
                     <div className="post-question-btn-box">
                         <div className="create-question-btn-box">
-                            <EditorLink {...createQuestionProps}/>
+                            <OpenEditorBtn {...createQuestionProps}/>
                         </div>
     
                         <p>Or</p>
                         <div className="create-post-btn-box">
-                            <EditorLink {...createPostProps}/>
+                            <OpenEditorBtn {...createPostProps}/>
                         </div>
                     </div>
                 </div>
@@ -355,7 +429,7 @@ export const PartialNavBar = props =>{
             </div>
          
             <div className="navigation-img-item">
-                <NavBarDropDown {...props}/>
+                <NavBarModalMenu {...props}/>
             
             </div>
         </nav>
@@ -416,6 +490,7 @@ export const CustomBackBtn = props => {
       </button>  
   );
 }
+
 
 
 

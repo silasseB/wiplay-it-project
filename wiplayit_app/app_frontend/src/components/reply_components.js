@@ -3,7 +3,13 @@ import { BrowserRouter,Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from 'components/editor_components';
-import { UpVoteReplyBtn, DownVoteReplytBtn, OptionsDropDownBtn} from 'components/buttons';
+import { UpVoteReplyBtn,
+         DownVoteReplytBtn,
+         OptionsDropDownBtn,
+         OpenEditorBtn,
+         OpenOptionsModalBtn,
+         ChangeImageBtn,
+         OpenUsersModalBtn,} from 'components/buttons';
 
 import {ButtonsBox} from "components/partial_components";
 import Api from 'utils/api';
@@ -12,13 +18,12 @@ import ReplyChildrenBox from "containers/replies/reply_children_page";
 import ReplyGrandChildrenBox from "containers/replies/reply_grand_children_page";
 import ReplyGreatGrandChildBox from "containers/replies/reply_great_grand_child_page";
 
-import {EditorLink, OptionsModalLink, UsersModalLink} from "components/modal-links";
 import { GetModalLinkProps } from "components/component-props";
 import { UserComponentSmall } from "components/profile_components";
 
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OptionsModalLink, '(max-width: 980px)');
+const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 
@@ -347,18 +352,18 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
     editReplyProps = GetModalLinkProps.props(editReplyProps)
     
 
-    let EditorModalLink   = <EditorLink {...editReplyChildProps}/>; 
-    let MenuModalLink     = <OptBtnSmallScreen {...editReplyProps}/>;
-    let MenuDropdownLink    = <OptBtnBigScreen {...editReplyProps}/>;
+    let EditorModalBtn   = <OpenEditorBtn {...editReplyChildProps}/>; 
+    let MenuModalBtn     = <OptBtnSmallScreen {...editReplyProps}/>;
+    let MenuDropdownBtn    = <OptBtnBigScreen {...editReplyProps}/>;
 
     let optionsBtn = ()=>(
         <div>
-            {MenuModalLink}
-            {MenuDropdownLink}
+            {MenuModalBtn}
+            {MenuDropdownBtn}
         </div>
         )
 
-    let ReplyUpVotersLink = reply.upvotes !== 0 && <UsersModalLink {...replyUpvotersProps}/> 
+    let ReplyUpVotersBtn = reply.upvotes !== 0 && <OpenUsersModalBtn {...replyUpvotersProps}/> 
 
     
 
@@ -381,9 +386,9 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
    
 
    const btnsList  = {
-        itemsCounter :  ReplyUpVotersLink,
+        itemsCounter :  ReplyUpVotersBtn,
         btn1         :  upvoteBtn,
-        btn2         :  EditorModalLink,
+        btn2         :  EditorModalBtn,
         btn3         :  optionsBtn(),
       } 
 

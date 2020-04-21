@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { store } from "store/index";
 import {showModal, handleError} from 'actions/actionCreators';
 import {history} from "App" 
+
 import { ModalManager}   from  "containers/modal/modal_container";
 
 
@@ -42,7 +43,9 @@ export const EditorLink = props => {
     let getEditorStyles = ()=>{
             if (window.matchMedia("(min-width: 900px)").matches) {
                return props.editorLinkDesktopStyles || {};
-            } else {
+            }
+            
+            else {
               return props.editorLinkMobileStyles || {};
             } 
         };

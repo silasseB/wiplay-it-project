@@ -95,15 +95,11 @@ export function withHigherOrderIndexBox(Component) {
         // console.log(error, info);
         // }
         
-        componentWillUnmount() {
-            this.unsubscribe();
-            this._isMounted = false;
-            
-        };
+        
 
         static getDerivedStateFromProps(props, state) {
-           //console.log(state, props)
-           return null
+            //console.log(state, props)
+            return null
         }
 
         
@@ -242,8 +238,13 @@ export function withHigherOrderIndexBox(Component) {
             let useToken = true;
             this.props.authenticate({apiUrl, form:{}, useToken})
             
-        }    
-          
+        }  
+
+        componentWillUnmount() {
+            this.unsubscribe();
+            this._isMounted = false;
+            
+        };
 
         componentDidUpdate(prevProps, nextProps) {
             let { entities, history }  = prevProps;
@@ -252,30 +253,42 @@ export function withHigherOrderIndexBox(Component) {
             let { action } = history;
             
             if (modal && action === "POP") {
-                //console.log(action, modal)
-                let{background} = modal;
-
-                let optionsModal   = modal['optionsMenu'];
-                let editorModal    = modal['editor'];
-                let dropImageModal = modal['dropImage'];
-                let userListModal  = modal['userList'];
-
-
-                editorModal    && editorModal.modalIsOpen    && ModalManager.close('editor', background);
-                optionsModal   && optionsModal.modalIsOpen   && ModalManager.close('optionsMenu', background);
-                dropImageModal && dropImageModal.modalIsOpen && ModalManager.close('dropImage', background); 
-                userListModal  && userListModal.modalIsOpen  && ModalManager.close('userList', background); 
+                                
 
             }else{
                 //console.log(action, prevProps, this.props, modal)
             }
         };
 
-        updateIndicator(status) {
-            //status && console.log(' internet is ' + status);
-            // Show a different icon based on offline/online
+        onPopState() {
+
+            let { entities, history }  = this.props;
+            let { modal } = entities;
+
+            let{background} = modal;
+
+            let optionsModal     = modal['optionsMenu'];
+            let editorModal      = modal['editor'];
+            let dropImageModal   = modal['dropImage'];
+            let userListModal    = modal['userList'];
+            let navigationModal  = modal['navigationMenu'];
+            if (navigationModal && navigationModal.modalIsOpen) {
+                //window.history.go(1)
+
+            }
+            
+
+            console.log(modal)
+           
+            editorModal     && editorModal.modalIsOpen      && ModalManager.close('editor', background);
+            optionsModal    && optionsModal.modalIsOpen     && ModalManager.close('optionsMenu', background);
+            dropImageModal  && dropImageModal.modalIsOpen   && ModalManager.close('dropImage', background); 
+            userListModal   && userListModal.modalIsOpen    && ModalManager.close('userList', background); 
+            navigationModal && navigationModal.modalIsOpen  && ModalManager.close('navigationMenu', background);
+             
         }
 
+        
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
@@ -296,8 +309,15 @@ export function withHigherOrderIndexBox(Component) {
                console.log(' internet is online');
             });*/
 
-            //console.log(this.props.entities)  
+            console.log(window.location.href)  
             let { entities } = this.props;
+            
+            window.onpopstate = (event) => {
+                                            
+                this.onPopState();
+                return false;
+            }
+
             window.addEventListener("beforeunload",(event)=>{
                 
                 let { modal } = entities;

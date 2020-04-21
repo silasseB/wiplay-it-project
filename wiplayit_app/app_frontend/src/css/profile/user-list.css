@@ -3,19 +3,12 @@
     font-size        : 15px;
     font-family      : 'Teko';
     border-radius    : 14px;
-    text-align       : center;
-    text-decoration  : none;
-    display          : inline-block;
-    padding          : 3px 6px; 
+     
 }
 
 
 .follow-btn-box button:focus, .follow-btn-box button:active { 
     border : 1px solid #B7D5F0 !important;
-}
-
-.user-list-follow-btn-box button  {
-        float     : right;
 }
 
 
@@ -25,12 +18,18 @@
     text-decoration : none;
 }
 
+
+.user-list-follow-btn-box {
+    border : px solid black; 
+    margin : 12px 5px 0;
+}
+
 @media (max-width: 980px) {
 
 
 
 .users-modal-container {
-    border      :  1px solid blue;
+    border      : px solid blue;
     padding-top : 50px; 
 
 }
@@ -39,8 +38,8 @@
 
 
 .user-list-container {
-   background: #ffff;
-   border: 1px solid black
+   background : #ffff;
+   border     : px solid black
    
 }
 
@@ -69,22 +68,19 @@
 
 .user-list-credentials-contents {
     border : px solid green;
-    width  : 95%;
-    margin : 9px; 
-
+    width  : 100%;
+    
 }
 
 .user-list-img-box {
     border :  px solid blue;
-    width  : 11%; 
 }
-
 
 .user-list-img {
     border-radius : 50%;
     border        : 1px solid  #D5D7D5;
-    width         : 40px;
-    height        : 40px;
+    width         : 48px;
+    height        : 48px;
     margin        : 7px 5px;  
 }
 
@@ -92,29 +88,33 @@
 
     .user-list-photo {
         border-radius : 50%;
-        width         : 30px;
-        height        : 30px;
-        object-fit    : cover;
+        width         : 48px;
+        height        : 48px;
+        
     }
 
     .user-list-name {
-        font-size: 16px;
-        color: black;
-        font-family: 'Nunito';
-        border: px solid blue;
+        font-size   : 16px;
+        color       : black;
+        font-family : 'Ubuntu';
+        border      : px solid blue;
         font-weight : bold; 
+        line-height : 1;
+        margin-top  : 12px 
    
     }
 
     .user-list-credentials {
-        border    : px solid black;
-        font-size : 13px;
-        font-family : 'Cambay';  
+        border      : px solid black;
+        font-size   : 13px;
+        font-family : 'Cambay';
+        line-height : 1;
+           
     }
     
     .user-list-follow-box {
-        width  : 20%;
- 
+        border : px solid blue; 
+
     }
 
     .follow-user-2,.follow-user { 
@@ -123,10 +123,6 @@
     }
 
 
-    .user-list-follow-btn-box {
-        border : px solid red; 
-        margin : 12px 7px 7px; 
-    }
 
 
 
@@ -216,7 +212,6 @@
 
     .user-list-credentials-contents {
         border : px solid green;
-        margin : 9px; 
     }
 
     .user-list-img-box {
@@ -228,24 +223,25 @@
     .user-list-img {
         border-radius : 50%;
         border        : 1px solid  #D5D7D5;
-        width         : 40px;
-        height        : 40px;
+        width         : 50px;
+        height        : 50px;
         margin        : 7px 5px;  
     }
 
     .user-list-photo {
         border-radius: 50%;
-        width: 40px;
-        height:40px;
-        object-fit: cover;
+        width: 50px;
+        height:50px;
     }
 
     .user-list-name {
         font-size: 12px;
         color: black;
-        font-family: 'Nunito';
+        font-family: 'Ubuntu';
         border: px solid blue;
         font-weight : bold; 
+        line-height : 1;
+        margin-top  : 12px 
    
     }
 
@@ -253,28 +249,9 @@
         border    : px solid black;
         font-size : 13px;
         font-family : 'Cambay';  
+        line-height : 1;
+        
     }
-    
-    .user-list-name:hover {
-        color: black;
-        text-decoration: none;
-    }
-
-
-    .user-list-follow-box {
-        border : px solid red;
- 
-    }
-
-    
-
-    .follow-user-list-box {
-        border : px solid red; 
-        margin : 12px 7px 7px; 
-    }
-
-
-
     
 }
 
