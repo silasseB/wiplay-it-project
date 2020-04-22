@@ -21,19 +21,12 @@
     color: #A33F0B;
     font-size: 17pX;
     font-weight: bold;
-    margin: 0 !important;
-    border: px solid #D5D7D5;/*#F9F7F7;*/
+    border: 1px solid #D5D7D5;/*#F9F7F7;*/
 }
 
-.custom-back-btn {
-  width: 50px;
-  height: 20px;
-  margin:7px ;
-  border: none;
-  color: #fff;
-  background: #fff;
- 
-
+.nav-bar-back-btn {
+    margin : 7px ;
+    border : px solid blue;
     
 }
 

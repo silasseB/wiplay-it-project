@@ -170,7 +170,7 @@ export const MobileModalNavBar = props  => {
             <div className="modal-navbar-box"> 
                 <div className="back-btn-box">
                     <ModalCloseBtn> 
-                     
+                       <span className="modal-close-icon material-icons ">arrow_back</span>
                     </ModalCloseBtn>     
                 </div>
 

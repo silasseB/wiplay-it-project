@@ -484,13 +484,10 @@ export const EditProfileNavBar = props  => {
 
 
 export const CustomBackBtn = props => {
-    let styles = props.styles || {};
     return(
-        <button type="button" 
-              onClick={()=>window.history.back()} 
-              className="btn-sm custom-back-btn" >
-            <span className="arrow material-icons ">arrow_back</span>
-        </button>  
+      <button type="button"  onClick={()=>window.history.back()} className="btn-sm custom-back-btn" >
+         <span className="arrow material-icons ">arrow_back</span>
+      </button>  
   );
 }
 

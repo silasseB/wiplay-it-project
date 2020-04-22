@@ -610,8 +610,13 @@ export const EditProfileDropDownButton = props => (
 
 export const ModalCloseBtn = props => {
    console.log(props)
-    return(
-      <button type="button"  onClick={()=>window.history.back()} className="btn-sm custom-back-btn" >
+   let styles = props.styles || {};
+
+   return(
+      <button type="button" 
+              style={styles}
+              onClick={()=>window.history.back()}
+              className="btn-sm nav-bar-back-btn" >
          {props.children}
       </button>  
   );
