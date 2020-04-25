@@ -73,40 +73,27 @@ export const Styles = {
 
 
 
-const AlertStyles = {
-  
-  alertBox: {
-    width                   : '100%',
-    margin                  : 'auto',
-    overflow                : 'none',
-    borderRadius            : '4px',
-    outline                 : 'none',
-    height                  : 'auto', 
-    bottom                  :  0,
-    top                     :  'auto', 
-    position                : 'fixed',
-    right                   : 'auto',
-    left                    : 'auto',
-  },
- 
-  
-};
 
 
 export const AlertComponent =(props)=> {
     let defaulfMessage   = 'This is a warning message alert'
     let { message }      = props; 
+    let textMessage      = message && message.textMessage || defaulfMessage; 
+
     let  messageType     = message && message.messageType;
-    let alertBoxClass    = messageType === 'error'   && 'alert alert-danger alert-container'  ||
-                           messageType === 'success' && 'alert alert-success alert-container' || '';
-    //console.log(alertBoxClass, messageType)        
+    let classNames       = 'alert alert-container' 
+    classNames           = messageType === 'error'   && `${classNames} alert-danger`   ||
+                           messageType === 'success' &&  `${classNames} alert-success` || classNames;
+                                 
+
+    //console.log(classNames, messageType)        
     
     return(
-        <div style={AlertStyles.alertBox} className={alertBoxClass}>
+        <div className={classNames}>
             <div className="alert-box">
                 <ul className="alert-message">
                     <li>
-                        { message && message.textMessage }
+                        { textMessage }
                     </li>
                 </ul>
             </div>

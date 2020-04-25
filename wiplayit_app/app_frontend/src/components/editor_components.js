@@ -77,6 +77,7 @@ export const ToolBar = props => {
            buttonProps['name']         = 'more-options'
            buttonProps['onClick']      = props.moreBtns;
            buttonProps['buttonFormat'] = 'more_horiz'; 
+           buttonProps['className']    = "btn-sm toolbar-button";
 
            button = <Button  key={style} {...buttonProps}/>
 
@@ -86,6 +87,7 @@ export const ToolBar = props => {
             buttonProps['name']         = 'LINK'
             buttonProps['onClick']      = props.promptLinkIpunt;
             buttonProps['buttonFormat'] = 'insert_link'; 
+            buttonProps['className']    = "btn-sm toolbar-button";
             button = <Button  key={style} {...buttonProps}/>
 
          }
@@ -94,11 +96,13 @@ export const ToolBar = props => {
 
       });
 
+      let LinkInputProps = {handleAddLink:props.handleAddLink}
+
       return (
          <div id='toolbar'>
             <div>
             { props.onLinkInput?
-               <LinkInput {...props}/>
+               <LinkInput {...LinkInputProps}/>
                :
                <div className='navigation-toolbar'  onMouseDown={(e)=>e.preventDefault()}>
                   <div className="text-btns">
@@ -144,8 +148,13 @@ export const DesktopModalCloseBtn = props => {
 
 
 export const MobileModalNavBar = props  => {
-    console.log(props)
-    let {isPut, isPost, modalTitle, objName } = props;
+    //console.log(props)
+    let { isPut,
+          isPost,
+          modalTitle,
+          objName,
+          isDraftEditor } = props;
+
     let action = isPut && "Edit" || isPost && "Create";
 
     modalTitle = !modalTitle &&  `${action} ${objName}` ||  modalTitle;
@@ -168,18 +177,18 @@ export const MobileModalNavBar = props  => {
     return (
         <div id="modal-navbar-container" className="fixed-top">
             <div className="modal-navbar-box"> 
-                <div className="back-btn-box">
+                <ul className="partial-navbar-back-btn-box">
                     <ModalCloseBtn> 
                        <span className="modal-close-icon material-icons ">arrow_back</span>
                     </ModalCloseBtn>     
-                </div>
+                </ul>
 
-                <div className="modal-title-box">
-                    <p className="modal-title">{modalTitle}</p>  
-                </div>
+                <ul className="modal-title-box">
+                    <li className="modal-title">{modalTitle}</li>  
+                </ul>
          
                 <div className="submit-btn-box">
-                    { props.isDraftEditor?
+                    { isDraftEditor?
                         <SubmitBtn/>
                         :
                         <DoneBtn/>
@@ -188,12 +197,12 @@ export const MobileModalNavBar = props  => {
                 </div>
             </div>
 
-            { props.isDraftEditor?
+            { isDraftEditor && objName !== 'Question'?
                 <div className="editor-btns-box">
                     <ToolBar {...props}/>
                 </div>
                 :
-                ""
+                null
             }
         </div>    
     ); 
@@ -233,7 +242,7 @@ const ImageButton = props => {
             accept={props.accept} 
             name={props.name}
             onChange={props.onChange}
-            className="image"
+            className="image toolbar-button"
             value={ props.urlValue }
          />
          <span className='material-icons'>{props.buttonFormat}</span>
@@ -266,11 +275,11 @@ const Button = props => {
 
 
 export const TextAreaEditor = props => {
-   return (
+    //console.log(props)
+    return (
       <div className="textarea-form">
          <form className="">
-            <div style={props.editorsBoxStyles} 
-                 className="textarea-box" id="editors-box" >
+            <div style={props.onScroolStyles} className="textarea-box" id="editors-box" >
                <TextareaAutosize
                      {...props.textAreaProps} 
                         rows={1}/>
@@ -283,11 +292,12 @@ export const TextAreaEditor = props => {
 
 
 export const DraftEditor = props => {
+    
 	return (
-		<div style={props.editorsBoxStyles} id="editors-box" className="editors-box">
+		<div style={props.onScroolStyles} id="editors-box" className="editors-box">
                { props.objName == "Post"?
                     <div className="post-textarea-box">
-                        <TextareaAutosize   {...props.textAreaProps} rows={1}/>
+                        <TextAreaEditor   {...props} rows={1}/>
             
                     </div>
                 :
@@ -304,6 +314,8 @@ export const DraftEditor = props => {
                placeholder={props.editorPlaceHolder}
                onFocus={props.handleFocus}
                onBlur={props.handleBlur}
+               //plugins={props.plugins}
+
             />
         </div>
         

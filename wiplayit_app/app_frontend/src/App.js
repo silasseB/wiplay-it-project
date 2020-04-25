@@ -28,6 +28,7 @@ import  PasswordChangePage from "containers/authentication/password_change_page"
 import EmailResendPage    from "containers/authentication/email_resend_page"
 import PasswordResetPage   from "containers/authentication/password_reset_page"
 import { ModalManager, Modal}   from  "containers/modal/modal_container";
+import {TestEditor}  from 'containers/test-editor';
 
 import AccountConfirmationPage from "containers/authentication/account_confirmation_page"
 /*import UserListBox from "containers/users/user_list_page"; 
@@ -83,7 +84,7 @@ function App() {
                     <Route  path="/reset/:uid/:token/" component={PasswordChangePage} />
                     <Route  path="/account/email/resend/" component={EmailResendPage} />
                     <Route  path="/:slug/answer/" component={QuestionPage}/>
-           
+                    <Route  path="/editor/" component={TestEditor}/>
                 </Switch>
                 {ModalRouter}
         </div>

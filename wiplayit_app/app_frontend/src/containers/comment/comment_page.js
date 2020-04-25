@@ -185,7 +185,7 @@ const Comments = (props, commentList) => {
             { commentList && commentList.map( (comment, index) => {
                 let commentProps = {comment, index};  
                 Object.assign(commentProps, props);
-                console.log(commentProps)
+                //console.log(commentProps)
 
                 return(
                     <div  key={index} >

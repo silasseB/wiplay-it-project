@@ -386,8 +386,8 @@ export function entities(state=InitialState(), action) {
                                                   || newReplies;  
                        
             payLoad['replyList'] = Array.isArray(newReplies) && newReplies;
-            delete payload.reply;
-            return updateStateEntyties('replies', {byId, payLoad })|| state;    
+            delete payLoad.reply;
+            return updateStateEntyties('replies', {byId, payLoad }) || state;    
 
       
         

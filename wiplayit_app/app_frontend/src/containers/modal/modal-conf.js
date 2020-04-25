@@ -70,7 +70,7 @@ export const ModalOpener = {
 
 
 
-const option_modal_styles = {
+const optionsModalStyles = {
   
   content: {
     width                   : '100%',
@@ -92,7 +92,7 @@ const option_modal_styles = {
 
 
 
-const nav_bar_modal_styles = {
+const navBarModalStyles = {
   
   content: {
     width                   : '70%',
@@ -115,7 +115,7 @@ const nav_bar_modal_styles = {
 export const OptionModal = props => {
     
     let modal_props = {
-        modalStyles    : option_modal_styles,
+        modalStyles    : optionsModalStyles,
         effect         : Effects.SlideFromBottom,
         modalContents  : props.modalContents,
         modalName      : 'optionsMenu',
@@ -135,7 +135,7 @@ export const OptionModal = props => {
 export const NavBarMenuModal = props => {
     
     let modal_props = {
-        modalStyles    : nav_bar_modal_styles,
+        modalStyles    : navBarModalStyles,
         effect         : Effects.SideFall,
         modalContents  : props.modalContents,
         modalName      : 'navigationMenu',
@@ -143,7 +143,7 @@ export const NavBarMenuModal = props => {
 
     modal_props =Object.assign(modal_props, props)
 
-    console.log(props)
+    //console.log(props)
     return(
         <div>
             <ModalContainer {...modal_props} />
@@ -169,7 +169,7 @@ export const mobileModalStyles = {
     position                : 'relative',
     right                   : 'auto',
     left                    : 'auto',
-   
+     
    }
 };
 
@@ -185,7 +185,6 @@ let desktopModalStyles  = {
         outline                 : 'none',
         boxShadow               : '0 5px 10px rgba(0, 0, 0, .3)',
         maxHeight               : '100%',
-        
     }
 }; 
 
@@ -207,7 +206,7 @@ let getModalEffect =()=> {
 };
 
 export const EditModal = props => {
-    console.log(props)
+    //console.log(props)
 
     let modalProps = {
         modalStyles    : getEditorStyles(),
@@ -327,9 +326,9 @@ export const UserListModal = props => {
 
 
 export function  ModalContainer(props)  {
-    console.log(props)
+    //console.log(props)
    
-   //Render modal with pass its contents
+    //Render modal with pass its contents
     const {
             modalContents,
             modalStyles,

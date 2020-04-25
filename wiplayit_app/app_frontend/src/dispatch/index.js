@@ -3,7 +3,7 @@
 import Api from 'utils/api';
 import Axios from 'utils/axios_instance';
 import  * as action  from 'actions/actionCreators';
-import * as checkType from 'helpers/type_checkers'; 
+import * as checkType from 'helpers/check-types'; 
 
 
 const api = new Api();
@@ -351,7 +351,7 @@ export function handleSubmit(props) {
         formData,
         apiUrl,
         IsModal,
-        modalType } = props;
+        modalName } = props;
 
 
    
@@ -362,7 +362,7 @@ export function handleSubmit(props) {
             actionType,
             byId,
             objName,
-            modalType,
+            modalName,
             isUpdating:true,
         };
 
@@ -370,7 +370,7 @@ export function handleSubmit(props) {
             actionType,
             byId,
             objName,
-            modalType,
+            modalName,
             isCreating: true, 
         }; 
          

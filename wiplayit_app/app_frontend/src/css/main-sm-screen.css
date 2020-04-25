@@ -17,28 +17,18 @@
 
 @media (max-width: 900px) {
 
-.arrow {
+.nav-bar-arrow-icon  {
     color: #A33F0B;
     font-size: 17pX;
     font-weight: bold;
-    border: 1px solid #D5D7D5;/*#F9F7F7;*/
-}
-
-.nav-bar-back-btn {
-    margin : 7px ;
-    border : px solid blue;
     
 }
 
-.modal_dropdown,.home-link {
-  width: 70px;
-  height: 30px;
-  margin:7px ;
-  border: none;
-  color: #fff;
-      
+.nav-bar-back-btn {
+    border : px solid blue;
+    height : 35px !important;
+    
 }
-
 
 .user-photo {
     border-radius: 50%;
@@ -55,11 +45,6 @@
 }
 
 
-.mydropzone {
-  border: 1px solid red !important;
-  height: 100px !important; 
-}
-
 .partial-page-navbar, .partial-form-navbar,  #editor-nav-bar, #navigation-mobile {
    background:  #fefefe;
    -webkit-box-shadow: 0px 3px 5px -1px rgba(202,202,202,1);
@@ -69,10 +54,9 @@
 }
 
  
-.back-btn-box {
-    border: px solid red !important;  
-    width: 100% !important;   
-
+.partial-navbar-back-btn-box {
+    border:  px solid black;  
+    padding: 7px 18px 0 10px;
 }
 
 
@@ -83,26 +67,6 @@
     height        : 23px;
     margin        : 7px ;
       
-}
-
-.submit-btn-box,.navbar-dropdown-sm  {
-   padding-right: 3%;
-   width: 30%;
-}
-
-
-
-.home-link {
-      font-size: 17px;
-      color: #A33F0B;
-      font-family: 'Teko';
-      font-weight: bold;
-}
-
-
-.options-modal.fade.in .modal-menu {
-     
-    opacity: 1;
 }
 
  .modal-menu {
@@ -118,93 +82,22 @@
    transition: bottom 0.3s ease-out;
 }
 
-.success-modal {
-  display: none;
-  position: fixed;
-  background:  #4CAF50;
-  width: 100%;
-  bottom: 0px;
-  
-   
-}
-
-.success-message {
-
- background:  #4CAF50;
- line-height: 3px;
- 
-}
-
-.success-message p {
-  line-height: 4px;
-  border: 1px solid black;
-}
 
 
-
-/*A page modal that display forms */
- .mobile-modal-page {
-    display: none;
-    padding-top: 52px;
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: #F9F7F7;/*#D5D7D5; /*rgb(0,0,0); /* Fall0back color */
-    background-color:#F9F7F7; /*rgba(0,0,0,0.4); /* Black w/ opacity */
-   /* background-color: rgb(0,0,0); /* Fallback color */
-  /*background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-     border:1px solid red; /*#fefefe;*/
-
-    
-}
-
-#modal-content {
-   background-color: #fefefe;
-   border:px solid red; /*#fefefe;*/
-   width: 44%; /* Full width */
-   margin: 0PX 28% 0;
-      
-}
-
-#mobile-modal-content {
-  background-color: #fefefe;
-   border:1px solid  #fefefe;
-   width: 100%; /* Full width */
-  min-height:  250px;
-   
-}
-
-.form-box {
-   background-color: #fefefe;
-   border:px solid red;
-   width: 100%; /* Full width */
-  
-   
-}
-
-.modal-form {
-  border: px solid black !important;
-  height: 100% !important;
-}
- .add-title {
+.add-title {
   border: px solid black !important;
   display: flex;
 }
+
 .guide-box  {
   border: px solid black !important;
   width: 70%;
-  
-
- 
 }
 
 
 .title-btn-box {
- border:  px solid black !important;
-  width: 30%;
+   border:  px solid black !important;
+   width: 30%;
 
 }
 
@@ -266,12 +159,12 @@
 
 }
 
-/*border-width: 0 17px 17px 17px;*/
 .modal-menu button:focus {
-  background:  #D5D7D5 !important;
-  border: none !important;
- outline: 0px solid  transparent;
+    background:  #D5D7D5 !important;
+    border: none !important;
+    outline: 0px solid  transparent;
 }
+
 .modal-menu button {
   background: #F9F7F7;
   width: 100%;
@@ -291,40 +184,45 @@
  } 
 
 
-.menu-dismiss-box {
-  display: flex;
-  width: 100%;
-  height: auto;
-  
-  background: #F9F7F7;
-  border-bottom:  1px solid  #D5D7D5;
-
-
-}
-.menu-helper-text {
-  width: 100%;
-  border: px solid red;
-}
-.menu-helper-text p {
-  margin:12px 0px 0px 35% ;
-  line-height: 1;
-  border: px solid blue;
+.menu-header-box {
+    display       : flex;
+    width         : 100%;
+    min-height    : 40px;
+    background    : #F7F7F7;
+    border-bottom : 1px solid  #D5D7D5;
+    
 }
 
-.menu-dismiss {
-  width: 20% !important;
-  
-  height: 40px !important;
-  background: #F9F7F7;
-  border: none !important; 
-  box-shadow: none;
-  
+.modal-menu-title-box {
+    width :100%;
+    border : px solid black;
 }
-.dismiss {
-  border: px solid blue;
-  font-weight: bold;
-  color:red;
 
+.modal-menu-title {
+    width      : 100%;
+    border     : px solid red;
+    text-align : center;
+}
+
+.header-text {
+    border      : px solid blue;
+    padding     : 12px 0 0 30px;
+    font-weight : bold;
+    font-size   : 12px;
+    font-family : 'Open Sans Condensed'; 
+    
+}
+
+.modal-menu-dismiss-box {
+    border  : px solid blue;
+    padding :  5px 12px; 
+}
+
+.modal-dismiss-icon {
+    border      : px solid blue;
+    font-weight : bold;
+    color       : red;
+    font-size   : 18px; 
 }
  
 }

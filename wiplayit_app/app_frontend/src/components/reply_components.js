@@ -354,7 +354,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
 
     let EditorModalBtn   = <OpenEditorBtn {...editReplyChildProps}/>; 
     let MenuModalBtn     = <OptBtnSmallScreen {...editReplyProps}/>;
-    let MenuDropdownBtn    = <OptBtnBigScreen {...editReplyProps}/>;
+    let MenuDropdownBtn  = <OptBtnBigScreen {...editReplyProps}/>;
 
     let optionsBtn = ()=>(
         <div>

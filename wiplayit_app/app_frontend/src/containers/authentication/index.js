@@ -11,7 +11,7 @@ import Api from 'utils/api';
 import Helper from 'containers/utils/helpers';
 import {authenticate, _GetApi} from 'dispatch/index';
 import { getCookie } from 'utils/csrf_token.js';
-import * as checkType from 'helpers/type_checkers'; 
+import * as checkType from 'helpers/check-types'; 
 const helper   = new Helper();
 const api = new Api();
 

@@ -47,6 +47,20 @@
     background :  #F7F7F7;
 }
 
+.modal-title-box {
+    width   : 100%;
+                          
+}
+    
+.modal-title {
+    border      : px solid black;
+    font-size   : 11px;
+    color       : #fff;
+    font-weight : bolder;
+    margin      : 13px 0 0; 
+    font-family : 'Open Sans Condensed'; 
+ }
+
 @media (max-width:900px) {
 
 

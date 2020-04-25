@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import { CharacterMetadata, CompositeDecorator, AtomicBlockUtils,
          RichUtils,convertToRaw, convertFromRaw,Entity,
-         genKey, EditorState, ContentBlock} from 'draft-js';
+         genKey, EditorState, ContentBlock} from 'draft-js'; 
+
 import  {ModalSubmitPending}  from 'actions/actionCreators';
 import { ModalManager}   from  "containers/modal/modal_container";
 
@@ -14,7 +15,7 @@ import {TextAreaEditor,
         ToolBar,
         MobileModalNavBar,
         DesktopModalNavBar } from  "components/editor_components";
-
+import {insertLink} from 'containers/plugins'
 import { AlertComponent } from "components/partial_components";
 import { showModal }  from 'actions/actionCreators';
 
@@ -23,6 +24,7 @@ import { history } from "App";
 import Api from 'utils/api';
 import { handleSubmit, _GetApi }  from "dispatch/index"
 import  * as action  from "actions/actionCreators";
+import * as checkType from 'helpers/check-types'; 
 
 
 
@@ -30,14 +32,15 @@ import  * as action  from "actions/actionCreators";
 const api      = new Api();
 const helper   = new Helper();  
 
-const linkText = 'foo bar';
+const linkText = 'texting link';
 
-function findLinkEntities(contentBlock, callback, contentState) {
+export function findLinkEntities(contentBlock, callback, contentState) {
+    //console.log(contentBlock, contentState)
 
     contentBlock.findEntityRanges((character) => {
 
         const entityKey = character.getEntity();
-
+        
         return (
             entityKey !== null &&
                 contentState.getEntity(entityKey).getType() === 'LINK'
@@ -47,16 +50,15 @@ function findLinkEntities(contentBlock, callback, contentState) {
 };
 
 
-const Link = (props) => {
-const { url } = props.contentState.getEntity(props.entityKey).getData();
-console.log(url)
+export const RenderLink = (props) => {
+    const { url } = props.contentState.getEntity(props.entityKey).getData();
+    console.log(url, props)
 
-
-return (
-    <a href={url} title={url} className="link">
-      {props.children}
-    </a>
-  );
+    return (
+        <a href={url} title={url} className="draft-js-link" target="_blank">
+            {props.children}
+        </a>
+    );
 };
 
 
@@ -68,52 +70,51 @@ export default  class AppEditor extends Component{
     constructor(props) {
         super(props);
         const decorator = new CompositeDecorator([
-         {
-           strategy: findLinkEntities,
-           component: Link,
-         },
-      ]);
+            {
+                strategy: findLinkEntities,
+                component: RenderLink,
+            },
+        ]);
 
 
       
-    this.state = {
-        editorState        : EditorState.createEmpty(decorator),
-        form               : {textarea   :  "", },
-        editorPlaceHolder  : "", 
-        postTitle          : "",
-        showURLInput       : false,
-        showImage          : false,
-        url                : '',
-        urlType            : '',
-        urlValue           : '',
-        italicOnClick      : false,
-        boldOnClick        : false,
-        onLinkInput        : false, 
-        onPost             : false,
-        contentIsEmpty     : true,
-        submitting         : false,
-        showSuccessMessage : false,
-        hasErrors          : false,  
-        errorMessage       : null,
-        submited           : false,
-        redirected         : false, 
-        editorsBoxStyles   : undefined,
-        isDraftEditor      : true, 
+        this.state = {
+            editorState        : EditorState.createEmpty(decorator),
+            form               : {textarea   :  "", },
+            editorPlaceHolder  : "", 
+            postTitle          : "",
+            showURLInput       : false,
+            showImage          : false,
+            url                : '',
+            urlType            : '',
+            urlValue           : '',
+            italicOnClick      : false,
+            boldOnClick        : false,
+            onLinkInput        : false, 
+            onPost             : false,
+            contentIsEmpty     : true,
+            submitting         : false,
+            showSuccessMessage : false,
+            hasErrors          : false,  
+            errorMessage       : null,
+            submited           : false,
+            redirected         : false, 
+            editorsBoxStyles   : undefined,
+            onScroolStyles     : undefined,
+            isDraftEditor      : true, 
+        };
 
-        
-
-      };
-
-      this.onChange          = this.onChange.bind(this);
-      this.onTextAreaChange  = this.onTextAreaChange.bind(this);
-      this.onURLChange       = this.onURLChange.bind(this);
-      this.onPostTitleChange = this.onPostTitleChange.bind(this)
-      this.handleKeyCommand  = this.handleKeyCommand.bind(this);
-      this.addBold           = this.addBold.bind(this);
-      this.addItalic         = this.addItalic.bind(this);
-      this.handleAddLink     = this.handleAddLink.bind(this); 
-      this.promptLinkIpunt   = this.promptLinkIpunt.bind(this);
-   };
+        this.focus             = () => this.refs.editor.focus();
+        this.onChange          = this.onChange.bind(this);
+        this.onTextAreaChange  = this.onTextAreaChange.bind(this);
+        this.onURLChange       = this.onURLChange.bind(this);
+        this.onPostTitleChange = this.onPostTitleChange.bind(this)
+        this.handleKeyCommand  = this.handleKeyCommand.bind(this);
+        this.addBold           = this.addBold.bind(this);
+        this.addItalic         = this.addItalic.bind(this);
+        this.handleAddLink     = this.handleAddLink.bind(this); 
+        this.promptLinkIpunt   = this.promptLinkIpunt.bind(this);
+    };
 
     handleKeyCommand(command, editorState) {
         const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -178,22 +179,18 @@ export default  class AppEditor extends Component{
 
         if (contentIsEmpty) {
             console.log('Form is Empth')
-            this.setState(
-                {
-                    submitting   : true,
-                    hasErrors    : true,
-                    errorMessage : 'You cannot submit empty form'
-                });
+
+            let message = {
+                textMessage : 'You cannot submit incomplete form',
+                messageType : 'error'
+            }
+            this.setState({ submitting : true, hasErrors : true, message, });
 
             setTimeout(()=> {
-                this.setState(
-                    {
-                       submitting   : false,
-                       hasErrors    : false,
-                       errorMessage : null
-                    }
-                ); 
+                this.setState({ submitting : false, hasErrors : false, message:null, });
+                
             }, 5000);
+
 
             return
         }
@@ -211,24 +208,21 @@ export default  class AppEditor extends Component{
 
                 let storeUpdate   = store.getState();
             
-                let {entities} = storeUpdate
-                let {modal} = entities
-                let { submited } = this.state
-                let {background, isPost} = this.props;
-                modal = modal['editor']
+                let { entities } = storeUpdate
+                let { modal    } = entities
 
-                if (modal) {
+                let { submited } = this.state
+                let { isPost   } = this.props;
+                                
+                if (modal && modal['editor']) {
+                    modal = modal['editor']
 
                     this.setState({ submitting : modal.submitting || false });
 
                     if (modal.successMessage && !submited) {
-
                         this.setState({submited : true});
-                        ModalManager.close('editor' ,background)
+                        ModalManager.close('editor')
                     }
-
-
-
                 }
             }
         };
@@ -253,17 +247,17 @@ export default  class AppEditor extends Component{
         //this.setState({submited : false, redirected: false});
         this.onEditorUpdate();
        
-       let state = this.state;
-       state['objName'] = this.props.objName;
-       state['editorPlaceHolder'] = this.props.editorPlaceHolder;
+        let state = this.state;
+        state['objName'] = this.props.objName;
+        state['editorPlaceHolder'] = this.props.editorPlaceHolder;
             
-       if (this.props.objName === 'Post') {
-         this.setState({onPost: true })
-       }
+        if (this.props.objName === 'Post') {
+           this.setState({onPost: true })
+        }
 
-      if (this.props.objId) {
-         state['objId']    = this.props.objId;
-      }
+        if (this.props.objId) {
+            state['objId']    = this.props.objId;
+        }
    
         if (this.props.isPut) {
             state['contentIsEmpty'] = false;
@@ -318,8 +312,8 @@ export default  class AppEditor extends Component{
     }
 
     blockStyleFn(contentBlock) {
-       //const type = contentBlock.getType();
-       //console.log(contentBlock) 
+       const type = contentBlock.getType();
+       console.log(contentBlock) 
   
     }
 
@@ -421,27 +415,31 @@ export default  class AppEditor extends Component{
 
     handleAddLink(linkUrl) {
         const { editorState } = this.state;
-        let newEditorState = new inser_block('before', editorState)
-   
-        //const blockMap = contentState.getBlockMap();
-        // create link entity
+        let newEditorState;
 
-        const newContentState = newEditorState.getCurrentContent();
-        const contentStateWithEntity = newContentState.createEntity(
-                                                'LINK',
-                                                'MUTABLE',
-                                                { url: linkUrl }
-                                          );
+        if (linkUrl) {
+            
+            let urlValue = linkUrl;
+            let protocol = urlValue && urlValue.slice(0, 4)
+            
+            let https = 'https://';
+            let http  = 'http://';
 
 
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        newEditorState = EditorState.set(newEditorState, { currentContent: contentStateWithEntity });
+            if (protocol !== http.slice(0, 4)) {
+                urlValue = `${http}${urlValue}`
 
-        newEditorState = RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey);
+            }
 
+            console.log(linkUrl)
+            console.log( protocol )
+        
+            newEditorState = insertLink(editorState, { url: urlValue }, linkUrl)
+            console.log(newEditorState)
+        }
+
+        newEditorState = newEditorState || editorState;
         this._handleChange(newEditorState)
-  
-        console.log(newEditorState)
     };
 
     _handleChange = (editorState) => {
@@ -486,48 +484,63 @@ export default  class AppEditor extends Component{
       return helper.createFormData(validForm);
    };
 
-   getSubmitProps = () =>{
-      return Object.assign({
-                       formData : this.getFormData(), 
-                       IsModal  : true,
-                       modalType: 'editor',
-                    }, this.props);
-   }
+    getSubmitProps = () =>{
+        let importantProps = {
+                formData : this.getFormData(), 
+                IsModal  : true,
+                modalName: 'editor',
+            } 
+
+        return  Object.assign(importantProps, this.props);
+    }
 
 
     getTextAreaProps() {
 
-        let props = {
+        let getPlaceHolder = ()=> {
+            let { editorPlaceHolder, objName} = this.props;
+                    
+            if (objName === 'Post') {
+               editorPlaceHolder = 'Title'
+            }
+            return editorPlaceHolder;
+        }
+
+        return {
            value       : this.state.form.textarea,
            onChange    : this.onTextAreaChange,
            name        : "textarea",
            className   : "textarea-form-field",
-           placeholder : this.props.editorPlaceHolder,
+           placeholder : getPlaceHolder(),
            onFocus     : this.handleFocus,
            onBlur      : this.handleBlur,
         };
-
-        return props;
     };
 
     handleScroll=()=>{
         //console.log(event)
-        let isDesktopScreenSize = window.matchMedia("(min-width: 900px)").matches;
+        let isDesktopScreenSize = window.matchMedia("(min-width: 980px)").matches;
 
         if (isDesktopScreenSize) {
             let modalContent   = document.getElementById('modal-content')
+            let editorsBox       = document.getElementById('editors-box')
             let modalContentsRect = modalContent && modalContent.getBoundingClientRect();
 
             if (modalContent && modalContentsRect) {
                 let modalOverlay              = document.getElementById('modal-overlay')
                 let modalContentClientHeight  = parseInt(modalContent.clientHeight) + parseInt(modalContentsRect.top);
-               
+                
+                console.log(modalContent.clientHeight, modalContentsRect.top)
+                console.log(modalContentClientHeight,  modalOverlay.clientHeight)
 
-                if (modalContentClientHeight >= modalOverlay.clientHeight - 30) {
-                    let editorsBox       = document.getElementById('editors-box')
-                    let editorsBoxStyles = editorsBox && {height:editorsBox.clientHeight };
+                editorsBox && console.log(editorsBox.clientHeight)
 
-                    !this.state.editorsBoxStyles &&  this.setState({editorsBoxStyles})
+                if ( modalContentClientHeight >= modalOverlay.clientHeight - 30) {
+                    editorsBox && console.log(editorsBox.clientHeight, modalOverlay.clientHeight)
+                    
+                    let onScroolStyles   = editorsBox && {height:editorsBox.clientHeight };
+                    
+                    !this.state.onScroolStyles &&  this.setState({onScroolStyles})
                 }
             
             }
@@ -537,11 +550,23 @@ export default  class AppEditor extends Component{
 
     handleFocus =()=> {
         console.log('focused')
-        //alert('focused')
+        
+        if (!window.matchMedia("(max-width: 980px)").matches) {
+            return;
+        }
+
+        let onScroolStyles   = { height : '100px' };
+        !this.state.onScroolStyles &&  this.setState({onScroolStyles})
     }
 
     handleBlur =()=> {
         console.log('Blured')
+        
+        if (!window.matchMedia("(max-width: 980px)").matches) {
+            return;
+        }
+
+        this.state.onScroolStyles &&   this.setState({onScroolStyles:undefined});
     }
 
 
@@ -582,13 +607,15 @@ export default  class AppEditor extends Component{
                                                      { display : 'none' };
        
 
-        console.log(props)
+        //console.log(props)
         return (
             <div
                 className="modal-editor"
                 id="modal-editor"
                 onClick={this.focus}
+                ref="editor"
                 onScroll={props.handleScroll()}
+                
                 >
                 <fieldset style={onSubmitStyles} 
                       disabled={ props.submitting } >
@@ -634,31 +661,43 @@ export const MobileEditorComponent =(props)=>{
 
 export const DesktopEditorComponent =(props)=>{
     let {currentUser, objName} = props;
+
+    if (!currentUser) {
+        let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'))  || {};
+        currentUser = cacheEntities.currentUser;
+        currentUser = currentUser && currentUser.user;
+    }
+    let profile = currentUser && currentUser.profile;
     //console.log(props.toolBarStyles)
 
     return(
 
         <div className="desktop-editor">
             <DesktopModalNavBar {...props}/>
+            { currentUser &&
+                <div className="modal-user-box">
+                    <div className="editor-img-box">
+                        { profile &&
+                            <img alt="" 
+                                 src={profile.profile_picture}
+                                 className="profile-photo"/>
+                            ||
 
-            <div className="modal-user-box">
-                <div className="editor-img-box">
-                    { currentUser.profile && currentUser.profile.profile_picture?
-                        <img alt="" src={currentUser.profile.profile_picture} className="profile-photo"/>
-                        :
-                        <img alt="" 
-                             src={require("media/user-image-placeholder.png")}
-                             className="profile-photo"/> 
-                    }
+                            <img alt="" 
+                                 src={require("media/user-image-placeholder.png")}
+                                className="profile-photo"/> 
+                        }
+                    </div>
+
+                    <ul className="editor-username-box">
+                        <li className="editor-username" >
+                            {currentUser.first_name}  {currentUser.last_name} 
+                        </li>
+                    </ul>
                 </div>
 
-                <ul className="editor-username-box">
-                    <li className="editor-username" >
-                        {currentUser.first_name}  {currentUser.last_name} 
-                    </li>
-                </ul>
-
-            </div>
+                || null
+            }
 
             <div className="editors-page">
                 { objName === "Question"?

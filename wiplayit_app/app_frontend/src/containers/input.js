@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import withInput from '../containers/index/input';
+import withInput from 'containers/index/input';
 
 
 

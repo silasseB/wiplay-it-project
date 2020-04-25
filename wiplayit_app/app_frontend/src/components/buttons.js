@@ -289,7 +289,7 @@ export const QuestionOptDropDownBtns = props => (
 const getModalProps = (props)=>{
     return {
             editorProps : {...props},
-            modalType   : 'editor', 
+            modalName   : 'editor', 
         };
 
 }
@@ -305,7 +305,7 @@ export const QuestionOptModalBtns = props => {
         <div>
            { props.obj.created_by.id === props.currentUser.id? 
            <div>
-            <EditorLink {...state}/>
+            <OpenEditorBtn {...props}/>
             <button type="button" className="btn-sm  delete-question" >
               Delete 
             </button>
@@ -320,17 +320,13 @@ export const QuestionOptModalBtns = props => {
 
 
 export const AnswerOptModalBtns = props => {
-    let {background} = props
-    let modalPath = `/compose/${'answer'}/${props.obj.id }/`
-    let modalProps = getModalProps(props);
-    let state = { background,modalPath, modalProps} 
-    //console.log(props)
+   // console.log(props)
    
    return(
       <div>
          { props.obj.created_by.id === props.currentUser.id?
             <div>
-               <EditorLink {...state}/>
+               <OpenEditorBtn {...props}/>
                <button type="button" className="btn-sm  delete-question" >
                   Delete 
                </button>
@@ -355,7 +351,7 @@ export const CommentOptModalBtns = props => {
         <div>
             { props.obj.created_by.id === props.currentUser.id?
                 <div>
-                   <EditorLink {...state}/>
+                    <OpenEditorBtn {...props}/>
                     <button type="button" className="btn-sm  delete-question" >
                        Delete 
                     </button>
@@ -381,7 +377,7 @@ export const ReplyOptModalBtns = props => {
         <div>
             {props.obj.created_by.id === props.currentUser.id?
                 <div>
-                    <EditorLink {...state}/> 
+                    <OpenEditorBtn {...props}/> 
                     <button type="button" className="btn-sm  delete-question" >
                         Delete 
                     </button>
@@ -541,17 +537,17 @@ export const OptionsMenuBtns = props => {
 
 export const ModalMenuHeader = props => (
  
-   <div className="menu-dismiss-box">
-        <div className="menu-helper-text" >
-            <p>Choose category</p>
-        </div>
-        <button 
-            type="button" 
-            onClick={()=> ModalManager.close('optionsMenu' ,props.background)}
-            className="btn-sm menu-dismiss">
+   <div className="menu-header-box">
+      <ul className="modal-menu-title" >
+         <li className="header-text">Choose category</li>
+      </ul>
 
-            <span className="dismiss">&times;</span>
-        </button>
+      <ul className="modal-menu-dismiss-box">
+         <ModalCloseBtn> 
+            <span className="modal-dismiss-icon">&times;</span>
+         </ModalCloseBtn>
+      </ul>
+        
     </div>
 )
 
@@ -575,7 +571,7 @@ export const OptionsDropDownBtn = props => {
                   data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" type="button" >
                 <i className="material-icons ">more_horiz</i>
             </button>
-            <div className="dropdown-menu" aria-labelledby="options-menu">
+            <div className="dropdown-menu dropdown-menu-box" aria-labelledby="options-menu">
                 <OptionsMenuBtns {...props}/>
             </div>
         </div>
@@ -609,14 +605,14 @@ export const EditProfileDropDownButton = props => (
 
 
 export const ModalCloseBtn = props => {
-   console.log(props)
+   //console.log(props)
    let styles = props.styles || {};
 
    return(
       <button type="button" 
               style={styles}
               onClick={()=>window.history.back()}
-              className="btn-sm nav-bar-back-btn" >
+              className="nav-bar-back-btn btn-sm" >
          {props.children}
       </button>  
   );
@@ -636,8 +632,8 @@ export const SubmitBtn = props => {
 export const OpenEditorBtn = props => {
     //console.log(props)
   
-    let {modalProps, currentUser} = props ;
-    let { modalPath, className } =  props;
+    let { modalProps, currentUser} = props ;
+    let { className } =  props;
 
       
     let editorProps = modalProps && modalProps.editorProps || {...props};
@@ -674,7 +670,7 @@ export const OpenEditorBtn = props => {
     //console.log(state)   
     return(
         <button  className={className}   onClick={()=> {
-                        if (!currentUser.is_confirmed) {
+                        if (currentUser && !currentUser.is_confirmed) {
                             let error = 'Sorry, you must confirm your account to start posting and editting ';
                             store.dispatch(handleError(error));
                             return;   

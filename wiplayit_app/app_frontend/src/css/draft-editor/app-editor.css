@@ -1,3 +1,15 @@
+
+.draft-js-link {
+    color  : #0470F9; 
+    border : px solid black;
+}
+
+.draft-js-link:hover {
+    color  : #0470F9;
+
+}
+
+
 @media (min-width: 900px) {
      
     .modal-navbar-top{
@@ -112,6 +124,7 @@
         min-height       : 180px;
         font-size        : 18px;
         font-family      : 'calibri', sans-serif;
+        border           : px solid red;
         
     }
  
@@ -226,16 +239,17 @@
 }
 .hyperlink-input:focus {
     border: 1PX solid #D5D7D5;
-   outline: 0px solid transparent;
+    outline: 0px solid transparent;
 }
 
 .toolbar-box {
-    width: 70%;
+    width  : 70%;
+    border : px solid black;
+
 }
 
 #toolbar {
-  background  :  #fefefe;
-  border      : px solid black;
+    border      : px solid black;
 
   
 }
@@ -308,12 +322,13 @@
 }
 
 .textarea-form-field {
-  width       : 100%;
-  border      : none !important;
-  margin      : 4px 0 0 !important;
-  font-weight : bold;
-  font-size   : 14px;
-  overflow-y  : auto !important;  
+    width       : 100%;
+    border      : none !important;
+    margin      : 4px 0 0 !important;
+    font-weight : bold;
+    font-size   : 14px;
+    overflow-y  : auto !important;
+    border     : 1px solid  red;
 }
 
 textarea:active, textarea:focus{
@@ -346,25 +361,25 @@ div.public-DraftEditor-content {
 @media (max-width: 980px) {
 
 
-    .editors-page {
-        background-color: #F6F6F6;
-        max-height    : 100%; 
-        padding-top   : 78px;
-        overflow-y    : auto;
-        font-size     : 18px;
-        height        : 200px;
-        font-family   : 'calibri', sans-serif;
-        border        : 1px solid red;
-   
+    #editors-page {
+        background-color : #fffef7;
+        max-height       : 100%; 
+        height           : 100%;
+        padding-top      : 85px;
+        overflow-y       : auto;
+        font-size        : 18px;
+        font-family      : 'calibri', sans-serif;
+        border           : px solid red;
     }
 
  
-    .editors-box  {
+    #editors-box  {
         background-color : #fffef7;
-        padding          : 12px;
-        max-height       : 100%;
+        min-height       : 100px; 
         overflow-y       : auto;  
-        border           : 1px solid blue;
+        border           : px solid blue;
+        padding          : 10px;
+         
     }
 
     .active {
@@ -442,7 +457,7 @@ div.public-DraftEditor-content {
     #modal-navbar-container{
         background : #A33F0B !important;
         width      : 100%;
-        margin : 0;
+        margin     : 0;
 
     }
 
@@ -463,19 +478,7 @@ div.public-DraftEditor-content {
 }
 
 
-    .modal-title-box {
-        width   : 100%;
-                          
-    }
     
-    .modal-title {
-        border      : px solid black;
-        font-size   : 11px;
-        color       : #fff;
-        display     :  flex;
-        font-weight : bolder;
-        margin      : 10px 0 0; 
-    }
 
 .submit-btn-box{
     border: px solid black;
@@ -526,7 +529,7 @@ div.public-DraftEditor-content {
 
 
 #toolbar {
-  background  :  #fefefe;
+    background  :  #F7F7F7;
   
 }
 
@@ -539,6 +542,10 @@ div.public-DraftEditor-content {
    display : flex;
    width   : 100%;
    
+}
+
+.toolbar-button {
+    background  :  #F7F7F7 !important;
 }
 
 .media-btns, .text-btns{
@@ -582,14 +589,17 @@ div.public-DraftEditor-content {
     border : px solid black;
 }
 
-.textarea-form {
-    border: 1px solid blue;
-    width: 100%;
-    padding: 10px;
+.textarea-form-field {
+    width         : 100%;
+    padding       : 10px;
+    font-weight   : bold;
+    font-size     : 14px;
+    border-bottom : 2px solid #888888;
 }
 
 .textarea-box {
-  border-bottom:  2px solid #888888;
+    border  : px solid red;
+    padding : 20px 10px 0;
 }
 
 .create-question-form {
@@ -603,9 +613,9 @@ div.public-DraftEditor-content {
 }
 
 textarea:active, textarea:focus{
-  outline    : 0;
-  box-shadow : none;
-  border     : 1px solid #D5D7D5;
+  outline        : 0;
+  box-shadow     : none;
+  border-bottom  : 1px solid #D5D7D5;
 
 
 }

@@ -7,7 +7,7 @@ export function withInput(Component) {
          super(props);
          this.state = {
                form : {
-               value : "",
+               value : '',
             },  
          }
 
@@ -31,7 +31,7 @@ export function withInput(Component) {
             onChange: this.onChange.bind(this),
             form    : this.state.form,
          }
-         return Object.assign(props, this.props);
+         return {...this.props, ...props};
       }
 
       render(){

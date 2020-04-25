@@ -71,7 +71,7 @@ export default class Axios {
         if (this.useToken) {
             instance.interceptors.request.use((config)=> {
                 // Do something before request is sent
-                console.log('intercepting request')
+                //console.log('intercepting request')
 
                 let timeStamp      = userAuth && userAuth.timeStamp;
                 const getTimeState = new GetTimeStamp({timeStamp});
@@ -97,7 +97,7 @@ export default class Axios {
                 });
         }
 
-        console.log(instance.defaults)
+        //console.log(instance.defaults)
         return instance;
     };
 

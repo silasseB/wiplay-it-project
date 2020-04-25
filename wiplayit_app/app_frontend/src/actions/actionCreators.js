@@ -1,4 +1,4 @@
-import  * as types  from '../actions/types';
+import  * as types  from 'actions/types';
 
 
 
@@ -6,9 +6,11 @@ import  * as types  from '../actions/types';
 
 export const createActionPending = (params) => {
    //console.log(actionType)
+   let {byId, actionType} = params;
+
     return{
-        type: params.actionType && params.actionType.PENDING,
-        byId : params.byId,
+        type : actionType && actionType.PENDING,
+        byId,
         payLoad: {
            isCreating : true,
         }
@@ -19,51 +21,62 @@ export const createActionPending = (params) => {
 
 export const createActionSuccess = (params) => {
    //console.log(actionType)
-   return{
-      type: params.actionType && params.actionType.SUCCESS,
-      byId: params.byId,
-      payLoad: {
-        ...params.data, 
-        isCreating   : false,
-
-      }
-   };
+   let {byId, actionType, data} = params;
+ 
+    return{
+        type : actionType && actionType.SUCCESS,
+        byId,
+        payLoad: {
+            ...data, 
+            isCreating   : false,
+        }
+    };
 };
 
 
-export const createActionError = (params) => ({
-  type: params.actionType && params.actionType.ERROR,
-  byId : params.byId,
-  payLoad: {
-     error     : params.error.detail, 
-     isCreating : false,
-  }
-});
+export const createActionError = (params) => {
+    let {byId, actionType, error} = params;
+    error = error && error.detail; 
+
+    return {
+        type : actionType && actionType.ERROR,
+        byId,
+        payLoad: {
+           error,
+           isCreating : false,
+        }
+    }
+};
 
 
 
 
 
-export const updateActionPending = (params) => ({
-  type:  params.actionType && params.actionType.PENDING,
-  byId : params.byId,
-  payLoad: {
-    submitting : true,
-    isUpdating : true,
-  }
-});
+export const updateActionPending = (params) => {
+    let {byId, actionType} = params;
+
+    return {
+        type : actionType && actionType.PENDING,
+        byId,
+        payLoad : {
+            submitting : true,
+            isUpdating : true,
+        }
+    }
+};
 
 
 
 
 export const updateActionSuccess = (params)=> {
    console.log(params)
+   let {byId, actionType, data} = params
 
     return{
-        type:  params.actionType && params.actionType.SUCCESS,
-        byId : params.byId,
+        type : actionType && actionType.SUCCESS,
+        byId,
         payLoad: {
-            ...params.data,
+            ...data,
             submitting : false,
             isUpdating : false
       }
@@ -71,19 +84,23 @@ export const updateActionSuccess = (params)=> {
 };
 
 
-export const updateActionError = (params) => ({
-  type:  params.actionType && params.actionType.ERROR,
-  byId : params.byId,
-  payLoad: {
-    error: params.error,
-    submitting : false,
-  }
-});
+export const updateActionError = (params) => {
+    let {byId, actionType, error} = params
+
+    return {
+        type : actionType && actionType.ERROR,
+        byId,
+        payLoad: {
+           error      : error,
+           submitting : false,
+        }
+    }
+};
 
 
-export const ModalSubmitPending = (byId) => ({
-    type: "MODAL_SUBMIT_PENDING",
-    byId,
+export const ModalSubmitPending = (modalName) => ({
+    type : "MODAL_SUBMIT_PENDING",
+    byId : modalName,
     payLoad: {
         submitting     : true,
         data           : null,
@@ -94,17 +111,18 @@ export const ModalSubmitPending = (byId) => ({
 
 export const ModalSubmitSuccess = (params) => {
 
-    let {objName, isUpdating, isCreating, modalType } = params;
-    let action = isCreating &&'created' || isUpdating && 'edited';
+    console.log(params)
+    let {objName, isUpdating, isCreating, modalName, data } = params;
+    let action         = isCreating &&'created' || isUpdating && 'edited';
     let successMessage = `${objName} successefully ${action}`
 
     return{
         type : "MODAL_SUBMIT_SUCESS",
-        byId : modalType,
+        byId : modalName,
         payLoad : {
+            successMessage,
             ...params,
             submitting     : false,
-            successMessage : successMessage,
         }
         
     };
@@ -114,12 +132,13 @@ export const ModalSubmitSuccess = (params) => {
 
 
 export const ModalSubmitError = (params) => {
+    let {byId, modalName, error} = params;
 
     return{
         type    : "MODAL_SUBMIT_ERROR",
-        byId    : params.modalType, 
+        byId    : modalName, 
         payLoad : {
-            error   : params.error,
+            error,
             submitting : false,
             errorMessage: ``,
         }

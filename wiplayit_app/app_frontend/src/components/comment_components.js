@@ -19,11 +19,17 @@ import  * as types  from 'actions/types';
 
 import RepliesBox from "containers/replies/reply_page";
 import { UserComponentSmall } from "components/profile_components";
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { Editor, EditorState, convertFromRaw, CompositeDecorator } from "draft-js";
 import {pageMediaBlockRenderer} from 'components/editor_components';
+import {findLinkEntities, RenderLink} from 'containers/editor'
 
 
-
+const decorator = new CompositeDecorator([
+            {
+                strategy: findLinkEntities,
+                component: RenderLink,
+            },
+        ]);
 
 const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen   = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
@@ -57,7 +63,7 @@ export const CommentsComponent = props => {
    
     let storedState = JSON.parse(comment.comment)
     const contentState = convertFromRaw(storedState);
-    const editorState = EditorState.createWithContent(contentState);
+    const editorState = EditorState.createWithContent(contentState, decorator);
 
 
     let pathToUpvoters;
@@ -124,8 +130,8 @@ export const CommentsComponent = props => {
 
     let optionsBtn = ()=>(
         <div>
-            {MenuModalLink}
-            {MenuDropdownLink}
+            {MenuModalBtn}
+            {MenuDropdownBtn}
         </div>
         )
 
@@ -177,6 +183,7 @@ export const CommentsComponent = props => {
                    blockRendererFn={pageMediaBlockRenderer}
                    editorState={editorState} 
                    readOnly={true}
+
                 />
             </div>
 

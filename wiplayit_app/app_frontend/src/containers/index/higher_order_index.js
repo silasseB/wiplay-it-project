@@ -146,29 +146,30 @@ export function withHigherOrderIndexBox(Component) {
                 
 
                 if (editorModal && Object.keys(editorModal).length) {
-                    //console.log(modal)
+                    //console.log(editorModal)
                     let {objName, data, isCreating, modalIsOpen} = editorModal;
                     this.setState({ modalIsOpen : modalIsOpen });
-
-                    
-                                                            
+                                                           
                     if (isCreating && objName === 'Question' || objName === 'Post' ) {
                         //console.log(modal)
                         //const scrollY = document.body.style.top;
                         //document.body.style.position = '';
                         //document.body.style.top = '';
                         //window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                        
                     }
-                    
 
                     if ( data && !data.displayMessage){
-                       let successMessage = modal && modal.successMessage;
-                       data['displayMessage'] = true;
-                       let message = {textMessage:successMessage, messageType:'success'}
-                       this.displayAlertMessage(message)
-                       delete modal.data
-                       
+
+                        let successMessage = editorModal.successMessage;
+                        data['displayMessage'] = true;
+                        let message = {textMessage:successMessage, messageType:'success'}
+                        this.displayAlertMessage(message)
+                        window.history.back()
+                        ModalManager.close('editor')
+
+                        delete modal.editor;
+
+                                   
                     }
                    
                 }
@@ -480,6 +481,7 @@ export function withHigherOrderIndexBox(Component) {
                     <div style={alertMessageStyles}>
                        <AlertComponent {...props}/>
                     </div>
+                    
                 </div> 
 
             );

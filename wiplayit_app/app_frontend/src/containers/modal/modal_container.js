@@ -76,11 +76,9 @@ class ModalBox extends Component{
        
         if(!this.props.onRequestClose || this.props.onRequestClose()){
            
-          let { modalName} = this.props;
-          console.log(this.props)
-          window.history.back();
-
-          ModalManager.close(modalName);
+            let { modalName} = this.props;
+            window.history.back();
+            ModalManager.close(modalName);
         }
    }
 
@@ -90,7 +88,7 @@ class ModalBox extends Component{
     
 
     componentDidMount(){
-        //console.log(this.props)
+        
         const transitionTimeMS = this.getTransitionDuration();
 
         setTimeout(() => this.setState({open : true}),0);
@@ -116,7 +114,7 @@ class ModalBox extends Component{
     }
 
     render(){
-      console.log(this.props)
+      
       const {style,effect} = this.props;
       const { open } = this.state;
 
@@ -188,10 +186,9 @@ export const ModalManager = {
         store.dispatch(showModal(modalName, true));
     },
     close(modalName){
-        
+          
         onClose && onClose(() => {
-            console.log(modalName);
-           store.dispatch(showModal(modalName, false));
+            store.dispatch(showModal(modalName, false));
 
             ReactDOM.unmountComponentAtNode(node);
            //renderModal();// render the other modals which are waiting.
@@ -205,7 +202,7 @@ export const ModalManager = {
 export const Modal=(props)=> {
     
     let {modalProps} = props;
-    console.log(props)
+    //console.log(props)
 
     let modal = GetModalType(modalProps) 
 

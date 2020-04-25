@@ -2,11 +2,11 @@
 import React from 'react';
 import {  Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { SubmitBtn  } from "components/buttons";
+import { SubmitBtn,
+         ModalCloseBtn,
+         OpenEditorBtn  } from "components/buttons";
+
 import { ModalManager,Modal}   from  "containers/modal/modal_container";
-
-import { OpenEditorBtn } from "components/buttons";
-
 import { GetModalLinkProps } from "components/component-props";
 import { store } from "store/index";
 import { showModal } from 'actions/actionCreators';
@@ -420,8 +420,10 @@ export const PartialNavBar = props =>{
        
     return (
         <nav className="navigation partial-page-navbar fixed-top" id="navigation">
-            <div className="back-btn-box">
-                <CustomBackBtn {...props}/> 
+            <div className="partial-navbar-back-btn-box">
+                 <ModalCloseBtn> 
+                    <span className="nav-bar-arrow-icon material-icons ">arrow_back</span>
+                </ModalCloseBtn>  
             </div>
 
             <div className="page-name-box">
@@ -459,8 +461,10 @@ export const EditProfileNavBar = props  => {
     return(
         <nav className="partial-form-navbar fixed-top"> 
 
-            <div className="back-btn-box">
-	            <CustomBackBtn {...props}/>
+            <div className="partial-navbar-back-btn-box">
+                <ModalCloseBtn> 
+                    <span className="nav-bar-arrow-icon material-icons ">arrow_back</span>
+                </ModalCloseBtn>  
 	        </div>
 
             <div className="page-name-box">
