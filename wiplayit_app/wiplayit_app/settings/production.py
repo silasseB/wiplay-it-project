@@ -15,7 +15,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Baloyi$wiplayitdb',
         'USER': 'Baloyi',
-        'PASSWORD': 'siLasValoi9020$?'
+        'PASSWORD': 'siLasValoi9020$?',
         'HOST': 'Baloyi.mysql.pythonanywhere-services.com',
         'PORT': '',
         'OPTIONS': {'charset': 'utf8mb4'},
