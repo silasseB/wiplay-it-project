@@ -4,6 +4,7 @@ import os
 import sys
 
 
+#'wiplayit_app.settings.production'
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wiplayit_app.settings.production')
