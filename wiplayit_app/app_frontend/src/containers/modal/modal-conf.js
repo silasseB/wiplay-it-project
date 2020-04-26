@@ -136,7 +136,7 @@ export const NavBarMenuModal = props => {
     
     let modal_props = {
         modalStyles    : navBarModalStyles,
-        effect         : Effects.SideFall,
+        effect         : Effects.SlideFromLeft,
         modalContents  : props.modalContents,
         modalName      : 'navigationMenu',
     };

@@ -19,23 +19,14 @@ import  * as types  from 'actions/types';
 
 import RepliesBox from "containers/replies/reply_page";
 import { UserComponentSmall } from "components/profile_components";
-import { Editor, EditorState, convertFromRaw, CompositeDecorator } from "draft-js";
+import { Editor, EditorState, convertFromRaws } from "draft-js";
 import {pageMediaBlockRenderer} from 'components/editor_components';
-import {findLinkEntities, RenderLink} from 'containers/editor'
+import {decorator} from 'containers/editor'
 
-
-const decorator = new CompositeDecorator([
-            {
-                strategy: findLinkEntities,
-                component: RenderLink,
-            },
-        ]);
 
 const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen   = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
-
-
 
 
 

@@ -312,7 +312,7 @@ class UserProfileContainer extends Component {
                     <div  className="app-box-container">
                         <UnconfirmedUserWarning {...props}/> 
                         {userProfile.isLoading?
-                            <div className="page-spin-loader-box">
+                            <div className="page-spin-loader-box partial-page-loader">
                                  <AjaxLoader/>
                             </div>
 

@@ -61,15 +61,7 @@ export const RenderLink = (props) => {
     );
 };
 
-
-
-
-export default  class AppEditor extends Component{
-    _isMounted = false;
-
-    constructor(props) {
-        super(props);
-        const decorator = new CompositeDecorator([
+export const decorator = new CompositeDecorator([
             {
                 strategy: findLinkEntities,
                 component: RenderLink,
@@ -77,6 +69,12 @@ export default  class AppEditor extends Component{
         ]);
 
 
+export default  class AppEditor extends Component{
+    _isMounted = false;
+
+    constructor(props) {
+        super(props);
+        
       
         this.state = {
             editorState        : EditorState.createEmpty(decorator),
@@ -395,7 +393,7 @@ export default  class AppEditor extends Component{
 
    addItalic(e){
       e.preventDefault();
-      if (! this.state.italicOnClick) {
+      if (this.state.italicOnClick) {
          this.setState({italicOnClick:false})
       }else{
          this.setState({italicOnClick:true})
@@ -667,8 +665,9 @@ export const DesktopEditorComponent =(props)=>{
         currentUser = cacheEntities.currentUser;
         currentUser = currentUser && currentUser.user;
     }
+
     let profile = currentUser && currentUser.profile;
-    //console.log(props.toolBarStyles)
+    console.log(profile)
 
     return(
 
@@ -677,7 +676,7 @@ export const DesktopEditorComponent =(props)=>{
             { currentUser &&
                 <div className="modal-user-box">
                     <div className="editor-img-box">
-                        { profile &&
+                        { profile && profile.profile_picture &&
                             <img alt="" 
                                  src={profile.profile_picture}
                                  className="profile-photo"/>

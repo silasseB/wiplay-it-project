@@ -19,6 +19,7 @@ import CommentsBox from "containers/comment/comment_page";
 import {pageMediaBlockRenderer} from 'components/editor_components';
 import {Editor,EditorState, convertFromRaw} from 'draft-js';
 import {ButtonsBox,Styles} from "components/partial_components";
+import {decorator} from 'containers/editor'
 
 import { UserComponentSmall } from "components/profile_components";
 
@@ -42,8 +43,8 @@ export const PostComponent = props => {
     let {post, currentUser, postById, postListById}     =    props;
 
     let   storedState    = post && post.add_post && JSON.parse(post.add_post);
-    const contentState   = convertFromRaw(storedState);
-    const editorState    = contentState && EditorState.createWithContent(contentState);
+    const contentState   = storedState && convertFromRaw(storedState);
+    const editorState    = contentState && EditorState.createWithContent(contentState, decorator);
 
     let  postPath       = post && `/post/${post.slug}/${post.id}/`;
     let  pathToUpvoters = post && `/upvoters/post/${post.id}/`;

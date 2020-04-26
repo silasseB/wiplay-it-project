@@ -104,15 +104,15 @@ export const ToolBar = props => {
             { props.onLinkInput?
                <LinkInput {...LinkInputProps}/>
                :
-               <div className='navigation-toolbar'  onMouseDown={(e)=>e.preventDefault()}>
-                  <div className="text-btns">
+               <ul className='navigation-toolbar'  onMouseDown={(e)=>e.preventDefault()}>
+                  <li className="text-btns">
                      { buttons }
-                  </div>
+                  </li>
 
-                  <div className="media-btns">
+                  <li className="media-btns">
                      {MediaBtns}
-                  </div>
-               </div>
+                  </li>
+               </ul>
             }
             </div>
          </div>

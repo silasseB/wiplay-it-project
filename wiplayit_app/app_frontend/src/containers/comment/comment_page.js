@@ -6,6 +6,8 @@ import  * as action  from 'actions/actionCreators';
 import {  CommentsComponent } from "components/comment_components"
 import {Editor, EditorState, convertFromRaw} from 'draft-js';
 import {pageMediaBlockRenderer} from 'components/editor_components';
+import {decorator} from 'containers/editor'
+
 import {store} from "store/index";
 
 
@@ -213,7 +215,7 @@ const Comments = (props, commentList) => {
 export const Links = props => {
    let storedState = JSON.parse(props.comment.comment)
    const contentState = convertFromRaw(storedState);
-   const editorState = EditorState.createWithContent(contentState);
+   const editorState = EditorState.createWithContent(contentState, decorator);
   
    return (
       <div  className="comment-box" id="comment-box">

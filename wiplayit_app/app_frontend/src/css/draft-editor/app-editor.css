@@ -10,6 +10,11 @@
 }
 
 
+.active {
+    border : 1px solid  #D5D7D5  !important;
+    color  : #A33F0B !important; 
+}
+
 @media (min-width: 900px) {
      
     .modal-navbar-top{
@@ -365,7 +370,7 @@ div.public-DraftEditor-content {
         background-color : #fffef7;
         max-height       : 100%; 
         height           : 100%;
-        padding-top      : 85px;
+        padding-top      : 95px;
         overflow-y       : auto;
         font-size        : 18px;
         font-family      : 'calibri', sans-serif;
@@ -382,10 +387,6 @@ div.public-DraftEditor-content {
          
     }
 
-    .active {
-        border : 1px solid  #D5D7D5  !important;
-        color : #A33F0B !important; 
-    }
   
 
     .navigation-toolbar button {
@@ -403,7 +404,7 @@ div.public-DraftEditor-content {
 
     .navigation-toolbar span {
        border    : px solid red;
-       font-size :  19px;
+       font-size : 15px;
        margin-top: 3px;
 
     }
@@ -478,12 +479,6 @@ div.public-DraftEditor-content {
 }
 
 
-    
-
-.submit-btn-box{
-    border: px solid black;
-}
-
 .editor-submit-btn {
     border        : 1px solid #A33F0B;
     background    : #ffff;
@@ -496,9 +491,17 @@ div.public-DraftEditor-content {
 }
 
 
+.hyperlink-form {
+    border  : px solid red;
+    padding : 6px 8px;
+}
+
+
+
 .hyperlink-box {
-   display : flex;
-   margin  : 10px; 
+    display : flex;
+    border  : px solid black;
+    
 }
 
 .add-link {
@@ -516,21 +519,23 @@ div.public-DraftEditor-content {
 
 }
 .hyperlink-input  {
-   border: 1PX solid #D5D7D5;
-   width: 100%;
-   padding: 4PX;
+   border  : 1PX solid #D5D7D5;
+   width   : 100%;
+   padding : 4px;
     
 
 }
 .hyperlink-input:focus {
     border: 1PX solid #D5D7D5;
-   outline: 0px solid transparent;
+    outline: 0px solid transparent;
 }
 
 
 #toolbar {
-    background  :  #F7F7F7;
-  
+    background    : #F7F7F7;
+    border-bottom : 1px solid #D5D7D5;
+    min-height    : 40px; 
+     
 }
 
 
@@ -540,31 +545,30 @@ div.public-DraftEditor-content {
 
 .navigation-toolbar{
    display : flex;
-   width   : 100%;
-   
+   padding : 6px;
+   border  : px solid red;
+     
 }
 
 .toolbar-button {
     background  :  #F7F7F7 !important;
+    border      : px solid red;
 }
 
 .media-btns, .text-btns{
-  display         : flex;  
-  list-style-type : none; 
-  padding         : 0;
-  margin          : 0;
-  font-size       : 13px; 
-  width           : 100%;
-  border          : px solid black;
+    display         : flex;  
+    font-size       : 13px; 
+    
 }
 
 .media-btns {
    border : px solid black;
-   padding-left: 30px;
+  
 }
 
 .text-btns{
-   padding-left: 10px;
+  width   : 100%;
+  border  : px solid blue;
 }
 
 .post-title-input{

@@ -3,6 +3,8 @@ import { BrowserRouter,Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from 'components/editor_components';
+import {decorator} from 'containers/editor'
+
 import { UpVoteReplyBtn,
          DownVoteReplytBtn,
          OptionsDropDownBtn,
@@ -278,7 +280,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
    
    let storedState = JSON.parse(reply.reply)
    const contentState = convertFromRaw(storedState);
-   const editorState = EditorState.createWithContent(contentState);
+   const editorState = EditorState.createWithContent(contentState, decorator);
   
    let state = {
             reply,

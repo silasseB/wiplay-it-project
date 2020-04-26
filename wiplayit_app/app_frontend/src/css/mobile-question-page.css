@@ -1,20 +1,10 @@
 
 @media (max-width: 900px) {
-    body {
-        overflow-x: hidden !important;
-       overflow-y: scroll !important;
-       flex-direction: column;
-       position: relative;
-       min-height: 100vh;
-       width:    100%;
-       padding:  0px;
-    }
+   
 
-    .question-page-loader, 
-    .question-list-page-loader,
-    .post-page-loader, 
-    .post-list-page-loader {
-        padding-top: 80px;
+    .partial-page-loader {
+        margin-top: 80px;
+        border: px solid black;
     }
 
     .post-box-container{
@@ -24,7 +14,7 @@
 
     #question-page, #post-page, #post-list-page, #question-list-page {  
         background : #fff;
-        border     : 1px solid  red !important;
+        border     : px solid  red;
         padding-top: 70px; 
     }
 
@@ -33,7 +23,7 @@
     }
 
     .index-posts-box, .index-questions-box,.index-answers-box  {
-        border      : 1px solid #D5D7D5;
+        border  : 1px solid #D5D7D5;
         margin  : 9px 0px;
         padding : 0px 0px 4px; 
         background:  #ffff;
@@ -196,7 +186,7 @@
   
 
 .reply-contents {
-  border: px solid black !important; 
+  border: px solid black; 
   background:  #f7f7f7;
 }
 

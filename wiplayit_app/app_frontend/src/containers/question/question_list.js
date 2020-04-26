@@ -78,7 +78,7 @@ class  QuestionListPage extends Component  {
                         <UnconfirmedUserWarning {...props}/>
                         
                         { questions.isLoading? 
-                            <div  className="page-spin-loader-box post-list-page-loader">
+                            <div  className="page-spin-loader-box partial-page-loader">
                                 <AjaxLoader/>
                             </div>
                             : 

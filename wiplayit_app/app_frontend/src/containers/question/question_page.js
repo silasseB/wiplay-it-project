@@ -107,7 +107,7 @@ class QuestionPage extends Component {
                     <div className="app-box-container">
                         <UnconfirmedUserWarning {...props}/>
                         { question.isLoading?
-                            <div className="page-spin-loader-box question-page-loader">
+                            <div className="page-spin-loader-box partial-page-loader">
                                 <AjaxLoader/>
                             </div>
 

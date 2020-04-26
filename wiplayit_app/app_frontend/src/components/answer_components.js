@@ -15,6 +15,7 @@ import {
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import  * as types  from 'actions/types';
 import {pageMediaBlockRenderer} from 'components/editor_components';
+import {decorator} from 'containers/editor'
 
 import {ButtonsBox, Styles } from "components/partial_components";
 import Api from 'utils/api';
@@ -55,7 +56,7 @@ export const AnswersComponent = props => {
     let storedState = JSON.parse( answer.add_answer);
    
     const contentState = convertFromRaw(storedState);
-    const editorState = EditorState.createWithContent(contentState);
+    const editorState = EditorState.createWithContent(contentState, decorator);
 
     let usersById =  answer && `answerUpVoters${answer.id}`;
     let apiUrl    = answer && api.getAnswerUpVotersListApi(answer.id);

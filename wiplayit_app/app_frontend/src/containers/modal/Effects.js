@@ -24,11 +24,11 @@ export const SlideFromLeft = {
         timingfunction : 'cubic-bezier(0.25, 0.5, 0.5, 0.9)'
      },
      begin : {
-       'transform': 'translateZ(35%)',
+       'transform': 'translateX(-35%)',
        'opacity': 0
      },
      end : {
-       'transform': 'translateZ(0)',
+       'transform': 'translateX(0)',
        'opacity': 1
      }
 };
@@ -40,7 +40,7 @@ export const SlideFromRight = {
         timingfunction : 'cubic-bezier(0.25, 0.5, 0.5, 0.9)'
      },
      begin : {
-       'transform': 'translateX(35%)',
+       'transform': 'translateX(-35%)',
        'opacity': 0
      },
      end : {
