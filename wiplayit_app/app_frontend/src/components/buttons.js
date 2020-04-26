@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation, Router } from "react-router-dom";
 import {history} from "App" 
-import { EditorLink } from "components/modal-links"
 
 import { ModalManager, Modal }   from  "containers/modal/modal_container";
 import { store } from "store/index";
@@ -300,6 +299,7 @@ export const QuestionOptModalBtns = props => {
     let modalPath = `/compose/${'question'}/${props.obj.id }/`
     let modalProps = getModalProps(props);
     let state = { background, modalPath, modalProps};
+
 
     return (
         <div>
@@ -667,7 +667,13 @@ export const OpenEditorBtn = props => {
     linkName   = linkName?linkName:getButtonName();
     let styles = getEditorStyles();
 
-    //console.log(state)   
+    //console.log(state)  
+
+    let storeUpdate  = store.getState();
+    let { entities } = storeUpdate;
+    let { modal }    = entities;
+    let optionsModal = modal && modal['optionsMenu'];
+
     return(
         <button  className={className}   onClick={()=> {
                         if (currentUser && !currentUser.is_confirmed) {
@@ -676,7 +682,15 @@ export const OpenEditorBtn = props => {
                             return;   
                         }
 
-                      Modal(state) 
+                        if (optionsModal && optionsModal.modalIsOpen ) {
+                            window.history.back()
+                        }
+
+                        return setTimeout(()=> {
+                                 Modal({modalProps}) ; 
+                            }, 500);
+
+                     
 
                     }}>
                     { linkName } 

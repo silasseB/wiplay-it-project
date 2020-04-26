@@ -56,6 +56,7 @@ let createQuestionProps = {
 createQuestionProps = GetModalLinkProps.props(createQuestionProps);
 createPostProps = GetModalLinkProps.props(createPostProps);
 
+
 export const NavBarMenuItems = props => {
     let { currentUser } = props;
     let profile = currentUser && currentUser.profile;
@@ -63,13 +64,14 @@ export const NavBarMenuItems = props => {
     let state = {userProfile : currentUser};
     
     let pathToProfile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
+    let toProfileProps = {pathname:pathToProfile, state}
  
     return(
         <BrowserRouter>
         <div>
 
             <div className="menu-img-container">
-                <div className="menu-img-box" onClick={() => props.push({path:pathToProfile,state})}> 
+                <div className="menu-img-box" onClick={() => RedirectMenuLinks(toProfileProps)}> 
                         { profile && profile.profile_picture?
                             <img alt="" src={profile.profile_picture} className="menu-img"/>
                             :
@@ -79,7 +81,8 @@ export const NavBarMenuItems = props => {
                 </div>
 
                 <ul className="menu-username-box">
-                    <li className="menu-username"  onClick={() => props.push({path:pathToProfile,state})}>
+                    <li className="menu-username"  
+                    onClick={() => RedirectMenuLinks(toProfileProps)}>
                         {currentUser.first_name}  {currentUser.last_name} 
                     </li>
                     <li className="menu-user-credential" >
@@ -105,21 +108,18 @@ export const NavBarMenuItems = props => {
 }
 
 
-export const RedirectModalLinks = props => {
-    let {pathname, background, state} = props;
+export const RedirectMenuLinks = props => {
+    let {pathname, state} = props;
 
     if (window.matchMedia("(max-width: 980px)").matches) {
-        ModalManager.close('navigationMenu') 
-
-        setTimeout(()=> {
-            history.push(pathname, state); 
-        }, 500);
-
-        return;
+        window.history.back() 
     }
 
-    return;
-}
+    return setTimeout(()=> {
+        history.push(pathname, state); 
+        }, 500);
+    
+};
 
 const NavBarDropDown = props => {
     let { currentUser } = props;

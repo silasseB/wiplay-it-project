@@ -19,7 +19,7 @@ import  * as types  from 'actions/types';
 
 import RepliesBox from "containers/replies/reply_page";
 import { UserComponentSmall } from "components/profile_components";
-import { Editor, EditorState, convertFromRaws } from "draft-js";
+import { Editor, EditorState, convertFromRaw } from "draft-js";
 import {pageMediaBlockRenderer} from 'components/editor_components';
 import {decorator} from 'containers/editor'
 

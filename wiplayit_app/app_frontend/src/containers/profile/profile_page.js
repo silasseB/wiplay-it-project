@@ -98,17 +98,17 @@ class UserProfileContainer extends Component {
     componentDidMount() {
         this.onProfileUpdate();
         
-        let { entities }    = this.props;
-        let { slug, id }   = this.props.match.params;
-        let {users, userProfile}  = entities; 
-
-        let  profileById  = `userProfile${id}`;
+        let { entities, match }    = this.props;
+        let { slug, id }           = match.params;
+        let { users, userProfile}  = entities; 
+        let  profileById           = `userProfile${id}`;
+        this.setState({profileById })
                
         userProfile = userProfile && userProfile[profileById];
-        this.setState({profileById })
-
-        !userProfile  &&  this.updateWithCacheData({profileById, id});
-        !users['filteredUsers']        &&  this.updateUsersStore();
+        users       = users['filteredUsers']
+        
+        !userProfile  && this.updateWithCacheData({profileById, id});
+        !users        && this.updateUsersStore();
                      
     };
 
@@ -137,9 +137,6 @@ class UserProfileContainer extends Component {
 
         userProfile = userProfile && userProfile[profileById];
         
-
-        //console.log(users, userProfile)
-
         if (userProfile && userProfile.user) {
 
             let timeStamp      = userProfile.timeStamp;
@@ -163,9 +160,8 @@ class UserProfileContainer extends Component {
         }
 
         console.log('Fetching userProfile from the server')
-        id && this.props.getUserProfile(id);
+        this.props.getUserProfile(id);
 
-        return
     };
 
     _dispatchUserProfileItems(userProfile){

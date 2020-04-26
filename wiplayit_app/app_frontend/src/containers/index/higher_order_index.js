@@ -147,29 +147,53 @@ export function withHigherOrderIndexBox(Component) {
 
                 if (editorModal && Object.keys(editorModal).length) {
                     //console.log(editorModal)
-                    let {objName, data, isCreating, modalIsOpen} = editorModal;
+                    let {objName, data, isCreating, modalIsOpen, hasProssed} = editorModal;
                     this.setState({ modalIsOpen : modalIsOpen });
                                                            
                     if (isCreating && objName === 'Question' || objName === 'Post' ) {
-                        //console.log(modal)
-                        //const scrollY = document.body.style.top;
-                        //document.body.style.position = '';
-                        //document.body.style.top = '';
-                        //window.scrollTo(0, parseInt(scrollY || '0') * -1);
-                    }
+                        let question       = data.question;
+                        let post           = data.post;
+                        let pathToPost     = post && `/post/${post.title}/${post.id}`;
+                        let pathToQuestion = question  && `/question/${question.slug}/${question.id}/`; 
 
-                    if ( data && !data.displayMessage){
+                        let questionRedirectProps = {
+                                path  : pathToQuestion,
+                                state : {question, recentlyCreated : true},
+                        }
 
-                        let successMessage = editorModal.successMessage;
-                        data['displayMessage'] = true;
-                        let message = {textMessage:successMessage, messageType:'success'}
-                        this.displayAlertMessage(message)
-                        window.history.back()
-                        ModalManager.close('editor')
+                        let postRedirectProps = {
+                                path  : pathToPost,
+                                state : {post, recentlyCreated : true},
+                        }
+                        console.log(data)
 
-                        delete modal.editor;
-
-                                   
+                        if (data && !hasProssed) {
+                            console.log(editorModal, data)
+                            editorModal['hasProssed'] = true;
+                            window.history.back()
+                            
+                            setTimeout(()=> {
+                                question    && this.push(questionRedirectProps);
+                                post        && this.push(pathToPost);
+                                this.logMessage(editorModal)
+                                delete modal.editor;
+                                
+                            }, 500);
+                        }
+                       
+                                                
+                    }else{
+                        if (data && !hasProssed ){
+                            editorModal['hasProssed'] = true;
+                            window.history.back()
+                            
+                            
+                            setTimeout(()=> {
+                                this.logMessage(editorModal)
+                                delete modal.editor;
+                                
+                            }, 500);
+                        }
                     }
                    
                 }
@@ -177,12 +201,24 @@ export function withHigherOrderIndexBox(Component) {
                 if (currentUser && currentUser.user) {
                     this._SetCurrentUser(currentUser.user)
                 }
-
                                 
             }
             };
 
             this.unsubscribe = store.subscribe(onStoreChange);
+
+        };
+
+        logMessage = (params) => {
+            console.log(params)
+            let {successMessage, data} = params && params;
+            
+            if ( successMessage ){
+                console.log(successMessage)
+                let message = {textMessage:successMessage, messageType:'success'}
+                this.displayAlertMessage(message)
+               
+            }
 
         };
 
@@ -193,9 +229,9 @@ export function withHigherOrderIndexBox(Component) {
 
         displayAlertMessage = (message) => {
                        
-            this.setState({ displayMessage : true, message });
-                setTimeout(()=> {
-                    this.setState({displayMessage : false}); 
+            this._isMounted &&  this.setState({ displayMessage : true, message });
+            setTimeout(()=> {
+                 this._isMounted && this.setState({displayMessage : false}); 
                 }, 5000);
         }
 
@@ -293,24 +329,7 @@ export function withHigherOrderIndexBox(Component) {
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
-            /* Update the online status icon based on connectivity
-            window.addEventListener('online',  this.updateIndicator('online'));
-            window.addEventListener('offline', this.updateIndicator('offline'));
-            //this.updateIndicator();
-
-
-            window.addEventListener("offline", function(e) {
-                alert('offline')
-                 console.log(' internet is offline');
-            });
-
-            // Add event listener online to detect network recovery.
-            window.addEventListener("online", function(e) {
-                alert('online')
-               console.log(' internet is online');
-            });*/
-
-            console.log(window.location.href)  
+              
             let { entities } = this.props;
             
             window.onpopstate = (event) => {
@@ -329,39 +348,21 @@ export function withHigherOrderIndexBox(Component) {
 
                 console.log('Im reloading',optionsModal,  editorModal, dropImageModal)
 
-                editorModal    && editorModal.modalIsOpen    && ModalManager.close(
-                                                                            'editor',
-                                                                            editorModal.background
-                                                                        );
-                optionsModal   && optionsModal.modalIsOpen   && ModalManager.close(
-                                                                        'optionsMenu',
-                                                                        optionsModal.background
-                                                                    );
-                dropImageModal && dropImageModal.modalIsOpen && ModalManager.close(
-                                                                            'dropImage',
-                                                                            dropImageModal.background
-                                                                        ); 
+                editorModal    && editorModal.modalIsOpen    && ModalManager.close( 'editor');
+                optionsModal   && optionsModal.modalIsOpen   && ModalManager.close('optionsMenu');
+                dropImageModal && dropImageModal.modalIsOpen && ModalManager.close('dropImage' ); 
                 //event.returnValue = '';
                 
             });
 
-            //const getTimeState = new GetTimeStamp({timeStamp});
-            //let menDiff        = parseInt(getTimeState.menutes());
-
-            let token    = this.isAuthenticated();
-            let apiUrl   = api.refreshTokenApi();
-            let useToken = false; 
-
-            //this.props.authenticate({apiUrl, form:{token}, useToken})
- 
             
             if (!this.isAuthenticated()) {
-                console.log(!this.isAuthenticated())
                 //User is not authenticated,so redirect to authentication page.
                 history.push('/user/registration/')
             }
 
             let currentUser = this._SetCurrentUser();
+
             if(!currentUser){
                 store.dispatch(getCurrentUser());
             }

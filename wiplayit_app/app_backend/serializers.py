@@ -244,7 +244,9 @@ class IndexSerializer(BaseSerializer):
 	
 	
 	def get_questions(self, obj):
-		questions = Question.objects.all()
+		request = self.context.get('request', None)
+		questions = Question.objects.exclude(created_by=request.user)
+		
 		self.update_serializer_obj_perms('question_perms')		       
 		return QuestionSerializer(questions, context=self.context, many=True).data
 		
@@ -257,7 +259,8 @@ class IndexSerializer(BaseSerializer):
 	
 	
 	def get_posts(self, obj):
-		posts = Post.objects.all()
+		request = self.context.get('request', None)
+		posts = Post.objects.exclude(created_by=request.user)
 		self.update_serializer_obj_perms('post_perms')
 
 		return PostReadSerializer(posts, context=self.context, many=True).data

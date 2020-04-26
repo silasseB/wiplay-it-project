@@ -412,7 +412,7 @@ export function withAuthentication(Component) {
                 let successMessage = data.detail || null;
 
                 if (isLoggedIn) {
-                   auth = {isLoggedIn, tokenKey, confirmed : true}
+                   auth = {isLoggedIn, tokenKey, isConfirmed : true}
                    response_data = {auth}
 
                 }else if(successMessage){
@@ -425,6 +425,7 @@ export function withAuthentication(Component) {
                 store.dispatch(action.authenticationSuccess(response_data));
 
                 if (user) {
+                    store.dispatch(action.getCurrentUserPending());
                     store.dispatch(action.getCurrentUserSuccess(user))
                 }
 

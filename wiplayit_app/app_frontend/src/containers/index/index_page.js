@@ -11,6 +11,7 @@ import { UnconfirmedUserWarning } from "components/partial_components";
 import { QuestionComponent} from "components/question_components"
 import { PostComponent} from "components/post_components"
 import CommentsBox from "containers/comment/comment_page";
+import AnswersBox from "containers/answer/answer_page";
 
 import  AjaxLoader from "components/ajax-loader";
 import { AnswersComponent } from "components/answer_components";
@@ -103,7 +104,7 @@ class IndexBox extends Component {
             console.log(menDiff  + ' ' + 'Menutes ago')
             if(questions && questions.length || answers &&
                 answers.length || posts && posts.length || users && users.length ){
-                if (menDiff <= 1) {
+                if (menDiff <= 0) {
 
                     console.log('Index found from cachedEntyties')
                     this.updateIndexEntities(cachedIndex);
@@ -265,6 +266,7 @@ export const Questions = props => {
 
                                     <div key={index} >
                                         <QuestionComponent {...contentsProps}  />
+                                        <AnswersBox {...contentsProps}/>
                                     </div>
                                 )
                             })}

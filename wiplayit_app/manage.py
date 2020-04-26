@@ -3,7 +3,7 @@
 import os
 import sys
 
-print(os.environ.setdefault)
+
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wiplayit_app.settings.development')

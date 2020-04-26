@@ -9,7 +9,6 @@ import {
         OptionsDropDownBtn,
         OpenEditorBtn,
         OpenOptionsModalBtn,
-        ChangeImageBtn,
         OpenUsersModalBtn} from 'components/buttons';
 
 import { Editor, EditorState, convertFromRaw } from "draft-js";

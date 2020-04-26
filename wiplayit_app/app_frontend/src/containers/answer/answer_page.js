@@ -28,8 +28,8 @@ class AnswersBox extends Component {
 
 
     componentDidMount() {
-      //console.log(this.props)
-      let {questionById, question, cacheEntities } = this.props;
+        //console.log(this.props)
+        let {questionById, question, cacheEntities } = this.props;
       
         let answerListById      = question && `answers${question.id}`;
         let newAnswerListById   = question && `newAnswers${question.id}`;
@@ -40,10 +40,7 @@ class AnswersBox extends Component {
             //console.log(question);
             store.dispatch(action.getAnswerListPending(answerListById));
             store.dispatch(action.getAnswerListSuccess(answerListById, question.answers));
-
         }
-
-        
     };
 
        
@@ -53,41 +50,48 @@ class AnswersBox extends Component {
 
 
     render() { 
-      const props =  this.getProps();
-      let {entities, newAnswerListById, answerListById} = props;
-      
-      let {answers}    =  entities;
-      
-      let questionAnswerList   = answers && answers[answerListById];
-      let newAnswers   = answers && answers[newAnswerListById];
-      //console.log(answers, answerListById) 
-      //console.log(props, newAnswers, newAnswerListById)
-         
+        const props =  this.getProps();
+        let { entities, 
+             answerListById,
+            question,
+            isQuestionBox } = props;
+        let {answers}  = entities;
+        answers        = answers && answers[answerListById];
+        let answerList = answers && answers.answerList;
+        let numberOfAnswers = answerList && answerList.length;
+                 
         return (
-            <div>
-                <div>
-                    { newAnswers?
-                        <NewAddedAnswers {...props}/>
-                        :
-                        "" 
-                    }
-                </div>
-
-                <div>
-                   { questionAnswerList &&  questionAnswerList.answerList.length?
+            <div className="answer-list-container">
+                { answerList && answerList.length &&
+                    <div>
+                        { isQuestionBox &&
+                            <ul className="number-answers-box">
+                                { numberOfAnswers > 1 && 
+                                    <li className="number-of-answers">{numberOfAnswers}  Answers</li>
+                                       ||
+                                    <li className="number-of-answers">{numberOfAnswers}  Answer</li>
+                                }
+                            </ul>
+                        }
+                
                         <div>
                             <AvailableAnswers {...props}/>
                         </div>
-                        :
-                        null
-                    }
-                </div>
+                    </div>
 
-                
+                    ||
+
+                    <div>
+                        { isQuestionBox &&
+                            <ul className="number-answers-box">
+                                <li className="number-of-answers">No answer yet</li>
+                            </ul>
+                        }
+                    </div>
+                }
             </div>
-
-      );        
-   };
+        );        
+    };
 };
 
 

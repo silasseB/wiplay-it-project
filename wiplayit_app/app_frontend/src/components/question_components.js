@@ -1,12 +1,13 @@
 import React from 'react';
-import { GetModalLinkProps } from "../components/component-props";
-import {EditorLink, OptionsModalLink, UsersModalLink} from "components/modal-links"
+import { GetModalLinkProps } from "components/component-props";
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { OpenOptionsModalBtn,
          FollowQuestionBtn,
          UnfollowQuestionBtn,
-         OptionsDropDownBtn} from 'components/buttons';
+         OptionsDropDownBtn,
+         OpenEditorBtn,
+         OpenUsersModalBtn, } from 'components/buttons';
 
 import {ButtonsBox, Styles } from "components/partial_components";
 //import AnswersBox from "containers/answer/answer_page";
@@ -46,7 +47,7 @@ export const QuestionComponent = props => {
 
     
 
-    let getObj = ()=>{
+    let getQuestion = ()=>{
 
         if (isQuestionBox && question.user_has_answer) {
             let questionEntitie  = props.entities.question;
@@ -60,7 +61,7 @@ export const QuestionComponent = props => {
 
     let usersById =  question && `questionFollowers${question.id}`;
     let apiUrl    = question && api.getQuestionFollowersListApi(question.id);
-    let linkName = question.followers > 1 && `${question.followers} Followers` || `${question.followers} Follower`;
+    let linkName  = question.followers > 1 && `${question.followers} Followers` || `${question.followers} Follower`;
     //console.log(linkName) 
 
     let questionFollowersProps = {
@@ -85,8 +86,8 @@ export const QuestionComponent = props => {
 
     let editAnswerProps = {
         objName           : 'Answer',
-        obj               : getObj(),
-        byId              : `newAnswers${question.id}`,
+        obj               : getQuestion(),
+        byId              : `answers${question.id}`,
         isPost            : !question.user_has_answer,
         isPut             : question.user_has_answer, 
         className         : 'btn-sm edit-answer-btn', 
@@ -98,7 +99,7 @@ export const QuestionComponent = props => {
     editAnswerProps = GetModalLinkProps.props(editAnswerProps)
     editQuestionProps = GetModalLinkProps.props(editQuestionProps)
  
-    let EditorModalLink = <EditorLink {...editAnswerProps}/>; 
+    let EditorModalBtn = <OpenEditorBtn {...editAnswerProps}/>; 
 
     let MenuModalBtn    = <OptBtnSmallScreen {...editQuestionProps}/>;
     let MenuDropdownBtn = <OptBtnBigScreen {...editQuestionProps}/>;
@@ -110,7 +111,7 @@ export const QuestionComponent = props => {
         </div>
         )
 
-    let questionFollowersLink = question.followers !== 0 &&  <UsersModalLink {...questionFollowersProps}/> 
+    let questionFollowersBtn = question.followers !== 0 &&  <OpenUsersModalBtn {...questionFollowersProps}/> 
     
   
 
@@ -133,8 +134,8 @@ export const QuestionComponent = props => {
 
 
    const btnsList  = {
-            itemsCounter : questionFollowersLink,
-            btn1         : EditorModalLink,
+            itemsCounter : questionFollowersBtn,
+            btn1         : EditorModalBtn,
             btn2         : unfollowOrFollowQuestionBtn,
             btn3         : optionsBtn(),
             Styles       : Styles,

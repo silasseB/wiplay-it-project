@@ -311,6 +311,7 @@ export function entities(state=InitialState(), action) {
             let updatedAnswer = payLoad.answer;
             var answers = state.answers[action.byId];
             answers = answers.answerList;
+            delete updatedAnswer.question;
 
             payLoad['answerList'] = helper.updateReducerListEntynties(answers, updatedAnswer);
             delete payLoad.answer;

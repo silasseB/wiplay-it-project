@@ -38,45 +38,65 @@ class QuestionPage extends Component {
 
     componentDidMount() {
         
-                   
-        let { entities } = this.props;
-        let { slug, id } = this.props.match.params;
-        let  questionById = `question${id}`;
+        console.log(this.props) 
+                        
+        let { entities,
+              match,
+              location }  =  this.props;
 
+        let { slug, id }  =  match.params;
+        let {state}       =  location; 
+
+        this.setState({questionById: `question${id}`})
         
+        if (state && state.recentlyCreated) {
+            let question = state.question;
+            console.log('Question recently created')
+            this.dispatchToStore( `question${id}`, question)
+            return; 
+        }
 
-        if (entities) {
-            let { question, currentUser } = entities;
-            question = question && question[questionById]
+        let { question } = entities;
+        question = question && question[`question${id}`]
+        !question && this.updateQuestionStore(id);
+      
+    };
 
-            //console.log(question)
+    updateQuestionStore(id){
 
-            if(question){
-                let timeStamp = question.timeStamp;
+        let { cacheEntities } = this.props;
+        let { question }     = cacheEntities && cacheEntities;
+        question = question[`question${id}`]
 
-                question = question.question;
-                const getTimeState = new GetTimeStamp({timeStamp});
-                let menDiff        = parseInt(getTimeState.menutes());
-
-                console.log(menDiff  + ' ' + 'Menutes ago')
+        if (question) {
+            let timeStamp = question.timeStamp;
+            const getTimeState = new GetTimeStamp({timeStamp});
+            let menDiff        = parseInt(getTimeState.menutes());
+            console.log(menDiff  + ' ' + 'Menutes ago')
                 
                
-                if (menDiff < 10) {
-                    questionById = `question${id}`;
-                    this.setState({questionById })
-                    console.log('Question found from cachedEntyties')
-                    store.dispatch(action.getQuestionPending(questionById));
-                    store.dispatch(action.getQuestionSuccess(questionById, question));
-                    return 
-                }
-               
+            if (menDiff < 10) {
+                question     = question.question;
+                let questionById = `question${id}`;
+                this.setState({questionById })
+                console.log('Question found from cachedEntyties')
+                this.dispatchToStore(questionById, question)
+
+                return 
             }
         }
 
         console.log('Fetching question data form the server') 
-        this.setState({questionById})
         return this.props.getQuestion(id);
-    };
+    }
+
+    dispatchToStore(questionById, question){
+        if (questionById && question) {
+            store.dispatch(action.getQuestionPending(questionById));
+            store.dispatch(action.getQuestionSuccess(questionById, question));
+        }
+
+    } 
    
 
    
@@ -144,12 +164,6 @@ export const Questions = props => {
    question = question && question[questionById];
    question = question && question.question;
 
-   let newAnswerListById = question && `newAnswers${question.id}`;
-   let newAnswers        = answers  && answers[newAnswerListById];
-   let newAnswersLength  = newAnswers &&  newAnswers.answerList && newAnswers.answerList.length || 0;
-
-   let totalAnswersLength = question && question.answer_count + newAnswersLength;
-
    let questionProps = { question};
    
    questionProps = {...props, ...questionProps}; 
@@ -160,23 +174,7 @@ export const Questions = props => {
         {question &&
             <div className="question-container">
                 <QuestionComponent {...questionProps}/>
-
-                {  question.answers || newAnswers?
-                    <div className="answer-list-container">
-                        <ul className="number-answers-box">
-                            { totalAnswersLength > 1? 
-                                <li className="number-of-answers">{totalAnswersLength}  Answers</li>
-                                :
-                                <li className="number-of-answers">{ totalAnswersLength } Answer</li>
-                            }
-                        </ul>
-                
-                        <AnswersBox {...questionProps}/>
-                    </div>
-                    :
-
-                    <p className="items-count">No answer yet</p>
-                }
+                <AnswersBox {...questionProps}/>
             </div>
             
         }

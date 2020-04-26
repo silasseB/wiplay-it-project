@@ -52,7 +52,7 @@ export function findLinkEntities(contentBlock, callback, contentState) {
 
 export const RenderLink = (props) => {
     const { url } = props.contentState.getEntity(props.entityKey).getData();
-    console.log(url, props)
+    //console.log(url, props)
 
     return (
         <a href={url} title={url} className="draft-js-link" target="_blank">
