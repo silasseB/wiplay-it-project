@@ -18,7 +18,10 @@ DATABASES = {
         'PASSWORD': 'siLasValoi9020$?',
         'HOST': 'Baloyi.mysql.pythonanywhere-services.com',
         'PORT': '',
-        'OPTIONS': {'charset': 'utf8mb4'},
+        'OPTIONS': {
+        	'charset': 'utf8mb4',
+        	'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        	},
         
     }
 }

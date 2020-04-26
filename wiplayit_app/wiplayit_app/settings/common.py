@@ -193,7 +193,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
      'http://192.168.43.101:3000',
      'http://127.0.0.1:8000',
-     'http://192.168.43.14:8000'
+     'http://192.168.43.14:8000',
      'http://localhost:3000', 
      'https://baloyi.pythonanywhere.com',
      'https://valoi.pythonanywhere.com', 
