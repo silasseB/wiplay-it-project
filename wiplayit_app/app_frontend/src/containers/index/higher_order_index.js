@@ -332,17 +332,6 @@ export function withHigherOrderIndexBox(Component) {
         };
 
         componentDidUpdate(prevProps, nextProps) {
-            let { entities, history }  = prevProps;
-            let { modal } = entities;
-
-            let { action } = history;
-            
-            if (modal && action === "POP") {
-                                
-
-            }else{
-                //console.log(action, prevProps, this.props, modal)
-            }
         };
 
         onPopState() {
@@ -411,7 +400,10 @@ export function withHigherOrderIndexBox(Component) {
 
             let currentUser = this._SetCurrentUser();
 
-            if(!currentUser){
+            if(!currentUser && !currentUser.is_confirmed){
+                store.dispatch(getCurrentUser());
+            }
+            if (currentUser && !currentUser.is_confirmed) {
                 store.dispatch(getCurrentUser());
             }
 
