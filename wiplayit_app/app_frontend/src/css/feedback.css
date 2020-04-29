@@ -1,0 +1,19 @@
+
+.feedback-form-page, 
+.privacy-page,
+.help-page,
+.about-info-page,
+.settings-page {
+      border: px solid blue;
+      margin-top: 70px;
+}
+
+.feedback-form-container, 
+.privacy-box,
+.help-box,
+.about-info-box,
+.settings-box {
+    border     : px solid black;
+    text-align : center;
+}
+

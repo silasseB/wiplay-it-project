@@ -19,7 +19,7 @@ import "css/main-sm-screen.css";
 import "css/profile/profile-edit.css";
 import "css/profile/user-list.css";
 import "css/profile/index-user-list.css";
-
+import "css/feedback.css";
 import "css/profile/profile.css"
 
 import 'css/authentication/registration-mobile.css';

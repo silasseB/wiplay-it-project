@@ -28,11 +28,7 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         	host = host + ":8000"
 
         url = http + host + "/registration/account/confirm/" + emailconfirmation.key + "/"
-        print(url)
-        context = {'activate_url':url}
-
-        #url = render_to_string(template_name, context)
-
+        
         ret = build_absolute_uri(
             request,
             url)

@@ -397,7 +397,7 @@ const EditProfilePicture = (props)=>{
                                          src={profile.profile_picture }/>
                                     :
                                     <img alt="" 
-                                         src={require("../../images/user-avatar.png")} 
+                                         src={require("media/user-image-placeholder.png")} 
                                          className="edit-image"/> 
                                 }
                             </div>

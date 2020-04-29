@@ -29,48 +29,26 @@ import UserProfileContainer from "containers/profile/profile_page";
 import  PasswordChangePage from "containers/authentication/password_change_page";
 import EmailResendPage    from "containers/authentication/email_resend_page"
 import PasswordResetPage   from "containers/authentication/password_reset_page"
-import { ModalManager, Modal}   from  "containers/modal/modal_container";
-import {TestEditor}  from 'containers/test-editor';
-
 import AccountConfirmationPage from "containers/authentication/account_confirmation_page"
-/*import UserListBox from "containers/users/user_list_page"; 
-import ProfileFollowersBox from "containers/users/profile-followers-page"; 
-import ProfileFollowingsBox from "containers/users/profile-followings-page"; 
-import QuestionFollowersBox from "containers/users/question-followers-page"; 
-import AnswerUpVotersBox  from "containers/users/answer-upvoters-page"; 
-import AnswerCommentUpVotersBox  from "containers/users/answer-comment-upvoters-page"; 
-import AnswerReplyUpVotersBox  from "containers/users/answer-reply-upvoters-page"; 
-import PostUpVotersBox  from "containers/users/post-upvoters-page"; 
-import PostCommentUpVotersBox  from "containers/users/post-comment-upvoters-page"; 
-import PostReplyUpVotersBox  from "containers/users/post-comment-upvoters-page"; */
+import {TestEditor}  from 'containers/test-editor';
+import FeedBackContainer  from 'containers/feed-back';
+import AboutContainer  from 'containers/about';
+import PrivacyContainer  from 'containers/privacy';
+import HelpContainer  from 'containers/help';
+import SettingsContainer  from 'containers/settings';
+
+
 import {store} from "store/index";
 
 
 export const history = createBrowserHistory();
 
-let storeUpdate = store.getState().entities;
-
-let GetModalRouter = (location)=>{
-    let background =  location && location.state && location.state.background;
-    //console.log(location)
-    let state = location && location.state;
-    return <Route path="/compose/:context/:id/" children={<Modal {...state}/> }/>  
-}
-
-
-
 
 function App() {
-    let location = useLocation && useLocation();
-    let background =  location && location.state && location.state.background;
-  
-    let ModalRouter = GetModalRouter(location)
-          
-
-     
+        
     return (
-            <div>
-                <Switch location={background || location}>
+        <div>
+                <Switch>
                     <Route exact path="/" component={IndexBox}/>
                     <Route  path="/profile/:id/:slug/" component={UserProfileContainer}/>
                     <Route  path="/question/:slug/:id/" component={QuestionPage}/>
@@ -88,8 +66,12 @@ function App() {
                     <Route  path="/account/email/resend/" component={EmailResendPage} />
                     <Route  path="/:slug/answer/" component={QuestionPage}/>
                     <Route  path="/editor/" component={TestEditor}/>
+                    <Route  path="/feedback/" component={FeedBackContainer}/>
+                    <Route  path="/about/" component={AboutContainer}/>
+                    <Route  path="/privacy/" component={PrivacyContainer}/>
+                    <Route  path="/help/" component={HelpContainer}/>
+                    <Route  path="/settings/" component={SettingsContainer}/>                      
                 </Switch>
-                {ModalRouter}
         </div>
     );
 }

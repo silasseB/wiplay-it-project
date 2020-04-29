@@ -58,6 +58,7 @@ createPostProps = GetModalLinkProps.props(createPostProps);
 
 
 export const NavBarMenuItems = props => {
+    console.log(props)
     let { currentUser } = props;
     let profile = currentUser && currentUser.profile;
           
@@ -82,7 +83,7 @@ export const NavBarMenuItems = props => {
 
                 <ul className="menu-username-box">
                     <li className="menu-username"  
-                    onClick={() => RedirectMenuLinks(toProfileProps)}>
+                        onClick={() => RedirectMenuLinks(toProfileProps)}>
                         {currentUser.first_name}  {currentUser.last_name} 
                     </li>
                     <li className="menu-user-credential" >
@@ -91,16 +92,36 @@ export const NavBarMenuItems = props => {
                 </ul>
             </div>
             <div className="menu-btn-container">
-                    <Link className="button" className="btn-sm dropdown-item" to="/help/">
-                        Help
-                    </Link>
-                    <Link type="button" className="btn-sm dropdown-item" to="/settings/">
-                        Settings
-                    </Link>
-                    <Link type='button' className="btn-sm dropdown-item" to="/about/">
-                        About
-                    </Link>
-                    <button  onClick={props.logout} className="btn-sm logout-btn">Logout</button>
+                <button type="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/help/'})}
+                        className="btn-sm dropdown-item">
+                    Help
+                </button>
+                <button type="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/feedback/'})}
+                        className="btn-sm dropdown-item">
+                    Feedback
+                </button>
+
+                <button type="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/settings/'})}
+                        className="btn-sm dropdown-item">
+                    Settings
+                </button> 
+
+                <button className="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/about/'})}
+                        className="btn-sm dropdown-item">
+                    About
+                </button>   
+
+                <button type="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/privacy/'})}
+                        className="btn-sm dropdown-item">
+                    Privacy
+                </button>   
+                
+                <button  onClick={props.logout} className="btn-sm logout-btn">Logout</button>
             </div>
         </div>
         </BrowserRouter>
@@ -154,14 +175,12 @@ const NavBarDropDown = props => {
 
 export const NavBarMenuModalItems = props =>{
     console.log(props);
-    let { background } = props;
-
-
+   
     return(
         <div className="">
             <div className="nav-bar-menu-header">
                 <ul className="nav-bar-menu-title-box">
-                    <li>You Account</li>
+                    <li>Your Account</li>
                 </ul>
 
                 <button type='button' 
@@ -184,20 +203,18 @@ export const NavBarMenuModalItems = props =>{
 
 
 const NavBarModalMenu = props => {
-    let { currentUser} = props;
+    let { currentUser, logout} = props;
     let profile = currentUser && currentUser.profile;
     
     let modalProps = {
-            navBarMenuProps:{currentUser},
+            navBarMenuProps:{...props},
             modalName   : 'navigationMenu', 
         };
-
-    let state = { modalProps } 
 
     return(
         
         <div className="navigation-img-box "
-             onClick={()=> Modal(state)}>
+             onClick={()=> Modal({modalProps})}>
                     
             <div className="nav-bar-modal-menu" id="nav-bar-modal-menu">
                 <div className="nav-bar-img-box"> 

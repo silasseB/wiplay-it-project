@@ -318,7 +318,11 @@ export function withHigherOrderIndexBox(Component) {
         };
 
         logout= () => {
-
+            let { entities, history }  = this.props;
+            let { modal } = entities;
+            let navigationModal  = modal['navigationMenu'];
+        
+            navigationModal && navigationModal.modalIsOpen  && window.history.back();
             let apiUrl   =  api.logoutUser();
             let useToken = true;
             this.props.authenticate({apiUrl, form:{}, useToken})
@@ -346,11 +350,6 @@ export function withHigherOrderIndexBox(Component) {
             let dropImageModal   = modal['dropImage'];
             let userListModal    = modal['userList'];
             let navigationModal  = modal['navigationMenu'];
-            if (navigationModal && navigationModal.modalIsOpen) {
-                //window.history.go(1)
-
-            }
-            
 
             console.log(modal)
            
@@ -400,9 +399,10 @@ export function withHigherOrderIndexBox(Component) {
 
             let currentUser = this._SetCurrentUser();
 
-            if(!currentUser && !currentUser.is_confirmed){
+            if(!currentUser){
                 store.dispatch(getCurrentUser());
             }
+
             if (currentUser && !currentUser.is_confirmed) {
                 store.dispatch(getCurrentUser());
             }
@@ -411,10 +411,7 @@ export function withHigherOrderIndexBox(Component) {
 
         };
 
-        reloadContents(callback=function(){}) {
-            callback();
-        }
-
+       
         push(params){
             let path = params && params.path;
             let state = params && params.state;
@@ -484,7 +481,6 @@ export function withHigherOrderIndexBox(Component) {
                 reloadPage              : this.reloadPage.bind(this),
                 push                    : this.push.bind(this),
                 redirectToRouter        : this.redirectToRouter.bind(this),
-                reloadContents          : this.reloadContents.bind(this),
                 ...this.state,
             };
          

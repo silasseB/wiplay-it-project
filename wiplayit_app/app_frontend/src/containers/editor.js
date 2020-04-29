@@ -150,7 +150,7 @@ export default  class AppEditor extends Component{
 
 
 
-   onTextAreaChange(event) {
+    onTextAreaChange(event) {
       event.preventDefault();
       let form = this.state.form;
       form[event.target.name] = event.target.value;
@@ -163,9 +163,7 @@ export default  class AppEditor extends Component{
          this.setState({contentIsEmpty : true,})
 
       }
-
-
-   }
+    }
 
    
    

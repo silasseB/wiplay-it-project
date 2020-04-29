@@ -325,7 +325,7 @@ def retrieve_current_user(request):
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
-	print(user, request.user)
+	
 	serializer = BaseUserSerializer(user)
 	return {
         'token': token,
