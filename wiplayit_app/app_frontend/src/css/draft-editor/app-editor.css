@@ -370,21 +370,22 @@ div.public-DraftEditor-content {
         background-color : #fffef7;
         max-height       : 100%; 
         height           : 100%;
-        padding-top      : 95px;
         overflow-y       : auto;
         font-size        : 18px;
         font-family      : 'calibri', sans-serif;
         border           : px solid red;
+        margin-top       : 45px; 
     }
 
  
     #editors-box  {
         background-color : #fffef7;
+        height           : 100%;
         min-height       : 100px; 
         overflow-y       : auto;  
         border           : px solid blue;
-        padding          : 10px;
-         
+        margin-top       : 50px;
+        padding          : 10px;  
     }
 
   
@@ -585,17 +586,12 @@ div.public-DraftEditor-content {
   background-color : #fffef7; 
 } 
 
-.post-title-form{
-   border: px solid blue;
-}
-
-.post-title-form-box{
-    border : px solid black;
+.post-title-form-box, .question-form-box{
+   border: 1px solid black;
 }
 
 .textarea-form-field {
-    width         : 100%;
-    padding       : 10px;
+    padding       : 4 10px;
     font-weight   : bold;
     font-size     : 14px;
     border-bottom : 2px solid #888888;
@@ -603,13 +599,11 @@ div.public-DraftEditor-content {
 
 .textarea-box {
     border  : px solid red;
-    padding : 20px 10px 0;
 }
 
 .create-question-form {
   width       : 100%;
   border      : none !important;
-  margin      : 4px 0 0 !important;
   font-weight : bold;
   font-size   : 14px;
   

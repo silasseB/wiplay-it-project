@@ -393,37 +393,23 @@ export const UserList = props => {
     let {entities,users, usersById } = props
 
     users   = entities && entities.users && entities.users[usersById] || users && users[usersById];
+    let userList = users && users.userList || [];
 
     return (
-      <div>
-         { users && users.userList && users.userList.length?
-         <div>
-           {  users.userList.map(( user, index )  => {
-               let userProps = {user  : user, objIndex:index};
+        <div>
+            { userList && userList.map(( user, index )  => {
+                let userProps = {user  : user, objIndex:index};
+                Object.assign(userProps, props);
 
-               Object.assign(userProps, props);           
-               return(
+                return(
                     <div style={props.userListBoxStyles}
                          key={index}
-                         className="user-list-container"
-                         id="user-list-container">
-
+                         className="user-list-container" id="user-list-container">
                         <UsersComponent{...userProps}/>
-
                     </div>
                 )
-            }
-      
-          )}
+            })}
         </div>
-      :
-      
-      <div  className="default-user-box">
-        <p>{props.error}</p>
-      </div>   
-      }
-
-   </div>
 
   )
 }

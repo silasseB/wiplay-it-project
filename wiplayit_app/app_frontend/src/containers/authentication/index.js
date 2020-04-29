@@ -166,11 +166,11 @@ export function withAuthentication(Component) {
 
                 if (auth) {
                     console.log(auth)  
-                    let { isLoggedIn, tokenKey, email, confirmed} = auth;
+                    let { isLoggedIn, tokenKey, email, isConfirmed} = auth;
                          
                     this.setState({ submitting : false,  error, email}) 
 
-                    if(!confirmed && isLoggedIn && tokenKey){
+                    if(!isConfirmed && isLoggedIn && tokenKey){
                         this._Redirect()
                     }
                 }
@@ -420,7 +420,7 @@ export function withAuthentication(Component) {
                 }  
 
                 callback({...response_data });
-                this.setState({...response_data})
+                this.setState({...auth})
 
                 store.dispatch(action.authenticationSuccess(response_data));
 
@@ -434,16 +434,18 @@ export function withAuthentication(Component) {
                 console.log(error) 
                 if (error && error.response) {
 
+                   error = error.response.data
+                   let errorMessage = error.detail;
                    error = "Unable to confirn your account" 
-                   console.log(error.response) 
-                   callback({ confirmed: false});
+                   callback({ isConfirmed : false, errorMessage});
                    
-                   this.setState({ confirmed : false })
+                   this.setState({ isConfirmed : false, errorMessage })
 
-                   store.dispatch(action.authenticationError(error.response.data));
+                   store.dispatch(action.authenticationError(error));
 
                 }else if(error && error.request){
-                    store.dispatch(action.authenticationError(error.request))
+                    error = "Something wrong happened, please try again" 
+                    store.dispatch(action.authenticationError(error))
 
                 }else{
                     store.dispatch(action.handleError())

@@ -11,7 +11,7 @@ import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
 import  * as action  from 'actions/actionCreators';
 import { ProfileComponent, UserAnswers } from "components/profile_components";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
-import { UnconfirmedUserWarning } from "components/partial_components";
+import { UnconfirmedUserWarning, PageErrorComponent } from "components/partial_components";
 
 import {store} from "store/index";
 import GetTimeStamp from 'utils/timeStamp';
@@ -23,7 +23,7 @@ import  AjaxLoader from "components/ajax-loader";
 
 
 class UserProfileContainer extends Component {
-
+    isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -33,7 +33,9 @@ class UserProfileContainer extends Component {
             profileById        : '',
             usersById          : 'filteredUsers',
             isMouseInside      : false,
-            userItemsStyles    : {},  
+            isReloading        : false,
+            userItemsStyles    : {}, 
+            error              : '', 
         } 
 
     };
@@ -50,12 +52,16 @@ class UserProfileContainer extends Component {
             let profileById  =  id? `userProfile${id}`:null;
             let answers      = entities.answers;
 
-            let userProfile  = profileById? entities.userProfile[profileById]:null;
+            let userProfile  = profileById && entities.userProfile[profileById];
 
-            if (userProfile && userProfile.user) {
+            if (userProfile) {
 
+                this.isMounted && this.setState({
+                            isReloading : userProfile.isLoading,
+                            error : userProfile.error} ) 
+            
                 userProfile = userProfile.user;
-                let answersById  = `usersAnswers${userProfile.id}`;
+                let answersById  = userProfile && `usersAnswers${userProfile.id}`;
                 answers          = answers[answersById];
                 //console.log(userProfile)
 
@@ -64,8 +70,6 @@ class UserProfileContainer extends Component {
 
                     this._dispatchUserProfileItems(userProfile);
                 }
-
-                
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -74,8 +78,10 @@ class UserProfileContainer extends Component {
   
 
     componentWillUnmount() {
-            this.unsubscribe();
+        this.isMounted = false;
+        this.unsubscribe();
     };
+
     componentDidUpdate(prevProps, nextProps){
         console.log(nextProps, this.props)
         //this.props.reloadPage()
@@ -91,18 +97,17 @@ class UserProfileContainer extends Component {
             this.updateWithCacheData({profileById, id});
             this.updateUsersStore();
         }
-
-
-    }
+    };
 
     componentDidMount() {
+        this.isMounted = true;
         this.onProfileUpdate();
         
         let { entities, match }    = this.props;
         let { slug, id }           = match.params;
         let { users, userProfile}  = entities; 
         let  profileById           = `userProfile${id}`;
-        this.setState({profileById })
+        this.setState({profileById, id})
                
         userProfile = userProfile && userProfile[profileById];
         users       = users['filteredUsers']
@@ -146,7 +151,7 @@ class UserProfileContainer extends Component {
             //console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
             //console.log(menDiff <= 3)
 
-            if ( menDiff <= 3) {
+            if ( menDiff <= 0) {
                 //userProfile = userProfile && userProfile.user;
 
                 console.log('userProfile found from cachedEntyties')
@@ -162,6 +167,12 @@ class UserProfileContainer extends Component {
         console.log('Fetching userProfile from the server')
         this.props.getUserProfile(id);
 
+    };
+
+    reLoader =()=>{
+        let id = this.state.id;   
+        this.isMounted && this.setState({isReloading : true})
+        return this.props.getUserProfile(id);
     };
 
     _dispatchUserProfileItems(userProfile){
@@ -281,14 +292,14 @@ class UserProfileContainer extends Component {
 
     getProps(){
 
-        let props = {
-            showUserItems      : this.showUserItems.bind(this),
-            mouseEnter         : this.mouseEnter,
-            mouseLeave         : this.mouseLeave,
+        return {
+            ...this.props,
+            showUserItems  : this.showUserItems.bind(this),
+            reLoader       : this.reLoader.bind(this),
+            mouseEnter     : this.mouseEnter,
+            mouseLeave     : this.mouseLeave,
             ...this.state, 
         };
-
-        return {...this.props, ...props};
     };
   
 
@@ -304,25 +315,22 @@ class UserProfileContainer extends Component {
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props} />
 
-                { userProfile?
-                    <div  className="app-box-container">
+                { userProfile &&
+                    <div  className="app-box-container app-profile-box">
                         <UnconfirmedUserWarning {...props}/> 
-                        {userProfile.isLoading?
+                        {userProfile.isLoading &&
                             <div className="page-spin-loader-box partial-page-loader">
                                  <AjaxLoader/>
                             </div>
-
-                            :
-                            <div className="profile-page" id="profile-page">
-                               <ProfileComponent {...props}/> 
-                              
-                            </div>
                         }
+
+                        { userProfile.error &&
+                            <PageErrorComponent {...props}/>
+                        }
+                        <div className="profile-page" id="profile-page">
+                            <ProfileComponent {...props}/> 
+                        </div>
                     </div>
-
-                    :
-                    null
-
                 }
             </div>
         );

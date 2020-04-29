@@ -37,14 +37,18 @@ export function getIndex(options) {
     
             })
             .catch(error => {
+                console.log(error)
                 
                 if (error.response) {
-                    console.log(error.response)
-                    dispatch(action.getIndexError(error.response.data ));
+                    error = error.response.data;
+                    dispatch(action.getIndexError(error.detail));
+
+                }else if(error.request){
+                    error = 'Something wrong happened.';
+                    dispatch(action.getIndexError(error));
 
                 }else{
-                    console.log(error.request)
-                    dispatch(action.handleError(error.request));
+                    dispatch(action.handleError());
                 }
            }); 
         
@@ -75,10 +79,17 @@ export function getUserList(props) {
         .then(response => dispatch(action.getUserListSuccess(usersById, response.data)))
         .catch(error => {
 
-      	    if (error.response) {
-      	        dispatch(action.getUserListError(usersById, error.response.data));
+            console.log(error)
+            if (error.response) {
+                error = error.response.data;
+                dispatch(action.getUserListError(usersById, error.detail));
+
+            }else if(error.request){
+                error = 'Something wrong happened.';
+                dispatch(action.getUserListError(usersById, error));
+
             }else{
-         	   dispatch(action.handleError(error.request));
+                dispatch(action.handleError());
             }
         }); 
     };
@@ -102,12 +113,18 @@ export function getQuestionList(questionListById) {
 	   Api.get(apiUrl)
       .then(response => dispatch(action.getQuestionListSuccess(questionListById, response.data)))
       .catch(error => {
-      	if (error.response) {
-      		dispatch(action.getQuestionListError(questionListById, error.response.data));
+            console.log(error)
+      	    if (error.response) {
+                error = error.response.data;
+                dispatch(action.getQuestionListError(questionListById, error.detail));
 
-         }else{
-         	dispatch(action.handleError(error.request));
-         }
+            }else if(error.request){
+                error = 'Something wrong happened.';
+                dispatch(action.getQuestionListError(questionListById, error));
+
+            }else{
+                dispatch(action.handleError());
+            }
       }); 
    };
 };
@@ -129,16 +146,22 @@ export function getPostList(postListById) {
     let   apiUrl  = api.getPostListApi();
 
     return dispatch => {
-      dispatch(action.getPostListPending(postListById))
-	   Api.get(apiUrl)
-       .then(response => dispatch(action.getPostListSuccess(postListById, response.data)))
-       .catch(error => {
-      	    if (error.response) {
-      	        dispatch(action.getPostListError(postListById, error.response.data));
+        dispatch(action.getPostListPending(postListById))
+	    Api.get(apiUrl)
+        .then(response => dispatch(action.getPostListSuccess(postListById, response.data)))
+        .catch(error => {
+      	   
+            if (error.response) {
+                error = error.response.data;
+                dispatch(action.getPostListError(postListById, error.detail));
+
+            }else if(error.request){
+                error = 'Something wrong happened.';
+                dispatch(action.getPostListError(postListById, error));
 
             }else{
-         	  dispatch(action.handleError(error.request));
-         }
+                dispatch(action.handleError());
+            }
       }); 
    };
 };
@@ -167,7 +190,17 @@ export function getQuestion(id) {
             })
             .catch(error => {
                 console.log(error)
-                dispatch(action.getQuestionError( questionById, error));
+                if (error.response) {
+                    error = error.response.data;
+                    dispatch(action.getQuestionError( questionById, error.detail));
+
+                }else if(error.request){
+                    error = 'Something wrong happened.';
+                    dispatch(action.getQuestionError(questionById, error));
+
+                }else{
+                    dispatch(action.handleError());
+                }
             })
     }
 };
@@ -196,8 +229,19 @@ export function getPost(id) {
             dispatch(action.getPostSuccess(postById, response.data));
         })
        .catch(error => {
-            dispatch(action.getPostError(postById ,error));
-       }) 
+            console.log(error)
+            if (error.response) {
+                error = error.response.data;
+                dispatch(action.getPostError(postById ,error.detail));
+
+            }else if(error.request){
+                error = 'Something wrong happened.';
+                dispatch(action.getPostError(postById ,error));
+
+            }else{
+                dispatch(action.handleError());
+            }
+        }) 
    };
 };
 
@@ -225,17 +269,21 @@ export function getUserProfile(id, apiUrl) {
 	    Api.get(apiUrl)
         .then(response => {
         	//console.log(response.data.profile)
-            dispatch(action.getUserProfileSuccess( profileById ,response.data));
+            dispatch(action.getUserProfileSuccess(profileById ,response.data));
         })
         .catch(error => {
             console.log(error)
       	
       	    if (error.response) {
-      		    dispatch(action.getUserProfileError( profileById, error.response.data));
+                error = error.response.data;
+      		    dispatch(action.getUserProfileError(profileById, error.detail));
+
+            }else if(error.request){
+                error = 'Something wrong happened.';
+                dispatch(action.getUserProfileError(profileById, error));
 
             }else{
-         	    
-         	    dispatch(action.handleError(error.request));
+                dispatch(action.handleError());
             }
         });
     }
@@ -351,7 +399,8 @@ export function handleSubmit(props) {
         formData,
         apiUrl,
         IsModal,
-        modalName } = props;
+        modalName,
+        obj } = props;
 
 
    
@@ -363,6 +412,7 @@ export function handleSubmit(props) {
             byId,
             objName,
             modalName,
+            obj,
             isUpdating:true,
         };
 
@@ -371,6 +421,7 @@ export function handleSubmit(props) {
             byId,
             objName,
             modalName,
+            obj,
             isCreating: true, 
         }; 
          
@@ -482,16 +533,16 @@ export function authenticate(params={}){
             }
         )
         .catch(error =>{
-            let { response, request } = error
-                
+            console.log(error)                
             if ( error.response) {
                 console.log(response.data)
-                console.log(typeof response.data )
-                dispatch(action.authenticationError(error.response.data));
+                error = error.response.data
+                error = error.detail;
+                dispatch(action.authenticationError(error));
             }
             else if (error.request)  {
-                console.log(error.request)
-                dispatch(action.authenticationError(error.request));
+                error = 'Something wrong happened.';
+                dispatch(action.authenticationError(error));
 
             }else{
                 console.log(error)

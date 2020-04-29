@@ -14,15 +14,16 @@
 }
 
 .author-name-box {
-    font-size   : 13px;
+    font-size   : 10px;
     color       : black;
     font-weight : bold;
     font-family : 'Kanit';
+    margin-top  : 8px; 
 }
 
 .time-created {
     border    : px solid red;
-    font-size : 13px;
+    font-size : 10px;
     color     : grey;
     font-family : 'Open Sons Condensed';
 }
@@ -68,8 +69,7 @@
 #profile-page {
    width  : 100%;
    margin : auto;
-   padding-top: 70px;
-    
+      
 }
 
 .profile-section-top {

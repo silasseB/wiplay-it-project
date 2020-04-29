@@ -184,7 +184,7 @@ export const MobileModalNavBar = props  => {
                 </ul>
 
                 <ul className="modal-title-box">
-                    <li className="modal-title">{modalTitle}</li>  
+                    <li className="modal-title">{modalTitle || ''}</li>  
                 </ul>
          
                 <div className="submit-btn-box">
@@ -219,7 +219,7 @@ export const DesktopModalNavBar = (props) => {
     return(
         <div className="modal-navbar-top">
             <div className="modal-title-box">
-                <p className="modal-title">{modalTitle}</p>
+                <p className="modal-title">{modalTitle || ""}</p>
             </div>
 
             <div className="modal-close-btn-box">
@@ -277,34 +277,54 @@ const Button = props => {
 export const TextAreaEditor = props => {
     //console.log(props)
     return (
-      <div className="textarea-form">
-         <form className="">
-            <div style={props.onScroolStyles} className="textarea-box" id="editors-box" >
+        <form className="textarea-form">
+            <div className="textarea-box" >
                <TextareaAutosize
                      {...props.textAreaProps} 
                         rows={1}/>
             </div>
-         </form>
-      </div>
-   );
+        </form>
+    );
 
 }
 
 
+export const PostEditor = (props) => {
+    let {objName} = props;
+    if(objName !== 'Post') return null;
+
+    return(
+        <div style={props.onScroolStyles} id="editors-box" className="editors-box">
+            <TextAreaEditor   {...props} rows={1}/>
+            <div className="post-editor-box">
+                <DraftEditor {...props}/>
+            </div>
+        </div>
+    )
+
+}
+
+
+export const QuestionEditor = (props) => {
+    let {objName} = props;
+    console.log(objName)
+    if(objName !== 'Question') return null;
+
+    return(
+        <div style={props.onScroolStyles} id="editors-box" className="editors-box">
+            <div className="question-form-box">
+                <TextAreaEditor {...props}/>
+            </div> 
+        </div>
+    )
+
+}
+
 export const DraftEditor = props => {
+    console.log(props)
     
 	return (
-		<div style={props.onScroolStyles} id="editors-box" className="editors-box">
-               { props.objName == "Post"?
-                    <div className="post-textarea-box">
-                        <TextAreaEditor   {...props} rows={1}/>
-            
-                    </div>
-                :
-                ""
-                }
-         
-            <Editor 
+		    <Editor 
                editorState={props.editorState} 
                blockRendererFn={mediaBlockRenderer}
                handleKeyCommand={props.handleKeyCommand}
@@ -317,9 +337,7 @@ export const DraftEditor = props => {
                //plugins={props.plugins}
 
             />
-        </div>
-        
-    );
+        )        
 }
 
 

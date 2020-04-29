@@ -78,7 +78,8 @@
 	}
 
 	.app-box-container {
-     	border  : px solid  red;
+     	border     : 1px solid  red;
+     	margin-top : 50px; 
     }
 
     .page-spin-loader-box {
@@ -216,6 +217,46 @@ ul {
 	padding         : 0;
 	margin          : 0;   
 }
+
+.page-error-box {
+        padding : 20px 0; 
+    }
+
+    .error-box, .reload-btn-box {
+        text-align : center;
+        border     : px solid black;
+    }
+ 
+    .error-text {
+        font-size : 14px;      
+        font-family: 'Raleway';   
+    }
+    
+    .reload-btn {
+        border        : 1px solid #A33F0B;
+        border-radius : 17px;
+        color         : #ffff;
+        background    : #A33F0B; 
+        margin        : 10px 20%;
+    }
+
+    .reload-icon {
+        border     : px solid red;
+        font-size  : 18px;
+        padding-top: 2px;
+    }
+
+    .reload-icon-text {
+        border      : px solid black;
+        font-size   : 14px;
+        font-family : 'Raleway';
+        margin-left : 5px;    
+    }
+
+    .reload-btn-box2 {
+        border  : px solid blue;
+        display : flex;
+    }
 
 
 .contents-nav-container {

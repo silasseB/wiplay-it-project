@@ -22,8 +22,9 @@ class AccountConfirmationPage extends Component{
         super(props);
 
         this.state = {
-            confirmed        :  false,
-            successMessage   :  '',
+            isConfirmed      :  false,
+            successMessage   :  undefined,
+            errorMessage     :  undefined,
             pageTitle        :  'Account Confirmation',
             navbarTitle      :  'Confirm Account',
             formDescription  :  ['Account Confirmation'],
@@ -34,10 +35,8 @@ class AccountConfirmationPage extends Component{
     };
 
 
-    isConfirmed = (params)=>{
-             
-        console.log(params)  
-        this.setState({...params});
+    isConfirmed = (auth={})=>{
+        this.setState({...auth});
         
     };
 

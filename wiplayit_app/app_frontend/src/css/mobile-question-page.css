@@ -1,7 +1,6 @@
 
 @media (max-width: 900px) {
    
-
     .partial-page-loader {
         margin-top: 80px;
         border: px solid black;
@@ -9,13 +8,25 @@
 
     .post-box-container{
         border-top   : 9px solid  #D5D7D5;
-
+    }
+    
+    
+    .app-question-box, .app-post-box. .app-profile-box {
+        margin-top : 50px;
+        border     : 1px solid black;
+    }
+    .app-index-box {
+       padding-top:  100px;
     }
 
-    #question-page, #post-page, #post-list-page, #question-list-page {  
+    #question-page,
+    #post-page, 
+    #post-list-page,
+    #question-list-page,
+    #answer-page {
         background : #fff;
         border     : px solid  red;
-        padding-top: 70px; 
+        margin-top : 70px; 
     }
 
     #home-page-contents{
@@ -23,41 +34,24 @@
     }
 
     .index-posts-box, .index-questions-box,.index-answers-box  {
-        border  : 1px solid #D5D7D5;
+        border  : px solid #D5D7D5;
         margin  : 9px 0px;
         padding : 0px 0px 4px; 
         background:  #ffff;
     }
 
-
-    .index-questions-box {
-        border      : px solid black;
-   
-    }
-
- 
-    .index-answers-box {
-        border      : px solid blue;
-    }
-
-    .index-posts-box {
-        border      : px solid red;
-    }
-
-
     .post-contents,.question-contents {
         background : white;
-
     }
 
     .index-items-label {
-        border      : 1px solid #D5D7D5;
-        font-size   : 14px; 
-        margin-bottom: 9px;
-        padding: 4px 9px 0px;
-        color: #A33F0B;
+        border-bottom : 1px solid #D5D7D5;
+        font-size     : 14px; 
+        margin-bottom : 9px;
+        padding       : 4px 9px 0px;
+        color         : #A33F0B;
+        font-weight   : bold; 
     }
-
 
     .post-box, .question-box, .answer-box, .comment-box, .reply-box {
         border-bottom : 0.5px solid #E8E8E8;
@@ -73,29 +67,26 @@
     }
 
     .autor-details-box {
-        margin  : 0 8px;
         border  : px solid green;
         display : flex;
+        margin  : 0 6px ; 
     }
-
 
     .post-box {
     } 
 
     .post-body{
-        padding: 0 0 0 10px;
+     }
+
+    .post ,.question {
+        font-size   : 12px;
+        font-weight : bold;
+        color       : black;
     }
 
- .post ,.question {
-   font-size: 14px;
-   padding: 0 0 0 10px;
-   font-weight:bold;
-   color: black;
-}
-
-.question-home  {
-   padding: 13px 14px 0  
-}
+    .question-home  {
+        padding: 13px 14px 0  
+    }
 
 .question-link {
    color : black;
@@ -202,7 +193,7 @@
 
 
 .contents-nav-box,.answer-nav-box {
-     border-top: px solid #D5D7D5;
+     border-top: 0.5px solid #D5D7D5;
      border-bottom:  px solid #D5D7D5;
      display:flex;
      margin-top: 4px;
@@ -210,14 +201,17 @@
 }
 
 
-
-.items-count a {
-   font-family      : 'Mukta';
-   color            : grey;  
-   font-size    :11px; 
+.items-counter-box {
+    border : px solid red;
+    
+    
 }
 
-
+.items-btn-box button {
+    font-family  : 'Mukta';
+    color        : grey;  
+    font-size    : 11px;
+}
 
 .edit-reply-btn,.upvote-comment {
    background  :  #f7f7f7;

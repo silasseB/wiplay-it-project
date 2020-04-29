@@ -146,42 +146,38 @@ export function withHigherOrderIndexBox(Component) {
                 
 
                 if (editorModal && Object.keys(editorModal).length) {
-                    //console.log(editorModal)
-                    let {objName, data, isCreating, modalIsOpen, hasProssed} = editorModal;
-                    this.setState({ modalIsOpen : modalIsOpen });
-                                                           
-                    if (isCreating && objName === 'Question' || objName === 'Post' ) {
-                        let question       = data.question;
-                        let post           = data.post;
-                        let pathToPost     = post && `/post/${post.title}/${post.id}`;
-                        let pathToQuestion = question  && `/question/${question.slug}/${question.id}/`; 
+                    console.log(editorModal)
+                    let { objName, 
+                          data,
+                          isCreating,
+                          modalIsOpen,
+                          hasProssed} = editorModal;
+                                                                               
+                    if (isCreating) {
+                        if ( objName === 'Question' ||
+                             objName === 'Post'     ||
+                             objName === 'Answer') {
 
-                        let questionRedirectProps = {
-                                path  : pathToQuestion,
-                                state : {question, recentlyCreated : true},
-                        }
+                            let {answer,question,post} = data
+                            console.log(data)
 
-                        let postRedirectProps = {
-                                path  : pathToPost,
-                                state : {post, recentlyCreated : true},
-                        }
-                        console.log(data)
-
-                        if (data && !hasProssed) {
-                            console.log(editorModal, data)
-                            editorModal['hasProssed'] = true;
-                            window.history.back()
+                            if (data && !hasProssed) {
+                                console.log(editorModal, data)
+                                editorModal['hasProssed'] = true;
+                                window.history.back()
                             
-                            setTimeout(()=> {
-                                question    && this.push(questionRedirectProps);
-                                post        && this.push(pathToPost);
-                                this.logMessage(editorModal)
-                                delete modal.editor;
+                                setTimeout(()=> {
+                                    post     && this.handleNewPost(editorModal);
+                                    question && this.handleNewQuestion(editorModal);
+                                    answer   && this.handleNewAnswer(editorModal);
+
+                                    this.logMessage(editorModal)
+                                    delete modal.editor;
                                 
-                            }, 500);
+                                }, 500);
+                            }
                         }
-                       
-                                                
+                                                               
                     }else{
                         if (data && !hasProssed ){
                             editorModal['hasProssed'] = true;
@@ -209,7 +205,48 @@ export function withHigherOrderIndexBox(Component) {
 
         };
 
-        logMessage = (params) => {
+        handleNewQuestion =(params)=> {
+            let data = params.data;
+            let { question } = data
+            let pathToQuestion = question  && `/question/${question.slug}/${question.id}/`; 
+            let questionRedirectProps = {
+                    path  : pathToQuestion,
+                    state : {question, recentlyCreated : true},
+                }
+            question && this.redirectToRouter(questionRedirectProps);
+        };
+
+        handleNewPost =(params)=> {
+            let data   = params.data;
+            let {post} = data
+            let pathToPost     = post && `/post/${post.title}/${post.id}`;
+            let postRedirectProps = {
+                    path  : pathToPost,
+                    state : {post, recentlyCreated : true},
+                }
+
+            post && this.redirectToRouter(postRedirectProps);
+
+        };
+
+        handleNewAnswer =(params)=> {
+            console.log(params)
+            let data     = params.data;
+            let question = params.obj;
+            let {answer} = data;
+            let pathToAnswer   = answer && `/answer/${answer.id}/`;
+
+            let answerRedirectProps = {
+                    path  : pathToAnswer,
+                    state : {answer, question, recentlyCreated : true},
+                } 
+            
+            answer && this.redirectToRouter(answerRedirectProps);
+
+
+        };
+
+        logMessage =(params)=> {
             console.log(params)
             let {successMessage, data} = params && params;
             
@@ -225,7 +262,7 @@ export function withHigherOrderIndexBox(Component) {
         displayErrorMessage =(errorMessage)=>{
             let message = {textMessage:errorMessage, messageType:'error'}
             this.displayAlertMessage(message)
-        }
+        };
 
         displayAlertMessage = (message) => {
                        
@@ -233,7 +270,18 @@ export function withHigherOrderIndexBox(Component) {
             setTimeout(()=> {
                  this._isMounted && this.setState({displayMessage : false}); 
                 }, 5000);
-        }
+        };
+
+        redirectToRouter =(params)=>{
+            let path  = params && params.path;
+            let state = params && params.state;
+
+            if (path) {
+                history.push(path, state);
+                //this.reloadPage();
+            }
+        };
+
 
         confirmLogout =(userAuth)=>{
 
@@ -275,7 +323,7 @@ export function withHigherOrderIndexBox(Component) {
             let useToken = true;
             this.props.authenticate({apiUrl, form:{}, useToken})
             
-        }  
+        };  
 
         componentWillUnmount() {
             this.unsubscribe();
@@ -323,7 +371,7 @@ export function withHigherOrderIndexBox(Component) {
             userListModal   && userListModal.modalIsOpen    && ModalManager.close('userList', background); 
             navigationModal && navigationModal.modalIsOpen  && ModalManager.close('navigationMenu', background);
              
-        }
+        };
 
         
         componentDidMount() {
@@ -355,7 +403,7 @@ export function withHigherOrderIndexBox(Component) {
                 
             });
 
-            
+
             if (!this.isAuthenticated()) {
                 //User is not authenticated,so redirect to authentication page.
                 history.push('/user/registration/')
@@ -371,6 +419,10 @@ export function withHigherOrderIndexBox(Component) {
 
         };
 
+        reloadContents(callback=function(){}) {
+            callback();
+        }
+
         push(params){
             let path = params && params.path;
             let state = params && params.state;
@@ -385,7 +437,6 @@ export function withHigherOrderIndexBox(Component) {
             console.log(this.props,window.location, 'Im reloading this page')
             window.location.reload();
         };
-
      
         redirecToQuestionPage  = (questionObj) => {
             questionObj = questionObj.newObject;
@@ -396,8 +447,6 @@ export function withHigherOrderIndexBox(Component) {
                 this.props.history.push(path, {questionObj, currentUser, isNeQuestion:true})
             }
         };
-      
-        
 
         editfollowersOrUpVoters = (params) =>{
             console.log(params)
@@ -413,7 +462,7 @@ export function withHigherOrderIndexBox(Component) {
 
             params = this._getFormData(params);
             this.props.submit(params); 
-        }
+        };
 
         _getFormData = (params) =>{
            
@@ -442,6 +491,8 @@ export function withHigherOrderIndexBox(Component) {
                 editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
                 reloadPage              : this.reloadPage.bind(this),
                 push                    : this.push.bind(this),
+                redirectToRouter        : this.redirectToRouter.bind(this),
+                reloadContents          : this.reloadContents.bind(this),
                 ...this.state,
             };
          
@@ -451,7 +502,7 @@ export function withHigherOrderIndexBox(Component) {
 
         onBeforeUnload =()=>{
             console.log('Component is unloading')
-        }
+        };
   
 
         render() {

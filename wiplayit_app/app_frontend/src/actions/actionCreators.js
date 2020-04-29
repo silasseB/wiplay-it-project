@@ -91,7 +91,7 @@ export const updateActionError = (params) => {
         type : actionType && actionType.ERROR,
         byId,
         payLoad: {
-           error      : error,
+           error,
            submitting : false,
         }
     }
@@ -167,7 +167,7 @@ export const getIndexError = ( error) => {
     return{
         type    : types.GET_INDEX.ERROR,
         payLoad : {
-            error     : error, 
+            error, 
             isLoading : false,
             isSuccess : false,
         }
@@ -225,11 +225,11 @@ export const getQuestionSuccess = ( byId, question) => {
 
 
 
-export const getQuestionError = ( byId, error) => ({
+export const getQuestionError = (byId, error) => ({
     type         : types.GET_QUESTION.ERROR,
     byId ,
     payLoad: {
-      error     : error, 
+      error, 
       isLoading : false,
     }
 });
@@ -276,7 +276,7 @@ export const getPostError = (postById, error) => ({
     type : types.GET_POST.ERROR,
     byId : postById,
     payLoad: {
-       error     : error, 
+       error, 
        isLoading : false,
     }
 });
@@ -298,7 +298,7 @@ export const getUserProfilePending = (byId) => {
 
 
 
-export const getUserProfileSuccess = ( byId, userProfile ) => {
+export const getUserProfileSuccess = (byId, userProfile) => {
     //console.log(userProfile, byId)
     
     return{
@@ -313,11 +313,11 @@ export const getUserProfileSuccess = ( byId, userProfile ) => {
 
 
 
-export const getUserProfileError = ( byId, error) => ({
+export const getUserProfileError = (byId, error) => ({
     type : types.GET_USER_PROFILE.ERROR,
     byId,
     payLoad: {
-       error     : error, 
+       error, 
        isLoading : false,
     }
 });
@@ -384,7 +384,7 @@ export const getQuestionListError = (byId, error) =>({
 	type: types.GET_QUESTION_LIST.ERROR,
    byId,
    payLoad: {
-    error: error.detail,
+    error,
     isLoading: false,
   }
 
@@ -392,7 +392,7 @@ export const getQuestionListError = (byId, error) =>({
 
 
 
-export const getPostListSuccess = ( byId, postList) => {
+export const getPostListSuccess = (byId, postList) => {
     return{
       type: types.GET_POST_LIST.SUCCESS,
       byId,
@@ -416,11 +416,11 @@ export const getPostListPending = (byId) => ({
 
 
 
-export const getPostListError = ( byId, error) =>({
+export const getPostListError = (byId, error) =>({
     type: types.GET_POST_LIST.ERROR,
     byId,
     payLoad: {
-        error: error.detail,
+        error,
         isLoading: false,
     }
 
@@ -456,7 +456,7 @@ export const getAnswerListError = (byId,error) =>({
    type: types.GET_ANSWER_LIST.ERROR,
    byId,
    payLoad: {
-    error: error,
+    error,
     isLoading: false,
   }
 
@@ -465,13 +465,13 @@ export const getAnswerListError = (byId,error) =>({
 
 
 
-export const getCommentListSuccess = (byId, commentList) => {
+export const getCommentListSuccess = (byId, comments) => {
    
     return{
         type: types.GET_COMMENT_LIST.SUCCESS,
         byId,
         payLoad: {
-            comments : commentList,
+            comments,
             showLink : false,
         }
     };
@@ -496,7 +496,7 @@ export const getCommentListError = (byId, error) =>({
    type: types.GET_COMMENT_LIST.ERROR,
    byId,
    payLoad: {
-    error: error,
+    error,
     isLoading: false,
   }
 
@@ -534,7 +534,7 @@ export const getReplyListError = (actionType,byId, error) =>({
    type    : actionType.ERROR,
    byId,
    payLoad : {
-      error       : error,
+      error,
       isLoading   : false,
    }
 });
@@ -543,12 +543,12 @@ export const getReplyListError = (actionType,byId, error) =>({
 
 
 export const getReplyChildListPending = (actionType, byId) => ({
-   type: actionType.PENDING,
-   byId,
-   payLoad: {
+    type: actionType.PENDING,
+    byId,
+    payLoad: {
       isLoading : true,
       showLink  : false,
-   }
+    }
 });
 
 
@@ -557,26 +557,25 @@ export const getReplyChildListPending = (actionType, byId) => ({
 export const getReplyChildListSuccess = (actionType, byId, replyList) => {
 
     return{
-      type: actionType.SUCCESS,
-      byId,
-      payLoad: {
-         replyList,
-         isLoading       : false,
-         showLink        : false,
-
-      }
-   }
+        type: actionType.SUCCESS,
+        byId,
+        payLoad: {
+            replyList,
+            isLoading       : false,
+            showLink        : false,
+        }
+    }
 };
 
 
 export const getReplyChildListError = (actionType, byId, error) =>({
-   type: actionType,
-   byId,
-   payLoad : {
-    error  : error,
-    isLoading : false,
-    showLink  : true,
-  }
+    type: actionType,
+    byId,
+    payLoad : {
+        error,
+        isLoading : false,
+        showLink  : true,
+    }
 
 });
 
@@ -585,8 +584,7 @@ export const getReplyChildListError = (actionType, byId, error) =>({
 
 export const handleError  = (error) => {
     console.log(error)
-    let _error = 'Something wrong happened, please try again.';
-    error = error && error || _error; 
+    error = error || 'Something wrong happened, please try again.'; 
 
     return {
         type: types.SERVER.ERROR,
@@ -595,16 +593,6 @@ export const handleError  = (error) => {
         }
     };
 };
-
-
-
-export const Redirected = () => ({
-    type: 'VIEW_NEW_QUESTION',
-    payLoad: {
-        visited: true,  
-    }
-});
-
 
 
 
@@ -657,7 +645,7 @@ export const authenticationError = (error) => {
     return {
         type   : types.USER_AUTHENTICATION.ERROR,
         payLoad : {
-            error     : error.data || error,
+            error,
             isLoading : false,
         }
     };
@@ -668,25 +656,25 @@ export const authenticationError = (error) => {
 
 export const getCurrentUserSuccess = (user) => {
     console.log('current user is this: ', user)
-   return {
-      type    : types.GET_CURRENT_USER.SUCCESS,
-      payLoad : {
-           user,
-           isLoading   : false,
-      }
-  };
+    return {
+        type    : types.GET_CURRENT_USER.SUCCESS,
+        payLoad : {
+            user,
+            isLoading   : false,
+        }
+    };
 };
 
 
 
 export const getCurrentUserPending = () => {
     
-   return {
-      type    : types.GET_CURRENT_USER.SUCCESS,
-      payLoad : {
+    return {
+        type    : types.GET_CURRENT_USER.SUCCESS,
+        payLoad : {
             isLoading: true,
-      }
-  };
+        }
+    };
 };
 
 
@@ -694,60 +682,57 @@ export const getCurrentUserPending = () => {
 export const getUserListSuccess = (byId, users) => {
     
     return{
-      type: types.GET_USER_LIST.SUCCESS,
-      byId,
-      payLoad: {
-         userList    : users,
-         isLoading   : false,
-      }
-   }
+        type: types.GET_USER_LIST.SUCCESS,
+        byId,
+        payLoad: {
+            userList    : users,
+            isLoading   : false,
+       }
+    }
 };
 
 
 
 export const getUserListPending = (byId) => ({
-   type: types.GET_USER_LIST.PENDING,
-   byId,
-   payLoad: {
-      isLoading : true,
-      userList  : [],
-      error     : '',
-   }
+    type: types.GET_USER_LIST.PENDING,
+    byId,
+    payLoad: {
+        isLoading : true,
+    }
 });
 
 
 
 export const getUserListError = (byId, error) =>({
-   type: types.GET_USER_LIST.ERROR,
-   byId,
-   payLoad: {
-    error: error.detail,
-    isLoading: false,
-  }
+    type: types.GET_USER_LIST.ERROR,
+    byId,
+    payLoad: {
+        error,
+        isLoading: false,
+    }
 
 });
 
 
 export const getCurrentUserError = (error) => {
-   console.log(error)
-   return {
-      type   :types.GET_CURRENT_USER.ERROR,
-      payLoad : {
-         error: error.data, 
-         isLoading: false,
-         
-      }
-  };
+    console.log(error)
+    return {
+        type   :types.GET_CURRENT_USER.ERROR,
+        payLoad : {
+            error: error.data, 
+            isLoading: false,
+        }
+    };
 };
 
 export const AddNewContents =(byId, contents) =>{
-     return {
+    return {
         type : 'ADD_NEW_CONTENTS',
         byId,
         payLoad : {
             comments,
         }
-     }
+    }
 };
 
 export const getCommentLindData = (byId, comments) => {
@@ -839,23 +824,22 @@ export const showModal = (modalName, isOpening) =>{
 
 
 export const getUserAnswer = (answerList) => {
-   let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')); 
-   let currentUser =  cacheEntities.currentUser;
-   currentUser = currentUser.user;
-   var answer = '' 
+    let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')); 
+    let currentUser =  cacheEntities.currentUser;
+    currentUser = currentUser.user;
+    var answer  = ''; 
       
-   if (answerList.length) {
-      answerList.map( (item, index) => {
-         if (item.created_by.id === currentUser.id) {
-           answer = item;
-         }
-         return answer;
-      });
-   }
+    if (answerList.length) {
+        answerList.map( (item, index) => {
+            if (item.created_by.id === currentUser.id) {
+                answer = item;
+            }
+            return answer;
+        });
+    }
 
-   return answer;
-   
-   };
+    return answer;
+};
 
 
 

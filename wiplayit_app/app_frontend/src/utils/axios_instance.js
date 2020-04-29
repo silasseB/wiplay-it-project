@@ -22,6 +22,7 @@ export default class Axios {
         this.baseURL       =  API_URL;
         this.DOMAIN_URL    =  window.location.origin; 
         this.useToken      =  props && props.useToken;
+        this.timeout       =  props && props.timeout || 10000; 
     }
 
     _checkAuth = () => {
@@ -65,7 +66,7 @@ export default class Axios {
         }
         
         instance.defaults.xsrfCookieName = csrftoken;
-        instance.defaults.timeout = 30000;
+        instance.defaults.timeout = this.timeout;
         
         
         if (this.useToken) {

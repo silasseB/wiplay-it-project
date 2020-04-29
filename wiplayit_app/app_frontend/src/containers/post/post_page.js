@@ -7,7 +7,7 @@ import  AjaxLoader from "components/ajax-loader";
 import { PostComponent} from "components/post_components"
 
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
-import { UnconfirmedUserWarning } from "components/partial_components";
+import { UnconfirmedUserWarning, PageErrorComponent } from "components/partial_components";
 
 import  * as action  from 'actions/actionCreators';
 import { getPost } from 'dispatch/index';
@@ -20,14 +20,16 @@ import GetTimeStamp from 'utils/timeStamp';
 
 
 class  PostPage extends Component  {
-   
+    isMounted = false;
     constructor(props) {
       super(props);
 
         this.state = {
             isPostBox   : true,
+            isReloading : false,
             pageName    : "Post", 
-            postById    : ''
+            postById    : '',
+            error       : '',
         };
     };
 
@@ -37,60 +39,103 @@ class  PostPage extends Component  {
 
             let storeUpdate   = store.getState();
             let {entities }   = storeUpdate;
-            let {postById}  =  this.state;
-            let post      =  entities.post[postById];
-
+            let {postById}    =  this.state;
+            let post          =  entities.post[postById];
+            if (this.isMounted && post) {
+                this.setState({
+                            isReloading : post.isLoading,
+                            error : post.error} ) 
+            }
             
         };
 
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
-
+    componentWillUnmount() {
+        this.isMounted = false;
+        //this.unsubscribe();
+    };
     
-
     componentDidMount() {
-        let { cacheEntities } = this.props;
-        let { slug, id } = this.props.match.params;
-        let  postById = `post${id}`;
+        this.isMounted = true;
+        this.onPostUpdate()
 
-        let { post, currentUser } = cacheEntities;
-        post = post && post[postById];
-        console.log(post)
+        let { entities,
+              match,
+              location }  =  this.props;
 
-        if(post){
-            let timeStamp = post.timeStamp;
+        let { slug, id }  =  match.params;
+        let {state}       =  location;
 
-            const getTimeState = new GetTimeStamp({timeStamp});
-            let menDiff        = parseInt(getTimeState.menutes());
-            console.log(parseInt(menDiff)  + ' ' + 'Menutes ago')
-                
-               
-            if (menDiff <= 5 && post.post) {
-                this.setState({postById })
-                console.log('Post found from cachedEntyties')
-                store.dispatch(action.getPostPending(postById));
-                store.dispatch(action.getPostSuccess(postById, post.post));
-                return 
-            }
+        let postById      = `post${id}`;
+        this.setState({postById, id})
+
+        if (state && state.recentlyCreated) {
+
+            let post = state.post
+            console.log('Post recently created')
+            this.dispatchToStore(postById, post)
+            return; 
         }
-        console.log('Fetching post from the server' )      
-        this.setState({postById }) 
-        store.dispatch(getPost(id));
+
+        let {post} = entities;
+        post       = post && post[postById]
+        !post && this.updatePostStore(id);
+
     };
 
 
+    updatePostStore(id){
+
+        let { cacheEntities } = this.props;
+        let { post }     = cacheEntities && cacheEntities;
+        post = post[`post${id}`]
+
+        if (post) {
+            let timeStamp = post.timeStamp;
+            const getTimeState = new GetTimeStamp({timeStamp});
+            let menDiff        = parseInt(getTimeState.menutes());
+            console.log(menDiff  + ' ' + 'Menutes ago')
+            console.log(menDiff <= 0)
+                
+               
+            if (menDiff <= 10) {
+                post     = post.post;
+                let postById = `post${id}`;
+                this.setState({postById })
+                console.log('Post found from cachedEntyties')
+                this.dispatchToStore(postById, post)
+
+                return 
+            }
+        }
+
+        console.log('Fetching post data form the server') 
+        return this.props.getPost(id);
+    }
+
+    dispatchToStore(postById, post){
+        if (postById && post) {
+            store.dispatch(action.getPostPending(postById));
+            store.dispatch(action.getPostSuccess(postById, post));
+        }
+
+    } 
+
+    reLoader =()=>{
+        let id = this.state.id;   
+        this.isMounted && this.setState({isReloading : true})
+        return this.props.getPost(id);
+    };
    
     getProps(){
 
-        //Collect all state data and props.
-        let props = {
-        	isPostBox      : this.state.isPostBox,
-            pageName       : this.state.pageName,
-            postById       : this.state.postById
+        return {
+            ...this.props,
+        	...this.state,
+            reLoader : this.reLoader.bind(this),
         };
-
-        return Object.assign(props, this.props);
     };
 
     render() {
@@ -104,19 +149,21 @@ class  PostPage extends Component  {
             <div>
                <PartalNavigationBar {...props}/>
                <NavigationBarBigScreen {...props} />
-                { post?
-                    <div  className="app-box-container">
+                { post &&
+                    <div  className="app-box-container post-page" id="post-page">
                         <UnconfirmedUserWarning {...props}/>
-                        { post.isLoading?
+                        { post.isLoading &&
                             <div className="page-spin-loader-box partial-page-loader">
                                 <AjaxLoader/>
                             </div>
-                            :
-                            <Post {...props}/>
-                        } 
+                        }
+
+                        { post.error &&
+                            <PageErrorComponent {...props}/>
+                        }
+                        
+                        <Post {...props}/>
                     </div>
-                    :
-                    null  
                 }           
          </div>
 
@@ -138,7 +185,7 @@ export const Post = props => {
     var postProps = {...props, post}
 
 	return(
-        <div className="post-page" id="post-page">
+        <div>
             <div className="post-container">
                 <div className="post-contents"> 
                     <PostComponent {...postProps }  />

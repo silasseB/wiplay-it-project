@@ -33,15 +33,19 @@ const api      = new Api();
 
 export const AnswersComponent = props => {
     //console.log(props)
+
     var {
         answer, 
         answerListById,
         newAnswerListById,
-        isNewAnswers, 
+        isNewAnswers,
+        isQuestionBox,
+        isProfileBox, 
         currentUser } = props;
-   
-    let pathToUpvoters =  `/answer/${answer.id}/upvoters/`;
 
+    if(!answer) return null;
+   
+   
     let optionsBtnStyles = {
          fontSize   : '8px',
          background : 'white',
@@ -54,20 +58,18 @@ export const AnswersComponent = props => {
 
     let storedState = JSON.parse( answer.add_answer);
    
-    const contentState = convertFromRaw(storedState);
-    const editorState = EditorState.createWithContent(contentState, decorator);
+    const contentState = storedState && convertFromRaw(storedState);
+    const editorState  = contentState && EditorState.createWithContent(contentState, decorator);
 
-    let usersById =  answer && `answerUpVoters${answer.id}`;
-    let apiUrl    = answer && api.getAnswerUpVotersListApi(answer.id);
-    let linkName = answer.upvotes > 1 && `${answer.upvotes} Upvoters` || `${answer.upvotes} Upvoter`;
+    let usersById =  `answerUpVoters${answer.id}`;
+    let apiUrl    =  api.getAnswerUpVotersListApi(answer.id);
+    let linkName  =  answer.upvotes > 1 && `${answer.upvotes} Upvoters` || `${answer.upvotes} Upvoter`;
    
     let state = {
-            answer,
-            usersIsFor : 'answerUpVoters', 
+          answer,
+          usersIsFor : 'answerUpVoters', 
         }
-
-
-   
+  
     let answerUpvotersProps = {
             apiUrl,
             byId      : usersById,
@@ -81,7 +83,7 @@ export const AnswersComponent = props => {
         linkName    : 'Edit Answer',
         isPut       : true,
         obj         : answer, 
-        byId        : isNewAnswers && newAnswerListById || answerListById,
+        byId        : answerListById,
         currentUser,
     };
 
@@ -91,9 +93,9 @@ export const AnswersComponent = props => {
         objName           : 'Comment',
         obj               : answer,
         isPost            : true,
-        currentUser,
-        byId              : `newAnswerComments${answer.id}`,
+        byId              : answerListById,
         className         : 'btn-sm edit-comment-btn',
+        currentUser,
         
     };
 
@@ -113,7 +115,7 @@ export const AnswersComponent = props => {
         </div>
         )
 
-    let AnswerUpVotersBtn =  answer.upvotes !== 0 && <OpenUsersModalBtn {...answerUpvotersProps}/> 
+    let AnswerUpVotersBtn = answer.upvotes !== 0 && <OpenUsersModalBtn {...answerUpvotersProps}/> 
    
     
 
@@ -125,7 +127,7 @@ export const AnswersComponent = props => {
     Object.assign(btnsProps, props)
    
     
-    let UpVoteBtn =  props.answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
+    let UpVoteBtn = answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
                : <UpVoteAnswerBtn {...btnsProps}/>
           
    
@@ -142,20 +144,27 @@ export const AnswersComponent = props => {
             time   : 'Answered',
             currentUser,
         };
-    
-    
-    //<p>{created_at}</p>
+
+
+    let question = answer.question;
+    let questionPath = question && `/question/${question.slug}/${question.id}/`;
+                                        
     return (
         <div className="answer-box">     
             <div className="autor-details-box answer-detail-box">
-                { props.isProfileBox?
-                    null
-                    :
-                    <UserComponentSmall {...userProps}/>
-                }
-
-
+                <UserComponentSmall {...userProps}/>
             </div>
+
+            { !isQuestionBox  &&
+                <ul className="answer-question-box">
+                <li className="question">
+                    <Link to={{pathname: questionPath, state : {question} }} 
+                          className="question-link">
+                        { question.add_question }
+                    </Link>
+                </li>
+                </ul>
+            }
 
             <div className="answer">
                 <Editor

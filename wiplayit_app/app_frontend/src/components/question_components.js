@@ -10,7 +10,7 @@ import { OpenOptionsModalBtn,
          OpenUsersModalBtn, } from 'components/buttons';
 
 import {ButtonsBox, Styles } from "components/partial_components";
-//import AnswersBox from "containers/answer/answer_page";
+
 import  * as types  from 'actions/types';
 import Api from 'utils/api';
 
@@ -87,7 +87,7 @@ export const QuestionComponent = props => {
     let editAnswerProps = {
         objName           : 'Answer',
         obj               : getQuestion(),
-        byId              : `answers${question.id}`,
+        byId              : `newAnswers${question.id}`,
         isPost            : !question.user_has_answer,
         isPut             : question.user_has_answer, 
         className         : 'btn-sm edit-answer-btn', 

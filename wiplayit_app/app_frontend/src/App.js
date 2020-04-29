@@ -23,6 +23,8 @@ import PostListPage from "containers/post/post_list"
 import  PostPage    from "containers/post/post_page"
 import  QuestionPage    from "containers/question/question_page"
 import QuestionListPage from "containers/question/question_list"
+import  AnswerContainer  from "containers/answer/answer_page";
+
 import UserProfileContainer from "containers/profile/profile_page";
 import  PasswordChangePage from "containers/authentication/password_change_page";
 import EmailResendPage    from "containers/authentication/email_resend_page"
@@ -76,6 +78,7 @@ function App() {
                     <Route  path="/user/signup/" component={SignUpPage} />
                     <Route  path="/user/login/" component={LoginPage} />
                     <Route  path="/posts/" component={PostListPage} />
+                    <Route  path="/answer/:id/" component={AnswerContainer} />
                     <Route  path="/questions/" component={QuestionListPage} />
                     <Route  path="/post/:slug/:id/" component={PostPage} />
                     <Route  path="/edit/profile/:slug/:id/" component={EditProfile} />

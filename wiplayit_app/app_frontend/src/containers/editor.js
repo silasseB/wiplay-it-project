@@ -12,6 +12,8 @@ import { List, Repeat } from 'immutable';
 import  Helper from 'containers/utils/helpers';
 import {TextAreaEditor,
         DraftEditor,
+        QuestionEditor,
+        PostEditor,
         ToolBar,
         MobileModalNavBar,
         DesktopModalNavBar } from  "components/editor_components";
@@ -640,21 +642,16 @@ const EditorCommponent = (props)=>{
 
 
 export const MobileEditorComponent =(props)=>{
-    
+    let { objName} = props;
 
     return(
-        <div className="editors-page" id="editors-page">
+        <div>
             <MobileModalNavBar {...props}/>
-            { props.objName === "Question"?
-                <TextAreaEditor {...props}/>
-                :
-                <DraftEditor {...props}/>
-            }
+            <EditorCommp {...props}/>
 
         </div>
         )
 };
-
 
 
 export const DesktopEditorComponent =(props)=>{
@@ -699,17 +696,13 @@ export const DesktopEditorComponent =(props)=>{
             }
 
             <div className="editors-page">
-                { objName === "Question"?
-                    <TextAreaEditor {...props}/>
-                    :
-                    <DraftEditor {...props}/>
-                }
+               <EditorCommp {...props}/>
             </div>
 
             <div className="editor-navbar-bottom">
                 <div className="toolbar-box">
                     { objName === "Question"?
-                        ""
+                        null
                         :
                         <ToolBar {...props}/>
                     }
@@ -727,6 +720,35 @@ export const DesktopEditorComponent =(props)=>{
     );
 };
 
+
+
+export const EditorCommp = (props)=> {
+    let { objName} = props;
+    console.log(objName === 'Question')
+
+    return(
+        <div className="editors-page" id="editors-page">
+
+            { objName === 'Question' &&
+                <div className="">
+                    <QuestionEditor {...props}/>
+                </div>
+            }
+
+            { objName === 'Post' && 
+                <div> 
+                    <PostEditor {...props}/>
+                </div>
+            }
+        
+            { objName !== 'Question' && objName !== 'Post' &&
+                <div style={props.onScroolStyles} id="editors-box" className="editors-box">
+                    <DraftEditor {...props}/>
+                </div>
+            }
+        </div>
+    )
+}
 
 
 

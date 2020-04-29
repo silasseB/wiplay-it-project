@@ -35,7 +35,7 @@ export const ButtonsBox = props => {
 
             <div className="items-counter-box">
                <ul className="items-counter-box">
-                    <li  className="items-count">
+                    <li  className="items-btn-box">
                         { props.itemsCounter }
                     </li>
                </ul>
@@ -70,6 +70,34 @@ export const Styles = {
 
       }
    }
+
+
+export const PageErrorComponent = props => {
+    console.log(props)
+    let {error, isReloading } = props;
+    if (isReloading) return '';
+
+    return(
+        <div className="page-error-box" id="page-error-box">
+            <ul className="error-box">
+                <li className="error-text">{error}</li>
+            </ul>
+
+            <ul className="reload-btn-box">
+                
+                    <button type="bottom"
+                        onClick={()=> props.reLoader() }
+                        className="reload-btn btn-sm">
+                        <li className="reload-btn-box2">
+                            <span className="reload-icon material-icons">refresh</span> 
+                            <span className="reload-icon-text">Try Again</span>
+                        </li>
+                    </button>
+            </ul>
+        </div>
+    )
+
+}
 
 
 
@@ -138,3 +166,4 @@ export const UnconfirmedUserWarning =(props)=> {
         </div>
     );
 };
+

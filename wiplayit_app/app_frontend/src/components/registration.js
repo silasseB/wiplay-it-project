@@ -623,21 +623,36 @@ const TermsAndContionTextComponent = props => {
 
 export const AccountConfirmationComponent = props => {
   console.log(props)
+  let message = 'Your account has successefully confirmed.'
+  let error   = "Something wrong happened, please try again"
+  let {successMessage, isConfirmed, errorMessage} = props;
+  
   return(
    
    <div  className="accont-confirmation-container" >
-      <p className="confirmation-title">
+        <p className="confirmation-title">
            {props.pageTitle}
-      </p>
+        </p>
+        { !isConfirmed &&
+            <div className="confirmation-message-box">
+                <p className="confirmation-message message-success">
+                    {successMessage || message} You can login now and start posting
+                </p> 
+                <LoginSmallScreem/>
+                <LoginBigScreem/>
+            </div>
 
-      <div className="confirmation-message-box">
-         <p className="confirmation-message message-success">
-            {props.successMessage}. You can click bellow to login
-         </p> 
+            ||
 
-         <LoginSmallScreem/>
-         <LoginBigScreem/>
-      </div>
+            <div className="confirmation-message-box">
+                <p>{errorMessage || error}</p>
+
+                <Link type="button" to="/account/email/resend/">
+                    Resend Confirmation Email
+                </Link>
+
+            </div>
+        }
     
    </div>
    
@@ -647,19 +662,19 @@ export const AccountConfirmationComponent = props => {
 
 const LoginSmall = props => {
    return (
-      <Link type="button" to="/user/login">Login</Link>
+      <Link type="button" to="/user/login/">Login</Link>
    )
 }
 
 
 const LoginBig = props => {
    return (
-      <Link  type="button" to="/user/registration">Login</Link>
+      <Link  type="button" to="/user/registration/">Login</Link>
    )
 }
 
-const LoginSmallScreem   = MatchMediaHOC(LoginSmall, '(max-width: 500px)')
-const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 900px)')
+const LoginSmallScreem   = MatchMediaHOC(LoginSmall, '(max-width: 980px)')
+const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 980px)')
 
 
 

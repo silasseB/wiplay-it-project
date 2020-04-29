@@ -6,12 +6,13 @@ import {NavigationBarSmallScreen,NavigationBarBigScreen } from "components/navBa
 import {store } from "store/index";
 import { FollowUserBtn} from "components/buttons"; 
 import { GetModalLinkProps } from "components/component-props";
-import { UnconfirmedUserWarning } from "components/partial_components";
+import { UnconfirmedUserWarning,
+         PageErrorComponent, } from "components/partial_components";
 
 import { QuestionComponent} from "components/question_components"
 import { PostComponent} from "components/post_components"
 import CommentsBox from "containers/comment/comment_page";
-import AnswersBox from "containers/answer/answer_page";
+import {AnswersBox} from "containers/answer/answer_page";
 
 import  AjaxLoader from "components/ajax-loader";
 import { AnswersComponent } from "components/answer_components";
@@ -33,7 +34,8 @@ class IndexBox extends Component {
             questionListById : 'filteredQuestions',
             postListById     : 'filteredPosts',
             answerListById   : 'filteredAnswers',
-            userListById     : 'filteredUsers'
+            userListById     : 'filteredUsers',
+            isReloading      : false,
 
 
         } 
@@ -67,7 +69,9 @@ class IndexBox extends Component {
                answers, 
                errors }   = entities && entities;
                      
-            //console.log(errors)    
+            //console.log(errors) 
+            index && this.setState({isReloading : index.isLoading})  
+
             if (index && index.isSuccess) {
                 index.isSuccess = false;
              
@@ -84,6 +88,7 @@ class IndexBox extends Component {
     componentDidMount() {
         this.isMounted = true;
         this.onIndexUpdate();
+        //this.props.reloadContents(this.props.getIndex)
 
         let { cacheEntities, entities } = this.props;
         let { index}                    = entities;
@@ -98,13 +103,13 @@ class IndexBox extends Component {
             let {questions, answers, posts, users} = cachedIndex && cachedIndex;
             
             const getTimeState = new GetTimeStamp({timeStamp});
-            let menDiff        = parseInt(getTimeState.menutes());
+            let menDiff        = getTimeState.menutes()//parseInt(getTimeState.menutes());
           
 
             console.log(menDiff  + ' ' + 'Menutes ago')
             if(questions && questions.length || answers &&
                 answers.length || posts && posts.length || users && users.length ){
-                if (menDiff <= 0) {
+                if (menDiff <= 60) {
 
                     console.log('Index found from cachedEntyties')
                     this.updateIndexEntities(cachedIndex);
@@ -121,6 +126,11 @@ class IndexBox extends Component {
    
 
    
+    reLoader =()=>{
+        let id = this.state.id;   
+        this.setState({isReloading : true})
+        return this.props.getIndex(id);
+    };
 
     updateIndexEntities(index){
         let {entities} = this.props;
@@ -166,11 +176,11 @@ class IndexBox extends Component {
     
 
     getProps(){
-        let props = {
-                ...this.state,
+        return {
+            ...this.props,
+            ...this.state,
+            reLoader : this.reLoader.bind(this),
         };
-
-        return Object.assign(props, this.props );  
     };
 
       
@@ -180,27 +190,27 @@ class IndexBox extends Component {
         let { entities }  = props ;
         var { index }          = entities;
         //console.log(props, index)
-                     
+        props['error'] = index && index.error; 
+                    
         return (
-
             <div>
-
                 <NavigationBarBigScreen {...props}/>
                 <NavigationBarSmallScreen {...props}/>
-
                 { index?
-
-                    <div className="app-box-container index-box">
+                    <div className="app-box-container app-index-box">
                         <UnconfirmedUserWarning {...props}/>
 
-                        {index && index.isLoading?
+                        {index && index.isLoading &&
                             <div className="page-spin-loader-box">
                                 <AjaxLoader/>
                             </div>
+                        }
 
-                            :
-                            <IndexComponent {...props}/>
+                        { index.error &&
+                            <PageErrorComponent {...props}/>
                         } 
+
+                        <IndexComponent {...props}/>
                     </div>
 
                     :
@@ -239,14 +249,17 @@ export const Questions = props => {
    
     let { questionListById, entities } = props;
 
-    let questions = entities.questions[questionListById];
+    let {questions}    = entities
+    questions          = questions && questions[questionListById];
+
+    let questionList = questions && questions.questionList;
     //console.log(questions)
    
   
     return (
 
         <div >
-            { questions && questions.questionList && questions.questionList.length?
+            { questionList && questionList.length?
                 <div className="index-questions">
                     <div className="index-questions-box">
                         <div className="question-container">
@@ -254,7 +267,7 @@ export const Questions = props => {
                                 <b>Questions</b>
                             </div>
 
-                            { questions.questionList.map((question, index) => {
+                            { questionList.map((question, index) => {
                                 let contentsProps = {
                                         question,
                                         questionById :questionListById
@@ -266,7 +279,6 @@ export const Questions = props => {
 
                                     <div key={index} >
                                         <QuestionComponent {...contentsProps}  />
-                                        <AnswersBox {...contentsProps}/>
                                     </div>
                                 )
                             })}
@@ -345,29 +357,17 @@ export const Answers = props => {
                     <div className="index-answers-box">
 
                         <div className="answer-container">
-                            <div className="index-items-label">
-                                <b>Answers</b>
-                             </div>
+                            <ul className="index-items-label">
+                                <li>Answers</li>
+                             </ul>
                   
                             { answers.answerList.map((answer, index) => {
-
                                 let answerProps = { answer };
-                                
-                                let question = answer.question;
-                                let questionPath = `/question/${question.slug}/${question.id}/`;
-
                                 Object.assign(answerProps, props); 
       
                                 return ( 
                                     <div key={index} className="answer-contents"> 
-                                        <div className="answer-question-box">
-                                            <p className="question">
-                                                <Link to={{pathname: questionPath, state : {question} }} 
-                                                                      className="question-link">
-                                                    { question.add_question }
-                                                </Link>
-                                            </p>
-                                        </div>
+                                        
                                         <AnswersComponent {...answerProps}/>
                                         <CommentsBox {...answerProps}/>
                                     </div>
@@ -394,32 +394,31 @@ export const Users = props => {
     users =  users[userListById]; 
     //console.log(answers)     
     return(
-        <div className="index-user-list">
-            
+        <div>
             {users && users.userList && users.userList.length?
-                <div>
-                <ul className="index-user-list-title-box">
-                    <li>Discover New People</li>
-                </ul>
+                <div className="index-user-list">
+                    <ul className="index-user-list-title-box">
+                        <li>Discover New People</li>
+                    </ul>
 
-                <div className="index-user-list-container">
+                    <div className="index-user-list-container">
                        
-                    { users.userList.map((user, index) => {
+                        { users.userList.map((user, index) => {
 
-                        let userProps = { user };
-                        let pathToProfile = user    && `/profile/${user.id}/${user.slug}/`;
-                        let profile         = user    &&  user.profile;
-                        let profile_picture = profile &&  profile.profile_picture;
+                            let userProps = { user };
+                            let pathToProfile = user    && `/profile/${user.id}/${user.slug}/`;
+                            let profile         = user    &&  user.profile;
+                            let profile_picture = profile &&  profile.profile_picture;
 
-                        let editUserProfileProps = {
-                            objName    : 'UsersList',
-                            isPut      : true,
-                            obj        : user, 
-                            byId       : userListById,
-                            currentUser,
-                        }
+                            let editUserProfileProps = {
+                                objName    : 'UsersList',
+                                isPut      : true,
+                                obj        : user, 
+                                byId       : userListById,
+                                currentUser,
+                            }
 
-                        editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+                            editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
                             var btnsProps   = {...props, editUserProfileProps};
                             let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
 

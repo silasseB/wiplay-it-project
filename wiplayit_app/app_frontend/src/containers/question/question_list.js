@@ -4,7 +4,7 @@ import { QuestionComponent} from "components/question_components"
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
 import withHigherOrderIndexBox from "containers/index/higher_order_index";
-import { UnconfirmedUserWarning } from "components/partial_components";
+import { UnconfirmedUserWarning,PageErrorComponent, } from "components/partial_components";
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "components/navBar";
 import  AjaxLoader from "components/ajax-loader";
@@ -18,31 +18,63 @@ import  AjaxLoader from "components/ajax-loader";
 
 
 class  QuestionListPage extends Component  {
+    isMounted = false;
     constructor(props) {
-      super(props);
+        super(props);
 
-      this.state = {
-         isQuestionListBox   : true,
-         questionListById    : 'filteredQuestions',
-
-      }
+        this.state = {
+            isQuestionListBox : true,
+            questionListById  : 'filteredQuestions',
+            isReloading       : false,
+            pageName          : "Questions",
+            error             : '',
+        }
      
    }
-  
+
+    onQuestionListUpdate = () =>{
+ 
+        const onStoreChange = () => {
+            let storeUpdate  = store.getState();
+            let {entities }  = storeUpdate;
+            let {questions}   = entities;
+
+            let {questionListById}  = this.state;
+             questions           = questions && questions[questionListById]
+                     
+            //console.log(errors) 
+            if (this.isMounted && questions){
+                this.setState({isReloading : questions.isLoading, error: questions.error})  
+            }
+                      
+        };
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
+    
+
+    
+    componentWillUnmount() {
+        this.isMounted = false;
+        this.unsubscribe();
+    };
       
     componentDidMount() {
-        
+        this.isMounted = true;
+        this.onQuestionListUpdate();
+
         var questionListById = this.state.questionListById;
         let { cacheEntities } = this.props;
         let { questions, currentUser } = cacheEntities;
         
              
         questions = questions[questionListById]
+        let questionList = questions && questions.questionList;
 
-        if (questions) {
-            console.log(questions) 
+        if (questionList) {
+            console.log(questionList) 
+            
             store.dispatch(action.getQuestionListPending(questionListById));
-            store.dispatch(action.getQuestionListSuccess( questionListById, questions.questionList));
+            store.dispatch(action.getQuestionListSuccess( questionListById, questionList));
             return
         }
       
@@ -51,16 +83,21 @@ class  QuestionListPage extends Component  {
       
     };
 
+     reLoader =()=>{
+        let {questionListById} = this.state;   
+        this.isMounted && this.setState({isReloading : true})
+        return this.props.getQuestionList(questionListById);
+    };
+
    
 
-   getProps(){
-      let props = {
-         isQuestionListBox  : this.state.isQuestionListBox,
-         pageName       : "Questions",
-         questionListById : this.state.questionListById,
-      }
-      return Object.assign(props,this.props);
-   };
+    getProps(){
+        return {
+            ...this.props,
+            ...this.state,
+            reLoader : this.reLoader.bind(this),
+        }
+    };
 
     render() {
       let props = this.getProps();
@@ -73,22 +110,22 @@ class  QuestionListPage extends Component  {
             <div style={{}}>
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props} /> 
-                { questions?
-                    <div  className="app-box-container">
+                { questions &&
+                    <div  className="app-box-container question-list-page" id="question-list-page">
                         <UnconfirmedUserWarning {...props}/>
                         
-                        { questions.isLoading? 
+                        { questions.isLoading && 
                             <div  className="page-spin-loader-box partial-page-loader">
                                 <AjaxLoader/>
                             </div>
-                            : 
-                            <div>
-                                <Questions {...props}/>   
-                            </div>
+                        } 
+                        { questions.error &&
+                            <PageErrorComponent {...props}/>
                         }
-                   </div>
-                   :
-                   null
+                        
+                        <Questions {...props}/>   
+                    </div>
+                
                 }
             </div>
         );
@@ -108,11 +145,12 @@ const Questions = props => {
 
    var questions  = props.entities.questions;
    questions  = questions[props.questionListById];
+   let questionList = questions && questions.questionList;
 
     return (
-        <div className="question-list-page" id="question-list-page">
+        <div>
 
-            { questions.questionList.map(( question, index )  => {
+            { questionList && questionList.map(( question, index )  => {
                let questionProps = {question} 
                Object.assign( questionProps, props);
                

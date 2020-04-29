@@ -5,6 +5,7 @@ import { UserList } from "components/profile_components";
 import  AjaxLoader from "components/ajax-loader";
 import {store } from "store/index";
 import { MobileModalNavBar, DesktopModalNavBar } from  "components/editor_components";
+import { PageErrorComponent } from "components/partial_components";
 import Helper from 'containers/utils/helpers';
 
 
@@ -18,15 +19,23 @@ const api = new Api();
   
 
 class UserListBox extends Component {
+    isMounted = false;
 
     constructor(props) {
         super(props);
         this.state = {
             usersById         : `filteredUsers`,
-            modalTitle        : "Users",
+            apiUrl            : '',
+            modalTitle        : "Authors",
+            isReloading       : false,
             users             : undefined,
             userListBoxStyles : undefined
         }
+    };
+
+    componentWillUnmount() {
+        this.isMounted = false;
+        this.unsubscribe();
     };
 
     onUserListUpdate = () =>{
@@ -35,9 +44,14 @@ class UserListBox extends Component {
             let storeUpdate   = store.getState();
             let { entities }   = storeUpdate;
             let { users }   = entities && entities;
-            console.log(users)
+            let {usersById}     = this.state;
 
-           this.setState({users})
+            console.log(users)
+            let userList = users    && users[usersById]
+            let error    = userList && userList.error; 
+            let isReloading = userList && userList.isLoading;
+
+            this.setState({users, isReloading, error})
         };
 
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -45,28 +59,26 @@ class UserListBox extends Component {
 
   
     componentDidMount() {
-        //console.log(this.props)
+        this.isMounted = true;
         this.onUserListUpdate();
+        console.log(this.props)
 
         let { apiUrl, byId} = this.props;
-        let usersById = !byId && this.state.usersById || byId;
-        apiUrl        = !apiUrl && api.getUserListApi() || apiUrl;
+        let {usersById}     = this.state;
+
+        usersById  = byId   || usersById;
+        apiUrl     = apiUrl || api.getUserListApi();
 
         let storeUpdate  = store.getState();
         let { entities } = storeUpdate;
         let { users }    = entities && entities;
 
-        this.setState({usersById})
+        this.setState({usersById, apiUrl})
         
         !users[usersById] && store.dispatch(getUserList({usersById, apiUrl}))
                           || this.setState({users});
                 
     }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    };
-
 
     editfollowersOrUpVoters = (params) =>{
         let { objName, obj } = params;
@@ -101,13 +113,20 @@ class UserListBox extends Component {
 
     };
 
+    reLoader =()=>{
+
+        let {apiUrl, usersById} = this.state;
+        this.isMounted && this.setState({isReloading : true})
+        return store.dispatch(getUserList({usersById, apiUrl}))
+    };
     
     getProps(){
-        let props = {
+        return {
+            ...this.props,
             ...this.state,
+            reLoader : this.reLoader.bind(this),
             editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
-        };
-        return {...this.props, ...props};
+        }
     };
 
 
@@ -122,23 +141,20 @@ class UserListBox extends Component {
             <div>
                 <div onScroll={this.handleScroll()} className="users-modal-container">
                     <UserListModalNavBar {...props}/>
-                    {users?
+                    { users &&
                         <div>
-
-                            {users.isLoading?
+                            { users.isLoading &&
                                 <div className="page-spin-loader-box">
                                     <AjaxLoader/>
                                 </div>
-
-                                :
-
-                                <div>
-                                    <UserList {...props}/>
-                                </div>
                             }
+
+                            { users.error &&
+                                <PageErrorComponent {...props}/>
+                            }
+
+                            <UserList {...props}/>
                         </div>
-                        :
-                        ""
                     }
                 </div>
             </div>
@@ -165,19 +181,26 @@ const UserListModalNavBar = (props)=> {
     let isUpVoters  = obj && obj.hasOwnProperty('upvotes');
 
     let getModalTitle =()=>{
+        let modalTitle;
+        if (!usersLength) return '';
        
         if (isFollowers) {
-            return usersLength > 1 && `${usersLength} Followers` || `${usersLength} Follower`;
+            modalTitle = usersLength > 1 && `${usersLength || ''} Followers` ||
+                                            `${usersLength || ''} Follower`;
+            return modalTitle;
 
         }else if(isUpVoters){
-            return usersLength > 1 && `${usersLength} Upvoters` || `${usersLength} Upvoter`;
+            modalTitle = usersLength > 1 && `${usersLength | ''} Upvoters` ||
+                                        `${usersLength} Upvoter`;
+            return modalTitle;
+
         }else{
             return `Who to follow`;
         }
        
     }
 
-    modalTitle  =  getModalTitle() || modalTitle;
+    modalTitle  =  getModalTitle() || modalTitle || null;
     console.log(props,modalTitle)
 
     let navBarProps = {...props, modalTitle};

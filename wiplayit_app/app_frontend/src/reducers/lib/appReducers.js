@@ -287,20 +287,21 @@ export function entities(state=InitialState(), action) {
             return updateStateEntyties('answers', action);
           
             
-          
+     //64663847882540464253     
 
 
         case types.CREATE_ANSWER.SUCCESS:
                
-            let newAnswer         =  payLoad.answer;
-            let newAnswerList     =  [newAnswer];
-            let currentNewAnswers =  state.answers[byId];
-            currentNewAnswers     =  currentNewAnswers && currentNewAnswers.answerList;
+            let newAnswer      =  payLoad.answer;
+            let newAnswerList  =  [newAnswer];
+            let currentAnswers =  state.answers[byId];
+            currentAnswers     =  currentAnswers && currentAnswers.answerList;
 
-            newAnswerList         =  currentNewAnswers && currentNewAnswers.length &&
-                                     currentNewAnswers.unshift(newAnswer) || newAnswerList;
+            newAnswerList      =  currentAnswers && currentAnswers.length &&
+                                  currentAnswers.unshift(newAnswer) || newAnswerList;
+            console.log(newAnswerList)
 
-            payLoad['answerList'] = Array.isArray(newAnswerList) && newAnswerList;
+            payLoad['answerList'] = Array.isArray(newAnswerList) && newAnswerList || currentAnswers;
             delete payLoad.answer; 
             return  updateStateEntyties('answers', {byId, payLoad})|| state;  
             
