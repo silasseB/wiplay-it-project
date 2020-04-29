@@ -13,8 +13,8 @@
     
     .app-question-box, .app-post-box. .app-profile-box {
         margin-top : 50px;
-        border     : 1px solid black;
     }
+    
     .app-index-box {
        padding-top:  100px;
     }
