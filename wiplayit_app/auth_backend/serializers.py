@@ -159,11 +159,11 @@ class CustomLoginSerializer(LoginSerializer):
 			raise serializers.ValidationError(msg)
 
 		else:
-			'''_user = User.objects.get(email=email)
+			_user = User.objects.get(email=email)
 
 			if not _user.is_confirmed:
 				msg = _('Your account has not been confirmed.')
-				raise exceptions.ValidationError(msg)'''
+				raise exceptions.ValidationError(msg)
 
 			user = authenticate(email=email, password=password)
 			

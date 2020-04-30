@@ -536,15 +536,17 @@ export function authenticate(params={}){
             console.log(error)                
             if (error.response) {
                 error = error.response.data
-                error = error.detail;
-                dispatch(action.authenticationError(error));
                 
+                dispatch(action.authenticationError(error));
+
             }
             else if (error.request)  {
                 error = 'Something wrong happened.';
+                console.log(error)
                 dispatch(action.authenticationError(error));
 
             }else{
+                console.log('Something evil happened')
                 dispatch(action.handleError());
             }
         });
