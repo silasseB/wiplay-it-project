@@ -147,41 +147,29 @@ class CustomLoginView(LoginView):
 
 class CustomVerifyEmailView(APIView):
 	permission_classes = (AllowAny,)
-	
 
 	def get(self, *args, **kwargs):
 		return self.post(*args, **kwargs)
-		
 
 	def get_serializer(self, *args, **kwargs):
 		return VerifyEmailSerializer(*args, **kwargs)
-
 
 	def get_object(self, queryset=None):
 		key = self.kwargs['key']
 		emailconfirmation = EmailConfirmationHMAC.from_key(key)	
 		return emailconfirmation
-        
-
 
 	def post(self, request, *args, **kwargs):
-		
 		serializer = self.get_serializer(data=kwargs)
-
 		serializer.is_valid(raise_exception=True)
-		
 		self.kwargs['key'] = serializer.validated_data['key']
 		confirmation       = self.get_object()
-		
 		
 		if confirmation:
 			#Finally confirm the user 
 			confirmation.confirm(self.request)
-			print(confirmation)
-
 			user = confirmation.email_address.user
 			user.is_confirmed = True 
-
 			user.save()
 
 			payload = JWT_PAYLOAD_HANDLER(user)
@@ -192,8 +180,6 @@ class CustomVerifyEmailView(APIView):
 			
 			response_data = jwt_response_payload_handler(jwt_token, user, request)
 			return Response(response_data, status=status.HTTP_200_OK)
-			
-
 
 		msg = """Could not confirm your account with this link"""
 		return Response({'detail':msg}, status=status.HTTP_400_BAD_REQUEST )
@@ -208,9 +194,7 @@ class SendEmailConfirimationView(APIView):
 		return EmailSerializer(*args, **kwargs)
 
 	def post(self, request, *args, **kwargs):
-		
 		serializer = self.get_serializer(data=request.data)	
-		
 
 		if serializer.is_valid(raise_exception=True):
 			user = serializer.validated_data.get('user', False)
@@ -218,7 +202,6 @@ class SendEmailConfirimationView(APIView):
 
 			if user:
 				user.is_active = False
-					
 				send_email_confirmation(self.request, user)
 				msg = _('Account confirmation e-mail has been resent')
 				return Response({'email': email, 'detail': msg},status=status.HTTP_201_CREATED,)

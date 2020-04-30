@@ -1,16 +1,6 @@
 
 @media (max-width : 900px) {
 
-html, body {
-  border: px solid blue;
-  width: 100%;
-  
-  overflow-x: hidden !important;
-  overflow-y: scroll !important;
-  flex-direction: column;
-    
-}
-  
 
 .navigation-bar {
   border-bottom: px solid red;
@@ -83,7 +73,8 @@ html, body {
   height     : auto;
   background : #edf0f3;
   padding    : 17% 0px;
-  margin-top: 20px; 
+  margin-top : 15px; 
+  border     : 1px solid red;
 }
 
 .email-form-box {
@@ -91,8 +82,11 @@ html, body {
 }
 
 .password-change-success,
-.email-form, .success-message-box,.confirmation-message-box,
-.password-change-form, .sign-up-form,.login-form {
+.email-form,
+.success-message-box,
+.confirmation-message-box,
+.password-change-form,
+.sign-up-form,.login-form {
   border:1px solid #BDBDBD;
   padding: 10px 4%;
   margin: 10px 4% 7%;
@@ -116,29 +110,11 @@ html, body {
     
 }
 
-
-select:focus {
-  border: none;
-  outline: 0 !important;
-}
-
-
 .name-field-box1, .name-field-box2 {
   border:px solid black;
   width: 47%;
 }
 
-
- input  {
-   width: 100%;
-   box-shadow: none;
-   padding: 5px;
-}
-
-
-input:focus {
-  outline: 0!important;
-}
 
 
 .name-field-box2 {
@@ -154,11 +130,26 @@ input:focus {
 
 
 .change-password-box {
-  border: 1px solid blue;
+  border: px solid blue;
   margin: 8px;
     
 }
 
+.confirmation-error-box,
+.confirmation-title-box,
+.confirmation-success-box,
+.resend-confirmation-btn-box {
+  border: px solid blue;
+  text-align : center;;
+
+}
+
+.resend-confirmation-btn {
+  color      : #fff;
+  background : #A33F0B;
+  order     : px solid blue;
+
+}
 
 .email-fields, .password-fields {
   margin: 10px 0px;
@@ -177,11 +168,9 @@ input:focus {
 .password-change-form-title,
 .signup-form-title, .login-form-title {
    font-weight: bold;
-   padding:0 37%;
    font-size: 11px;
    border: px solid red;
-   display: flex;
-    
+         
 }
 
 .login-form-title, .signup-form-title {

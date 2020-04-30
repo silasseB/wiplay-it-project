@@ -84,7 +84,6 @@ class EmailSerializer(serializers.Serializer):
 
 	def validate(self, attrs):
 		email = attrs.get('email')
-		
 		users = User.objects.filter(email=email)
 		
 		if users:

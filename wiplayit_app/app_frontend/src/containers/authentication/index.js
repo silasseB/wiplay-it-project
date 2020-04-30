@@ -294,7 +294,6 @@ export function withAuthentication(Component) {
                 switch(formName){
 
                     case 'loginForm':
-
                         form = this.getFormFields().loginForm;
                         this.setState({ onLoginForm : true, defaultActiveForm})
 
@@ -370,22 +369,28 @@ export function withAuthentication(Component) {
             let { value, successMessage, formName } = params;
 
             if (!successMessage) {
+                console.log(formName)
                 this.setState({successMessage : false})
                 this.formConstructor(formName)
             }
 
-            if (!value) {
+            if (!value && formName !== 'emailResendForm') {
+                console.log(formName)
                 this.setState({onPasswordResetForm : false})
                 this.formConstructor(defaultActiveForm) 
+                
+            }else{
+                this.setState({onEmailResendForm : false})
             }
 
             if ( value) {
+                console.log(formName)
                 this.formConstructor(formName)
             }
         };
 
 
-        confirmUser = ( key, callback )=>{
+        confirmUser = (key, callback)=>{
             
             //let withToken = false;
             //const Api = new Axios(withToken);
@@ -490,10 +495,8 @@ export function withAuthentication(Component) {
             let form        = this.state.form[formName];
             let formIsValid = this.formIsValid(form, formName);
             let apiUrl      = this.getAuthUrl(formName);
-            
-
+        
             if ( form && formIsValid) {
-
                 if (form.email) {
                     let emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
                     let emailIsValid = emailRegExp.test(form.email)

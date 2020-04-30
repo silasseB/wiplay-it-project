@@ -4,6 +4,7 @@ import { MatchMediaHOC } from 'react-match-media';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import  AjaxLoader from "components/ajax-loader";
+import {history} from "App";
 
 
 
@@ -612,8 +613,8 @@ const TermsAndContionTextComponent = props => {
       <div className="terms-and-policy-box">
             <p className="terms-and-policy">
                By signing up you indicate that you read and agree 
-               to Lotiros <Link className="" to="/latiro/terms/conditions/">Terms and conditions</Link>
-                and <Link className="" to="/latiro/privace/policy/">Privace policy</Link>
+               to Lotiros <Link className="" to="/privacy/">Terms and conditions</Link>
+                and <Link className="" to="/privacy/">Privace policy</Link>
             </p>
               
        </div>
@@ -623,38 +624,60 @@ const TermsAndContionTextComponent = props => {
 
 export const AccountConfirmationComponent = props => {
   console.log(props)
-  let message = 'Your account has successefully confirmed.'
+  let message = 'Your account has been successefully confirmed.'
   let error   = "Something wrong happened, please try again"
   let {successMessage, isConfirmed, errorMessage} = props;
   
   return(
    
-   <div  className="accont-confirmation-container" >
-        <p className="confirmation-title">
-           {props.pageTitle}
-        </p>
-        { !isConfirmed &&
-            <div className="confirmation-message-box">
-                <p className="confirmation-message message-success">
-                    {successMessage || message} You can login now and start posting
-                </p> 
-                <LoginSmallScreem/>
-                <LoginBigScreem/>
+    <div  className="account-confirmation-container" >
+        <div className="confirmation-title-box">
+            <p className="confirmation-title">
+                {props.pageTitle}
+            </p>
+        </div>
+       
+        { props.onEmailResendForm &&
+            <div className="confirmation-resend-container">
+                <EmailFormComponent {...props}/> 
             </div>
 
             ||
 
             <div className="confirmation-message-box">
-                <p>{errorMessage || error}</p>
+                { isConfirmed &&
+                    <div>
+                        <div className="confirmation-success-box">
+                            <p className="confirmation-message message-success">
+                                {successMessage || message}  You can login now and start posting
+                            </p> 
+                        </div>
 
-                <Link type="button" to="/account/email/resend/">
-                    Resend Confirmation Email
-                </Link>
+                        <div className="confirmation-login-box">
+                            <LoginSmallScreem/>
+                            <LoginBigScreem/>
+                        </div>
+                    </div>
 
+                    ||
+
+                    <div>
+                        <div className="confirmation-error-box">
+                            <p className="confirmation-message message-success">
+                                {errorMessage || error}
+                            </p>
+                        </div>
+
+                        <div className="resend-confirmation-btn-box">
+                            <ConfirmationResendSmall {...props}/>
+                            <ConfirmationResendBig {...props}/>
+                        </div>
+                    </div>
+                }
             </div>
         }
-    
-   </div>
+      
+    </div>
    
   )
 }
@@ -788,6 +811,39 @@ export const  SpinLoader  = props => {
     );
 };
 
+
+const  ConfirmationResendBtn  = props => {
+
+    let toggleProps = { value : true, formName : 'emailResendForm' };
+    return(
+        <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)} 
+                  className="resend-confirmation-btn" >
+            Resend Confirmation Email
+        </button>
+    );
+};
+
+
+const  ConfirmationResendLink  = props => (
+        <button type="button" 
+                className="resend-confirmation-btn btn" 
+                onClick={()=> history.push("/account/email/resend/")}> 
+            Resend Confirmation Email
+        </button>
+);
+
+
+const  CancelConfirmationBtn  = props => {
+    let toggleProps = {value:false, formName:props.formName};
+
+    return (
+        <button type="button" onClick={()=>props.toggleEmailForm(toggleProps)} 
+            className="form-cancel-btn btn " >
+            Cancel
+        </button>
+    );
+};
+
 const  PasswordChangeButton  = props => {
 
     let toggleProps = { value : true, formName : 'passwordResetForm' };
@@ -820,8 +876,9 @@ const  CancelBtn  = props => {
     )
 };
 
-const  CancelPasswordResetBtn  = props => {
+const  CancelEmailFormBtn  = props => {
     let toggleProps = {value:false, formName:props.formName};
+    console.log(toggleProps)
 
     return (
         <button type="button" onClick={()=>props.toggleEmailForm(toggleProps)} 
@@ -847,18 +904,22 @@ const  SubmitBtn  = props => {
 };
 
 
-export const  SubmitBtnSmallScreen = MatchMediaHOC(SubmitBtn, '(max-width: 800px)') 
-export const  SubmitBtnBigScreen = MatchMediaHOC(SubmitBtn, '(min-width: 900px)') 
-export const NavBarSmallScreen = MatchMediaHOC(NavBarSmall, '(max-width : 800px)')
+export const  SubmitBtnSmallScreen = MatchMediaHOC(SubmitBtn, '(max-width: 980px)') 
+export const  SubmitBtnBigScreen = MatchMediaHOC(SubmitBtn, '(min-width: 980px)') 
+export const NavBarSmallScreen = MatchMediaHOC(NavBarSmall, '(max-width : 980px)')
 
-export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 900px)');
+export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 980px)');
 
 
-export const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 800px)');
-export const CancelEmailForm = MatchMediaHOC(CancelPasswordResetBtn , '(min-width: 900px)');
+export const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 980px)');
+export const CancelEmailForm = MatchMediaHOC(CancelEmailFormBtn , '(min-width: 980px)');
 
-export const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , '(max-width: 500px)');
-export const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton , '(min-width: 800px)');
+export const ConfirmationResendSmall = MatchMediaHOC(ConfirmationResendLink, '(max-width: 980px)');
+export const ConfirmationResendBig   = MatchMediaHOC(ConfirmationResendBtn,  '(min-width: 980px)');
 
-export const RegistrationSmallScreen = MatchMediaHOC(RegistrationSmall, '(max-width: 500px)')
-export const RegistrationBigScreen   = MatchMediaHOC(RegistrationBig, '(min-width: 900px)')
+
+export const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , '(max-width: 980px)');
+export const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton , '(min-width: 980px)');
+
+export const RegistrationSmallScreen = MatchMediaHOC(RegistrationSmall, '(max-width: 980px)')
+export const RegistrationBigScreen   = MatchMediaHOC(RegistrationBig, '(min-width: 980px)')

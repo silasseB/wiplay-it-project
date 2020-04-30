@@ -134,29 +134,6 @@
  
   } 
 
-.btn-sm:focus {
-   border: none !important;
-   box-shadow: none !important;
-}
-
-
-input:focus; button:focus {
-  outline: 0px transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-
-}
-
-
-
-input {
-  padding: 2% !important;
-  width: 100%;
-  box-shadow: none;
-  border: 1px solid #D5D7D5;
-  
-}
-
 .or-option {
   padding-left: 44%;
   margin: 0px 2%;
@@ -225,7 +202,8 @@ input {
  } 
 
 .confirmation-message-box {
-  
+   border    : 1px solid blue;
+   text-align:  center;
 
  }
 
