@@ -534,8 +534,7 @@ export function authenticate(params={}){
         )
         .catch(error =>{
             console.log(error)                
-            if ( error.response) {
-                console.log(response.data)
+            if (error.response) {
                 error = error.response.data
                 error = error.detail;
                 dispatch(action.authenticationError(error));
@@ -546,7 +545,7 @@ export function authenticate(params={}){
 
             }else{
                 console.log(error)
-                dispatch(action.handleError());
+                 dispatch(action.handleError());
             }
         });
     }

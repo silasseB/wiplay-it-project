@@ -365,14 +365,16 @@ export function withHigherOrderIndexBox(Component) {
         componentDidMount() {
             this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
+
+            if (!this.isAuthenticated()) {
+                //User is not authenticated,so redirect to authentication page.
+                history.push('/user/registration/')
+                return;
+            }
               
             let { entities } = this.props;
             
-            window.onpopstate = (event) => {
-                                            
-                this.onPopState();
-                return false;
-            }
+            window.onpopstate = (event) => { this.onPopState();return false;}
 
             window.addEventListener("beforeunload",(event)=>{
                 
@@ -390,12 +392,7 @@ export function withHigherOrderIndexBox(Component) {
                 //event.returnValue = '';
                 
             });
-
-
-            if (!this.isAuthenticated()) {
-                //User is not authenticated,so redirect to authentication page.
-                history.push('/user/registration/')
-            }
+           
 
             let currentUser = this._SetCurrentUser();
 

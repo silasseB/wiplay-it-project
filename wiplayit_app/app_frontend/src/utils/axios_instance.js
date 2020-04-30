@@ -22,7 +22,7 @@ export default class Axios {
         this.baseURL       =  API_URL;
         this.DOMAIN_URL    =  window.location.origin; 
         this.useToken      =  props && props.useToken;
-        this.timeout       =  props && props.timeout || 10000; 
+        this.timeout       =  props && props.timeout || 15000; 
     }
 
     _checkAuth = () => {
