@@ -538,14 +538,14 @@ export function authenticate(params={}){
                 error = error.response.data
                 error = error.detail;
                 dispatch(action.authenticationError(error));
+                
             }
             else if (error.request)  {
                 error = 'Something wrong happened.';
                 dispatch(action.authenticationError(error));
 
             }else{
-                console.log(error)
-                 dispatch(action.handleError());
+                dispatch(action.handleError());
             }
         });
     }
