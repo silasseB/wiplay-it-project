@@ -1,4 +1,4 @@
-import Helper from 'containers/utils/helpers';
+import Helper from 'utils/helpers';
 import  * as types  from 'actions/types';
 
 

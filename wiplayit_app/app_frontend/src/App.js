@@ -12,30 +12,29 @@ import {
 
 import { createBrowserHistory } from 'history';
 
-import {showModal}  from './actions/actionCreators';
-import  RegistrationPage  from "containers/authentication/registration";
-import  SignUpPage from "containers/authentication/signup";
-import  LoginPage from "containers/authentication/login";
+import  RegistrationPage  from "components/authentication/index";
+import  SignUpPage from "components/authentication/signup";
+import  LoginPage from "components/authentication/login";
 
-import EditProfile from "containers/profile/edit_profile";
-import IndexBox from "containers/index/index_page";
-import PostListPage from "containers/post/post_list"
-import  PostPage    from "containers/post/post_page"
-import  QuestionPage    from "containers/question/question_page"
-import QuestionListPage from "containers/question/question_list"
-import  AnswerContainer  from "containers/answer/answer_page";
+import EditProfile from "components/author/edit-profile";
+import IndexBox from "components/index/index-page";
+import PostListPage from "components/post/post-list"
+import  PostPage    from "components/post/post-page"
+import  QuestionPage    from "components/question/question-page"
+import QuestionListPage from "components/question/question-list"
+import  AnswerContainer  from "components/answer/answer-page";
 
-import UserProfileContainer from "containers/profile/profile_page";
-import  PasswordChangePage from "containers/authentication/password_change_page";
-import EmailResendPage    from "containers/authentication/email_resend_page"
-import PasswordResetPage   from "containers/authentication/password_reset_page"
-import AccountConfirmationPage from "containers/authentication/account_confirmation_page"
-import {TestEditor}  from 'containers/test-editor';
-import FeedBackContainer  from 'containers/feed-back';
-import AboutContainer  from 'containers/about';
-import PrivacyContainer  from 'containers/privacy';
-import HelpContainer  from 'containers/help';
-import SettingsContainer  from 'containers/settings';
+import UserProfileContainer from "components/author/profile-page";
+import PasswordChangePage from "components/authentication/password-change";
+import EmailResendPage    from "components/authentication/email-resend"
+import PasswordResetPage   from "components/authentication/password-reset"
+import AccountConfirmationPage from "components/authentication/account-confirmation"
+import {TestEditor}  from 'components/test-editor';
+import FeedBackContainer  from 'components/feed-back';
+import AboutContainer  from 'components/about';
+import PrivacyContainer  from 'components/privacy';
+import HelpContainer  from 'components/help';
+import SettingsContainer  from 'components/settings';
 
 
 import {store} from "store/index";

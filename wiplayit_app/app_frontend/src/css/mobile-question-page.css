@@ -54,7 +54,6 @@
     }
 
     .post-box, .question-box, .answer-box, .comment-box, .reply-box {
-        border-bottom : 0.5px solid #E8E8E8;
         padding    : 10px 10px;
     } 
   
@@ -181,37 +180,6 @@
   background:  #f7f7f7;
 }
 
-.comment p {
-  margin:0px 28px 0px 10px;
-  line-height: 1.2;
-  width:auto;
-  font-size: 12px;
-  border: px solid blue;
-}
-
-
-
-
-.contents-nav-box,.answer-nav-box {
-     border-top: 0.5px solid #D5D7D5;
-     border-bottom:  px solid #D5D7D5;
-     display:flex;
-     margin-top: 4px;
-     width:100%;
-}
-
-
-.items-counter-box {
-    border : px solid red;
-    
-    
-}
-
-.items-btn-box button {
-    font-family  : 'Mukta';
-    color        : grey;  
-    font-size    : 11px;
-}
 
 .edit-reply-btn,.upvote-comment {
    background  :  #f7f7f7;

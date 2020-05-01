@@ -287,6 +287,37 @@ ul {
 
 }
 
+.items-counter-box {
+	border  :  px solid black;
+	display : flex;
+}
+
+.items-btn-box {
+	border  :  px solid blue;
+}
+
+
+.contents-nav-box,.answer-nav-box {
+     border-top: px solid #D5D7D5;
+     border-bottom:  0.5px solid #D5D7D5;
+     display:flex;
+     margin-top: 4px;
+     width:100%;
+}
+
+
+.items-btn-box button {
+    font-family  : 'Mukta';
+    color        : grey;  
+    font-size    : 10px;
+}
+
+
+
+.upvote-icon {
+	color:  #A33F0B; 
+}
+
 .facebook-login {
   background: #3B5998;
      
@@ -294,9 +325,8 @@ ul {
 
 .google-login {
   background: #dd4b39;
-
-  
 }
+
 .google-login-icon {
   color:  #dd4b39;
 
@@ -306,27 +336,6 @@ ul {
 .facebook-login-icon {
   color: #3B5998;
 }
-
-
-
-.icon-color {
-	
-	color:  #A33F0B; /*#92293a;*/
-
-}
-.comment-icon {
-	color: #40403f ; 
-	}
-
-
-.bg-color {
-	background: white; /*#5384e5; /*#0c5af5; /*#fc366c; /*#928f8f; /*#24acf4; /*#a49bc6; /*#92293a;*/
-}
-.btn-color {
-	background:#A33F0B;
-	color: white;
-}
-
 
 
 
