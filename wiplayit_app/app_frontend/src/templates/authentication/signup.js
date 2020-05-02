@@ -1,15 +1,24 @@
 import React from 'react';
+import { MatchMediaHOC } from 'react-match-media';
 import {  Link } from "react-router-dom";
-import  AjaxLoader from "templates/ajax-loader";
+
+import { NonFieldErrors,
+         EmailFieldErrors} from "templates/authentication/errors"
+import { CancelFormBtn,
+         RegistrationSubmitBtn,
+         SpinLoader} from  'templates/authentication/utils';
 
 
-
-
-
-const  SignUpForm= props => {
+export const  SignUpForm = props => {
     //console.log(props)
 
-    let { submitting, form, onSignUpForm, formName, formIsValid, validateForm } = props;
+    let { 
+          submitting,
+          form,
+          onSignUpForm,
+          formName,
+          formIsValid, 
+          validateForm } = props;
 
     form = form && form.signUpForm? 
                            form.signUpForm:null;
@@ -26,19 +35,15 @@ const  SignUpForm= props => {
         <div>
           { form?
           <div>
-          <p className="signup-form-title">Sign Up</p>
+            <ul className="form-title-box">
+                <li className="">Create Account</li>
+            </ul> 
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
-            <NavBarSmallScreen {...props}/>
-                { error && error.non_field_errors && error.non_field_errors.length?
-                            <div>
-                                { error.non_field_errors.map(( error, index) =>
-                                   <li key={index} className="form-errors">{error}</li>
-                                )}
-                            </div>
-                            :
-                            ""
-                }        
+      
+            { error &&
+                <NonFieldErrors {...error}/>
+            }       
 
             <fieldset  disabled={ submitting } 
                        style={ fieldSetStyles}
@@ -78,14 +83,8 @@ const  SignUpForm= props => {
                </div>
 
                <div  className="email-fields signup-fields">
-                    { error && error.email && error.email.length?
-                            <div>
-                                { error.email.map(( error, index) =>
-                                   <li key={index} className="form-errors">{error}</li>
-                                )}
-                            </div>
-                            :
-                            ""
+                    { onSignUpForm && error &&
+                        <EmailFieldErrors {...error}/>
                     }
 
                   <div className="email-box">
@@ -117,8 +116,17 @@ const  SignUpForm= props => {
                   </div>
                </div>
             </div>
-              <SubmitBtnBigScreen {...props}/>
-              <CancelFormBtn {...props}/>          
+
+            <div className="registration-btns-box">
+                <div className="submit-btn-box">
+                    <RegistrationSubmitBtn {...props}/>
+                </div>
+                <div className="cancel-signup-btn-box">
+                    <CancelFormBtn {...props}/> 
+                </div>    
+            </div>  
+            <LoginLink/>
+
             </fieldset>
           </form>
           { onSignUpForm?
@@ -136,9 +144,26 @@ const  SignUpForm= props => {
     </div>
           
    )
-}
+};
+
 
 export default SignUpForm;
 
+
+
+const _LoginLink = ()=>{
+    return(
+        <ul className="signup-login-link-box">
+            <li>
+               Already have account ?
+               <Link className="signup-login-link" to="/user/login/"> Login</Link>
+            </li>
+        </ul>
+         
+    )
+
+};
+
+export const LoginLink = MatchMediaHOC(_LoginLink , '(max-width: 980px)');
 
 

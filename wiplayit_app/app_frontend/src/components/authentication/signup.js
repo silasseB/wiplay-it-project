@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { MatchMediaHOC } from 'react-match-media';
 import RegistrationPage from 'components/authentication/index';
-import withAuthHoc   from 'components/authentication/index-hoc'; 
+import AuthenticationHoc  from 'components/authentication/index-hoc'; 
 import SignUpForm   from 'templates/authentication/signup'; 
+import {NavBar} from 'templates/authentication/utils'
 
 
 
@@ -39,6 +40,7 @@ class SignUpPage extends Component {
            
         return (
             <div> 
+                 <NavBar {...props}/>
                 <SignUpFormSmallScreen {...props}/>
                 <RegistrationBigScreen/>
             </div>
@@ -48,7 +50,7 @@ class SignUpPage extends Component {
 };
 
 
-export default withAuthHoc(SignUpPage);
+export default AuthenticationHoc(SignUpPage);
 
 
 

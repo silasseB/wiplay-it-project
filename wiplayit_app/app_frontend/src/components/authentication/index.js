@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import  withAuthHoc   from 'components/authentication/index-hoc';
+import  AuthenticationHoc   from 'components/authentication/index-hoc';
 import RegistrationComponent from 'templates/authentication/index';
 
 
@@ -31,14 +31,12 @@ class RegistrationPage extends Component {
         console.log(props)
      
         return (
-            <div> 
-              <RegistrationComponent {...props}/>         
-            </div>
+            <RegistrationComponent {...props}/>         
         );
     };
 };
 
-export default withAuthHoc(RegistrationPage);
+export default AuthenticationHoc(RegistrationPage);
 
 
 

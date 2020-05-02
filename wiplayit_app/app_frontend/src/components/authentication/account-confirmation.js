@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import  withAuthHoc   from 'components/authentication/index-hoc'; 
- import {NavBar} from 'templates/authentication/utils'
+import  AuthenticationHoc   from 'components/authentication/index-hoc'; 
+import {NavBar} from 'templates/authentication/utils'
 import AccountConfirmation from 'templates/authentication/confirmation'
 import {store} from "store/index";
 import Axios from 'utils/axios_instance'
@@ -27,7 +27,7 @@ class AccountConfirmationPage extends Component{
             errorMessage     :  undefined,
             pageTitle        :  'Account Confirmation',
             navbarTitle      :  'Confirm Account',
-            formDescription  :  ['Account Confirmation'],
+            formDescription  :  ['Enter your email address'],
         };
 
         this.isConfirmed = this.isConfirmed.bind(this);
@@ -60,7 +60,7 @@ class AccountConfirmationPage extends Component{
         let props = this.getProps();
         console.log(props) 
         return (
-            <div className="registration-page">
+            <div className="registration-page confirmation-page">
               <NavBar {...props}/>
 
                <div>
@@ -75,5 +75,5 @@ class AccountConfirmationPage extends Component{
 };
 
 
-export default withAuthHoc(AccountConfirmationPage);
+export default AuthenticationHoc(AccountConfirmationPage);
 

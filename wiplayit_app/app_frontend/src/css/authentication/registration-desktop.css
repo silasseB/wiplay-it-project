@@ -1,44 +1,27 @@
 
 @media (min-width:992px) {
- body {
-  
- 
-}  
-
-  
+   
 .registration-page {
     background:  #edf0f3 url("../../images/soccer.jpeg") no-repeat;
     background-size: 100% 100%;
     height: 100vh;
     max-height: 500vh;
     border: 1px solid transparent; 
-   
 }
 
-
 .registration-box {
-  border: px solid red !important;
-  min-height: 494px;
-  
+    min-height: 494px;
 }
 
 .registration-container {
-  width: 50%;
-  height: auto;
-  margin: 100px 25%;
-  background: #edf0f3;
-  border: 1px solid #edf0f3 !important; /*Important border*/
-      
+    width: 50%;
+    margin: 100px 25%;
+    background: #edf0f3;
+    border: 1px solid #edf0f3;
 }
 
 .password-change-container {
    min-height: 50%;
-}
-
-.account-confirm-container {
-   min-height: 40%;
-   
-    
 }
 
 .navigation-bar  {
@@ -53,20 +36,11 @@
 
 .navbar-title-box {
    width  : 100%;  
-   border: px solid black;
- }
-
-
-
-.navbar-title-box p  {
-    color: #ffff;
-    font-size: 20px;
-    margin:  0 40%;
-    padding: 0 30px;
-    border: px solid blue;
-
+   border: 1px solid black;
+   text-align: center;
+   color: #ffff;
+   font-size: 20px;
 }
-
 
 .navbar-box {
     margin  : 5px;
@@ -166,7 +140,7 @@
 }
 
 .password-reset-container,.login-container {
-  border: px solid blue !important;
+  border: px solid blue;
   width: 50%;
 }
 
@@ -180,19 +154,13 @@
   margin: 10px 0;
 }
 
-.resend-email-btn {
-  border: 1px solid blue;
-  
-}
 
 .form-errors {
-  color     : red;
-  border    : px solid blue;
-  font-size : 14px;
-  margin    : 0 5%; 
-  list-style-type : none;  
- 
-}
+    color     : red;
+    border    : px solid blue;
+   font-size : 14px;
+   margin    : 0 5%; 
+ }
 
 
 .message-success {
@@ -202,38 +170,16 @@
  } 
 
 .confirmation-message-box {
-   border    : 1px solid blue;
-   text-align:  center;
+   border-top : 1px solid #BDBDBD;
+   text-align :  center;
 
  }
-
-.password-change-success-box a,
-.confirmation-message-box a {
-  border: 1px solid red; 
-  margin: 17px  30% 40px;
-  width: 30%; 
-  color: #ffff;
-  text-align: center;
-  border: none;
-  background: #A33F0B;
-} 
-
-.password-change-success-box a:hover,
-.confirmation-message-box a:hover {
-   text-decoration:  none;
-   color: #ffff;
-}
-
 
 .password-change-success,
 .confirmation-message {
    border: 1px solid  #BDBDBD;
    margin: 4%  8%;
    padding: 4% 7px;
-}
-
-.resend-email-box {
-   
 }
 
 .social-login-label {
@@ -251,37 +197,14 @@
 }
 
 
-.confirmation-title,.password-reset-form-title,
-.password-change-form-title,
-.signup-form-title, .login-form-title {
-   font-weight: bold;
-   padding:0 20%;
-   margin:  5% 10% !important;
-   font-size: 11px;
-   border: px solid red;
-   display: flex;
-    
+.form-title-box {
+    font-weight: bold;
+    font-size: 11px;
+    border: px solid red;
+    text-align: center;
+    margin : 16px 0 8px;
+        
 }
-
-.login-form-title  {
-   padding:0 34%;
-    
-}
-
-.signup-form-title {
-   padding:0 33%;
-    
-}
-
-.password-change-form-title  {
-   padding:0 30%;
-    
-}
-
-.confirmation-title {
-  padding : 0 30%;
-}
-
 
 
 .success-message-box,.password-change-form,
@@ -289,7 +212,7 @@
 .sign-up-form, .email-form, .login-form {
   border:1px solid #BDBDBD;
   padding: 4%;
-  margin: 5% 10%;
+  margin: 0 10%;
   
 }
 
@@ -300,30 +223,64 @@
 
 }
 
+
+.name-field-box1 {
+    border       : px solid blue; 
+    margin-right : 1%;
+}
+
+.name-field-box2 {
+  margin-left
+   : 1%
+}
+
+.create-account-link-box {
+    border : 1px solid blue; 
+}
+
+.registration-btns-box {
+    display:  flex;
+    margin-top: 15px;
+}
+
+.submit-btn-box {
+    border     : px solid blue; 
+    width      : 100%;
+}
+
+.cancel-signup-btn-box, .password-change-link-box {
+    border : px solid black; 
+    text-align: right;
+}
+
 .separator {
   border: 1px solid #D2D2D2;
   background: #D2D2D2;
 }
-
-
 
 .login-errors {
   font-size: 10px;
   
 }
 
-.registration-btn-box {
-  margin-top : 10%; 
-}
-
-.resend-email-btn, .btn-submit {
-  width: 25%;
-  font-size: 11px !important;
-  color: white;
-  border: none;
+.confirmation-login-box a,
+.resend-confirmation-btn, .registration-submit-btn {
+  font-size: 11px;
+  color: #ffff;
   font-family: 'Oswald';
   background:  #A33F0B;
 
+}
+
+.confirmation-login-box,
+.resend-confirmation-btn-box {
+    text-align: center;
+    border : 1px solid black;
+    margin: 0 0 20px; 
+} 
+
+.resend-confirmation-btn {
+   
 }
 
 
@@ -332,12 +289,10 @@
 }
 
 .form-cancel-btn {
-  background-color: #edf0f3;
-  color:#5384e5;
-  border: none;
-  font-size: 12px !important;
-  width: 25%;
-  margin-left: 50%;
+     background-color: #edf0f3;
+     color:#5384e5;
+     font-size: 12px;
+    
 }
 
 
@@ -371,6 +326,9 @@
 }
 
 
+
+.welcome-message  a,
+.terms-and-policy  a,
 .registration-link-box a {
    border: px solid red;
    background:#edf0f3;
@@ -379,48 +337,20 @@
 }
 
 
-.login-user-link {
-  border: px solid blue;
-  margin: 0 0 0 2%;
- }
-
-.create-account-link {
-  border: px solid blue;
-  margin: 0 0 0 50%;
- }
-
-.terms-and-policy-box {
-  margin: 24px 2% 0px;
-  
-
-}
-
-
-.terms-and-policy {
-   font-size: 14px; 
-}
-
 .create-account-btn {
-      border      : none;
-      width       : 50%;
-      height      : 24px;
-      margin-top  : 10px;
-      margin-left : 28%;
-      background  :  #A33F0B;
-      font-size   : 12px !important;
-      color       : white !important;
-      font-weight : bold;
+    width       : 50%;
+    height      : 24px;
+    margin-top  : 10px;
+    margin-left : 28%;
+    background  :  #A33F0B;
+    font-size   : 12px !important;
+    color       : white !important;
+    font-weight : bold;
 }
 
 .password-change-btn {
-   width: auto;
    font-size: 10px;
    color: #5384e5;
-   height: 20px;
-   background: none;
-   box-shadow: none;
-   margin: 10px 0px 0px 30%; 
-  
 }
 
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import  EmailForm   from 'templates/authentication/email-form'; 
-import  withAuthHoc   from 'components/authentication/index-hoc';  
+import AuthenticationHoc from 'components/authentication/index-hoc';  
  
 
 
@@ -34,6 +34,9 @@ class PasswordResetForm extends Component{
 
       return (
          <div className="password-reset">
+            <ul className="form-title-box">
+                <li className="">Password Reset</li>
+            </ul>
          
              <EmailForm {...props}/>
          
@@ -45,6 +48,6 @@ class PasswordResetForm extends Component{
 
 
 
-export default withAuthHoc(PasswordResetForm);
+export default AuthenticationHoc(PasswordResetForm);
 
 

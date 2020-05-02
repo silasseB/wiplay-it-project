@@ -1,15 +1,18 @@
 import React from 'react';
-import  AjaxLoader from "templates/ajax-loader";
-import { NonFieldErrors } from "templates/authentication/errors"
+import  AjaxLoader from 'templates/ajax-loader';
+import {history} from 'App';
+
+import { NonFieldErrors } from 'templates/authentication/errors'
 
 import { CancelFormBtn,
-         SubmitBtnBigScreen } from  'templates/authentication/utils'
+         SubmitBtnBigScreen,
+         SpinLoader } from  'templates/authentication/utils'
 
 
 
 
 
-const PassWordChangeForm = props => {
+export const PassWordChangeForm = props => {
     let { submitting, form, formName,
           onSignUpForm,onPasswordChangeForm,
            formIsValid , validateForm, successMessage } = props;
@@ -36,7 +39,9 @@ const PassWordChangeForm = props => {
         {form?
 
         <div className="">
-         <p className="password-change-form-title">Password Change</p>
+            <ul className="form-title-box">
+                <li className="">Password Change</li>
+            </ul>
 
            { successMessage?
                <div className="password-change-success-box">
@@ -51,8 +56,6 @@ const PassWordChangeForm = props => {
             :
 
             <form className="password-change-form" onSubmit={props.onSubmit} >
-                <NavBarSmallScreen {...props}/>
-
                 <li className="password-form-description">{props.Description}</li>
                
 
@@ -106,6 +109,6 @@ const PassWordChangeForm = props => {
   )
 }
 
-export default PassWordChangeForm
 
+export default PassWordChangeForm;
 

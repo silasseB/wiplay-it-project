@@ -1,11 +1,8 @@
 import React from 'react';
 import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import  AjaxLoader from "components/ajax-loader";
-import {history} from "App";
 
+import { ConfirmationResendSmall,ConfirmationResendBig } from  'templates/authentication/utils'
 
 
 

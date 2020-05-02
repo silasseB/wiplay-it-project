@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import withHigherOrderIndexBox from "components/index/higher_order_index";
 import {TextAreaEditor} from 'templates/editor/editor-templates';
 import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
 
@@ -67,6 +66,6 @@ class FeedBackContainer extends Component{
     }
 };
 
-export default withHigherOrderIndexBox(FeedBackContainer); 
+export default FeedBackContainer; 
 
 

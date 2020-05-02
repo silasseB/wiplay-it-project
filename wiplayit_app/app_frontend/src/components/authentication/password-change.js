@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavBar} from 'templates/authentication/utils';
 import  PassWordChangeForm   from 'templates/authentication/password-change'; 
-import  withAuthHoc   from 'components/authentication/index-hoc'; 
+import AuthenticationHoc  from 'components/authentication/index-hoc'; 
 
 
 
@@ -12,13 +12,12 @@ export class PasswordChangePage extends Component{
    constructor(props) {
       super(props);
 
-      this.state = {
-         navbarTitle        : 'Password Change',
-         formTitle          : 'Password Change',
-         formDescription    : 'Fill in the form bellow with your new account password and submit.',
-                            
-      };
-   }
+        this.state = {
+            navbarTitle        : 'Password Change',
+            formTitle          : 'Password Change',
+            formDescription    : 'Fill in the form bellow with your new account password and submit.',
+        };
+    }
 
    
    
@@ -27,21 +26,19 @@ export class PasswordChangePage extends Component{
     }
 
    
-   render(){
+    render(){
       
-      let props = Object.assign(this.state, this.props);
-      console.log(props)
-      return (
-         <div>
-            
+        let props = Object.assign(this.state, this.props);
+        console.log(props)
+        return (
             <div className="registration-page">
-               <div className="password-change-container registration-container">
+               <NavBar {...props}/>
+                <div className="password-change-container registration-container">
                   <PassWordChangeForm {...props}/>
                </div>   
             </div>
-         </div>
-      )
-   }
+        )
+    }
 }
 
 
@@ -50,5 +47,5 @@ export class PasswordChangePage extends Component{
 
 
 
-export default withAuthHoc(PasswordChangePage)
+export default AuthenticationHoc(PasswordChangePage)
 

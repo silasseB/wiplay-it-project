@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { NonFieldErrors,
-         EmailFieldErrors} from "components/authentication/errors"
+         EmailFieldErrors} from "templates/authentication/errors"
 import { CancelFormBtn,
          SubmitBtnBigScreen,
-         AjaxLoader, } from  'components/authentication/utils';
+         AjaxLoader, } from  'templates/authentication/utils';
 
 
 export const  SignUpForm = props => {
@@ -128,6 +128,7 @@ export const  SignUpForm = props => {
    )
 };
 
+export default SignUpForm;
 
 
 

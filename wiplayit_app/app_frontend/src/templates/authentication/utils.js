@@ -12,15 +12,13 @@ import {history} from "App";
 
 
 export const  NavBar   = props => {
-    
-    console.log(props)
-    
+      
     return (
         <div className="navigation-bar fixed-top">
             <div className="navbar-box">
-               <div className="navbar-title-box">
-                   <p className="" >{props.navbarTitle}</p>
-                </div>
+               <ul className="navbar-title-box">
+                   <li className="" >{props.navbarTitle}</li>
+                </ul>
             </div>
         </div>    
     );
@@ -78,7 +76,7 @@ const  ConfirmationResendBtn  = props => {
     let toggleProps = { value : true, formName : 'emailResendForm' };
     return(
         <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)} 
-                  className="resend-confirmation-btn" >
+                  className="resend-confirmation-btn btn" >
             Resend Confirmation Email
         </button>
     );
@@ -117,11 +115,9 @@ const  PasswordChangeButton  = props => {
 };
 
 const  PasswordChangeLink  = props => (
-    <div className="password-change-link-box">
         <Link className="password-change-link" to="/user/account/password/reset/"> 
             Forgot Password ?
         </Link>
-    </div>
 );
 
 
@@ -151,22 +147,22 @@ const  CancelEmailFormBtn  = props => {
 
 
 
-const  SubmitBtn  = props => {
+export const  RegistrationSubmitBtn  = props => {
     let submitButtonStyles = props.submitting? {opacity:'0.60'}: {};
    
     return(
         <button type="submit" 
                 style={submitButtonStyles} 
                 disabled={props.submitting}
-                className="auth-submit-btn btn-sm">
+                className="registration-submit-btn btn-sm">
             Submit
         </button>
     )
 };
 
 
-export const  SubmitBtnSmallScreen = MatchMediaHOC(SubmitBtn, '(max-width: 980px)') 
-export const  SubmitBtnBigScreen = MatchMediaHOC(SubmitBtn, '(min-width: 980px)') 
+export const  SubmitBtnSmallScreen = MatchMediaHOC(RegistrationSubmitBtn, '(max-width: 980px)') 
+export const  SubmitBtnBigScreen = MatchMediaHOC(RegistrationSubmitBtn, '(min-width: 980px)') 
 export const NavBarSmallScreen = MatchMediaHOC(NavBarSmall, '(max-width : 980px)')
 
 export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 980px)');

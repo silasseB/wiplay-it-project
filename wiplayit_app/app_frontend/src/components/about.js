@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import withHigherOrderIndexBox from "components/index/higher_order_index";
 import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
 
 
@@ -35,6 +34,6 @@ class  AboutContainer extends Component  {
     }
 };
 
-export default withHigherOrderIndexBox(AboutContainer); 
+export default AboutContainer; 
 
 

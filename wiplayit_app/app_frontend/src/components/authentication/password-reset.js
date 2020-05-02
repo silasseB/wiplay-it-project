@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EmailForm   from 'templates/authentication/email-form'; 
-import  withAuthHoc   from 'components/authentication/index-hoc';  
+import AuthenticationHoc  from 'components/authentication/index-hoc';  
+import {NavBar} from 'templates/authentication/utils'
 
 
 
@@ -36,10 +37,9 @@ class PasswordResetPage extends Component{
         let props = this.getProps();
 
         return (
-            <div>
-                <div className="registration-container">
+            <div className="registration-container">
+                 <NavBar {...props}/>
                   <EmailForm {...props}/>
-                </div>
             </div>
         )
     };
@@ -48,6 +48,6 @@ class PasswordResetPage extends Component{
 
 
 
-export default withAuthHoc(PasswordResetPage);
+export default AuthenticationHoc(PasswordResetPage);
 
 

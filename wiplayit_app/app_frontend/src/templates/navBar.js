@@ -204,7 +204,9 @@ export const NavBarMenuModalItems = props =>{
 
 const NavBarModalMenu = props => {
     let { currentUser, logout} = props;
-    let profile = currentUser && currentUser.profile;
+    if (!currentUser) return null;
+
+    let profile = currentUser.profile;
     
     let modalProps = {
             navBarMenuProps:{...props},

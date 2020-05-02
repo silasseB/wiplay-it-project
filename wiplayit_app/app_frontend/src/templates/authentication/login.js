@@ -1,11 +1,19 @@
 import React from 'react';
 import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import  AjaxLoader from "templates/ajax-loader";
+
+import { NonFieldErrors,
+         EmailFieldErrors} from "templates/authentication/errors"
+
+import { PasswordChangeBig, 
+         PasswordChangeSmall,
+         SubmitBtnBigScreen,
+         RegistrationSubmitBtn,
+         SpinLoader } from  'templates/authentication/utils'
 
 
 
-const  LoginForm = props => {
+export const  LoginForm = props => {
     //console.log(props)
     let { submitting, onSignUpForm,onLoginForm, formIsValid, formName, form, validateForm} = props;
 
@@ -24,94 +32,93 @@ const  LoginForm = props => {
 
     return(
         <div>
-        { form?
-
-        <div>
-        
-
-            <p className="login-form-title label">Login</p>
-
-            <form onSubmit={props.onSubmit} className="login-form">
-               <NavBarSmallScreen {...props}/>
-             
-                <fieldset style={ fieldSetStyles}
-                        disabled={ submitting || onSignUpForm }
-                        className="fieldset-login">
-                    {error && error.non_field_errors && error.non_field_errors.length?
-                            <div>
-                                { error.non_field_errors.map(( error, index) =>
-                                   <li key={index} className="form-errors">{error}</li>
-                                )}
-                            </div>
-                            :
-                            ""
-                    }        
+            { form?
+                <div>
+                    <ul className="form-title-box">
+                        <li className="">Login</li>
+                    </ul> 
+                    <form onSubmit={props.onSubmit} className="login-form">
+                                   
+                        <fieldset 
+                            style={ fieldSetStyles}
+                            disabled={ submitting || onSignUpForm }
+                            className="fieldset-login">
+                            { error &&
+                                <NonFieldErrors {...error}/>
+                            }
                                
-               <div className="login-box">
-                    {onLoginForm && error && error.email && error.email.length?
-                            <div>
-                                { error.email.map(( error, index) =>
-                                   <li key={index} className="form-errors">{error}</li>
-                                )}
-                            </div>
-                            :
-                            ""
-                    }
-                  <div className="login-fields">
-                    <input
-                      className="login-email-field"
-                      placeholder="Email Address"
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={props.handleFormChange} 
-                      required
-                      
-                    />
-                    
-                  </div>
-                  <div className="login-fields">
-                    <input
-                      className="login-password-field"
-                      placeholder="Password"
-                      type="password"
-                      name="password"
-                      value={form.password}
-                      onChange={props.handleFormChange} 
-                      required
-                      
-                    />
-
-                  </div>
+                            <div className="login-box">
+                                { onLoginForm && error &&
+                                    <EmailFieldErrors {...error}/>
+                                }
+                                <div className="login-fields">
+                                    <input
+                                        className="login-email-field"
+                                        placeholder="Email Address"
+                                        type="email"
+                                        name="email"
+                                        value={form.email}
+                                        onChange={props.handleFormChange} 
+                                        required
+                                    />
+                                </div>
+                                <div className="login-fields">
+                                    <input
+                                        className="login-password-field"
+                                        placeholder="Password"
+                                        type="password"
+                                        name="password"
+                                        value={form.password}
+                                        onChange={props.handleFormChange} 
+                                        required
+                                    />
+                                </div>
     
-                  <div className="registration-btn-box">  
-                    <SubmitBtnBigScreen {...props}/>
-                    <PasswordChangeSmall {...props}/>
-                    <PasswordChangeBig {...props}/>
-                  </div>
-                </div>
-   
-             </fieldset>
-            </form>
+                                <div className="registration-btns-box">  
+                                    <div className="submit-btn-box">
+                                       <RegistrationSubmitBtn {...props}/>
+                                    </div>
+                                    <div className="password-change-link-box">
+                                        <PasswordChangeSmall {...props}/>
+                                        <PasswordChangeBig {...props}/>
+                                    </div>    
+                                </div>
 
-            { onSignUpForm?
-                ""
-                :
-                <SpinLoader {...props}/> 
-              
-            } 
+                                <CreateAccountLink/> 
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    { !onSignUpForm &&
+                        <SpinLoader {...props}/> 
+                    } 
          
+                </div>
+                :
+                ""
+            }
         </div>
-      :
-      ""
-    }
-    </div>
     )
 };
 
 
-
 export default LoginForm;
+
+const _CreateAccountLink = ()=>{
+    return(
+        <ul className="create-account-link-box">
+            <li>
+               Do not have account ?
+               <Link className="create-account-lin" to="/user/signup/">  Sign Up</Link>
+            </li>
+        </ul>
+         
+    )
+
+};
+
+export const CreateAccountLink = MatchMediaHOC(_CreateAccountLink , '(max-width: 980px)');
+
 
 
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import  EmailForm   from 'templates/authentication/email-form'; 
-import  withAuthHoc   from 'components/authentication/index-hoc'; 
+import  AuthenticationHoc   from 'components/authentication/index-hoc'; 
 import {NavBar}  from 'templates/authentication/utils';
 
 
@@ -12,7 +12,7 @@ export class EmailResendPage extends Component{
         this.state = {
             pageTitle :  'Confirmation Resend',
             navbarTitle      :  'Confirm Account',
-            formDescription  :  ['Account Confirmation'],
+            formDescription  :  ['Enter Your email address'],
         };
     }
 
@@ -40,5 +40,5 @@ export class EmailResendPage extends Component{
 
 
 
-export default withAuthHoc(EmailResendPage);
+export default AuthenticationHoc(EmailResendPage);
 

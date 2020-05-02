@@ -18,7 +18,7 @@ const api = new Api();
 
 
 
-export function withAuthHoc(Component) {
+export function AuthenticationHoc(Component) {
 
     return class Authentication extends React.Component {
 
@@ -574,7 +574,7 @@ const mapStateToProps = (state, ownProps) => {
    }
 };
 
-const composedHoc = compose( connect(mapStateToProps, mapDispatchToProps),withAuthentication )
+const composedHoc = compose( connect(mapStateToProps, mapDispatchToProps), AuthenticationHoc)
 
 
 export default  composedHoc;

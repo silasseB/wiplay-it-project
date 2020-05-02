@@ -1,9 +1,8 @@
 import React from 'react';
 import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import  AjaxLoader from "templates/ajax-loader";
-import {history} from "App";
 import  EmailForm  from 'templates/authentication/email-form'; 
+import { ConfirmationResendSmall,ConfirmationResendBig } from  'templates/authentication/utils'
 
 
 
@@ -16,18 +15,17 @@ import  EmailForm  from 'templates/authentication/email-form';
     return(
    
         <div  className="account-confirmation-container" >
-            <div className="confirmation-title-box">
-                <p className="confirmation-title">
-                    {props.pageTitle}
-                </p>
-            </div>
-       
+                 
             { props.onEmailResendForm &&
             <div className="confirmation-resend-container">
                 <EmailForm {...props}/> 
             </div>
 
             ||
+            <div>
+                <ul className="form-title-box">
+                    <li className="">{props.pageTitle}</li>
+                </ul> 
 
             <div className="confirmation-message-box">
                 { isConfirmed &&
@@ -38,7 +36,7 @@ import  EmailForm  from 'templates/authentication/email-form';
                             </p> 
                         </div>
 
-                        <div className="confirmation-login-box">
+                        <div className="confirmation-login-btn-box">
                             <LoginSmallScreem/>
                             <LoginBigScreem/>
                         </div>
@@ -60,6 +58,7 @@ import  EmailForm  from 'templates/authentication/email-form';
                     </div>
                 }
             </div>
+            </div>
         }
       
     </div>
@@ -71,14 +70,14 @@ export default AccountConfirmation;
 
 const LoginSmall = props => {
    return (
-      <Link type="button" to="/user/login/">Login</Link>
+      <Link className="btn" type="button" to="/user/login/">Login</Link>
    )
 }
 
 
 const LoginBig = props => {
    return (
-      <Link  type="button" to="/user/registration/">Login</Link>
+      <Link className="btn" type="button" to="/user/registration/">Login</Link>
    )
 }
 

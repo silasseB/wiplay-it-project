@@ -173,6 +173,7 @@ img:hover {
 input, textarea {
 	border     : none;
 	width      : 100%; 
+	padding    : 7px;
 }
 
 input:focus, input:active,
