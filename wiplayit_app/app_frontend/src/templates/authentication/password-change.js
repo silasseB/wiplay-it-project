@@ -5,7 +5,7 @@ import {history} from 'App';
 import { NonFieldErrors } from 'templates/authentication/errors'
 
 import { CancelFormBtn,
-         SubmitBtnBigScreen,
+         RegistrationSubmitBtn,
          SpinLoader } from  'templates/authentication/utils'
 
 
@@ -90,10 +90,9 @@ export const PassWordChangeForm = props => {
                            required
                         />
                      </div>
-
-                     <div className="submit-box">  
-                        <SubmitBtnBigScreen {...props}/>
-                     </div>
+                    <div className="submit-btn-box">
+                        <RegistrationSubmitBtn {...props}/>
+                    </div>
       
                   </div>
                </fieldset>

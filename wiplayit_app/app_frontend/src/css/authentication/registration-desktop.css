@@ -36,7 +36,6 @@
 
 .navbar-title-box {
    width  : 100%;  
-   border: 1px solid black;
    text-align: center;
    color: #ffff;
    font-size: 20px;
@@ -263,7 +262,7 @@
   
 }
 
-.confirmation-login-box a,
+.confirmation-login-bt-box a,
 .resend-confirmation-btn, .registration-submit-btn {
   font-size: 11px;
   color: #ffff;
@@ -272,7 +271,7 @@
 
 }
 
-.confirmation-login-box,
+.confirmation-login-bt-box,
 .resend-confirmation-btn-box {
     text-align: center;
     border : 1px solid black;

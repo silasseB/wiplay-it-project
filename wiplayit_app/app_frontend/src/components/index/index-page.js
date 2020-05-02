@@ -109,7 +109,7 @@ class IndexBox extends Component {
             console.log(menDiff  + ' ' + 'Menutes ago')
             if(questions && questions.length || answers &&
                 answers.length || posts && posts.length || users && users.length ){
-                if (menDiff <= 60) {
+                if (menDiff <= 5) {
 
                     console.log('Index found from cachedEntyties')
                     this.updateIndexEntities(cachedIndex);
