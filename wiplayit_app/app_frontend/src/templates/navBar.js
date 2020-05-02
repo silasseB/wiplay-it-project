@@ -297,17 +297,9 @@ export const NavBarSmallScreen = props => {
                     </ul>
                     
                     <ul  className="navigation-item">
-                        <li>
-                            <button className="items btn-sm"    onClick={()=> {
-                                                store.dispatch(showModal(madalParams))
-                                                setTimeout(()=> {
-                                                    history.push({ pathname: pathname, state}); 
-                                                }, 500);
-
-                                            }}>
-                                    Notifications  
-                            </button>
-                           
+                         <li>
+                            <Link className="items"
+                            to="/notifications/">Notifications</Link>
                         </li>
                     </ul>
                     <div className="navigation-img-item">
@@ -382,16 +374,8 @@ export const NavBarBigScreen = props => {
                     
                     <ul  className="navigation-item">
                         <li>
-                            <button className="items btn-sm"    onClick={()=> {
-                                                store.dispatch(showModal(madalParams))
-                                                setTimeout(()=> {
-                                                    history.push({ pathname: pathname, state}); 
-                                                }, 500);
-
-                                            }}>
-                                    Notifications  
-                            </button>
-
+                            <Link className="items"
+                            to="/notifications/">Notifications</Link>
                         </li>
                     </ul> 
                     </div> 

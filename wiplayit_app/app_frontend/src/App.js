@@ -35,6 +35,8 @@ import AboutContainer  from 'components/about';
 import PrivacyContainer  from 'components/privacy';
 import HelpContainer  from 'components/help';
 import SettingsContainer  from 'components/settings';
+import NotificationsContainer from 'components/notifications';
+
 
 
 import {store} from "store/index";
@@ -69,7 +71,8 @@ function App() {
                     <Route  path="/about/" component={AboutContainer}/>
                     <Route  path="/privacy/" component={PrivacyContainer}/>
                     <Route  path="/help/" component={HelpContainer}/>
-                    <Route  path="/settings/" component={SettingsContainer}/>                      
+                    <Route  path="/settings/" component={SettingsContainer}/>  
+                    <Route  path="/notifications/" component={NotificationsContainer}/>                      
                 </Switch>
         </div>
     );
