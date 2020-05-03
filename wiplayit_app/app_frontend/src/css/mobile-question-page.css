@@ -77,8 +77,8 @@
     .post-body{
      }
 
-    .post ,.question {
-        font-size   : 12px;
+    .post-title, .question {
+        font-size   : 15px;
         font-weight : bold;
         color       : black;
         margin      : 4px 0
@@ -123,13 +123,6 @@
 
 }
 
-.comment {
-  border: px solid #F7F7F7;
-  padding: 0 10px;
-
-
-}
-
 .answer-contents {
    border-top: px solid  #D5D7D5;
    padding-top: 4px;
@@ -148,30 +141,22 @@
 
 
 .answer {
-   font-size : 14px;
+   font-size : 13px;
    margin    : 0 10px;
 }
 
-.answer p {
-  display : block;
-  width:auto;
-
-}
  
 .reply-box {
   border: px solid red;
-
   
 }
 
 
-.reply  {
-   margin:0px 0px 0px 10px;
-   width:auto;
-   font-size: 13px;
-   border: px solid blue;
-   line-height: 1.2;
-  
+.reply, .comment  {
+    font-size : 12px;
+    border    : px solid blue;
+    margin    : 0 10px;
+ 
 }
 
   

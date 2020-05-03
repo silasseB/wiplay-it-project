@@ -151,7 +151,7 @@ export const PostComponent = props => {
                         </div>
 
                         { props.isPostBox? 
-                            <b className="">
+                            <b className="post-title">
                                 { post.add_title }
                             </b>
                             :
