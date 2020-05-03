@@ -83,7 +83,7 @@ class UserProfileContainer extends Component {
     };
 
     componentDidUpdate(prevProps, nextProps){
-        console.log(nextProps, this.props)
+        //console.log(nextProps, this.props)
         //this.props.reloadPage()
         let { slug, id }  = this.props.match.params;
         let profileById   = `userProfile${id}`;

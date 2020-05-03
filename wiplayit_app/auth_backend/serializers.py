@@ -340,7 +340,7 @@ class UserProfileSerializer(UserSerializer):
 	def get_answers(self, obj):
 		answers  =  Answer.objects.filter(created_by=obj)
 		self.update_serializer_obj_perms('answer_perms')
-		return app_serializers.AnswerSerializer(answers, context=self.context ,many=True).data
+		return app_serializers.AnswerReadSerializer(answers, context=self.context ,many=True).data
 		
 	  
 	def get_followers(self, obj):

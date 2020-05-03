@@ -465,12 +465,6 @@ export const UserAnswers = props =>{
 
                             return(
                                 <div key={answer.id} className="answer-contents profile-activites "> 
-                                    <div className="question">
-                                        <b className="answer-question">
-                                            {answer.question && answer.question.add_question}
-                                        </b> 
-                                    </div>
-
                                     <AnswersComponent {...answerProps}  />
                                 </div>
                             )

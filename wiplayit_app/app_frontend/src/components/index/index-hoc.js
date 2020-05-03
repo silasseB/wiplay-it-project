@@ -493,7 +493,7 @@ export function MainAppHoc(Component) {
 
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',} :
                                                     {opacity:'2',};
-            //console.log(props)
+            console.log(props)
 
             var isOnline = window.navigator.onLine;
             if (isOnline) {

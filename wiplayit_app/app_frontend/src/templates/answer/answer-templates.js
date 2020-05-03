@@ -147,6 +147,7 @@ export const AnswersComponent = props => {
 
     let question = answer.question;
     let questionPath = question && `/question/${question.slug}/${question.id}/`;
+    console.log(props)
                                         
     return (
         <div className="answer-box">     

@@ -34,7 +34,7 @@
     }
 
     .index-posts-box, .index-questions-box,.index-answers-box  {
-        border  : px solid #D5D7D5;
+        border  : 1px solid #D5D7D5;
         margin  : 9px 0px;
         padding : 0px 0px 4px; 
         background:  #ffff;
@@ -47,14 +47,14 @@
     .index-items-label {
         border-bottom : 1px solid #D5D7D5;
         font-size     : 14px; 
-        margin-bottom : 9px;
         padding       : 4px 9px 0px;
         color         : #A33F0B;
         font-weight   : bold; 
     }
 
     .post-box, .question-box, .answer-box, .comment-box, .reply-box {
-        padding    : 10px 10px;
+        padding  : 0 10px;
+        border   : px solid green;
     } 
   
     .question-box, .post-box, {
@@ -81,6 +81,7 @@
         font-size   : 12px;
         font-weight : bold;
         color       : black;
+        margin      : 4px 0
     }
 
     .question-home  {
@@ -147,8 +148,8 @@
 
 
 .answer {
-   font-size: 14px;
-   margin: 0 10px;
+   font-size : 14px;
+   margin    : 0 10px;
 }
 
 .answer p {
