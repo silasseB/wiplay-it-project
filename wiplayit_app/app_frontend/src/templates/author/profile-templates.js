@@ -351,7 +351,7 @@ export const PartialUserList = props => {
             <div className="partial-user-list-box">
                 <div className="partial-user-list-contents">
                     <div className="partial-user-list-img-box">
-                        <div className="partail-user-list-img">
+                        <div className="partail-user-list-img user-list-img">
                             { profile_picture? 
                                 <img 
                                     onClick={() => history.push(pathToProfile,user)}
@@ -367,7 +367,7 @@ export const PartialUserList = props => {
 
                     <div className="user-list-credentials-box">
                         <div className="user-list-credentials-contents">
-                            <p onClick={() => props.push({path:pathToProfile,user}) } 
+                            <p onClick={() => props.push({path:pathToProfile, user}) } 
                                   className="partial-user-list-name user-list-name">
                                 { user.first_name }   {user.last_name }
                             </p>
