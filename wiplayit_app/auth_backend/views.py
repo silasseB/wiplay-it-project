@@ -34,7 +34,8 @@ from rest_auth.app_settings import (TokenSerializer,
 from app_backend.mixins.views_mixins import RetrieveMixin, UpdateObjectMixin
 from app_backend.views import BaseApiView
 from .models import User
-from .serializers import (  CustomRegisterSerializer,
+from .serializers import (  CustomSocialLoginSerializer,
+							CustomRegisterSerializer,
                             CustomLoginSerializer,
                             EmailSerializer,
                             BaseUserSerializer,
@@ -217,7 +218,7 @@ class SendEmailConfirimationView(APIView):
 
 class FacebookLogin(SocialLoginView):
 	adapter_class    = FacebookOAuth2Adapter
-	#serializer_class = CustomSocialLoginSerializer
+	serializer_class = CustomSocialLoginSerializer
 
 
 	def post(self, request, *args, **kwargs):

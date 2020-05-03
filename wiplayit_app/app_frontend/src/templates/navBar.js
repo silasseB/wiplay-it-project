@@ -60,6 +60,7 @@ createPostProps = GetModalLinkProps.props(createPostProps);
 export const NavBarMenuItems = props => {
     console.log(props)
     let { currentUser } = props;
+
     let profile = currentUser && currentUser.profile;
           
     let state = {userProfile : currentUser};
@@ -69,6 +70,7 @@ export const NavBarMenuItems = props => {
  
     return(
         <BrowserRouter>
+
         <div>
 
             <div className="menu-img-container">
@@ -84,10 +86,10 @@ export const NavBarMenuItems = props => {
                 <ul className="menu-username-box">
                     <li className="menu-username"  
                         onClick={() => RedirectMenuLinks(toProfileProps)}>
-                        {currentUser.first_name}  {currentUser.last_name} 
+                        {currentUser && currentUser.first_name}  {currentUser && currentUser.last_name} 
                     </li>
                     <li className="menu-user-credential" >
-                        {profile.credential} 
+                        {profile && profile.credential} 
                     </li>
                 </ul>
             </div>

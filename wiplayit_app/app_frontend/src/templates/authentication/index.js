@@ -106,8 +106,8 @@ const TermsAndContionTextComponent = props => {
       <div className="terms-and-policy-box">
             <p className="terms-and-policy">
                By signing up you indicate that you read and agree 
-               to Wiplayit <Link className="" to="/privacy/">Terms and conditions </Link>
-                and <Link className="" to="/privacy/"> Privace policy</Link>
+               to wiplayit <Link className="" to="/privacy/">Terms and Conditions </Link>
+                and <Link className="" to="/privacy/"> Privacy</Link>
             </p>
               
        </div>
@@ -126,6 +126,7 @@ const WelcomeTextComponent = props => {
 
         )
 }
+
 
 
  const SocialLogin = props =>  {
@@ -158,7 +159,7 @@ const WelcomeTextComponent = props => {
    
         <div className="facebook-login-box">
           <FacebookLogin
-            appId = "2363163133805760"
+            appId = "2482459181845798"
             callback={props.responseFacebook}
             render={renderProps => (
                 <button className='facebook-login' onClick={renderProps.onClick}>

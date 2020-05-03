@@ -25,12 +25,12 @@ from wiplayit_app.settings.common import *
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = True
-SITE_ID = 1
+SITE_ID = 2
 
 INSTALLED_APPS.append('coverage')
 
 
-ALLOWED_HOSTS = [ '127.0.0.1', '192.168.43.14' ]
+ALLOWED_HOSTS = [ '127.0.0.1', '192.168.43.14', 'localhost' ]
 
 
 DATABASES = {

@@ -324,6 +324,11 @@
   margin: 0;
 }
 
+.terms-and-policy-box {
+  margin: 10px;
+  border: px solid red;
+
+}
 
 
 .welcome-message  a,

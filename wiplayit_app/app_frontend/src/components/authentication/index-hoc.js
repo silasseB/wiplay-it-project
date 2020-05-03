@@ -101,10 +101,11 @@ export function AuthenticationHoc(Component) {
         };
 
         responseFacebook(response) {
-            
+             console.log(response)
             let apiUrl =  api.facebookLoginApi();
             let accessToken =  response.accessToken
             let form = helper.createFormData({"access_token": accessToken});
+
            
             if (accessToken) {
                 return this.props.authenticate({apiUrl, form,});
@@ -118,9 +119,15 @@ export function AuthenticationHoc(Component) {
 
         responseTwitter = (response) => {
             console.log(response);
-            //var accessToken =  response.accessToken
-            //var apiUrl =  api.twitterLoginApi(this)
-           //this.socialLogin(apiUrl, accessToken)
+            var accessToken =  response.accessToken
+            var apiUrl =  api.twitterLoginApi(this)
+            let form   = helper.createFormData({"access_token": accessToken});
+
+            if (accessToken) {
+                return this.props.authenticate({ apiUrl, form });
+            }
+
+            return ;
         }
 
 

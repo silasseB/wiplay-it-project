@@ -43,12 +43,15 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
         social_login = adapter.complete_login(request, app, token, response=response)
         social_login.token = token
         email = social_login.user.email
+        print(social_login)
 
         users = User.objects.filter(email__iexact=email)
+        print(users)
 
         if users:
         	for user in users:
         		#Is the user account confirmed?
+        		print(user)
         		if not user.is_confirmed:
         			msg = _('Your account has not been confirmed.')
         			raise exceptions.ValidationError(msg)
