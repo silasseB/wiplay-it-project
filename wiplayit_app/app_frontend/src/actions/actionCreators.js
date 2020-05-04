@@ -44,6 +44,7 @@ export const createActionError = (params) => {
         payLoad: {
            error,
            isCreating : false,
+           created    : true,
         }
     }
 };
@@ -78,7 +79,7 @@ export const updateActionSuccess = (params)=> {
         payLoad: {
             ...data,
             submitting : false,
-            isUpdating : false
+            updated    : true,
       }
    };
 };
@@ -122,7 +123,8 @@ export const ModalSubmitSuccess = (params) => {
         payLoad : {
             successMessage,
             ...params,
-            submitting     : false,
+            submitting : false,
+            updated    : true,
         }
         
     };

@@ -58,7 +58,7 @@ createPostProps = GetModalLinkProps.props(createPostProps);
 
 
 export const NavBarMenuItems = props => {
-    console.log(props)
+    //console.log(props)
     let { currentUser } = props;
 
     let profile = currentUser && currentUser.profile;

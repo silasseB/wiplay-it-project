@@ -12,7 +12,7 @@ import  * as action  from 'actions/actionCreators';
 import { ProfileComponent, UserAnswers } from 'templates/author/profile-templates';
 import MainAppHoc from "components/index/index-hoc";
 import { UnconfirmedUserWarning, PageErrorComponent } from "templates/partial-components";
-
+import * as checkType from 'helpers/check-types'; 
 import {store} from "store/index";
 import GetTimeStamp from 'utils/timeStamp';
 import  AjaxLoader from "templates/ajax-loader";
@@ -45,18 +45,19 @@ class UserProfileContainer extends Component {
     onProfileUpdate = () =>{
         console.log(this.props)    
         const onStoreChange = () => {
+            if (!this.isMounted) return;
 
             let { slug, id } = this.props.match.params;
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
-            let profileById  =  id? `userProfile${id}`:null;
+            let profileById  = id? `userProfile${id}`:null;
             let answers      = entities.answers;
 
             let userProfile  = profileById && entities.userProfile[profileById];
-
+            let { errors } = entities;
+            
             if (userProfile) {
-
-                this.isMounted && this.setState({
+                this.setState({
                             isReloading : userProfile.isLoading,
                             error : userProfile.error} ) 
             

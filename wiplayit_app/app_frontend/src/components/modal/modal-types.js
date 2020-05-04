@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ModalOptionsMenu } from "templates/buttons";
-import EditProfile, { DropImage } from "components/author/edit-profile";
+import {EditProfile, DropImage} from "components/author/edit-profile";
 import UserListBox from "components/users/modal-user-list"; 
 import { NavBarMenuModalItems} from "templates/navBar";
 import AppEditor  from 'components/draft-js-editor/editor';

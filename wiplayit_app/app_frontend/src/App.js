@@ -16,7 +16,7 @@ import  RegistrationPage  from "components/authentication/index";
 import  SignUpPage from "components/authentication/signup";
 import  LoginPage from "components/authentication/login";
 
-import EditProfile from "components/author/edit-profile";
+import EditProfileRouter from "components/author/edit-profile";
 import IndexBox from "components/index/index-page";
 import PostListPage from "components/post/post-list"
 import  PostPage    from "components/post/post-page"
@@ -60,7 +60,7 @@ function App() {
                     <Route  path="/answer/:id/" component={AnswerContainer} />
                     <Route  path="/questions/" component={QuestionListPage} />
                     <Route  path="/post/:slug/:id/" component={PostPage} />
-                    <Route  path="/edit/profile/:slug/:id/" component={EditProfile} />
+                    <Route  path="/edit/profile/:slug/:id/" component={EditProfileRouter} />
                     <Route  path="/registration/account/confirm/:key/" component={AccountConfirmationPage} />
                     <Route  path="/user/account/password/reset/" component={PasswordResetPage} />
                     <Route  path="/reset/:uid/:token/" component={PasswordChangePage} />

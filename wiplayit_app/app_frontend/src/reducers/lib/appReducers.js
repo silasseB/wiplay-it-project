@@ -111,6 +111,7 @@ export function entities(state=InitialState(), action) {
         case "MODAL_SUBMIT_PENDING":
         case "MODAL_SUBMIT_SUCESS":
         case "MODAL_SUBMIT_ERROR":
+            console.log(action)
             return updateStateEntyties('modal', action);
 
             

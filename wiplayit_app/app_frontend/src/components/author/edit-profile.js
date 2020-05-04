@@ -8,6 +8,7 @@ import { GetModalLinkProps } from 'templates/component-props';
 
 import { EditProfileNavBar } from 'templates/navBar';
 import {  ChangeImageBtn  } from 'templates/buttons';
+import MainAppHoc from "components/index/index-hoc";
 
 import  * as types  from 'actions/types';
 import  * as action  from 'actions/actionCreators';
@@ -17,6 +18,7 @@ import { AlertComponent } from 'templates/partial-components';
 import  AjaxLoader from 'templates/ajax-loader';
 import  Helper from 'utils/helpers';
 import Api from 'utils/api';
+import * as checkType from 'helpers/check-types'; 
 
 
 
@@ -25,10 +27,33 @@ const api = new Api();
 
 const helper   = new Helper();  
 
-  
+
+class EditProfileRouter extends Component{
+
+    constructor(props) {
+       super(props);
+
+        this.state = {
+        }
+    }; 
 
 
-class EditProfile extends Component{
+    render() {
+        let props = {...this.props, ...this.state};
+        
+        return (
+            <div>
+                <EditProfile {...props}/>
+            </div>
+        );
+    };
+};
+ 
+export default MainAppHoc(EditProfileRouter);
+
+
+export class EditProfile extends Component{
+    isMounted = false;
 
     constructor(props) {
        super(props);
@@ -52,17 +77,19 @@ class EditProfile extends Component{
         this.handleChange   =  this.handleChange.bind(this);
     }; 
 
+
     onProfileUpdate = () =>{
  
         const onStoreChange = () => {
+            let {location} = this.props;
+            let state      = location && location.state;
+            let { obj, currentUser, apiUrl }   =  state ||  this.props;
 
-            let { obj, currentUser, apiUrl }      =  this.props.location && this.props.location.state || this.props;
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
             let byId         = obj && `userProfile${obj.id}`;
             
             let userProfile = byId && entities.userProfile[byId];
-            //let { currentUser} = cacheEntities;
             let { modal, errors } = entities;
 
             if (errors.error && !errors.displayErrors) {
@@ -71,35 +98,29 @@ class EditProfile extends Component{
                 delete errors.displayErrors;
                 delete errors.error;
             }
-            
-        
-            console.log(entities)
+              
             if (userProfile) {
                 //console.log(userProfile)
+                
+                let submitIsBool = checkType.isBoolean(submitting)
                                
                 this.setState({ submitting : userProfile.submitting});
 
-                if (userProfile) {
-                    //console.log(userProfile, userProfile.submitting)
-                    let user = userProfile.user;
-                    //currentUser =  currentUser && currentUser.user;
-                    this.setState({userProfile:user})
-                    
-                    if ( user && currentUser && currentUser.id === user.id) {
-
-                        //console.log(currentUser, user);
-                        if (userProfile.submitting != undefined && !currentUser.upDated) {
-                            currentUser['upDated'] = true;
-                            //console.log(userProfile)
-                            store.dispatch(action.getCurrentUserPending())
-                            store.dispatch(action.getCurrentUserSuccess(user));
-
-                            delete currentUser.upDated;
-                        }
+                let user = userProfile.user;
+                this.setState({userProfile:user})
+                
+                let {submitting, updated} = userProfile;    
+                if ( checkType.isBoolean(updated) ) {
+                
+                    if (updated && !currentUser.upDated) {
+                        currentUser['upDated'] = true;
+                        console.log('Im refreshing currentUser')
+                        store.dispatch(action.getCurrentUserPending())
+                        store.dispatch(action.getCurrentUserSuccess(user));
+                        delete currentUser.upDated;
                     }
-
-                    this.populateEditForm(user);
                 }
+                this.populateEditForm(user);
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -119,16 +140,20 @@ class EditProfile extends Component{
 
 
     componentWillUnmount() {
-            this.unsubscribe();
-        };
+        this.isMounted = false;
+        this.unsubscribe();
+    };
    
 
     componentDidMount() {
+        this.isMounted = true
         this.onProfileUpdate();
-        console.log(this.props)
+        //console.log(this.props)
         //let { cacheEntities } = this.props; 
         //let { userProfile }   = cacheEntities
-        let { obj, currentUser, apiUrl }      =  this.props.location && this.props.location.state || this.props;
+        let { obj, 
+              currentUser,
+              apiUrl }      =  this.props.location && this.props.location.state || this.props;
                
                           
         
@@ -220,6 +245,8 @@ class EditProfile extends Component{
 
         let editUserProfileProps = {
                 objName     : 'UserProfile',
+                modalName   : 'editor',
+                IsModal     : true,
                 isPut       : true,
                 obj         : userProfile, 
                 byId        : profileById,
@@ -265,10 +292,7 @@ class EditProfile extends Component{
 };
 
 
-    
 
-
-export default EditProfile;
 
 const ProfileEditComponent = props => {
     
@@ -373,7 +397,7 @@ const EditProfilePicture = (props)=>{
 
         let {userProfile, editUserProfileProps } = props;
         let profile  = userProfile && userProfile.profile;
-        let linkName = `Change`; 
+        let linkName = `Edit`; 
 
         editUserProfileProps = {...editUserProfileProps, linkName}
 
@@ -399,7 +423,7 @@ const EditProfilePicture = (props)=>{
                                 }
                             </div>
                     </div>
-                    <div className="chang-img-btn-box">
+                    <div className="change-img-btn-box">
                         <ChangeImageBtn {...editUserProfileProps}/>
                     </div>
                 </div>
@@ -429,23 +453,21 @@ export const EditContents = props  => (
 
 
 export class DropImage extends React.Component {
+    isMounted = false;
  
    constructor(props) {
       super(props);
       this.state = {
-         file: '',
-         imagePreviewUrl: '',
-         submitting: false,
-      };
+           file: '',
+           imagePreviewUrl : '',
+           submitting      : false,
+        };
 
-      this.handleChange = this.handleChange.bind(this);
-
-   }
+        this.handleChange = this.handleChange.bind(this);
+    }
 
     componentDidMount(){
-        console.log(this.props)
-
-      
+        this.isMounted = true;
         this.onImageDropUpdate();
     }
     
@@ -453,50 +475,24 @@ export class DropImage extends React.Component {
     onImageDropUpdate = () =>{
  
         const onStoreChange = () => {
+            if(!this.isMounted)  return;
+
             let storeUpdate          = store.getState();
             let {currentUser, obj}   = this.props; 
             let {entities}           = storeUpdate
-            let {modal, userProfile} = entities
-            let { background }       = this.props;
+            let {userProfile}        = entities
             let byId                 = obj && `userProfile${obj.id}`;
             userProfile              = userProfile[byId];
-            let user                 = userProfile && userProfile.user;
-            console.log(userProfile, currentUser, this.props)
 
-            if ( user && currentUser && currentUser.id === user.id) {
-                console.log(user);
-
-                if (userProfile.submitting != undefined && !currentUser.upDated) {
-                    currentUser['upDated'] = true;
-                    //console.log(userProfile)
-                    store.dispatch(action.getCurrentUserPending())
-                    store.dispatch(action.getCurrentUserSuccess(user));
-                    delete currentUser.upDated;
-                }
-            }
+                  
+            userProfile && this.setState({submitting : userProfile.submitting});
             
-            
-            
-            modal = modal && modal['dropImage'];
-            this.setState({submitting : modal.submitting});
-            //console.log(modal)
-
-
-            if (modal && modal.successMessage) {
-                !modal.profilePictureUpdate && ModalManager.close('dropImage' , background)
-                 modal['profilePictureUpdate'] = true;
-            }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
     componentWillUnmount() {
-        let storeUpdate   = store.getState();
-        let {entities} = storeUpdate
-        let {modal} = entities;
-        modal = modal && modal['dropImage'];
-
-        modal && modal.profilePictureUpdate && delete modal.profilePictureUpdate;
+        this.isMounted = false;
         this.unsubscribe();
     };
   
@@ -523,15 +519,18 @@ export class DropImage extends React.Component {
         let formData = helper.createFormData({'profile_picture': file});
         let submitProps = {
                formData,
-               IsModal   : true,
-               modalType : 'dropImage',
+               IsModal    : true,
+               modalName : 'dropImage',
             };
 
-        submitProps = Object.assign(submitProps , this.props)
-        console.log(submitProps)
-               
+        submitProps = {...this.props, ...submitProps};
         store.dispatch(handleSubmit(submitProps));
        
+
+    };
+
+    cancelImagePreview =()=>{
+        this.setState({imagePreviewUrl:undefined, file:''})
 
     };
 
@@ -551,31 +550,31 @@ export class DropImage extends React.Component {
     
     render() {
         let props = this.getProps();
-        let { background } = this.props
-        let submitButtonStyles = props.submitting?{opacity:'0.60'}:{};
+        let {imagePreviewUrl,
+             submitting, } = props
+        let submitButtonStyles = submitting?{opacity:'0.60'}:{};
     
-        let fieldSetStyles = props.submitting? {opacity:'0.60'}:{};
+        let fieldSetStyles = submitting? {opacity:'0.60'}:{};
+        console.log(props)
 
 
         return (
             <div>
             <fieldset style={ fieldSetStyles} 
-                      disabled={ props.submitting} >
-
-            
-               <div className="upload-preview">
+                      disabled={ submitting} >
+                        
+                <div className="upload-preview">
                   <div className="drop-image-btns">
                      <div className="dismiss-box">
                         <button  type="button" 
-                              onClick={()=> ModalManager.close('dropImage',background)}
-                              className="image-drop-dismiss-btn">
+                              onClick={()=> window.history.back()}
+                              className="image-drop-dismiss-btn btn-sm">
 
                             <span className="image-drop-dismiss-icon dismiss">&times;</span>
                         </button>
                      </div>
-
-                  
-                    { this.state.imagePreviewUrl?
+                                       
+                    { imagePreviewUrl?
                         <div className="add-image-btn-box">
                             <button  type="button" onClick={()=>this.handleImageAdd()}
                                   className="btn-sm image-add-btn">
@@ -587,11 +586,24 @@ export class DropImage extends React.Component {
                     }
                   </div>
 
-                  { this.state.imagePreviewUrl?
+                   { submitting &&
+                        <ul className="drop-image-spin-loader">
+                            <li><AjaxLoader/></li>
+                        </ul>
+                    }
+
+                  { imagePreviewUrl?
                      <div className="image-preview-container">
                         <div className="image-preview-box">
                             <img className="image-preview" alt="" src={this.state.imagePreviewUrl} />
                         </div>
+                        <div className="cancel-image-btn-box">
+                            <button  type="button" onClick={()=>this.cancelImagePreview()}
+                                  className="btn-sm image-cancel-btn">
+                                Cancel
+                            </button>
+                        </div>
+
                      </div>
                      :
                      <form className="image-form">

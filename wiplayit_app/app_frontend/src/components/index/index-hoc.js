@@ -120,16 +120,6 @@ export function MainAppHoc(Component) {
                 let dropImageModal = modal['dropImage'];
                 let userListModal  = modal['userList'];
 
-                if (editorModal && editorModal.modalIsOpen || optionsModal &&  optionsModal.modalIsOpen ||
-                    dropImageModal && dropImageModal.modalIsOpen || userListModal && userListModal.modalIsOpen  ) {
-                    //alert(e.modalIsOpen)
-                    //document.body.style['overflow-y'] = 'hidden';
-                    //document.body.style['overflow-x'] = 'hidden';
-                }else{
-                    //document.body.style['overflow-y'] = 'scroll';
-                    //document.body.style['overflow-x'] = 'scroll';
-                }
-                
                 //console.log(entities)
                 Object.keys(userAuth).length && this.confirmLogout(userAuth);
 
@@ -139,57 +129,11 @@ export function MainAppHoc(Component) {
                     delete errors.displayErrors;
                     delete errors.error;
                 }
+
+                this.handleCreateSuccess(editorModal);
+                this.handleUpdateSuccess(editorModal);
+                this.handleUpdateSuccess(dropImageModal);
                 
-
-                if (editorModal && Object.keys(editorModal).length) {
-                    console.log(editorModal)
-                    let { objName, 
-                          data,
-                          isCreating,
-                          modalIsOpen,
-                          hasProssed} = editorModal;
-                                                                               
-                    if (isCreating) {
-                        if ( objName === 'Question' ||
-                             objName === 'Post'     ||
-                             objName === 'Answer') {
-
-                            let {answer,question,post} = data
-                            console.log(data)
-
-                            if (data && !hasProssed) {
-                                console.log(editorModal, data)
-                                editorModal['hasProssed'] = true;
-                                window.history.back()
-                            
-                                setTimeout(()=> {
-                                    post     && this.handleNewPost(editorModal);
-                                    question && this.handleNewQuestion(editorModal);
-                                    answer   && this.handleNewAnswer(editorModal);
-
-                                    this.logMessage(editorModal)
-                                    delete modal.editor;
-                                
-                                }, 500);
-                            }
-                        }
-                                                               
-                    }else{
-                        if (data && !hasProssed ){
-                            editorModal['hasProssed'] = true;
-                            window.history.back()
-                            
-                            
-                            setTimeout(()=> {
-                                this.logMessage(editorModal)
-                                delete modal.editor;
-                                
-                            }, 500);
-                        }
-                    }
-                   
-                }
-
                 if (currentUser && currentUser.user) {
                     this._SetCurrentUser(currentUser.user)
                 }
@@ -200,6 +144,61 @@ export function MainAppHoc(Component) {
             this.unsubscribe = store.subscribe(onStoreChange);
 
         };
+
+        handleCreateSuccess(modal){
+            if (!modal) return;
+            if (!Object.keys(modal).length) return;
+
+            
+            if (modal.created) {
+                delete modal.created;
+                let data = modal.data
+
+                window.history.back()
+
+                let {answer,question,post} = data
+                post     && this.handleNewPost(modal);
+                question && this.handleNewQuestion(modal);
+                answer   && this.handleNewAnswer(modal);
+                this.logMessage(modal);
+              
+            }
+
+        }
+
+        handleUpdateSuccess(modal){
+            if (!modal) return;
+            if (!Object.keys(modal).length) return;
+            
+            if (modal.updated) {
+                delete modal.updated;
+                console.log(modal, !objName  === 'UserProfile')
+                let {data, objName, modalName} = modal;
+                                
+                objName   === 'UserProfile'  && this.handleUserProfileUpdate(data.user);
+
+                this.logMessage(modal);
+                this.closeModal(modal)
+               
+            }
+            
+        };
+
+        handleUserProfileUpdate(userProfile) {
+            console.log(userProfile)
+            userProfile && store.dispatch(action.getCurrentUserPending())
+            userProfile && store.dispatch(action.getCurrentUserSuccess(userProfile));
+
+        }
+
+        closeModal(modal){
+
+            let { objName, modalName} = modal;
+            if (objName  === 'UserProfile' && modalName === 'editor') return;
+            
+            window.history.back();
+
+        }
 
         handleNewQuestion =(params)=> {
             let data = params.data;
@@ -493,7 +492,7 @@ export function MainAppHoc(Component) {
 
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',} :
                                                     {opacity:'2',};
-            console.log(props)
+            //console.log(props)
 
             var isOnline = window.navigator.onLine;
             if (isOnline) {

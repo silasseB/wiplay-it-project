@@ -203,24 +203,15 @@ export default  class AppEditor extends Component{
  
         const onStoreChange = () => {
             if (this._isMounted) {
-
                 let storeUpdate   = store.getState();
-            
+          
                 let { entities } = storeUpdate
                 let { modal    } = entities
-
-                let { submited } = this.state
-                let { isPost   } = this.props;
-                                
+                                        
                 if (modal && modal['editor']) {
                     modal = modal['editor']
+                    modal && this.setState({ submitting : modal.submitting });
 
-                    this.setState({ submitting : modal.submitting || false });
-
-                    if (modal.successMessage && !submited) {
-                        this.setState({submited : true});
-                        ModalManager.close('editor')
-                    }
                 }
             }
         };

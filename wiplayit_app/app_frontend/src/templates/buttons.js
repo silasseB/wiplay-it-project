@@ -413,27 +413,7 @@ export const ProfileOptsModalBtns = props => {
 
     return (
       <div>
-         { props.obj && props.obj.user_can_edit?   
-            <button className="btn-sm edit-user-profile"
-                onClick={()=>{
-                    ModalManager.close('optionsMenu', props.background) 
-                    setTimeout(()=> {
-                        history.push(pathToEditProfile); 
-                    }, 500);
-                      
-                    }
-                }>
-                
-                 
-                Edit Profile
-            </button>
-         
-  
-            :
-            ""
-         }
-              
-         <button type="button" id="logout"  onClick={props.logout} className="btn-sm logout" >
+          <button type="button" id="logout"  onClick={props.logout} className="btn-sm logout" >
             Logout
          </button>
       </div>
@@ -703,6 +683,7 @@ export const OpenEditorBtn = props => {
 
 
 export const OpenOptionsModalBtn = props => {
+    //console.log(props)
     
     let  modalProps = {
             optionsMenuProps : {...props},

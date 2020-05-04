@@ -97,7 +97,7 @@
     width         : 90px;
     height        : 90px;
     border-radius : 50%;
-    margin        : 0 32%;
+    margin        : 0 40%;
 }
 
 .edit-image,.image-preview{
@@ -122,8 +122,7 @@
   font-size: 14px;
   float: right;
   margin: 8px 0 0 47%;
-  
-  display: block !important;
+    display: block !important;
 }
 
 
@@ -151,7 +150,15 @@
 }
 
 
- 
+
+.drop-image-spin-loader {
+    border     : px solid green;
+    margin     : 0 40%;
+    
+}
+.drop-image-spin-loader li {
+}
+
 .drop-image-btns {
    border: px solid red;
    display: flex;
@@ -159,7 +166,6 @@
 }
 
 .image-drop-dismiss{
-   width: 40px;
    background:#EEF2F1; 
 }
 
@@ -167,19 +173,44 @@
   border: 1px solid #D5D7D5;
   background: #CBCBCB;
   border-radius: 4px !important; 
+  margin: 0 10px;
 }
 
 
 .dismiss-box{
-  width: 100%;
+    border: px solid blue; 
+    padding: 0 10px;
+}
+
+
+.image-drop-dismiss-btn {
+    color      : red; 
+    background : #EEF2F1; 
+    border     : px solid red;
+}
+
+.image-drop-dismiss-icon {
+    font-size  : 18px;
+}
+
+.cancel-image-btn-box {
+    border     : px solid red;
+    text-align : center;
+    padding    : 10px 0;
+    color      : #5384e5;
+
 }
 
 .add-image-btn-box {
-   width: 20%;
+  border: px solid black;
+  text-align: right;
+  width: 100%;
+
 }
 
-.chang-img-btn-box {
+.change-img-btn-box {
     border: px solid blue;
+    text-align: center;
 }
 
 
@@ -419,6 +450,7 @@
     font-size  : 23px; 
     width      : 40px;
     background : #EEF2F1; 
+    border: 1px solid red;
 }
 
 .add-image-btn-box {
