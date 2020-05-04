@@ -140,7 +140,7 @@ export function entities(state=InitialState(), action) {
             
 
         case types.UPDATE_USER_PROFILE.SUCCESS:
-            
+            console.log(action, state)
             let profileToUpdate    = state.userProfile[byId];
             let updatedUserProfile = payLoad && payLoad.user;
             profileToUpdate        = profileToUpdate.user;

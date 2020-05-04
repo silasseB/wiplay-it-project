@@ -65,14 +65,11 @@ export function MainAppHoc(Component) {
                     
             if (!currentUser) {
                 let  cacheEntities  = this._cacheEntities();
-
                 currentUser = cacheEntities.currentUser;
                 currentUser = currentUser && currentUser.user;
             }
-            console.log(currentUser)
-            
+                       
             this.setState({currentUser})
-            
             return currentUser;  
         };
 
@@ -150,10 +147,8 @@ export function MainAppHoc(Component) {
         handleCreateSuccess(modal){
             if (!modal) return;
             if (!Object.keys(modal).length) return;
-            if(!checkType.isBoolean(modal.created)) return;
-            console.log(modal)
-            
-            if (modal.created) {
+                       
+            if (modal.created === true) {
                 delete modal.created;
                 this.closeModal(modal)
                 this.logMessage(modal);
@@ -173,15 +168,11 @@ export function MainAppHoc(Component) {
         handleUpdateSuccess(modal){
             if (!modal) return;
             if (!Object.keys(modal).length) return;
-            if(!checkType.isBoolean(modal.updated)) return;
-            console.log(modal)
-            
-            if (modal.updated) {
+                       
+            if (modal.updated === true) {
                 delete modal.updated;
                 this.closeModal(modal)
                 this.logMessage(modal);
-
-                console.log(modal, !objName  === 'UserProfile')
                 let {data, objName, modalName} = modal;
                                 
                 objName   === 'UserProfile'  && this.handleUserProfileUpdate(data.user);
@@ -194,7 +185,6 @@ export function MainAppHoc(Component) {
         };
 
         handleUserProfileUpdate(userProfile) {
-            console.log(userProfile)
             userProfile && store.dispatch(action.getCurrentUserPending())
             userProfile && store.dispatch(action.getCurrentUserSuccess(userProfile));
 
@@ -209,7 +199,6 @@ export function MainAppHoc(Component) {
         }
 
         handleNewQuestion =(params)=> {
-            console.log(params)
             let data = params.data;
             let { question } = data
             let pathToQuestion = question  && `/question/${question.slug}/${question.id}/`; 
@@ -234,7 +223,6 @@ export function MainAppHoc(Component) {
         };
 
         handleNewAnswer =(params)=> {
-            console.log(params)
             let data     = params.data;
             let question = params.obj;
             let {answer} = data;
@@ -251,14 +239,12 @@ export function MainAppHoc(Component) {
         };
 
         logMessage =(params)=> {
-            console.log(params)
             let {successMessage, data} = params && params;
             
             if ( successMessage ){
                 console.log(successMessage)
                 let message = {textMessage:successMessage, messageType:'success'}
                 this.displayAlertMessage(message)
-               
             }
 
         };
@@ -355,8 +341,6 @@ export function MainAppHoc(Component) {
             let userListModal    = modal['userList'];
             let navigationModal  = modal['navigationMenu'];
 
-            console.log(modal)
-           
             editorModal     && editorModal.modalIsOpen      && ModalManager.close('editor', background);
             optionsModal    && optionsModal.modalIsOpen     && ModalManager.close('optionsMenu', background);
             dropImageModal  && dropImageModal.modalIsOpen   && ModalManager.close('dropImage', background); 
@@ -399,8 +383,7 @@ export function MainAppHoc(Component) {
            
 
             let currentUser = this._SetCurrentUser();
-            console.log(currentUser)
-
+           
             if(!currentUser){
                 store.dispatch(getCurrentUser());
             }
@@ -440,7 +423,7 @@ export function MainAppHoc(Component) {
         };
 
         editfollowersOrUpVoters = (params) =>{
-            console.log(params)
+            //console.log(params)
             let {currentUser} = params || this.state;
             if (!currentUser.is_confirmed) {
                 let {obj}  = params && params;
@@ -500,15 +483,8 @@ export function MainAppHoc(Component) {
 
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',} :
                                                     {opacity:'2',};
-            console.log(props)
+            //console.log(props)
 
-            var isOnline = window.navigator.onLine;
-            if (isOnline) {
-               // console.log('online');
-            } else {
-               // console.log('offline');
-            }
-            
             return (
                 <div  className="app-container">
                     <fieldset style={ onModalStyles } 

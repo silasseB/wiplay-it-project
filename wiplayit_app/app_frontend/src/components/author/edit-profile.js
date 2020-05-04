@@ -35,7 +35,6 @@ class EditProfileRouter extends Component{
 
         this.state = {
         }
-        console.log(props)
     }; 
 
 
@@ -58,8 +57,7 @@ export class EditProfile extends Component{
 
     constructor(props) {
        super(props);
-       console.log(props)
-
+    
         this.state = {
             userProfile  :  null,
             profileById  :  null,
@@ -95,7 +93,7 @@ export class EditProfile extends Component{
             let { modal, errors } = entities;
               
             if (userProfile) {
-                //console.log(userProfile)
+                console.log(userProfile)
                 
                 let submitIsBool = checkType.isBoolean(userProfile.submitting)
                                
@@ -204,16 +202,15 @@ export class EditProfile extends Component{
 
     getUserEditProps(){
         let { profileById, userProfile, currentUser } = this.state;
-        console.log(currentUser)
-
+    
         let editUserProfileProps = {
                 objName     : 'UserProfile',
                 modalName   : 'editor',
                 IsModal     : true,
                 isPut       : true,
                 obj         : userProfile, 
-                byId        : profileById,
                 currentUser ,
+                ...this.state,
             } 
         return GetModalLinkProps.props(editUserProfileProps)    
 
@@ -364,8 +361,8 @@ const EditProfilePicture = (props)=>{
         let linkName = `Edit`; 
 
         editUserProfileProps = {...editUserProfileProps, linkName}
-        console.log(editUserProfileProps, props)
-
+        console.log(editUserProfileProps)
+    
         return(
             <div className="edit-img-container">
                 <ul className="item-title-box">
@@ -434,6 +431,7 @@ export class DropImage extends React.Component {
     componentDidMount(){
         this.isMounted = true;
         this.onImageDropUpdate();
+        console.log(this.props)
     }
     
 
@@ -443,14 +441,14 @@ export class DropImage extends React.Component {
             if(!this.isMounted)  return;
 
             let storeUpdate          = store.getState();
-            let {currentUser, obj}   = this.props; 
+            let {currentUser, obj}   = this.state; 
             let {entities}           = storeUpdate
             let {userProfile}        = entities
             let byId                 = obj && `userProfile${obj.id}`;
             userProfile              = userProfile[byId];
-
+            let isSubimiting         = userProfile &&  checkType.isBoolean(userProfile.submitting)
                   
-            userProfile && this.setState({submitting : userProfile.submitting});
+            isSubimiting && this.setState({submitting : userProfile.submitting});
             
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -559,8 +557,10 @@ export class DropImage extends React.Component {
 
                   { imagePreviewUrl?
                      <div className="image-preview-container">
-                        <div className="image-preview-box">
-                            <img className="image-preview" alt="" src={this.state.imagePreviewUrl} />
+                        <div className="image-preview-contents">
+                            <div className="image-preview-box">
+                                <img className="image-preview" alt="" src={this.state.imagePreviewUrl} />
+                            </div>
                         </div>
                         <div className="cancel-image-btn-box">
                             <button  type="button" onClick={()=>this.cancelImagePreview()}
