@@ -35,16 +35,16 @@ class EditProfileRouter extends Component{
 
         this.state = {
         }
+        console.log(props)
     }; 
 
 
     render() {
-        let props = {...this.props, ...this.state};
-        console.log(props)
+        console.log(this.props)
         
         return (
             <div>
-                <EditProfile {...props}/>
+                <EditProfile {...this.props}/>
             </div>
         );
     };
@@ -58,6 +58,7 @@ export class EditProfile extends Component{
 
     constructor(props) {
        super(props);
+       console.log(props)
 
         this.state = {
             userProfile  :  null,
@@ -94,7 +95,7 @@ export class EditProfile extends Component{
             let { modal, errors } = entities;
               
             if (userProfile) {
-                console.log(userProfile)
+                //console.log(userProfile)
                 
                 let submitIsBool = checkType.isBoolean(userProfile.submitting)
                                
@@ -120,24 +121,17 @@ export class EditProfile extends Component{
         this.isMounted = true
         this.onProfileUpdate();
         console.log(this.props)
-        let { cacheEntities } = this.props; 
+        let { cacheEntities, location } = this.props; 
+        let state = location && location.state || this.props;
         //let { userProfile }   = cacheEntities
-        let { apiUrl }      =  this.props.location && this.props.location.state || this.props;
-        let currentUser = cacheEntities.currentUser;
-               
-                          
-        
-        let userProfile =  currentUser && currentUser.user;
-        let profileById = userProfile && `userProfile${userProfile.id}`;
+        let { apiUrl, currentUser, obj, byId } =  state;
 
-        console.log(userProfile)
+        this.setState({...state});
 
-        this.setState({profileById, userProfile});
-
-        if (userProfile) {
-            store.dispatch(action.getUserProfilePending(profileById));
-            store.dispatch(action.getUserProfileSuccess(profileById, userProfile));
-            this.populateEditForm(userProfile);
+        if (obj) {
+            store.dispatch(action.getUserProfilePending(byId));
+            store.dispatch(action.getUserProfileSuccess(byId, obj));
+            this.populateEditForm(obj);
 
         }else {
             //let {id, slug} = this.props.match && this.props.match.params && this.props.match.params;
@@ -152,7 +146,7 @@ export class EditProfile extends Component{
         if (!userProfile) return;
         if (!Object.keys(userProfile).length) return;
 
-        console.log(userProfile)
+        //console.log(userProfile)
         
         let {form}     =  this.state;
             
@@ -177,7 +171,8 @@ export class EditProfile extends Component{
 
     getProps(){
         
-        let props = {
+        return {
+            ...this.props,
             handleChange         : this.handleChange, 
             textAreaProps        : this.textAreaProps(),
             submitProps          : this.submitProps(),
@@ -185,8 +180,6 @@ export class EditProfile extends Component{
             editUserProfileProps : this.getUserEditProps(),
             ...this.state,
         }
-
-        return Object.assign(props, this.props);
     }
  
     textAreaProps() {
@@ -211,7 +204,7 @@ export class EditProfile extends Component{
 
     getUserEditProps(){
         let { profileById, userProfile, currentUser } = this.state;
-        //let currentUser = this.props.currentUser || this.props.location.state;
+        console.log(currentUser)
 
         let editUserProfileProps = {
                 objName     : 'UserProfile',
@@ -365,11 +358,13 @@ const ProfileEditComponent = props => {
 
 const EditProfilePicture = (props)=>{
 
+        //console.log(props)
         let {userProfile, editUserProfileProps } = props;
         let profile  = userProfile && userProfile.profile;
         let linkName = `Edit`; 
 
         editUserProfileProps = {...editUserProfileProps, linkName}
+        console.log(editUserProfileProps, props)
 
         return(
             <div className="edit-img-container">

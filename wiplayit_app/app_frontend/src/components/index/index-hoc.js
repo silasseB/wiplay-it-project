@@ -9,6 +9,7 @@ import  * as action  from 'actions/actionCreators';
 import { ModalManager}   from  "components/modal/modal-container";
 
 import { AlertComponent } from "templates/partial-components";
+import * as checkType from 'helpers/check-types'; 
 
 import {store} from "store/index";
 import {history} from "App";
@@ -149,20 +150,22 @@ export function MainAppHoc(Component) {
         handleCreateSuccess(modal){
             if (!modal) return;
             if (!Object.keys(modal).length) return;
-
+            if(!checkType.isBoolean(modal.created)) return;
+            console.log(modal)
             
             if (modal.created) {
                 delete modal.created;
-                let data = modal.data
-
-                window.history.back()
-
-                let {answer,question,post} = data
-                post     && this.handleNewPost(modal);
-                question && this.handleNewQuestion(modal);
-                answer   && this.handleNewAnswer(modal);
+                this.closeModal(modal)
                 this.logMessage(modal);
-              
+                let data = modal.data
+                               
+                setTimeout(()=> {
+                    let {answer,question,post} = data
+
+                    post     && this.handleNewPost(modal);
+                    question && this.handleNewQuestion(modal);
+                    answer   && this.handleNewAnswer(modal);
+                }, 100);
             }
 
         }
@@ -170,16 +173,21 @@ export function MainAppHoc(Component) {
         handleUpdateSuccess(modal){
             if (!modal) return;
             if (!Object.keys(modal).length) return;
+            if(!checkType.isBoolean(modal.updated)) return;
+            console.log(modal)
             
             if (modal.updated) {
                 delete modal.updated;
+                this.closeModal(modal)
+                this.logMessage(modal);
+
                 console.log(modal, !objName  === 'UserProfile')
                 let {data, objName, modalName} = modal;
                                 
                 objName   === 'UserProfile'  && this.handleUserProfileUpdate(data.user);
 
-                this.logMessage(modal);
-                this.closeModal(modal)
+                
+                
                
             }
             
@@ -196,12 +204,12 @@ export function MainAppHoc(Component) {
 
             let { objName, modalName} = modal;
             if (objName  === 'UserProfile' && modalName === 'editor') return;
+            window.history.back(); 
             
-            window.history.back();
-
         }
 
         handleNewQuestion =(params)=> {
+            console.log(params)
             let data = params.data;
             let { question } = data
             let pathToQuestion = question  && `/question/${question.slug}/${question.id}/`; 
@@ -391,6 +399,7 @@ export function MainAppHoc(Component) {
            
 
             let currentUser = this._SetCurrentUser();
+            console.log(currentUser)
 
             if(!currentUser){
                 store.dispatch(getCurrentUser());

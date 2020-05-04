@@ -80,6 +80,7 @@ export const ProfileComponent = props => {
     }
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+    console.log(editUserProfileProps)
 
     let EditorModalBtnBigScreen   = <EditorLinkBigScreen {...editUserProfileProps}/>;
     let MenuModalBtn              = <OptBtnSmallScreen {...editUserProfileProps}/>;
@@ -216,7 +217,7 @@ export const ProfileComponent = props => {
                                     <div className="edit-credential-btn-box">
 
                                         {EditorModalBtnBigScreen }
-                                        <EditorModalBtnSmallScreen/>
+                                        <EditorModalBtnSmallScreen {...props}/>
                                     </div>
                                     :
                                     ""

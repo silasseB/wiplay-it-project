@@ -707,7 +707,7 @@ export const OpenOptionsModalBtn = props => {
 
 export const ChangeImageBtn = props => {
     let location = useLocation();
-    //console.log(props)
+    console.log(props)
     let {currentUser} = props && props;
 
     let modalProps = {

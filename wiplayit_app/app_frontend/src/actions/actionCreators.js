@@ -124,7 +124,8 @@ export const ModalSubmitSuccess = (params) => {
             successMessage,
             ...params,
             submitting : false,
-            updated    : true,
+            updated    : isUpdating || false,
+            created    : isCreating || false,
         }
         
     };

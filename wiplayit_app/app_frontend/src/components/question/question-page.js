@@ -171,8 +171,10 @@ class QuestionPage extends Component {
                         { question.error &&
                             <PageErrorComponent {...props}/>
                         }
-
-                        <Questions {...props}/>
+                        
+                        {!question.isLoading &&
+                            <Questions {...props}/>
+                        }
                          
                     </div>
                 }           
@@ -195,15 +197,15 @@ export default  MainAppHoc(QuestionPage);
 
 
 export const Questions = props => {
-   var {questionById, entities} = props;
-   let {question, answers} = entities;
-   
-   question = question && question[questionById];
-   question = question && question.question;
+    var {questionById, entities} = props;
+    let {question, answers} = entities;
+    question = question && question[questionById];
+    if(question && question.isLoading) return
 
-   let questionProps = { question};
+    question = question && question.question;
+    let questionProps = { question};
    
-   questionProps = {...props, ...questionProps}; 
+    questionProps = {...props, ...questionProps}; 
 
    
     return (
