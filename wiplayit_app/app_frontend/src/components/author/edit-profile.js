@@ -40,6 +40,7 @@ class EditProfileRouter extends Component{
 
     render() {
         let props = {...this.props, ...this.state};
+        console.log(props)
         
         return (
             <div>
@@ -91,54 +92,24 @@ export class EditProfile extends Component{
             
             let userProfile = byId && entities.userProfile[byId];
             let { modal, errors } = entities;
-
-            if (errors.error && !errors.displayErrors) {
-                errors['displayErrors'] = true;
-                this.displayErrorMessage(errors.error);
-                delete errors.displayErrors;
-                delete errors.error;
-            }
               
             if (userProfile) {
-                //console.log(userProfile)
+                console.log(userProfile)
                 
-                let submitIsBool = checkType.isBoolean(submitting)
+                let submitIsBool = checkType.isBoolean(userProfile.submitting)
                                
                 this.setState({ submitting : userProfile.submitting});
 
                 let user = userProfile.user;
-                this.setState({userProfile:user})
-                
-                let {submitting, updated} = userProfile;    
-                if ( checkType.isBoolean(updated) ) {
-                
-                    if (updated && !currentUser.upDated) {
-                        currentUser['upDated'] = true;
-                        console.log('Im refreshing currentUser')
-                        store.dispatch(action.getCurrentUserPending())
-                        store.dispatch(action.getCurrentUserSuccess(user));
-                        delete currentUser.upDated;
-                    }
-                }
-                this.populateEditForm(user);
+                user && this.setState({userProfile:user})
+
+                user && this.populateEditForm(user);
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
-    displayErrorMessage =(errorMessage)=>{
-        let message = {textMessage:errorMessage, messageType:'error'}
-        this.displayAlertMessage(message)
-    }
-
-    displayAlertMessage = (message) => {
-        this.setState({ displayMessage : true, message });
-        setTimeout(()=> {
-            this.setState({displayMessage : false}); 
-            }, 5000);
-    }
-
-
+   
     componentWillUnmount() {
         this.isMounted = false;
         this.unsubscribe();
@@ -148,21 +119,20 @@ export class EditProfile extends Component{
     componentDidMount() {
         this.isMounted = true
         this.onProfileUpdate();
-        //console.log(this.props)
-        //let { cacheEntities } = this.props; 
+        console.log(this.props)
+        let { cacheEntities } = this.props; 
         //let { userProfile }   = cacheEntities
-        let { obj, 
-              currentUser,
-              apiUrl }      =  this.props.location && this.props.location.state || this.props;
+        let { apiUrl }      =  this.props.location && this.props.location.state || this.props;
+        let currentUser = cacheEntities.currentUser;
                
                           
         
-        let userProfile = obj
+        let userProfile =  currentUser && currentUser.user;
         let profileById = userProfile && `userProfile${userProfile.id}`;
 
-        //console.log(userProfile)
+        console.log(userProfile)
 
-        this.setState({profileById, userProfile, currentUser});
+        this.setState({profileById, userProfile});
 
         if (userProfile) {
             store.dispatch(action.getUserProfilePending(profileById));
@@ -179,22 +149,22 @@ export class EditProfile extends Component{
 
     
     populateEditForm(userProfile ){
-        
-        if (userProfile) {
-            let {form}     =  this.state;
-            
-            let {first_name, last_name} = userProfile
+        if (!userProfile) return;
+        if (!Object.keys(userProfile).length) return;
 
-            let { live, credential, favorite_quote } = userProfile.profile 
-      
-            form    = { first_name, last_name, live, credential, favorite_quote };
+        console.log(userProfile)
+        
+        let {form}     =  this.state;
             
-            this.setState({ form, userProfile });
-        }
+        let {first_name, last_name} = userProfile
+
+        let { live, credential, favorite_quote } = userProfile.profile 
+      
+        form    = { first_name, last_name, live, credential, favorite_quote };
+
+        this.setState({ form, userProfile });
     }
 
-    
-   
     handleChange(e){
       e.preventDefault()
       let form = this.state.form;

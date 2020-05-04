@@ -52,7 +52,7 @@ export function MainAppHoc(Component) {
                     let { auth } = userAuth;
 
                     if (auth && auth.isLoggedIn && auth.tokenKey) {
-             		    return auth.tokenKey;
+             		    return true;
                     }
                	}
             }
@@ -68,6 +68,7 @@ export function MainAppHoc(Component) {
                 currentUser = cacheEntities.currentUser;
                 currentUser = currentUser && currentUser.user;
             }
+            console.log(currentUser)
             
             this.setState({currentUser})
             
@@ -467,7 +468,8 @@ export function MainAppHoc(Component) {
      
         getProps(){
 
-            let props = {
+            return {
+                ...this.props,
                 logout                  : this.logout,
                 editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
                 reloadPage              : this.reloadPage.bind(this),
@@ -475,9 +477,6 @@ export function MainAppHoc(Component) {
                 redirectToRouter        : this.redirectToRouter.bind(this),
                 ...this.state,
             };
-         
-            Object.assign(props, this.props );
-            return props;  
         };
 
         onBeforeUnload =()=>{
@@ -492,7 +491,7 @@ export function MainAppHoc(Component) {
 
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',} :
                                                     {opacity:'2',};
-            //console.log(props)
+            console.log(props)
 
             var isOnline = window.navigator.onLine;
             if (isOnline) {
