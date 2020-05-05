@@ -9,43 +9,35 @@ import {ModalOpener} from 'components/modal/modal-conf'
 
 
 export const GetModalType = (props)=>{
-
-    let {
-        modalName, 
-        editorProps,
-        optionsMenuProps,
-        navBarMenuProps,
-        dropImageProps,
-        userListProps } = props;
-
-
+    let modalProps = props;
+    
     let getEditorContents = () =>{
-        let { objName } = editorProps;
-        return objName === 'UserProfile' && <EditProfile {...editorProps}/> || <AppEditor {...editorProps}/>
+        let { objName } = modalProps;
+        return objName === 'UserProfile' && <EditProfile {...modalProps}/> || <AppEditor {...modalProps}/>
     }
         
-    //sconsole.log(props)
+    let { modalName } = modalProps;
 
     switch(modalName){
         case 'editor':
-            editorProps['modalContents'] = getEditorContents();
-            return ModalOpener.editorModal(modalName, editorProps);
+            modalProps['modalContents'] = getEditorContents();
+            return ModalOpener.editorModal(modalName, modalProps);
 
         case 'optionsMenu':
-            optionsMenuProps['modalContents'] = <ModalOptionsMenu {...optionsMenuProps}/>
-            return ModalOpener.optionsMenuModal(modalName, optionsMenuProps);
+            modalProps['modalContents'] = <ModalOptionsMenu {...modalProps}/>
+            return ModalOpener.optionsMenuModal(modalName, modalProps);
 
         case 'navigationMenu':
-            navBarMenuProps['modalContents'] = <NavBarMenuModalItems {...navBarMenuProps}/>
-            return ModalOpener.navBarMenuModal(modalName, navBarMenuProps);
+            modalProps['modalContents'] = <NavBarMenuModalItems {...modalProps}/>
+            return ModalOpener.navBarMenuModal(modalName, modalProps);
 
         case 'dropImage':
-            dropImageProps['modalContents'] = <DropImage {...dropImageProps}/>
-            return ModalOpener.dropImageModal(modalName, dropImageProps);
+            modalProps['modalContents'] = <DropImage {...modalProps}/>
+            return ModalOpener.dropImageModal(modalName, modalProps);
 
         case 'userList':
-            userListProps['modalContents'] = <UserListBox {...userListProps}/>
-            return ModalOpener.userListModal(modalName, userListProps);
+            modalProps['modalContents'] = <UserListBox {...modalProps}/>
+            return ModalOpener.userListModal(modalName, modalProps);
 
         default:
             return; 

@@ -104,14 +104,12 @@ export function entities(state=InitialState(), action) {
 
     switch (action.type){
         case "SERVER_ERROR":
-            console.log(action)
             return updateStateEntyties('errors', action);
 
         case 'MODAL_ROUTER':
         case "MODAL_SUBMIT_PENDING":
         case "MODAL_SUBMIT_SUCESS":
         case "MODAL_SUBMIT_ERROR":
-            console.log(action)
             return updateStateEntyties('modal', action);
 
             
@@ -140,7 +138,6 @@ export function entities(state=InitialState(), action) {
             
 
         case types.UPDATE_USER_PROFILE.SUCCESS:
-            console.log(action, state)
             let profileToUpdate    = state.userProfile[byId];
             let updatedUserProfile = payLoad && payLoad.user;
             profileToUpdate        = profileToUpdate.user;

@@ -200,16 +200,12 @@ export const ModalManager = {
 
 
 export const Modal=(props)=> {
-    
-    let {modalProps} = props;
-    //console.log(props)
-
-    let modal = GetModalType(modalProps) 
+   let modal = GetModalType(props) 
 
     return (
         <div>
           {modal}
         </div>
-        )
+    )
    
 }

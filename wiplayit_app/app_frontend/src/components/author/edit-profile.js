@@ -39,8 +39,7 @@ class EditProfileRouter extends Component{
 
 
     render() {
-        console.log(this.props)
-        
+               
         return (
             <div>
                 <EditProfile {...this.props}/>
@@ -59,9 +58,9 @@ export class EditProfile extends Component{
        super(props);
     
         this.state = {
-            userProfile  :  null,
-            profileById  :  null,
+            userProfile  :  undefined,
             submitting   : false,
+            currentUser  : undefined, 
 
             form         : {
                first_name       : "",
@@ -81,23 +80,20 @@ export class EditProfile extends Component{
     onProfileUpdate = () =>{
  
         const onStoreChange = () => {
-            let {location} = this.props;
-            let state      = location && location.state;
-            let { obj, currentUser, apiUrl }   =  state ||  this.props;
+            let { byId, currentUser}     =  this.state; 
 
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
-            let byId         = obj && `userProfile${obj.id}`;
-            
-            let userProfile = byId && entities.userProfile[byId];
+            let {userProfile} = entities;
+                        
+            userProfile = userProfile[byId];
             let { modal, errors } = entities;
               
             if (userProfile) {
-                console.log(userProfile)
-                
-                let submitIsBool = checkType.isBoolean(userProfile.submitting)
-                               
-                this.setState({ submitting : userProfile.submitting});
+                console.log(userProfile, this.state)
+                let isSubimiting  = userProfile &&  checkType.isBoolean(userProfile.submitting)
+                                                            
+                isSubimiting && this.setState({ submitting : userProfile.submitting});
 
                 let user = userProfile.user;
                 user && this.setState({userProfile:user})
@@ -119,32 +115,62 @@ export class EditProfile extends Component{
         this.isMounted = true
         this.onProfileUpdate();
         console.log(this.props)
-        let { cacheEntities, location } = this.props; 
-        let state = location && location.state || this.props;
-        //let { userProfile }   = cacheEntities
-        let { apiUrl, currentUser, obj, byId } =  state;
+        let { location, match } = this.props; 
+        let state =  location && location.state;
+        
+        
 
-        this.setState({...state});
+        if (state) {
+            this.setState({...state});
 
-        if (obj) {
+            let { obj, byId } =  state;
             store.dispatch(action.getUserProfilePending(byId));
             store.dispatch(action.getUserProfileSuccess(byId, obj));
             this.populateEditForm(obj);
-
-        }else {
-            //let {id, slug} = this.props.match && this.props.match.params && this.props.match.params;
-            //let apiUrl = api.updateProfileApi(id)
-            //getUserProfile(id, apiUrl);
+            return;
         }
-        
+
+        let {obj, byId} = this.props 
+        if (obj) {
+
+            this.setState({...this.props});
+            store.dispatch(action.getUserProfilePending(byId));
+            store.dispatch(action.getUserProfileSuccess(byId, obj));
+            this.populateEditForm(obj);
+            return;
+        }
+
+        this.getUserProfile()
     };
+
+    getUserProfile(){
+        let { cacheEntities, match } = this.props; 
+        let { userProfile, currentUser } = cacheEntities;
+
+        let {id}    = match && match.params;
+        let byId    = `userProfile${id}`;
+        userProfile = userProfile && userProfile[byId];
+
+        currentUser = currentUser.user;
+        userProfile = userProfile.user;
+        this.setState({userProfile, currentUser, byId});
+
+        if (userProfile) {
+            
+            store.dispatch(action.getUserProfilePending(byId));
+            store.dispatch(action.getUserProfileSuccess(byId, userProfile));
+            this.populateEditForm(userProfile);
+            return;
+        }
+
+        getUserProfile(id);
+    }
+
 
     
     populateEditForm(userProfile ){
         if (!userProfile) return;
         if (!Object.keys(userProfile).length) return;
-
-        //console.log(userProfile)
         
         let {form}     =  this.state;
             
@@ -164,9 +190,6 @@ export class EditProfile extends Component{
       this.setState({form})
     }
 
-    
-
-
     getProps(){
         
         return {
@@ -185,7 +208,8 @@ export class EditProfile extends Component{
            value     : this.state.form.favorite_quote,
            onChange  : this.handleChange,
            name      : "favorite_quote",
-           className : "favorite_quote"
+           className : "favorite_quote",
+           placeholder:'You favourite quote',
         };
     };
 
@@ -201,17 +225,19 @@ export class EditProfile extends Component{
     };
 
     getUserEditProps(){
-        let { profileById, userProfile, currentUser } = this.state;
-    
+        let { byId, userProfile, currentUser } = this.state;
+            
         let editUserProfileProps = {
                 objName     : 'UserProfile',
-                modalName   : 'editor',
-                IsModal     : true,
                 isPut       : true,
+                isModal     : true,
+                modalName   : 'editor',
                 obj         : userProfile, 
                 currentUser ,
-                ...this.state,
+                byId,
+
             } 
+
         return GetModalLinkProps.props(editUserProfileProps)    
 
     }
@@ -221,11 +247,10 @@ export class EditProfile extends Component{
     };
 
     render() {
-      let props = this.getProps();
-      let alertMessageStyles = props.displayMessage?{ display : 'block'}:
-                                                    { display : 'none' };
-          
-      var userProfile = props.userProfile
+        let props = this.getProps();
+        let alertMessageStyles = props.displayMessage?{ display : 'block'}:
+                                                      { display : 'none' };
+        var userProfile = props.userProfile
 
       return (
         <div>
@@ -309,6 +334,7 @@ const ProfileEditComponent = props => {
                     <div className="input-box">
                         <input
                             type="text" 
+                            placeholder="Your location"
                             className=""
                             name="live"
                             value={props.form.live}
@@ -325,7 +351,8 @@ const ProfileEditComponent = props => {
                     </ul>
                     <div className="input-box">
                         <input
-                            type="text" 
+                            type="text"
+                            placeholder="About you" 
                             className=""
                             name="credential"
                             value={props.form.credential}
@@ -361,7 +388,7 @@ const EditProfilePicture = (props)=>{
         let linkName = `Edit`; 
 
         editUserProfileProps = {...editUserProfileProps, linkName}
-        console.log(editUserProfileProps)
+        //console.log(editUserProfileProps)
     
         return(
             <div className="edit-img-container">
@@ -389,7 +416,6 @@ const EditProfilePicture = (props)=>{
                         <ChangeImageBtn {...editUserProfileProps}/>
                     </div>
                 </div>
-
             </div>   
         )
 };
@@ -444,11 +470,13 @@ export class DropImage extends React.Component {
             let {currentUser, obj}   = this.state; 
             let {entities}           = storeUpdate
             let {userProfile}        = entities
-            let byId                 = obj && `userProfile${obj.id}`;
+            let {byId}               = this.props;
+
             userProfile              = userProfile[byId];
-            let isSubimiting         = userProfile &&  checkType.isBoolean(userProfile.submitting)
-                  
-            isSubimiting && this.setState({submitting : userProfile.submitting});
+            if (userProfile) {
+                let isSubimiting  =   checkType.isBoolean(userProfile.submitting)
+                isSubimiting && this.setState({submitting : userProfile.submitting});
+            }
             
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -461,20 +489,20 @@ export class DropImage extends React.Component {
   
     
     handleChange(event) {
-      event.preventDefault();
-      var reader = new FileReader();
-      var file = event.target.files[0];
+        event.preventDefault();
+        var reader = new FileReader();
+        var file = event.target.files[0];
 
-      reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-    }
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        };
 
-    reader.readAsDataURL(file)
+        reader.readAsDataURL(file);
   
-    }
+    };
 
     handleImageAdd = (params)=>{
         let file = this.state.file;
@@ -500,17 +528,15 @@ export class DropImage extends React.Component {
 
     getProps() {
    
-      let props = {
-        file         : this.state.file,
-        userProfile  : this.props.userProfile,
-        isImageDrop  : true,
-        ...this.state,
-                           
-      };
+        return {
+            ...this.props,
+            file         : this.state.file,
+            userProfile  : this.props.userProfile,
+            isImageDrop  : true,
+            ...this.state,
+        };
+    };
 
-      return props;
-    }
-    
     render() {
         let props = this.getProps();
         let {imagePreviewUrl,
@@ -518,9 +544,7 @@ export class DropImage extends React.Component {
         let submitButtonStyles = submitting?{opacity:'0.60'}:{};
     
         let fieldSetStyles = submitting? {opacity:'0.60'}:{};
-        console.log(props)
-
-
+       
         return (
             <div>
             <fieldset style={ fieldSetStyles} 

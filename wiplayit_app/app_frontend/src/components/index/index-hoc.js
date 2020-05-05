@@ -138,7 +138,7 @@ export function MainAppHoc(Component) {
                 }
                                 
             }
-            };
+        };
 
             this.unsubscribe = store.subscribe(onStoreChange);
 
@@ -151,7 +151,7 @@ export function MainAppHoc(Component) {
             if (modal.created === true) {
                 delete modal.created;
                 this.closeModal(modal)
-                this.logMessage(modal);
+                this.logMessage(modal.successMessage);
                 let data = modal.data
                                
                 setTimeout(()=> {
@@ -172,14 +172,10 @@ export function MainAppHoc(Component) {
             if (modal.updated === true) {
                 delete modal.updated;
                 this.closeModal(modal)
-                this.logMessage(modal);
+                this.logMessage(modal.successMessage);
                 let {data, objName, modalName} = modal;
-                                
+                             
                 objName   === 'UserProfile'  && this.handleUserProfileUpdate(data.user);
-
-                
-                
-               
             }
             
         };
@@ -238,15 +234,11 @@ export function MainAppHoc(Component) {
 
         };
 
-        logMessage =(params)=> {
-            let {successMessage, data} = params && params;
-            
-            if ( successMessage ){
-                console.log(successMessage)
-                let message = {textMessage:successMessage, messageType:'success'}
-                this.displayAlertMessage(message)
-            }
+        logMessage =(message)=> {
+            if (!message) return;
 
+            message = {textMessage:message, messageType:'success'}
+            this.displayAlertMessage(message)
         };
 
         displayErrorMessage =(errorMessage)=>{
@@ -255,11 +247,12 @@ export function MainAppHoc(Component) {
         };
 
         displayAlertMessage = (message) => {
+            if (!this._isMounted) return;
                        
-            this._isMounted &&  this.setState({ displayMessage : true, message });
+            this.setState({ displayMessage : true, message });
             setTimeout(()=> {
-                 this._isMounted && this.setState({displayMessage : false}); 
-                }, 5000);
+                this.setState({displayMessage : false}); 
+            }, 5000);
         };
 
         redirectToRouter =(params)=>{

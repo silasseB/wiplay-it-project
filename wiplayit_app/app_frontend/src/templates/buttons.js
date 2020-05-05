@@ -614,22 +614,19 @@ export const OpenEditorBtn = props => {
   
     let { modalProps, currentUser} = props ;
     let { className } =  props;
-
       
     let editorProps = modalProps && modalProps.editorProps || {...props};
 
     modalProps = {
-            editorProps,
-            modalName   : 'editor', 
+            ...editorProps,
+            modalName   : 'editor',
+            isModal     :  true, 
         };
 
     
     let {objName, isPut, linkName, editorLinkStyles} = editorProps;
     let context   = objName && objName.toLowerCase();
     
-    let state = { modalProps } 
-    
-
     let getButtonName =()=> {
         let Edit = isPut && "Edit " || "";
         return `${Edit}${objName}`;
@@ -646,8 +643,6 @@ export const OpenEditorBtn = props => {
     
     linkName   = linkName?linkName:getButtonName();
     let styles = getEditorStyles();
-
-    //console.log(state)  
 
     let storeUpdate  = store.getState();
     let { entities } = storeUpdate;
@@ -667,7 +662,7 @@ export const OpenEditorBtn = props => {
                         }
 
                         return setTimeout(()=> {
-                                 Modal({modalProps}) ; 
+                                 Modal(modalProps) ; 
                             }, 500);
 
                      
@@ -686,15 +681,12 @@ export const OpenOptionsModalBtn = props => {
     //console.log(props)
     
     let  modalProps = {
-            optionsMenuProps : {...props},
+            ...props,
             modalName   : 'optionsMenu', 
         }; 
-
-    let state = { modalProps  } 
-       
-        
+      
     return(
-        <button className="btn-sm options-btn"    onClick={()=> {  Modal(state) }}>
+        <button className="btn-sm options-btn"    onClick={()=> {  Modal(modalProps) }}>
              <i className="material-icons ">more_horiz</i>  
         </button>
         
@@ -706,17 +698,15 @@ export const OpenOptionsModalBtn = props => {
 
 
 export const ChangeImageBtn = props => {
-    let location = useLocation();
     let {currentUser} = props && props;
+    console.log(props)
 
     let modalProps = {
-            dropImageProps : {...props},
-            modalName      : 'dropImage', 
+            ...props,
+            modalName : 'dropImage', 
+            isModal   : true, 
         }; 
-
-    let state    = { modalProps };
-
-
+    
     let linkName = props.linkName || `Edit`;
 
     return(
@@ -727,7 +717,7 @@ export const ChangeImageBtn = props => {
                             store.dispatch(handleError(error));
                             return;   
                         }
-                        Modal(state)
+                        Modal(modalProps)
 
 
                     }}>
@@ -744,16 +734,14 @@ export const OpenUsersModalBtn = props => {
     let {obj, linkName} = props
     
     let modalProps = {
-            userListProps : {...props},
-            modalName     : 'userList', 
+            ...props,
+            modalName : 'userList', 
         }; 
-
-    let state = { modalProps } 
         
         
     return(
         <button className="btn-sm "    onClick={()=> {
-                        Modal(state)
+                        Modal(modalProps)
 
                     }}>
             {linkName}  

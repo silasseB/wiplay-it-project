@@ -398,14 +398,14 @@ export function handleSubmit(props) {
         objName,  
         formData,
         apiUrl,
-        IsModal,
+        isModal,
         modalName,
         obj } = props;
 
 
    
     byId = byId?byId:"newObject"; 
-    IsModal = IsModal || false;
+    isModal = isModal || false;
 
     let updateProps = {
             actionType,
@@ -431,9 +431,9 @@ export function handleSubmit(props) {
 
 		    Api.put(apiUrl, formData)
 		    .then(response => {
-		        console.log(response)
+		        //console.log(response)
                 updateProps['data'] = prepPayLoad(objName, response.data);
-                IsModal && dispatch(action.ModalSubmitSuccess(updateProps))
+                isModal && dispatch(action.ModalSubmitSuccess(updateProps))
 			    dispatch(action.updateActionSuccess(updateProps));
 			
 		    })
@@ -442,7 +442,7 @@ export function handleSubmit(props) {
 			
 			    if (error.response && error.response.data) {
                    createProps['error'] = error.response.data;
-                   IsModal && dispatch(action.ModalSubmitError(updateProps))
+                   isModal && dispatch(action.ModalSubmitError(updateProps))
 			       dispatch(action.updateActionError(updateProps));
 			    }else {
       		       dispatch(action.handleError(error.request))
@@ -457,7 +457,7 @@ export function handleSubmit(props) {
 		    Api.post(props.apiUrl, props.formData)
 		    .then(response => {
 			    createProps['data'] = prepPayLoad(objName, response.data); 
-                IsModal && dispatch(action.ModalSubmitSuccess(createProps))
+                isModal && dispatch(action.ModalSubmitSuccess(createProps))
 			    dispatch(action.createActionSuccess(createProps));
                 
 		    })
@@ -466,7 +466,7 @@ export function handleSubmit(props) {
 				
 			    if (error.response && error.response.data) {
                     createProps['error'] = error.response.data;
-                    IsModal && dispatch(action.ModalSubmitError(createProps))
+                    isModal && dispatch(action.ModalSubmitError(createProps))
 				    dispatch(action.createActionError(createProps));
       		
          	    }else{

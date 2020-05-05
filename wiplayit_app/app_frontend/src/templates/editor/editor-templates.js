@@ -307,7 +307,7 @@ export const PostEditor = (props) => {
 
 export const QuestionEditor = (props) => {
     let {objName} = props;
-    console.log(objName)
+   
     if(objName !== 'Question') return null;
 
     return(
@@ -321,8 +321,7 @@ export const QuestionEditor = (props) => {
 }
 
 export const DraftEditor = props => {
-    console.log(props)
-    
+       
 	return (
 		    <Editor 
                editorState={props.editorState} 

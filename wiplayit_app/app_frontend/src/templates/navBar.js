@@ -211,14 +211,14 @@ const NavBarModalMenu = props => {
     let profile = currentUser.profile;
     
     let modalProps = {
-            navBarMenuProps:{...props},
+            ...props,
             modalName   : 'navigationMenu', 
         };
 
     return(
         
         <div className="navigation-img-box "
-             onClick={()=> Modal({modalProps})}>
+             onClick={()=> Modal(modalProps)}>
                     
             <div className="nav-bar-modal-menu" id="nav-bar-modal-menu">
                 <div className="nav-bar-img-box"> 

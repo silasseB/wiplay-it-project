@@ -70,7 +70,7 @@ export const updateActionPending = (params) => {
 
 
 export const updateActionSuccess = (params)=> {
-   console.log(params)
+   //console.log(params)
    let {byId, actionType, data} = params
 
     return{
@@ -111,11 +111,10 @@ export const ModalSubmitPending = (modalName) => ({
 
 
 export const ModalSubmitSuccess = (params) => {
-
-    console.log(params)
     let {objName, isUpdating, isCreating, modalName, data } = params;
     let action         = isCreating &&'created' || isUpdating && 'edited';
     let successMessage = `${objName} successefully ${action}`
+    console.log(params)
 
     return{
         type : "MODAL_SUBMIT_SUCESS",
@@ -136,7 +135,7 @@ export const ModalSubmitSuccess = (params) => {
 
 export const ModalSubmitError = (params) => {
     let {byId, modalName, error} = params;
-
+    
     return{
         type    : "MODAL_SUBMIT_ERROR",
         byId    : modalName, 
@@ -658,7 +657,7 @@ export const authenticationError = (error) => {
 
 
 export const getCurrentUserSuccess = (user) => {
-    console.log('current user is this: ', user)
+    //console.log('current user is this: ', user)
     return {
         type    : types.GET_CURRENT_USER.SUCCESS,
         payLoad : {
@@ -808,11 +807,10 @@ export const getReplyChildLindData = (props) => {
 
 export const showModal = (modalName, isOpening) =>{
     
-    console.log(modalName, isOpening)  
     return {
-      type : 'MODAL_ROUTER',
-      byId : modalName,
-      payLoad : {
+        type : 'MODAL_ROUTER',
+        byId : modalName,
+        payLoad : {
         modalIsOpen  : isOpening,
         
       }

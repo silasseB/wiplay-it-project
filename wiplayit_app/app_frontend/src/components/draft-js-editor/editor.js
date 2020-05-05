@@ -233,64 +233,46 @@ export default  class AppEditor extends Component{
 
     componentDidMount(){
         this._isMounted = true;
-        //this.setState({submited : false, redirected: false});
         this.onEditorUpdate();
-       
+        
+        let {isPut, objName, obj} = this.props;
         let state = this.state;
-        state['objName'] = this.props.objName;
-        state['editorPlaceHolder'] = this.props.editorPlaceHolder;
-            
-        if (this.props.objName === 'Post') {
-           this.setState({onPost: true })
-        }
-
-        if (this.props.objId) {
-            state['objId']    = this.props.objId;
-        }
-   
-        if (this.props.isPut) {
+           
+        if (isPut) {
             state['contentIsEmpty'] = false;
 
-            if (this.props.objName === 'Post') {
-               let storedState = JSON.parse(this.props.obj.add_post);
-               console.log(this.props)
-
+            if ( objName === 'Post') {
+               let storedState = JSON.parse(obj.add_post);
                let editorState = this.newEditorState(storedState);
-               state['editorState']  = editorState; //
-               state.form['textarea']  = this.props.obj.add_title;
+               state['editorState']   = editorState; //
+               state.form['textarea'] = obj.add_title;
             }
 
-         if (this.props.objName === 'Question') {
-            state.form['textarea']  = this.props.obj.add_question; 
-         }
+            if (objName === 'Question') {
+                state.form['textarea']  = obj.add_question; 
+            }
 
-         else if (this.props.objName === 'Answer') {
-            let storedState = JSON.parse(this.props.obj.add_answer);
-            console.log(this.props)
-            let editorState = this.newEditorState(storedState);
-            state['editorState']  = editorState; //
-           
+            else if (objName === 'Answer') {
+                let storedState = JSON.parse(obj.add_answer);
+                let editorState = this.newEditorState(storedState);
+                state['editorState']  = editorState; //
+            }
 
-         }
+            else if (objName === 'Comment') {
+                let storedState = JSON.parse(obj.comment);
+                let editorState = this.newEditorState(storedState);
+                state['editorState']  = editorState; //
+            }
 
-         else if (this.props.objName === 'Comment') {
-            let storedState = JSON.parse(this.props.obj.comment);
-            let editorState = this.newEditorState(storedState);
-            state['editorState']  = editorState; //
-           
-         }
-
-         else if (this.props.objName === 'Reply') {
-            let storedState = JSON.parse(this.props.obj.reply);
-            let editorState = this.newEditorState(storedState);
-            state['editorState']  = editorState; 
-             
-         }
-             
-      }
+            else if (objName === 'Reply') {
+                let storedState = JSON.parse(obj.reply);
+                let editorState = this.newEditorState(storedState);
+                state['editorState']  = editorState; 
+            }
+        }
       
-      this.setState({...state})
-   }
+        this.setState({...state})
+    };
 
     
 
@@ -474,13 +456,10 @@ export default  class AppEditor extends Component{
    };
 
     getSubmitProps = () =>{
-        let importantProps = {
-                formData : this.getFormData(), 
-                IsModal  : true,
-                modalName: 'editor',
-            } 
-
-        return  Object.assign(importantProps, this.props);
+        return {
+            formData : this.getFormData(),
+            ...this.props, 
+        };
     }
 
 
@@ -564,7 +543,8 @@ export default  class AppEditor extends Component{
         let editorContents   = convertToRaw(currentContent);
         editorContents       =  JSON.stringify(editorContents)
     
-        let props =  {
+        return {
+            ...this.props,
             onChange          : this.onChange,
             onURLChange       : this.onURLChange,
             onPostTitleChange : this.onPostTitleChange,
@@ -582,9 +562,6 @@ export default  class AppEditor extends Component{
             handleBlur        : this.handleBlur,
             ...this.state,
         } 
-      
-        return Object.assign(props, this.props);
-      
     }
 
     render() {
@@ -653,8 +630,7 @@ export const DesktopEditorComponent =(props)=>{
     }
 
     let profile = currentUser && currentUser.profile;
-    console.log(profile)
-
+  
     return(
 
         <div className="desktop-editor">
@@ -713,8 +689,7 @@ export const DesktopEditorComponent =(props)=>{
 
 export const EditorCommp = (props)=> {
     let { objName} = props;
-    console.log(objName === 'Question')
-
+  
     return(
         <div className="editors-page" id="editors-page">
 

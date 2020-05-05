@@ -226,11 +226,11 @@
 } 
 
 .bio-icon,.location-icon {
-  font-size:11px !important;
-  font-weight: 100;
-  color: #A33F0B;
-  border:px solid blue;
-  line-height: 1; 
+    font-size:14px;
+    font-weight: 100;
+    color: #A33F0B;
+    border:px solid blue;
+    line-height: 1; 
 }
 .user-location,.user-location-2 {
   margin-left: 10px;

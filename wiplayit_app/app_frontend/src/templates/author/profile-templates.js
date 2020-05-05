@@ -80,7 +80,6 @@ export const ProfileComponent = props => {
     }
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-    console.log(editUserProfileProps)
 
     let EditorModalBtnBigScreen   = <EditorLinkBigScreen {...editUserProfileProps}/>;
     let MenuModalBtn              = <OptBtnSmallScreen {...editUserProfileProps}/>;
@@ -227,13 +226,13 @@ export const ProfileComponent = props => {
                             <div className="about-user-box">
                                 <span  className="location-icon material-icons">location_on</span>
                                 <p className="user-location">
-                                     Live {profile && profile.country },   {profile && profile.live } 
+                                     {profile &&  profile.country }   {profile && profile.live } 
                                 </p>
                             </div>
                   
                             <div className="about-user-box">
                                 <p className="user-fav-quote">
-                                    Bio {profile && profile.favorite_quote }
+                                    {profile && profile.favorite_quote }
                                 </p>
                             </div> 
                         </div>
