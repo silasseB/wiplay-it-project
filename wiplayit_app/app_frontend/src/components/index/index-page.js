@@ -210,7 +210,7 @@ class IndexBox extends Component {
                             <PageErrorComponent {...props}/>
                         }
 
-                        {!index.isLoading &&
+                        {!index.isLoading && !index.error &&
                             <IndexComponent {...props}/>
 
                         }

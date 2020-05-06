@@ -120,7 +120,7 @@ class  QuestionListPage extends Component  {
                                 <AjaxLoader/>
                             </div>
                         } 
-                        { questions.error &&
+                        { questions.error && !questions.error &&
                             <PageErrorComponent {...props}/>
                         }
                         
