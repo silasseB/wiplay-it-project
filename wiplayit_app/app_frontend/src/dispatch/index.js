@@ -438,15 +438,22 @@ export function handleSubmit(props) {
 			
 		    })
 		    .catch(error => {
-			    console.log(error)
-			
+			    			
 			    if (error.response && error.response.data) {
+                    console.log(error.response)
                    createProps['error'] = error.response.data;
                    isModal && dispatch(action.ModalSubmitError(updateProps))
 			       dispatch(action.updateActionError(updateProps));
-			    }else {
-      		       dispatch(action.handleError(error.request))
-      	        }
+			    }else if(error.request){
+                    console.log(error.request)
+                    error = 'Something wrong happened.';
+                    //dispatch(action.updateActionError(error));
+                    dispatch(action.handleError(error)); 
+
+                }else{
+                    console.log(error)
+                    dispatch(action.handleError());
+                }
 	        })
         }
 
@@ -462,16 +469,23 @@ export function handleSubmit(props) {
                 
 		    })
 		    .catch(error => {
-                console.log(error)
-				
+                				
 			    if (error.response && error.response.data) {
+                    console.log(error)
                     createProps['error'] = error.response.data;
                     isModal && dispatch(action.ModalSubmitError(createProps))
 				    dispatch(action.createActionError(createProps));
       		
-         	    }else{
-      	        	dispatch(action.handleError(error.request))
-      	        }
+         	    }else if(error.request){
+                    console.log(error.request)
+                    error = 'Something wrong happened.';
+                    //dispatch(action.createActionError(error));
+                    dispatch(action.handleError(error));
+
+                }else{
+                    console.log(error)
+                    dispatch(action.handleError());
+                }
 
 			   
 	        })
