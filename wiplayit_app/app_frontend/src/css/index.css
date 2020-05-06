@@ -342,9 +342,12 @@ ul {
 
 
 #fountainG{
-	position:relative;
-	width:140px;
-	height:14px;
+	border          : px solid red;  
+	position        : relative;
+	justify-content : center;
+    display         : flex;  
+    width           : 100px;
+    padding-left    : 30px; 
 }
 
 

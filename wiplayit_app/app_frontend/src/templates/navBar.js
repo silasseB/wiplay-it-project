@@ -456,11 +456,21 @@ export const NavigationBarSmallScreen = MatchMediaHOC(NavBarSmallScreen, '(max-w
 
 export const EditProfileNavBar = props  => {
 
-  let {submitting, userProfile } = props;
+    let {submitting, userProfile } = props;
+    let submitButtonStyles = submitting?{opacity:'0.60'}:{};
+    let fieldSetStyles     = submitting? {opacity:'0.60'}:{};
 
-  let submitButtonStyles = submitting?{opacity:'0.60'}:{};
-   
-  let fieldSetStyles     = submitting? {opacity:'0.60'}:{};
+    const ModalCloseBtnIcon = () => {
+        if (window.matchMedia("(min-width: 980px)").matches) {
+            return (
+                <span className="nav-bar-arrow-icon">&times;</span>
+            )
+        }
+        
+        return (
+            <span className="nav-bar-arrow-icon material-icons ">arrow_back</span>
+            )
+    }
 
 
     return(
@@ -468,7 +478,7 @@ export const EditProfileNavBar = props  => {
 
             <div className="partial-navbar-back-btn-box">
                 <ModalCloseBtn> 
-                    <span className="nav-bar-arrow-icon material-icons ">arrow_back</span>
+                    <ModalCloseBtnIcon/>
                 </ModalCloseBtn>  
 	        </div>
 
@@ -481,7 +491,7 @@ export const EditProfileNavBar = props  => {
                         style={submitButtonStyles} 
                         disabled={submitting}
                         onClick={()=> props.submit(props.submitProps)}
-                        value="submit" className="submit-btn submit-profile-btn">
+                        value="submit" className="btn-sm  submit-profile-btn">
                     Submit
                 </button>
 	        </div>

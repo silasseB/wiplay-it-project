@@ -699,7 +699,7 @@ export const OpenOptionsModalBtn = props => {
 
 export const ChangeImageBtn = props => {
     let {currentUser} = props && props;
-    console.log(props)
+    //console.log(props)
 
     let modalProps = {
             ...props,
@@ -711,7 +711,7 @@ export const ChangeImageBtn = props => {
 
     return(
        
-        <button className="edit-img-btn"   onClick={()=> {
+        <button className="edit-img-btn btn"   onClick={()=> {
                         if (!currentUser.is_confirmed) {
                             let error = 'Sorry, you must confirm your account to to change photo ';
                             store.dispatch(handleError(error));

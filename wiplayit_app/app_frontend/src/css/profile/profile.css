@@ -28,6 +28,14 @@
     font-family : 'Open Sons Condensed';
 }
 
+.edit-credential-btn-box button {
+  font-size   : 14px;
+  font-weight : bold;
+  font-family : 'Open Sans';
+  color       : grey;
+  
+}
+
 @media (max-width: 980px) {
 
     .unfollow-user-2,.unfollow-user { 

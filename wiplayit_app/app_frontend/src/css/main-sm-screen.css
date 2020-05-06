@@ -17,18 +17,6 @@
 
 @media (max-width: 900px) {
 
-.nav-bar-arrow-icon  {
-    color: #A33F0B;
-    font-size: 17pX;
-    font-weight: bold;
-    
-}
-
-.nav-bar-back-btn {
-    border : px solid blue;
-    height : 35px !important;
-    
-}
 
 .user-photo {
     border-radius: 50%;
@@ -54,11 +42,6 @@
 }
 
  
-.partial-navbar-back-btn-box {
-    border:  px solid black;  
-    padding: 7px 18px 0 10px;
-}
-
 
 .submit-btn {
     border-radius : 50px;

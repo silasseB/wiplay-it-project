@@ -136,7 +136,7 @@ export const DesktopModalCloseBtn = props => {
     let background = props.background;
     return(
         <button  type="button" 
-                onClick={()=> ModalManager.close('editor',background)}
+                onClick={()=> window.history.back()}
                 className="btn-sm modal-custom-back-btn custom-back-btn">
 
             <span className="modal-close-icon">&times;</span>
@@ -218,9 +218,9 @@ export const DesktopModalNavBar = (props) => {
 
     return(
         <div className="modal-navbar-top">
-            <div className="modal-title-box">
-                <p className="modal-title">{modalTitle || ""}</p>
-            </div>
+            <ul className="modal-title-box">
+                <li className="modal-title">{modalTitle || ""}</li>
+            </ul>
 
             <div className="modal-close-btn-box">
                 <ModalCloseBtn>

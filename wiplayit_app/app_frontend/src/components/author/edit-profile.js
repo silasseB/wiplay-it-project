@@ -115,33 +115,43 @@ export class EditProfile extends Component{
         this.isMounted = true
         this.onProfileUpdate();
         console.log(this.props)
+        
         let { location, match } = this.props; 
         let state =  location && location.state;
-        
-        
-
+                
         if (state) {
+            let {obj, byId} =  state;
             this.setState({...state});
+            this.getUserProfileFromStore(byId)
+           
+        }else{
 
-            let { obj, byId } =  state;
-            store.dispatch(action.getUserProfilePending(byId));
-            store.dispatch(action.getUserProfileSuccess(byId, obj));
-            this.populateEditForm(obj);
-            return;
+            let {obj, byId} = this.props 
+            if (byId) {
+                this.setState({...this.props});
+                this.getUserProfileFromStore(byId)
+            }
+           
         }
+        
+    };
 
-        let {obj, byId} = this.props 
-        if (obj) {
+    getUserProfileFromStore(byId){
+        let storeUpdate  = store.getState();
+        let {entities }  = storeUpdate;
+        let {userProfile} = entities;
 
-            this.setState({...this.props});
-            store.dispatch(action.getUserProfilePending(byId));
-            store.dispatch(action.getUserProfileSuccess(byId, obj));
-            this.populateEditForm(obj);
+        userProfile = userProfile[byId];
+        console.log(userProfile)
+                         
+        if (userProfile && userProfile.user) {
+            userProfile = userProfile.user;
+            this.populateEditForm(userProfile);
             return;
         }
 
         this.getUserProfile()
-    };
+    }
 
     getUserProfile(){
         let { cacheEntities, match } = this.props; 
@@ -156,9 +166,6 @@ export class EditProfile extends Component{
         this.setState({userProfile, currentUser, byId});
 
         if (userProfile) {
-            
-            store.dispatch(action.getUserProfilePending(byId));
-            store.dispatch(action.getUserProfileSuccess(byId, userProfile));
             this.populateEditForm(userProfile);
             return;
         }
@@ -209,7 +216,7 @@ export class EditProfile extends Component{
            onChange  : this.handleChange,
            name      : "favorite_quote",
            className : "favorite_quote",
-           placeholder:'You favourite quote',
+           placeholder:'Your favourite quote',
         };
     };
 
@@ -560,25 +567,24 @@ export class DropImage extends React.Component {
                             <span className="image-drop-dismiss-icon dismiss">&times;</span>
                         </button>
                      </div>
-                                       
-                    { imagePreviewUrl?
+
+                     <div className="drop-image-spin-loader">
+                        { submitting &&
+                            <AjaxLoader/>
+                        }
+                     </div>
+                    
                         <div className="add-image-btn-box">
+                        { imagePreviewUrl &&
                             <button  type="button" onClick={()=>this.handleImageAdd()}
                                   className="btn-sm image-add-btn">
                                 Add
                             </button>
+                        }
                         </div>
-                        :
-                        ""
-                    }
-                  </div>
+                    </div>
 
-                   { submitting &&
-                        <ul className="drop-image-spin-loader">
-                            <li><AjaxLoader/></li>
-                        </ul>
-                    }
-
+                   
                   { imagePreviewUrl?
                      <div className="image-preview-container">
                         <div className="image-preview-contents">
@@ -603,7 +609,6 @@ export class DropImage extends React.Component {
                      </form>
 
                   }
-
                </div>
                </fieldset>
             </div>  
