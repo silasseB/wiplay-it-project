@@ -45,7 +45,7 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
         email = social_login.user.email
         print(social_login)
 
-        users = User.objects.filter(email__iexact=email)
+        users = User.objects.filter(email=email)
         print(users)
 
         if users:
