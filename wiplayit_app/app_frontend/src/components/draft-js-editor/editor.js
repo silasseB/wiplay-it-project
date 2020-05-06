@@ -182,13 +182,7 @@ export default  class AppEditor extends Component{
                 textMessage : 'You cannot submit incomplete form',
                 messageType : 'error'
             }
-            this.setState({ submitting : true, hasErrors : true, message, });
-
-            setTimeout(()=> {
-                this.setState({ submitting : false, hasErrors : false, message:null, });
-                
-            }, 5000);
-
+            this._setErrorMessage(message)
 
             return
         }
@@ -199,6 +193,15 @@ export default  class AppEditor extends Component{
 
     }
 
+    _SetErrorMessage(message){
+        this.setState({ submitting : true, hasErrors : true, message, });
+
+        setTimeout(()=> {
+            this.setState({ submitting : false, hasErrors : false, message:null, });
+        }, 5000);
+
+    }
+
     onEditorUpdate = () =>{
  
         const onStoreChange = () => {
@@ -206,12 +209,25 @@ export default  class AppEditor extends Component{
                 let storeUpdate   = store.getState();
           
                 let { entities } = storeUpdate
-                let { modal    } = entities
-                                        
+                let { modal,errors    } = entities
+                console.log(errors)
+                                                        
                 if (modal && modal['editor']) {
                     modal = modal['editor']
-                    modal && this.setState({ submitting : modal.submitting });
+                    console.log(modal)
+                    this.setState({ submitting : modal.submitting });
 
+                    if (modal.error) {
+                                     
+                        let message = {
+                            textMessage : modal.error,
+                            messageType : 'error'
+                        }
+
+                        this._SetErrorMessage(message)
+
+                        delete modal.error;   
+                    }
                 }
             }
         };

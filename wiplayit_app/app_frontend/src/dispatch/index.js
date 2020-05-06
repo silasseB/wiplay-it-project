@@ -441,7 +441,8 @@ export function handleSubmit(props) {
 			    			
 			    if (error.response && error.response.data) {
                     console.log(error.response)
-                   createProps['error'] = error.response.data;
+                    error = error.response.data
+                   updateProps['error'] = error;
                    isModal && dispatch(action.ModalSubmitError(updateProps))
 			       dispatch(action.updateActionError(updateProps));
 			    }else if(error.request){
@@ -449,11 +450,17 @@ export function handleSubmit(props) {
                     error = 'Something wrong happened.';
                     //dispatch(action.updateActionError(error));
                     dispatch(action.handleError(error)); 
+                    updateProps['error'] = error;
+                    isModal && dispatch(action.ModalSubmitError(updateProps))
 
                 }else{
                     console.log(error)
                     dispatch(action.handleError());
+
+                    updateProps['error'] = 'Something wrong happened.'
+                    isModal && dispatch(action.ModalSubmitError(updateProps))
                 }
+        
 	        })
         }
 
@@ -558,6 +565,7 @@ export function authenticate(params={}){
                 error = 'Something wrong happened.';
                 console.log(error)
                 dispatch(action.authenticationError(error));
+                dispatch(action.handleError(error));
 
             }else{
                 console.log('Something evil happened')

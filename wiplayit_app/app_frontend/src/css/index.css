@@ -50,13 +50,17 @@
     	position      : fixed;
     	right         : auto;
     	left          : auto;
-
+    	z-index       : 3;
+    	
     }
 
     .alert-box {
     	width      : 45%;
         margin     : 0px 27.5%; 
-        border     : px solid red;
+        border     : 1px solid red;
+        color      :  #ffff;
+        justify-content : center;
+    	display         : flex;
     }
 
 }
@@ -98,12 +102,19 @@
     	right         : auto;
     	left          : auto;
 
+
     }
 
 
     .index-box{
-    	padding-top : 150px; 
-    	border      : px solid black;
+    	padding-top     : 150px; 
+    	border          : px solid black;
+    	justify-content : center;
+    	display         : flex;
+    }
+
+    .alert-message {
+
     }
 
     .unconfirmed-user-warn-container {

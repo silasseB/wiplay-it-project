@@ -234,11 +234,11 @@ export function MainAppHoc(Component) {
 
         };
 
-        logMessage =(message)=> {
+        displaySuccessMessage =(message)=> {
             if (!message) return;
 
             if (!checkType.isString(message)){
-                message = 'Something wrong happend '
+                this.displayAlertMessage()
             }
 
             message = {textMessage:message, messageType:'success'}
