@@ -98,41 +98,37 @@
 
 
 
-    .post-question-btn-box {
-        display    : flex;
-        border     : px solid black;
-        position   : relative; 
-                
+    .post-question-btn-container {
+        display         : flex;
+        border          : px solid black;
+        justify-content : flex-end;
+        width           : 100%;
+                   
+    }
+
+    .post-question-btn-box{
+        display :   flex;
+        margin  : 0 12px;
     }
 
     .create-question-btn, .create-post-btn {
         background  : #A33F0B;
         color       : #fefefe;
-        font-size   : 8px; 
+        font-size   : 12px; 
         font-family : 'Oswald'; 
-        max-width   : 100%;
         margin-top  : 10px; 
+        font-weight : bold;;
         
         
     }
-
-    .create-post-btn {
-        width       : 80px;
-        
-    }
-
-    .create-question-btn {
-        width       : 110px;
-        
-    };
 
     .post-question-btn-box p {
-        margin  : 8px; 
+       margin-top: 8px;
     
     }
 
     .create-post-btn-box, .create-question-btn-box {
-        border    : px solid blue;
+        
     }
 
     .create-post-btn-box {

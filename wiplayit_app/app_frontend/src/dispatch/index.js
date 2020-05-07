@@ -424,10 +424,12 @@ export function handleSubmit(props) {
             obj,
             isCreating: true, 
         }; 
-         
+
+    
     if (props.isPut) {
    	    return dispatch => {
-            dispatch(action.updateActionPending(updateProps))
+            isModal && dispatch(action.ModalSubmitPending(modalName))
+            !isModal && dispatch(action.updateActionPending(updateProps))
 
 		    Api.put(apiUrl, formData)
 		    .then(response => {
@@ -443,19 +445,23 @@ export function handleSubmit(props) {
                     console.log(error.response)
                     error = error.response.data
                    updateProps['error'] = error;
-                   isModal && dispatch(action.ModalSubmitError(updateProps))
-			       dispatch(action.updateActionError(updateProps));
+
+                   isModal  && dispatch(action.ModalSubmitError(updateProps));
+			       !isModal && dispatch(action.updateActionError(updateProps));
+
 			    }else if(error.request){
                     console.log(error.request)
                     error = 'Something wrong happened.';
-                    //dispatch(action.updateActionError(error));
-                    dispatch(action.handleError(error)); 
                     updateProps['error'] = error;
-                    isModal && dispatch(action.ModalSubmitError(updateProps))
+                    !isModal && dispatch(action.updateActionError(updateProps));
+                                      
+                    isModal && dispatch(action.ModalSubmitError(updateProps));
+
+                    !isModal && dispatch(action.handleError(error));
 
                 }else{
                     console.log(error)
-                    dispatch(action.handleError());
+                    !isModal && dispatch(action.handleError());
 
                     updateProps['error'] = 'Something wrong happened.'
                     isModal && dispatch(action.ModalSubmitError(updateProps))
@@ -466,7 +472,8 @@ export function handleSubmit(props) {
 
 	}else if (props.isPost) {
         return dispatch => {
-     	    dispatch(action.createActionPending(createProps ))
+           isModal && dispatch(action.ModalSubmitPending(modalName))
+     	   !isModal && dispatch(action.createActionPending(createProps ))
 
 		    Api.post(props.apiUrl, props.formData)
 		    .then(response => {
@@ -480,18 +487,25 @@ export function handleSubmit(props) {
 			    if (error.response && error.response.data) {
                     console.log(error)
                     createProps['error'] = error.response.data;
-                    isModal && dispatch(action.ModalSubmitError(createProps))
-				    dispatch(action.createActionError(createProps));
+                    isModal  && dispatch(action.ModalSubmitError(createProps))
+				    !isModal && dispatch(action.createActionError(createProps));
       		
          	    }else if(error.request){
                     console.log(error.request)
                     error = 'Something wrong happened.';
-                    //dispatch(action.createActionError(error));
-                    dispatch(action.handleError(error));
+                    createProps['error'] = error;
+
+                    !isModal && dispatch(action.createActionError(error));
+                    isModal && dispatch(action.handleError(error));
+                    
+                    isModal && dispatch(action.ModalSubmitError(createProps))
 
                 }else{
                     console.log(error)
                     dispatch(action.handleError());
+
+                    createProps['error'] = 'Something wrong happened.'
+                    isModal && dispatch(action.ModalSubmitError(createProps))
                 }
 
 			   

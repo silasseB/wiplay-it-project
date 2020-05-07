@@ -104,8 +104,6 @@ export const ModalSubmitPending = (modalName) => ({
     byId : modalName,
     payLoad: {
         submitting     : true,
-        data           : null,
-        successMessage : null,
     }
 });
 
@@ -624,7 +622,8 @@ export const toggleSignUpForm = (props) => {
 export const authenticationPending = () => ({
     type   : types.USER_AUTHENTICATION.PENDING,
     payLoad : {
-        isLoading: true,      
+        isLoading : true,
+        error     : undefined      
     }
 });
 

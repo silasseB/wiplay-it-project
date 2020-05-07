@@ -55,7 +55,8 @@ export const Styles = {
 export const PageErrorComponent = props => {
     console.log(props)
     let {error, isReloading } = props;
-    if (isReloading) return '';
+    if (isReloading) return null;
+    if (!error) return null;
 
     return(
         <div className="page-error-box" id="page-error-box">

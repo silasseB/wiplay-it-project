@@ -34,16 +34,16 @@ const api      = new Api();
 
 
 export const ProfileComponent = props => {
-    
-    var profileById = props.profileById;
-    var userProfile = props.entities.userProfile[profileById];
+    let {entities,
+        currentUser,
+         profileById} = props;
+
+    let userProfile = entities.userProfile[profileById];
     userProfile     = userProfile && userProfile.user;
+    if (!userProfile) return null;
 
-    //console.log(props, userProfile)
-    let currentUser = props.currentUser;
-     
-    let profile = userProfile && userProfile.profile;
-
+         
+    let profile  = userProfile && userProfile.profile;
     let apiUrl   = userProfile && api.getQuestionFollowersListApi(userProfile.id);
     let linkName = profile && profile.followers > 1 && `${profile.followers} Followers` 
                                                     || profile && `${profile.followers} Follower`;

@@ -263,21 +263,21 @@ export const NavBarSmallScreen = props => {
 		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
             <button onClick={()=>props.reloadPage()}  className="logo"><strong>Wiplayit</strong></button>
                 <div className="mobile-navbar-center">
-                    <ul style={styles}>
+                    <div className="post-question-btn-container">
+                        <ul className="post-question-btn-box">
 
-                    </ul>                    
-                    <ul className="post-question-btn-box">
-                        <li className="create-question-btn-box">
-                            <OpenEditorBtn {...createQuestionProps}/>
-                        </li>
+                            <li className="create-question-btn-box">
+                                <OpenEditorBtn {...createQuestionProps}/>
+                            </li>
 
-                        <p>Or</p>
+                            <p>Or</p>
 
                         
-                        <li className="create-post-btn-box">
-                            <OpenEditorBtn {...createPostProps}/>
-                        </li>
-                    </ul>
+                            <li className="create-post-btn-box">
+                                <OpenEditorBtn {...createPostProps}/>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
               <div className="mobile-navbar-bottom">

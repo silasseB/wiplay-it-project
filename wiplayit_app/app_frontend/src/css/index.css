@@ -291,10 +291,11 @@ ul {
 }
 
 .options-btn {
-  border  :  px solid black;
-  float   :  right !important;
-  color   :  gray; 
-  
+  border      : px solid black;
+  float       : right !important;
+  color       : gray; 
+  font-weight : bold; 
+  font-size   : 20px;
 
 }
 
@@ -356,8 +357,9 @@ ul {
 	position        : relative;
 	justify-content : center;
     display         : flex;  
-    width           : 100px;
-    padding-left    : 30px; 
+    width           : 87px;
+    margin-left     : 34px;
+   
 }
 
 

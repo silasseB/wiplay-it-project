@@ -122,11 +122,14 @@ export function MainAppHoc(Component) {
                 //console.log(entities)
                 Object.keys(userAuth).length && this.confirmLogout(userAuth);
 
-                if (errors.error && !errors.displayErrors) {
-                    errors['displayErrors'] = true;
-                    this.displayErrorMessage(errors.error);
-                    delete errors.displayErrors;
-                    delete errors.error;
+                if (errors.error) {
+                    if (editorModal && editorModal.modalIsOpen ||
+                        dropImageModal && dropImageModal.modalIsOpen){
+                        //Can avoid handling errors if any of these modal are open
+
+                    }else{
+                        this._HandleErrors(errors)
+                    }
                 }
 
                 this.handleCreateSuccess(editorModal);
@@ -144,6 +147,14 @@ export function MainAppHoc(Component) {
 
         };
 
+        _HandleErrors(errors){
+            if (!errors) return;
+            if (!errors.error) return;
+
+            this.displayErrorMessage(errors.error);
+            delete errors.error;
+        }
+
         handleCreateSuccess(modal){
             if (!modal) return;
             if (!Object.keys(modal).length) return;
@@ -151,7 +162,7 @@ export function MainAppHoc(Component) {
             if (modal.created === true) {
                 delete modal.created;
                 this.closeModal(modal)
-                this.logMessage(modal.successMessage);
+                this.displaySuccessMessage(modal.successMessage);
                 let data = modal.data
                                
                 setTimeout(()=> {
@@ -166,13 +177,14 @@ export function MainAppHoc(Component) {
         }
 
         handleUpdateSuccess(modal){
+            console.log(modal)
             if (!modal) return;
             if (!Object.keys(modal).length) return;
                        
             if (modal.updated === true) {
                 delete modal.updated;
                 this.closeModal(modal)
-                this.logMessage(modal.successMessage);
+                this.displaySuccessMessage(modal.successMessage);
                 let {data, objName, modalName} = modal;
                              
                 objName   === 'UserProfile'  && this.handleUserProfileUpdate(data.user);

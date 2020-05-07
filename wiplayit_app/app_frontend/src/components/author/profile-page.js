@@ -111,6 +111,7 @@ class UserProfileContainer extends Component {
         this.setState({profileById, id})
                
         userProfile = userProfile && userProfile[profileById];
+        userProfile = userProfile && userProfile.user;
         users       = users['filteredUsers']
         
         !userProfile  && this.updateWithCacheData({profileById, id});
@@ -152,7 +153,7 @@ class UserProfileContainer extends Component {
             //console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
             //console.log(menDiff <= 3)
 
-            if ( menDiff <= 0) {
+            if ( menDiff <= 2) {
                 //userProfile = userProfile && userProfile.user;
 
                 console.log('userProfile found from cachedEntyties')
@@ -309,7 +310,7 @@ class UserProfileContainer extends Component {
         let   props = this.getProps();
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
-        //console.log(userProfile, profileById)
+        console.log(userProfile, profileById)
       
         return (
             <div>
@@ -325,14 +326,11 @@ class UserProfileContainer extends Component {
                             </div>
                         }
 
-                        { userProfile.error &&
-                            <PageErrorComponent {...props}/>
-                        }
-                        {!userProfile.isLoading && !userProfile.error &&
-                            <div className="profile-page" id="profile-page">
-                                <ProfileComponent {...props}/> 
-                            </div>
-                        }
+                        <PageErrorComponent {...props}/>
+                        <div className="profile-page" id="profile-page">
+                            <ProfileComponent {...props}/> 
+                        </div>
+                        
                     </div>
                 }
             </div>

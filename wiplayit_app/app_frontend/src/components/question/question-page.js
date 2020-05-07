@@ -167,15 +167,8 @@ class QuestionPage extends Component {
                                 <AjaxLoader/>
                             </div>
                         }
-
-                        { question.error &&
-                            <PageErrorComponent {...props}/>
-                        }
-                        
-                        {!question.isLoading && !question.error &&
-                            <Questions {...props}/>
-                        }
-                         
+                        <PageErrorComponent {...props}/>
+                        <Questions {...props}/>
                     </div>
                 }           
             </div>
@@ -200,13 +193,13 @@ export const Questions = props => {
     var {questionById, entities} = props;
     let {question, answers} = entities;
     question = question && question[questionById];
-    if(question && question.isLoading) return
+    if(question && question.isLoading) return null;
 
     question = question && question.question;
-    let questionProps = { question};
-   
-    questionProps = {...props, ...questionProps}; 
+    if (!question) return null;
 
+    let questionProps = { question};
+    questionProps = {...props, ...questionProps}; 
    
     return (
         <div className="question-page" id="question-page">
