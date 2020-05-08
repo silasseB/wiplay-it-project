@@ -28,6 +28,14 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
     access_token = serializers.CharField(required=False, allow_blank=True)
     code = None 
 
+    def check_is_confirmed(self, users):
+    	if not users: return
+
+    	for user in users:
+    		#Is the user account confirmed?
+    		if user.is_confirmed:
+    			return True    		    		        		
+
     
     def get_social_login(self, adapter, app, token, response):
         """
@@ -43,41 +51,41 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
         social_login = adapter.complete_login(request, app, token, response=response)
         social_login.token = token
         email = social_login.user.email
-        print(social_login)
+        print(dir(social_login))
+        print(dir(social_login.user))
 
-        users = User.objects.filter(email=email)
-        print(users)
+        user_exist = User.objects.filter(email=email).exists()
+        if user_exist:
+        	users = User.objects.filter(email=email)
+        	is_confirmed = self.check_is_confirmed(users)
+        	
+        	if not is_confirmed:
+        		msg = _('Your account has not been confirmed.')
+        		raise exceptions.ValidationError(msg)
 
-        if users:
-        	for user in users:
-        		#Is the user account confirmed?
-        		print(user)
-        		if not user.is_confirmed:
-        			msg = _('Your account has not been confirmed.')
-        			raise exceptions.ValidationError(msg)
+        	else:
+        		print('User exists and have been confirmed')
+        		#self.connect_account() 
+        if not user_exist:
+        	pass
+        	#self.save_social_login(social_login)    
 
-        
-        user = User(
+        return social_login
+
+    def save_social_login(self, social_login):
+       	user = User(
 			first_name = social_login.user.first_name,
 		    last_name  = social_login.user.last_name, 
             email      = social_login.user.email,
             password   = social_login.user.password,
             is_confirmed = True
             )
+       	user.save()
+       	u = social_login.user
+       	u.set_unusable_password()
+       	print(u)
+       	Profile.objects.get_or_create(user=user,) 
 
-
-        user.save()
-
-        u = social_login.user
-        u.set_unusable_password()
-        print(u)
-        #profile = {
-         #       "profile_picture": social_login.user.picture
-          #    }
-
-        Profile.objects.get_or_create(user=user,) 
-
-        return social_login
 
     
 

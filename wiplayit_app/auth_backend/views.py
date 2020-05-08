@@ -242,6 +242,8 @@ class TwitterLogin(SocialLoginView):
 
 class GoogleLogin(SocialLoginView):
 	adapter_class = GoogleOAuth2Adapter
+	serializer_class = CustomSocialLoginSerializer
+
 
 
 

@@ -71,7 +71,8 @@ class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
         if not self.password:
            
             print(self.password)  
-        #self.set_password(self.password)     
+        #self.set_password(self.password)    
+        print(self.password)
             
         super().save()         
 
@@ -134,8 +135,8 @@ def retrieve_social_data(request, user, **kwargs):
     if data:
         picture = data[0].get_avatar_url()
 
-        #url = download_file_from_url(picture)
-        #print(url)
+        url = download_file_from_url(picture)
+        print(url)
 
         try:
             image = requests.get(picture, stream=True).content
@@ -167,7 +168,7 @@ def download_file_from_url(url):
         return None
 
     # Create a temporary file
-    lf = tempfile.NamedTemporaryFile(dir="media")
+    lf = tempfile.NamedTemporaryFile(dir="profiles")
 
     # Read the streamed image in sections
     for block in request.iter_content(1024 * 8):

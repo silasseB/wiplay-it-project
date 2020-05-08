@@ -168,7 +168,10 @@ class QuestionPage extends Component {
                             </div>
                         }
                         <PageErrorComponent {...props}/>
-                        <Questions {...props}/>
+
+                        {!question.isLoading &&
+                           <Questions {...props}/>
+                        }
                     </div>
                 }           
             </div>

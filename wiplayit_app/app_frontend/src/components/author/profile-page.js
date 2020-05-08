@@ -327,9 +327,12 @@ class UserProfileContainer extends Component {
                         }
 
                         <PageErrorComponent {...props}/>
-                        <div className="profile-page" id="profile-page">
-                            <ProfileComponent {...props}/> 
-                        </div>
+
+                        {!userProfile.isLoading &&
+                            <div className="profile-page" id="profile-page">
+                                <ProfileComponent {...props}/> 
+                            </div>
+                        }
                         
                     </div>
                 }

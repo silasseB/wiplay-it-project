@@ -158,11 +158,13 @@ class  PostPage extends Component  {
                             </div>
                         }
 
-                        { post.error && post.error &&
+                        { post.error &&
                             <PageErrorComponent {...props}/>
                         }
                         
-                        <Post {...props}/>
+                        {!post.isLoading &&
+                            <Post {...props}/>
+                        }
                     </div>
                 }           
          </div>
