@@ -23,6 +23,7 @@ from wiplayit_app.settings.common import *
 #SECRET_KEY = 't*=!z(-o4grk^=*w$!&1)9)c3-4pzlr0t-nr57rar=mkfvtno1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+#01010111 01000101 01001100 01000011 01001111 01001101 01000101
 
 DEBUG = True
 SITE_ID = 2

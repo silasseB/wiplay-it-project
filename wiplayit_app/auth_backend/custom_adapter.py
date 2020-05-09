@@ -3,16 +3,12 @@ from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.utils import build_absolute_uri
 from django.conf import settings
-from django.template.loader import render_to_string
+from allauth.account.adapter import get_adapter as get_account_adapter
+import requests
+import tempfile
+from django.core.files.base import ContentFile
+from django.core import files
 
-email_template_nam = """\
-<html>
-  <head></head>
-    <body>
-
-    </body>
-</html>
-"""
 
 
 template_name = 'account/email/email_confirmation_message.html'
@@ -39,21 +35,5 @@ class CustomAccountAdapter(DefaultAccountAdapter):
 
 
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
-	pass
-	'''
+    pass
     
-	def save_user(self, request, sociallogin, form=None):
-		u = sociallogin.user
-		u.set_unusable_password()
-		print(u)
-
-		sociallogin.save(request)
-
-		return u
-
-	'''	
-
-
-    
-
-

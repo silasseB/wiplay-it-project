@@ -82,12 +82,33 @@ class IndexBox extends Component {
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
+
+    _CheckIndexDataFromStore(){
+        let { entities } = this.props;
+
+        var { questionListById,
+              answerListById, 
+              postListById,
+              userListById,
+            } = this.state;
+
+        let {questions, posts, answers, users} =  entities;
+
+        if(!questions[questionListById])return false;
+        if(!answers[answerListById])return false;
+        if(!posts[postListById])return false;
+
+        return true;
+    }
     
 
     
     componentDidMount() {
         this.isMounted = true;
         this.onIndexUpdate();
+
+        if (this._CheckIndexDataFromStore()) return;
+        
         //this.props.reloadContents(this.props.getIndex)
 
         let { cacheEntities, entities } = this.props;
@@ -206,15 +227,9 @@ class IndexBox extends Component {
                             </div>
                         }
 
-                        { index.error &&
-                            <PageErrorComponent {...props}/>
-                        }
-
-                        {!index.isLoading && !index.error &&
-                            <IndexComponent {...props}/>
-
-                        }
-                        
+                        <PageErrorComponent {...props}/>
+                        <IndexComponent {...props}/>
+                       
                     </div>
 
                     :

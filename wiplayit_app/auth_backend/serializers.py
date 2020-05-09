@@ -51,9 +51,7 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
         social_login = adapter.complete_login(request, app, token, response=response)
         social_login.token = token
         email = social_login.user.email
-        print(dir(social_login))
-        print(dir(social_login.user))
-
+      
         user_exist = User.objects.filter(email=email).exists()
         if user_exist:
         	users = User.objects.filter(email=email)

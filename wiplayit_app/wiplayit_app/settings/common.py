@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import datetime
-#01010111 01000101 01001100 01000011 01001111 01001101 01000101
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,7 +48,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 ACCOUNT_ADAPTER             = 'auth_backend.custom_adapter.CustomAccountAdapter'
-SOCIALACCOUNT_AUTO_SIGNUP   = False
+SOCIALACCOUNT_AUTO_SIGNUP   = True
 SOCIALACCOUNT_ADAPTER       = 'auth_backend.custom_adapter.CustomSocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL   = True
 ACCOUNT_LOGOUT_ON_GET       = True
@@ -56,6 +56,7 @@ ACCOUNT_EMAIL_VERIFICATION  =  'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 SOCIALACCOUNT_AVATAR_SUPPORT = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 #SOCIALACCOUNT_EMAIL_VERIFICATION
 
 SOCIALACCOUNT_PROVIDERS = {

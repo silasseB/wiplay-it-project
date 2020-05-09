@@ -8,8 +8,8 @@ import * as checkType from 'helpers/check-types';
 
 const api = new Api();
 
-export const _GetApi =(useToken=true) =>{
-    const axios     = new Axios({useToken});
+export const _GetApi =(useToken=true, opts={}) =>{
+    const axios     = new Axios({useToken, ...opts});
     return axios.instance()
 
 } 
@@ -522,7 +522,7 @@ export function handleSubmit(props) {
 
 
 export function authenticate(params={}){
-    let useTokenIsBolean = checkType.isBoolean(useToken)
+    let useTokenIsBolean = checkType.isBoolean(useToken, {timeout:30000})
     useToken  = useTokenIsBolean &&  useToken || false;
 
     const Api = _GetApi(useToken);   
