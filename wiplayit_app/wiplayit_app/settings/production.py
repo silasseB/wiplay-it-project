@@ -6,8 +6,16 @@ from wiplayit_app.settings.common import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 SITE_ID = 3
+SECURE_SSL_REDIRECT = True
+CORS_ORIGIN_WHITELIST = [
+	'https://baloyi.pythonanywhere.com',
+	'https://wiplayit.com' ]
 
-ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','valoi.pythonanywhere.com', 'silasi.pythonanywhere.com' ]
+ALLOWED_HOSTS = [
+	'baloyi.pythonanywhere.com',
+	'wiplayit.com',
+	'valoi.pythonanywhere.com', 
+	'silasi.pythonanywhere.com' ]
 
 
 DATABASES = {

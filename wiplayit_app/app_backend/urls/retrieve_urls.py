@@ -13,7 +13,7 @@ from app_backend.api_views.api_detail_views import ( RetrievePostView, RetrieveP
                                                      RetrievePostReplyChildrenListView, RetrievePostUpVoters,
                                                      RetrievePostCommentUpVoters, RetrievePostReplyUpVoters
                                                     )
-from app_backend.api_views.api_detail_views import ( index, IndexView )
+from app_backend.api_views.api_detail_views import ( index, IndexView, AboutView )
  
 
 
@@ -52,6 +52,7 @@ urlpatterns = [
         path("api/post/<int:pk>/upvoters/", RetrievePostUpVoters.as_view({'get': 'list'})),
         path("api/post/comment/<int:pk>/upvoters/", RetrievePostCommentUpVoters.as_view({'get': 'list'})),
         path("api/post/reply/<int:pk>/upvoters/", RetrievePostReplyUpVoters.as_view({'get': 'list'})),
+        path("api/about/", AboutView.as_view({'get':'list'}), name='about'),
 
               
     ]

@@ -58,6 +58,12 @@ class AnswerReplyAdmin(MPTTModelAdmin):
 admin.site.register(AnswerReply, AnswerReplyAdmin)
 
 
+class AboutAdmin(admin.ModelAdmin):
+    fields = ['title_info',  'info']
+
+admin.site.register(AboutCompany, AboutAdmin)
+
+
 '''
 class FootballClubsAdmin(admin.ModelAdmin):
     fields = ['name', 'badge', 'followers']

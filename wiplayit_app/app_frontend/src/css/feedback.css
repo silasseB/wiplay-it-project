@@ -4,8 +4,8 @@
 .help-page,
 .about-info-page,
 .settings-page {
-      border: px solid blue;
-      margin-top: 70px;
+      border: 1px solid blue;
+      padding-top: 60px;
 }
 
 .feedback-form-container, 
@@ -13,7 +13,11 @@
 .help-box,
 .about-info-box,
 .settings-box {
-    border     : px solid black;
-    text-align : center;
+    border     : 1px solid black;
+    margin: 10px;
 }
 
+.about-info-title {
+	font-size   : 16px;
+	font-weight : bold;
+}

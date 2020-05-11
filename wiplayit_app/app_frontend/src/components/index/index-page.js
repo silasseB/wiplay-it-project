@@ -319,9 +319,9 @@ export const Questions = props => {
 
 export const Posts = props => {
    
-    var { postListById, entities } = props;
+    let { postListById, entities } = props;
 
-    var posts = entities.posts[postListById];
+    let posts = entities.posts[postListById];
     
   
     return (
@@ -366,8 +366,8 @@ export const Posts = props => {
 
 
 export const Answers = props => {
-    var { answerListById, entities } = props;
-    var answers   = entities.answers[answerListById]; 
+    let { answerListById, entities } = props;
+    let answers   = entities.answers[answerListById]; 
     //console.log(answers)     
     return(
         <div>
@@ -490,9 +490,9 @@ export const Users = props => {
                                         </div>
                                     </div>
                                     
-                                    <div className="index-user-credentials-box text-wrap">
-                                        <p>{user.profile.credential}</p>
-                                    </div>
+                                    <ul className="index-user-credentials-box text-wrap">
+                                        <li>{user.profile.credential}</li>
+                                    </ul>
 
                                     <div className="index-user-follow-btn-box">
                                         {UnfollowOrFollowUserBtn}

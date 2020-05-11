@@ -36,6 +36,7 @@ import PrivacyContainer  from 'components/privacy';
 import HelpContainer  from 'components/help';
 import SettingsContainer  from 'components/settings';
 import NotificationsContainer from 'components/notifications';
+import ReportContainer from 'components/report';
 
 
 
@@ -72,7 +73,8 @@ function App() {
                     <Route  path="/privacy/" component={PrivacyContainer}/>
                     <Route  path="/help/" component={HelpContainer}/>
                     <Route  path="/settings/" component={SettingsContainer}/>  
-                    <Route  path="/notifications/" component={NotificationsContainer}/>                      
+                    <Route  path="/notifications/" component={NotificationsContainer}/>    
+                    <Route  path="/report/" component={ReportContainer}/>                    
                 </Switch>
         </div>
     );

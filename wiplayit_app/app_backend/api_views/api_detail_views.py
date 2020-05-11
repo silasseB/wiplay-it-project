@@ -1,4 +1,4 @@
-
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -11,15 +11,15 @@ from django.views.decorators.csrf import csrf_exempt
 from app_backend.helpers import get_users_with_permissions
 from auth_backend.models import User  
 from app_backend.models import (Question, Post, Answer, AnswerComment, AnswerReply,
-	                             PostComment, PostReply )
+	                             PostComment, PostReply, AboutCompany )
 
-from app_backend.views import ( BaseView, QuestionView, PostDetailView,
+from app_backend.views import ( BaseView, BaseApiView, QuestionView, PostDetailView,
                                 PostCommentDetailView,PostReplyDetailView,
 	                            QuestionDetailView, AnswerCommentDetailView, 
 	                            AnswerReplyDetailView )
 
 from auth_backend.views import UserView
-from app_backend.serializers import IndexSerializer
+from app_backend.serializers import IndexSerializer, AboutSerializer
 from app_backend.mixins.views_mixins import RetrieveMixin
 
 
@@ -29,6 +29,16 @@ def index(request, resource=''):
 	return render(request, 'index.html')
 
 
+class AboutView(BaseApiView, APIView):
+	permission_classes = (AllowAny,)
+	serializer_class   = AboutSerializer
+	queryset           = AboutCompany.objects.all()
+		
+	def get(self, *args, **kwargs):
+		kwargs['context'] = self.get_serializer_context()
+		serializer = self.serializer_class(*args, **kwargs)
+
+		return Response(serializer.data,  status=status.HTTP_200_OK )
 
 
 class IndexView(BaseView, APIView):

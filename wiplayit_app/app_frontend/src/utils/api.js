@@ -2,7 +2,10 @@
 
 
 export default class Api{
-
+    getAboutInfoApi() {
+        var api = `/api/about/`;
+        return api
+    }
 
     getCurrentUserApi() {
         var api = `/api/current/user/`;

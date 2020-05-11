@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import {handleSubmit, getCurrentUser,getPost, getUserList,
+import {handleSubmit, getCurrentUser,getPost, getUserList,getAboutInfo,
          getUserProfile,getPostList,getQuestion,getReplyList,getReplyChildrenList,
          getQuestionList as _getQuestionList,getCommentList, getIndex, authenticate }  from "dispatch/index"
 import  * as action  from 'actions/actionCreators';
@@ -370,7 +370,7 @@ export function MainAppHoc(Component) {
 
             if (!this.isAuthenticated()) {
                 //User is not authenticated,so redirect to authentication page.
-                history.push('/user/registration/')
+                //history.push('/user/registration/')
                 return;
             }
               
@@ -526,6 +526,7 @@ export function MainAppHoc(Component) {
 const mapDispatchToProps = (dispatch, ownProps) => {
    
     return {
+        getAboutInfo         : ()           => dispatch(getAboutInfo()),
     	getIndex             : (props)      => dispatch(getIndex(props)), 
         getUserProfile       : (id, apiUrl) => dispatch(getUserProfile(id, apiUrl)),
         getUserList          : (props)      => dispatch(getUserList(props)),

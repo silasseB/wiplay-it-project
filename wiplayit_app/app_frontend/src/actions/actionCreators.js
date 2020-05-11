@@ -146,6 +146,39 @@ export const ModalSubmitError = (params) => {
 };
 
 
+export const getAboutInfoPending = () => {
+
+    return{
+        type    : 'ABOUT_PENDING',
+        payLoad : {
+            isLoading : true,
+        }
+    }
+};
+
+
+export const getAboutInfoSuccess = (data) => {
+
+    return{
+        type    : 'ABOUT_SUCCESS',
+        payLoad : {
+            isLoading : false,
+            info      : data
+        }
+    }
+};
+
+
+export const getAboutInfoError = (error) => {
+
+    return{
+        type    : 'ABOUT_ERROR',
+        payLoad : {
+            isLoading : false,
+            error
+        }
+    }
+};
 
 export const getIndexPending = () => {
 

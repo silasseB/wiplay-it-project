@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from auth_backend.models import User
-from .models import (Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply, DraftEditorMediaContent)
+from .models import ( Question, Post, Answer, AnswerComment, AnswerReply,
+	                  PostComment, PostReply, DraftEditorMediaContent,
+	                  AboutCompany)
 
 from .mixins.serializer_mixins import   SerialiizerMixin
 from auth_backend.serializers import  BaseUserSerializer, UserSerializer
@@ -281,5 +282,10 @@ class IndexSerializer(BaseSerializer):
 		
 	
 	
+class AboutSerializer(BaseModelSerializer):
+		
+	class Meta:
+		model = AboutCompany 
+		fields = '__all__'
 	
 	

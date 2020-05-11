@@ -36,6 +36,7 @@ const InitialState = () => {
 
         modal       : {},
         errors      : {},
+        about       : {},
     };
 };
 
@@ -106,6 +107,12 @@ export function entities(state=InitialState(), action) {
         case "SERVER_ERROR":
             console.log(action)
             return updateStateEntyties('errors', action);
+
+       
+        case "ABOUT_SUCCESS":
+        case "ABOUT_ERROR":
+        case "ABOUT_PENDING":
+            return updateStateEntyties('about', action);
 
         case 'MODAL_ROUTER':
         case "MODAL_SUBMIT_PENDING":

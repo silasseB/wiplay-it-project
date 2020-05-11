@@ -224,11 +224,18 @@ class PostReply(MPTTModel):
         return self.reply
 
 
+class AboutCompany(models.Model):
+    title_info = models.CharField( max_length=250, blank=True)
+    info       = models.TextField( blank=True)
+
+    def __str__(self):
+        return self.title_info
+
 
 
 class TermsAndService(models.Model):
     terms    = models.TextField( blank=True)
-    service    = models.TextField( blank=True)
+    service   = models.TextField( blank=True)
 
     def __str__(self):
         return self.terms
@@ -237,13 +244,26 @@ class TermsAndService(models.Model):
     
 class PrivacyAndPolicy(models.Model):
     policy    = models.TextField( blank=True)
-    privacy    = models.TextField( blank=True)
+    privacy   = models.TextField( blank=True)
 
     def __str__(self):
         return self.policy
 
 
+class Help(models.Model):
+    terms    = models.TextField( blank=True)
+    service  = models.TextField( blank=True)
+
+    def __str__(self):
+        return self.terms
     
+
+class BugReport(models.Model):
+    bug     = models.TextField( blank=True)
+    service = models.TextField( blank=True)
+
+    def __str__(self):
+        return self.terms
 
 class FootballClubs(models.Model):
     name    = models.CharField(max_length=50, blank=True)

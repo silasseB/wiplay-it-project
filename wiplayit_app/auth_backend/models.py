@@ -123,7 +123,7 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(user_signed_up)
 def confirm_social_login(request, user,  sociallogin=None, **kwargs):
-    if user:
+    if sociallogin:
         user.is_confirmed = True
         user.save()
 
@@ -132,6 +132,8 @@ def confirm_social_login(request, user,  sociallogin=None, **kwargs):
 
 @receiver(user_signed_up)
 def retrieve_social_data(request, user,  sociallogin=None, **kwargs):
+    if not sociallogin:
+        return
     """Signal, that gets extra data from sociallogin and put it to profile."""
     # get the profile where i want to store the extra_data
     profile = Profile.objects.filter(user=user)
@@ -202,6 +204,9 @@ def download_file_from_url(url):
 
 @receiver(user_signed_up)
 def social_login_fname_lname_profilepic(request, user,  sociallogin=None, **kwargs):
+    if not sociallogin:
+        return
+        
     preferred_avatar_size_pixels=256
 
     picture_url = "http://www.gravatar.com/avatar/{0}?s={1}".format(
@@ -241,6 +246,7 @@ def social_login_fname_lname_profilepic(request, user,  sociallogin=None, **kwar
 
     #avatar = urllib.request.urlopen(picture_url)
     #url_pic = ContentFile(avatar.read())
+    print(picture_url)
     user.save()
     profile = Profile.objects.filter(user=user)[0]
     profile.profile_picture = picture_url

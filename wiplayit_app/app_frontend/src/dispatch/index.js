@@ -15,6 +15,47 @@ export const _GetApi =(useToken=true, opts={}) =>{
 } 
 
 
+
+export function getAboutInfo(options) {
+    let useToken = false
+    const Api    = _GetApi(useToken);
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
+    let apiUrl = api.getAboutInfoApi(); 
+    
+    return dispatch => {
+        dispatch(action.getAboutInfoPending());
+
+        Api.get(apiUrl)
+            .then(response => {
+                console.log(response)  
+                dispatch(action.getAboutInfoSuccess(response.data)); 
+            })
+            .catch(error => {
+                console.log(error)
+
+                if (error.response) {
+                    error = error.response.data;
+                    dispatch(action.getAboutInfoError(error.detail));
+
+                }else if(error.request){
+                    error = 'Something wrong happened.';
+                    dispatch(action.getAboutInfoError(error));
+
+                }else{
+                    dispatch(action.handleError());
+                }
+            })
+                
+    }
+};
+
+
 export function getIndex(options) {
     let useToken=true
     const Api  = _GetApi(useToken);

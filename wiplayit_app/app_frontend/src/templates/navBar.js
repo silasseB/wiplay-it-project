@@ -121,7 +121,13 @@ export const NavBarMenuItems = props => {
                         onClick={() => RedirectMenuLinks({pathname:'/privacy/'})}
                         className="btn-sm dropdown-item">
                     Privacy
-                </button>   
+                </button>  
+
+                 <button type="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/report/'})}
+                        className="btn-sm dropdown-item">
+                    Report
+                </button> 
                 
                 <button  onClick={props.logout} className="btn-sm logout-btn">Logout</button>
             </div>

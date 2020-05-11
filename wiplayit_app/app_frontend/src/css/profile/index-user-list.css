@@ -20,8 +20,8 @@
 
 
 .index-user-list-title-box {
-    border      :  px solid red;
-    margin-left : 14px;
+    border      : px solid red;
+    margin-left : 12px;
 }
 
 
@@ -58,15 +58,12 @@
 
 
 .index-user-credentials-box {
-    border      : px solid red;
-    min-height  : 100px; 
-    
-}
-
-.index-user-credentials-box p {
+    border        : px solid red;
     font-family   : 'Cambay';
-    border        : px solid blue;
-    margin        : 4px 8px; 
+    text-align    : center;
+    font-size     : 13px;
+    min-height    : 70px; 
+    padding       : 0 6px;
 }
 
 .index-user-list-img-container {
@@ -98,7 +95,8 @@
 
 .index-user-name-box {
     border: px solid blue;
-    margin: 4px 10px;
+    margin: 4px 0;
+    text-align: center;
 
 }
 
@@ -108,7 +106,6 @@
     font-size   : 13px;
     font-family : 'Ubuntu';
     font-weight : bold;
-    margin-left : 22px;
 }
 
 
@@ -130,15 +127,13 @@
 }
 
 .index-user-follow-btn-box {
-    border  : px solid blue;
-    padding : 5px 35px 30px;
+    border     : px solid blue;
+    text-align : center;
+    padding    :  10px 0;
 }
 
 
 @media (max-width: 980px) {
-
-
-
  
 }
 
