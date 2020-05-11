@@ -27,6 +27,24 @@ class CustomAccountAdapter(DefaultAccountAdapter):
 
 
 
+
+
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
-    pass
+    def save_user(self, request, sociallogin, form=None):
+        """
+        Saves a newly signed up social login. In case of auto-signup,
+        the signup form is not available.
+        """
+        user = sociallogin.user
+        user.is_confirmed = True
+        user.save()
+
+        user.set_unusable_password()
+        if form:
+            get_account_adapter().save_user(request, user, form)
+        else:
+            get_account_adapter().populate_username(request, user)
+        sociallogin.save(request)
+        return user
+    
     

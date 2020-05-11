@@ -123,11 +123,7 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(user_signed_up)
 def confirm_social_login(request, user,  sociallogin=None, **kwargs):
-    if sociallogin:
-        user.is_confirmed = True
-        user.save()
-
-
+    pass
 
 
 @receiver(user_signed_up)
@@ -204,9 +200,9 @@ def download_file_from_url(url):
 
 @receiver(user_signed_up)
 def social_login_fname_lname_profilepic(request, user,  sociallogin=None, **kwargs):
-    if not sociallogin:
+    if sociallogin == None:
         return
-        
+
     preferred_avatar_size_pixels=256
 
     picture_url = "http://www.gravatar.com/avatar/{0}?s={1}".format(
