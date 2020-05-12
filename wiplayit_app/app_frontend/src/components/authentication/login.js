@@ -8,17 +8,21 @@ import {NavBar} from 'templates/authentication/utils'
 
 
 class LoginPage extends Component {
-
-   constructor(props) {
+    //isMounted = false;
+    constructor(props) {
         super(props);
 
         this.state = {
            navbarTitle : 'Login',
         }
+        console.log(this)
     }
 
     componentDidMount() {
-        this.props.formConstructor('loginForm')
+        console.log(this.props.isMounted)
+        if(this.props.isMounted){
+            this.props.formConstructor('loginForm')
+        }
     }
 
     getProps(){
