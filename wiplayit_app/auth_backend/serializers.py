@@ -64,10 +64,7 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
         	else:
         		print('User exists and have been confirmed')
         		#self.connect_account() 
-        if not user_exist:
-        	pass
-        	#self.save_social_login(social_login)    
-
+        
         return social_login
 
     def save_social_login(self, social_login):

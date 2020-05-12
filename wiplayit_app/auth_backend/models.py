@@ -2,6 +2,8 @@ import requests
 import tempfile
 import hashlib
 import urllib
+import shutil
+import os
 from django.core.files.base import ContentFile
 
 from django.core import files
@@ -23,7 +25,7 @@ from PIL import Image
 
 from app_backend.slug_generator import generate_unique_slug
 
-
+#file_path = os.path.join(dest_folder, filename)
 
 class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
     email           = models.CharField(verbose_name='email address', max_length=50, unique=True )
@@ -121,84 +123,8 @@ def create_profile(sender, instance, created, **kwargs):
             assign_perm("delete_user", instance,  instance)
 
 
-@receiver(user_signed_up)
-def confirm_social_login(request, user,  sociallogin=None, **kwargs):
-    pass
 
 
-@receiver(user_signed_up)
-def retrieve_social_data(request, user,  sociallogin=None, **kwargs):
-    if not sociallogin:
-        return
-    """Signal, that gets extra data from sociallogin and put it to profile."""
-    # get the profile where i want to store the extra_data
-    profile = Profile.objects.filter(user=user)
-    print(profile)
-    # in this signal I can retrieve the obj from SocialAccount
-    data = SocialAccount.objects.filter(user=user, provider='facebook')
-    data_google = SocialAccount.objects.filter(user=user, provider='google')
-    #print(data_google)
-    # check if the user has signed up via social media
-
-    if data_google:
-        picture = data_google[0].get_avatar_url()
-        print(picture)
-
-        url = download_file_from_url(picture)
-        print(url)
-
-        try:
-            image = requests.get(picture, stream=True)
-        except requests.exceptions.RequestException as e:
-            return None
-
-        print(image)
-
-        
-        if image:
-            content_file = ContentFile(image)
-            print(content_file)
-
-            profile = profile[0]
-            profile.profile_picture = content_file
-            print(profile.profile_picture) 
-            profile.save()
-
-
-
-def download_file_from_url(url):
-    # Stream the image from the url
-    try:
-        request = requests.get(url, stream=True)
-    except requests.exceptions.RequestException as e:
-        # TODO: log error here
-        return None
-
-    print(request)
-
-    if request.status_code != requests.codes.ok:
-        
-        return None
-
-    # Create a temporary file
-    lf = tempfile.NamedTemporaryFile()
-
-    # Read the streamed image in sections
-    for block in request.iter_content(1024 * 8):
-
-        # If no more file then stop
-        if not block:
-            break
-
-        # Write image block to temporary file
-        lf.write(block)
-
-    return files.File(lf)
-
-
-
-
-@receiver(user_signed_up)
 def social_login_fname_lname_profilepic(request, user,  sociallogin=None, **kwargs):
     if sociallogin == None:
         return
@@ -239,11 +165,31 @@ def social_login_fname_lname_profilepic(request, user,  sociallogin=None, **kwar
             #verified = sociallogin.account.extra_data['verified_email']
             picture_url = sociallogin.account.extra_data['picture']
 
-
-    #avatar = urllib.request.urlopen(picture_url)
-    #url_pic = ContentFile(avatar.read())
-    print(picture_url)
+    
+    avatar = download_file_from_url(picture_url)
+    print(avatar)
     user.save()
     profile = Profile.objects.filter(user=user)[0]
-    profile.profile_picture = picture_url
+    profile.profile_picture = avatar
     profile.save()        
+
+
+def download_file_from_url(url):
+    # Stream the image from the url
+    try:
+        request = requests.get(url, stream=True)
+    except requests.exceptions.RequestException as e:
+        # TODO: log error here
+        return None
+
+   
+    if request.status_code != requests.codes.ok:
+        return None
+
+    img_temp = tempfile.NamedTemporaryFile(delete=True)
+    img_temp.write(request.content)
+    img_temp.flush()
+
+    file_name = 'social-login-picture.png'
+    return files.File(img_temp, name=file_name)
+
