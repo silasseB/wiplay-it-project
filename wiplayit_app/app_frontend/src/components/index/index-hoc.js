@@ -370,7 +370,7 @@ export function MainAppHoc(Component) {
 
             if (!this.isAuthenticated()) {
                 //User is not authenticated,so redirect to authentication page.
-                //history.push('/user/registration/')
+                history.push('/user/registration/')
                 return;
             }
               
