@@ -21,7 +21,7 @@ const api = new Api();
 export function AuthenticationHoc(Component) {
 
     return class Authentication extends React.Component {
-
+        isMounted = false;
         constructor(props) {
 
             super(props);
@@ -101,15 +101,10 @@ export function AuthenticationHoc(Component) {
         };
 
         responseFacebook(response) {
-             console.log(response)
+            console.log(response)
             let apiUrl =  api.facebookLoginApi();
             let accessToken =  response.accessToken
-            let form = helper.createFormData({"access_token": accessToken});
-
-           
-            if (accessToken) {
-                return this.props.authenticate({apiUrl, form,});
-            }
+            accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
 
             return ;
 
@@ -119,31 +114,28 @@ export function AuthenticationHoc(Component) {
 
         responseTwitter = (response) => {
             console.log(response);
-            var accessToken =  response.accessToken
-            var apiUrl =  api.twitterLoginApi(this)
-            let form   = helper.createFormData({"access_token": accessToken});
-
-            if (accessToken) {
-                return this.props.authenticate({ apiUrl, form });
-            }
-
+            let accessToken =  response.accessToken
+            let apiUrl =  api.twitterLoginApi(this)
+            accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
+            
             return ;
         }
 
 
         responseGoogle = (response)=> {
             console.log(response);
-            var accessToken =  response.accessToken
-            var apiUrl =  api.googleLoginApi();
-            let form   = helper.createFormData({"access_token": accessToken});
-
-            if (accessToken) {
-                return this.props.authenticate({ apiUrl, form });
-            }
-
+            let accessToken =  response.accessToken
+            let apiUrl =  api.googleLoginApi();
+            accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
             return ;
-           
         };
+
+        _SendSocialAuthentication(accessToken, apiUrl){
+            let isSocialAuth = true
+            let form   = helper.createFormData({"access_token": accessToken});
+            return this.props.authenticate({ apiUrl, form, isSocialAuth });
+
+        }
 
 
         componentDidUpdate(nextProps , prevState){
@@ -152,6 +144,7 @@ export function AuthenticationHoc(Component) {
 
 
         componentDidMount() {
+            this.isMounted = true;
             const onStoreChange = () => {
                 let  storeUpdate = store.getState(); 
                 let { entities } =  storeUpdate;
@@ -188,20 +181,18 @@ export function AuthenticationHoc(Component) {
 
 
         componentWillUnmount() {
+            this.isMounted = false;
             this.unsubscribe();
 
         };
 
         handleFormChange(e){
+            if(!this.isMounted) return;
+
             e.preventDefault()
-
             let  { form, formName } = this.state;
-          
-            
             if (form) {
-
-                let currentForm = form[formName];
-                currentForm[e.target.name] = e.target.value;
+                form[formName][e.target.name] = e.target.value;
                 this.setState({form});
             }
         };
@@ -243,15 +234,13 @@ export function AuthenticationHoc(Component) {
 
 
         _SetForm(form, formName){
-           
+            if(!this.isMounted) return;
+
             let currentForm = this.state.form;
-            
             if (currentForm) {
 
                 if (!currentForm[formName]) {
-
                     currentForm[formName] = {...form}
-                   
                 }
 
                 form = currentForm;
@@ -291,6 +280,7 @@ export function AuthenticationHoc(Component) {
         }
 
         formConstructor = (name) => {
+            if(!this.isMounted) return;
             
             if (name) {
                 let formName = name;
@@ -352,6 +342,8 @@ export function AuthenticationHoc(Component) {
 
         
         toggleSignUpForm = (params)=>{
+            if(!this.isMounted) return;
+
             const currentFormName = this.getCurrentDefaultForm();
             let signUpFormName = "signUpForm";
             let { value } = params;
@@ -370,6 +362,8 @@ export function AuthenticationHoc(Component) {
         };
 
         toggleEmailForm = (params) => {
+            if(!this.isMounted) return;
+
             console.log(params)
             const defaultActiveForm = 'loginForm';
             let { value, successMessage, formName } = params;
@@ -397,9 +391,8 @@ export function AuthenticationHoc(Component) {
 
 
         confirmUser = (key, callback)=>{
-            
-            //let withToken = false;
-            //const Api = new Axios(withToken);
+            if(!this.isMounted) return;
+
             let useToken = false;
             const Api    = _GetApi(useToken);
             if (!Api) {
@@ -496,6 +489,8 @@ export function AuthenticationHoc(Component) {
 
 
         onSubmit = (e) => {
+            if(!this.isMounted) return;
+
             e.preventDefault();
             let formName    = this.state.formName;
             let form        = this.state.form[formName];

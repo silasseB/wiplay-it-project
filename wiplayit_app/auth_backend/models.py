@@ -1,28 +1,13 @@
-import requests
-import tempfile
-import hashlib
-import urllib
-import shutil
-import os
-from django.core.files.base import ContentFile
-
-from django.core import files
+from PIL import Image
 from django.db import models
 from django.conf import settings
+from django.dispatch import receiver
 from django.contrib.auth.models import PermissionsMixin
 from guardian.mixins import GuardianUserMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.base_user import AbstractBaseUser
 from .managers import UserManager
-from rest_framework.authtoken.models import Token
-from allauth.account.signals import user_signed_up
-from allauth.socialaccount.models import SocialAccount
-
-
 from django.db.models.signals import post_save
-from django.dispatch import receiver
-from PIL import Image
-
 from app_backend.slug_generator import generate_unique_slug
 
 #file_path = os.path.join(dest_folder, filename)
@@ -123,73 +108,4 @@ def create_profile(sender, instance, created, **kwargs):
             assign_perm("delete_user", instance,  instance)
 
 
-
-
-def social_login_fname_lname_profilepic(request, user,  sociallogin=None, **kwargs):
-    if sociallogin == None:
-        return
-
-    preferred_avatar_size_pixels=256
-
-    picture_url = "http://www.gravatar.com/avatar/{0}?s={1}".format(
-        hashlib.md5(user.email.encode('UTF-8')).hexdigest(),
-        preferred_avatar_size_pixels
-    )
-
-    if sociallogin:
-        # Extract first / last names from social nets and store on User record
-        if sociallogin.account.provider == 'twitter':
-            name = sociallogin.account.extra_data['name']
-            user.first_name = name.split()[0]
-            user.last_name = name.split()[1]
-
-        if sociallogin.account.provider == 'facebook':
-            f_name = sociallogin.account.extra_data['first_name']
-            l_name = sociallogin.account.extra_data['last_name']
-            if f_name:
-                user.first_name = f_name
-            if l_name:
-                user.last_name = l_name
-
-            #verified = sociallogin.account.extra_data['verified']
-            picture_url = "http://graph.facebook.com/{0}/picture?width={1}&height={1}".format(
-                sociallogin.account.uid, preferred_avatar_size_pixels)
-
-        if sociallogin.account.provider == 'google':
-            f_name = sociallogin.account.extra_data['given_name']
-            l_name = sociallogin.account.extra_data['family_name']
-            if f_name:
-                user.first_name = f_name
-            if l_name:
-                user.last_name = l_name
-            #verified = sociallogin.account.extra_data['verified_email']
-            picture_url = sociallogin.account.extra_data['picture']
-
-    
-    avatar = download_file_from_url(picture_url)
-    print(avatar)
-    user.save()
-    profile = Profile.objects.filter(user=user)[0]
-    profile.profile_picture = avatar
-    profile.save()        
-
-
-def download_file_from_url(url):
-    # Stream the image from the url
-    try:
-        request = requests.get(url, stream=True)
-    except requests.exceptions.RequestException as e:
-        # TODO: log error here
-        return None
-
-   
-    if request.status_code != requests.codes.ok:
-        return None
-
-    img_temp = tempfile.NamedTemporaryFile(delete=True)
-    img_temp.write(request.content)
-    img_temp.flush()
-
-    file_name = 'social-login-picture.png'
-    return files.File(img_temp, name=file_name)
 

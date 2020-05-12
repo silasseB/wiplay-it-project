@@ -9,11 +9,15 @@ SITE_ID = 3
 SECURE_SSL_REDIRECT = True
 CORS_ORIGIN_WHITELIST = [
 	'https://baloyi.pythonanywhere.com',
-	'https://wiplayit.com' ]
+	'https://wiplayit.com',
+	'http://wiplayit.com',
+	'https://www.wiplayit.com',
+	'http://www.wiplayit.com' ]
 
 ALLOWED_HOSTS = [
 	'baloyi.pythonanywhere.com',
 	'wiplayit.com',
+	'www.wiplayit.com',
 	'valoi.pythonanywhere.com', 
 	'silasi.pythonanywhere.com' ]
 

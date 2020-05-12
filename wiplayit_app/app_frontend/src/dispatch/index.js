@@ -572,12 +572,12 @@ export function authenticate(params={}){
         return dispatch =>{ dispatch(action.handleError()) };
     }
 
-    let {apiUrl, form, useToken} = params;
+    let {apiUrl, form, useToken, isSocialAuth} = params;
     
     console.log(params)    
     
     return dispatch => {
-        dispatch(action.authenticationPending());
+        dispatch(action.authenticationPending(isSocialAuth));
 
         Api.post(apiUrl, form)
             .then(response => {
@@ -601,7 +601,7 @@ export function authenticate(params={}){
                     response_data = {successMessage}
                 }  
                
-                dispatch(action.authenticationSuccess(response_data));
+                dispatch(action.authenticationSuccess(response_data, isSocialAuth));
 
                 if (user) {
                     dispatch(action.getCurrentUserSuccess(user))
@@ -612,14 +612,13 @@ export function authenticate(params={}){
             console.log(error)                
             if (error.response) {
                 error = error.response.data
-                
-                dispatch(action.authenticationError(error));
+                dispatch(action.authenticationError(error, isSocialAuth));
 
             }
             else if (error.request)  {
                 error = 'Something wrong happened.';
                 console.log(error)
-                dispatch(action.authenticationError(error));
+                dispatch(action.authenticationError(error, isSocialAuth));
                 dispatch(action.handleError(error));
 
             }else{

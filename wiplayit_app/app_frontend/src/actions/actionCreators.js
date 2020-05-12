@@ -652,16 +652,17 @@ export const toggleSignUpForm = (props) => {
 
 
 
-export const authenticationPending = () => ({
+export const authenticationPending = (isSocialAuth=false) => ({
     type   : types.USER_AUTHENTICATION.PENDING,
     payLoad : {
         isLoading : true,
-        error     : undefined      
+        error     : undefined,  
+        isSocialAuth,    
     }
 });
 
 
-export const authenticationSuccess = (data={}) => {
+export const authenticationSuccess = (data={}, isSocialAuth=false) => {
     console.log(data)
     
     return {
@@ -669,18 +670,20 @@ export const authenticationSuccess = (data={}) => {
         payLoad : {
             ...data,
             isLoading  : false,
+            isSocialAuth,
         }
     };
 };
 
 
-export const authenticationError = (error) => {
+export const authenticationError = (error, isSocialAuth=false) => {
     console.log(error)
     return {
         type   : types.USER_AUTHENTICATION.ERROR,
         payLoad : {
             error,
             isLoading : false,
+            isSocialAuth,
         }
     };
 };
