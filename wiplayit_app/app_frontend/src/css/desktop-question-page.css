@@ -5,17 +5,12 @@
  
 @media (min-width:980px) {
 
-    #page-error-box,     
+    #page-error-box, #answer-page,     
     #home-page-contents, .question-page, .post-page,
     .question-list-page, .post-list-page {
         width      : 42%;
-        margin     : 30px 29%; 
-
-    }
-
-    
-    #home-page-contents {
-        border     : px solid  red;
+        margin     : 30px 29%;  
+       
     }
 
     .question-list-page, .post-list-page ,
@@ -49,25 +44,6 @@
         font-size: 17px;
     }
 
-    .main-post img {
-        border: px solid blue;
-        max-width: 100%;
-        height: auto;
-        width: 500px;
-        object-fit: cover;
-    }
-
-    .main-post p:nth-child(2) {
-        border: px solid black;
-        height: auto; ;
-        margin-left: 0px;
-    }
-
-    .main-post p:nth-child(3) {
-        border: 1px solid red;
-        display: none; 
-    }
-
     .index-questions, .index-answers, .index-posts {
         border     : 1px solid #D5D7D5;
         background : #ffff;
@@ -82,7 +58,6 @@
     }
 
     .answer-container, .question-container, .post-container {
-        border     : px solid red;/*#D5D7D5;*/
         background : #ffff;
     }
 

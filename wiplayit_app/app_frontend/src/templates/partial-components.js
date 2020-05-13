@@ -91,9 +91,7 @@ export const AlertComponent =(props)=> {
     let classNames       = 'alert alert-container' 
     classNames           = messageType === 'error'   && `${classNames} alert-danger`   ||
                            messageType === 'success' &&  `${classNames} alert-success` || classNames;
-                                 
-
-    console.log(classNames, messageType)        
+    //console.log(classNames, messageType)        
     
     return(
         <div className={classNames}>

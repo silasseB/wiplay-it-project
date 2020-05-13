@@ -132,9 +132,9 @@ export default  class AppEditor extends Component{
    
 
     onChange(editorState){
+        this.setState({ editorState, });
 
         const contentState = editorState.getCurrentContent();
-        
         let validatedForm = helper.validateForm({editorContents : contentState})
 
         if (validatedForm.formIsValid) {
@@ -145,7 +145,7 @@ export default  class AppEditor extends Component{
 
         }
 
-        this.setState({ editorState, });
+       
     };
 
 
@@ -535,22 +535,18 @@ export default  class AppEditor extends Component{
     handleFocus =()=> {
         console.log('focused')
         
-        if (!window.matchMedia("(max-width: 980px)").matches) {
-            return;
+        if (window.matchMedia("(max-width: 980px)").matches) {
+            let onScroolStyles   = { height : '100px' };
+            !this.state.onScroolStyles &&  this.setState({onScroolStyles})
         }
-
-        let onScroolStyles   = { height : '100px' };
-        !this.state.onScroolStyles &&  this.setState({onScroolStyles})
     }
 
     handleBlur =()=> {
         console.log('Blured')
         
-        if (!window.matchMedia("(max-width: 980px)").matches) {
-            return;
+        if (window.matchMedia("(max-width: 980px)").matches) {
+            this.state.onScroolStyles &&   this.setState({onScroolStyles:undefined});
         }
-
-        this.state.onScroolStyles &&   this.setState({onScroolStyles:undefined});
     }
 
 

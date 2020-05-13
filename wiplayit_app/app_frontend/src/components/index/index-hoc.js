@@ -257,13 +257,10 @@ export function MainAppHoc(Component) {
             this.displayAlertMessage(message)
         };
 
-        displayErrorMessage =(errorMessage)=>{
-            
-            if (!checkType.isString(errorMessage)){
-                errorMessage = 'Something wrong happend '
-            }
+        displayErrorMessage =(textMessage)=>{
+            if (!checkType.isString(textMessage))return
 
-            let message = {textMessage:errorMessage, messageType:'error'}
+            let message = {textMessage, messageType:'error'}
             this.displayAlertMessage(message)
         };
 

@@ -150,7 +150,7 @@ class  PostPage extends Component  {
                <PartalNavigationBar {...props}/>
                <NavigationBarBigScreen {...props} />
                 { post &&
-                    <div  className="app-box-container post-page" id="post-page">
+                    <div  className="app-box-container">
                         <UnconfirmedUserWarning {...props}/>
                         { post.isLoading &&
                             <div className="page-spin-loader-box partial-page-loader">
@@ -187,7 +187,7 @@ export const Post = props => {
     var postProps = {...props, post}
 
 	return(
-        <div>
+        <div className="post-page" id="post-page">
             <div className="post-container">
                 <div className="post-contents"> 
                     <PostComponent {...postProps }  />

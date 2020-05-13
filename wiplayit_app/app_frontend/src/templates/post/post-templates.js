@@ -149,19 +149,21 @@ export const PostComponent = props => {
                             }
            
                         </div>
+                        <ul className="answer-question-box">
+                            { props.isPostBox? 
+                                <li className="post-title">
+                                    { post.add_title }
+                                </li>
+                                :
 
-                        { props.isPostBox? 
-                            <b className="post-title">
-                                { post.add_title }
-                            </b>
-                            :
-
-                            <b className="">
-                                <Link to={{pathname: postPath, state }} className="question-link">
+                                <li className="post-title">
+                                    <Link to={{pathname: postPath, state }} 
+                                          className="question-link">
                                         { post.add_title }
-                                </Link>
-                            </b>
-                        }
+                                    </Link>
+                                </li>
+                            }
+                        </ul>
 
                     </div>
                     <div className="post-body">

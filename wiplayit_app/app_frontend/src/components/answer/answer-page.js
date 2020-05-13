@@ -59,21 +59,23 @@ class AnswerContainer extends Component {
         console.log(entities )
       
         return(
-            <div className="answer-page" id="answer-page">
-                <div className="answer-container">
-                    <PartalNavigationBar {...props}/>
-                    <NavigationBarBigScreen {...props} />
-
-                    <div className="answer-contents"> 
-                        <div className="answer-question-box">
-                            <p className="question">
-                                <Link to={{pathname: questionPath, state : {question} }} 
-                                        className="question-link">
-                                    {question  && question.add_question }
-                                </Link>
-                            </p>
+            <div className="app-box-container app-question-box">
+                <PartalNavigationBar {...props}/>
+                <NavigationBarBigScreen {...props} />
+                
+                <div className="answer-page" id="answer-page">
+                    <div className="answer-container">    
+                        <div className="answer-contents"> 
+                            <div className="answer-question-box">
+                                <p className="question">
+                                    <Link to={{pathname: questionPath, state : {question} }} 
+                                          className="question-link">
+                                        {question  && question.add_question }
+                                    </Link>
+                                </p>
+                            </div>
+                            <AvailableAnswers {...props}/>
                         </div>
-                        <AvailableAnswers {...props}/>
                     </div>
                 </div> 
             </div>

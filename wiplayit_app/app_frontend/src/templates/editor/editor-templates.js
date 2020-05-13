@@ -291,6 +291,7 @@ export const TextAreaEditor = props => {
 
 export const PostEditor = (props) => {
     let {objName} = props;
+    console.log(props)
     if(objName !== 'Post') return null;
 
     return(

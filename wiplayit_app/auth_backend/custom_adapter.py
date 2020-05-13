@@ -16,11 +16,13 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     def get_email_confirmation_url(self, request, emailconfirmation):
         
         path = "/registration/account/confirm/" + emailconfirmation.key + "/"
+        print(path)
         if settings.DEBUG:
             uri = request.build_absolute_uri(path)
         else:
-            uri = request.build_absolute_uri(request, path) 
-        
+            uri = build_absolute_uri(request, path) 
+
+        print(uri)
         return uri
 
 
@@ -59,12 +61,8 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
             preferred_avatar_size_pixels
         )
 
-
-
-        print(picture_url)
         avatar_url = sociallogin.account.get_avatar_url()
         avatar = download_file_from_url(avatar_url)
-        print(avatar)
         profile = user.profile 
         profile.profile_picture = avatar
         profile.save()        
