@@ -610,7 +610,7 @@ export const SubmitBtn = props => {
 
 
 export const OpenEditorBtn = props => {
-    console.log(props)
+    //console.log(props)
   
     let { modalProps, currentUser} = props ;
     let { className } =  props;

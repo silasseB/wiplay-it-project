@@ -335,7 +335,7 @@ export const DraftEditor = props => {
                onFocus={props.handleFocus}
                onBlur={props.handleBlur}
                //plugins={props.plugins}
-
+               
             />
         )        
 }

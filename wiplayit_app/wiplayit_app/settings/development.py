@@ -28,6 +28,21 @@ from wiplayit_app.settings.common import *
 DEBUG = True
 SITE_ID = 2
 
+#EMAIL_USE_TLS = True
+#EMAIL_USE_SSL = False
+
+#EMAIL_HOST          = 'smtp.gmail.com'
+#EMAIL_HOST_USER     = 'silassibaloy@gmail.com'
+#EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
+
+EMAIL_PORT = 587
+
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_HOST_USER = 'info'
+EMAIL_HOST_PASSWORD = 'SilasValoi1990@?'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 INSTALLED_APPS.append('coverage')
 
 

@@ -132,27 +132,29 @@ const WelcomeTextComponent = props => {
 
 
  const SocialLogin = props =>  {
-  
+  let {isSocialAuth} = props
 
  return(
-  <div className="social-login-container">
-      <SpinLoader {...props}/>
+        <div className="social-login-container">
+            {isSocialAuth && 
+                <SpinLoader {...props}/>
+            }
     
-      <div className="social-login">
-        <div className="google-login-box">
-           <GoogleLogin
-               clientId = "499495811255-0v3hjt4lena190or9euvdla2qi5f8qrk.apps.googleusercontent.com"
-               fields="first_name,last_name,email,picture"
-               onSuccess={props.responseGoogle}
-               onFailure={props.responseGoogle}
-               render={renderProps => (
+            <div className="social-login">
+                <div className="google-login-box">
+                <GoogleLogin
+                    clientId = "499495811255-0v3hjt4lena190or9euvdla2qi5f8qrk.apps.googleusercontent.com"
+                    fields="first_name,last_name,email,picture"
+                    onSuccess={props.responseGoogle}
+                    onFailure={props.responseGoogle}
+                    render={renderProps => (
 
-                  <button  className='btn-openid google-login'
+                    <button  className='btn-openid google-login'
                     onClick={renderProps.onClick} 
                          disabled={renderProps.disabled}>
                          <span className="google-login-icon fa fa-google"></span>   
                         Login with Google 
-                 </button>
+                    </button>
                )}
          
             />

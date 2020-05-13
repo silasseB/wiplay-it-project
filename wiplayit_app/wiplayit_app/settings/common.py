@@ -26,16 +26,6 @@ GUARDIAN_MONKEY_PATH = False
 ANONYMOUS_USER_NAME = "Anonymous"
 GUARDIAN_GET_INIT_ANONYMOUS_USER = 'auth_backend.models.get_anonymous_user_instance'
 
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-
-EMAIL_HOST          = 'smtp.gmail.com'
-EMAIL_HOST_USER     = 'silassibaloy@gmail.com'
-EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
-EMAIL_PORT = 587
-
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 

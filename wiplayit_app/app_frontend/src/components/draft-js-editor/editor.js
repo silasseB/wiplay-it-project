@@ -81,7 +81,6 @@ export default  class AppEditor extends Component{
         this.state = {
             editorState        : EditorState.createEmpty(decorator),
             form               : {textarea   :  "", },
-            editorPlaceHolder  : "", 
             postTitle          : "",
             showURLInput       : false,
             showImage          : false,
@@ -541,6 +540,10 @@ export default  class AppEditor extends Component{
         }
     }
 
+    handhleFocus =()=> {
+        this.focus()
+    }
+
     handleBlur =()=> {
         console.log('Blured')
         
@@ -572,6 +575,7 @@ export default  class AppEditor extends Component{
             handleScroll      : this.handleScroll, 
             handleFocus       : this.handleFocus,
             handleBlur        : this.handleBlur,
+            handhleFocus      : this.handhleFocus.bind(this),
             ...this.state,
         } 
     }
@@ -585,7 +589,7 @@ export default  class AppEditor extends Component{
                                                      { display : 'none' };
        
 
-        //console.log(props)
+        console.log(props, this)
         return (
             <div
                 className="modal-editor"
@@ -718,7 +722,10 @@ export const EditorCommp = (props)=> {
             }
         
             { objName !== 'Question' && objName !== 'Post' &&
-                <div style={props.onScroolStyles} id="editors-box" className="editors-box">
+                <div style={props.onScroolStyles}
+                     id="editors-box" 
+                     className="editors-box"
+                     onClick={()=> props.handhleFocus()}>
                     <DraftEditor {...props}/>
                 </div>
             }
