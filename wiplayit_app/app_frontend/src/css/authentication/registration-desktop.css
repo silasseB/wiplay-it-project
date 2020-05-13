@@ -68,7 +68,8 @@
 }
 
 .social-login {
-  margin: 48px 4%;
+  margin: 20px 4%;
+  border: px solid blue
 }
 
 
@@ -283,9 +284,6 @@
 }
 
 
-.registration-spin-loader-box {
-  margin: 10px 40%;
-}
 
 .form-cancel-btn {
      background-color: #edf0f3;

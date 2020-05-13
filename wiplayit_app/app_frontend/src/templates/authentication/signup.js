@@ -18,7 +18,8 @@ export const  SignUpForm = props => {
           onSignUpForm,
           formName,
           formIsValid, 
-          validateForm } = props;
+          validateForm, 
+          isSocialAuth} = props;
 
     form = form && form.signUpForm? 
                            form.signUpForm:null;
@@ -41,7 +42,7 @@ export const  SignUpForm = props => {
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
       
-            { error &&
+            {!isSocialAuth && error &&
                 <NonFieldErrors {...error}/>
             }       
 
@@ -83,7 +84,7 @@ export const  SignUpForm = props => {
                </div>
 
                <div  className="email-fields signup-fields">
-                    { onSignUpForm && error &&
+                    {!isSocialAuth && onSignUpForm && error &&
                         <EmailFieldErrors {...error}/>
                     }
 
@@ -128,14 +129,12 @@ export const  SignUpForm = props => {
             <LoginLink/>
 
             </fieldset>
-          </form>
-          { onSignUpForm?
-     
-            <SpinLoader {...props}/> 
-            :
-            ""
-              
-          }
+
+            {!isSocialAuth && onSignUpForm &&
+                <SpinLoader {...props}/> 
+            }
+        </form>
+          
       </div>
 
       :

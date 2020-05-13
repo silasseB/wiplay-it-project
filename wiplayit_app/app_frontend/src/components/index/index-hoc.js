@@ -196,7 +196,7 @@ export function MainAppHoc(Component) {
             userProfile && store.dispatch(action.getCurrentUserPending())
             userProfile && store.dispatch(action.getCurrentUserSuccess(userProfile));
 
-        }
+        };
 
         closeModal(modal){
 
@@ -204,7 +204,7 @@ export function MainAppHoc(Component) {
             if (objName  === 'UserProfile' && modalName === 'editor') return;
             window.history.back(); 
             
-        }
+        };
 
         handleNewQuestion =(params)=> {
             let data = params.data;
@@ -224,7 +224,7 @@ export function MainAppHoc(Component) {
             let postRedirectProps = {
                     path  : pathToPost,
                     state : {post, recentlyCreated : true},
-                }
+                };
 
             post && this.redirectToRouter(postRedirectProps);
 

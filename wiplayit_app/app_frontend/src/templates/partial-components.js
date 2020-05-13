@@ -6,8 +6,6 @@ export const ButtonsBox = props => {
     let styles = props && props.Styles;
     styles     = styles && styles.contents;
   	styles     = !styles && Styles.contents || styles;
-
-   
       
     return (
 
@@ -95,7 +93,7 @@ export const AlertComponent =(props)=> {
                            messageType === 'success' &&  `${classNames} alert-success` || classNames;
                                  
 
-    //console.log(classNames, messageType)        
+    console.log(classNames, messageType)        
     
     return(
         <div className={classNames}>

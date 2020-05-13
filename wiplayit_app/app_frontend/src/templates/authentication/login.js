@@ -15,7 +15,15 @@ import { PasswordChangeBig,
 
 export const  LoginForm = props => {
     //console.log(props)
-    let { submitting, onSignUpForm,onLoginForm, formIsValid, formName, form, validateForm} = props;
+    let { 
+        submitting,
+        onSignUpForm,
+        onLoginForm,
+        formIsValid,
+        formName, 
+        form, 
+        validateForm,
+        isSocialAuth} = props;
 
 
     form = form && form.loginForm? 
@@ -43,12 +51,12 @@ export const  LoginForm = props => {
                             style={ fieldSetStyles}
                             disabled={ submitting || onSignUpForm }
                             className="fieldset-login">
-                            { error &&
+                            { error && !isSocialAuth &&
                                 <NonFieldErrors {...error}/>
                             }
                                
                             <div className="login-box">
-                                { onLoginForm && error &&
+                                {!isSocialAuth && onLoginForm && error && 
                                     <EmailFieldErrors {...error}/>
                                 }
                                 <div className="login-fields">
@@ -87,12 +95,11 @@ export const  LoginForm = props => {
                                 <CreateAccountLink/> 
                             </div>
                         </fieldset>
-                    </form>
 
-                    { !onSignUpForm &&
-                        <SpinLoader {...props}/> 
-                    } 
-         
+                        {!isSocialAuth && !onSignUpForm &&
+                            <SpinLoader {...props}/> 
+                        } 
+                    </form>
                 </div>
                 :
                 ""

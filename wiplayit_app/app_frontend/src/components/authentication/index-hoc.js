@@ -2,7 +2,6 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-; 
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
 import Axios from 'utils/axios_instance';
@@ -11,12 +10,12 @@ import Helper from 'utils/helpers';
 import {authenticate, _GetApi} from 'dispatch/index';
 import { getCookie } from 'utils/csrf_token.js';
 import * as checkType from 'helpers/check-types'; 
+import { AlertComponent } from "templates/partial-components";
+
+
+
 const helper   = new Helper();
 const api = new Api();
-
-
-
-
 
 export function AuthenticationHoc(Component) {
 
@@ -26,7 +25,10 @@ export function AuthenticationHoc(Component) {
 
             super(props);
             this.state = {
+                displayMessage       : false,
+                message              : null,
                 isMounted            : false,
+                isSocialAuth         : false,
                 isAuthenticated      : false,
                 confirmed            : false,
                 defaultActiveForm    : null,
@@ -66,21 +68,20 @@ export function AuthenticationHoc(Component) {
             console.log(cacheEntities)
 
             if (cacheEntities){
-                let { userAuth  }  = cacheEntities;
-                
-                if ( userAuth){
-                    let { auth } = userAuth;
 
+                let {userAuth}  = cacheEntities;
+                if (userAuth){
+
+                    let {auth} = userAuth;
                     if (auth && auth.isLoggedIn){
                         this.props.history.push('/')
-                        this.props.forceUpdate()
                         return true
                     }
                 }
             }
 
             return false;
-        }
+        };
 
         _Redirect =()=> {
             let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
@@ -120,7 +121,7 @@ export function AuthenticationHoc(Component) {
             accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
             
             return ;
-        }
+        };
 
 
         responseGoogle =(response)=> {
@@ -134,15 +135,17 @@ export function AuthenticationHoc(Component) {
         _SendSocialAuthentication =(accessToken, apiUrl)=>{
             let isSocialAuth = true
             let form   = helper.createFormData({"access_token": accessToken});
+            this.setState({isSocialAuth, submitting:true})
             return this.props.authenticate({ apiUrl, form, isSocialAuth });
 
-        }
+        };
 
         componentWillUnmount =()=> {
             this.isMounted = false;
             this.unsubscribe();
 
         };
+
 
         componentDidUpdate =(nextProps , prevState)=>{
            
@@ -159,17 +162,21 @@ export function AuthenticationHoc(Component) {
             const onStoreChange = () => {
                 let  storeUpdate = store.getState(); 
                 let { entities } =  storeUpdate;
-                let { userAuth } = entities;
+                let { userAuth, errors } = entities;
                 let { form, formName } = this.state;
                 console.log(userAuth)
 
                 let { auth, error, successMessage }  = userAuth;
 
+                if (errors) {
+                    this._HandleErrors(errors);
+                }
+
                 if (form && error) {
                     form[formName]['error'] = error;
                     this.setState({form, submitting : false})
-                    
                 }
+
                 if(successMessage){
                     this.setState({ submitting : false, successMessage}) 
                 }
@@ -187,7 +194,26 @@ export function AuthenticationHoc(Component) {
             };
 
             this.unsubscribe = store.subscribe(onStoreChange);
+        };
+
+
+        _HandleErrors(errors){
+            if (!errors) return;
+            if (!errors.error) return;
+            let message = {textMessage:errors.error, messageType:'error'}
+
+            this.displayAlertMessage(message);
+            delete errors.error;
         }
+
+        displayAlertMessage = (message) => {
+                                 
+            this.setState({ displayMessage : true, message });
+            setTimeout(()=> {
+                this.setState({displayMessage : false}); 
+            }, 10000);
+        };
+
 
         handleFormChange=(e)=>{
             e.preventDefault()
@@ -200,7 +226,7 @@ export function AuthenticationHoc(Component) {
 
         _InvalidateForm(){
 
-        }
+        };
 
 
 
@@ -235,12 +261,9 @@ export function AuthenticationHoc(Component) {
 
 
         _SetForm =(form, formName)=> {
-            console.log(form, formName, this.isMounted)
-            if(!this.isMounted) return;
 
             let currentForm = this.state.form;
             if (currentForm) {
-
                 if (!currentForm[formName]) {
                     currentForm[formName] = {...form}
                 }
@@ -282,8 +305,6 @@ export function AuthenticationHoc(Component) {
         }
 
         formConstructor =(name)=> {
-            //if(!this.isMounted) return;
-            console.log(this.isMounted)
             if (name) {
                 let formName = name;
                 let defaultActiveForm = formName;
@@ -464,7 +485,8 @@ export function AuthenticationHoc(Component) {
       
       
         getAuthUrl =(formName)=> {
-            console.log(formName)
+            if (!formName) return;
+        
             switch(formName){
 
                 case 'loginForm':
@@ -522,7 +544,8 @@ export function AuthenticationHoc(Component) {
 
       
         getProps =()=> {
-            let  props = {
+            return {
+                ...this.props,
                 ...this.state,
                 onSubmit                : this.onSubmit,
                 formConstructor         : this.formConstructor,
@@ -534,21 +557,26 @@ export function AuthenticationHoc(Component) {
                 toggleSignUpForm        : this.toggleSignUpForm,
                 confirmUser             : this.confirmUser,
                 validateForm            : this.validateForm, 
+
             };
-         
-            return Object.assign(props, this.props);
         };
     
 
         render() {
             if (!this.isMounted) return null;
             let props = this.getProps(); 
+
+            let alertMessageStyles = props.displayMessage?{ display : 'block'}:
+                                                          { display : 'none' };
            
             return (
                <div>
                     <div>
                      <Component {...props}/>
-                  </div>  
+                   </div>  
+                   <div style={alertMessageStyles}>
+                       <AlertComponent {...props}/>
+                    </div>
                 </div>
             );
         };
@@ -573,7 +601,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => {
    return {
-      userAuth : state.entities.userAuth,
+      entities : state.entities,
       
    }
 };

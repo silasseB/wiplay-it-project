@@ -1,0 +1,13 @@
+
+.social-login-container {
+     border: px solid red;
+ }
+
+
+.registration-spin-loader-box {
+    border          : px solid black;
+    justify-content : center;
+    display         : flex;
+    padding         : 10px 0;
+    
+}

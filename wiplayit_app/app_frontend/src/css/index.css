@@ -55,11 +55,11 @@
     }
 
     .alert-box {
-    	width      : 45%;
-        margin     : 0px 27.5%; 
-        color      :  #ffff;
+    	width           : 45%;
+        margin          : 0px 27.5%; 
         justify-content : center;
     	display         : flex;
+    	border          : px solid black;
     }
 
 }
@@ -100,8 +100,13 @@
     	position      : fixed;
     	right         : auto;
     	left          : auto;
+    }
 
 
+    .alert-box {
+        justify-content : center;
+    	display         : flex;
+    	border          : px solid black;
     }
 
 
@@ -131,9 +136,9 @@
     .unconfirmed-user-warn {
 
     }
-
-
 }
+
+
 .unconfirmed-user-email {
 	text-decoration:  underline;
 	text-decoration-color : v;

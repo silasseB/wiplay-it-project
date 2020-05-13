@@ -609,19 +609,23 @@ export function authenticate(params={}){
             }
         )
         .catch(error =>{
-            console.log(error)                
+            let _error;
+                          
             if (error.response) {
-                error = error.response.data
-                dispatch(action.authenticationError(error, isSocialAuth));
+                console.log(error.response)  
+                _error = error.response.data
+                dispatch(action.authenticationError(_error, isSocialAuth));
 
             }
             else if (error.request)  {
-                error = 'Something wrong happened.';
-                console.log(error)
-                dispatch(action.authenticationError(error, isSocialAuth));
-                dispatch(action.handleError(error));
+                console.log(error.request)
+                _error = 'Something wrong happened.';
+                
+                dispatch(action.authenticationError(_error, isSocialAuth));
+                dispatch(action.handleError(_error));
 
             }else{
+                console.log(error)  
                 console.log('Something evil happened')
                 dispatch(action.handleError());
             }

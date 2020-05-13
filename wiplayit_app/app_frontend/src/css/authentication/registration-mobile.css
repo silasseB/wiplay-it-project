@@ -218,6 +218,7 @@
 
 .social-login {
    margin: 0 4%;
+   border: px solid blue
   
 }
 
@@ -322,11 +323,6 @@
   padding:  10px;
 }
 
-.registration-spin-loader-box {
-  border: px solid blue;
-  margin: 0 40%;
-
-}
 
 }
 

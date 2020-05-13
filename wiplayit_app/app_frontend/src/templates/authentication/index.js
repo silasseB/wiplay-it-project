@@ -3,11 +3,12 @@ import {  Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import  AjaxLoader from "templates/ajax-loader";
 import {history} from "App";
 import  LoginForm from "templates/authentication/login";
 import  SignUpForm  from "templates/authentication/signup";
 import  EmailForm  from "templates/authentication/email-form";
+
+import { SpinLoader } from  'templates/authentication/utils'
 
 
 const RegistrationComponent = (props)=>{
@@ -58,6 +59,7 @@ const RegistrationSmall = props => (
 
 const RegistrationBig = props => {
    let toggleProps = {value : true,};
+   let {onPasswordResetForm, onSignUpForm} = props
    console.log(props)
    
     return(
@@ -66,7 +68,7 @@ const RegistrationBig = props => {
             <SocialLogin {...props}/>
             <p className="or-option">Or</p>
             <div className="registration-flex-box ">
-                { props.onPasswordResetForm?
+                { onPasswordResetForm?
                     <div className="password-reset-container">
                         <EmailForm{...props}/> 
                     </div>
@@ -78,7 +80,7 @@ const RegistrationBig = props => {
 
                 <p className="separator"></p>
                 <div className="signup-container">
-                    { props.onSignUpForm?
+                    { onSignUpForm?
                         <SignUpForm {...props}/>
                         :
                         <div className="second-box-contents signup-container-contents" 
@@ -133,7 +135,8 @@ const WelcomeTextComponent = props => {
   
 
  return(
-  <React.Fragment>
+  <div className="social-login-container">
+      <SpinLoader {...props}/>
     
       <div className="social-login">
         <div className="google-login-box">
@@ -171,7 +174,7 @@ const WelcomeTextComponent = props => {
 
         </div>
       </div>
-    </React.Fragment>
+    </div>
   ); 
 
  }

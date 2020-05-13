@@ -20,9 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '(sm1(p$as-5c)a@)^vthx1g%t+kil^rzxx%mx*!vp@8rbqm7t2'
 
-
-#LOGOUT_REDIRECT_URL  = 'user_app:login'
-#LOGIN_REDIRECT_URL = 'user_app:api-login'
 AUTH_USER_MODEL = 'auth_backend.User'
 
 GUARDIAN_MONKEY_PATH = False
@@ -30,7 +27,7 @@ ANONYMOUS_USER_NAME = "Anonymous"
 GUARDIAN_GET_INIT_ANONYMOUS_USER = 'auth_backend.models.get_anonymous_user_instance'
 
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL=False
+EMAIL_USE_SSL = False
 
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_HOST_USER     = 'silassibaloy@gmail.com'
@@ -57,7 +54,6 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 SOCIALACCOUNT_AVATAR_SUPPORT = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
-#SOCIALACCOUNT_EMAIL_VERIFICATION
 
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
@@ -192,16 +188,6 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = [
-     'http://192.168.43.101:3000',
-     'http://127.0.0.1:8000',
-     'http://192.168.43.14:8000',
-     'http://localhost:3000', 
-     'https://baloyi.pythonanywhere.com',
-     'https://valoi.pythonanywhere.com', 
-     'https://silasi.pythonanywhere.com',
-
-    ]
 
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -281,9 +267,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATICFILES_FINDERS = "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -297,9 +280,6 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-
-
 
 WEBPACK_LOADER = {
     'DEFAULT': {

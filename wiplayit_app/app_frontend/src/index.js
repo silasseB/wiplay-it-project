@@ -22,6 +22,7 @@ import "css/profile/index-user-list.css";
 import "css/feedback.css";
 import "css/profile/profile.css"
 
+import 'css/authentication/index.css';
 import 'css/authentication/registration-mobile.css';
 import 'css/authentication/registration-desktop.css';
 

@@ -13,9 +13,16 @@ import { RegistrationSubmitBtn,
 const EmailForm = props => {
     console.log(props)
 
-    let { submitting ,onSignUpForm,
-          onPasswordResetForm, successMessage,
-          onEmailResendForm, form, formIsValid, formName, validateForm } = props;
+    let {submitting,
+        onSignUpForm,
+        onPasswordResetForm,
+        successMessage,
+        onEmailResendForm,
+        form, 
+        formIsValid,
+        formName, 
+        validateForm,
+        isSocialAuth } = props;
 
     form = form && form[formName]? 
                            form[formName]:null;
@@ -62,7 +69,7 @@ const EmailForm = props => {
                     <form className="email-form" onSubmit={props.onSubmit}>
                         <li className="password-form-description">{props.formDescription}</li>
 
-                        { error &&
+                        {!isSocialAuth && error &&
                             <NonFieldErrors {...error}/>
                         }
 
@@ -70,7 +77,7 @@ const EmailForm = props => {
                       disabled={ submitting || onSignUpForm} >
 
                     <div  className="email-fields">
-                    { onPasswordResetForm || onEmailResendForm && error &&
+                    {!isSocialAuth && onPasswordResetForm || onEmailResendForm && error &&
                         <EmailFieldErrors {...error}/>
                     }
 
@@ -99,19 +106,15 @@ const EmailForm = props => {
                         </div>                  
                     </div>
 
-                </fieldset>    
+                </fieldset>   
+                {!isSocialAuth && !onSignUpForm &&
+                  <SpinLoader {...props}/> 
+                }   
 
             </form>
 
             }
-
-            { onSignUpForm?
             
-            ""
-            :
-            <SpinLoader {...props}/> 
-              
-          }  
         </div>
 
         :

@@ -221,30 +221,13 @@ class FacebookLogin(SocialLoginView):
 	serializer_class = CustomSocialLoginSerializer
 
 
-	def post(self, request, *args, **kwargs):
-		self.request = request
-		print(request.data)
-
-		self.serializer = self.get_serializer(data=self.request.data,
-                                              context={'request': request})
-		self.serializer.is_valid(raise_exception=True)
-
-		self.login()
-		return self.get_response()
-	
-
 class TwitterLogin(SocialLoginView):
 	serializer_class = TwitterLoginSerializer
 	adapter_class = TwitterOAuthAdapter
 
-
-
-
 class GoogleLogin(SocialLoginView):
 	adapter_class = GoogleOAuth2Adapter
 	serializer_class = CustomSocialLoginSerializer
-
-
 
 
 
