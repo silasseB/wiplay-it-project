@@ -9,8 +9,9 @@ SITE_ID = 3
 
 EMAIL_PORT = 587
 
-EMAIL_HOST = 'smtp.office365.com'
-EMAIL_HOST_USER = 'info'
+
+EMAIL_HOST = 'wiplayit-com.mail.protection.outlook.com'
+EMAIL_HOST_USER = 'info@wiplayit.com'
 EMAIL_HOST_PASSWORD = 'SilasValoi1990@?'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

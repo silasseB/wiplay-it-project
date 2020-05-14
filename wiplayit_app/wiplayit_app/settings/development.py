@@ -36,11 +36,11 @@ SITE_ID = 2
 #EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
 
 EMAIL_PORT = 587
-
-EMAIL_HOST = 'smtp.office365.com'
-EMAIL_HOST_USER = 'info'
+EMAIL_USE_TLS= 1
+EMAIL_HOST = 'wiplayit-com.mail.protection.outlook.com' #'smtp.office365.com'
+EMAIL_HOST_USER = 'info@wiplayit.com'
 EMAIL_HOST_PASSWORD = 'SilasValoi1990@?'
-EMAIL_USE_TLS = True
+#EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 INSTALLED_APPS.append('coverage')

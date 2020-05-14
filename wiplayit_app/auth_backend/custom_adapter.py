@@ -14,15 +14,13 @@ from django.core import files
 class CustomAccountAdapter(DefaultAccountAdapter):
 
     def get_email_confirmation_url(self, request, emailconfirmation):
-        
+                
         path = "/registration/account/confirm/" + emailconfirmation.key + "/"
-        print(path)
+        
         if settings.DEBUG:
             uri = request.build_absolute_uri(path)
         else:
             uri = build_absolute_uri(request, path) 
-
-        print(uri)
         return uri
 
 

@@ -563,10 +563,10 @@ export function handleSubmit(props) {
 
 
 export function authenticate(params={}){
-    let useTokenIsBolean = checkType.isBoolean(useToken, {timeout:30000})
+    let useTokenIsBolean = checkType.isBoolean(useToken)
     useToken  = useTokenIsBolean &&  useToken || false;
 
-    const Api = _GetApi(useToken);   
+    const Api = _GetApi(useToken, {timeout:120000});   
     if (!Api) {
         console.log(Api)
         return dispatch =>{ dispatch(action.handleError()) };
