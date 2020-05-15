@@ -566,7 +566,7 @@ export function authenticate(params={}){
     let useTokenIsBolean = checkType.isBoolean(useToken)
     useToken  = useTokenIsBolean &&  useToken || false;
 
-    const Api = _GetApi(useToken, {timeout:120000});   
+    const Api = _GetApi(useToken, {timeout:30000});   
     if (!Api) {
         console.log(Api)
         return dispatch =>{ dispatch(action.handleError()) };

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
 import  MainAppHoc from "components/index/index-hoc";
 import {store} from "store/index";
+import {getAboutInfo} from "dispatch/index"
 
 
 
@@ -18,8 +19,10 @@ class  AboutContainer extends Component  {
     onAboutInfoUpdate = () =>{
  
         const onStoreChange = () => {
-            let storeUpdate   = store.getState();
-            let {entities }   = storeUpdate;
+            let storeUpdate = store.getState();
+            let {entities } = storeUpdate;
+            let {about}     = entities;
+            this.setState({about})
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
@@ -32,7 +35,7 @@ class  AboutContainer extends Component  {
     componentDidMount() {
         this.isMounted = true;
         this.onAboutInfoUpdate()
-        this.props.getAboutInfo()
+        store.dispatch(getAboutInfo())
         console.log(this.props)
     }
 
@@ -51,13 +54,12 @@ class  AboutContainer extends Component  {
     }
 };
 
-export default MainAppHoc(AboutContainer); 
+export default AboutContainer; 
 
 
 export const AboutComponent = props => {
     console.log(props)
-    let {entities} = props
-    let about = entities.about;
+    let about = props.about;
     about = about && about.info;
     return(
         <div>

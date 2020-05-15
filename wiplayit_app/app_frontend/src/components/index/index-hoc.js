@@ -2,9 +2,21 @@ import React from 'react';
 import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import {handleSubmit, getCurrentUser,getPost, getUserList,getAboutInfo,
-         getUserProfile,getPostList,getQuestion,getReplyList,getReplyChildrenList,
-         getQuestionList as _getQuestionList,getCommentList, getIndex, authenticate }  from "dispatch/index"
+import {handleSubmit, 
+        getCurrentUser,
+        getPost,
+        getUserList,
+        getAboutInfo,
+        getUserProfile,
+        getPostList,
+        getQuestion,
+        getReplyList,
+        getReplyChildrenList,
+        getQuestionList,
+        getCommentList,
+        getIndex, 
+        authenticate }  from "dispatch/index"
+
 import  * as action  from 'actions/actionCreators';
 import { ModalManager}   from  "components/modal/modal-container";
 

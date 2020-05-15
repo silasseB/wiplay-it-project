@@ -10,11 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-
 from wiplayit_app.settings.common import *
-
-
-
+import smtplib
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -24,26 +21,38 @@ from wiplayit_app.settings.common import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #01010111 01000101 01001100 01000011 01001111 01001101 01000101
+#206367499
+#1990
 
 DEBUG = True
 SITE_ID = 2
+'''
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
-#EMAIL_USE_TLS = True
-#EMAIL_USE_SSL = False
+EMAIL_HOST          = 'smtp.gmail.com'
+EMAIL_HOST_USER     = 'silassibaloy@gmail.com'
+EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
+'''
 
-#EMAIL_HOST          = 'smtp.gmail.com'
-#EMAIL_HOST_USER     = 'silassibaloy@gmail.com'
-#EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+EMAIL_PORT    = 587
 
-EMAIL_PORT = 587
-EMAIL_USE_TLS= 1
-EMAIL_HOST = 'wiplayit-com.mail.protection.outlook.com' #'smtp.office365.com'
+
+EMAIL_HOST = 'outlook.office365.com'
 EMAIL_HOST_USER = 'info@wiplayit.com'
 EMAIL_HOST_PASSWORD = 'SilasValoi1990@?'
-#EMAIL_USE_TLS = True
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 INSTALLED_APPS.append('coverage')
+
+'''
+s = smtplib.SMTP('info@wiplayit.com', 587)
+s.ehlo()
+s.starttls()
+'''
 
 
 ALLOWED_HOSTS = [ '127.0.0.1', '192.168.43.14', 'localhost' ]
