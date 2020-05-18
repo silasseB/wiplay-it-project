@@ -37,15 +37,16 @@ EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
 
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
-EMAIL_PORT    = 587
+EMAIL_PORT    = 25
 
 
-EMAIL_HOST = 'outlook.office365.com'
-EMAIL_HOST_USER = 'info@wiplayit.com'
-EMAIL_HOST_PASSWORD = 'SilasValoi1990@?'
+EMAIL_HOST = 'smtpout.secureserver.net' 
+EMAIL_HOST_USER     =  'info@wiplayit.com' #'silasbaloy@hotmail.com'  # #
+EMAIL_HOST_PASSWORD =  'SilasValoi1990@?' #'sila9018$?'  
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
+SERVER_EMAIL       = EMAIL_HOST_USER
+EMAIL_FROM         = EMAIL_HOST_USER 
 INSTALLED_APPS.append('coverage')
 
 '''

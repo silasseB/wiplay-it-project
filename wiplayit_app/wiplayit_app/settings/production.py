@@ -7,13 +7,14 @@ from wiplayit_app.settings.common import *
 DEBUG = False
 SITE_ID = 3
 
+'''
 EMAIL_PORT = 587
 EMAIL_HOST = 'outlook.office365.com'
 EMAIL_HOST_USER = 'info@wiplayit.com'
 EMAIL_HOST_PASSWORD = 'SilasValoi1990@?'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
+'''
 
 
 SECURE_SSL_REDIRECT = True
