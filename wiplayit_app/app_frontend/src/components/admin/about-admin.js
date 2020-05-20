@@ -141,7 +141,7 @@ export const AboutAdminComponent = props => {
     
     return(
         <div className="about-admin-contents" id="about-admin-contents">
-            <OpenEditorBtn {...editAboutProps}/>
+            
                 
             <div className="">
                 {about && about.map( (about, index)=>{
