@@ -3,10 +3,8 @@ import  AjaxLoader from "templates/ajax-loader";
 import  * as action  from 'actions/actionCreators';
 
 import {  CommentsComponent } from "templates/comment/comment-templates"
-import {Editor, EditorState, convertFromRaw} from 'draft-js';
+import {Editor} from 'draft-js';
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {decorator} from 'components/draft-js-editor/editor'
-
 import {store} from "store/index";
 
 

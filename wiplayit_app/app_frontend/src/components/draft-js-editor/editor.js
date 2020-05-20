@@ -17,7 +17,7 @@ import {TextAreaEditor,
         ToolBar,
         MobileModalNavBar,
         DesktopModalNavBar } from  "templates/editor/editor-templates";
-import {insertLink} from 'components/draft-js-editor/plugins'
+import {insertLink, decorator} from 'components/draft-js-editor/plugins'
 import { AlertComponent } from 'templates/partial-components';
 import { showModal }  from 'actions/actionCreators';
 
@@ -28,47 +28,10 @@ import { handleSubmit, _GetApi }  from "dispatch/index"
 import  * as action  from "actions/actionCreators";
 import * as checkType from 'helpers/check-types'; 
 
-
-
   
 const api      = new Api();
 const helper   = new Helper();  
 
-const linkText = 'texting link';
-
-export function findLinkEntities(contentBlock, callback, contentState) {
-    //console.log(contentBlock, contentState)
-
-    contentBlock.findEntityRanges((character) => {
-
-        const entityKey = character.getEntity();
-        
-        return (
-            entityKey !== null &&
-                contentState.getEntity(entityKey).getType() === 'LINK'
-            );
-
-    }, callback );
-};
-
-
-export const RenderLink = (props) => {
-    const { url } = props.contentState.getEntity(props.entityKey).getData();
-    //console.log(url, props)
-
-    return (
-        <a href={url} title={url} className="draft-js-link" target="_blank">
-            {props.children}
-        </a>
-    );
-};
-
-export const decorator = new CompositeDecorator([
-            {
-                strategy: findLinkEntities,
-                component: RenderLink,
-            },
-        ]);
 
 
 export default  class AppEditor extends Component{
@@ -252,20 +215,17 @@ export default  class AppEditor extends Component{
         
         let {isPut, objName, obj} = this.props;
         let state = this.state;
+        const convertFromRaw = helper.convertFromRaw;
            
         if (isPut) {
             state['contentIsEmpty'] = false;
             if (objName === 'About') {
-                let storedState = JSON.parse(obj.about_text);
-                let editorState = this.newEditorState(storedState);
-                state['editorState']  = editorState; 
+                state['editorState'] =  convertFromRaw(obj.about_text); 
                 state.form['textarea'] = obj.about_title;
             }
 
             if ( objName === 'Post') {
-               let storedState = JSON.parse(obj.add_post);
-               let editorState = this.newEditorState(storedState);
-               state['editorState']   = editorState; //
+                state['editorState']   = convertFromRaw(obj.add_post); 
                state.form['textarea'] = obj.add_title;
             }
 
@@ -274,33 +234,25 @@ export default  class AppEditor extends Component{
             }
 
             else if (objName === 'Answer') {
-                let storedState = JSON.parse(obj.add_answer);
-                let editorState = this.newEditorState(storedState);
-                state['editorState']  = editorState; //
+                state['editorState']  = convertFromRaw(obj.add_answer);; //
             }
 
             else if (objName === 'Comment') {
-                let storedState = JSON.parse(obj.comment);
-                let editorState = this.newEditorState(storedState);
-                state['editorState']  = editorState; //
+                state['editorState'] = convertFromRaw(obj.comment);; //
             }
 
             else if (objName === 'Reply') {
-                let storedState = JSON.parse(obj.reply);
-                let editorState = this.newEditorState(storedState);
-                state['editorState']  = editorState; 
+                state['editorState']  = convertFromRaw(obj.about_text);; 
             }
         }
       
         this.setState({...state})
     };
 
-    
 
-
-    newEditorState(storedState){
-       const contentState = convertFromRaw(storedState);
-       return  EditorState.createWithContent(contentState);
+    newEditorState(contentState){
+      console.log(contentState)
+        return  EditorState.createWithContent(contentState);
     }
 
     blockStyleFn(contentBlock) {

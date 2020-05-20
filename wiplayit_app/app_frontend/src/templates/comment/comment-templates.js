@@ -16,20 +16,18 @@ import { GetModalLinkProps } from "templates/component-props";
 import {ButtonsBox, Styles} from "templates/partial-components";
 import Api from 'utils/api';
 import  * as types  from 'actions/types';
-
+import Helper from 'utils/helpers';
 import RepliesBox from "components/replies/reply-page";
 import { UserComponentSmall } from "templates/author/profile-templates";
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { Editor } from "draft-js";
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {decorator} from 'components/draft-js-editor/editor'
+
 
 
 const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen   = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
-
-
-
+const helper   = new Helper();
 
 export const CommentsComponent = props => {
     //console.log(props)

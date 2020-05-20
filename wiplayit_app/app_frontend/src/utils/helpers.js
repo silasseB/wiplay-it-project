@@ -1,5 +1,8 @@
 
-import {convertToRaw} from 'draft-js';
+import {convertToRaw, convertFromRaw, EditorState} from 'draft-js';
+import {decorator} from 'components/draft-js-editor/plugins';
+import * as checkType from 'helpers/check-types'; 
+
 
 
 
@@ -31,7 +34,55 @@ export default class Helper {
       }
 
       return formData;
-   };
+    };
+
+
+    draftContents =()=>{
+        return {
+            "blocks":
+                [{"key": "dau30","text":"", 
+                  "type":"unstyled","depth":0,
+                   "inlineStyleRanges":[],
+                   "entityRanges":[],
+                   "data":{} }
+                ],"entityMap":{}
+        }
+    }
+
+
+    convertFromRaw =(contents)=>{
+        let contentState = contents;
+
+        if (contents.length) {
+
+            for (var i = contents.length - 1; i >= 0; i--) {
+                let carecter = contents[i];
+            
+                if (!contents.includes('{') || !contents.includes('[')) {
+                    console.log(contents.charAt(0))
+                    let draftContents = this.draftContents();
+                    draftContents.blocks[0].text = contents
+                    contentState = draftContents
+                    console.log(carecter)
+                    break
+                }
+
+            }
+        }
+        
+        let isString = checkType.isString(contentState)
+
+        if (isString) {
+            contentState  = JSON.parse(contentState);
+        }
+
+               
+        console.log(contentState)
+        contentState   = contentState && convertFromRaw(contentState);
+        const editorState    = contentState && 
+                                EditorState.createWithContent(contentState, decorator);
+        return editorState;
+    };
 
     _blockText(form) {
         let blocks    =  form.blocks;
@@ -54,7 +105,7 @@ export default class Helper {
         return blockText;
     };
 
-    validateForm(params){
+    validateForm =(params)=> {
         let validatedForm = {};
 
         let {editorContents, form } = params

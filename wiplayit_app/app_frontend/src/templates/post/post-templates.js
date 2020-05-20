@@ -17,12 +17,9 @@ import {
 
 import CommentsBox from "components/comment/comment-page";
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {Editor,EditorState, convertFromRaw} from 'draft-js';
+import {Editor} from 'draft-js';
 import {ButtonsBox,Styles} from "templates/partial-components";
-import {decorator} from 'components/draft-js-editor/editor'
-
 import { UserComponentSmall } from "templates/author/profile-templates";
-
 
 const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
@@ -41,11 +38,9 @@ export const PostComponent = props => {
     }
 
     let {post, currentUser, postById, postListById}     =    props;
+    if(!post) return null;
 
-    let   storedState    = post && post.add_post && JSON.parse(post.add_post);
-    const contentState   = storedState && convertFromRaw(storedState);
-    const editorState    = contentState && EditorState.createWithContent(contentState, decorator);
-
+    const editorState  = helper.convertFromRaw(post.add_post);
     let  postPath       = post && `/post/${post.slug}/${post.id}/`;
     let  pathToUpvoters = post && `/upvoters/post/${post.id}/`;
 

@@ -5,9 +5,11 @@ import  MainAppHoc from "components/index/index-hoc";
 import {store} from "store/index";
 import {getAboutInfo} from "dispatch/index"
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {Editor,EditorState, convertFromRaw} from 'draft-js';
-import {decorator} from 'components/draft-js-editor/editor'
+import {Editor} from 'draft-js';
+import Helper from 'utils/helpers';
 
+
+const helper = new Helper();
 
 
 class  AboutContainer extends Component  {
@@ -67,11 +69,7 @@ export const AboutComponent = props => {
     return(
         <div>
             {about && about.map( (about, index)=>{
-                let   storedState    = JSON.parse(about.about_text);
-                const contentState   = storedState && convertFromRaw(storedState);
-                const editorState    = contentState && 
-                                       EditorState.createWithContent(contentState, decorator);
-
+                let editorState = helper.convertFromRaw(about.about_text)
                 return(
                     <div key={index}>
                         <div className="">

@@ -6,19 +6,19 @@ import { GetModalLinkProps } from "templates/component-props";
 import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
 import { OpenEditorBtn  } from "templates/buttons";
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {Editor,EditorState, convertFromRaw} from 'draft-js';
-import {decorator} from 'components/draft-js-editor/editor'
-
+import {Editor} from 'draft-js';
+import * as checkType from 'helpers/check-types'; 
 import { UnconfirmedUserWarning,
          PageErrorComponent, } from "templates/partial-components";
 
 import {getAdmin}  from "dispatch/index"
-
+import Helper from 'utils/helpers';
 import  AjaxLoader from "templates/ajax-loader";
 import GetTimeStamp from 'utils/timeStamp';
 
 import  MainAppHoc from "components/admin/index-hoc";
 
+const helper   = new Helper();
 
 
 
@@ -129,6 +129,16 @@ class AboutAdminPage extends Component {
 
 export default  MainAppHoc(AboutAdminPage);
 
+let draftContents = {
+                    "blocks":[
+                            {"key": "dau30","text":"", 
+                             "type":"unstyled","depth":0,
+                             "inlineStyleRanges":[],
+                              "entityRanges":[],
+                              "data":{} }
+                            ],"entityMap":{}
+                        }
+
 
 export const AboutAdminComponent = props => {
     let about = props.about;
@@ -136,8 +146,34 @@ export const AboutAdminComponent = props => {
     let isPut    = about && about.length  && true || false;
     let isPost   = about && !about.length && true || false;
     console.log(props ,about)
+    let about_text = about && about.length && about[1].about_text;
+    let aboutIsString = checkType.isString(about_text)
+    console.log(aboutIsString, about_text)
+    if (aboutIsString) {
+        for (var i = about_text.length + 1; i >= 0; i++) {
+           
+           let carecter = about_text[i];
+           if (carecter !== '{') {
+            let blocks = draftContents.blocks[0]
+            let text = blocks.text;
+            text = about_text
+            draftContents.blocks[0].text = about_text
+            console.log(carecter, text, blocks)
+            break
+           }
+        }
+    }
 
     
+    let isString = checkType.isString(draftContents)
+    console.log(draftContents, isString)
+    draftContents = JSON.stringify(draftContents)
+    isString =checkType.isString(draftContents)
+    console.log(draftContents, isString)
+    draftContents = JSON.parse(draftContents);
+
+    isString =checkType.isString(draftContents)
+    console.log(draftContents, isString)
     
     return(
         <div className="about-admin-contents" id="about-admin-contents">
@@ -148,16 +184,16 @@ export const AboutAdminComponent = props => {
                     let editAboutProps = {
                             isPost,
                             isPut,
-                            obj : about && about[0],
-                            objName : 'About',
+                            obj       : about,
+                            objName   : 'About',
                             className : "edit-about-admin-btn btn-sm",
                     };
                     editAboutProps = GetModalLinkProps.props(editAboutProps);
+                    
+                    let editorState = helper.convertFromRaw(about.about_text)
+                    
+                    if (!editorState) return null;
 
-                    let   storedState    = JSON.parse(about.about_text);
-                    const contentState   = storedState && convertFromRaw(storedState);
-                    const editorState    = contentState && 
-                                       EditorState.createWithContent(contentState, decorator);
                     return(
                         <div key={index}>
                             <OpenEditorBtn {...editAboutProps}/>

@@ -229,7 +229,7 @@ class AboutCompany(models.Model):
     about_text  = models.TextField( blank=True)
 
     def __str__(self):
-        return self.about_text
+        return self.about_title
 
 
 class TermsAndService(models.Model):

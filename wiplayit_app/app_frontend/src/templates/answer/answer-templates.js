@@ -11,11 +11,10 @@ import {
         OpenOptionsModalBtn,
         OpenUsersModalBtn} from 'templates/buttons';
 
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { Editor } from "draft-js";
 import  * as types  from 'actions/types';
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {decorator} from 'components/draft-js-editor/editor'
-
+import Helper from 'utils/helpers';
 import {ButtonsBox, Styles } from "templates/partial-components";
 import Api from 'utils/api';
 import { UserComponentSmall } from "templates/author/profile-templates";
@@ -26,6 +25,7 @@ const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)
 
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
+const helper   = new Helper(); 
 
 
 
@@ -54,11 +54,7 @@ export const AnswersComponent = props => {
          margin     : '0 0 2px'
     };
   
-
-    let storedState = JSON.parse( answer.add_answer);
-   
-    const contentState = storedState && convertFromRaw(storedState);
-    const editorState  = contentState && EditorState.createWithContent(contentState, decorator);
+   const editorState  = helper.convertFromRaw(answer.add_answer);
 
     let usersById =  `answerUpVoters${answer.id}`;
     let apiUrl    =  api.getAnswerUpVotersListApi(answer.id);

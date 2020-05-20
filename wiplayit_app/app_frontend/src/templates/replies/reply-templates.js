@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter,Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { Editor } from "draft-js";
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
-import {decorator} from 'components/draft-js-editor/editor'
 
 import { UpVoteReplyBtn,
          DownVoteReplytBtn,
@@ -19,7 +18,7 @@ import  * as types  from 'actions/types';
 import ReplyChildrenBox from "components/replies/reply-children-page";
 import ReplyGrandChildrenBox from "components/replies/reply-grand-children-page";
 import ReplyGreatGrandChildBox from "components/replies/reply-great-grand-child-page";
-
+import Helper from 'utils/helpers';
 import { GetModalLinkProps } from "templates/component-props";
 import { UserComponentSmall } from "templates/author/profile-templates";
 
@@ -28,6 +27,7 @@ import { UserComponentSmall } from "templates/author/profile-templates";
 const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
 const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
+const helper   = new Helper();
 
 
 
@@ -276,11 +276,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         reply,
         replyStyles } = replyProps && replyProps  
         //console.log(props, newRepliesById, isNewReply) 
-
-   
-   let storedState = JSON.parse(reply.reply)
-   const contentState = convertFromRaw(storedState);
-   const editorState = EditorState.createWithContent(contentState, decorator);
+   const editorState  = helper.convertFromRaw(reply.reply);
   
    let state = {
             reply,
