@@ -9,9 +9,8 @@ import  * as types  from 'actions/types';
 import {
         DownVotePostBtn,
         UpVotePostBtn,
-        OptionsDropDownBtn,
+        OpenOptionlBtn,
         OpenEditorBtn,
-        OpenOptionsModalBtn,
         ChangeImageBtn,
         OpenUsersModalBtn,} from 'templates/buttons';
 
@@ -21,10 +20,8 @@ import {Editor} from 'draft-js';
 import {ButtonsBox,Styles} from "templates/partial-components";
 import { UserComponentSmall } from "templates/author/profile-templates";
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
-const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
-const api      = new Api();
 
+const api      = new Api();
 
 export const PostComponent = props => {
 
@@ -87,19 +84,9 @@ export const PostComponent = props => {
     editCommentProps = GetModalLinkProps.props(editCommentProps)
 
     let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
-    let MenuModalBtn       = <OptBtnSmallScreen {...editPostProps}/>;
-    let MenuDropdownBtn    = <OptBtnBigScreen {...editPostProps}/>;
 
-     
-
-    let optionsBtn = ()=>(
-        <div>
-            {MenuModalBtn}
-            {MenuDropdownBtn}
-        </div>
-        )
-
-    let PostUpVotersBtn = post.upvotes !== 0 &&  <OpenUsersModalBtn {...postUpvotersProps}/>; 
+    let PostUpVotersBtn = post.upvotes !== 0 &&   
+                    <OpenUsersModalBtn {...postUpvotersProps}/>; 
    
     
 
@@ -121,7 +108,7 @@ export const PostComponent = props => {
             itemsCounter : PostUpVotersBtn,
             btn1   : UpVoteBtn,
             btn2   : EditorModalBtn,
-            btn3   : optionsBtn(),
+            btn3   : <OpenOptionlBtn {...editPostProps}/>,
             Styles : Styles
          };
 

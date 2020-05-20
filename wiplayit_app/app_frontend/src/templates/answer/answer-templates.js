@@ -6,9 +6,8 @@ import { GetModalLinkProps } from "templates/component-props";
 import { 
         UpVoteAnswerBtn,
         DownVoteAnswerBtn,
-        OptionsDropDownBtn,
         OpenEditorBtn,
-        OpenOptionsModalBtn,
+        OpenOptionlBtn,
         OpenUsersModalBtn} from 'templates/buttons';
 
 import { Editor } from "draft-js";
@@ -20,14 +19,8 @@ import Api from 'utils/api';
 import { UserComponentSmall } from "templates/author/profile-templates";
 
 
-
-const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
-
-const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 const helper   = new Helper(); 
-
-
 
 
 export const AnswersComponent = props => {
@@ -99,17 +92,7 @@ export const AnswersComponent = props => {
     editCommentProps = GetModalLinkProps.props(editCommentProps);
 
     let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
-    let MenuModalBtn       = <OptBtnSmallScreen {...editAnswerProps}/>;
-    let MenuDropdownBtn    = <OptBtnBigScreen {...editAnswerProps}/>;
     
-
-    let optionsBtn = ()=>(
-        <div>
-            {MenuModalBtn}
-            {MenuDropdownBtn}
-        </div>
-        )
-
     let AnswerUpVotersBtn = answer.upvotes !== 0 && <OpenUsersModalBtn {...answerUpvotersProps}/> 
    
     
@@ -130,7 +113,7 @@ export const AnswersComponent = props => {
             itemsCounter : AnswerUpVotersBtn,
             btn1   : UpVoteBtn,
             btn2   : EditorModalBtn,
-            btn3   : optionsBtn(),
+            btn3   : <OpenOptionlBtn {...editAnswerProps}/>,
             Styles : Styles
          };
 

@@ -15,16 +15,13 @@ import { GetModalLinkProps } from "templates/component-props";
 import { AnswersComponent  } from "templates/answer/answer-templates";
 
 import { OpenEditorBtn,
-         OpenOptionsModalBtn,
+         OpenOptionlBtn,
          ChangeImageBtn,
          OpenUsersModalBtn,
-         OptionsDropDownBtn,
          UnfollowUserBtn, 
          FollowUserBtn } from "templates/buttons";
 
 
-const OptBtnSmallScreen   = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
-const OptBtnBigScreen     = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const EditorLinkBigScreen = MatchMediaHOC(OpenEditorBtn, '(min-width: 980px)') 
 const api      = new Api();
 
@@ -82,8 +79,7 @@ export const ProfileComponent = props => {
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
 
     let EditorModalBtnBigScreen   = <EditorLinkBigScreen {...editUserProfileProps}/>;
-    let MenuModalBtn              = <OptBtnSmallScreen {...editUserProfileProps}/>;
-    let MenuDropdownBtn           = <OptBtnBigScreen {...editUserProfileProps}/>;
+    
 
     const EditorModalBtnSmall = ()=>{
         
@@ -192,8 +188,7 @@ export const ProfileComponent = props => {
                                     </div>
 
                                     <div className="user-profile-options-box">
-                                        { MenuModalBtn }
-                                        { MenuDropdownBtn }
+                                        <OpenOptionlBtn {...editUserProfileProps}/>
                                     </div>
                                 </div>
                             </div>

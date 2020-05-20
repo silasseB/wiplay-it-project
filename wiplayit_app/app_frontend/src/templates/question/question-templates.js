@@ -2,10 +2,9 @@ import React from 'react';
 import { GetModalLinkProps } from "templates/component-props";
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
-import { OpenOptionsModalBtn,
+import { OpenOptionlBtn,
          FollowQuestionBtn,
          UnfollowQuestionBtn,
-         OptionsDropDownBtn,
          OpenEditorBtn,
          OpenUsersModalBtn, } from 'templates/buttons';
 
@@ -15,12 +14,7 @@ import  * as types  from 'actions/types';
 import Api from 'utils/api';
 
 
-const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
-const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
-
 const api      = new Api();
-
-
 
 export const QuestionComponent = props => {
     
@@ -101,17 +95,15 @@ export const QuestionComponent = props => {
  
     let EditorModalBtn = <OpenEditorBtn {...editAnswerProps}/>; 
 
-    let MenuModalBtn    = <OptBtnSmallScreen {...editQuestionProps}/>;
-    let MenuDropdownBtn = <OptBtnBigScreen {...editQuestionProps}/>;
-
     let optionsBtn = ()=>(
         <div>
-            {MenuModalBtn}
-            {MenuDropdownBtn}
+           <OptBtnBigScreen {...editQuestionProps}/>
+           <OptBtnSmallScreen {...editQuestionProps}/>
         </div>
         )
 
-    let questionFollowersBtn = question.followers !== 0 &&  <OpenUsersModalBtn {...questionFollowersProps}/> 
+    let questionFollowersBtn = question.followers !== 0 && 
+               <OpenUsersModalBtn {...questionFollowersProps}/> || null;
     
   
 
@@ -137,7 +129,7 @@ export const QuestionComponent = props => {
             itemsCounter : questionFollowersBtn,
             btn1         : EditorModalBtn,
             btn2         : unfollowOrFollowQuestionBtn,
-            btn3         : optionsBtn(),
+            btn3         : <OpenOptionlBtn {...editQuestionProps}/>,
             Styles       : Styles,
         }
 
@@ -162,10 +154,10 @@ export const QuestionComponent = props => {
                                 </Link>
                             </b>
                         }
+                        <ButtonsBox {...btnsList}/>
 
                     </div>
-
-                    <ButtonsBox {...btnsList}/>
+             
 
                 </div>
                 

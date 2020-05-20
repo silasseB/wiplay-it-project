@@ -387,7 +387,9 @@ div.public-DraftEditor-content {
     }
 
     .pure-draft-editor {
-       padding-top: 60px;
+       margin-top : 50px;
+       border     : px solid blue;
+
     }
 
     .post-editor-box {

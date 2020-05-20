@@ -249,11 +249,7 @@ export default  class AppEditor extends Component{
         this.setState({...state})
     };
 
-
-    newEditorState(contentState){
-      console.log(contentState)
-        return  EditorState.createWithContent(contentState);
-    }
+  
 
     blockStyleFn(contentBlock) {
        const type = contentBlock.getType();

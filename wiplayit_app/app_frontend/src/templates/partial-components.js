@@ -2,11 +2,15 @@ import React from 'react';
 
 
 export const ButtonsBox = props => {
+  console.log(props)
+
  
     let styles = props && props.Styles;
     styles     = styles && styles.contents;
   	styles     = !styles && Styles.contents || styles;
-      
+
+    console.log(props.btn3)
+    
     return (
 
          <div className="contents-nav-container">
@@ -14,22 +18,22 @@ export const ButtonsBox = props => {
             <div className="items-counter-box">
                <ul className="items-counter-box">
                     <li  className="items-btn-box">
-                        { props.itemsCounter }
+                        { props.itemsCounter || null}
                     </li>
                </ul>
             </div>
 
             <ul  className="contents-nav-box" > 
                <li className="btn-box1">
-                 { props.btn1 }
+                 { props.btn1 || null}
                </li>
 
                <li  className="btn-box2">
-                  { props.btn2 }
+                  { props.btn2 || null  }
                </li>
 
                <li className="btn-box3">
-                  { props.btn3 }
+                  {props.btn3 || null }
                </li>
             </ul>
             
@@ -51,7 +55,6 @@ export const Styles = {
 
 
 export const PageErrorComponent = props => {
-    console.log(props)
     let {error, isReloading } = props;
     if (isReloading) return null;
     if (!error) return null;

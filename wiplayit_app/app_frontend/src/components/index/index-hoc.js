@@ -17,7 +17,7 @@ import {handleSubmit,
         getIndex, 
         authenticate }  from "dispatch/index"
 
-//import  * as action  from 'actions/actionCreators';
+import  * as action  from 'actions/actionCreators';
 import { ModalManager}   from  "components/modal/modal-container";
 
 import { AlertComponent } from "templates/partial-components";
@@ -189,7 +189,6 @@ export function MainAppHoc(Component) {
         }
 
         handleUpdateSuccess(modal){
-            console.log(modal)
             if (!modal) return;
             if (!Object.keys(modal).length) return;
                        

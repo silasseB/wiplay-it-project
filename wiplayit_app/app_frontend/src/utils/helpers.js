@@ -84,6 +84,10 @@ export default class Helper {
         return editorState;
     };
 
+    convertToRaw(){
+        
+    }
+
     _blockText(form) {
         let blocks    =  form.blocks;
         let blockText     =  "";    

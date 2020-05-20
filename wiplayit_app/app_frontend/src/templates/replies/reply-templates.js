@@ -6,9 +6,8 @@ import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
 
 import { UpVoteReplyBtn,
          DownVoteReplytBtn,
-         OptionsDropDownBtn,
          OpenEditorBtn,
-         OpenOptionsModalBtn,
+         OpenOptionlBtn,
          ChangeImageBtn,
          OpenUsersModalBtn,} from 'templates/buttons';
 
@@ -22,14 +21,8 @@ import Helper from 'utils/helpers';
 import { GetModalLinkProps } from "templates/component-props";
 import { UserComponentSmall } from "templates/author/profile-templates";
 
-
-
-const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
-const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 const helper   = new Helper();
-
-
 
 export const RepliesComponent = props => {
   // console.log(props.replyState)
@@ -387,7 +380,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         itemsCounter :  ReplyUpVotersBtn,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalBtn,
-        btn3         :  optionsBtn(),
+        btn3         :  <OpenOptionlBtn {...editReplyProps}/>,
       } 
 
 

@@ -272,7 +272,7 @@ export const Questions = props => {
     questions          = questions && questions[questionListById];
 
     let questionList = questions && questions.questionList;
-    //console.log(questions)
+    console.log(questions)
    
   
     return (
@@ -296,8 +296,8 @@ export const Questions = props => {
 
                                 return (
 
-                                    <div key={index} >
-                                        <QuestionComponent {...contentsProps}  />
+                                    <div key={index}>
+                                        <QuestionComponent {...contentsProps}/>
                                     </div>
                                 )
                             })}

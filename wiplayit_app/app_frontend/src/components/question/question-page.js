@@ -14,7 +14,7 @@ import  MainAppHoc from "components/index/index-hoc";
 
 
 
- 
+ console.log(<QuestionComponent/>)
 
 
 class QuestionPage extends Component {
@@ -152,7 +152,7 @@ class QuestionPage extends Component {
         let { questionById, entities, id} = props;
         let { question } = entities && entities;
         question = question && question[questionById]
-        //console.log(props, questionById, question)
+        console.log(props, questionById, question)
       
         return (
             <div>

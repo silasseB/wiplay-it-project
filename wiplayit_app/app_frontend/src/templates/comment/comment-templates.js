@@ -4,9 +4,8 @@ import { MatchMediaHOC } from 'react-match-media';
 import {
          UpVoteCommentBtn,
          DownVoteCommentBtn,
-         OptionsDropDownBtn,
          OpenEditorBtn,
-         OpenOptionsModalBtn,
+         OpenOptionlBtn,
          ChangeImageBtn,
          OpenUsersModalBtn, } from 'templates/buttons';
 
@@ -22,10 +21,6 @@ import { UserComponentSmall } from "templates/author/profile-templates";
 import { Editor } from "draft-js";
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
 
-
-
-const OptBtnSmallScreen = MatchMediaHOC(OpenOptionsModalBtn, '(max-width: 980px)');
-const OptBtnBigScreen   = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 const api      = new Api();
 const helper   = new Helper();
 
@@ -49,11 +44,8 @@ export const CommentsComponent = props => {
         commentsById, 
         currentUser, 
         isNewComments, } = props;
-   
-    let storedState = JSON.parse(comment.comment)
-    const contentState = convertFromRaw(storedState);
-    const editorState = EditorState.createWithContent(contentState, decorator);
-
+       
+    let editorState = helper.convertFromRaw(comment.comment)  
 
     let pathToUpvoters;
 
@@ -114,17 +106,9 @@ export const CommentsComponent = props => {
     editReplyProps    = GetModalLinkProps.props(editReplyProps)
     
     let EditorModalBtn     = <OpenEditorBtn {...editReplyProps}/>; 
-    let MenuModalBtn       = <OptBtnSmallScreen {...editCommentProps}/>;
-    let MenuDropdownBtn    = <OptBtnBigScreen {...editCommentProps}/>;
-
-    let optionsBtn = ()=>(
-        <div>
-            {MenuModalBtn}
-            {MenuDropdownBtn}
-        </div>
-        )
-
-    let CommentUpVotersBtn = comment.upvotes !== 0 &&  <OpenUsersModalBtn {...commentUpvotersProps}/>; 
+    
+    let CommentUpVotersBtn = comment.upvotes !== 0 && 
+                             <OpenUsersModalBtn {...commentUpvotersProps}/>; 
     
 
 
@@ -147,7 +131,7 @@ export const CommentsComponent = props => {
         itemsCounter :  CommentUpVotersBtn,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalBtn,
-        btn3         :  optionsBtn(),
+        btn3         :  <OpenOptionlBtn {...editCommentProps}/>,
         Styles       : Styles,
       } 
 

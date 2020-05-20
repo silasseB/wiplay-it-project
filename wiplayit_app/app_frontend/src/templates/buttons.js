@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, Router } from "react-router-dom";
 import {history} from "App" 
-
+import { MatchMediaHOC } from 'react-match-media';
 import { ModalManager, Modal }   from  "components/modal/modal-container";
 import { store } from "store/index";
 import {showModal, handleError} from 'actions/actionCreators';
@@ -544,21 +544,6 @@ export const ModalOptionsMenu = props => {
 
 
 
-export const OptionsDropDownBtn = props => {
-    return(
-        <div>
-            <button className="btn-sm options-btn" id="options-menu"
-                  data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" type="button" >
-                <i className="material-icons ">more_horiz</i>
-            </button>
-            <div className="dropdown-menu dropdown-menu-box" aria-labelledby="options-menu">
-                <OptionsMenuBtns {...props}/>
-            </div>
-        </div>
-    )
-}
-
-
 export const QuestionOptDropDownBtn = props => (
   <div>
     <button className="btn-sm answer-option options-btn " id="questionMenuButton"
@@ -675,27 +660,53 @@ export const OpenEditorBtn = props => {
 };
 
 
+export const OptionsDropDownBtn = props => {
+    return(
+        <div>
+            <button className="btn-sm options-btn" id="options-menu"
+                  data-toggle="dropdown" aria-haspopup="false" aria-expanded="true" type="button" >
+                <i className="material-icons ">more_horiz</i>
+            </button>
+            <div className="dropdown-menu dropdown-menu-box" aria-labelledby="options-menu">
+                <OptionsMenuBtns {...props}/>
+            </div>
+        </div>
+    )
+}
 
 
-export const OpenOptionsModalBtn = props => {
-    //console.log(props)
-    
+
+export const  OptionModal = props => {
     let  modalProps = {
             ...props,
-            modalName   : 'optionsMenu', 
-        }; 
-      
+            modalName : 'optionsMenu', 
+        };
+
     return(
         <button className="btn-sm options-btn"    onClick={()=> {  Modal(modalProps) }}>
              <i className="material-icons ">more_horiz</i>  
         </button>
-        
+    )
+}
+
+
+export const OpenOptionlBtn  = props => {
+    console.log(props)
+    if (window.matchMedia("(max-width: 980px)").matches) {
+
+    }
+         
+    return(
+        <div>
+            <OptBtnSmallScreen {...props}/>
+            <OptBtnBigScreen {...props}/>
+        </div>
     );
+  
 };
 
-
-
-
+const OptBtnSmallScreen = MatchMediaHOC(OptionModal, '(max-width: 980px)');
+const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 
 export const ChangeImageBtn = props => {
     let {currentUser} = props && props;
@@ -732,6 +743,7 @@ export const ChangeImageBtn = props => {
 
 export const OpenUsersModalBtn = props => {
     let {obj, linkName} = props
+    if (!obj) return null;
     
     let modalProps = {
             ...props,
