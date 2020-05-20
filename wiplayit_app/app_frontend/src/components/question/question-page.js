@@ -14,9 +14,6 @@ import  MainAppHoc from "components/index/index-hoc";
 
 
 
- console.log(<QuestionComponent/>)
-
-
 class QuestionPage extends Component {
     isMounted = false;
     
@@ -181,14 +178,6 @@ class QuestionPage extends Component {
 
 
 export default  MainAppHoc(QuestionPage);
-
-
-
-
-
-
-
-
 
 
 

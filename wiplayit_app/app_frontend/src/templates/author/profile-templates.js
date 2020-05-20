@@ -22,13 +22,7 @@ import { OpenEditorBtn,
          FollowUserBtn } from "templates/buttons";
 
 
-const EditorLinkBigScreen = MatchMediaHOC(OpenEditorBtn, '(min-width: 980px)') 
 const api      = new Api();
-
-   
-
- 
-
 
 export const ProfileComponent = props => {
     let {entities,
@@ -78,31 +72,38 @@ export const ProfileComponent = props => {
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
 
-    let EditorModalBtnBigScreen   = <EditorLinkBigScreen {...editUserProfileProps}/>;
-    
-
     const EditorModalBtnSmall = ()=>{
         
-            return(
-                <button className="btn-sm edit-user-profile"
-                        onClick={()=>{
-                            history.push(pathToEditProfile, {...editUserProfileProps}); 
-                        }
-                }>
-                    Edit
-                </button>
-            )
-    
+        return(
+            <button 
+                className="btn-sm edit-user-profile"
+                onClick={()=>{
+                        history.push(pathToEditProfile, {...editUserProfileProps}); 
+                    }}>
+                Edit
+            </button>
+        )
     }
 
-    let EditorModalBtnSmallScreen = MatchMediaHOC(EditorModalBtnSmall, '(max-width: 980px)');
-    let ChangeImageBtnBigScreen   = MatchMediaHOC(ChangeImageBtn, '(min-width: 980px)');
+
+    let EditorModalBtnSmallScreen = MatchMediaHOC(
+                                            EditorModalBtnSmall,
+                                            '(max-width: 980px)');
+    const EditorModalBtnBigScreen = MatchMediaHOC(
+                                            OpenEditorBtn,
+                                            '(min-width: 980px)'); 
+
+    let ChangeImageBtnBigScreen   = MatchMediaHOC(
+                                            ChangeImageBtn,
+                                            '(min-width: 980px)');
 
     let UserProfileFollowersBtn = profile && profile.followers !== 0 && 
-                                                 <OpenUsersModalBtn {...userProfileFollowersProps}/>; 
+                                  <OpenUsersModalBtn {...userProfileFollowersProps}/>; 
 
-    let pathToUserFollowers = userProfile && `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
-    const pathToEditProfile = userProfile  && `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
+    let pathToUserFollowers = userProfile &&
+                 `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
+    const pathToEditProfile = userProfile  && `
+                 /edit/profile/${userProfile.slug}/${userProfile.id}/`;
 
     let btnsProps = {
         editUserProfileProps,
@@ -210,7 +211,7 @@ export const ProfileComponent = props => {
                                 { userProfile && userProfile.user_can_edit?
                                     <div className="edit-credential-btn-box">
 
-                                        {EditorModalBtnBigScreen }
+                                        <EditorModalBtnBigScreen {...editUserProfileProps}/>
                                         <EditorModalBtnSmallScreen {...props}/>
                                     </div>
                                     :

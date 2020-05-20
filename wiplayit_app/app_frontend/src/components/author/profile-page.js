@@ -222,6 +222,7 @@ class UserProfileContainer extends Component {
    
     showUserItems(params) {
         //console.log(params)
+        if(!this.isMounted) return;
         let {items, component, byId, data } = params;
         this.setState({userItemsComponent : component});
 
