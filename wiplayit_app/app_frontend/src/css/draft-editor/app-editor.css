@@ -86,7 +86,8 @@
 
     .modal-user-box {
         display : flex;
-        padding : 10px 20px;
+        padding : 10px 20px 0;
+        border  : px solid red;
     }
 
     .editor-img-box {
@@ -117,19 +118,19 @@
     .editors-page {
         background-color : #F6F6F6;
         max-height       : 100%;
-        margin           : 10px;
+        border           : px solid black;
     }
 
  
     .editors-box  {
         background-color : #fffef7;
-        padding          : 12px;
+        padding          : 0 12px;
         max-height       : 100%;
         overflow-y       : auto;
         min-height       : 180px;
         font-size        : 15px;
         font-family      : 'calibri', sans-serif;
-        border           : 1px solid red;
+        border           : px solid red;
         
     }
  
@@ -312,13 +313,11 @@
 }
 
 .textarea-form {
-    border: 1px solid blue;
-    width: 100%;
-    padding: 10px;
+     width   : 100%;
 }
 
 .textarea-box {
-    border-bottom :  2px solid #888888;
+    border-bottom :  0.5px solid #D5D7D5;
     overflow-y    : auto;
 }
 
@@ -384,8 +383,15 @@ div.public-DraftEditor-content {
         min-height       : 100px; 
         overflow-y       : auto;  
         border           : px solid blue;
-        margin-top       : 50px;
         padding          : 10px;  
+    }
+
+    .pure-draft-editor {
+       padding-top: 60px;
+    }
+
+    .post-editor-box {
+        padding-top: 45px;
     }
 
   
@@ -539,16 +545,10 @@ div.public-DraftEditor-content {
      
 }
 
-
-.image{
-   border: px solid blue;
-}
-
 .navigation-toolbar{
    display : flex;
    padding : 6px;
    border  : px solid red;
-     
 }
 
 .toolbar-button {
@@ -559,12 +559,10 @@ div.public-DraftEditor-content {
 .media-btns, .text-btns{
     display         : flex;  
     font-size       : 13px; 
-    
 }
 
 .media-btns {
    border : px solid black;
-  
 }
 
 .text-btns{
@@ -587,14 +585,14 @@ div.public-DraftEditor-content {
 } 
 
 .post-title-form-box, .question-form-box{
-   border: 1px solid black;
+   border: px solid black;
 }
 
 .textarea-form-field {
     padding       : 4 10px;
     font-weight   : bold;
     font-size     : 14px;
-    border-bottom : 2px solid #888888;
+    border-bottom : 0.5px solid #D5D7D5;
 }
 
 .textarea-box {

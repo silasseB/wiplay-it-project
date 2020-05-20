@@ -91,7 +91,9 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
             //console.log(entitieKey)
             if( entitieKey === 'userAuth'     ||
                 entitieKey === 'currentUser'  ||
-                entitieKey === 'index'        ||      
+                entitieKey === 'index'        ||  
+                entitieKey === 'admin'        ||   
+                entitieKey === 'about'       ||        
                 entitieKey === 'modal' ) {
                    
                 cacheData = cacheData || {};
@@ -110,8 +112,8 @@ const persistStore = () => (next) => (reducer, initialState, enhancer) => {
                      entitieKey === 'posts'       ||  
                      entitieKey === 'post'        ||   
                      entitieKey === 'comments'    ||     
-                     entitieKey === 'replies'){
-               //entitieKey === 'post' && console.log(storeData, cacheData, entitieKey)
+                     entitieKey === 'replies'
+                     ){
 
                 _cacheMerge = UpdateKeyedLocalCache(storeData, cacheData)
                 cacheEntities[entitieKey] = Object.assign(cacheData, _cacheMerge)

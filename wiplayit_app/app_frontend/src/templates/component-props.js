@@ -20,7 +20,7 @@ export const GetModalLinkProps = {
 
 		linkProps['actionType'] = actionType || GetActionTypesProps(objName, isPut, isPost);
 		linkProps['apiUrl']     = apiUrl || GetRestApiProps(objName, obj, isPut, isPost);
-		linkProps['editorPlaceHolder'] = `Create ${objName}...`;
+		linkProps['editorPlaceHolder'] = `Add ${objName}...`;
 
 		return linkProps;
     },
@@ -32,12 +32,16 @@ export const GetActionTypesProps = (actionName, isPut=false, isPost=false) => {
     let actionType; 
     
     switch(actionName){
+    	case 'About':
+ 	        actionType = isPut && types.UPDATE_ABOUT || types.CREATE_ABOUT;
+    		return actionType;
+
         case 'UserProfile':
- 	        actionType = isPut? types.UPDATE_USER_PROFILE:null;
+ 	        actionType = isPut && types.UPDATE_USER_PROFILE;
  	 	    return actionType; 
 
  	 	case 'UsersList':
- 	        actionType = isPut? types.UPDATE_USER_LIST:null;
+ 	        actionType = isPut && types.UPDATE_USER_LIST;
  	 	    return actionType;   
 
     	case 'Question':
@@ -74,10 +78,15 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
 	let apiUrl;
 	switch(actionName){
+		case 'About':
+			apiUrl = isPut &&  api.updateAboutApi(id) || api.createAboutApi();
+			return apiUrl;
+
 		case 'UserProfile':
 		case 'UsersList':       
 		    apiUrl    = api.updateProfileApi(id);
 			return apiUrl
+			
     	case 'Question':
  	        apiUrl = isPut? api.updateQuestionApi(id): api.createQuestionApi();
  	        return apiUrl;
@@ -92,22 +101,12 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
 
 
  	    case 'Comment':
- 	    //console.log(obj, isPut, isPost)
- 	       
  	        if (isPut) {
- 	        	
-               apiUrl = obj.post || obj.add_post? 
-                            api.updatePostCommentApi(id)
-                            :
-                            api.updateAnswerCommentApi(id);
-
+ 	            apiUrl = obj.post || obj.add_post && api.updatePostCommentApi(id) ||
+                                                     api.updateAnswerCommentApi(id);
  	        }else {
- 	        	
- 	        	//id = obj.answer || obj.post;
- 	        	apiUrl = obj.post || obj.add_post?
- 	        	            api.createPostCommentApi(id)
- 	        	            :
- 	        	            api.createAnswerCommentApi(id);
+	        	apiUrl = obj.post || obj.add_post && api.createPostCommentApi(id) ||
+	         					       	             api.createAnswerCommentApi(id);
  	        }
 
  	        return apiUrl;

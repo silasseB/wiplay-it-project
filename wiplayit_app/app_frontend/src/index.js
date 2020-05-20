@@ -5,7 +5,9 @@ import { Router}  from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import 'css/page-not-found.css';
+import 'css/admin/admin.css';
+import 'css/admin/about-admin.css'
 import 'css/App.css';
 import 'draft-js/dist/Draft.css';
 import 'css/draft-editor/app-editor.css';

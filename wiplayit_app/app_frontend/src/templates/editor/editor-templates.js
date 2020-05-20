@@ -212,7 +212,7 @@ export const MobileModalNavBar = props  => {
 export const DesktopModalNavBar = (props) => {
     
     let {isPut, isPost, modalTitle, objName } = props;
-    let action = isPut && "Edit" || isPost && "Create";
+    let action = isPut && "Update" || isPost && "Add";
 
     modalTitle = !modalTitle &&  `${action} ${objName}` ||  modalTitle;
 
@@ -297,7 +297,7 @@ export const PostEditor = (props) => {
     return(
         <div style={props.onScroolStyles} id="editors-box" className="editors-box">
             <TextAreaEditor   {...props} rows={1}/>
-            <div className="post-editor-box">
+            <div className="">
                 <DraftEditor {...props}/>
             </div>
         </div>

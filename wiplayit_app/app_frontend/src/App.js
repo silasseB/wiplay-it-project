@@ -11,7 +11,8 @@ import {
 } from "react-router-dom";
 
 import { createBrowserHistory } from 'history';
-
+import AdminPage from 'components/admin/admin-page';
+import AboutAdminPage from 'components/admin/about-admin';
 import  RegistrationPage  from "components/authentication/index";
 import  SignUpPage from "components/authentication/signup";
 import  LoginPage from "components/authentication/login";
@@ -37,6 +38,7 @@ import HelpContainer  from 'components/help';
 import SettingsContainer  from 'components/settings';
 import NotificationsContainer from 'components/notifications';
 import ReportContainer from 'components/report';
+import NotFoundPage from 'components/page-not-found';
 
 
 
@@ -74,7 +76,10 @@ function App() {
                     <Route  path="/help/" component={HelpContainer}/>
                     <Route  path="/settings/" component={SettingsContainer}/>  
                     <Route  path="/notifications/" component={NotificationsContainer}/>    
-                    <Route  path="/report/" component={ReportContainer}/>                    
+                    <Route  path="/report/" component={ReportContainer}/>
+                    <Route  exact path="/app/admin/"  component={AdminPage}/>
+                    <Route  path="/app/admin/about/" component={AboutAdminPage}/>
+                    <Route path="*" component={NotFoundPage} />                    
                 </Switch>
         </div>
     );

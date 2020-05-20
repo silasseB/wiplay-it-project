@@ -7,7 +7,6 @@ from wiplayit_app.settings.common import *
 DEBUG = False
 SITE_ID = 3
 
-
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
 EMAIL_PORT    = 25

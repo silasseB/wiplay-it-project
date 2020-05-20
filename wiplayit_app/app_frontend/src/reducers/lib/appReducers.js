@@ -37,6 +37,7 @@ const InitialState = () => {
         modal       : {},
         errors      : {},
         about       : {},
+        admin       : {},
     };
 };
 
@@ -104,15 +105,23 @@ export function entities(state=InitialState(), action) {
     let createAction    = {byId};
 
     switch (action.type){
-        case "SERVER_ERROR":
+        case 'SERVER_ERROR':
             console.log(action)
             return updateStateEntyties('errors', action);
 
        
-        case "ABOUT_SUCCESS":
-        case "ABOUT_ERROR":
-        case "ABOUT_PENDING":
+        case 'ABOUT_SUCCESS':
+        case 'ABOUT_ERROR':
+        case 'ABOUT_PENDING':
+        case 'CREATE_ABOUT_SUCCESS':
+        case 'CREATE_ABOUT_PENDING':
+        case 'CREATE_ABOUT_SUCCESS':
             return updateStateEntyties('about', action);
+
+        case "ADMIN_SUCCESS":
+        case "ADMIN_ERROR":
+        case "ADMIN_PENDING":
+            return updateStateEntyties('admin', action);
 
         case 'MODAL_ROUTER':
         case "MODAL_SUBMIT_PENDING":

@@ -225,17 +225,16 @@ class PostReply(MPTTModel):
 
 
 class AboutCompany(models.Model):
-    title_info = models.CharField( max_length=250, blank=True)
-    info       = models.TextField( blank=True)
+    about_title = models.CharField( max_length=250, blank=True)
+    about_text  = models.TextField( blank=True)
 
     def __str__(self):
-        return self.title_info
-
+        return self.about_text
 
 
 class TermsAndService(models.Model):
     terms    = models.TextField( blank=True)
-    service   = models.TextField( blank=True)
+    service  = models.TextField( blank=True)
 
     def __str__(self):
         return self.terms

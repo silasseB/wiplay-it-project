@@ -23,14 +23,11 @@ class BaseSerializer(SerialiizerMixin, serializers.Serializer):
 class BaseChildSerializer(BaseModelSerializer):
 	upvoted    = serializers.SerializerMethodField()
 	created_by = BaseUserSerializer(read_only=True)
-	
 				
 	def get_upvoted(self, obj):
 		perms = self.get_obj_permissions('upvotes_perms')
-
 		if perms:
 			return has_perm(self.current_user(), perms, obj)
-
 		return False
 
 		
@@ -187,12 +184,17 @@ class AnswerReadSerializer(AnswerSerializer):
 
 
 
-	
-
-
-
-class QuestionSerializer(BaseChildSerializer):
+class BaseQuestionSerializer(BaseChildSerializer):	
 	upvoted = None
+
+	class Meta:
+		model = Question 
+		fields = '__all__'
+
+
+
+class QuestionSerializer(BaseQuestionSerializer):
+	
 	user_is_following =  serializers.SerializerMethodField()
 	user_has_answer   =  serializers.SerializerMethodField()
 	answer_count      =  serializers.SerializerMethodField()
@@ -213,9 +215,7 @@ class QuestionSerializer(BaseChildSerializer):
 		return obj.answers.count()
 		
 	
-	class Meta:
-		model = Question 
-		fields = '__all__'
+	
 
 
 

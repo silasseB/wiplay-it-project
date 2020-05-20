@@ -10,12 +10,9 @@ from app_backend.helpers import  get_objects_perms, has_perm
 
 
 class BaseMixin(object):
-    
-    
+
     def get(self, request, pk=None):
-    	
     	return Response({}, status=status.HTTP_200_OK)  
-    	
     	
     def get_obj_permissions(self, obj_perms=None, perm_to=None):
     	permissions = get_objects_perms(obj_perms)
@@ -29,12 +26,11 @@ class BaseMixin(object):
 
         
     def update_text_field(self, instance=None):
-      	
     	data = dict()
-    	related_field  = self.fields_to_update.get('related_field', False) 
-    	text_field     = self.fields_to_update.get('text_field', False)
-    	
-    	 
+    	if hasattr(self, 'fields_to_update'):
+    		related_field  = self.fields_to_update.get('related_field', False) 
+    		text_field     = self.fields_to_update.get('text_field', False)
+     	 
     	if  hasattr(self, 'is_user'):
     		data = self.update_user_fields(instance)
     		
@@ -63,12 +59,12 @@ class BaseMixin(object):
     		field_to_slugify = '{0} {1}'.format(first_name, last_name)
 
     	elif self.request.data.get("add_post", False):
-    		field_to_slugify     = self.request.data['add_title']
+    		field_to_slugify = self.request.data['add_title']
 
     	elif  self.request.data.get("add_question", False):
-    		field_to_slugify  = self.request.data['add_question']
+    		field_to_slugify = self.request.data['add_question']
 
-    	if field_to_slugify is not '':
+    	if field_to_slugify != '':
     		return generate_unique_slug(instance.__class__, field_to_slugify)
 
     	return	
@@ -88,12 +84,6 @@ class BaseMixin(object):
         return assign_perm(perm, user, instance )
         
         
-        
-       
-    
-    
-
-
 class UpdateObjectMixin(BaseMixin):
 
 	def unfollow(self, instance):
@@ -116,13 +106,11 @@ class UpdateObjectMixin(BaseMixin):
 
 
 	def modify_current_user_followings_field(self, instance, increm=False, decrem=False):
-
 		if increm:
 			instance.followings = instance.followings + 1
 			
 		elif decrem:
 			instance.followings = instance.followings - 1
-
 		return instance.save() 
 	
 
@@ -243,12 +231,11 @@ class UpdateObjectMixin(BaseMixin):
 		instance = self.get_object()
 
 		serializer = self.get_serializer(
-            instance, 
-            data     = data,
-            context  = {'request': request},
-            partial  = True
-        )
-        
+            					instance, 
+            					data,
+            					context={'request': request},
+            					partial  = True)
+
 		if serializer.is_valid():
 			self.perform_update(serializer)
 			
@@ -264,11 +251,6 @@ class UpdateObjectMixin(BaseMixin):
 		return Response(serializer.data, status=status.HTTP_200_OK)    
         
     	
-    
-    		       
-    
-
-
 class CreateMixin(BaseMixin):
 	
 	def post(self, request, *args, **kwargs):
@@ -284,24 +266,33 @@ class CreateMixin(BaseMixin):
 	
 		
 	def create(self, data):
-		edit_perms = self.permissions.get('edit_perms',None)
-		#print(data)
-		#print(self.request.data)
+		created_by = self.request.user;	
+
+		if  hasattr(self, 'permissions'):
+			edit_perms = self.permissions.get('edit_perms',None)
+
+		print(data)
+		print(self.request.data)
 
 		serializer = self.get_serializer(data=data)
-				
 		if not serializer.is_valid():
 			print(serializer.errors)
 			
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-			
-		instance = serializer.save(created_by=self.request.user)
-		
-		if edit_perms is not None:
+		if data and data.get('about_text', None) is None:
+			instance = serializer.save(created_by=created_by)
+		else:
+			instance = serializer.save()
+
+
+		print(serializer.data)
+
+		is_superuser = created_by.is_superuser
+		if not is_superuser and edit_perms is not None:
 			for perm in edit_perms:
 				self.assign_perm(perm, instance)
-						
+
 		return Response(serializer.data, status=status.HTTP_201_CREATED)
 		
 		

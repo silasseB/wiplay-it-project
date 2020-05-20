@@ -1,7 +1,10 @@
 
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-
+from django.contrib.auth import (
+    login as django_login,
+    logout as django_logout
+)
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -52,26 +55,6 @@ JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 
 
-def send_mail(self, subject_template_name, email_template_name,
-                  context, from_email, to_email, html_email_template_name=None):
-        """
-        Send a django.core.mail.EmailMultiAlternatives to `to_email`.
-        """
-        subject = loader.render_to_string(subject_template_name, context)
-        # Email subject *must not* contain newlines
-        subject = ''.join(subject.splitlines())
-        body = loader.render_to_string(email_template_name, context)
-
-        email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
-        if html_email_template_name is not None:
-            html_email = loader.render_to_string(html_email_template_name, context)
-            email_message.attach_alternative(html_email, 'text/html')
-
-        email_message.send()
-
-
-
-
 class CustomRegisterView(RegisterView):
 	queryset = User.objects.all()
 	serializer_class       = CustomRegisterSerializer
@@ -82,10 +65,7 @@ class CustomRegisterView(RegisterView):
 			return {"detail": _("Verification e-mail sent.")}
 
 		if getattr(settings, 'REST_USE_JWT', False):
-			print(user)
 			response_data = jwt_response_payload_handler(self.token, user, self.request)
-			
-
 			return response_data
 
 		else:
@@ -99,6 +79,7 @@ class CustomRegisterView(RegisterView):
 		user = self.perform_create(serializer)
 		user.set_password(request.data['password'])
 		user.save()
+		django_login(self.request, user)
 				
 		headers = self.get_success_headers(serializer.data)
 

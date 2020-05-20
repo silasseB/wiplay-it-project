@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from app_backend.helpers import get_objects_perms
 from app_backend.serializers import DraftEditorContentsSerializer
 from app_backend.mixins.views_mixins import CreateMixin
-
+from app_backend.admin_api.views import AboutView 
 from app_backend.models import ( Question, Post,
                                  Answer, AnswerComment, 
                                  AnswerReply, PostComment,
@@ -17,6 +17,11 @@ from app_backend.views import (BaseApiView, PostView,
 	                           AnswerChildReplyView)
 
 
+
+class CreateAboutView(CreateMixin, AboutView):
+
+	def get_object(self):
+		pass    
 
 class CreatePostView(CreateMixin, PostView):
 

@@ -181,7 +181,7 @@ export default  class AppEditor extends Component{
                 textMessage : 'You cannot submit incomplete form',
                 messageType : 'error'
             }
-            this._setErrorMessage(message)
+            this._SetErrorMessage(message)
 
             return
         }
@@ -255,6 +255,12 @@ export default  class AppEditor extends Component{
            
         if (isPut) {
             state['contentIsEmpty'] = false;
+            if (objName === 'About') {
+                let storedState = JSON.parse(obj.about_text);
+                let editorState = this.newEditorState(storedState);
+                state['editorState']  = editorState; 
+                state.form['textarea'] = obj.about_title;
+            }
 
             if ( objName === 'Post') {
                let storedState = JSON.parse(obj.add_post);
@@ -465,6 +471,9 @@ export default  class AppEditor extends Component{
       }
       else if(objName === "Reply"){
          validForm   =  {reply : validatedForm.data};    
+      }
+      else if(objName === "About"){
+         validForm   =  {about_text : validatedForm.data};    
       }
       //console.log(validForm, validatedForm) 
       return helper.createFormData(validForm);
@@ -691,7 +700,7 @@ export const DesktopEditorComponent =(props)=>{
 
                 <div className="editor-submit-btn-box">
                     <button type="button" onClick={()=> props.subimtCleanForm()}
-                           className="editor-submit-btn ">
+                           className="editor-submit-btn">
                             Submit
                     </button>
                 </div>
@@ -710,13 +719,13 @@ export const EditorCommp = (props)=> {
         <div className="editors-page" id="editors-page">
 
             { objName === 'Question' &&
-                <div className="">
+                <div className="question-editor-box">
                     <QuestionEditor {...props}/>
                 </div>
             }
 
             { objName === 'Post' && 
-                <div> 
+                <div className="post-editor-box"> 
                     <PostEditor {...props}/>
                 </div>
             }
@@ -724,7 +733,7 @@ export const EditorCommp = (props)=> {
             { objName !== 'Question' && objName !== 'Post' &&
                 <div style={props.onScroolStyles}
                      id="editors-box" 
-                     className="editors-box"
+                     className="editors-box pure-draft-editor"
                      onClick={()=> props.handhleFocus()}>
                     <DraftEditor {...props}/>
                 </div>

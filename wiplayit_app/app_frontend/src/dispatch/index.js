@@ -586,8 +586,7 @@ export function authenticate(params={}){
                 let { data }  = response
                 let auth      = {};
                 let response_data = {};
-                let user      = data.user;
-
+                
                 let isLoggedIn = data.key && true || data.token && true || false;
                 let tokenKey   = data.token || data.key  || null;
 
@@ -603,14 +602,19 @@ export function authenticate(params={}){
                
                 dispatch(action.authenticationSuccess(response_data, isSocialAuth));
 
+                let user = data.user;
                 if (user) {
+                    console.log(user)
+
+                    let isSuperUser = user.is_superuser;
+                    isSuperUser  && dispatch(action.getAdminSuccess(response_data))
                     dispatch(action.getCurrentUserSuccess(user))
                 }
             }
         )
         .catch(error =>{
+
             let _error;
-                          
             if (error.response) {
                 console.log(error.response)  
                 _error = error.response.data
@@ -633,6 +637,40 @@ export function authenticate(params={}){
     }
    
 }; 
+
+
+export function getAdmin() {
+    let useToken=true
+    const Api  = _GetApi(useToken); 
+
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }   
+
+    return dispatch => {
+        dispatch(action.getAdminPending());
+
+        Api.get(`/api/admin/`)
+            .then(response => {
+                console.log(response)
+                dispatch(action.getAdminSuccess(response.data)) 
+            })
+            .catch(error =>{
+                //console.log(error)
+                if (error.response && error.response.data) {
+                    console.log(error.response)
+                    dispatch(action.getAdminError(error.response.data));
+
+                }else{
+                    console.log(error.request)
+                    dispatch(action.handleError(error.request))
+                }
+            });
+    };
+    
+};
 
 
 const prepPayLoad = (objName, data)=>{

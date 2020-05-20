@@ -2,9 +2,20 @@
 
 
 export default class Api{
+    getAdminApi() {
+       return `/api/admin/`;
+    }
+
+    updateAboutApi(id) {
+       return `/api/about/change/${id}/`;
+    }
+
+    createAboutApi(){
+        return `/api/about/create/`;
+    }
+
     getAboutInfoApi() {
-        var api = `/api/about/`;
-        return api
+        return `/api/about/`;
     }
 
     getCurrentUserApi() {

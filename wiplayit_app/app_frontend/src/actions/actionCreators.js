@@ -853,10 +853,40 @@ export const showModal = (modalName, isOpening) =>{
 };
 
 
+export const getAdminPending = () => {
+    
+    return {
+        type    : 'ADMIN_PENDING',
+        payLoad : {
+            isLoading: true,
+        }
+    };
+};
 
 
+export const getAdminSuccess = (data) => {
+
+    
+    return {
+        type    : 'ADMIN_SUCCESS',
+        payLoad : {
+            ...data,
+            isLoading: false,
+        }
+    };
+};
 
 
+export const getAdminError = (error) => {
+    
+    return {
+        type    : 'ADMIN_ERROR',
+        payLoad : {
+            error,
+            isLoading: false,
+        }
+    };
+};
 
 
 export const getUserAnswer = (answerList) => {

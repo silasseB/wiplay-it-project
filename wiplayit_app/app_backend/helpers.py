@@ -60,8 +60,11 @@ def get_objects_perms(perms_for=None):
 		},
 
 		'draft_editor_contents_perms' : {
-		    'edit_perms': [ 'edit_draft_editor_files','view_draft_editor_files', 'delete_draft_editor_files' ],
+		    'edit_perms': [ 'edit_draft_editor_files',
+		    				'view_draft_editor_files',
+		    				'delete_draft_editor_files' ],
 		}
+ 
     }
 		         
 	perms.setdefault('permssions', {})
@@ -78,7 +81,11 @@ def get_model_fields(for_model=None):
 
  	        'text_fields'      : {
 		            'user'    : ['first_name', 'last_name',],
-		            'profile' : [ 'profile_picture', 'favorite_quote', 'live',  'phone_number', 'credential']
+		            'profile' : ['profile_picture', 
+		            			'favorite_quote',
+		            			 'live', 
+		            			 'phone_number',
+		            			 'credential']
             },
 
             'followers_field' : 'followers',
@@ -129,6 +136,10 @@ def get_model_fields(for_model=None):
 	     	'text_field':'reply', 'upvotes_field' :'upvotes',
 		    'related_field':'parent'
 	    },
+
+	    'about_model_fields' : {
+	     	'text_field' :'about_text',
+		},
 		
 	}
 	

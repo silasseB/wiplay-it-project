@@ -7,16 +7,31 @@ from rest_framework import viewsets
 
 from app_backend.helpers import get_objects_perms, get_model_fields
 from auth_backend.models import User
-from .models import ( Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply, DraftEditorMediaContent )
+from .models import (Question,
+					 Post,
+					 Answer,
+					 AnswerComment,
+					 AnswerReply,
+	                 PostComment,
+	                 PostReply,
+	                 DraftEditorMediaContent )
 
-from app_backend.serializers import ( UserSerializer, QuestionSerializer, QuestionReadSerializer,
-	                                  AnswerReadSerializer, AnswerSerializer, AnswerCommentSerializer,
-	                                  AnswerCommentReadSerializer, AnswerReplySerializer,
+from app_backend.serializers import ( UserSerializer,
+									  QuestionSerializer,
+									  QuestionReadSerializer,
+	                                  AnswerReadSerializer,
+	                                  AnswerSerializer,
+	                                  AnswerCommentSerializer,
+	                                  AnswerCommentReadSerializer,
+	                                  AnswerReplySerializer,
 	                                  AnswerReplyReadSerializer )
 
-from app_backend.serializers import (PostSerializer, PostReadSerializer, PostCommentSerializer,
-	                                PostCommentReadSerializer, PostReplySerializer, PostReplyReadSerializer )
+from app_backend.serializers import (PostSerializer,
+									 PostReadSerializer,
+									 PostCommentSerializer,
+	                                 PostCommentReadSerializer,
+	                                 PostReplySerializer,
+	                                 PostReplyReadSerializer )
 
 
 class BaseView():
@@ -39,27 +54,17 @@ class BaseView():
 class BaseApiView(BaseView, viewsets.ModelViewSet):
 	pass
         
-    
-    
-	
-
-  
 
 class QuestionView(BaseApiView):
-	queryset = Question.objects.all()
+	queryset         = Question.objects.all()
 	serializer_class = QuestionSerializer
-	permissions     = get_objects_perms('question_perms')
+	permissions      = get_objects_perms('question_perms')
 	fields_to_update = get_model_fields('question_model_fields') 
 	
 class QuestionDetailView(QuestionView):
 	serializer_class = QuestionReadSerializer
 
 	
-
-
-
-
-
 class AnswerView(BaseApiView):
 	queryset = Answer.objects.all()
 	serializer_class = AnswerSerializer

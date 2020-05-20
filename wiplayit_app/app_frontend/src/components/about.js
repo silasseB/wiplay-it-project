@@ -4,7 +4,9 @@ import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
 import  MainAppHoc from "components/index/index-hoc";
 import {store} from "store/index";
 import {getAboutInfo} from "dispatch/index"
-
+import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
+import {Editor,EditorState, convertFromRaw} from 'draft-js';
+import {decorator} from 'components/draft-js-editor/editor'
 
 
 
@@ -61,20 +63,31 @@ export const AboutComponent = props => {
     console.log(props)
     let about = props.about;
     about = about && about.info;
+    
     return(
         <div>
             {about && about.map( (about, index)=>{
+                let   storedState    = JSON.parse(about.about_text);
+                const contentState   = storedState && convertFromRaw(storedState);
+                const editorState    = contentState && 
+                                       EditorState.createWithContent(contentState, decorator);
 
                 return(
                     <div key={index}>
-                    <div className="">
-                        <h2 className="about-info-title">{about.title_info}</h2>
-                    </div>
-                    <div>
-                        <p>{about.info}</p>
-                    </div>
-                    <div>
-                    </div>
+                        <div className="">
+                            <h2 className="about-info-title">{about.about_title}</h2>
+                        </div>
+
+                        <div>
+                            <Editor
+                                blockRendererFn={pageMediaBlockRenderer}
+                                editorState={editorState} 
+                                readOnly={true} 
+                            />
+                        </div>
+
+                        <div>
+                        </div>
                     </div>
                 )
             })}

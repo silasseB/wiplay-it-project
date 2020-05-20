@@ -59,7 +59,7 @@ admin.site.register(AnswerReply, AnswerReplyAdmin)
 
 
 class AboutAdmin(admin.ModelAdmin):
-    fields = ['title_info',  'info']
+    fields = ['about_title', 'about_text']
 
 admin.site.register(AboutCompany, AboutAdmin)
 

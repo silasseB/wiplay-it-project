@@ -2,11 +2,11 @@
 
 const asyncActionType = (type) => {
 	//console.log(type)
-return {
-   PENDING : `${type}_PENDING`,
-   SUCCESS : `${type}_SUCCESS`,
-   ERROR   : `${type}_ERROR`,
-}
+    return {
+        PENDING : `${type}_PENDING`,
+        SUCCESS : `${type}_SUCCESS`,
+        ERROR   : `${type}_ERROR`,
+    }
 }
 
 
@@ -19,7 +19,7 @@ const asyncActionToggleType = (type) => ({
 
 
 const actionType = (type) => ({
-    
+    ABOUT                   : `${type}_ABOUT`,
     INDEX                   : `${type}_INDEX`,
     QUESTION                : `${type}_QUESTION`,
     POST                    : `${type}_POST`,
@@ -78,7 +78,7 @@ export const GET_REPLY_GRAND_CHILD_LIST  = asyncActionType(GET.REPLY_GRAND_CHILD
 
 export const GET_REPLY_GREAT_GRAND_CHILD_LIST = asyncActionType(GET.REPLY_GREAT_GRAND_CHILD_LIST);
 
-
+export const CREATE_ABOUT        = asyncActionType(CREATE.ABOUT);
 export const CREATE_QUESTION     = asyncActionType(CREATE.QUESTION);
 export const CREATE_POST         = asyncActionType(CREATE.POST);
 export const CREATE_ANSWER       = asyncActionType(CREATE.ANSWER);
@@ -89,13 +89,13 @@ export const CREATE_REPLY_CHILD  = asyncActionType(CREATE.REPLY_CHILD);
 
 export const UPDATE_QUESTION      = asyncActionType(UPDATE.QUESTION);
 export const UPDATE_QUESTION_LIST = asyncActionType(UPDATE.QUESTION_LIST);
-
 export const UPDATE_POST          = asyncActionType(UPDATE.POST);
 export const UPDATE_ANSWER        = asyncActionType(UPDATE.ANSWER)
 export const UPDATE_REPLY         = asyncActionType(UPDATE.REPLY);
 export const UPDATE_COMMENT       = asyncActionType(UPDATE.COMMENT);
 export const UPDATE_USER_PROFILE  = asyncActionType(UPDATE.USER_PROFILE);
-export const UPDATE_USER_LIST   = asyncActionType(UPDATE.USER_LIST);
+export const UPDATE_USER_LIST     = asyncActionType(UPDATE.USER_LIST);
+export const UPDATE_ABOUT         = asyncActionType(UPDATE.ABOUT);
 
 
 
