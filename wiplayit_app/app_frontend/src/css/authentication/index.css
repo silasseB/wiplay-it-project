@@ -1,8 +1,11 @@
 
+.navbar-title-box {
+    color: #ffff;
+}
+
 .social-login-container {
      border: px solid red;
  }
-
 
 .registration-spin-loader-box {
     border          : px solid black;
@@ -10,4 +13,49 @@
     display         : flex;
     padding         : 10px 0;
     
+}
+
+.auth-input-field {
+    border : 1px solid #D2D2D2;
+    margin : 4px;
+}
+
+.auth-input-field input {
+    border    : px solid red;
+    font-size : 13px;
+}
+
+
+.authenticated-box {
+   border : 1px solid #D2D2D2;
+   margin: 40px 10px;
+}
+
+.authenticated-contents {
+  border     : px solid red;
+  min-height : 100px; 
+
+}
+
+.navbar-title-box,
+.authenticated-title,
+.authenticated-redirect-link-box {
+   width      : 100%;
+   text-align : center;
+   
+}
+
+
+.authenticated-title {
+    font-size: 14px;
+}
+
+.authenticated-redirect-link{
+     border      : px solid red;
+     width       : 30%;
+     font-size   : 14px; 
+     margin      : 10px 0; 
+     background  :  #A33F0B;
+     color       : white;
+     font-weight : bold;
 }

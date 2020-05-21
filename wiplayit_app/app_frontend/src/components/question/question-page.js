@@ -62,9 +62,7 @@ class QuestionPage extends Component {
     componentDidMount() {
         this.isMounted = true;
         this.onQuestionUpdate();
-        
-        console.log(this.props) 
-                        
+                      
         let { entities,
               match,
               location }  =  this.props;
@@ -149,7 +147,6 @@ class QuestionPage extends Component {
         let { questionById, entities, id} = props;
         let { question } = entities && entities;
         question = question && question[questionById]
-        console.log(props, questionById, question)
       
         return (
             <div>

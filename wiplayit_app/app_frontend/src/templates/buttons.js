@@ -691,11 +691,7 @@ export const  OptionModal = props => {
 
 
 export const OpenOptionlBtn  = props => {
-    console.log(props)
-    if (window.matchMedia("(max-width: 980px)").matches) {
-
-    }
-         
+           
     return(
         <div>
             <OptBtnSmallScreen {...props}/>

@@ -23,7 +23,6 @@ class AnswerContainer extends Component {
 
 
     componentDidMount() {
-        console.log(this.props)
         let { match,location, entities }  =  this.props;
         let { slug, id }  =  match.params;
         let {state}       =  location; 
@@ -108,7 +107,6 @@ export class AnswersBox extends Component {
 
 
     componentDidMount() {
-        console.log(this.props)
         let {questionById, question, entities} = this.props;
         let {answers} = entities;
 
@@ -142,8 +140,7 @@ export class AnswersBox extends Component {
         let currentAnswersNum = currentAnswers && currentAnswers.length;
 
         let numberOfAnswers;
-        console.log(currentAnswersNum, newAnswersNum)
-        
+       
         if (newAnswersNum) {
             currentAnswersNum = currentAnswersNum  + newAnswersNum;
         }
@@ -164,9 +161,6 @@ export class AnswersBox extends Component {
         let currentAnswers   = answers        && answers[answerListById];
         let newAnswers       = answers        && answers[newAnswerListById];
         let numberOfAnswers  = this.getNumberOfAnswers(currentAnswers, newAnswers);
-
-        //console.log(answers,currentAnswers, newAnswers)
-        //console.log(props, numberOfAnswers)
                  
         return (
             <div className="answer-list-container">

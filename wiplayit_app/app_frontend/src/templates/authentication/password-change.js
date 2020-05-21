@@ -66,7 +66,7 @@ export const PassWordChangeForm = props => {
                     }
 
                    <div  className="" >
-                     <div className="change-password-box">
+                     <div className="change-password-box auth-input-field">
                         <input
                            className="password"
                            placeholder="New Password"
@@ -78,7 +78,7 @@ export const PassWordChangeForm = props => {
                         />
                      </div>
 
-                     <div className="change-password-box">
+                     <div className="change-password-box auth-input-field">
 
                         <input
                            className="password"

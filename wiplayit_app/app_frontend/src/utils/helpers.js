@@ -10,7 +10,7 @@ export default class Helper {
 
    
     updateReducerListEntynties(listItems, obj) {
-        console.log(listItems,obj)
+        //console.log(listItems,obj)
         if (Array.isArray(listItems) && obj ) {
 
             listItems.map(( item, index) => {
@@ -59,14 +59,11 @@ export default class Helper {
                 let carecter = contents[i];
             
                 if (!contents.includes('{') || !contents.includes('[')) {
-                    console.log(contents.charAt(0))
                     let draftContents = this.draftContents();
                     draftContents.blocks[0].text = contents
                     contentState = draftContents
-                    console.log(carecter)
                     break
                 }
-
             }
         }
         
@@ -76,11 +73,8 @@ export default class Helper {
             contentState  = JSON.parse(contentState);
         }
 
-               
-        console.log(contentState)
-        contentState   = contentState && convertFromRaw(contentState);
-        const editorState    = contentState && 
-                                EditorState.createWithContent(contentState, decorator);
+        contentState      = contentState && convertFromRaw(contentState);
+        const editorState = contentState && EditorState.createWithContent(contentState, decorator);
         return editorState;
     };
 

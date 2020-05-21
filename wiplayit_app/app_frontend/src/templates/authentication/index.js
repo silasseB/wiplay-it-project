@@ -8,16 +8,25 @@ import  LoginForm from "templates/authentication/login";
 import  SignUpForm  from "templates/authentication/signup";
 import  EmailForm  from "templates/authentication/email-form";
 
-import { SpinLoader } from  'templates/authentication/utils'
+import { SpinLoader,
+         AuthenticatedComponent } from  'templates/authentication/utils'
 
 
 const RegistrationComponent = (props)=>{
+    let {isAuthenticated, navbarTitle} = props;
+    navbarTitle = isAuthenticated && "You're logged in"  || navbarTitle;
+
+    let _props = {...props, navbarTitle}
 
     return(
         <div className="registration-page">
-           <NavBar {...props}/>
+           <NavBar {..._props}/>
             <div className="registration-container">
-                <MainRegistrationComponent {...props}/>         
+                { isAuthenticated &&
+                    <AuthenticatedComponent {..._props}/>
+                        ||
+                    <MainRegistrationComponent {..._props}/>  
+                }
             </div>
         </div>
     );
@@ -88,7 +97,8 @@ const RegistrationBig = props => {
                             <div className="create-account-box"> 
                                 <button type="button" 
                                         onClick={() => props.toggleSignUpForm(toggleProps) } 
-                                        id="create-account"  className="btn-sm create-account-btn">
+                                        id="create-account" 
+                                        className="btn-sm create-account-btn">
                                     Create account 
                                 </button>
                             </div>

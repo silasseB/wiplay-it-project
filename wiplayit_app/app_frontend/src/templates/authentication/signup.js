@@ -55,7 +55,7 @@ export const  SignUpForm = props => {
                 <div className="name-fields">
                             
                   <div className="username-fields">
-                    <div className="name-field-box1">
+                    <div className="name-field-box1 auth-input-field">
                       <input
                         placeholder="First Name"
                         className="first-name-input"
@@ -67,7 +67,7 @@ export const  SignUpForm = props => {
                       />
 
                     </div>  
-                    <div className="name-field-box2">
+                    <div className="name-field-box2 auth-input-field">
                       <input
                         placeholder="Last Name"
                         className="last-name-input"
@@ -88,7 +88,7 @@ export const  SignUpForm = props => {
                         <EmailFieldErrors {...error}/>
                     }
 
-                  <div className="email-box">
+                  <div className="email-box auth-input-field">
                     <input
                       placeholder="Email"
                       className="email"
@@ -103,7 +103,7 @@ export const  SignUpForm = props => {
                </div>
 
                <div className="password-fields signup-fields">
-                  <div className="password-box">
+                  <div className="password-box auth-input-field">
                       <input
                         placeholder="Password"
                         className="password"

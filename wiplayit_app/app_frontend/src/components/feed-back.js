@@ -44,7 +44,8 @@ class FeedBackContainer extends Component{
 
     render(){
         let textAreaProps = this.textAreaProps;
-        let props = {...this.props, ...this.state}
+        let props  = {...this.props, ...this.state}
+        let {form, handleChange} = props;
 
         return(
             <div className="feedback-form-page">
@@ -52,7 +53,69 @@ class FeedBackContainer extends Component{
                 <NavigationBarBigScreen {...props} />
                 <div className="feedback-form-container">
                     <div className="feedback-form-box">
-                        <TextAreaEditor {...textAreaProps}/>
+                        <div className="">
+                            <ul className="item-title-box">
+                                <li className="item-title">
+                                    Full Name
+                                </li>
+                            </ul>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    placeholder="" 
+                                    className=""
+                                    name="full_name"
+                                    value={form && form.full_name || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="">
+                            <ul className="item-title-box">
+                                <li className="item-title">
+                                    Your email address
+                                </li>
+                            </ul>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    placeholder="About you" 
+                                    className=""
+                                    name="email"
+                                    value={form && form.email || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="">
+                            <ul className="item-title-box">
+                                <li className="item-title">
+                                    Subject
+                                </li>
+                            </ul>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    placeholder="" 
+                                    className=""
+                                    name="subject"
+                                    value={form && form.subject || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="">
+                            <ul className="item-title-box">
+                                <li className="item-title">
+                                    Description
+                                </li>
+                            </ul>
+
+                            <TextAreaEditor {...textAreaProps}/>
+                        </div>
             
                         <button
                             onClick={() => this._handleSubmit}

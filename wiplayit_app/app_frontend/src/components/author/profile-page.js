@@ -137,6 +137,7 @@ class UserProfileContainer extends Component {
     }
 
     updateWithCacheData(params){
+        if(!this.isMounted) return;
         let { cacheEntities }        = this.props;
         let { profileById, id }      = params;
         let { usersById }            = this.state;
@@ -178,9 +179,8 @@ class UserProfileContainer extends Component {
     };
 
     _dispatchUserProfileItems(userProfile){
-        //console.log(userProfile)
+        if(!this.isMounted) return;
         let answers      = this.props.cacheEntities.answers;
-
 
         if (userProfile && userProfile.answers && userProfile.answers.length) {
             var byId         =`usersAnswers${userProfile.id}`;
@@ -311,8 +311,7 @@ class UserProfileContainer extends Component {
         let   props = this.getProps();
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
-        console.log(userProfile, profileById)
-      
+              
         return (
             <div>
                 <PartalNavigationBar {...props}/>

@@ -3,15 +3,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import  * as action  from 'actions/actionCreators';
-import {store} from "store/index";
+import {store} from 'store/index';
 import Axios from 'utils/axios_instance';
 import Api from 'utils/api';
 import Helper from 'utils/helpers';
 import {authenticate, _GetApi} from 'dispatch/index';
 import { getCookie } from 'utils/csrf_token.js';
 import * as checkType from 'helpers/check-types'; 
-import { AlertComponent } from "templates/partial-components";
-
+import { AlertComponent } from 'templates/partial-components';
+import{history} from 'App';
 
 
 const helper   = new Helper();
@@ -74,7 +74,6 @@ export function AuthenticationHoc(Component) {
 
                     let {auth} = userAuth;
                     if (auth && auth.isLoggedIn){
-                        this.props.history.push('/')
                         return true
                     }
                 }
@@ -153,9 +152,17 @@ export function AuthenticationHoc(Component) {
 
         componentDidMount =()=> {
             this.isMounted = true;
+            this.onAuthStoreUpdate()
             this.setState({isMounted:true})
-            this.onAuthStoreUpdate()  
-                    
+
+            if (this.isAuthenticated()) {
+                this.setState({isAuthenticated:true});
+            }
+
+            window.onpopstate = (event) => {
+                console.log("Poping action" ,this.props)
+                
+            }  
         };
 
         onAuthStoreUpdate =()=> {
@@ -565,7 +572,6 @@ export function AuthenticationHoc(Component) {
         render() {
             if (!this.isMounted) return null;
             let props = this.getProps(); 
-
             let alertMessageStyles = props.displayMessage?{ display : 'block'}:
                                                           { display : 'none' };
            

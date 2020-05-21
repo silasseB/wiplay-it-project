@@ -10,8 +10,26 @@ import {history} from "App";
 
 
 
+export const AuthenticatedComponent = props => {
+      
+    return (
+        <div className="authenticated-box">
+            <div className="authenticated-contents">
+               <ul className="authenticated-title">
+                   <li className="" >You already logged in</li>
+                </ul>
+                <div className="authenticated-redirect-link-box">
+                    <Link type="button" className="authenticated-redirect-link btn" to="/"> 
+                        Home
+                    </Link>
+                </div>
+            </div>
+        </div>    
+    );
+};
 
-export const  NavBar   = props => {
+
+export const NavBar = props => {
       
     return (
         <div className="navigation-bar fixed-top">
@@ -159,6 +177,7 @@ export const  RegistrationSubmitBtn  = props => {
         </button>
     )
 };
+
 
 
 export const  SubmitBtnSmallScreen = MatchMediaHOC(RegistrationSubmitBtn, '(max-width: 980px)') 

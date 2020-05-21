@@ -21,8 +21,6 @@ import Api from 'utils/api';
 import * as checkType from 'helpers/check-types'; 
 
 
-
-const ChangeImageBtnSmallScreen = MatchMediaHOC(ChangeImageBtn, '(max-width: 980px)');
 const api = new Api();
 
 const helper   = new Helper();  

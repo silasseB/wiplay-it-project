@@ -2,14 +2,9 @@ import React from 'react';
 
 
 export const ButtonsBox = props => {
-  console.log(props)
-
- 
     let styles = props && props.Styles;
     styles     = styles && styles.contents;
   	styles     = !styles && Styles.contents || styles;
-
-    console.log(props.btn3)
     
     return (
 

@@ -143,8 +143,7 @@ class  PostPage extends Component  {
         var postById = props.postById;
         var post = props.entities.post;
         post = post && post[postById]
-        console.log(post, props)       
-                  
+                       
         return (
             <div>
                <PartalNavigationBar {...props}/>

@@ -38,7 +38,7 @@ const helper   = new Helper();
 export function MainAppHoc(Component) {
 
     return class MainApp extends Component {
-        _isMounted = false;
+        isMounted = false;
 
         constructor(props) {
             super(props);
@@ -113,7 +113,7 @@ export function MainAppHoc(Component) {
         onStoreUpdate = (params, callback=function(){}) =>{
  
             const onStoreChange = () => {
-                if (this._isMounted) {
+                if (this.isMounted) {
                 
                 let storeUpdate = store.getState();
                 var timeStamp = new Date();
@@ -343,7 +343,7 @@ export function MainAppHoc(Component) {
 
         componentWillUnmount() {
             this.unsubscribe();
-            this._isMounted = false;
+            this.isMounted = false;
             
         };
 
@@ -373,18 +373,19 @@ export function MainAppHoc(Component) {
 
         
         componentDidMount() {
-            this._isMounted = true;
             this.onStoreUpdate() //Subscribe on store change 
-
-            if (!this.isAuthenticated()) {
-                //User is not authenticated,so redirect to authentication page.
-                history.push('/user/registration/')
-                return;
-            }
-              
+             
             let { entities } = this.props;
             
-            window.onpopstate = (event) => { this.onPopState();return false;}
+            window.onpopstate = (event) => {
+                console.log("Poping action" ,this.props, !this.isAuthenticated())
+                if (!this.isAuthenticated()) {
+                    history.goBack();
+                    return;
+                }
+
+                this.onPopState();
+            }
 
             window.addEventListener("beforeunload",(event)=>{
                 
@@ -402,10 +403,16 @@ export function MainAppHoc(Component) {
                 //event.returnValue = '';
                 
             });
-           
 
+            if (!this.isAuthenticated()) {
+                //User is not authenticated,so redirect to authentication page.
+                history.push('/user/registration/')
+                return;
+            }
+
+            this.isMounted = true;
             let currentUser = this._SetCurrentUser();
-           
+          
             if(!currentUser){
                 store.dispatch(getCurrentUser());
             }

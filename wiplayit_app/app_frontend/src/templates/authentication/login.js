@@ -7,7 +7,6 @@ import { NonFieldErrors,
 
 import { PasswordChangeBig, 
          PasswordChangeSmall,
-         SubmitBtnBigScreen,
          RegistrationSubmitBtn,
          SpinLoader } from  'templates/authentication/utils'
 
@@ -59,7 +58,7 @@ export const  LoginForm = props => {
                                 {!isSocialAuth && onLoginForm && error && 
                                     <EmailFieldErrors {...error}/>
                                 }
-                                <div className="login-fields">
+                                <div className="login-fields auth-input-field">
                                     <input
                                         className="login-email-field"
                                         placeholder="Email Address"
@@ -70,7 +69,7 @@ export const  LoginForm = props => {
                                         required
                                     />
                                 </div>
-                                <div className="login-fields">
+                                <div className="login-fields auth-input-field">
                                     <input
                                         className="login-password-field"
                                         placeholder="Password"

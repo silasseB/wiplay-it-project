@@ -73,7 +73,8 @@ export const ProfileComponent = props => {
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
 
     const EditorModalBtnSmall = ()=>{
-        
+        const pathToEditProfile = userProfile  && 
+                 `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
         return(
             <button 
                 className="btn-sm edit-user-profile"
@@ -102,8 +103,7 @@ export const ProfileComponent = props => {
 
     let pathToUserFollowers = userProfile &&
                  `/user/profile/${userProfile.slug}/${userProfile.id}/followers/`;
-    const pathToEditProfile = userProfile  && `
-                 /edit/profile/${userProfile.slug}/${userProfile.id}/`;
+    
 
     let btnsProps = {
         editUserProfileProps,
@@ -212,7 +212,7 @@ export const ProfileComponent = props => {
                                     <div className="edit-credential-btn-box">
 
                                         <EditorModalBtnBigScreen {...editUserProfileProps}/>
-                                        <EditorModalBtnSmallScreen {...props}/>
+                                        <EditorModalBtnSmallScreen/>
                                     </div>
                                     :
                                     ""

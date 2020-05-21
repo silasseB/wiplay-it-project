@@ -1,5 +1,5 @@
 
-@media (max-width : 900px) {
+@media (max-width : 980px) {
 
 
 .navigation-bar {
@@ -10,11 +10,8 @@
 }
 
 
-
 .navbar-title-box {
-   width  : 100%;
-   text-align: center;
-   margin: 6px  
+    margin: 6px  
  }
 
 .navbar-title-box  {
@@ -78,11 +75,6 @@
   background: #A33F0B;
 } 
 
-.login-fields {
-  padding: 10px;
-  margin: 4px;
-    
-}
 
 
 .create-account-link-box li {
@@ -112,6 +104,7 @@
 .submit-btn-box {
     width      : 100%;
     text-align : center;
+    font-size  : 17px;
 }
 
 
@@ -164,6 +157,7 @@
   color      : #ffff;
   background : #A33F0B; 
   width      : 60%; 
+  font-size  : 14px;
 
 }
 

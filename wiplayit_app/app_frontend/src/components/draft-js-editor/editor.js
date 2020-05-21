@@ -35,7 +35,7 @@ const helper   = new Helper();
 
 
 export default  class AppEditor extends Component{
-    _isMounted = false;
+    isMounted = false;
 
     constructor(props) {
         super(props);
@@ -167,16 +167,14 @@ export default  class AppEditor extends Component{
     onEditorUpdate = () =>{
  
         const onStoreChange = () => {
-            if (this._isMounted) {
+            if (this.isMounted) {
                 let storeUpdate   = store.getState();
           
                 let { entities } = storeUpdate
                 let { modal,errors    } = entities
-                console.log(errors)
-                                                        
+                                                             
                 if (modal && modal['editor']) {
                     modal = modal['editor']
-                    console.log(modal)
                     this.setState({ submitting : modal.submitting });
 
                     if (modal.error) {
@@ -198,7 +196,7 @@ export default  class AppEditor extends Component{
     };
 
     componentWillUnmount() {
-        this._isMounted = false;
+        this.isMounted = false;
         
         this.unsubscribe();
     };
@@ -210,7 +208,7 @@ export default  class AppEditor extends Component{
     }
 
     componentDidMount(){
-        this._isMounted = true;
+        this.isMounted = true;
         this.onEditorUpdate();
         
         let {isPut, objName, obj} = this.props;

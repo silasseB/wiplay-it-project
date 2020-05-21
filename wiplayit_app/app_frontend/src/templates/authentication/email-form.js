@@ -82,7 +82,7 @@ const EmailForm = props => {
                     }
 
                         <p></p>
-                        <div className="email-box">
+                        <div className="email-box auth-input-field">
                             <input
                                placeholder="Email"
                                className="email"
