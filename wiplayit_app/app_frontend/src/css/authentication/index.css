@@ -7,6 +7,12 @@
      border: px solid red;
  }
 
+
+.submit-btn-box {
+    width   : 100%;
+    padding : 0 5px; 
+}
+
 .registration-spin-loader-box {
     border          : px solid black;
     justify-content : center;

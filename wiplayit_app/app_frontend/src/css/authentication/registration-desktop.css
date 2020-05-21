@@ -231,10 +231,6 @@
     margin-top: 15px;
 }
 
-.submit-btn-box {
-    border     : 1px solid blue; 
-    width      : 100%;
-}
 
 .cancel-signup-btn-box, .password-change-link-box {
     border : px solid black; 
@@ -263,7 +259,6 @@
 .confirmation-login-bt-box,
 .resend-confirmation-btn-box {
     text-align: center;
-    border : 1px solid black;
     margin: 0 0 20px; 
 } 
 
@@ -271,17 +266,11 @@
    
 }
 
-
-
 .form-cancel-btn {
      background-color: #edf0f3;
      color:#5384e5;
      font-size: 12px;
-    
 }
-
-
-
 
 .create-account-box  {
      border: px solid black;
@@ -294,8 +283,6 @@
    margin: 10px 3% !important;
    border:1px solid #BDBDBD;
 }
-
-
 
 .sign-or-login {
    border: 1px solid #D2D2D2;

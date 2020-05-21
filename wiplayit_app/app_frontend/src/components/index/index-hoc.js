@@ -506,7 +506,7 @@ export function MainAppHoc(Component) {
   
 
         render() {
-            if(!this.isMounted) console.log(' Now Mouted');
+            if(!this.isMounted) return null;
 
             let props = this.getProps();
             let alertMessageStyles = props.displayMessage?{ display : 'block'}:
