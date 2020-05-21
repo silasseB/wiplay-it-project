@@ -114,10 +114,11 @@
     .create-question-btn, .create-post-btn {
         background  : #A33F0B;
         color       : #fefefe;
-        font-size   : 12px; 
+        font-size   : 9px !important; 
         font-family : 'Oswald'; 
-        margin-top  : 10px; 
-        font-weight : bold;;
+        margin      : 5px 0; 
+        font-weight : bold;
+        border      : px solid black;
         
         
     }
@@ -128,7 +129,7 @@
     }
 
     .create-post-btn-box, .create-question-btn-box {
-        
+        border : px solid black;
     }
 
     .create-post-btn-box {
@@ -377,8 +378,8 @@
     }
 
     .create-post-btn-box, .create-question-btn-box {
-        border        : px solid black;
-        display:  flex;
+        border  : px solid black;
+        display : flex;
     }
 
     .create-question-btn, .create-post-btn {
@@ -388,6 +389,7 @@
         font-weight : bold;
         height      : 30px;
         margin      : 15px 7px 0;
+        font-size   : 10px;
                
         
     }
