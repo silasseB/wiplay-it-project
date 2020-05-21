@@ -272,9 +272,7 @@ export const Questions = props => {
     questions          = questions && questions[questionListById];
 
     let questionList = questions && questions.questionList;
-    console.log(questions)
-   
-  
+    
     return (
 
         <div >

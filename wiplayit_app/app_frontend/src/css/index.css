@@ -24,9 +24,8 @@
     .unconfirmed-user-warn-box {
     	border     : px solid red;
     	margin     : 0px 10%;
-    	padding    : 10px 0 10px 80px; 
-    	/*background : #FCCACA;*/
-    	display: flex; 
+    	justify-content : center;
+    	display         : flex;
 
     }
 
@@ -106,7 +105,7 @@
     .alert-box {
         justify-content : center;
     	display         : flex;
-    	border          : px solid black;
+    	border          : 1px solid black;
     }
 
 
@@ -118,6 +117,7 @@
     }
 
     .alert-message {
+    	font-size: 17px !important;
 
     }
 
@@ -131,11 +131,6 @@
     	margin     : 10px; 
     }
 
-
-
-    .unconfirmed-user-warn {
-
-    }
 }
 
 
@@ -148,6 +143,12 @@
 .unconfirmed-user-email:hover {
 	cursor : pointer;
 } 
+
+
+.unconfirmed-user-warn {
+  	font-size: 13px !important;
+}
+
 
 body {
    margin     : 0;

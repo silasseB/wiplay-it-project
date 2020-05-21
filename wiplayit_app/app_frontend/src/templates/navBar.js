@@ -143,6 +143,7 @@ export const RedirectMenuLinks = props => {
     if (window.matchMedia("(max-width: 980px)").matches) {
         window.history.back() 
     }
+    console.log(pathname, state)
 
     return setTimeout(()=> {
         history.push(pathname, state); 
@@ -172,12 +173,13 @@ const NavBarDropDown = props => {
 
                     }
                 </div>
+            </div>
             
             <div className="dropdown-menu nav-dropdown-menu" aria-labelledby="navBardropdown">
                 <NavBarMenuItems {...props}/>
                 
             </div>
-            </div>
+           
         </div>
     )
 }
