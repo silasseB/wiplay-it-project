@@ -247,7 +247,7 @@
   
 }
 
-.confirmation-login-bt-box a,
+.confirmation-login-btn-box a,
 .resend-confirmation-btn, .registration-submit-btn {
   font-size: 11px;
   color: #ffff;
@@ -256,7 +256,11 @@
 
 }
 
-.confirmation-login-bt-box,
+.confirmation-login-btn {
+    width: 40%;
+} 
+
+.confirmation-login-btn-box,
 .resend-confirmation-btn-box {
     text-align: center;
     margin: 0 0 20px; 

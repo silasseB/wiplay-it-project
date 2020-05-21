@@ -68,7 +68,7 @@ class  PostListPage extends Component  {
         let { posts, currentUser } = cacheEntities;
         posts  =  posts[postListById]
 
-        let postList = posts.postList;
+        let postList = posts && posts.postList;
 
         if (postList) {
             console.log(posts)

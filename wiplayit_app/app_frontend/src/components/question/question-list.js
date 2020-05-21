@@ -12,12 +12,6 @@ import  AjaxLoader from 'templates/ajax-loader';
  
 
 
-
-
-
-
-
-
 class  QuestionListPage extends Component  {
     isMounted = false;
     constructor(props) {
@@ -144,30 +138,43 @@ export default MainAppHoc(QuestionListPage);
 
 const Questions = props => {
 
-   var questions  = props.entities.questions;
+   let questions  = props.entities.questions;
    questions  = questions[props.questionListById];
    let questionList = questions && questions.questionList;
 
     return (
         <div>
-
-            { questionList && questionList.map(( question, index )  => {
-               let questionProps = {question} 
-               Object.assign( questionProps, props);
-               
-               return (
-                  <div key={question.id}>
-                    <QuestionComponent {...questionProps}/>
-                  </div>
-                  )
-               }
-            )}
+            { questionList &&  IterateQuestionList(props)
+                ||
+                <ul className="">
+                    <li className="">
+                        No question yet
+                    </li>
+                </ul>
+            }
         </div>
     );
 }
 
 
+const IterateQuestionList = (props)=>{
+    let {entities, questionListById} = props
 
+    let {questions}  = entities;
+    questions        =   questions[props.questionListById];
+    let questionList =  questions.questionList;
+
+    questionList.map(( question, index )  => {
+        let questionProps = {question} 
+        Object.assign( questionProps, props);
+               
+        return (
+            <div key={question.id}>
+                <QuestionComponent {...questionProps}/>
+            </div>
+        )
+    })
+};
 
 
  

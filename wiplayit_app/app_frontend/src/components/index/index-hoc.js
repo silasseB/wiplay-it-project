@@ -547,7 +547,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     	getIndex             : (props)      => dispatch(getIndex(props)), 
         getUserProfile       : (id, apiUrl) => dispatch(getUserProfile(id, apiUrl)),
         getUserList          : (props)      => dispatch(getUserList(props)),
-        getQuestionList      : (id)         => dispatch(_getQuestionList(id)),
+        getQuestionList      : (id)         => dispatch(getQuestionList(id)),
         getPostList          : (id)         => dispatch(getPostList(id)),
         getQuestion          : (id)         => dispatch(getQuestion(id)),
         getPost              : (id)         => dispatch(getPost(id)),
