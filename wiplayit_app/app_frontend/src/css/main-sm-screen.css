@@ -171,7 +171,7 @@
   display: block;
   font-family: 'PT San'; /*'Squada one';*/
   font-weight: normal;
-  font-size:17px;
+  font-size:13px;
   border:none;
   color: #807f7f; 
 }
@@ -221,7 +221,7 @@
     border      : px solid blue;
     font-weight : bold;
     color       : red;
-    font-size   : 18px; 
+    font-size   : 14px; 
 }
  
 }

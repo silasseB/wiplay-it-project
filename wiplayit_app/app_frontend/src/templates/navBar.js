@@ -96,40 +96,40 @@ export const NavBarMenuItems = props => {
             <div className="menu-btn-container">
                 <button type="button"
                         onClick={() => RedirectMenuLinks({pathname:'/help/'})}
-                        className="btn-sm dropdown-item">
+                        className="btn dropdown-item">
                     Help
                 </button>
                 <button type="button"
                         onClick={() => RedirectMenuLinks({pathname:'/feedback/'})}
-                        className="btn-sm dropdown-item">
+                        className="btn dropdown-item">
                     Feedback
                 </button>
 
                 <button type="button"
                         onClick={() => RedirectMenuLinks({pathname:'/settings/'})}
-                        className="btn-sm dropdown-item">
+                        className="btn dropdown-item">
                     Settings
                 </button> 
 
                 <button className="button"
                         onClick={() => RedirectMenuLinks({pathname:'/about/'})}
-                        className="btn-sm dropdown-item">
+                        className="btn dropdown-item">
                     About
                 </button>   
 
                 <button type="button"
                         onClick={() => RedirectMenuLinks({pathname:'/privacy/'})}
-                        className="btn-sm dropdown-item">
+                        className="btn dropdown-item">
                     Privacy
                 </button>  
 
                  <button type="button"
                         onClick={() => RedirectMenuLinks({pathname:'/report/'})}
-                        className="btn-sm dropdown-item">
+                        className="btn dropdown-item">
                     Report
                 </button> 
                 
-                <button  onClick={props.logout} className="btn-sm logout-btn">Logout</button>
+                <button  onClick={props.logout} className="btn logout-btn">Logout</button>
             </div>
         </div>
         </BrowserRouter>
@@ -160,9 +160,9 @@ const NavBarDropDown = props => {
  
     return(
         
-        <div className="navigation-img-box ">
+        <div className="navigation-img-box">
                     
-            <div className="" id="navBardropdown" 
+            <div className="droplef" id="navBardropdown" 
                            data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
                 <div className="nav-bar-img-box"> 
                     { profile && profile.profile_picture?
@@ -172,10 +172,11 @@ const NavBarDropDown = props => {
 
                     }
                 </div>
-            </div>
-            <div className="dropdown-menu " aria-labelledby="navBardropdown">
+            
+            <div className="dropdown-menu nav-dropdown-menu" aria-labelledby="navBardropdown">
                 <NavBarMenuItems {...props}/>
                 
+            </div>
             </div>
         </div>
     )
