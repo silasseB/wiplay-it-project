@@ -139,24 +139,25 @@ export default MainAppHoc(PostListPage);
 
 
 const Posts = props => {
-
-    var posts  = props.entities.posts;
-    posts  = posts[props.postListById];
+    let {entities, postListById} = props;
+    let {posts} =  entities;
+    posts       =  posts && posts[postListById];
     let postList = posts && posts.postList;
-    console.log(posts)
-
+  
     return (
         <div>
-            {postList && postList.map(( post, index )  => {
-                let postProps = {post:post} 
-                Object.assign(postProps, props);
-               
-                return (
-                    <div key={post.id}>
-                        <PostComponent {...postProps}/>
-                    </div>
-                );
-            })}
+            { postList && postList.length &&
+                IteratePostList(props, postList)
+
+                ||
+
+                <ul className="">
+                    <li className="">
+                        No Posts Yet
+                    </li>
+                </ul>
+            }
+      
         </div>        
     );
 };
@@ -164,5 +165,15 @@ const Posts = props => {
 
 
 
+const IteratePostList = (props, postList=[])=>{
+    return postList.map(( post, index )  => {
+    
+        return (
+            <div key={post.id}>
+                <PostComponent {...{...props, post}}/>
+            </div>
+        )
+    })
+};
 
  

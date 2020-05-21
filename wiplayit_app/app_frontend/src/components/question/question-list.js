@@ -141,11 +141,15 @@ const Questions = props => {
    let questions  = props.entities.questions;
    questions  = questions[props.questionListById];
    let questionList = questions && questions.questionList;
+   console.log(questionList)
 
     return (
         <div>
-            { questionList &&  IterateQuestionList(props)
+            { questionList && questionList.length &&
+                IterateQuestionList(props, questionList)
+
                 ||
+
                 <ul className="">
                     <li className="">
                         No question yet
@@ -157,20 +161,13 @@ const Questions = props => {
 }
 
 
-const IterateQuestionList = (props)=>{
-    let {entities, questionListById} = props
-
-    let {questions}  = entities;
-    questions        =   questions[props.questionListById];
-    let questionList =  questions.questionList;
-
-    questionList.map(( question, index )  => {
-        let questionProps = {question} 
-        Object.assign( questionProps, props);
-               
+const IterateQuestionList = (props, questionList=[])=>{
+   
+    return questionList.map(( question, index )  => {
+                       
         return (
             <div key={question.id}>
-                <QuestionComponent {...questionProps}/>
+                <QuestionComponent {...{...props, question}}/>
             </div>
         )
     })

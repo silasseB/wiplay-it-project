@@ -16,7 +16,7 @@ import Helper from 'utils/helpers';
 import  AjaxLoader from "templates/ajax-loader";
 import GetTimeStamp from 'utils/timeStamp';
 
-import  MainAppHoc from "components/admin/index-hoc";
+import  MainAppHoc from "components/index/index-hoc";
 
 const helper   = new Helper();
 
@@ -129,26 +129,39 @@ class AboutAdminPage extends Component {
 
 export default  MainAppHoc(AboutAdminPage);
 
+const EditAboutProps =(obj=undefined)=>{
+
+    //isPut=false, isPost=false
+    let isPut    = obj && true || false;
+    let isPost   = !obj && true || false;
+
+    let props = {
+        isPost,
+        isPut,
+        obj,
+        objName   : 'About',
+        className : "edit-about-admin-btn btn-sm",
+    };
+
+    return GetModalLinkProps.props(props);
+};
 
 export const AboutAdminComponent = props => {
     let about = props.about;
     about = about && about.info;
-    let isPut    = about && about.length  && true || false;
-    let isPost   = about && !about.length && true || false;
     console.log(props ,about)
+    let createAboutProps = EditAboutProps();
     
     
     return(
         <div className="about-admin-contents" id="about-admin-contents">
+            <div className="">
+                <OpenEditorBtn {...createAboutProps}/>
+            </div>
+
             {about && about.length && about.map( (about, index)=>{
-                let editAboutProps = {
-                        isPost,
-                        isPut,
-                        obj       : about,
-                        objName   : 'About',
-                        className : "edit-about-admin-btn btn-sm",
-                };
-                editAboutProps = GetModalLinkProps.props(editAboutProps);
+                
+                let editAboutProps = EditAboutProps(about);
               
                 let editorState = helper.convertFromRaw(about.about_text)
                 if (!editorState) return null;

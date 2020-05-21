@@ -13,7 +13,7 @@ import {getAdmin}  from "dispatch/index"
 import  AjaxLoader from "templates/ajax-loader";
 import GetTimeStamp from 'utils/timeStamp';
 
-import  MainAppHoc from "components/admin/index-hoc";
+import  MainAppHoc from "components/index/index-hoc";
 
 
 
@@ -81,7 +81,15 @@ class AdminPage extends Component {
     componentDidMount() {
         this.isMounted = true;
         this.onIndexUpdate();
-        console.log(this.props)    
+        console.log(this.props) 
+        let {isAdmin} = this.props;
+
+        if (isAdmin !== true) {
+            //User is not authenticated,so redirect to authentication page.
+            history.push('/user/registration/')
+            return;
+        }
+
         store.dispatch(getAdmin())    
     };
    

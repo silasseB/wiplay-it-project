@@ -18,7 +18,7 @@ import {handleSubmit,
         authenticate }  from "dispatch/index"
 
 import  * as action  from 'actions/actionCreators';
-import { ModalManager}   from  "components/modal/modal-container";
+import { closeModals}   from  "components/modal/helpers";
 
 import { AlertComponent } from "templates/partial-components";
 import * as checkType from 'helpers/check-types'; 
@@ -47,6 +47,7 @@ export function MainAppHoc(Component) {
                 currentUser        : {},
                 cacheEntities      : this._cacheEntities(), 
                 isAuthenticated    : this.isAuthenticated(),
+                isAdmin            : this.isAdmin(),
                 displayMessage     : false,
                 message            : null,
                 modalIsOpen        : false,
@@ -60,10 +61,9 @@ export function MainAppHoc(Component) {
             //console.log(cacheEntities)        
             if (cacheEntities){
         	    let { userAuth  }  = cacheEntities;
-                                
+                                               
         	    if ( userAuth){
-                    let { auth } = userAuth;
-
+                    let {auth} = userAuth;
                     if (auth && auth.isLoggedIn && auth.tokenKey) {
              		    return true;
                     }
@@ -72,6 +72,19 @@ export function MainAppHoc(Component) {
 
             return false;
         };
+
+        isAdmin(){
+            let cacheEntities = this._cacheEntities();
+            if (cacheEntities) {
+                let {admin}        = cacheEntities;
+                let  auth          = admin && admin.auth;
+                if (auth.isLoggedIn && auth.tokenKey) {
+                    return true
+                }
+            }
+
+            return false;
+        }
 
         _SetCurrentUser =(currentUser=undefined)=>{
                     
@@ -350,28 +363,7 @@ export function MainAppHoc(Component) {
         componentDidUpdate(prevProps, nextProps) {
         };
 
-        onPopState() {
-
-            let { entities, history }  = this.props;
-            let { modal } = entities;
-
-            let{background} = modal;
-
-            let optionsModal     = modal['optionsMenu'];
-            let editorModal      = modal['editor'];
-            let dropImageModal   = modal['dropImage'];
-            let userListModal    = modal['userList'];
-            let navigationModal  = modal['navigationMenu'];
-
-            editorModal     && editorModal.modalIsOpen      && ModalManager.close('editor', background);
-            optionsModal    && optionsModal.modalIsOpen     && ModalManager.close('optionsMenu', background);
-            dropImageModal  && dropImageModal.modalIsOpen   && ModalManager.close('dropImage', background); 
-            userListModal   && userListModal.modalIsOpen    && ModalManager.close('userList', background); 
-            navigationModal && navigationModal.modalIsOpen  && ModalManager.close('navigationMenu', background);
-             
-        };
-
-        
+                
         componentDidMount() {
             this.onStoreUpdate() //Subscribe on store change 
              
@@ -384,24 +376,12 @@ export function MainAppHoc(Component) {
                     return;
                 }
 
-                this.onPopState();
+                closeModals();
             }
 
             window.addEventListener("beforeunload",(event)=>{
-                
                 let { modal } = entities;
-
-                let optionsModal   = modal && modal['optionsMenu'];
-                let editorModal    = modal && modal['editor'];
-                let dropImageModal = modal && modal['dropImage'];
-
-                console.log('Im reloading',optionsModal,  editorModal, dropImageModal)
-
-                editorModal    && editorModal.modalIsOpen    && ModalManager.close( 'editor');
-                optionsModal   && optionsModal.modalIsOpen   && ModalManager.close('optionsMenu');
-                dropImageModal && dropImageModal.modalIsOpen && ModalManager.close('dropImage' ); 
                 //event.returnValue = '';
-                
             });
 
             if (!this.isAuthenticated()) {

@@ -3,12 +3,9 @@ import {convertToRaw, convertFromRaw, EditorState} from 'draft-js';
 import {decorator} from 'components/draft-js-editor/plugins';
 import * as checkType from 'helpers/check-types'; 
 
-
-
-
 export default class Helper {
 
-   
+
     updateReducerListEntynties(listItems, obj) {
         //console.log(listItems,obj)
         if (Array.isArray(listItems) && obj ) {

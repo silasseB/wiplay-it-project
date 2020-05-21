@@ -116,7 +116,7 @@ class IndexBox extends Component {
        
         let cachedIndex                 = cacheEntities.index; 
         let now = new Date();
-        //console.log(Object.keys(index))
+        console.log(this.props)
         
         if (cachedIndex && Object.keys(cachedIndex).length && !Object.keys(index).length) {
             //console.log(cachedIndex)
