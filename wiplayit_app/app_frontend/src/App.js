@@ -9,7 +9,7 @@ import {
   useParams,
   
 } from "react-router-dom";
-
+import LogoTest from 'templates/logo-test';
 import { createBrowserHistory } from 'history';
 import AdminPage from 'components/admin/admin-page';
 import AboutAdminPage from 'components/admin/about-admin';
@@ -79,6 +79,7 @@ function App() {
                     <Route  path="/report/" component={ReportContainer}/>
                     <Route  exact path="/app/admin/"  component={AdminPage}/>
                     <Route  path="/app/admin/about/" component={AboutAdminPage}/>
+                    <Route  path="/logo/" component={LogoTest}/>
                     <Route path="*" component={NotFoundPage} />                    
                 </Switch>
         </div>

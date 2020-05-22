@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import  * as action  from "actions/actionCreators";
 import { Link } from "react-router-dom";
 
-import {NavigationBarSmallScreen,NavigationBarBigScreen } from "templates/navBar";
+import { NavigationBarSmallScreen,
+         NavigationBarMobile,
+         NavigationBarBigScreen } from "templates/navBar";
 import {store } from "store/index";
 import { FollowUserBtn} from "templates/buttons"; 
 import { GetModalLinkProps } from "templates/component-props";
@@ -217,6 +219,7 @@ class IndexBox extends Component {
             <div>
                 <NavigationBarBigScreen {...props}/>
                 <NavigationBarSmallScreen {...props}/>
+                <NavigationBarMobile {...props}/>
                 { index?
                     <div className="app-box-container app-index-box">
                         <UnconfirmedUserWarning {...props}/>

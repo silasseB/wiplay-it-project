@@ -13,10 +13,11 @@
     
     .app-question-box, .app-post-box. .app-profile-box {
         margin-top : 50px;
+        border: 1px solid blue;
     }
     
     .app-index-box {
-       padding-top:  100px;
+        padding-top : 40px; 
     }
 
     #question-page,
@@ -56,6 +57,33 @@
         border   : px solid green;
     } 
   
+    .empty-question-list-box,
+    .empty-post-list-box {
+        border : px solid  red; 
+        justify-content: center;
+        display : flex;
+        font-size: 14px; 
+    }
+
+    .post-list-create-box,
+    .question-list-create-box  {
+        border    : px solid  red; 
+        justify-content: center;
+        display : flex;
+        margin  : 10px 0;
+    }
+
+    .post-list-create-box button,
+    .question-list-create-box button  {
+        border     : px solid  red; 
+        width      : 40%;
+        background : #A33F0B;
+        color      : #fff; 
+        font-size  : 14px; 
+
+    }
+
+
     .question-box, .post-box, {
         border-bottom : 8px solid  #D5D7D5;
     }

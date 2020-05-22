@@ -1,8 +1,94 @@
 
+
+.navigation-bar-mobile {
+    border-top    : 1px solid #D5D7D5;
+    width         : 100%;
+    margin        : auto;
+    overflow      : none;
+    border-radius : 4px;
+    outline       : none;
+    height        : auto; 
+    bottom        : 0;
+    top           : auto; 
+    position      : fixed;
+    right         : auto;
+    left          : auto;
+    z-index       : 2; 
+    background    : #fff;
+}
+
+.navbar-bottom-menu {
+    border  : px solid blue;
+    display :  flex;
+    padding : 0 10px;
+
+}
+
+.navbar-bottom-item {
+    border : px solid red;
+    width  : 100%;
+}
+
+.navbar-bottom-btn {
+    border: px solid green;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    text-align: center;
+
+}
+
+.navbar-bottom-btn .feather {
+    border: px solid blue;
+    font-size: 13px !important;
+
+}
+
+.feather-bell {
+    margin-left: 20px;
+
+}
+
+.feather-home {
+    margin-left: 4px
+
+}
+
+.feather-edit, .feather-users   {
+    margin-left: 9px
+
+}
+
+
+.navbar-btn-text {
+    border: px solid black;
+
+}
+
+.navbar-contents-top {
+    background:#A33F0B
+}
+
 .menu-img-container {
     border-bottom : 1px solid #D5D7D5;
     padding : 0 0 20px ; 
 
+}
+
+.navbar-feedback-btn {
+    color      : #fefefe;;
+    font-size  : 12px;
+    margin      : 12px 10px 0;
+    font-family : 'Cambay';
+
+}
+
+.logo-contents {
+    font-weight : bold;
+    font-family : 'Ubuntu';
+    font-size   : 17px;
+    color       : #fefefe;
+    margin-top  : 12px;
 }
 
 .menu-img-box {
@@ -72,13 +158,13 @@
 .modal-title {
     border      : px solid black;
     font-size   : 14px;
-    color       : #fff;
+    color       : #fefefe;
     font-weight : bold;
 }
 
 .mobile-navbar-center, .partial-page-navbar, .partial-form-navbar {
-        display    : flex;
-        width      : 100%;
+    display    : flex;
+    width      : 100%;
         
 }
 .partial-form-navbar {
@@ -97,7 +183,6 @@
         width   : 100%;
         padding : 15px 0 0 10px; 
     }
-
    
     .nav-bar-arrow-icon  {
         color: #A33F0B;
@@ -107,34 +192,31 @@
 
     
     .mobile-navbar-top {
-        background:#A33F0B !important; /*#C70039;*/
         border-bottom:1px solid #D5D7D5;
         width: 100%;
     }
 
-
-
-    .post-question-btn-container {
-        display         : flex;
-        border          : px solid black;
-        justify-content : flex-end;
-        width           : 100%;
-                   
+    .mobile-navbar-bottom-contents {
+        display :  flex;
+        width   : 100%;
     }
 
-    .post-question-btn-box{
-        display :   flex;
-        margin  : 0 12px;
+    .add-question-box, .add-post-box {
+        width         : 100%;
+    }
+
+    .add-question-box li, .add-post-box li {
+        border-bottom : 1px solid #D5D7D5;
+        margin : 7px 13px 7px; 
+
     }
 
     .create-question-btn, .create-post-btn {
-        background  : #A33F0B;
-        color       : #fefefe;
+        color       : #A33F0B;
         font-size   : 9px !important; 
         font-family : 'Oswald'; 
-        margin      : 5px 0; 
         font-weight : bold;
-        border      : px solid black;
+        width       : 100%;
         
         
     }
@@ -156,11 +238,31 @@
        
     }
 
-    .logo {
+    .log {
         font-family: 'Signika';
         font-size: 22px;
         color: white;
         padding: 10px;
+    }
+
+    .logo-contents {
+        justify-content: center;
+        display: flex;
+        width: 100%;
+
+    }
+
+    .logo-img-box {
+        border-radius: 50%;
+        width        : 50px;
+        height       : 50px;
+        border       : px solid red;
+    }
+
+    .logo-img {
+        border-radius: 50%;
+        width        : 50px;
+        height       : 50px;
     }
 
 
@@ -237,7 +339,7 @@
     }
 
     #navBardropdown, .nav-bar-img-box{
-        border        : 1px solid #D5D7D5;
+        border        : px solid #D5D7D5;
         border-radius : 50%;
         width         : 27px;
         height        : 27px; 
@@ -325,15 +427,16 @@
     }
 
     .navigation-menu {
-        border:px solid blue;
-        display: flex;
+        border  : px solid blue;
+        display : flex;
+        width   : 100%;
 
     }
 
     .navigation-box {
-        border:px solid black;
-        width: 84%;
-        margin:0 8%;
+        border : px solid black;
+        width  : 60%;
+        margin : 0 20%;
     }
 
 
@@ -354,7 +457,7 @@
     .nav-menu {
         border  : px solid red;
         display : flex;
-        width   : 50%; 
+        width   : 75%; 
     }
 
     .items {
@@ -373,9 +476,23 @@
         text-decoration: none;
     }
 
-    .img-box {
-        border: px solid  red !important;
-        margin: 0 0 0 13%  !important;
+    .logo-img-contents {
+        background : #fff;
+        border    : px solid blue;
+
+    }
+
+    .logo-img-box {
+        border-radius: 50%;
+        width        : 45px;
+        height       : 45px;
+        border       : px solid red;
+    }
+
+    .logo-img {
+        border-radius: 50%;
+        width        : 45px;
+        height       : 45px;
     }
 
     .nav-bar-img {
@@ -385,10 +502,21 @@
         object-fit    : cover;
     }
 
+    .img-box {
+        border: 2px solid  red !important;
+        margin: 0 0 0 13%  !important;
+    }
+
+    .post-question-box{
+        border  : px solid black;
+        display : flex;
+        width   : 25%;
+        justify-content: flex-end !important; 
+    }
+
     .post-question-btn-box {
-        border  :  px solid red;
         display :  flex;
-        margin-left  : 45px;  
+        border  : px solid blue;
     }
 
     .create-post-btn-box, .create-question-btn-box {
@@ -399,23 +527,22 @@
     .create-question-btn, .create-post-btn {
         background  : #A33F0B;
         color       : #fefefe;
-        margin      : 7px 0;
         font-weight : bold;
-        height      : 30px;
-        margin      : 15px 7px 0;
         font-size   : 10px;
-               
+        height      : 30px; 
+        margin-top  : 7px;             
         
     }
 
     .post-question-btn-box p {
-        margin : 20px 20px 0;
-
+        margin      : 12px 5px 0;
+        font-weight : bold;
+        font-size   : 13px;
     }
 
     .navigation-img-box{
-        border          : px solid red;
-        margin          : 10px 5px 0;
+        border : px solid red;
+        margin : 7px 5px 0;
     }
 
     #navBardropdown{

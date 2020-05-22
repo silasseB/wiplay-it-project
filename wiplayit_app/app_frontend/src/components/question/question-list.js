@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { QuestionComponent} from "templates/question/question-templates"
+import {QuestionComponent} from "templates/question/question-templates"
 import  * as action  from 'actions/actionCreators';
 import {store} from 'store/index';
 import  MainAppHoc from "components/index/index-hoc";
-
-import { UnconfirmedUserWarning,PageErrorComponent, } from 'templates/partial-components';
-
-import {PartalNavigationBar,NavigationBarBigScreen } from 'templates/navBar';
+import {OpenEditorBtn}  from "templates/buttons";
+import {UnconfirmedUserWarning, PageErrorComponent} from 'templates/partial-components';
+import { GetModalLinkProps } from "templates/component-props";
+import { MatchMediaHOC } from 'react-match-media';
+import {PartalNavigationBar, NavigationBarBigScreen} from 'templates/navBar';
 import  AjaxLoader from 'templates/ajax-loader';
  
 
@@ -135,6 +136,16 @@ export default MainAppHoc(QuestionListPage);
 
 
 
+let createQuestionProps = {
+        objName   : 'Question',
+        isPost    : true,
+        linkName  : "Ask Question",
+        className : "btn-sm",
+    };
+
+
+createQuestionProps = GetModalLinkProps.props(createQuestionProps);
+
 
 const Questions = props => {
 
@@ -149,12 +160,17 @@ const Questions = props => {
                 IterateQuestionList(props, questionList)
 
                 ||
+                <div className="">
+                    <ul className="empty-question-list-box">
+                        <li className="">
+                            No question yet
+                        </li>
+                    </ul>
 
-                <ul className="">
-                    <li className="">
-                        No question yet
-                    </li>
-                </ul>
+                    <div className="question-list-create-box">
+                        <OpenEditorBtn {...createPostProps}/>
+                    </div>
+                </div>
             }
         </div>
     );

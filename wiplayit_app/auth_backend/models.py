@@ -20,7 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
     slug            = models.SlugField('slug', max_length=50, unique=True, blank=True) 
     is_active       = models.BooleanField('active',default=True)
     is_staff        = models.BooleanField('staff', default=False)
-    is_confirmed    = models.BooleanField('confirmed', default=False)
+    is_confirmed    = models.BooleanField('Is confirmed', default=False)
     
 
     

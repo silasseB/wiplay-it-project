@@ -77,9 +77,13 @@ export function MainAppHoc(Component) {
             let cacheEntities = this._cacheEntities();
             if (cacheEntities) {
                 let {admin}        = cacheEntities;
-                let  auth          = admin && admin.auth;
-                if (auth.isLoggedIn && auth.tokenKey) {
-                    return true
+                if (admin && admin.auth) {
+                    let  auth  = admin.auth;
+                    let {isLoggedIn, tokenKey} = auth && auth || {};
+
+                    if (isLoggedIn && tokenKey) {
+                        return true
+                    }
                 }
             }
 
@@ -175,7 +179,7 @@ export function MainAppHoc(Component) {
         _HandleErrors(errors){
             if (!errors) return;
             if (!errors.error) return;
-
+            console.log(errors)
             this.displayErrorMessage(errors.error);
             delete errors.error;
         }
@@ -289,8 +293,8 @@ export function MainAppHoc(Component) {
         };
 
         displayAlertMessage = (message) => {
-            if (!this._isMounted) return;
-                       
+            if (!this.isMounted) return;
+
             this.setState({ displayMessage : true, message });
             setTimeout(()=> {
                 this.setState({displayMessage : false}); 

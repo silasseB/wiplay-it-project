@@ -87,6 +87,7 @@ export const updateActionSuccess = (params)=> {
 
 export const updateActionError = (params) => {
     let {byId, actionType, error} = params
+    console.log(params)
 
     return {
         type : actionType && actionType.ERROR,

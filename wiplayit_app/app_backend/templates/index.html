@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="#A33F0B"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    
+    <script src="https://unpkg.com/feather-icons"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <!-- jQuery library -->
@@ -29,6 +29,9 @@
   <body>
     <div id="root">  </div>
        {% render_bundle 'main' %}
+        <script>
+          feather.replace()
+        </script>
 
   </body>
 </html>

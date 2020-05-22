@@ -4,8 +4,10 @@ import { PostComponent} from "templates/post/post-templates";
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
 import  MainAppHoc from "components/index/index-hoc";
-
+import { GetModalLinkProps } from "templates/component-props";
+import { MatchMediaHOC } from 'react-match-media';
 import { UnconfirmedUserWarning,PageErrorComponent, } from "templates/partial-components";
+import {OpenEditorBtn}  from "templates/buttons";
 
 import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
 import  AjaxLoader from "templates/ajax-loader";
@@ -138,6 +140,16 @@ export default MainAppHoc(PostListPage);
 
 
 
+let createPostProps = {
+        objName     : 'Post',
+        linkName    : 'Add Post',
+        isPost      : true,
+        className   : "btn",
+    };
+
+createPostProps = GetModalLinkProps.props(createPostProps);
+
+
 const Posts = props => {
     let {entities, postListById} = props;
     let {posts} =  entities;
@@ -150,12 +162,18 @@ const Posts = props => {
                 IteratePostList(props, postList)
 
                 ||
+                <div className="">
 
-                <ul className="">
-                    <li className="">
-                        No Posts Yet
-                    </li>
-                </ul>
+                    <ul className="empty-post-list-box">
+                        <li className="">
+                            No Posts Yet
+                        </li>
+                    </ul>
+
+                    <div className="post-list-create-box">
+                        <OpenEditorBtn {...createPostProps}/>
+                    </div>
+                </div>
             }
       
         </div>        

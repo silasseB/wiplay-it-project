@@ -38,7 +38,7 @@ let createPostProps = {
         objName     : 'Post',
         linkName    : 'Add Post',
         isPost      : true,
-        className   : "create-post-btn btn-sm",
+        className   : "create-post-btn btn",
         editorLinkDesktopStyles,
         editorLinkMobileStyles,
     };
@@ -47,7 +47,7 @@ let createQuestionProps = {
         objName   : 'Question',
         isPost    : true,
         linkName  : "Ask Question",
-        className : "create-question-btn btn-sm",
+        className : "create-question-btn btn",
         editorLinkMobileStyles,
         editorLinkDesktopStyles,
     };
@@ -269,57 +269,40 @@ export const NavBarSmallScreen = props => {
      
 
     return (
-		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light" id="navigation-mobile">
-            <button onClick={()=>props.reloadPage()}  className="logo"><strong>Wiplayit</strong></button>
-                <div className="mobile-navbar-center">
-                    <div className="post-question-btn-container">
-                        <ul className="post-question-btn-box">
-
-                            <li className="create-question-btn-box">
-                                <OpenEditorBtn {...createQuestionProps}/>
-                            </li>
-
-                            <p>Or</p>
-
-                        
-                            <li className="create-post-btn-box">
-                                <OpenEditorBtn {...createPostProps}/>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-              <div className="mobile-navbar-bottom">
-
-                <div className="navigation-menu">
-                    <ul  className="navigation-item">
-                       <li>
-                            <Link className="items" to="/posts/">
-                                Posts
-                            </Link>
-                        </li>
-                    </ul>
-
-                    <ul  className="navigation-item">
-                        <li>
-                            <Link className="items"
-                            to="/questions/">Questions</Link>
-                        </li>
-                    </ul>
-                    
-                    <ul  className="navigation-item">
-                         <li>
-                            <Link className="items"
-                            to="/notifications/">Notifications</Link>
-                        </li>
-                    </ul>
-                    <div className="navigation-img-item">
-                        <NavBarModalMenu{...props}/>
-                    </div>
-
-                </div>
-
+		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light"
+              id="navigation-mobile">
+            <div style={{display:'flex'}} className="navbar-contents-top">
+                <ul className="navbar-feedback-box">
+                    <button type="button"
+                             onClick={() => RedirectMenuLinks({pathname:'/feedback/'})}
+                             className="btn-sm navbar-feedback-btn">
+                        Feedback
+                    </button>
+                </ul>
+                <ul className="logo-contents">
+                    <li>Wiplayit</li>
+                </ul>
+                
+                <ul className="navigation-img-item">
+                     <NavBarModalMenu{...props}/>
+                </ul>
             </div>
+
+            <div className="mobile-navbar-center">
+                <div className="mobile-navbar-bottom-contents">
+                    <ul className="add-question-box">
+                        <li className="">
+                            <OpenEditorBtn {...createQuestionProps}/>
+                        </li>
+                    </ul>
+                    <ul className="add-post-box">
+                        <li className="">
+                            <OpenEditorBtn {...createPostProps}/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
         </nav>
     ); 
 };
@@ -363,47 +346,50 @@ export const NavBarBigScreen = props => {
         <nav className="navigation fixed-top" id="navigation">
             <div className="navigation-box">
                 <div className="navigation-menu">
-                    <div className="logo-box">
-                        <button onClick={()=> props.reloadPage()} className="logo">Wiplayit</button>
-                    </div>
-
-                    <div className="nav-menu">
-                    
-                    <ul  className="navigation-item">
-                        <li>
-                            <Link className="items" to="/posts/">
-                                Posts
-                            </Link>
-                        </li>
-                    </ul>
-
-                    <ul  className="navigation-item">
-                        <li>
-                            <Link className="items"  to="/questions/">Questions</Link>
-                        </li>
-                    </ul>
-                    
-                    <ul  className="navigation-item">
-                        <li>
-                            <Link className="items"
-                            to="/notifications/">Notifications</Link>
-                        </li>
-                    </ul> 
+                    <div id="logo-img-contents">
+                        <div className="logo-img-box" onClick={()=> props.reloadPage()}>
+                            <img alt="" 
+                                 src={require("media/logo.png")}
+                                 className="logo-img"/>
+                        </div>
+        
                     </div> 
 
+
+                    <div className="nav-menu">
+                        <ul  className="navigation-item">
+                            <li>
+                                <Link className="items" to="/posts/">
+                                    Posts
+                                </Link>
+                            </li>
+                        </ul>
+
+                        <ul className="navigation-item">
+                            <li>
+                               <Link className="items"  to="/questions/">Questions</Link>
+                            </li>
+                        </ul>
+                    
+                        <ul className="navigation-item">
+                            <li>
+                                <Link className="items"
+                                to="/notifications/">Notifications</Link>
+                            </li>
+                        </ul> 
+                    </div> 
                            
                     <NavBarDropDown {...props}/>
-                    
-                 
-              
-                    <div className="post-question-btn-box">
-                        <div className="create-question-btn-box">
-                            <OpenEditorBtn {...createQuestionProps}/>
-                        </div>
+                    <div className="post-question-box">
+                        <div className="post-question-btn-box">
+                            <ul className="create-question-btn-box">
+                                <OpenEditorBtn {...createQuestionProps}/>
+                            </ul>
     
-                        <p>Or</p>
-                        <div className="create-post-btn-box">
-                            <OpenEditorBtn {...createPostProps}/>
+                            <p>Or</p>
+                            <ul className="create-post-btn-box">
+                                <OpenEditorBtn {...createPostProps}/>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -414,7 +400,50 @@ export const NavBarBigScreen = props => {
 };
 
 
+export const NavBarMobileTemplate = props =>{
+    return (
+        <div className="navigation-bar-mobile">
+            <div className="navbar-bottom-menu">
+                <ul  className="navbar-bottom-item">
+                    <button type="button"
+                             onClick={() => RedirectMenuLinks({pathname:'/'})}
+                             className="btn-sm navbar-bottom-btn">
+                        <i data-feather="home"></i>
+                         Home
+                    </button> 
+                </ul>
 
+                <ul  className="navbar-bottom-item">
+                    <button type="button"
+                             onClick={() => RedirectMenuLinks({pathname:'/'})}
+                             className="btn-sm navbar-bottom-btn navbar-users-btn">
+                        <i data-feather="users"></i>
+                         People
+                    </button>
+                </ul>
+
+                <ul  className="navbar-bottom-item">
+                    <button type="button"
+                             onClick={() => RedirectMenuLinks({pathname:'/questions/'})}
+                             className="btn-sm navbar-bottom-btn answer-questions-btn">
+                             <i data-feather="edit"></i>
+                            Answer 
+                    </button>
+                </ul>
+                
+
+                <ul  className="navbar-bottom-item">
+                    <button type="button"
+                             onClick={() => RedirectMenuLinks({pathname:'/notifications/'})}
+                             className="btn-sm navbar-bottom-btn notifications-btn">
+                        <i data-feather="bell"></i>
+                         Notifications
+                    </button>
+                </ul> 
+            </div> 
+        </div>
+        )
+}
 
 
 export const PartialNavBar = props =>{
@@ -455,6 +484,7 @@ export const PartialNavBar = props =>{
 
 
 
+export const NavigationBarMobile = MatchMediaHOC(NavBarMobileTemplate, '(max-width: 980px)');
 
 export const PartalNavigationBar = MatchMediaHOC(PartialNavBar, '(max-width: 980px)');
 

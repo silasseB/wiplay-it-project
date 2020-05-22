@@ -24,12 +24,39 @@
         border-bottom : 0.5px solid #E8E8E8;
         padding    : 0px 10px;
     } 
-  
-     
+    
+    .empty-question-list-box,
+    .empty-post-list-box {
+        border    : px solid  red; 
+        font-size : 16px;  
+        justify-content: center;
+        display: flex;
+
+    }  
+
+    .post-list-create-box,
+    .question-list-create-box  {
+        border    : px solid  red; 
+        justify-content: center;
+        display : flex;
+        margin :15px 0; 
+
+    }
+
+
+    .post-list-create-box button,
+    .question-list-create-box button  {
+        border     : px solid  red; 
+        width      : 40%;
+        background : #A33F0B;
+        color      : #fff; 
+        font-size  : 13px; 
+
+    }
 
     .post ,.question {
         border      : px solid black;
-        font-size   : 17px;
+        font-size   : 13px;
         font-family : 'Ropa Sans';
         font-weight : bold;
     }
