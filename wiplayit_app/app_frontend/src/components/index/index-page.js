@@ -3,7 +3,7 @@ import  * as action  from "actions/actionCreators";
 import { Link } from "react-router-dom";
 
 import { NavigationBarSmallScreen,
-         NavigationBarMobile,
+         NavigationBarBottom,
          NavigationBarBigScreen } from "templates/navBar";
 import {store } from "store/index";
 import { FollowUserBtn} from "templates/buttons"; 
@@ -38,8 +38,7 @@ class IndexBox extends Component {
             answerListById   : 'filteredAnswers',
             userListById     : 'filteredUsers',
             isReloading      : false,
-
-
+            homeTab          : {color:'#A33F0B'},      
         } 
     };
   
@@ -214,12 +213,12 @@ class IndexBox extends Component {
         var { index }          = entities;
         //console.log(props, index)
         props['error'] = index && index.error; 
-                    
+                         
         return (
             <div>
                 <NavigationBarBigScreen {...props}/>
                 <NavigationBarSmallScreen {...props}/>
-                <NavigationBarMobile {...props}/>
+                <NavigationBarBottom {...props}/>
                 { index?
                     <div className="app-box-container app-index-box">
                         <UnconfirmedUserWarning {...props}/>

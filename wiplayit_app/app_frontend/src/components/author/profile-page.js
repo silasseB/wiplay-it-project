@@ -6,7 +6,9 @@ import {history} from 'App'
 import {ModalManager} from 'components/modal/modal-container';
 import { getUserList }  from 'dispatch/index'
 
-import {PartalNavigationBar,NavigationBarBigScreen } from'templates/navBar';
+import {PartalNavigationBar,
+        NavigationBarBottom,
+        NavigationBarBigScreen } from'templates/navBar';
 
 import  * as action  from 'actions/actionCreators';
 import { ProfileComponent, UserAnswers } from 'templates/author/profile-templates';
@@ -316,7 +318,7 @@ class UserProfileContainer extends Component {
             <div>
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props} />
-
+                <NavigationBarBottom {...props}/> 
                 { userProfile &&
                     <div  className="app-box-container app-profile-box">
                         <UnconfirmedUserWarning {...props}/> 

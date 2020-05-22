@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-import {PartalNavigationBar,NavigationBarBigScreen } from 'templates/navBar';
+import {PartalNavigationBar,
+    NavigationBarBottom,
+    NavigationBarBigScreen } from 'templates/navBar';
 
 import  AjaxLoader from 'templates/ajax-loader';
 
@@ -148,6 +150,7 @@ class  PostPage extends Component  {
             <div>
                <PartalNavigationBar {...props}/>
                <NavigationBarBigScreen {...props} />
+                <NavigationBarBottom {...props}/>
                 { post &&
                     <div  className="app-box-container">
                         <UnconfirmedUserWarning {...props}/>

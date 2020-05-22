@@ -5,13 +5,12 @@ import { MatchMediaHOC } from 'react-match-media';
 import { SubmitBtn,
          ModalCloseBtn,
          OpenEditorBtn  } from "templates/buttons";
-
 import { ModalManager,Modal}   from  "components/modal/modal-container";
 import { GetModalLinkProps } from "templates/component-props";
 import { store } from "store/index";
 import { showModal } from 'actions/actionCreators';
-import { history } from "App" 
-
+import { history } from "App"
+import * as Icon from 'react-feather';
 
 let editorLinkMobileStyles = {
         background : '#A33F0B !important',
@@ -400,33 +399,55 @@ export const NavBarBigScreen = props => {
 };
 
 
-export const NavBarMobileTemplate = props =>{
+export const NavBarBottomTemplate = props =>{
+    console.log(props)
+    let {homeTab,
+         questionListTab,
+         usersTab,
+         notificationsTab} = props || {};
+   
+    
     return (
         <div className="navigation-bar-mobile">
             <div className="navbar-bottom-menu">
                 <ul  className="navbar-bottom-item">
                     <button type="button"
+                             style={homeTab}
                              onClick={() => RedirectMenuLinks({pathname:'/'})}
                              className="btn-sm navbar-bottom-btn">
-                        <i data-feather="home"></i>
+                        <Icon.Home
+                            id="feather-home"
+                            size={30}
+                            {...homeTab}
+                         />
                          Home
                     </button> 
                 </ul>
 
                 <ul  className="navbar-bottom-item">
                     <button type="button"
+                            style={usersTab}
                              onClick={() => RedirectMenuLinks({pathname:'/'})}
                              className="btn-sm navbar-bottom-btn navbar-users-btn">
-                        <i data-feather="users"></i>
+                        <Icon.Users 
+                            id="feather-users"
+                            size={30}
+                            {...usersTab}
+                        />
                          People
                     </button>
                 </ul>
 
                 <ul  className="navbar-bottom-item">
-                    <button type="button"
-                             onClick={() => RedirectMenuLinks({pathname:'/questions/'})}
+                    <button type="button" 
+                            style={questionListTab}
+                            onClick={() => RedirectMenuLinks({pathname:'/questions/'})}
                              className="btn-sm navbar-bottom-btn answer-questions-btn">
-                             <i data-feather="edit"></i>
+                            <Icon.Edit
+                                id="feather-edit"
+                                size={30}
+                                {...questionListTab}
+                             />
                             Answer 
                     </button>
                 </ul>
@@ -434,9 +455,14 @@ export const NavBarMobileTemplate = props =>{
 
                 <ul  className="navbar-bottom-item">
                     <button type="button"
+                            style={notificationsTab}
                              onClick={() => RedirectMenuLinks({pathname:'/notifications/'})}
                              className="btn-sm navbar-bottom-btn notifications-btn">
-                        <i data-feather="bell"></i>
+                        <Icon.Bell 
+                            id="feather-bell"
+                            size={28}
+                            {...notificationsTab}
+                            />
                          Notifications
                     </button>
                 </ul> 
@@ -484,7 +510,7 @@ export const PartialNavBar = props =>{
 
 
 
-export const NavigationBarMobile = MatchMediaHOC(NavBarMobileTemplate, '(max-width: 980px)');
+export const NavigationBarBottom = MatchMediaHOC(NavBarBottomTemplate, '(max-width: 980px)');
 
 export const PartalNavigationBar = MatchMediaHOC(PartialNavBar, '(max-width: 980px)');
 

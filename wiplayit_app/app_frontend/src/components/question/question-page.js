@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 import  * as action  from 'actions/actionCreators';
 import { getQuestion } from 'dispatch/index';
-import {PartalNavigationBar,NavigationBarBigScreen } from 'templates/navBar';
+import {PartalNavigationBar,
+    NavigationBarBottom,
+        NavigationBarBigScreen } from 'templates/navBar';
 import  AjaxLoader from 'templates/ajax-loader';
 import { QuestionComponent} from 'templates/question/question-templates';
 import {store} from "store/index";
@@ -152,7 +154,7 @@ class QuestionPage extends Component {
             <div>
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props} />
-
+                <NavigationBarBottom {...props}/>
                 { question &&
                     <div className="app-box-container app-question-box">
                         <UnconfirmedUserWarning {...props}/>

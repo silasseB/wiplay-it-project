@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import {handleSubmit, 
@@ -15,15 +14,16 @@ import {handleSubmit,
         getQuestionList,
         getCommentList,
         getIndex, 
-        authenticate }  from "dispatch/index"
+        authenticate }  from 'dispatch/index'
 
 import  * as action  from 'actions/actionCreators';
-import { closeModals}   from  "components/modal/helpers";
+import { closeModals}   from  'components/modal/helpers';
 
-import { AlertComponent } from "templates/partial-components";
+import {NavigationBarBottom} from 'templates/navBar';
+import { AlertComponent } from 'templates/partial-components';
 import * as checkType from 'helpers/check-types'; 
 
-import {store} from "store/index";
+import {store} from 'store/index';
 import {history} from "App";
 import GetTimeStamp from 'utils/timeStamp';
 import Api from 'utils/api';
@@ -491,6 +491,7 @@ export function MainAppHoc(Component) {
 
         render() {
             if(!this.isMounted) return null;
+            const feather = require('feather-icons')
 
             let props = this.getProps();
             let alertMessageStyles = props.displayMessage?{ display : 'block'}:
@@ -498,8 +499,7 @@ export function MainAppHoc(Component) {
 
             let onModalStyles = props.modalIsOpen ? {opacity:'0.70',} :
                                                     {opacity:'2',};
-            //console.log(props)
-
+                      
             return (
                 <div  className="app-container">
                     <fieldset style={ onModalStyles } 

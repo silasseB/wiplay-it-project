@@ -8,7 +8,9 @@ import {OpenEditorBtn}  from "templates/buttons";
 import {UnconfirmedUserWarning, PageErrorComponent} from 'templates/partial-components';
 import { GetModalLinkProps } from "templates/component-props";
 import { MatchMediaHOC } from 'react-match-media';
-import {PartalNavigationBar, NavigationBarBigScreen} from 'templates/navBar';
+import {PartalNavigationBar, 
+        NavigationBarBottom,
+        NavigationBarBigScreen} from 'templates/navBar';
 import  AjaxLoader from 'templates/ajax-loader';
  
 
@@ -24,6 +26,7 @@ class  QuestionListPage extends Component  {
             isReloading       : false,
             pageName          : "Questions",
             error             : '',
+            questionListTab : {color:'#A33F0B'},
         }
      
    }
@@ -96,16 +99,20 @@ class  QuestionListPage extends Component  {
     };
 
     render() {
-      let props = this.getProps();
-      //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
-      var { questions }  = props.entities;
+        let props = this.getProps();
+        //let style =  {border:'1px solid red',padding:'60px 0 0 0', margin:'100px 0 0 0'}
+        var { questions }  = props.entities;
       
-      questions  = questions[props.questionListById];
-      console.log(props, questions)
+        questions  = questions[props.questionListById];
+        console.log(props, questions)
+      
+      
         return (
             <div style={{}}>
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props} /> 
+                <NavigationBarBottom {...props}/>
+                
                 { questions &&
                     <div  className="app-box-container question-list-page" id="question-list-page">
                         <UnconfirmedUserWarning {...props}/>
@@ -153,6 +160,7 @@ const Questions = props => {
    questions  = questions[props.questionListById];
    let questionList = questions && questions.questionList;
    console.log(questionList)
+
 
     return (
         <div>

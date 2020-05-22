@@ -9,7 +9,9 @@ import { MatchMediaHOC } from 'react-match-media';
 import { UnconfirmedUserWarning,PageErrorComponent, } from "templates/partial-components";
 import {OpenEditorBtn}  from "templates/buttons";
 
-import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
+import {PartalNavigationBar,
+    NavigationBarBottom,
+    NavigationBarBigScreen } from "templates/navBar";
 import  AjaxLoader from "templates/ajax-loader";
  
 
@@ -26,10 +28,11 @@ class  PostListPage extends Component  {
         super(props);
 
         this.state = {
-            isPostListBox : true,
-            postListById  : 'filteredPosts',
-             pageName     : "Posts", 
-            isReloading   : false,
+            isPostListBox   : true,
+            postListById    : 'filteredPosts',
+             pageName       : "Posts", 
+            isReloading     : false,
+            
         }
      
     }
@@ -108,6 +111,7 @@ class  PostListPage extends Component  {
             <div>
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props} /> 
+                 <NavigationBarBottom {...props}/>
                 
                 { posts &&
                     <div className="app-box-container post-list-page" id="post-list-page">
