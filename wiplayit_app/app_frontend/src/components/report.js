@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {TextAreaEditor} from 'templates/editor/editor-templates';
 import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
+import MainAppHoc from "components/index/index-hoc";
 
 
 class ReportContainer extends Component{

@@ -570,7 +570,7 @@ export const EditProfileDropDownButton = props => (
 
 
 export const ModalCloseBtn = props => {
-   //console.log(props)
+   console.log(props)
    let styles = props.styles || {};
 
    return(
@@ -739,7 +739,7 @@ export const ChangeImageBtn = props => {
 
 export const OpenUsersModalBtn = props => {
     let {obj, linkName} = props
-    if (!obj) return null;
+    //if (!obj) return null;
     
     let modalProps = {
             ...props,
@@ -752,7 +752,8 @@ export const OpenUsersModalBtn = props => {
                         Modal(modalProps)
 
                     }}>
-            {linkName}  
+            {linkName} 
+            {props.children} 
         </button>
         
     );

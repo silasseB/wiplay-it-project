@@ -94,7 +94,7 @@ export const AlertComponent =(props)=> {
     //console.log(classNames, messageType)        
     
     return(
-        <div className="alert-container alert alert-danger">
+        <div className={classNames}>
             <div className="alert-box">
                 <ul className="alert-message">
                     <li>

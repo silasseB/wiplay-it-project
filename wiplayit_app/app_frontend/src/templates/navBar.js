@@ -3,9 +3,10 @@ import React from 'react';
 import {  Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { SubmitBtn,
+         OpenUsersModalBtn,
          ModalCloseBtn,
          OpenEditorBtn  } from "templates/buttons";
-import { ModalManager,Modal}   from  "components/modal/modal-container";
+import { ModalManager, Modal}   from  "components/modal/modal-container";
 import { GetModalLinkProps } from "templates/component-props";
 import { store } from "store/index";
 import { showModal } from 'actions/actionCreators';
@@ -415,40 +416,30 @@ export const NavBarBottomTemplate = props =>{
                              style={homeTab}
                              onClick={() => RedirectMenuLinks({pathname:'/'})}
                              className="btn-sm navbar-bottom-btn">
-                        <Icon.Home
-                            id="feather-home"
-                            size={30}
-                            {...homeTab}
-                         />
-                         Home
+                        <Icon.Home id="feather-home" size={20} {...homeTab}/>
+                        Home
                     </button> 
                 </ul>
 
                 <ul  className="navbar-bottom-item">
-                    <button type="button"
-                            style={usersTab}
-                             onClick={() => RedirectMenuLinks({pathname:'/'})}
-                             className="btn-sm navbar-bottom-btn navbar-users-btn">
-                        <Icon.Users 
-                            id="feather-users"
-                            size={30}
-                            {...usersTab}
-                        />
-                         People
-                    </button>
+                    <OpenUsersModalBtn {...{}}>
+                        <Icon.Users id="feather-users" size={20} {...usersTab}/>
+                        People
+                    </OpenUsersModalBtn>
+                    
                 </ul>
 
                 <ul  className="navbar-bottom-item">
-                    <button type="button" 
+                    <button type="button"
                             style={questionListTab}
-                            onClick={() => RedirectMenuLinks({pathname:'/questions/'})}
-                             className="btn-sm navbar-bottom-btn answer-questions-btn">
-                            <Icon.Edit
-                                id="feather-edit"
-                                size={30}
-                                {...questionListTab}
-                             />
-                            Answer 
+                             onClick={() => RedirectMenuLinks({pathname:'/questions/'})}
+                             className="btn-sm navbar-bottom-btn answer-question-btn">
+                        <Icon.Edit 
+                            id="feather-edit"
+                            size={20}
+                            {...questionListTab}
+                        />
+                        Answer
                     </button>
                 </ul>
                 
@@ -460,7 +451,7 @@ export const NavBarBottomTemplate = props =>{
                              className="btn-sm navbar-bottom-btn notifications-btn">
                         <Icon.Bell 
                             id="feather-bell"
-                            size={28}
+                            size={20}
                             {...notificationsTab}
                             />
                          Notifications

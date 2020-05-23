@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import MainAppHoc from "components/index/index-hoc";
 import {PartalNavigationBar,
         NavigationBarBottom,
         NavigationBarBigScreen } from "templates/navBar";
@@ -11,7 +12,7 @@ class  NotificationsContainer extends Component  {
     constructor(props) {
         super(props);
         this.state = { 
-            pageName : "About",
+            pageName : "Notifications",
             notificationsTab : {color:'#A33F0B'}, 
         };       
     }
@@ -29,15 +30,15 @@ class  NotificationsContainer extends Component  {
             <NavigationBarBigScreen {...props} />
             <NavigationBarBottom {...props}/>
             <div className="about-info-box">
-                <img alt="" 
-                     src={require("media/pages-placeholder/pageUnderConstruction.jpeg")} 
-                     className="page-placeholder-img"/> 
+                <ul className="">
+                    <li>Notifications empty</li>
+                </ul>
             </div>
          </div>
         )
     }
 };
 
-export default NotificationsContainer; 
+export default MainAppHoc(NotificationsContainer); 
 
 

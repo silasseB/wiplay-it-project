@@ -1,7 +1,12 @@
 
+.navigation-bar-mobile {
+    -webkit-box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
+-moz-box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
+box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
+}
 
 .navigation-bar-mobile {
-    border-top    : 1px solid #D5D7D5;
+    border-top    : px solid #D5D7D5;
     width         : 100%;
     margin        : auto;
     overflow      : none;
@@ -13,7 +18,7 @@
     position      : fixed;
     right         : auto;
     left          : auto;
-    z-index       : 2; 
+    z-index       : 3; 
     background    : #fff;
 }
 
@@ -29,7 +34,7 @@
     width  : 100%;
 }
 
-.navbar-bottom-btn {
+.navbar-bottom-item button {
     border: px solid green;
     display: flex;
     flex-direction: column;
@@ -38,36 +43,20 @@
 
 }
 
-.navbar-bottom-btn .feather {
-    border: px solid blue;
-    font-size: 13px !important;
-
-}
-
-.feather {
-    color : "#A33F0B" !important;
-  
-}
-
 #feather-bell {
     margin-left: 20px;
-    
 }
 
 #feather-home {
-    margin-left: 1px;
-    
+    margin-left: 4px;
 }
 
 #feather-edit, #feather-users   {
-    margin-left: 4px
-
+    margin-left: 8px
 }
-
 
 .navbar-btn-text {
     border: px solid black;
-
 }
 
 .navbar-contents-top {
@@ -77,7 +66,6 @@
 .menu-img-container {
     border-bottom : 1px solid #D5D7D5;
     padding : 0 0 20px ; 
-
 }
 
 .navbar-feedback-btn {
@@ -85,7 +73,6 @@
     font-size  : 12px;
     margin      : 12px 10px 0;
     font-family : 'Cambay';
-
 }
 
 .logo-contents {
@@ -156,8 +143,6 @@
 
 .modal-title-box {
     width   : 100%;
-    border  : px solid blue;
-                          
 }
     
 .modal-title {
@@ -165,6 +150,7 @@
     font-size   : 14px;
     color       : #fefefe;
     font-weight : bold;
+    margin-top  : 10px;
 }
 
 .mobile-navbar-center, .partial-page-navbar, .partial-form-navbar {
@@ -173,8 +159,9 @@
         
 }
 .partial-form-navbar {
-    border     : 1px solid #D5D7D5;
+    border-bottom : 1px solid #D5D7D5;
 }
+
 .partial-navbar-back-btn-box {
     border:  px solid black;  
     padding: 7px 18px 0 10px;

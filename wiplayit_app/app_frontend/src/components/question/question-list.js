@@ -156,12 +156,10 @@ createQuestionProps = GetModalLinkProps.props(createQuestionProps);
 
 const Questions = props => {
 
-   let questions  = props.entities.questions;
-   questions  = questions[props.questionListById];
-   let questionList = questions && questions.questionList;
-   console.log(questionList)
-
-
+    let questions  = props.entities.questions;
+    questions  = questions[props.questionListById];
+    let questionList = questions && questions.questionList;
+   
     return (
         <div>
             { questionList && questionList.length &&

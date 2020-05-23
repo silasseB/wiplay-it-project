@@ -5,7 +5,7 @@ from wiplayit_app.settings.common import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-SITE_ID = 3
+SITE_ID = 4
 
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
