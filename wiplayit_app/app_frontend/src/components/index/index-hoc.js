@@ -18,6 +18,7 @@ import {handleSubmit,
 
 import  * as action  from 'actions/actionCreators';
 import { closeModals}   from  'components/modal/helpers';
+import { ModalManager}   from  "components/modal/modal-container";
 
 import {NavigationBarBottom} from 'templates/navBar';
 import { AlertComponent } from 'templates/partial-components';
@@ -311,47 +312,52 @@ export function MainAppHoc(Component) {
             }
         };
 
+        clearStore=()=>{
+            //Remove app cache and  clean the store
+            let storeUpdate = store.getState();
+            let { entities } = storeUpdate;
+
+            localStorage.removeItem('@@CacheEntities');
+                
+            Object.keys(entities).forEach(key => {
+                let entitie = entities[key]
+                   
+                Object.keys(entitie).forEach(k => {
+                    if (entities[key][k]) {
+                        delete entities[key][k]
+                    }
+                })
+            })
+
+        };
 
         confirmLogout =(userAuth)=>{
-
-            
+           
             if (userAuth) {
-                //Remove app cache and  clean the store
-                //and redirect the user to authentication page
-                //console.log('User is logging out', userAuth)
-
                 let {successMessage} = userAuth;
-
                 let isLoggedOut =  successMessage === 'Successfully logged out.'
 
                 if (isLoggedOut) {
-
                     let storeUpdate = store.getState();
                     let { entities } = storeUpdate;
+                    let { modal } = entities;
+                    let navigationModal  = modal['navigationMenu'];
+                    if (navigationModal && navigationModal.modalIsOpen) {
+                        window.history.back();
+                        ModalManager.close('navigationMenu');
+                    }
 
-                    localStorage.removeItem('@@CacheEntities');
-                
-                    Object.keys(entities).forEach(key => {
-                        let entitie = entities[key]
-                   
-                        Object.keys(entitie).forEach(k => {
-                            delete entities[key][k]
+                    setTimeout(()=>{
+                        this.clearStore()
+                        history.push('/user/registration');
 
-                        })
-                    })
-                
-                    history.push('/user/registration');
+                    }, 1000)
                 }
             }
             
         };
 
         logout= () => {
-            let { entities, history }  = this.props;
-            let { modal } = entities;
-            let navigationModal  = modal['navigationMenu'];
-        
-            navigationModal && navigationModal.modalIsOpen  && window.history.back();
             let apiUrl   =  api.logoutUser();
             let useToken = true;
             this.props.authenticate({apiUrl, form:{}, useToken})
@@ -374,13 +380,10 @@ export function MainAppHoc(Component) {
             let { entities } = this.props;
             
             window.onpopstate = (event) => {
-                console.log("Poping action" ,this.props, !this.isAuthenticated())
-                if (!this.isAuthenticated()) {
-                    history.goBack();
-                    return;
-                }
-
                 closeModals();
+
+                if (!this.isAuthenticated()) {
+                }
             }
 
             window.addEventListener("beforeunload",(event)=>{

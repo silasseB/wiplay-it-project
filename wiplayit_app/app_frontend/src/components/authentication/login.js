@@ -8,7 +8,7 @@ import {NavBar} from 'templates/authentication/utils'
 
 
 class LoginPage extends Component {
-    //isMounted = false;
+    isMounted = false;
     constructor(props) {
         super(props);
 

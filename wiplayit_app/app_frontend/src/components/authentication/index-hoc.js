@@ -310,6 +310,8 @@ export function AuthenticationHoc(Component) {
         }
 
         formConstructor =(name)=> {
+            if (!this.isMounted) return;
+            
             if (name) {
                 let formName = name;
                 let defaultActiveForm = formName;
@@ -419,7 +421,7 @@ export function AuthenticationHoc(Component) {
 
 
         confirmUser =(key, callback)=> {
-            //if(!this.isMounted) return;
+            if(!this.isMounted) return;
 
             let useToken = false;
             const Api    = _GetApi(useToken);

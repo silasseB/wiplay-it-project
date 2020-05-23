@@ -7,6 +7,7 @@ import { ModalManager}   from  "components/modal/modal-container";
 export const closeModals =()=> {
     let { entities}  = store.getState();
     let { modal } = entities;
+    console.log(modal)
     let optionsModal     = modal && modal['optionsMenu'];
     let editorModal      = modal && modal['editor'];
     let dropImageModal   = modal && modal['dropImage'];

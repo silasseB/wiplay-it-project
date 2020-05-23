@@ -132,7 +132,7 @@ class IndexBox extends Component {
             let {questions,
                  answers,
                  posts,
-                 users} = cachedIndex;
+                 users} = cachedIndex && cachedIndex || {};
             
             if(checkData(questions) || checkData(answers) ||
                checkData(posts) || checkData(users)){
@@ -144,7 +144,7 @@ class IndexBox extends Component {
                 }
             }
         }
-        
+
         !checkData(index) && this.props.getIndex();
         
     };
