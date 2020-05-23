@@ -11,8 +11,6 @@ import { RegistrationSubmitBtn,
 
 
 const EmailForm = props => {
-    console.log(props)
-
     let {submitting,
         onSignUpForm,
         onPasswordResetForm,
@@ -40,7 +38,8 @@ const EmailForm = props => {
     let toggleProps = {successMessage:false, value:true, formName}
     let formTitle = onEmailResendForm && 'Confirmation Resend' || onPasswordResetForm && 'Password Reset';
 
-   
+    console.log(onPasswordResetForm, error, isSocialAuth)
+    console.log(!isSocialAuth && onPasswordResetForm || onEmailResendForm && error)
     return(
         <div>
             { form? 
@@ -73,15 +72,15 @@ const EmailForm = props => {
                             <NonFieldErrors {...error}/>
                         }
 
+                        {!isSocialAuth && error &&
+                          <EmailFieldErrors {...error}/>
+                        }
+
                         <fieldset style={ fieldSetStyles} 
                       disabled={ submitting || onSignUpForm} >
 
                     <div  className="email-fields">
-                    {!isSocialAuth && onPasswordResetForm || onEmailResendForm && error &&
-                        <EmailFieldErrors {...error}/>
-                    }
-
-                        <p></p>
+                      <p></p>
                         <div className="email-box auth-input-field">
                             <input
                                placeholder="Email"

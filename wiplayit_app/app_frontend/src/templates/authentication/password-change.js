@@ -6,6 +6,8 @@ import { NonFieldErrors } from 'templates/authentication/errors'
 
 import { CancelFormBtn,
          RegistrationSubmitBtn,
+         LoginSmallScreem,
+         LoginBigScreem,
          SpinLoader } from  'templates/authentication/utils'
 
 
@@ -46,7 +48,7 @@ export const PassWordChangeForm = props => {
            { successMessage?
                <div className="password-change-success-box">
                   <p className="password-change-success message-success">{ successMessage}</p>
-                  <p>Chick bellow to login with your password</p>
+                  <p>Chick bellow to login with your new password</p>
                   
                    <LoginSmallScreem/>
                    <LoginBigScreem/>

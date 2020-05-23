@@ -67,28 +67,3 @@ import { ConfirmationResendSmall,ConfirmationResendBig } from  'templates/authen
 }
 
 export default AccountConfirmation;
-
-const LoginSmall = props => {
-    return (
-        <Link className="btn confirmation-login-btn"
-            type="button"
-            to="/user/login/">
-            Login
-        </Link>
-    )
-}
-
-
-const LoginBig = props => {
-    return (
-        <Link className="btn confirmation-login-btn" 
-            type="button"
-            to="/user/registration/">
-            Login
-        </Link>
-    )
-}
-
-const LoginSmallScreem   = MatchMediaHOC(LoginSmall, '(max-width: 980px)')
-const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 980px)')
-

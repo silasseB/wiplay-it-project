@@ -1,8 +1,8 @@
 
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.conf import settings
-
+from django.contrib.auth.forms import PasswordResetForm
 from rest_framework import serializers, exceptions
 from rest_framework.authtoken.models import Token
 from rest_auth.serializers import LoginSerializer,  PasswordResetSerializer
@@ -14,6 +14,7 @@ from app_backend.mixins.serializer_mixins import SerialiizerMixin
 from app_backend import serializers  as app_serializers
 from app_backend.helpers import  has_perm, get_users_with_permissions
 
+UserModel = get_user_model()
 
 
 class TokenSerializer(serializers.ModelSerializer):
@@ -102,8 +103,21 @@ class EmailSerializer(serializers.Serializer):
 		return attrs
 
 
-class CustomPasswordResetSerializer (PasswordResetSerializer):
-    
+class CustomPasswordResetForm(PasswordResetForm):
+
+	def get_users(self, email):
+		email_field_name = UserModel.get_email_field_name()
+
+		return UserModel._default_manager.filter(**{
+            '%s__iexact' % email_field_name: email,
+            'is_active': True,
+            'is_confirmed':True,
+        })
+        
+	
+
+class CustomPasswordResetSerializer(PasswordResetSerializer):
+
     def get_email_options(self):
         """Override this method to change default e-mail options"""
         host = settings.ALLOWED_HOSTS[0]
@@ -124,7 +138,7 @@ class CustomPasswordResetSerializer (PasswordResetSerializer):
         	raise serializers.ValidationError(msg)
 
         else:
-        	self.reset_form = self.password_reset_form_class(data=self.initial_data)
+        	self.reset_form = CustomPasswordResetForm(data=self.initial_data)
 
         	if not self.reset_form.is_valid():
         		raise serializers.ValidationError(self.reset_form.errors)
@@ -143,7 +157,7 @@ class CustomPasswordResetSerializer (PasswordResetSerializer):
         }
 
         opts.update(self.get_email_options())
-        print(opts)
+        #print(opts)
         self.reset_form.save(**opts)  
 
   

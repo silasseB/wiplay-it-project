@@ -617,13 +617,19 @@ export function authenticate(params={}){
             let _error;
             if (error.response) {
                 console.log(error.response)  
-                _error = error.response.data
+                if (error.response.status == 500) {
+                    _error = error.response.statusText
+                    return dispatch(action.handleError(_error));
+                }
+
+                _error = error.response.data;
                 dispatch(action.authenticationError(_error, isSocialAuth));
+                isSocialAuth && dispatch(action.handleError(_error.non_field_errors[0]));
 
             }
             else if (error.request)  {
                 console.log(error.request)
-                _error = 'Something wrong happened.';
+                _error = 'Something wrong happened. Please try again';
                 
                 dispatch(action.authenticationError(_error, isSocialAuth));
                 dispatch(action.handleError(_error));

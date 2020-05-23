@@ -36,11 +36,11 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         print(sociallogin.account.get_avatar_url())
         user = sociallogin.user
         user.is_confirmed = True
+        user.set_unusable_password()
         user.save()
 
         self.save_profile_picture(user, sociallogin)
-
-        user.set_unusable_password()
+       
         if form:
             get_account_adapter().save_user(request, user, form)
         else:

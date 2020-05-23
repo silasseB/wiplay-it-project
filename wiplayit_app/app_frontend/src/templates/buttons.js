@@ -718,16 +718,16 @@ export const ChangeImageBtn = props => {
 
     return(
        
-        <button className="edit-img-btn btn"   onClick={()=> {
-                        if (!currentUser.is_confirmed) {
-                            let error = 'Sorry, you must confirm your account to to change photo ';
-                            store.dispatch(handleError(error));
-                            return;   
-                        }
-                        Modal(modalProps)
-
-
-                    }}>
+        <button 
+            className="edit-img-btn btn" 
+            onClick={()=> {
+                if (!currentUser.is_confirmed) {
+                    let error = 'Sorry, you must confirm your account to to change photo ';
+                    store.dispatch(handleError(error));
+                        return;   
+                    }
+                    Modal(modalProps)
+                  }}>
             {linkName}  
         </button>
     );
@@ -739,8 +739,7 @@ export const ChangeImageBtn = props => {
 
 export const OpenUsersModalBtn = props => {
     let {obj, linkName} = props
-    //if (!obj) return null;
-    
+        
     let modalProps = {
             ...props,
             modalName : 'userList', 
