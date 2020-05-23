@@ -36,10 +36,10 @@ const EmailForm = props => {
     
     let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{};
     let toggleProps = {successMessage:false, value:true, formName}
-    let formTitle = onEmailResendForm && 'Confirmation Resend' || onPasswordResetForm && 'Password Reset';
+    let formTitle   = onEmailResendForm && 'Confirmation Resend' ||
+                      onPasswordResetForm && 'Password Reset';
 
-    console.log(onPasswordResetForm, error, isSocialAuth)
-    console.log(!isSocialAuth && onPasswordResetForm || onEmailResendForm && error)
+    
     return(
         <div>
             { form? 
@@ -55,8 +55,9 @@ const EmailForm = props => {
                             </p>
 
                             <div className="resend-email-box ">
-                                <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)}
-                                     className="resend-email-btn" >
+                                <button type="button" 
+                                        onClick={()=> props.toggleEmailForm(toggleProps)}
+                                        className="resend-email-btn" >
                                      Resend
                                 </button>
                                 <CancelEmailForm {...props}/>
@@ -66,7 +67,11 @@ const EmailForm = props => {
                         :
 
                     <form className="email-form" onSubmit={props.onSubmit}>
-                        <li className="password-form-description">{props.formDescription}</li>
+                        <ul className="password-form-description">
+                            <li>
+                               {props.formDescription}
+                            </li>
+                        </ul>
 
                         {!isSocialAuth && error &&
                             <NonFieldErrors {...error}/>
