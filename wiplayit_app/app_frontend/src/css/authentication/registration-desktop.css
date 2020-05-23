@@ -164,7 +164,7 @@
   list-style-type: none;
  } 
 
-.confirmation-message-box {
+.confirmation-message-box, .password-change-success-box {
    border-top : 1px solid #BDBDBD;
    text-align :  center;
 
@@ -202,8 +202,7 @@
 }
 
 
-.success-message-box,.password-change-form,
-
+.success-message-box, .password-change-form,
 .sign-up-form, .email-form, .login-form {
   border:1px solid #BDBDBD;
   padding: 4%;
@@ -247,7 +246,7 @@
   
 }
 
-.confirmation-login-btn-box a,
+.confirmation-login-link,
 .resend-confirmation-btn, .registration-submit-btn {
   font-size: 11px;
   color: #ffff;
@@ -256,7 +255,7 @@
 
 }
 
-.confirmation-login-btn {
+.confirmation-login-link {
     width: 40%;
 } 
 

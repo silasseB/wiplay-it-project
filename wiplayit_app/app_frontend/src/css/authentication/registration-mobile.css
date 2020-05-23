@@ -152,13 +152,13 @@
   
 }
 
-.confirmation-login-btn-bo a,
-.registration-submit-btn, .resend-confirmation-btn {
-  color      : #ffff;
-  background : #A33F0B; 
-  width      : 60%; 
-  font-size  : 14px;
-
+.confirmation-login-link,
+.registration-submit-btn, 
+.resend-confirmation-btn {
+    color      : #ffff;
+    background : #A33F0B; 
+    width      : 60%; 
+    font-size  : 14px;
 }
 
 

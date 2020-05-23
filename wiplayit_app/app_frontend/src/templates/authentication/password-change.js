@@ -45,17 +45,20 @@ export const PassWordChangeForm = props => {
                 <li className="">Password Change</li>
             </ul>
 
-           { successMessage?
-               <div className="password-change-success-box">
-                  <p className="password-change-success message-success">{ successMessage}</p>
-                  <p>Chick bellow to login with your new password</p>
-                  
-                   <LoginSmallScreem/>
-                   <LoginBigScreem/>
-                 
-               </div>
+            { !successMessage?
+                <div>
+                    <div className="password-change-success-box">
+                        <p className="password-change-success message-success">
+                            { successMessage}. Chick bellow to login with your new password
+                        </p>
+                    </div>
+                    <div className="confirmation-login-btn-box">
+                        <LoginSmallScreem/>
+                        <LoginBigScreem/>
+                    </div>
+                </div>
 
-            :
+                :
 
             <form className="password-change-form" onSubmit={props.onSubmit} >
                 <li className="password-form-description">{props.Description}</li>

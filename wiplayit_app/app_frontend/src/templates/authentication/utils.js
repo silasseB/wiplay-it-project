@@ -181,7 +181,7 @@ export const  RegistrationSubmitBtn  = props => {
 
 const LoginSmall = props => {
     return (
-        <Link className="btn confirmation-login-btn"
+        <Link className="btn confirmation-login-link"
             type="button"
             to="/user/login/">
             Login
@@ -192,7 +192,7 @@ const LoginSmall = props => {
 
 const LoginBig = props => {
     return (
-        <Link className="btn confirmation-login-btn" 
+        <Link className="btn confirmation-login-link" 
             type="button"
             to="/user/registration/">
             Login
