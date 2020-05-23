@@ -140,15 +140,21 @@ export const NavBarMenuItems = props => {
 export const RedirectMenuLinks = props => {
     let {pathname, state} = props;
 
-    if (window.matchMedia("(max-width: 980px)").matches) {
-        window.history.back() 
-    }
-    console.log(pathname, state)
+    let storeUpdate  = store.getState();
+    let { entities } = storeUpdate;
+    let { modal }    = entities;
+    let navigationMenuModal = modal && modal['navigationMenu'];
 
-    return setTimeout(()=> {
-        history.push(pathname, state); 
+    if (navigationMenuModal && navigationMenuModal.modalIsOpen ) {
+        window.history.back() 
+        
+        return setTimeout(()=> {
+            history.push(pathname, state); 
         }, 500);
-    
+    }
+
+    history.push(pathname, state);
+
 };
 
 const NavBarDropDown = props => {

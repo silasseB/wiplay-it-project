@@ -1,6 +1,8 @@
 
 # wiplay-it-project
-Wiplayit project is the app built on python/django rest-framework and run react on javascript for web frontend.
+Wiplayit project is a social network for football professionals and alike where a user can ask questions about any thing related to fooball and get answer from another user who might have any answer to that question.
 
-The appication tries to meet soccer fans to discuss football in a manner of Question-Answer and posting articles in a journalism manner.
+The Question and Answer feature is not the only thing the platform does. The platform again allow users to create posts, follow questions, create comments to answers and post, upvote answers, posts, commets and edit their profiles.  
+
+The platform is built in python/django on the backend and Javscript/React in the browser.
 
