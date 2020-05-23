@@ -147,7 +147,7 @@ export const RedirectMenuLinks = props => {
 
     if (navigationMenuModal && navigationMenuModal.modalIsOpen ) {
         window.history.back() 
-        
+
         return setTimeout(()=> {
             history.push(pathname, state); 
         }, 500);
@@ -407,7 +407,6 @@ export const NavBarBigScreen = props => {
 
 
 export const NavBarBottomTemplate = props =>{
-    console.log(props)
     let {homeTab,
          questionListTab,
          usersTab,

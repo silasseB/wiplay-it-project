@@ -25,7 +25,11 @@ export default class Axios {
         this.timeout       =  props && props.timeout || 15000; 
     }
 
-    _checkAuth = () => {
+    tokenTimeStampe(timeStamp){
+        return new GetTimeStamp({timeStamp});
+   }
+
+    _getAuth = () => {
         
         if (this.cacheEntities) {
             let {userAuth} = this.cacheEntities;
@@ -38,67 +42,62 @@ export default class Axios {
                 }
             }
         }
-
         return null;
     };
 
+    refreshToken(){
+        let userAuth = this._getAuth();
+        let expireTime = userAuth && this.tokenTimeStampe(userAuth.timeStamp)
+        
+        if (expireTime && expireTime.menutes() >= 50) {
+            let token = this.getToken(userAuth)
+          
+            let apiUrl   =  api.refreshTokenApi();
+            let useToken = true; 
+            store.dispatch(authenticate({apiUrl, form:{token}, useToken}))
+        }
+    }
 
-    instance = () => {
-     	let userAuth = this._checkAuth();
+    getToken(userAuth){
+        let auth = userAuth && userAuth.auth;
+        return auth && auth.tokenKey; 
+    }
 
-    	let instance = axios.create({
+    createInstance=()=>{
+        let instance = axios.create({
             baseURL: this.DOMAIN_URL,
         });
 
-        //retrive token from storage
-        if (this.useToken) {
-
-            let auth     = userAuth && userAuth.auth;
-            let tokenKey = auth     && auth.tokenKey; 
-            //console.log(tokenKey)
-            if (!tokenKey) {
-                return
-            }
-            
-            tokenKey =`JWT ${tokenKey}`;
-            instance.defaults.headers.common['Authorization'] = tokenKey;
-            
-        }
-        
         instance.defaults.xsrfCookieName = csrftoken;
         instance.defaults.timeout = this.timeout;
-        
-        
+        return instance;
+
+    };
+
+    instance = () => {
+        const instance = this.createInstance()
+     	
         if (this.useToken) {
+            
             instance.interceptors.request.use((config)=> {
                 // Do something before request is sent
                 //console.log('intercepting request')
+                this.refreshToken()
 
-                let timeStamp      = userAuth && userAuth.timeStamp;
-                const getTimeState = new GetTimeStamp({timeStamp});
-                let menDiff        = parseInt(getTimeState.menutes());
-                let hourDiff       = parseInt(getTimeState.hours());
-                let dayDiff        = parseInt(getTimeState.days());
-
-            
-                let auth     = userAuth && userAuth.auth;
-                let tokenKey = auth     && auth.tokenKey; 
-
-                //console.log(menDiff + ' menutes', hourDiff +' hourDiff', dayDiff + ' dayDiff')
-
-                let apiUrl   =  api.refreshTokenApi();
-                let useToken = true; 
-
-                //store.dispatch(authenticate({apiUrl, form:{tokenKey}, useToken}))
                 return config;
 
-                }, (error)=> {
-                    // Do something with request error
-                    return Promise.reject(error);
-                });
+            }, (error)=> {
+                // Do something with request error
+                return Promise.reject(error);
+            });
+
+            let userAuth = this._getAuth();  
+            let tokenKey = this.getToken(userAuth)
+                       
+            tokenKey =`JWT ${tokenKey}`;
+            instance.defaults.headers.common['Authorization'] = tokenKey;
         }
 
-        //console.log(instance.defaults)
         return instance;
     };
 

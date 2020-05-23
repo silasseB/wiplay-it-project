@@ -37,10 +37,10 @@ export function getAboutInfo(options) {
                 dispatch(action.getAboutInfoSuccess(response.data)); 
             })
             .catch(error => {
-                console.log(error)
-
+            
                 if (error.response) {
                     error = error.response.data;
+                    console.log(error)
                     dispatch(action.getAboutInfoError(error.detail));
 
                 }else if(error.request){
@@ -73,22 +73,22 @@ export function getIndex(options) {
 
         Api.get(apiUrl)
             .then(response => {
-                console.log(response)  
                 dispatch(action.getIndexSuccess(response.data)); 
-    
             })
             .catch(error => {
-                console.log(error)
-                
+                                
                 if (error.response) {
                     error = error.response.data;
+                    console.log(error)
                     dispatch(action.getIndexError(error.detail));
 
                 }else if(error.request){
+                    console.log(error.request)
                     error = 'Something wrong happened.';
                     dispatch(action.getIndexError(error));
 
                 }else{
+                    console.log(error)
                     dispatch(action.handleError());
                 }
            }); 
@@ -573,8 +573,7 @@ export function authenticate(params={}){
     }
 
     let {apiUrl, form, useToken, isSocialAuth} = params;
-    
-    console.log(params)    
+           
     
     return dispatch => {
         dispatch(action.authenticationPending(isSocialAuth));

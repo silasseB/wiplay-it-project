@@ -320,11 +320,12 @@ export const QuestionOptModalBtns = props => {
 
 
 export const AnswerOptModalBtns = props => {
-   // console.log(props)
+    console.log(props)
+    let {currentUser, obj} = props
    
-   return(
+    return(
       <div>
-         { props.obj.created_by.id === props.currentUser.id?
+         { obj.created_by.id === currentUser.id?
             <div>
                <OpenEditorBtn {...props}/>
                <button type="button" className="btn-sm  delete-question" >
@@ -456,7 +457,7 @@ export const EditUserButtons = props => {
 
 
 export const OptionsMenuBtns = props => {
-    //console.log(props);
+  
     return(
         <div>
             { props.objName === 'UserProfile'?
@@ -570,8 +571,7 @@ export const EditProfileDropDownButton = props => (
 
 
 export const ModalCloseBtn = props => {
-   console.log(props)
-   let styles = props.styles || {};
+    let styles = props.styles || {};
 
    return(
       <button type="button" 
@@ -595,70 +595,56 @@ export const SubmitBtn = props => {
 
 
 export const OpenEditorBtn = props => {
-    //console.log(props)
-  
-    let { modalProps, currentUser} = props ;
-    let { className } =  props;
-      
-    let editorProps = modalProps && modalProps.editorProps || {...props};
-
-    modalProps = {
-            ...editorProps,
-            modalName   : 'editor',
-            isModal     :  true, 
-        };
-
-    
-    let {objName, isPut, linkName, editorLinkStyles} = editorProps;
+        
+    let {objName,
+         isPut, 
+         className,
+         linkName} = props;
     let context   = objName && objName.toLowerCase();
     
     let getButtonName =()=> {
         let Edit = isPut && "Edit " || "";
         return `${Edit}${objName}`;
     };
-
-    let getEditorStyles = ()=>{
-            if (window.matchMedia("(min-width: 900px)").matches) {
-               return props.editorLinkDesktopStyles || {};
-            } else {
-              return props.editorLinkMobileStyles || {};
-            } 
-        };
-
-    
     linkName   = linkName?linkName:getButtonName();
-    let styles = getEditorStyles();
+    
+    return(
+        <button className={className}  onClick={()=> OpenModalEditor(props)}>
+            { linkName } 
+        </button>
+    );
+};
 
+const OpenModalEditor=(props)=>{
+    let { currentUser} = props ;
+    
     let storeUpdate  = store.getState();
     let { entities } = storeUpdate;
     let { modal }    = entities;
     let optionsModal = modal && modal['optionsMenu'];
 
-    return(
-        <button  className={className}   onClick={()=> {
-                        if (currentUser && !currentUser.is_confirmed) {
-                            let error = 'Sorry, you must confirm your account to start posting and editting ';
-                            store.dispatch(handleError(error));
-                            return;   
-                        }
+    if (currentUser && !currentUser.is_confirmed) {
+        let error = 'Sorry, you must confirm your account to start posting and editting ';
+        store.dispatch(handleError(error));
+        return;   
+    }
 
-                        if (optionsModal && optionsModal.modalIsOpen ) {
-                            window.history.back()
-                        }
+    let modalProps = {
+        ...props,
+        modalName   : 'editor',
+        isModal     :  true, 
+    };
 
-                        return setTimeout(()=> {
-                                 Modal(modalProps) ; 
-                            }, 500);
+    if (optionsModal && optionsModal.modalIsOpen ) {
 
-                     
+        window.history.back()
+        return setTimeout(()=> {
+            Modal(modalProps) ; 
+        }, 500);
+    }
 
-                    }}>
-                    { linkName } 
-        </button>
-        
-    );
+    Modal(modalProps)
 };
-
 
 export const OptionsDropDownBtn = props => {
     return(
@@ -691,7 +677,7 @@ export const  OptionModal = props => {
 
 
 export const OpenOptionlBtn  = props => {
-           
+             
     return(
         <div>
             <OptBtnSmallScreen {...props}/>
@@ -706,8 +692,7 @@ const OptBtnBigScreen = MatchMediaHOC(OptionsDropDownBtn, '(min-width: 980px)');
 
 export const ChangeImageBtn = props => {
     let {currentUser} = props && props;
-    //console.log(props)
-
+    
     let modalProps = {
             ...props,
             modalName : 'dropImage', 

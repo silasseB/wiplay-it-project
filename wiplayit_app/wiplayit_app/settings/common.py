@@ -124,11 +124,9 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
     'JWT_ALLOW_REFRESH'     : True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=15),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),
 
-
-    'JWT_RESPONSE_PAYLOAD_HANDLER':
-    'auth_backend.views.jwt_response_payload_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'auth_backend.views.jwt_response_payload_handler',
     
 }
 

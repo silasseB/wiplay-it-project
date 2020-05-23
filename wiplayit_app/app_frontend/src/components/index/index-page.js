@@ -104,7 +104,7 @@ class IndexBox extends Component {
     
     _checkData(data){
         if (!data) return false;
-       
+
         if(checkType.isObject(data)){
             data = Object.keys(data)
         }
@@ -139,14 +139,12 @@ class IndexBox extends Component {
                 let menDifference = this.getTimeState(cachedIndex.timeStamp)
 
                 if (menDifference <= 2) {
-                    console.log('Index found from cachedEntyties')
                     this.updateIndexEntities(cachedIndex);
                     return;
                 }
             }
         }
-               
-        console.log('Fetching index data from the server' )
+        
         !checkData(index) && this.props.getIndex();
         
     };

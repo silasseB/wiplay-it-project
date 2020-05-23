@@ -108,8 +108,6 @@ export function AuthenticationHoc(Component) {
             accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
 
             return ;
-
-
         };
 
 
