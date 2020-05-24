@@ -22,15 +22,12 @@
     color: #A33F0B;
     font-size: 17pX;
     font-weight: bold;
-
-    
 }
 
 .nav-bar-back-btn {
     border : px solid blue;
     height : 35px !important;
     background: none !important;
-    
 }
 
 .user-photo {
@@ -56,17 +53,13 @@
 
 }
 
- 
-
 .submit-btn {
     border-radius : 50px;
     font-size     : 10px; 
     width         : 50px;
     height        : 23px;
     margin        : 7px ;
-      
 }
-
 
  .modal-menu {
   

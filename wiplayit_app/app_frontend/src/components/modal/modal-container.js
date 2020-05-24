@@ -17,7 +17,7 @@ import {GetModalType} from 'components/modal/modal-types'
 import { history } from "App" 
 import { store } from "store/index";
 import Assign from 'lodash.assign';
-
+import {DisablePageScrool,  EnablePageScrool} from 'utils/helpers';
 
 const prefix = require('react-prefixr');
 
@@ -182,12 +182,14 @@ export const ModalManager = {
         }
 
         window.history.pushState(null, null, window.location.href);
+        DisablePageScrool()
 
         store.dispatch(showModal(modalName, true));
     },
     close(modalName){
           
         onClose && onClose(() => {
+            EnablePageScrool()
             store.dispatch(showModal(modalName, false));
 
             ReactDOM.unmountComponentAtNode(node);

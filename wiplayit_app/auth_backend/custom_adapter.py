@@ -8,6 +8,7 @@ import requests
 import tempfile
 import hashlib
 from django.core import files
+from allauth.account.models import EmailAddress
 
 
 
@@ -28,12 +29,44 @@ class CustomAccountAdapter(DefaultAccountAdapter):
 
 
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
+    def pre_social_login(self, request, sociallogin):
+       
+        # social account already exists, so this is just a login
+        if sociallogin.is_existing:
+            return
+
+        # some social logins don't have an email address
+        if not sociallogin.email_addresses:
+            return
+
+        # find the first verified email that we get from this sociallogin
+        verified_email = None
+        for email in sociallogin.email_addresses:
+            if email.verified:
+                verified_email = email
+                break
+
+        # no verified emails found, nothing more to do
+        if not verified_email:
+            return
+
+        
+        # check if given email address already exists as a verified email on
+        # an existing user's account
+        try:
+            existing_email = EmailAddress.objects.get(email__iexact=email.email, verified=True)
+        except EmailAddress.DoesNotExist:
+            return
+
+        # if it does, connect this new social login to the existing user
+        sociallogin.connect(request, existing_email.user)
+
+
     def save_user(self, request, sociallogin, form=None):
         """
         Saves a newly signed up social login. In case of auto-signup,
         the signup form is not available.
         """
-        print(sociallogin.account.get_avatar_url())
         user = sociallogin.user
         user.is_confirmed = True
         user.set_unusable_password()

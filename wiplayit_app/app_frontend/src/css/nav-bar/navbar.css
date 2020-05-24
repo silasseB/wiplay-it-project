@@ -1,8 +1,8 @@
 
 .navigation-bar-mobile {
     -webkit-box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
--moz-box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
-box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
+    -moz-box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
+    box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
 }
 
 .navigation-bar-mobile {
@@ -158,6 +158,7 @@ box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
     width      : 100%;
         
 }
+
 .partial-form-navbar {
     border-bottom : 1px solid #D5D7D5;
 }
@@ -218,18 +219,7 @@ box-shadow: -2px 0px 5px 0px rgba(213,213,215,1);
     
     }
 
-    .create-post-btn-box, .create-question-btn-box {
-        border : px solid black;
-    }
-
-    .create-post-btn-box {
-       
-    }
-
-    .create-question-btn-box {
-       
-    }
-
+    
     .log {
         font-family: 'Signika';
         font-size: 22px;

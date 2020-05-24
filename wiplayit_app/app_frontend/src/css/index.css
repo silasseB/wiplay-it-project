@@ -171,7 +171,6 @@ body {
   
 }
 
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -196,13 +195,15 @@ input, textarea {
 	padding    : 7px;
 }
 
-input:focus, input:active,
+input:focus, input:active{
+	border: 1px solid #5384e5;
+}
+
+
 button:focus, button:active {
 	outline    : 0px transparent;
 	box-shadow : none;
 	border     : none;
-	
-
 }
 
 

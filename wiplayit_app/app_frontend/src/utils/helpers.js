@@ -150,8 +150,20 @@ export default class Helper {
 
 
 
+export const GetLoggedInUser =()=>{
+    let cache = JSON.parse(localStorage.getItem('@@CacheEntities'))  || {};
+    let currentUser = cache && cache.currentUser
+    return currentUser && currentUser.user || undefined;
+}
 
 
 
+export const DisablePageScrool =()=>{
+            document.body.style['overflow-y'] = 'hidden';
+            document.body.style['overflow-x'] = 'hidden';
+    }
 
-
+export const EnablePageScrool =()=>{
+        document.body.style['overflow-y'] = 'scroll';
+        document.body.style['overflow-x'] = 'scroll';
+}

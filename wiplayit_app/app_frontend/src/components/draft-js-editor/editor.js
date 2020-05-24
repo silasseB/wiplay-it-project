@@ -20,7 +20,7 @@ import {TextAreaEditor,
 import {insertLink, decorator} from 'components/draft-js-editor/plugins'
 import { AlertComponent } from 'templates/partial-components';
 import { showModal }  from 'actions/actionCreators';
-
+import {handleModalScroll} from 'components/modal/helpers';
 import {store} from 'store/index';
 import { history } from "App";
 import Api from 'utils/api';
@@ -456,34 +456,21 @@ export default  class AppEditor extends Component{
     };
 
     handleScroll=()=>{
-        //console.log(event)
+        let {onScroolStyles}    = this.state;
         let isDesktopScreenSize = window.matchMedia("(min-width: 980px)").matches;
 
         if (isDesktopScreenSize) {
-            let modalContent   = document.getElementById('modal-content')
-            let editorsBox       = document.getElementById('editors-box')
-            let modalContentsRect = modalContent && modalContent.getBoundingClientRect();
+            let editorsBoxElem     = document.getElementById('editors-box')
+            let isAtBottom = handleModalScroll()
 
-            if (modalContent && modalContentsRect) {
-                let modalOverlay              = document.getElementById('modal-overlay')
-                let modalContentClientHeight  = parseInt(modalContent.clientHeight) + parseInt(modalContentsRect.top);
-                
-                console.log(modalContent.clientHeight, modalContentsRect.top)
-                console.log(modalContentClientHeight,  modalOverlay.clientHeight)
+            if (editorsBoxElem && isAtBottom && !onScroolStyles) {
+                onScroolStyles  = {
+                    height : editorsBoxElem.clientHeight
+                };
 
-                editorsBox && console.log(editorsBox.clientHeight)
-
-                if ( modalContentClientHeight >= modalOverlay.clientHeight - 30) {
-                    editorsBox && console.log(editorsBox.clientHeight, modalOverlay.clientHeight)
-                    
-                    let onScroolStyles   = editorsBox && {height:editorsBox.clientHeight };
-                    
-                    !this.state.onScroolStyles &&  this.setState({onScroolStyles})
-                }
-            
+                this.setState({onScroolStyles});
             }
         }
-
     };
 
     handleFocus =()=> {
@@ -676,7 +663,7 @@ export const EditorCommp = (props)=> {
                 </div>
             }
         
-            { objName !== 'Question' && objName !== 'Post' &&
+            {objName !== 'Question' && objName !== 'Post' &&
                 <div style={props.onScroolStyles}
                      id="editors-box" 
                      className="editors-box pure-draft-editor"

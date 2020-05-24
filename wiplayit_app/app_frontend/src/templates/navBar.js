@@ -363,26 +363,7 @@ export const NavBarBigScreen = props => {
 
 
                     <div className="nav-menu">
-                        <ul  className="navigation-item">
-                            <li>
-                                <Link className="items" to="/posts/">
-                                    Posts
-                                </Link>
-                            </li>
-                        </ul>
-
-                        <ul className="navigation-item">
-                            <li>
-                               <Link className="items"  to="/questions/">Questions</Link>
-                            </li>
-                        </ul>
-                    
-                        <ul className="navigation-item">
-                            <li>
-                                <Link className="items"
-                                to="/notifications/">Notifications</Link>
-                            </li>
-                        </ul> 
+                        <NavigationMenuBtns {...props}/>
                     </div> 
                            
                     <NavBarDropDown {...props}/>
@@ -407,27 +388,36 @@ export const NavBarBigScreen = props => {
 
 
 export const NavBarBottomTemplate = props =>{
-    let {homeTab,
-         questionListTab,
-         usersTab,
-         notificationsTab} = props || {};
-   
+     
     
     return (
         <div className="navigation-bar-mobile">
-            <div className="navbar-bottom-menu">
-                <ul  className="navbar-bottom-item">
-                    <button type="button"
-                             style={homeTab}
-                             onClick={() => RedirectMenuLinks({pathname:'/'})}
-                             className="btn-sm navbar-bottom-btn">
+            <NavigationMenuBtns {...props}/>
+        </div>
+        )
+}
+
+export const NavigationMenuBtns =(props)=>{
+    let {homeTab,
+         questionListTab,
+         usersTab,
+         currentUser,
+         notificationsTab} = props || {};
+
+    return(
+        <div className="navbar-bottom-menu">
+            <ul  className="navbar-bottom-item">
+                <button type="button"
+                        style={homeTab}
+                        onClick={() => RedirectMenuLinks({pathname:'/'})}
+                        className="btn-sm navbar-bottom-btn">
                         <Icon.Home id="feather-home" size={20} {...homeTab}/>
                         Home
                     </button> 
                 </ul>
 
                 <ul  className="navbar-bottom-item">
-                    <OpenUsersModalBtn {...{}}>
+                    <OpenUsersModalBtn {...{currentUser}}>
                         <Icon.Users id="feather-users" size={20} {...usersTab}/>
                         People
                     </OpenUsersModalBtn>
@@ -463,8 +453,7 @@ export const NavBarBottomTemplate = props =>{
                     </button>
                 </ul> 
             </div> 
-        </div>
-        )
+    )
 }
 
 

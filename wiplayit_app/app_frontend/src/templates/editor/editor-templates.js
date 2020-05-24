@@ -167,11 +167,13 @@ export const MobileModalNavBar = props  => {
         )
     
     let DoneBtn = ()=>(
-            <button  type="button" 
-                onClick={()=> window.history.back()}
-                className="btn-sm modal-custom-back-btn custom-back-btn">
-                Done
-            </button>
+            <div className="submit-btn-box">
+                <button  type="button" 
+                        onClick={()=> window.history.back()}
+                        className="btn modal-custom-back-btn">
+                    Done
+                </button>
+            </div>
         )
     
     return (
@@ -187,7 +189,7 @@ export const MobileModalNavBar = props  => {
                     <li className="modal-title">{modalTitle || ''}</li>  
                 </ul>
          
-                <div className="submit-btn-box">
+                <div className="modal-submit-btn-box">
                     { isDraftEditor?
                         <SubmitBtn/>
                         :

@@ -320,7 +320,6 @@ export const QuestionOptModalBtns = props => {
 
 
 export const AnswerOptModalBtns = props => {
-    console.log(props)
     let {currentUser, obj} = props
    
     return(
@@ -588,7 +587,9 @@ export const SubmitBtn = props => {
   //console.log(props)
  return (
     <div className="submit-btn-box">
-      <button type="button" onClick={props.handleSubmit} className="submit-btn ">Submit </button>
+        <button type="button" onClick={props.handleSubmit} className="submit-btn ">
+            Submit 
+        </button>
     </div>
  )
 }

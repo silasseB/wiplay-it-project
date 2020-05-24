@@ -4,7 +4,7 @@ import Api from 'utils/api';
 import Axios from 'utils/axios_instance';
 import  * as action  from 'actions/actionCreators';
 import * as checkType from 'helpers/check-types'; 
-
+import {GetLoggedInUser } from 'utils/helpers';
 
 const api = new Api();
 
@@ -412,8 +412,10 @@ export function getCurrentUser(tokenKey) {
 	
 };
 
+const UserIsConfirmed =(currentUser)=> {
+    return currentUser && currentUser.is_confirmed;
 
-
+}
 
 export function handleSubmit(props) {
     console.log(props)
@@ -424,8 +426,11 @@ export function handleSubmit(props) {
     }
 
     let { currentUser } = props;
-    if (currentUser && !currentUser.is_confirmed) {
-        let error = 'Sorry, you must confirm your account to post or edit ';
+    currentUser = currentUser || GetLoggedInUser()
+
+    let userIsConfirmed = UserIsConfirmed(currentUser);
+    if (!userIsConfirmed) {
+        let error = 'Sorry. You must confirm your account before you can do any action';
         
         return dispatch => {
             dispatch(action.handleError(error));

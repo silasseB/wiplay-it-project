@@ -37,7 +37,7 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
     		if user.is_confirmed:
     			return True    		    		        		
 
-    
+    '''
     def get_social_login(self, adapter, app, token, response):
         """
         :param adapter: allauth.socialaccount Adapter subclass.
@@ -67,6 +67,7 @@ class CustomSocialLoginSerializer(SocialLoginSerializer):
         		#self.connect_account() 
         
         return social_login
+    '''
 
     def save_social_login(self, social_login):
        	user = User(

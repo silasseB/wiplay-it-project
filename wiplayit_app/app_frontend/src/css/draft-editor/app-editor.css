@@ -364,7 +364,6 @@ div.public-DraftEditor-content {
 
 @media (max-width: 980px) {
 
-
     #editors-page {
         background-color : #fffef7;
         max-height       : 100%; 
@@ -375,7 +374,6 @@ div.public-DraftEditor-content {
         border           : px solid red;
         margin-top       : 45px; 
     }
-
  
     #editors-box  {
         background-color : #fffef7;
@@ -396,9 +394,7 @@ div.public-DraftEditor-content {
         padding-top: 45px;
     }
 
-  
-
-    .navigation-toolbar button {
+   .navigation-toolbar button {
         overflow      : hidden;
         position      : relative;
         display       : block;
@@ -417,8 +413,6 @@ div.public-DraftEditor-content {
        margin-top: 3px;
 
     }
-
-
    
     #fileContainer {
         overflow      : hidden;
@@ -432,9 +426,6 @@ div.public-DraftEditor-content {
         border        : px solid black;
         margin        : 4px 6px 0;
     }
-
-
-
 
     #fileContainer [type=file] {
         cursor     : inherit;
@@ -456,13 +447,9 @@ div.public-DraftEditor-content {
 
     }
 
-
-
     .options {
         margin-bottom: 20px;
     }
-
-
 
     #modal-navbar-container{
         background : #A33F0B !important;
@@ -471,152 +458,146 @@ div.public-DraftEditor-content {
 
     }
 
-.modal-custom-back-btn{
-   background : #A33F0B !important;
-   color: #ffff !important;
-}
 
-.modal-close-icon{
-   color: #ffff !important;
-   font-size: 17px;
-}
-
-.modal-navbar-box {
-  background : #A33F0B !important;
-  display: flex; 
-  
-}
+    .modal-submit-btn-box {
+        border  : px solid red;
+        padding : 5px 12px;  
+    } 
 
 
-.editor-submit-btn {
-    border        : 1px solid #A33F0B;
-    background    : #ffff;
-    color         : #A33F0B; 
-    font-size     : 11px;  
-    font-family   : 'Play'; 
-    font-weight   : bold; 
-    float         :  right;
-    
-}
+    .modal-custom-back-btn{
+        background : #A33F0B !important;
+        color: #ffff !important;
+        font-size: 14px;
+    }
+
+    .modal-close-icon{
+        color: #ffff !important;
+        font-size: 17px;
+    }
+
+    .modal-navbar-box {
+        background : #A33F0B !important;
+        display: flex; 
+    }
 
 
-.hyperlink-form {
-    border  : px solid red;
-    padding : 6px 8px;
-}
+    .editor-submit-btn {
+        border        : 1px solid #A33F0B;
+        background    : #ffff;
+        color         : #A33F0B; 
+        font-size     : 11px;  
+        font-family   : 'Play'; 
+        font-weight   : bold; 
+        float         :  right;
+    }
+
+    .hyperlink-form {
+        border  : px solid red;
+        padding : 6px 8px;
+    }
+
+    .hyperlink-box {
+        display : flex;
+        border  : px solid black;
+    }
+
+    .add-link {
+        border: 1px solid #D5D7D5;
+        margin: 0px 3% 0px;
+        display: block;
+        background:white; 
+        font-size: 10px;
+        font-weight: bold;
+        font-family: 'Overpass';
+        text-align: center;
+        line-height: 2;
+        color: #6A6767;
+    }
+    .hyperlink-input  {
+        border  : 1PX solid #D5D7D5;
+        width   : 100%;
+        padding : 4px;
+    }
+
+    .hyperlink-input:focus {
+        border: 1PX solid #D5D7D5;
+        outline: 0px solid transparent;
+    }
 
 
+    #toolbar {
+        background    : #F7F7F7;
+        border-bottom : 1px solid #D5D7D5;
+        min-height    : 40px; 
+    }
 
-.hyperlink-box {
-    display : flex;
-    border  : px solid black;
-    
-}
+    .navigation-toolbar{
+        display : flex;
+        padding : 6px;
+        border  : px solid red;
+    }
 
-.add-link {
-   border: 1px solid #D5D7D5;
-   margin: 0px 3% 0px;
-   display: block;
-   background:white; 
-   font-size: 10px;
-   font-weight: bold;
-   font-family: 'Overpass';
-   text-align: center;
-   line-height: 2;
-   color: #6A6767;
-   
+    .toolbar-button {
+        background  :  #F7F7F7 !important;
+        border      : px solid red;
+    }
 
-}
-.hyperlink-input  {
-   border  : 1PX solid #D5D7D5;
-   width   : 100%;
-   padding : 4px;
-    
+    .media-btns, .text-btns{
+        display         : flex;  
+        font-size       : 13px; 
+    }
 
-}
-.hyperlink-input:focus {
-    border: 1PX solid #D5D7D5;
-    outline: 0px solid transparent;
-}
+    .media-btns {
+        border : px solid black;
+    }
 
+    .text-btns{
+        width   : 100%;
+        border  : px solid blue;
+    }
 
-#toolbar {
-    background    : #F7F7F7;
-    border-bottom : 1px solid #D5D7D5;
-    min-height    : 40px; 
-     
-}
+    .post-title-input{
+        width     : 100%;
+        height    : 40px;
+        padding   : 10px;
+        font-size : 14px;
+        border    : 1px solid #D5D7D5;
+    }
 
-.navigation-toolbar{
-   display : flex;
-   padding : 6px;
-   border  : px solid red;
-}
+    .post-title-input:focus, .post-title-input:active {
+        border           : 1px solid #D5D7D5;
+        outline          : 0;
+        background-color : #fffef7; 
+    } 
 
-.toolbar-button {
-    background  :  #F7F7F7 !important;
-    border      : px solid red;
-}
+    .post-title-form-box, .question-form-box{
+        border: px solid black;
+    }
 
-.media-btns, .text-btns{
-    display         : flex;  
-    font-size       : 13px; 
-}
+    .textarea-form-field {
+        padding       : 4 10px;
+        font-weight   : bold;
+        font-size     : 14px;
+        border-bottom : 0.5px solid #D5D7D5;
+    }
 
-.media-btns {
-   border : px solid black;
-}
+    .textarea-box {
+        border  : px solid red;
+    }
 
-.text-btns{
-  width   : 100%;
-  border  : px solid blue;
-}
+    .create-question-form {
+        width       : 100%;
+        border      : none !important;
+        font-weight : bold;
+        font-size   : 14px;
+    }
 
-.post-title-input{
-   width: 100%;
-   height: 40px;
-   padding: 10px;
-   font-size: 14px;
-   border  :  1px solid #D5D7D5;
-}
-
-.post-title-input:focus, .post-title-input:active {
-  border           : 1px solid #D5D7D5;
-  outline          : 0;
-  background-color : #fffef7; 
-} 
-
-.post-title-form-box, .question-form-box{
-   border: px solid black;
-}
-
-.textarea-form-field {
-    padding       : 4 10px;
-    font-weight   : bold;
-    font-size     : 14px;
-    border-bottom : 0.5px solid #D5D7D5;
-}
-
-.textarea-box {
-    border  : px solid red;
-}
-
-.create-question-form {
-  width       : 100%;
-  border      : none !important;
-  font-weight : bold;
-  font-size   : 14px;
-  
-
-}
-
-textarea:active, textarea:focus{
-  outline        : 0;
-  box-shadow     : none;
-  border-bottom  : 1px solid #D5D7D5;
-
-
-}
+    textarea:active, textarea:focus{
+        outline        : 0;
+        box-shadow     : none;
+        border-bottom  : 1px solid #D5D7D5;
+    }
 }
 
 

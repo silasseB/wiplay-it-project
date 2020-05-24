@@ -351,7 +351,7 @@ export function MainAppHoc(Component) {
                         this.clearStore()
                         history.push('/user/registration');
 
-                    }, 1000)
+                    }, 500)
                 }
             }
             
@@ -439,17 +439,6 @@ export function MainAppHoc(Component) {
         };
 
         editfollowersOrUpVoters = (params) =>{
-            //console.log(params)
-            let {currentUser} = params || this.state;
-            if (!currentUser.is_confirmed) {
-                let {obj}  = params && params;
-                let name   = obj && obj.upvotes && 'upvote' || obj && 'follow';
-                let error  = `Sorry, you must confirm your account to ${name} ` ;
-                store.dispatch(action.handleError(error));
-               return;   
-
-            }
-
             params = this._getFormData(params);
             this.props.submit(params); 
         };

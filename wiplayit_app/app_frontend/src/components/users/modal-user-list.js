@@ -7,8 +7,8 @@ import {store } from "store/index";
 import { MobileModalNavBar, DesktopModalNavBar } from  "templates/editor/editor-templates";
 import { PageErrorComponent } from "templates/partial-components";
 import Helper from 'utils/helpers';
-
-
+import {handleModalScroll} from 'components/modal/helpers';
+import {history} from "App";
 import Api from 'utils/api';
 
 const helper   = new Helper();
@@ -29,7 +29,7 @@ class UserListBox extends Component {
             modalTitle        : "Authors",
             isReloading       : false,
             users             : undefined,
-            userListBoxStyles : undefined
+            onScroolStyles    : undefined,
         }
     };
 
@@ -39,6 +39,7 @@ class UserListBox extends Component {
     };
 
     onUserListUpdate = () =>{
+        if (!this.isMounted) return;
  
         const onStoreChange = () => {
             let storeUpdate   = store.getState();
@@ -51,7 +52,7 @@ class UserListBox extends Component {
             let error    = userList && userList.error; 
             let isReloading = userList && userList.isLoading;
 
-            this.setState({users, isReloading, error})
+            this.isMounted && this.setState({users, isReloading, error})
         };
 
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -89,28 +90,46 @@ class UserListBox extends Component {
     }
 
     handleScroll=(event)=>{
-        let isDesktopScreenSize = window.matchMedia("(min-width: 900px)").matches;
-
+        if (!this.isMounted) return;
+        
+        let isDesktopScreenSize = window.matchMedia("(min-width: 980px)").matches;
+        let overlay      = document.getElementById('modal-overlay');
         if (isDesktopScreenSize) {
-            let modalContent   = document.getElementById('modal-content')
-            let modalContentsRect = modalContent && modalContent.getBoundingClientRect();
+            overlay = overlay.clientHeight - 150;
+            this._SetScrooll(overlay);
 
-            if (modalContent && modalContentsRect) {
-                let modalOverlay              = document.getElementById('modal-overlay');
+        }else{
+            let isAtBottom       = handleModalScroll();
+            console.log(isAtBottom, overlay.clientHeight)
 
-                let modalContentClientHeight  = parseInt(modalContent.clientHeight) + parseInt(modalContentsRect.top);
-                console.log(modalContentClientHeight, modalOverlay.clientHeight)
-
-                if (modalContentClientHeight >= modalOverlay.clientHeight - 30) {
-                    let userListBox       = document.getElementById('user-list-box')
-                    let usersListBoxStyles = editorsBox && {height:userListBox.clientHeight };
-
-                    !this.state.userListBoxStyles &&  this.setState({userListBoxStyles})
-                }
-            
+            if (isAtBottom) {
+                overlay = overlay.clientHeight - 40;
+                this._SetScrooll(overlay);
             }
+
+        }
+    };
+
+    _SetScrooll=(overlay)=>{
+        let {onScroolStyles, users} = this.state;
+        if (!onScroolStyles) {
+            onScroolStyles =  {
+                        height : overlay,
+                        overflowY:'scroll'
+                    };
+            this.setState({onScroolStyles});
         }
 
+    }
+
+    redirectToUserProfile(params){
+        let path = params && params.path;
+        let state = params && params.state;
+
+        if (path) {
+            window.history.back()
+            setTimeout(()=>  history.push(path, state), 500)
+        }
     };
 
     reLoader =()=>{
@@ -125,38 +144,48 @@ class UserListBox extends Component {
             ...this.props,
             ...this.state,
             reLoader : this.reLoader.bind(this),
+            redirectToUserProfile: this.redirectToUserProfile.bind(this),
             editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
         }
     };
 
 
     render() {
-        var props = this.getProps()
-        //console.log(props)
-        var usersById = props.usersById;
-        let users = props.users && props.users[usersById];
-        console.log(users)
-   
+        if (!this.isMounted) return null;
+        let props = this.getProps()
+        let {usersById,
+             onScroolStyles,
+             users} = props;
+
+        users = users && users[usersById];
+        onScroolStyles = onScroolStyles || {};
+         
         return (
-            <div>
-                <div onScroll={this.handleScroll()} className="users-modal-container">
-                    <UserListModalNavBar {...props}/>
-                    { users &&
-                        <div>
-                            { users.isLoading &&
-                                <div className="page-spin-loader-box">
-                                    <AjaxLoader/>
-                                </div>
-                            }
-
-                            { users.error &&
-                                <PageErrorComponent {...props}/>
-                            }
-
-                            <UserList {...props}/>
-                        </div>
-                    }
-                </div>
+            <div 
+                id="users-modal-container"
+                className="users-modal-container">
+                <UserListModalNavBar {...props}/>
+                { users &&
+                    <div>
+                        { users.isLoading &&
+                            <div className="page-spin-loader-box">
+                                <AjaxLoader/>
+                            </div>
+                        }
+                        { users.error &&
+                            <PageErrorComponent {...props}/>
+                        }
+                        { users.userList &&
+                            <div onScroll={this.handleScroll()}
+                                style={onScroolStyles} 
+                                className="user-list-container"
+                                id="user-list-container"
+                                >
+                                <UserList {...props}/>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
         );
    };
@@ -201,8 +230,6 @@ const UserListModalNavBar = (props)=> {
     }
 
     modalTitle  =  getModalTitle() || modalTitle || null;
-    console.log(props,modalTitle)
-
     let navBarProps = {...props, modalTitle};
 
     if (window.matchMedia("(min-width: 900px)").matches) {

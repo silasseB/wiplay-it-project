@@ -392,15 +392,13 @@ export const UserList = props => {
     let userList = users && users.userList || [];
 
     return (
-        <div>
+        <div className="">
             { userList && userList.map(( user, index )  => {
                 let userProps = {user  : user, objIndex:index};
                 Object.assign(userProps, props);
 
                 return(
-                    <div style={props.userListBoxStyles}
-                         key={index}
-                         className="user-list-container" id="user-list-container">
+                    <div key={index}>
                         <UsersComponent{...userProps}/>
                     </div>
                 )
@@ -589,7 +587,7 @@ export const UsersComponent = props => {
       
     let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
 
-   
+   let {redirectToUserProfile} = props;
     
 
     return (
@@ -598,7 +596,7 @@ export const UsersComponent = props => {
             <div className="user-list-contents">
                 <div className="user-list-img-box">
                     <div className="user-list-img">
-                        <div  onClick={() => props.push({path:pathToProfile,state})}>  
+                        <div  onClick={() => redirectToUserProfile({path:pathToProfile,state})}>  
                             { user && profile_picture? 
                                 <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
                                 :
@@ -613,7 +611,7 @@ export const UsersComponent = props => {
 
                 <div className="user-list-credentials-box">
                     <ul className="user-list-credentials-contents">
-                        <li onClick={() => props.push({path:pathToProfile,state})}
+                        <li onClick={() => redirectToUserProfile({path:pathToProfile,state})}
                            className="user-list-name">
                             { user.first_name }   {user.last_name }
                         </li>
