@@ -174,7 +174,7 @@ const Questions = props => {
                     </ul>
 
                     <div className="question-list-create-box">
-                        <OpenEditorBtn {...createPostProps}/>
+                        <OpenEditorBtn {...createQuestionProps}/>
                     </div>
                 </div>
             }
