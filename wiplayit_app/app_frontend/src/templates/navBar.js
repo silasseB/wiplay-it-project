@@ -353,7 +353,8 @@ export const NavBarBigScreen = props => {
             <div className="navigation-box">
                 <div className="navigation-menu">
                     <div id="logo-img-contents">
-                        <div className="logo-img-box" onClick={()=> props.reloadPage()}>
+                        <div className="logo-img-box" 
+                             onClick={() => RedirectMenuLinks({pathname:'/'})}>
                             <img alt="" 
                                  src={require("media/logo.png")}
                                  className="logo-img"/>
