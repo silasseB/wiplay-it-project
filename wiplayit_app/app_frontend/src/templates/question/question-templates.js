@@ -114,11 +114,6 @@ export const QuestionComponent = props => {
 
    Object.assign(btnsProps, props)
 
-
-   let questionFollowers = <Link to={{ pathname : pathToFollowers,state }}>
-                             { question.followers} Followers
-                           </Link>;
-   
    let unfollowOrFollowQuestionBtn =  question.user_is_following? 
                                          <UnfollowQuestionBtn {...btnsProps} />
                                        :
