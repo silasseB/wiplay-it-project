@@ -12,9 +12,7 @@ class PasswordResetForm extends Component{
 
       this.state = {
          formTitle          : 'Password Reset',
-         navbarTitle        : 'Password Reset',
-         formDescription    : `Forgotten your password? Enter your e-mail address below,
-                                   and we'll send you an e-mail allowing you to reset it`,
+         
                          
       };
             

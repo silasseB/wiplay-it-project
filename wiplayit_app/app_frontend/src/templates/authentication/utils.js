@@ -73,13 +73,10 @@ export const  NavBarSmall   = props => {
 };
 
 
-
-
 export const  SpinLoader  = props => {
-  
     return (
         <div className="registration-spin-loader-box">
-            { props.submitting?
+            {props.submitting?
                <AjaxLoader/> 
                :
                "" 
@@ -90,7 +87,6 @@ export const  SpinLoader  = props => {
 
 
 const  ConfirmationResendBtn  = props => {
-
     let toggleProps = { value : true, formName : 'emailResendForm' };
     return(
         <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)} 
@@ -121,7 +117,7 @@ const  CancelConfirmationBtn  = props => {
     );
 };
 
-const  PasswordChangeButton  = props => {
+export const  PasswordChangeButton  = props => {
 
     let toggleProps = { value : true, formName : 'passwordResetForm' };
     return(
@@ -133,7 +129,7 @@ const  PasswordChangeButton  = props => {
 };
 
 const  PasswordChangeLink  = props => (
-        <Link className="password-change-link" to="/user/account/password/reset/"> 
+        <Link className="password-change-link" to="/password/reset/"> 
             Forgot Password ?
         </Link>
 );
@@ -151,7 +147,7 @@ const  CancelBtn  = props => {
     )
 };
 
-const  CancelEmailFormBtn  = props => {
+export const  CancelEmailFormBtn  = props => {
     let toggleProps = {value:false, formName:props.formName};
     console.log(toggleProps)
 
@@ -209,7 +205,7 @@ export const NavBarSmallScreen = MatchMediaHOC(NavBarSmall, '(max-width : 980px)
 
 export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 980px)');
 
-
+export const CancelEmailFormSmall = MatchMediaHOC(CancelEmailFormBtn, '(max-width : 980px)');
 export const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 980px)');
 export const CancelEmailForm = MatchMediaHOC(CancelEmailFormBtn , '(min-width: 980px)');
 

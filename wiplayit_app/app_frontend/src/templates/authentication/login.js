@@ -61,8 +61,8 @@ export const  LoginForm = props => {
                                 <div className="login-fields auth-input-field">
                                     <input
                                         className="login-email-field"
-                                        placeholder="Email Address"
-                                        type="email"
+                                        placeholder="Email or Phone Number"
+                                        type="text"
                                         name="email"
                                         value={form.email}
                                         onChange={props.handleFormChange} 

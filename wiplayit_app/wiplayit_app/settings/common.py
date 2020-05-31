@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import datetime
 
+#+27781806487
+#7245
+
+#+27781906856
+#8035
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -110,6 +115,8 @@ REST_AUTH_SERIALIZERS = {
    'USER_DETAILS_SERIALIZER'   : 'auth_backend.serializers.BaseUserSerializer',
    'TOKEN_SERIALIZER'          : 'auth_backend.serializers.TokenSerializer',
    'PASSWORD_RESET_SERIALIZER' : 'auth_backend.serializers.CustomPasswordResetSerializer',
+   'PASSWORD_RESET_CONFIRM_SERIALIZER': 'auth_backend.serializers.CustomPasswordResetConfirmSerializer',
+
 }
 
 
@@ -123,8 +130,8 @@ REST_SESSION_LOGIN = True
 JWT_AUTH = { 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
     'JWT_ALLOW_REFRESH'     : True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
 
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'auth_backend.views.jwt_response_payload_handler',
     
@@ -149,6 +156,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'webpack_loader',
+    'twilio',
     'guardian',
     'mptt',
     'allauth',
@@ -277,4 +285,8 @@ WEBPACK_LOADER = {
             
         }
 }
+
+TWILIO_ACCOUNT_SID = 'AC7ef780034af8db8aa10a7f13e03db4df' #'AC842714aac43137afd9df1fcbda09f004'       'AC097d537bc2f471c4522622b6809d9b22'
+TWILIO_AUTH_TOKEN =   'ab5cac9d50a69005858b4bbc63949a8a' #'140f11dd7fb5e548132d41ac773803ab'       #'2c80865e1ccdd1f694f1aacb5e299b9f'
+TWILIO_PHONE_NUMBER =  '+12566009898'
 

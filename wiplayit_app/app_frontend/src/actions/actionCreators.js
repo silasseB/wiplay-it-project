@@ -657,8 +657,6 @@ export const authenticationPending = (isSocialAuth=false) => ({
     type   : types.USER_AUTHENTICATION.PENDING,
     payLoad : {
         isLoading : true,
-        error     : undefined,  
-        ...{auth  : undefined, successMessage:undefined},
         isSocialAuth,    
     }
 });

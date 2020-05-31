@@ -1,0 +1,173 @@
+import random
+import copy
+import phonenumbers
+from phonenumbers import geocoder
+from django.conf import settings
+from django.core.cache import cache
+from twilio.rest import Client
+from django.core.validators import validate_email , RegexValidator
+from django.core.exceptions import ValidationError
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.http import  HttpResponse, JsonResponse
+from django.urls import reverse_lazy, reverse
+from django.views.decorators.csrf import csrf_exempt, csrf_protect 
+from rest_framework import serializers, exceptions
+
+
+
+def phone_number_exists(phone_number, exclude_user=None):
+    from .models import  PhoneNumber
+
+    ret = PhoneNumber.objects.filter(primary_number__iexact=phone_number).exists()
+
+    if not ret:
+        ret = PhoneNumber.objects.filter(national_format__iexact=phone_number).exists()
+    if not ret:
+        ret = PhoneNumber.objects.filter(inter_format__iexact=phone_number).exists()
+       
+    if not ret:
+        ret = PhoneNumber.objects.filter(user__email__iexact=phone_number).exists()
+
+    return ret
+
+
+def get_verified_number(unique_key):
+    from .models import  PhoneNumber
+    phone_number = PhoneNumber.objects.filter(primary_number=unique_key)
+
+    if not  phone_number:
+        user = PhoneNumber.objects.filter(national_format=unique_key)
+
+    if not phone_number:
+        phone_number =  PhoneNumber.objects.filter(user__email=unique_key)
+    if not phone_number:
+        phone_number = PhoneNumber.objects.filter(inter_format=unique_key)
+
+    if phone_number:
+        phone_number = phone_number[0]
+        if  not phone_number.verified:
+            return None
+        return phone_number 
+    return None
+
+def email_is_verified(unique_key):
+    from allauth.account.models import EmailAddress
+    from .models import User
+    email_address = EmailAddress.objects.filter(email__iexact=unique_key)
+    users = User.objects.filter(email__iexact=unique_key)
+    print(email_address, users)
+
+    verified = False
+    for email in email_address:
+        if email.verified:
+            verified = True
+
+    for user in users:
+        if user.is_confirmed:
+            verified = True
+
+    return verified
+
+
+def username_exist(email_or_phone_num):
+    is_taken = User.objects.filter(email__iexact=email_or_phone_num).exists()
+    return is_taken
+
+
+def _get_pin(length=4):
+    pin = random.sample(range(10**(length-1),10**length), 1)[0]
+    return pin
+
+
+
+
+def _verify_pin(pin):
+    """Verify a pin is correct"""
+    print(pin, cache.get('pin'))
+    return pin == cache.get('pin')
+    
+
+@csrf_exempt
+def send_pin(phone_number, message_body=None):
+    twiml = '<Response><Message>Hello!</Message></Response>'
+
+    if not phone_number:
+        return HttpResponse(twiml, content_type='text/xml')
+    
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    message = client.messages.create(body=message_body,
+            to = phone_number,
+            from_ = settings.TWILIO_PHONE_NUMBER, 
+            )
+    print(message)  
+    HttpResponse("Message %s sent" % message.sid, content_type='text/xml', status=403)
+
+
+def primary_number(country, phone_number):
+    phone_number = parse_phone_number(country, phone_number)
+    if is_valid_number(phone_number):
+        pass
+
+def is_using_phone_number(username):
+    validator = get_username_validator(is_phone_number=True)
+    #phonenumbers.is_valid_number(z)
+    return validate_username(validator, username)
+
+def is_using_email_address(username):
+    validator = get_username_validator(is_email_address=True)
+    return validate_username(validator, username)
+
+def validate_username(validator, username):
+    try:
+        validator(username)
+        return True
+    except  ValidationError as e:
+        error =   e
+        return False
+
+def get_username_validator(is_phone_number=False, is_email_address=False):
+    if is_phone_number:
+        return RegexValidator(regex=r'^\+?[\d\s]+$')
+    else:
+        if is_email_address:
+            return validate_email
+    return None
+
+def parse_phone_number(country, phone_number):
+    try:
+        phone_number = phonenumbers.parse(phone_number, country)
+        return phone_number
+    except Exception as e:
+        return None
+
+def is_valid_number(country, phone_number):
+    phone_number = parse_phone_number(country, phone_number)
+    return phonenumbers.is_valid_number(phone_number)
+
+def get_intern_number_format(country, phone_number):
+    phone_number = parse_phone_number(country, phone_number)
+    if phone_number:
+        return phonenumbers.format_number(
+                                phone_number, 
+                                phonenumbers.PhoneNumberFormat.E164
+                            )
+    return None
+
+
+def get_national_number_format(country, phone_number):
+    phone_number = parse_phone_number(country, phone_number)                             
+    return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.NATIONAL)
+
+
+def get_inter_number_format(country, phone_number):
+    phone_number = parse_phone_number(country, phone_number)                             
+    return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+
+def get_phone_number_region(country, phone_number):
+    phone_number = parse_phone_number(country, phone_number)
+    country = geocoder.description_for_number(phone_number, "en")
+    return country
+
+

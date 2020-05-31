@@ -9,7 +9,7 @@ import { UnconfirmedUserWarning,
          PageErrorComponent, } from "templates/partial-components";
 
 import {getAdmin}  from "dispatch/index"
-
+import{history} from 'App';
 import  AjaxLoader from "templates/ajax-loader";
 import GetTimeStamp from 'utils/timeStamp';
 

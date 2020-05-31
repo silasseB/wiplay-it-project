@@ -11,7 +11,8 @@ class FeedBackContainer extends Component{
         this.state = { 
             form     : {feedback : "" },
             pageName : "Feedback", 
-        };       
+        }; 
+        this.handleChange = this.onChange.bind(this);      
     }
 
     onChange(event) {
@@ -29,7 +30,7 @@ class FeedBackContainer extends Component{
    textAreaProps() {
         return {
            value       : this.state.form.feedback,
-           onChange    : this.onChange,
+           onChange    : this.handleChange,
            name        : "feedback",
            className   : "feedback-textarea-field",
            placeholder : 'Your Feedback',
@@ -45,7 +46,7 @@ class FeedBackContainer extends Component{
     render(){
         let textAreaProps = this.textAreaProps;
         let props  = {...this.props, ...this.state}
-        let {form, handleChange} = props;
+        let {form} = props;
 
         return(
             <div className="feedback-form-page">
@@ -66,7 +67,7 @@ class FeedBackContainer extends Component{
                                     className=""
                                     name="full_name"
                                     value={form && form.full_name || ''}
-                                    onChange={handleChange}
+                                    onChange={this.handleChange}
                                 />
                             </div>
                         </div>
@@ -84,7 +85,7 @@ class FeedBackContainer extends Component{
                                     className=""
                                     name="email"
                                     value={form && form.email || ''}
-                                    onChange={handleChange}
+                                    onChange={this.handleChange}
                                 />
                             </div>
                         </div>
@@ -102,7 +103,7 @@ class FeedBackContainer extends Component{
                                     className=""
                                     name="subject"
                                     value={form && form.subject || ''}
-                                    onChange={handleChange}
+                                    onChange={this.handleChange}
                                 />
                             </div>
                         </div>
@@ -118,7 +119,7 @@ class FeedBackContainer extends Component{
                         </div>
             
                         <button
-                            onClick={() => this._handleSubmit}
+                            onClick={() => this._handleSubmit()}
                             className="btn-sm add-link">
                             Submit
                         </button>

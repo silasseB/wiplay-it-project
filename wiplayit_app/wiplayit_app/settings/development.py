@@ -25,7 +25,7 @@ import smtplib
 #1990
 
 DEBUG = True
-SITE_ID = 2
+SITE_ID = 3
 
 
 EMAIL_USE_TLS = True

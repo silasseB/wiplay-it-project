@@ -35,9 +35,9 @@ export default class Axios {
             let {userAuth} = this.cacheEntities;
 
             if (userAuth) {
-                let {auth} = userAuth;
+                let {loginAuth} = userAuth;
 
-                if (auth && auth.tokenKey) {
+                if (loginAuth && loginAuth.tokenKey) {
                    return userAuth
                 }
             }
@@ -48,8 +48,8 @@ export default class Axios {
     refreshToken(){
         let userAuth = this._getAuth();
         let expireTime = userAuth && this.tokenTimeStampe(userAuth.timeStamp)
-        
-        if (expireTime && expireTime.menutes() >= 50) {
+                
+        if (expireTime && expireTime.menutes() >= 3) {
             let token = this.getToken(userAuth)
           
             let apiUrl   =  api.refreshTokenApi();
@@ -59,8 +59,8 @@ export default class Axios {
     }
 
     getToken(userAuth){
-        let auth = userAuth && userAuth.auth;
-        return auth && auth.tokenKey; 
+        let loginAuth = userAuth && userAuth.loginAuth;
+        return loginAuth && loginAuth.tokenKey; 
     }
 
     createInstance=()=>{
@@ -78,7 +78,6 @@ export default class Axios {
         const instance = this.createInstance()
      	
         if (this.useToken) {
-            
             instance.interceptors.request.use((config)=> {
                 // Do something before request is sent
                 //console.log('intercepting request')
@@ -93,7 +92,7 @@ export default class Axios {
 
             let userAuth = this._getAuth();  
             let tokenKey = this.getToken(userAuth)
-                       
+                               
             tokenKey =`JWT ${tokenKey}`;
             instance.defaults.headers.common['Authorization'] = tokenKey;
         }

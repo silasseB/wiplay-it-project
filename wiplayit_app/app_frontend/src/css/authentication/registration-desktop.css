@@ -119,16 +119,12 @@
 
 }
 
-
 .name-fields {
   display: flex;
   width: 100%;
   border: px solid red;
  
 }
-
-
-
 
 .registration-flex-box {
    display: flex; 
@@ -153,8 +149,8 @@
 .form-errors {
     color     : red;
     border    : px solid blue;
-   font-size : 14px;
-   margin    : 0 5%; 
+    font-size : 14px;
+     
  }
 
 
@@ -187,7 +183,6 @@
 
 .email-form-description,.password-form-description {
   font-size: 14px;
-  list-style-type: none;
   margin: 14px 0;
 }
 
@@ -236,6 +231,19 @@
     text-align: right;
 }
 
+.country-select-box {
+  border : px solid black; 
+  margin : 14px 10px 6px;
+
+}
+ 
+.submit-btn-box,   
+.resend-email-box,
+.country-select-btn {
+  border : px solid red; 
+
+}
+
 .separator {
   border: 1px solid #D2D2D2;
   background: #D2D2D2;
@@ -265,21 +273,21 @@
     margin: 0 0 20px; 
 } 
 
+.cancel-email-form-btn-box,
 .resend-confirmation-btn {
-   
+    border : 1px solid black;
 }
 
 .form-cancel-btn {
-     background-color: #edf0f3;
-     color:#5384e5;
-     font-size: 12px;
+    background-color: #edf0f3;
+    color:#5384e5;
+    font-size: 12px;
 }
 
 .create-account-box  {
-     border: px solid black;
-     width: 100%;
-     padding: 0px 0px 3px; 
-      
+    border: px solid black;
+    width: 100%;
+    padding: 0px 0px 3px; 
 }
 
 .signup-container-contents {

@@ -1,13 +1,12 @@
-
-from allauth.account.adapter import DefaultAccountAdapter
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth.utils import build_absolute_uri
-from django.conf import settings
-from allauth.account.adapter import get_adapter as get_account_adapter
 import requests
 import tempfile
 import hashlib
 from django.core import files
+from django.conf import settings
+from allauth.utils import build_absolute_uri
+from allauth.account.adapter import DefaultAccountAdapter
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.account.adapter import get_adapter as get_account_adapter
 from allauth.account.models import EmailAddress
 
 

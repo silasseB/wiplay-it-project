@@ -277,17 +277,11 @@ export default class Api{
         return url ;
          
     }
-
-    passwordChangeApi() {
-        var url = `/rest-auth/password/change/`;
-        return url ;
-         
-    }
-
+    
     passwordResetConfirmApi() {
         var url = `/rest-auth/password/reset/confirm/`;
         return url ;
-         
+  
     }
 
     accountConfirmApi(key) {
@@ -296,8 +290,23 @@ export default class Api{
          
     }
 
+    accountConfirmPhoneNumberApi(){
+        return `rest-auth/account-confirm-phone-number/`
+    }
+
     confirmationEmailResendApi(){
         return `/rest-auth/resend/account/confirm/email/`;
+    }
+
+    passwordResetSmsConfirmApi(){
+        return `rest-auth/password-change-confirm-sms-code/`
+
+    }
+
+    passwordChangeApi() {
+        var url = `/rest-auth/password/change/`;
+        return url ;
+         
     }
 
     facebookLoginApi() {

@@ -79,7 +79,7 @@ const RegistrationBig = props => {
             <div className="registration-flex-box ">
                 { onPasswordResetForm?
                     <div className="password-reset-container">
-                        <EmailForm{...props}/> 
+                        <EmailForm {...props}/> 
                     </div>
                     :
                     <div className="login-container" >

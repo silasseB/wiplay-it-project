@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EmailForm   from 'templates/authentication/email-form'; 
+import EmailForm ,{EmailPasswordResetSuccess}  from 'templates/authentication/email-form'; 
 import AuthenticationHoc  from 'components/authentication/index-hoc';  
 import {NavBar} from 'templates/authentication/utils'
 
@@ -11,30 +11,27 @@ class PasswordResetPage extends Component{
         super(props);
 
         this.state = {
-            navbarTitle    : 'Password Reset',
-            formDescription    : `Forgotten your password? Enter your e-mail address below,
-                                   and we'll send you an e-mail allowing you to reset it`,
-                             
+            navbarTitle     : 'Password Reset',
+            formDescription : `Enter your e-mail address or phone number to change password.`,
         };
-    
-   };
+    };
 
     componentDidMount() {
        console.log(this.props)
        this.props.formConstructor('passwordResetForm');
     }
-
-
-      
-    getProps(){
-          
-        return Object.assign(this.state, this.props );
-    }
- 
-
+   
     render(){
-      
-        let props = this.getProps();
+        let props = {...this.props, ...this.state};
+        let {formName, cacheEntities, passwordRestAuth} = props;
+        let {userAuth} = cacheEntities;
+
+        if (!passwordRestAuth) {
+            passwordRestAuth =  userAuth.passwordRestAuth;
+        }
+
+        let {identifier} = passwordRestAuth || {};
+        console.log(props)
 
         return (
             <div className="registration-container">

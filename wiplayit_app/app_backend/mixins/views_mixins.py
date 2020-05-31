@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from guardian.shortcuts import assign_perm, remove_perm
 from app_backend.slug_generator import generate_unique_slug
 from app_backend.helpers import  get_objects_perms, has_perm
-
-
+import phonenumbers
+from auth_backend.utils import send_pin
 	
 
 
@@ -179,8 +179,29 @@ class UpdateObjectMixin(BaseMixin):
 			
 		data['upvotes']  = instance.upvotes
 		return data 
+
+	def update_phone_number_field(self, instance):
+		print(self.request.data)
+		phone_number = self.request.data.get('phone_number')
+		country = self.request.data.get('country')
+		self.format_phone_number(phone_number, country)
 		
-		
+	def format_phone_number(self, username, country):
+		national_format  = phonenumbers.parse(username, country)
+		#print(national_format)
+
+		int_format = phonenumbers.format_number(
+									national_format,
+									phonenumbers.PhoneNumberFormat.INTERNATIONAL
+								)
+		#print(int_format)
+		national_format_number = phonenumbers.format_number(
+									national_format, 
+									phonenumbers.PhoneNumberFormat.E164
+							)
+		print(national_format_number)	
+
+		send_pin(self.request, national_format_number)	
 		
 	def update_user_fields(self, instance=None):
 		profile     = dict()
@@ -201,11 +222,15 @@ class UpdateObjectMixin(BaseMixin):
 
 		for field in profile_fields:
 			request_field = self.request.data.get(field, False)
-			#print(request_field)
-			
+					
 			if request_field:
+				#print(request_field)
 				profile[field]  = request_field
 
+			if field == 'phone_number':
+				print()
+				self.update_phone_number_field(instance)
+				
 
 		data['profile']  = profile
 		return data
@@ -219,7 +244,7 @@ class UpdateObjectMixin(BaseMixin):
 	 		
 	 	elif  request.data.get("upvotes", False):
 	 		kwargs['data'] = self.update_upvotes_fields(instance)
-	 		
+	 		 		
 	 	else:
 	 		kwargs['data'] = self.update_text_field(instance)
 
@@ -227,7 +252,7 @@ class UpdateObjectMixin(BaseMixin):
 	 	
 	 	
 	def update(self, request, *args, **kwargs):
-		data = kwargs.pop("data", False)
+		data = kwargs.pop("data", None)
 		instance = self.get_object()
 
 		serializer = self.get_serializer(
@@ -238,7 +263,7 @@ class UpdateObjectMixin(BaseMixin):
 
 		if serializer.is_valid():
 			self.perform_update(serializer)
-			
+
 		else:
 			print(serializer.errors)
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
@@ -247,6 +272,7 @@ class UpdateObjectMixin(BaseMixin):
 			# If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
 			instance._prefetched_objects_cache = {}
+
             
 		return Response(serializer.data, status=status.HTTP_200_OK)    
         

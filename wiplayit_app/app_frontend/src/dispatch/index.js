@@ -577,43 +577,33 @@ export function authenticate(params={}){
         return dispatch =>{ dispatch(action.handleError()) };
     }
 
-    let {apiUrl, form, useToken, isSocialAuth} = params;
-           
-    
+    let {
+        apiUrl,
+        form,
+        useToken,
+        formName,
+        isSocialAuth} = params;
+      
     return dispatch => {
         dispatch(action.authenticationPending(isSocialAuth));
 
         Api.post(apiUrl, form)
             .then(response => {
                 console.log(response)
+                let {data}  = response;
 
-                let { data }  = response
-                let auth      = {};
-                let response_data = {};
-                
-                let isLoggedIn = data.key && true || data.token && true || false;
-                let tokenKey   = data.token || data.key  || null;
+                if(formName === 'signUpForm') handleLogin(data, dispatch);
+                if(formName === 'loginForm') handleLogin(data, dispatch);
+                if (isSocialAuth) handleLogin(data, dispatch);
+                if (formName === 'passwordChangeForm') handlePasswordChange(data, dispatch);
+                if (formName === 'logoutForm') handleLogin(data, dispatch)
+                if (formName === 'passwordResetForm') handlePasswordReset(data, dispatch);
 
-                let successMessage = data.detail || null;
-
-                if (isLoggedIn) {
-                   auth = {isLoggedIn, tokenKey}
-                   response_data = {auth}
-
-                }else if(successMessage){
-                    response_data = {successMessage}
-                }  
-               
-                dispatch(action.authenticationSuccess(response_data, isSocialAuth));
-
-                let user = data.user;
-                if (user) {
-                    console.log(user)
-
-                    let isSuperUser = user.is_superuser;
-                    isSuperUser  && dispatch(action.getAdminSuccess(response_data))
-                    dispatch(action.getCurrentUserSuccess(user))
+                if(formName === 'passwordResetSmsCodeForm') {
+                    handleSmsCode(data, dispatch);
                 }
+               
+                
             }
         )
         .catch(error =>{
@@ -623,7 +613,9 @@ export function authenticate(params={}){
                 console.log(error.response)  
                 if (error.response.status == 500) {
                     _error = error.response.statusText
+                    dispatch(action.authenticationError(_error, isSocialAuth));
                     return dispatch(action.handleError(_error));
+
                 }
 
                 _error = error.response.data;
@@ -648,6 +640,53 @@ export function authenticate(params={}){
    
 }; 
 
+const handleLogin=(data, dispatch)=>{
+     
+    let loginAuth = {
+        isLoggedIn :true,
+        tokenKey   : data.token || data.key || null,
+        successMessage: data.detail,
+    }
+    if (data.user) {
+        let isSuperUser = data.user.is_superuser;
+        isSuperUser  && dispatch(action.getAdminSuccess({loginAuth}))
+        dispatch(action.getCurrentUserSuccess(data.user))
+    }
+    
+    dispatch(action.authenticationSuccess({loginAuth}));
+}
+
+
+const handlePasswordReset =(data, dispatch)=>{
+        
+    let passwordRestAuth = {
+        successMessage : data.detail,
+        identifier     : data.email || data.phone_number,
+    }
+
+    dispatch(action.authenticationSuccess({passwordRestAuth}));
+}
+
+
+
+const handleSmsCode = (data, dispatch) => {
+    let smsCodeAuth = {
+            smsCode : data.sms_code, 
+            smsCodeValidated : true,
+            successMessage : data.detail,
+        };
+             
+    dispatch(action.authenticationSuccess({smsCodeAuth}));
+};
+
+const handlePasswordChange = (data, dispatch) => {
+    let passwordChangeAuth = {
+        successMessage : data.detail,
+    }
+
+    dispatch(action.authenticationSuccess({passwordChangeAuth}));
+
+}
 
 export function getAdmin() {
     let useToken=true

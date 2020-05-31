@@ -9,11 +9,16 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from .managers import UserManager
 from django.db.models.signals import post_save
 from app_backend.slug_generator import generate_unique_slug
-
-#file_path = os.path.join(dest_folder, filename)
+from auth_backend.utils import (is_using_phone_number,
+                                get_phone_number_region)
 
 class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
-    email           = models.CharField(verbose_name='email address', max_length=50, unique=True )
+    email         = models.CharField(
+                        verbose_name='email or phone number', 
+                        max_length=50, 
+                        unique=True
+                        )
+
     first_name      = models.CharField('first name', max_length=15,blank=True)
     last_name       = models.CharField('last name', max_length=15,blank=True)
     date_joined     = models.DateTimeField('date joined', auto_now_add=True)
@@ -21,9 +26,8 @@ class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
     is_active       = models.BooleanField('active',default=True)
     is_staff        = models.BooleanField('staff', default=False)
     is_confirmed    = models.BooleanField('Is confirmed', default=False)
-    
-
-    
+    country         = models.CharField(max_length=50, null=True)
+        
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -64,14 +68,12 @@ class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
 
 
 def get_anonymous_user_instance(CustomUser):
-    user, _  = CustomUser.objects.get_or_create(first_name="Anonymous")
+    user, _  = User.objects.get_or_create(first_name="Anonymous")
     return user
 
 class Profile (models.Model):
     live            = models.CharField(max_length=100, blank=True)
     credential      = models.CharField(max_length=150, blank=True)
-    phone_number    = models.CharField(max_length=100, null=True)
-    country         = models.CharField(max_length=100, blank=True)
     favorite_quote  = models.TextField(max_length=200, blank=True)
     profile_picture = models.ImageField(upload_to='profiles/%y/%m/%d/', blank=True)
     followers       = models.IntegerField(default=0)
@@ -85,6 +87,10 @@ class Profile (models.Model):
     def __str__(self):
         return (self.user.email)
 
+
+    def save(self, *args, **kwargs):
+        super().save()
+
     class Meta:
         db_table = "profile"
         
@@ -94,7 +100,6 @@ class Profile (models.Model):
        
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
-    #print(instance)
 
     first_name = instance.get_short_name()
     if created and not kwargs.get('raw', False):
@@ -106,6 +111,112 @@ def create_profile(sender, instance, created, **kwargs):
             
             assign_perm("change_user", instance,  instance)
             assign_perm("delete_user", instance,  instance)
+
+
+
+
+class PhoneNumber (models.Model):
+    primary_number  = models.CharField(max_length=50, null=True)
+    national_format = models.CharField(max_length=50, null=True)
+    inter_format    = models.CharField(max_length=50, null=True)
+    verified        = models.BooleanField(default=False)
+    primary         = models.BooleanField(default=False)
+    user            = models.OneToOneField(settings.AUTH_USER_MODEL,
+                       on_delete= models.CASCADE, related_name="phone_number", blank=True)
+
+
+    def __str__(self):
+        return (self.user.email)
+    
+    def save(self, *args, **kwargs):
+        super().save()
+
+    class Meta:
+        db_table = 'user_phone_number'
+
+    def get_national_format(self, phone_number):
+        pass
+
+    def get_inter_format(self, phone_number):
+        pass
+
+    def is_verified(self, phone_number):
+        return  self.verified
+
+    def is_primary(self, phone_number):
+        pass
+        
+
+       
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_phone_number(sender, instance, created, **kwargs):
+
+    if created and not kwargs.get('raw', False):
+        phone_number = PhoneNumber(user=instance)
+        phone_number.save()
+
+
+
+class Country (models.Model):
+    long_name  = models.CharField(max_length=50, null=True)
+    short_name = models.CharField(max_length=5, null=True) 
+    user          = models.OneToOneField(settings.AUTH_USER_MODEL,
+                       on_delete= models.CASCADE, related_name="user_country", blank=True)
+
+    def __str__(self):
+        return (self.user.email)
+    
+    def save(self, *args, **kwargs):
+        super().save()
+
+    class Meta:
+        db_table = 'user_country'
+
+            
+
+       
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_country(sender, instance, created, **kwargs):
+
+    if created and not kwargs.get('raw', False):
+        country = Country(user=instance)
+        country.save()
+
+
+
+class PhoneNumberSmsCode(models.Model):
+    verify_sms_code   = models.CharField(max_length=5, null=True)
+    password_sms_code = models.CharField(max_length=5, null=True)
+    user              = models.OneToOneField(settings.AUTH_USER_MODEL,
+                            on_delete= models.CASCADE, 
+                            related_name="sms_code",
+                            blank=True)
+
+    def __str__(self):
+        return (self.user.email)
+    
+    def save(self, *args, **kwargs):
+        super().save()
+
+    class Meta:
+        db_table = 'sms_code'
+
+    def confirm_password_change(self, request):
+        pass
+
+    def confirm_verification_change(self, request):
+        pass
+        
+
+       
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_phone_number_sms__code(sender, instance, created, **kwargs):
+
+    if created and not kwargs.get('raw', False):
+        if is_using_phone_number(instance.email):
+            print('Creating phone number sms code')
+            phone_number_sms_code = PhoneNumberSmsCode(user=instance)
+            phone_number_sms_code.save()
 
 
 

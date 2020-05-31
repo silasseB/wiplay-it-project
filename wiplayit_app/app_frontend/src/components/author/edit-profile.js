@@ -29,15 +29,12 @@ const helper   = new Helper();
 class EditProfileRouter extends Component{
 
     constructor(props) {
-       super(props);
-
+        super(props);
         this.state = {
         }
     }; 
 
-
     render() {
-               
         return (
             <div>
                 <EditProfile {...this.props}/>
@@ -56,16 +53,17 @@ export class EditProfile extends Component{
        super(props);
     
         this.state = {
-            userProfile  :  undefined,
-            submitting   : false,
-            currentUser  : undefined, 
-            displayMessage: false,
+            userProfile    :  undefined,
+            submitting     : false,
+            currentUser    : undefined, 
+            displayMessage : false,
 
             form         : {
                first_name       : "",
                last_name        : "",
                credential       : "",
                live             : "",
+               country          : '',
                favorite_quote   : "",
                phone_number     : "",
                profile_picture  : "", 
@@ -229,9 +227,16 @@ export class EditProfile extends Component{
             
         let {first_name, last_name} = userProfile
 
-        let { live, credential, favorite_quote } = userProfile.profile 
+        let { live, credential, favorite_quote, country, phone_number } = userProfile.profile 
       
-        form    = { first_name, last_name, live, credential, favorite_quote };
+        form = { first_name, 
+                 last_name, 
+                 live, 
+                 country,
+                 phone_number,
+                 credential,
+                 favorite_quote 
+            };
 
         this.setState({ form, userProfile });
     }
@@ -404,6 +409,24 @@ const ProfileEditComponent = props => {
                             className=""
                             name="live"
                             value={props.form.live}
+                            onChange={props.handleChange}
+                        />
+                    </div>        
+                </div>
+
+                <div className="user-locacion-box">
+                    <ul className="item-title-box">
+                        <li className="item-title">
+                            Country
+                        </li>
+                    </ul>
+                    <div className="input-box">
+                        <input
+                            type="text" 
+                            placeholder="Country"
+                            className=""
+                            name="country"
+                            value={props.form.country}
                             onChange={props.handleChange}
                         />
                     </div>        

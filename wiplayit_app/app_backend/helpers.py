@@ -84,6 +84,7 @@ def get_model_fields(for_model=None):
 		            'profile' : ['profile_picture', 
 		            			'favorite_quote',
 		            			 'live', 
+		            			 'country',
 		            			 'phone_number',
 		            			 'credential']
             },

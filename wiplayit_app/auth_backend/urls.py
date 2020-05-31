@@ -5,14 +5,17 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from .views import ( 
                    FacebookLogin, TwitterLogin, 
                    GoogleLogin ,  CustomRegisterView,
-                   CustomLoginView, CustomVerifyEmailView, 
-                   SendEmailConfirimationView )
+                   CustomLoginView, VerifyEmailView, 
+                   ComfirmSmsCodeView,
+                   SendEmailConfirimationView,VerifyPhoneNumberView,
+                   UpdatePhoneNumberView, CustomPasswordResetView)
 
 from .views import ( UserView, RetrieveUserProfileView,
                      retrieve_current_user, RetrieveUserFollowers,
                      RetrieveUserFollowings, UpdateUserProfileView ) 
 
 app_name = 'rest_auth_apis'
+
 
 urlpatterns = [
     path('api-token-refresh/', refresh_jwt_token),
@@ -22,19 +25,35 @@ urlpatterns = [
     path('rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
     path('rest-auth/registration/', CustomRegisterView.as_view()),
     path('rest-auth/login/', CustomLoginView.as_view()),
-    url(r'^rest-auth/account-confirm-email/(?P<key>[-:\w]+)/$', CustomVerifyEmailView.as_view(),
-        name='account_confirm_email'),
+    path('rest-auth/password/reset/', CustomPasswordResetView.as_view()),
 
-    path('rest-auth/resend/account/confirm/email/', SendEmailConfirimationView.as_view(),
-       name='account_confirm_email'),
+    url(r'^rest-auth/account-confirm-email/(?P<key>[-:\w]+)/$',
+        VerifyEmailView.as_view(), name='account_confirm_email'),
+    path('rest-auth/account-confirm-phone-number/',
+        VerifyPhoneNumberView.as_view(), name='account_confirm_phone_number'),
 
-    path("api/user/<int:pk>/followers/", RetrieveUserFollowers.as_view({'get': 'list'})),
-    path("api/user/<int:pk>/followings/", RetrieveUserFollowings.as_view({'get': 'list'})),  
+    path('rest-auth/password-change-confirm-sms-code/',
+        ComfirmSmsCodeView.as_view(), name='password_hange_confirm_code'),
+
+    path('rest-auth/resend/account/confirm/email/',
+         SendEmailConfirimationView.as_view(),     name='account_confirm_email'),
+
+    path("api/user/<int:pk>/followers/", 
+        RetrieveUserFollowers.as_view({'get': 'list'})),
+    path("api/user/<int:pk>/followings/",
+         RetrieveUserFollowings.as_view({'get': 'list'})),  
 
     path("api/current/user/", retrieve_current_user, name="api-current-user"),
-    path('api/profile/<int:pk>/', RetrieveUserProfileView.as_view({'get':'retrieve'}), name='profile'),
-    path('api/user/list/', UserView.as_view({'get': 'list'}), name="get-user-list"),   
-    path('api/profile/<int:pk>/edit/', UpdateUserProfileView.as_view({'get':'retrieve','put':'put' }), 
-                                                                             name='update-user-profile'), 
+    path('api/profile/<int:pk>/',
+         RetrieveUserProfileView.as_view({'get':'retrieve'}), name='profile'),
+    path('api/user/list/',
+         UserView.as_view({'get': 'list'}), name="get-user-list"),   
+    path('api/profile/<int:pk>/edit/',
+         UpdateUserProfileView.as_view({'get':'retrieve','put':'put' }),
+         name='update-user-profile'), 
+
+    path('api/profile/number/<int:pk>/change/',
+         UpdatePhoneNumberView.as_view({'get':'retrieve','put':'put' }),
+         name='update-user-profile'), 
 
 ]

@@ -65,3 +65,22 @@
      color       : white;
      font-weight : bold;
 }
+
+
+
+.resend-email-box {
+    border : px solid red;
+    display: flex;
+    margin:  12px 8px; 
+}
+
+.resend-email-text {
+    font-size: 13px;
+    padding: 7px 0 0;
+}
+
+.resend-email-btn {
+    color : #5384e5;
+    font-size: 15px;
+
+}

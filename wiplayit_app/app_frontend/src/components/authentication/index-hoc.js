@@ -22,7 +22,6 @@ export function AuthenticationHoc(Component) {
     return class Authentication extends React.Component {
         isMounted = false;
         constructor(props) {
-
             super(props);
             this.state = {
                 displayMessage       : false,
@@ -49,10 +48,11 @@ export function AuthenticationHoc(Component) {
 
             //React binding
 
-            this.validateForm             = this.formIsValid.bind(this);          
+            this.validateForm             = this.validateForm.bind(this);          
             this.formConstructor          = this.formConstructor.bind(this);  
             this.onSubmit                 = this.onSubmit.bind(this);
             this.handleFormChange         = this.handleFormChange.bind(this); 
+            this.selectCountry            = this.selectCountry.bind(this);
             this.confirmUser              = this.confirmUser.bind(this);
             this.responseFacebook         = this.responseFacebook.bind(this);
             this.responseTwitter          = this.responseTwitter.bind(this);
@@ -81,25 +81,7 @@ export function AuthenticationHoc(Component) {
 
             return false;
         };
-
-        _Redirect =()=> {
-            let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
-
-            if (cacheEntities){
-
-               let { userAuth  }  = cacheEntities;
-                
-                if ( userAuth){
-                    let { auth } = userAuth;
-                    if (auth && auth.isLoggedIn){
-                        setTimeout(()=> {
-                            this.props.history.push('/'); 
-                        }, 500);
-                    }
-                    
-                }
-            }
-        };
+       
 
         responseFacebook =(response)=> {
             console.log(response)
@@ -164,56 +146,101 @@ export function AuthenticationHoc(Component) {
         };
 
         onAuthStoreUpdate =()=> {
+            if (!this.isMounted) return;
+
             const onStoreChange = () => {
                 let  storeUpdate = store.getState(); 
                 let { entities } =  storeUpdate;
                 let { userAuth, errors } = entities;
                 let { form, formName } = this.state;
+                this.setState({submitting : userAuth.isLoading}) 
                 console.log(userAuth)
 
-                let { auth, error, successMessage }  = userAuth;
+                let {error,loginAuth}  = userAuth;
 
-                if (errors) {
+                if (errors && errors.error) {
                     this._HandleErrors(errors);
                 }
 
                 if (form && error) {
                     form[formName]['error'] = error;
-                    this.setState({form, submitting : false})
+                    this.setState({form})
                 }
 
-                if(successMessage){
-                    this.setState({ submitting : false, successMessage}) 
-                }
+                this.handleLogin(userAuth)
 
-                if (auth) {
-                    console.log(auth)  
-                    let { isLoggedIn, tokenKey, email, isConfirmed} = auth;
-                         
-                    this.setState({ submitting : false,  error, email}) 
-
-                    if(!isConfirmed && isLoggedIn && tokenKey){
-                        this._Redirect()
-                    }
-                }
+                this.redirectToPasswordChange(userAuth);
             };
-
             this.unsubscribe = store.subscribe(onStoreChange);
         };
 
+        handlePasswordReset(){
+
+        }
+
+        
+        redirectToPasswordChange =(userAuth)=>{
+            if (!userAuth.passwordRestAuth) return;
+
+            let {passwordRestAuth} = userAuth;
+            if (!passwordRestAuth.successMessage) return;
+            let successMessage = passwordRestAuth.successMessage;
+
+            let {isPhoneNumber, formName} = this.state;
+            if (isPhoneNumber && formName == 'passwordResetForm') {
+                history.push('/password/change/', {passwordRestAuth});
+            }else{
+                this.setState({passwordRestAuth, successMessage})
+            }
+            delete passwordRestAuth.successMessage;
+        };
+
+        handleLogin(userAuth){
+            console.log(userAuth)
+            if (!userAuth.loginAuth)return;
+
+            let loginAuth = userAuth.loginAuth
+            let {isLoggedIn, isConfirmed} = loginAuth;
+            console.log(loginAuth)
+                                     
+            if(isLoggedIn){
+                this._Redirect()
+            }
+        };
+
+        _Redirect =()=> {
+            let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
+
+            if (cacheEntities){
+
+               let { userAuth  }  = cacheEntities;
+                
+                if ( userAuth){
+                    let { loginAuth } = userAuth;
+                    if (loginAuth && loginAuth.isLoggedIn){
+                        setTimeout(()=> {
+                            this.props.history.push('/'); 
+                        }, 500);
+                    }
+                    
+                }
+            }
+        };
 
         _HandleErrors(errors){
             if (!errors) return;
             if (!errors.error) return;
-            let message = {textMessage:errors.error, messageType:'error'}
+            let message = {
+                textMessage : errors.error,
+                messageType : 'error'
+            }
 
             this.displayAlertMessage(message);
             delete errors.error;
         }
 
         displayAlertMessage = (message) => {
-                                 
-            this.setState({ displayMessage : true, message });
+            this.setState({displayMessage : true, message});
             setTimeout(()=> {
                 this.setState({displayMessage : false}); 
             }, 10000);
@@ -229,58 +256,26 @@ export function AuthenticationHoc(Component) {
             }
         };
 
-        _InvalidateForm(){
-
-        };
-
-
-
-        formIsValid =(form, formName=null)=> {
-                        
-            if (form) {
-
-                let formKeys = Object.keys(form);
-                let formIsValid = true;
-               
-                for (var key in form) {
-                    let formValue = form[key]
-                    //console.log(form,formValue)
-                    //console.log(/^ *$/.test(formValue))
-
-                    if(/^ *$/.test(formValue)){
-                        formIsValid = false;
-                        return formIsValid;
-                         
-                    }
-                    
-                }
-                //console.log(formIsValid) 
-                return formIsValid
-                             
-
-            }else{
-                return false
-            }
-
-        };
+        selectCountry =(val)=> {
+            console.log(val)
+            let {formName, form} = this.state;
+            form[formName]['country'] = val
+            this.setState({form });
+        }
 
 
         _SetForm =(form, formName)=> {
-
             let currentForm = this.state.form;
             if (currentForm) {
                 if (!currentForm[formName]) {
                     currentForm[formName] = {...form}
                 }
-
                 form = currentForm;
 
             }else{
                 form = Object.defineProperty({}, formName, { value : form });
             }
-           
             this.setState({form, formName});
-
         };
 
         getFormFields =()=> {
@@ -295,21 +290,27 @@ export function AuthenticationHoc(Component) {
                     'last_name'  : '',
                     'email'      : '',
                     'password'   : '',
+                    'country'    : '',
                 },
 
                 emailForm  : {
                     'email'  : '',
+                },
+
+                smsCodeForm  : {
+                    'sms_code'  : '',
                 }, 
 
                 passwordChangeForm : {
-                    'new_password1' : '',
-                    'new_password2' : '',
+                    'new_password1' : 'sila9018',
+                    'new_password2' : 'sila9018',
+                    
 
                 }
             }  
         }
 
-        formConstructor =(name)=> {
+        formConstructor =(name,opts={})=> {
             if (!this.isMounted) return;
             
             if (name) {
@@ -333,7 +334,6 @@ export function AuthenticationHoc(Component) {
                         return this._SetForm(form, formName);
 
                     case 'passwordResetForm':
-
                         form = this.getFormFields().emailForm;
                         this.setState({ onPasswordResetForm : true, defaultActiveForm });
 
@@ -346,15 +346,15 @@ export function AuthenticationHoc(Component) {
 
                         return this._SetForm(form, formName);
 
+                    case 'passwordResetSmsCodeForm':
+                        form = this.getFormFields().smsCodeForm;
+                        this.setState({onPasswordResetSmsCodeForm : true});
+                        return this._SetForm(form, formName)
+
                     case 'passwordChangeForm':
-                        let { uid, token } = this.props.match.params;
-
-
                         form = this.getFormFields().passwordChangeForm;
-                        form = Object.assign({uid, token}, form);
-                        console.log(form)
-
-                        this.setState({ onPasswordChangeForm : true});
+                        form = Object.assign(opts, form);
+                        this.setState({onPasswordChangeForm : true});
                         
                         return this._SetForm(form, formName);
 
@@ -392,9 +392,6 @@ export function AuthenticationHoc(Component) {
         };
 
         toggleEmailForm = (params) => {
-            //if(!this.isMounted) return;
-
-            console.log(params)
             const defaultActiveForm = 'loginForm';
             let { value, successMessage, formName } = params;
 
@@ -508,6 +505,9 @@ export function AuthenticationHoc(Component) {
                 case 'passwordChangeForm':
                     return api.passwordResetConfirmApi();
 
+                case 'passwordResetSmsCodeForm':
+                    return api.passwordResetSmsConfirmApi();
+
                 case 'emailResendForm':
                     return api.confirmationEmailResendApi();
 
@@ -518,35 +518,86 @@ export function AuthenticationHoc(Component) {
        	    
         };
 
+        validateForm =(form, formName=null)=> {
+            //Check form is complete
+            if (form) {
+                for (var key in form) {
+                    if(/^ *$/.test(form[key])){
+                        return false; //Form is not complete
+                    }
+                }
+                return true
+            }else{
+                return false
+            }
+        };
+
+        validatePhoneNumber=(phone_number)=>{
+            let numberRegExp = /^\+?[\d\s]+$/
+            let isPhoneNumber = numberRegExp.test(phone_number)
+                                           
+            if (isPhoneNumber) {
+                return true
+            }
+            return false
+        }
+
+        validateEmail=(email)=>{
+            let emailRegExp;
+            emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            let isEmail = emailRegExp.test(email)
+
+            if (isEmail) {
+                return true
+            }
+            return false
+        }
+
+        setFormErrors=(error, formName)=>{
+            let form        = this.state.form;
+            form[formName]['error'] = error
+            this.setState({form})
+        }
 
         onSubmit =(e)=> {
-            
             e.preventDefault();
             let formName    = this.state.formName;
             let form        = this.state.form[formName];
-            let formIsValid = this.formIsValid(form, formName);
-            let apiUrl      = this.getAuthUrl(formName);
+            let formIsValid = this.validateForm(form, formName);
+           
+            if (!formIsValid) {
+                let error = 'Please fill all fields';
+                //return store.dispatch(action.handleError(error));
+            }
         
-            if ( form && formIsValid) {
-                if (form.email) {
-                    let emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-                    let emailIsValid = emailRegExp.test(form.email)
+            let isEmail = false;
+            let isPhoneNumber = false;
 
-                    if (!emailIsValid) {
-                        return 
-                    }
+            if (form.email) {
+                isEmail = this.validateEmail(form.email);
+                isPhoneNumber = this.validatePhoneNumber(form.email);
+                
+                if (!isEmail && !isPhoneNumber) {
+                    let error = 'Please enter a valid email or phone number'
+                    error = {email:[error]}
+                    this.setFormErrors(error, formName)
+                    return
+                }
+
+                if (isPhoneNumber && formName === 'signUpForm' && !form.country) {
+                    let error = 'Please select your country'
+                    error = {country:[error]}
+                    this.setFormErrors(error, formName)
+                    return
 
                 }
-                
-                form = helper.createFormData({...form});
-                this.setState({submitting : true})
-                return this.props.authenticate({apiUrl, form,});
-
-            }else{
-                
-                this._InvalidateForm()
             }
-           
+
+            let apiUrl      = this.getAuthUrl(formName);           
+            form = helper.createFormData({...form});
+            this.setState({submitting : true, isEmail, isPhoneNumber})
+            return this.props.authenticate({apiUrl, form,formName});
+    
         };
 
       
@@ -554,22 +605,22 @@ export function AuthenticationHoc(Component) {
             return {
                 ...this.props,
                 ...this.state,
-                onSubmit                : this.onSubmit,
-                formConstructor         : this.formConstructor,
-                handleFormChange        : this.handleFormChange,
-                responseFacebook        : this.responseFacebook,
-                responseGoogle          : this.responseGoogle,
-                responseTwitter         : this.responseTwitter,
-                toggleEmailForm         : this.toggleEmailForm, 
-                toggleSignUpForm        : this.toggleSignUpForm,
-                confirmUser             : this.confirmUser,
-                validateForm            : this.validateForm, 
-
+                selectCountry    : this.selectCountry,
+                onSubmit         : this.onSubmit,
+                formConstructor  : this.formConstructor,
+                handleFormChange : this.handleFormChange,
+                responseFacebook : this.responseFacebook,
+                responseGoogle   : this.responseGoogle,
+                responseTwitter  : this.responseTwitter,
+                toggleEmailForm  : this.toggleEmailForm, 
+                toggleSignUpForm : this.toggleSignUpForm,
+                confirmUser      : this.confirmUser,
+                validateForm     : this.validateForm, 
             };
         };
     
 
-        render() {
+        render=()=> {
             if (!this.isMounted) return null;
             let props = this.getProps(); 
             let alertMessageStyles = props.displayMessage?{ display : 'block'}:
@@ -594,9 +645,13 @@ export function AuthenticationHoc(Component) {
 const mapDispatchToProps = (dispatch, ownProps) => {
      
     return {
-        togglePasswordReset  : (self , props)    => dispatch(action.togglePasswordResetForm(self, props)),
-        toggleSignUp         : (self , props)    => dispatch(action.toggleSignUpForm(self , props)),
-        authenticate         : (props)           => dispatch(authenticate(props)),
+        togglePasswordReset : (self, props)=> dispatch(
+                                               action.togglePasswordResetForm(self, props)
+                                            ),
+        toggleSignUp        : (self, props)=> dispatch(
+                                               action.toggleSignUpForm(self , props)
+                                            ),
+        authenticate        : (props)=> dispatch(authenticate(props)),
      
    }
 

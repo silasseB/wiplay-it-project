@@ -64,8 +64,8 @@ export function MainAppHoc(Component) {
         	    let { userAuth  }  = cacheEntities;
                                                
         	    if ( userAuth){
-                    let {auth} = userAuth;
-                    if (auth && auth.isLoggedIn && auth.tokenKey) {
+                    let {loginAuth} = userAuth;
+                    if (loginAuth &&  loginAuth.tokenKey) {
              		    return true;
                     }
                	}
@@ -78,8 +78,8 @@ export function MainAppHoc(Component) {
             let cacheEntities = this._cacheEntities();
             if (cacheEntities) {
                 let {admin}        = cacheEntities;
-                if (admin && admin.auth) {
-                    let  auth  = admin.auth;
+                if (admin && admin.loginAuth) {
+                    let  auth  = admin.loginAuth;
                     let {isLoggedIn, tokenKey} = auth && auth || {};
 
                     if (isLoggedIn && tokenKey) {
@@ -150,7 +150,7 @@ export function MainAppHoc(Component) {
                 let userListModal  = modal['userList'];
 
                 //console.log(entities)
-                Object.keys(userAuth).length && this.confirmLogout(userAuth);
+                this.confirmLogout(userAuth);
 
                 if (errors.error) {
                     if (editorModal && editorModal.modalIsOpen ||
@@ -308,7 +308,6 @@ export function MainAppHoc(Component) {
 
             if (path) {
                 history.push(path, state);
-                //this.reloadPage();
             }
         };
 
@@ -334,7 +333,7 @@ export function MainAppHoc(Component) {
         confirmLogout =(userAuth)=>{
            
             if (userAuth) {
-                let {successMessage} = userAuth;
+                let {successMessage} = userAuth && userAuth.loginAuth || {};
                 let isLoggedOut =  successMessage === 'Successfully logged out.'
 
                 if (isLoggedOut) {
@@ -360,7 +359,8 @@ export function MainAppHoc(Component) {
         logout= () => {
             let apiUrl   =  api.logoutUser();
             let useToken = true;
-            this.props.authenticate({apiUrl, form:{}, useToken})
+            let formName = 'logoutForm';
+            this.props.authenticate({apiUrl, form:{},formName, useToken})
             
         };  
 

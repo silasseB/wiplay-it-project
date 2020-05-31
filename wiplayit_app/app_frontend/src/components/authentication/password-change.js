@@ -15,21 +15,31 @@ export class PasswordChangePage extends Component{
         this.state = {
             navbarTitle        : 'Password Change',
             formTitle          : 'Password Change',
-            formDescription    : 'Fill in the form bellow with your new account password and submit.',
+            formDescription    : 'Enter a new passsword on both fields.',
         };
     }
 
    
    
     componentDidMount() {
-        this.props.formConstructor('passwordChangeForm');
+        let {match, entities} =this.props;
+        let {uid, token}  = match.params;
+        
+        let passwordAuthOpts = {}
+        if (uid && token) {
+            passwordAuthOpts = {uid, token}
+        }
+
+        this.props.formConstructor('passwordChangeForm', passwordAuthOpts);
     }
 
+    
    
     render(){
       
-        let props = Object.assign(this.state, this.props);
-        console.log(props)
+        let props = {...this.props, ...this.state};
+        
+        
         return (
             <div className="registration-page">
                <NavBar {...props}/>

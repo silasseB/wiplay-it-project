@@ -1,8 +1,12 @@
 import React from 'react';
 import { MatchMediaHOC } from 'react-match-media';
 import {  Link } from "react-router-dom";
+import { CountryDropdown,
+       RegionDropdown, 
+       CountryRegionData } from 'react-country-region-selector';
 
 import { NonFieldErrors,
+         CountryFieldErrors,
          EmailFieldErrors} from "templates/authentication/errors"
 import { CancelFormBtn,
          RegistrationSubmitBtn,
@@ -90,9 +94,9 @@ export const  SignUpForm = props => {
 
                   <div className="email-box auth-input-field">
                     <input
-                      placeholder="Email"
+                      placeholder="Email or Phone Number"
                       className="email"
-                      type="email"
+                      type="text"
                       name="email"
                       value={form.email}
                       onChange={props.handleFormChange}
@@ -123,9 +127,32 @@ export const  SignUpForm = props => {
                     <RegistrationSubmitBtn {...props}/>
                 </div>
                 <div className="cancel-signup-btn-box">
-                    <CancelFormBtn {...props}/> 
+                  <CancelFormBtn {...props}/> 
                 </div>    
             </div>  
+            <div className="country-select-box">
+                { error &&
+                  <CountryFieldErrors {...error}/>
+                }
+                <div className="country-select-btn">
+                    <CountryDropdown
+                        value={form.country}
+                        labelType="full"
+                        valueType="short"
+                        priorityOptions={["ZA"]}
+                        onChange={(val) => props.selectCountry(val)}
+                        style={{
+                            backgroundColor: '#D5D7D5',
+                            color: 'black',
+                            fontSize: 14,
+                            width: '200px',
+                            height:'30px',
+                            border:'none',
+                        }}
+                                 
+                    />
+                </div>
+            </div>
             <LoginLink/>
 
             </fieldset>
