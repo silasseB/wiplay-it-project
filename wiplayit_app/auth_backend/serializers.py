@@ -74,8 +74,9 @@ class CustomLoginSerializer(LoginSerializer):
 		
 		user = None
 		verified_number =  get_verified_number(phone_number)
+		email = verified_number.user.email
 		
-		user = authenticate(email=verified_number, password=password)
+		user = authenticate(email=email, password=password)
 		return user
 
 	def _validate_email(self, email, password):
@@ -187,7 +188,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 				number.save()
 			
 
-		if country:
+		if country and self.is_phone_number:
 			country_long_name = get_phone_number_region(country, phone_number) 
 			
 			user_countries = Country.objects.filter(user=user)
