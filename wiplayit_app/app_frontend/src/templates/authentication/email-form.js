@@ -44,7 +44,7 @@ const EmailForm = props => {
                       onPasswordResetForm && 'Password Reset';
 
 
-    formDescription = formDescription ||  `Enter your e-mail address or` +
+    formDescription = formDescription ||  `Enter your e-mail address or ` +
                                            `phone number to change password.`;
     let {userAuth} = cacheEntities
     if (!passwordRestAuth) {

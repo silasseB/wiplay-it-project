@@ -44,34 +44,6 @@ export const NavBar = props => {
 
 
 
-export const  NavBarSmall   = props => {
-    let { submitting, formIsValid, formName, form, validateForm} = props;
-    formIsValid  = validateForm(form, formName) || false;
-
-    let submitButtonStyles = submitting || !formIsValid? {opacity:'0.60'}: {};
-        
-    
-    return (
-        <div className="navigation-bar fixed-top">
-         <div className="navbar-box">
-            <div className="navbar-sm-title-box">
-                <p className="" >{props.navbarTitle}</p>
-            </div>
-              
-            <div className="navbar-submit-box">
-                <button type="submit" 
-                    style={submitButtonStyles} 
-                    disabled={submitting}
-                    className="navbar-submit btn-submit btn-sm">
-                    Submit
-                </button>
-               
-            </div>
-          </div>
-        </div>    
-    );
-};
-
 
 export const  SpinLoader  = props => {
     return (
@@ -149,7 +121,6 @@ const  CancelBtn  = props => {
 
 export const  CancelEmailFormBtn  = props => {
     let toggleProps = {value:false, formName:props.formName};
-    console.log(toggleProps)
 
     return (
         <button type="button" onClick={()=>props.toggleEmailForm(toggleProps)} 
@@ -201,7 +172,6 @@ export const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 980px)')
 
 export const  SubmitBtnSmallScreen = MatchMediaHOC(RegistrationSubmitBtn, '(max-width: 980px)') 
 export const  SubmitBtnBigScreen = MatchMediaHOC(RegistrationSubmitBtn, '(min-width: 980px)') 
-export const NavBarSmallScreen = MatchMediaHOC(NavBarSmall, '(max-width : 980px)')
 
 export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 980px)');
 

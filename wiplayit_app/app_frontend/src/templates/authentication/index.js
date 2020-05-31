@@ -194,9 +194,7 @@ const WelcomeTextComponent = props => {
 
 
 export const  NavBar   = props => {
-    
-    console.log(props)
-    
+   
     return (
         <div className="navigation-bar fixed-top">
             <div className="navbar-box">

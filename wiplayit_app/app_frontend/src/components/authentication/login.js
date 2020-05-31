@@ -15,11 +15,9 @@ class LoginPage extends Component {
         this.state = {
            navbarTitle : 'Login',
         }
-        console.log(this)
     }
 
     componentDidMount() {
-        console.log(this.props.isMounted)
         if(this.props.isMounted){
             this.props.formConstructor('loginForm')
         }

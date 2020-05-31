@@ -65,8 +65,6 @@ export function AuthenticationHoc(Component) {
 
         isAuthenticated =()=> {
             let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
-            console.log(cacheEntities)
-
             if (cacheEntities){
 
                 let {userAuth}  = cacheEntities;
@@ -94,7 +92,6 @@ export function AuthenticationHoc(Component) {
 
 
         responseTwitter =(response)=> {
-            console.log(response);
             let accessToken =  response.accessToken
             let apiUrl =  api.twitterLoginApi(this)
             accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
@@ -104,7 +101,6 @@ export function AuthenticationHoc(Component) {
 
 
         responseGoogle =(response)=> {
-            console.log(response);
             let accessToken =  response.accessToken
             let apiUrl =  api.googleLoginApi();
             accessToken && this._SendSocialAuthentication(accessToken, apiUrl)
@@ -153,11 +149,10 @@ export function AuthenticationHoc(Component) {
                 let { entities } =  storeUpdate;
                 let { userAuth, errors } = entities;
                 let { form, formName } = this.state;
-                this.setState({submitting : userAuth.isLoading}) 
-                console.log(userAuth)
+                let {error,loginAuth, isLoading}  = userAuth;
 
-                let {error,loginAuth}  = userAuth;
-
+                this.setState({submitting : isLoading}) 
+             
                 if (errors && errors.error) {
                     this._HandleErrors(errors);
                 }
@@ -168,9 +163,9 @@ export function AuthenticationHoc(Component) {
                 }
 
                 this.handleLogin(userAuth)
-
                 this.redirectToPasswordChange(userAuth);
             };
+
             this.unsubscribe = store.subscribe(onStoreChange);
         };
 
@@ -192,17 +187,14 @@ export function AuthenticationHoc(Component) {
             }else{
                 this.setState({passwordRestAuth, successMessage})
             }
-            delete passwordRestAuth.successMessage;
+            //delete passwordRestAuth.successMessage;
         };
 
         handleLogin(userAuth){
-            console.log(userAuth)
             if (!userAuth.loginAuth)return;
-
             let loginAuth = userAuth.loginAuth
             let {isLoggedIn, isConfirmed} = loginAuth;
-            console.log(loginAuth)
-                                     
+                                                
             if(isLoggedIn){
                 this._Redirect()
             }
@@ -257,7 +249,6 @@ export function AuthenticationHoc(Component) {
         };
 
         selectCountry =(val)=> {
-            console.log(val)
             let {formName, form} = this.state;
             form[formName]['country'] = val
             this.setState({form });
@@ -294,7 +285,7 @@ export function AuthenticationHoc(Component) {
                 },
 
                 emailForm  : {
-                    'email'  : '',
+                    'email'  : 'silassibaloy@gmail.com',
                 },
 
                 smsCodeForm  : {
@@ -430,9 +421,8 @@ export function AuthenticationHoc(Component) {
 
             Api.get(apiUrl)
             .then(response => { 
-                console.log(response)
                 let {data}  = response;
-               
+             
                 let auth      = {};
                 let response_data = {};
                 let user      = data.user;

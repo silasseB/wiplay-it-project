@@ -17,8 +17,7 @@ class RegistrationPage extends Component {
     }
 
     componentDidMount() {
-       console.log(this.props)
-       this.props.formConstructor('loginForm')
+      this.props.formConstructor('loginForm')
     }
 
 
@@ -28,8 +27,7 @@ class RegistrationPage extends Component {
 
     render() {
         let props = this.getProps();
-        console.log(props)
-     
+          
         return (
             <RegistrationComponent {...props}/>         
         );
