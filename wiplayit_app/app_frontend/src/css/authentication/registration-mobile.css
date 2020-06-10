@@ -3,10 +3,10 @@
 
 
 .navigation-bar {
-  border-bottom: px solid red;
-  display: flex;
-  width: 100%;
-  background:#A33F0B;
+    border-bottom: px solid red;
+    display: flex;
+    width: 100%;
+    background:#A33F0B;
 }
 
 
@@ -31,9 +31,9 @@
 
 
 .login-page{
-  width: 100%; 
-  min-height: 500px;
-  background:#edf0f3;
+    width: 100%; 
+    min-height: 500px;
+    background:#edf0f3;
   
 }
 
@@ -43,32 +43,37 @@
     width      : 100%;
     height     : 100vh;
     background : #edf0f3;
-    padding    : 15% 0px;
-    margin-top : 15px; 
+    padding    : 35% 0px;
 }
 
 .password-change-contents {
 
 }
 
-.password-change-container {
-    border: px solid blue;
-   
+.account-confirm-modal-container  {
+    padding : 0 15px 15px;    
+}
+
+.confirmation-close-box button {
+    border : px solid red;
+    margin : 10px 10px 0;
+    color  : red;
 }
 
 .email-form-box {
-   margin-top: 10%;
+   margin-top : 10%;
 }
 
 .password-change-success,
+.sms-code-form,
 .email-form,
 .success-message-box,
 .confirmation-message-box,
 .password-change-form,
 .sign-up-form,.login-form {
-    border:1px solid #BDBDBD;
-    padding: 10px 4%;
-    margin: 10px 4% 7%;
+    border  : 1px solid #BDBDBD;
+    padding : 10px 4%;
+    margin  : 10px 4% 7%;
 }
 
 .password-change-success-box a,
@@ -83,27 +88,26 @@
 } 
 
 
-
+.signup-login-link-box li,
 .create-account-link-box li {
-    border : px solid red;
     color: black;
-
  }
 
 .create-account-link-box,
 .signup-login-link-box,
 .password-change-link-box {
-   border     : px solid red;   
-   text-align : right;
-   margin-top : 22px;
-   font-size  : 12px;
+    text-align : right;
+    margin-top : 22px;
+    font-size  : 14px;
 }
 
+.registration-link-box a,
 .create-account-link-box a,
 .signup-login-link, 
 .password-change-link {
     border    : px solid red;
     color     : #5384e5;
+    font-size : 15px !important;
 
 }
 
@@ -187,6 +191,7 @@
     margin : 16px 0 8px;
 }
 
+.form-helper-text,
 .email-form-description,.password-form-description {
     font-size: 15px;
 }

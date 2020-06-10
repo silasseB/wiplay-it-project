@@ -38,9 +38,15 @@
                    
     }
     
-    .modal-close-btn-box {
+    .desktop-modal-close-btn {
         padding : 0 14px 0px 5px; 
         border  : px solid red;
+       
+    }
+
+    .desktop-modal-close-btn button {
+        border  : px solid blue;
+        margin  : 10px 15px 0;
     }
 
 
@@ -56,8 +62,7 @@
         border      : px solid black;
         font-size   : 15px;
         color       : #fff;
-        padding-top : 10px;
-        display     :  flex;
+        display     : flex;
         font-weight : bolder;
     }
 

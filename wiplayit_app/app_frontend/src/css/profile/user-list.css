@@ -28,12 +28,13 @@
     background: #ffff;
 }
 
+
 #user-list-container {
     padding-bottom: 65px;
     overflow-y: scroll;
 }
 
-
+.nav-bar-modal-menu-box,
 #user-list-container::-webkit-scrollbar {
     -webkit-appearance: none;
 }

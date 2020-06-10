@@ -5,15 +5,33 @@ let API_URL = 'http://127.0.0.1:8000';
 let MobileAPI_URL = 'http://192.168.43.14:8000'
 import GetTimeStamp from 'utils/timeStamp';
 import { getCookie } from 'utils/csrf_token.js';
+import * as checkType from 'helpers/check-types'; 
 import {store} from "store/index";
 import {authenticate} from "dispatch/index"
-
 import Api from 'utils/api';
 
 
 const api      = new Api();
   
 var csrftoken = getCookie('csrftoken');  
+
+
+
+let   isRefreshingToken =()=>{
+        let storeUpdate = store.getState();
+        let {entities}  = storeUpdate;
+        let {userAuth}  = entities;
+
+        let isLoading = checkType.isBoolean(userAuth.isLoading)
+        
+        if (isLoading) {
+            //console.log(userAuth)
+            return userAuth.isLoading;
+
+        }else{
+            return false;
+        }
+    }
 
 export default class Axios {
 
@@ -23,11 +41,12 @@ export default class Axios {
         this.DOMAIN_URL    =  window.location.origin; 
         this.useToken      =  props && props.useToken;
         this.timeout       =  props && props.timeout || 15000; 
+        this.requestFor    =  props.requestFor; 
     }
 
     tokenTimeStampe(timeStamp){
         return new GetTimeStamp({timeStamp});
-   }
+    }
 
     _getAuth = () => {
         
@@ -45,23 +64,33 @@ export default class Axios {
         return null;
     };
 
-    refreshToken(){
+    tokenExpired=()=>{
         let userAuth = this._getAuth();
-        let expireTime = userAuth && this.tokenTimeStampe(userAuth.timeStamp)
-                
-        if (expireTime && expireTime.menutes() >= 3) {
-            let token = this.getToken(userAuth)
-          
-            let apiUrl   =  api.refreshTokenApi();
-            let useToken = true; 
-            store.dispatch(authenticate({apiUrl, form:{token}, useToken}))
-        }
+        let expireTime = userAuth && this.tokenTimeStampe(userAuth.timeStamp);
+        return expireTime && expireTime.days() >= 7 || false
+
     }
+
+    refreshToken(){
+                        
+        if (this.tokenExpired()) {
+            let userAuth = this._getAuth();
+            let token = this.getToken(userAuth);
+           
+            let authProps ={
+                apiUrl :api.refreshTokenApi(), 
+                form   :{token},
+                isTokenRefresh : true,
+                useToken : false,
+            };
+            store.dispatch(authenticate(authProps))
+        }
+    };
 
     getToken(userAuth){
         let loginAuth = userAuth && userAuth.loginAuth;
         return loginAuth && loginAuth.tokenKey; 
-    }
+    };
 
     createInstance=()=>{
         let instance = axios.create({
@@ -74,30 +103,20 @@ export default class Axios {
 
     };
 
+
     instance = () => {
         const instance = this.createInstance()
-     	
+
         if (this.useToken) {
-            instance.interceptors.request.use((config)=> {
-                // Do something before request is sent
-                //console.log('intercepting request')
-                this.refreshToken()
-
-                return config;
-
-            }, (error)=> {
-                // Do something with request error
-                return Promise.reject(error);
-            });
-
+            this.refreshToken();
             let userAuth = this._getAuth();  
             let tokenKey = this.getToken(userAuth)
                                
             tokenKey =`JWT ${tokenKey}`;
             instance.defaults.headers.common['Authorization'] = tokenKey;
         }
-
-        return instance;
+     
+        return instance        
     };
 
 };
@@ -105,4 +124,29 @@ export default class Axios {
 
 
 
+/*
+instance.interceptors.request.use((config)=> {
+    // Do something before request is sent
+    //console.log('intercepting request', this.requestFor)
+    this.canSendrequest = false
+                                
+    return config;
 
+    }, (error)=> {
+        // Do something with request error
+        console.log(error)
+        return Promise.reject(error);
+    });
+
+        instance.interceptors.response.use((response)=> {
+                console.log(response, this.requestFor)
+               return response;
+            }, (error)=> {
+                this.canSendrequest = false
+                if (error.response) {
+                    console.log(error.response, this.requestFor)
+                }
+
+                return Promise.reject(error);
+            });
+*/

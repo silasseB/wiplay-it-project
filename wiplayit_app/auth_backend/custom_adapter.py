@@ -23,6 +23,9 @@ class CustomAccountAdapter(DefaultAccountAdapter):
             uri = build_absolute_uri(request, path) 
         return uri
 
+    def send_confirmation_sms(self, request, phoneNumberConfirmation, signup):
+        pass
+
 
 
 

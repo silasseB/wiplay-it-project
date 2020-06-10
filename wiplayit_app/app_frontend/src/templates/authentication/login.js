@@ -115,7 +115,7 @@ const _CreateAccountLink = ()=>{
         <ul className="create-account-link-box">
             <li>
                Do not have account ?
-               <Link className="create-account-lin" to="/user/signup/">  Sign Up</Link>
+               <Link className="" to="/user/signup/">  Create account</Link>
             </li>
         </ul>
          

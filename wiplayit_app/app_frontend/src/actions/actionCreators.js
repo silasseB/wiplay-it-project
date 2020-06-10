@@ -617,8 +617,9 @@ export const getReplyChildListError = (actionType, byId, error) =>({
 
 
 export const handleError  = (error) => {
+  //if (!error) return {};
     console.log(error)
-    error = error || 'Something wrong happened, please try again.'; 
+    //error = error || 'Something wrong happened, please try again.'; 
 
     return {
         type: types.SERVER.ERROR,
@@ -653,17 +654,18 @@ export const toggleSignUpForm = (props) => {
 
 
 
-export const authenticationPending = (isSocialAuth=false) => ({
+export const authenticationPending = (isSocialAuth=false, isTokenRefresh=false) => ({
     type   : types.USER_AUTHENTICATION.PENDING,
     payLoad : {
         isLoading : true,
-        isSocialAuth,    
+        isSocialAuth,   
+        isTokenRefresh, 
     }
 });
 
 
-export const authenticationSuccess = (data={}, isSocialAuth=false) => {
-    console.log(data)
+export const authenticationSuccess = (data={}, isSocialAuth=false, isTokenRefresh=false) => {
+    console.log(data, isTokenRefresh, isSocialAuth)
     
     return {
         type   : types.USER_AUTHENTICATION.SUCCESS,
@@ -676,14 +678,15 @@ export const authenticationSuccess = (data={}, isSocialAuth=false) => {
 };
 
 
-export const authenticationError = (error, isSocialAuth=false) => {
-    console.log(error)
+export const authenticationError = (error, isSocialAuth=false, isTokenRefresh=false) => {
+    console.log(error, isTokenRefresh, isSocialAuth)
     return {
         type   : types.USER_AUTHENTICATION.ERROR,
         payLoad : {
             error,
             isLoading : false,
             isSocialAuth,
+            isTokenRefresh,
         }
     };
 };

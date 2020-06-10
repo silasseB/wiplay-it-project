@@ -38,8 +38,17 @@ admin.site.register(Country, CountryAdmin)
 
 
 
-class PhoneNumberSmsCodeAdmin(admin.ModelAdmin):
-	fields = ['user', 'verify_sms_code', 'password_sms_code']
+class PhoneNumberPasswordChangeAdmin(admin.ModelAdmin):
+	fields = ['phone_number', 'sent', 'created', 'sms_code', 'password_changed']
 
-admin.site.register(PhoneNumberSmsCode, PhoneNumberSmsCodeAdmin)
+admin.site.register(PhoneNumberPasswordChange, PhoneNumberPasswordChangeAdmin)
+
+
+
+class PhoneNumberConfirmationAdmin(admin.ModelAdmin):
+	fields = ['phone_number', 'sent', 'created', 'sms_code']
+
+admin.site.register(PhoneNumberConfirmation, PhoneNumberConfirmationAdmin)
+
+
 

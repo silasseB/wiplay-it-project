@@ -16,12 +16,14 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework import serializers, exceptions
 
 
+def signup_phone_number(request, user):
+    pass
 
 def phone_number_exists(phone_number, exclude_user=None):
     from .models import  PhoneNumber
 
     ret = PhoneNumber.objects.filter(primary_number__iexact=phone_number).exists()
-
+    
     if not ret:
         ret = PhoneNumber.objects.filter(national_format__iexact=phone_number).exists()
     if not ret:
@@ -32,21 +34,30 @@ def phone_number_exists(phone_number, exclude_user=None):
 
     return ret
 
-
-def get_verified_number(unique_key):
+def get_phone_number(phone_number):
     from .models import  PhoneNumber
-    phone_number = PhoneNumber.objects.filter(primary_number=unique_key)
+    if not phone_number_exists(phone_number):
+        msg = _('Account with this phone number does not exists')
+        raise serializers.ValidationError(msg)
+    
+    phone_number = PhoneNumber.objects.filter(primary_number=phone_number)
 
     if not  phone_number:
-        user = PhoneNumber.objects.filter(national_format=unique_key)
+        phone_number = PhoneNumber.objects.filter(national_format=phone_number)
 
     if not phone_number:
-        phone_number =  PhoneNumber.objects.filter(user__email=unique_key)
+        phone_number =  PhoneNumber.objects.filter(user__email=phone_number)
     if not phone_number:
-        phone_number = PhoneNumber.objects.filter(inter_format=unique_key)
+        phone_number = PhoneNumber.objects.filter(inter_format=phone_number)
+
+    return phone_number[0] or None
+
+
+def get_verified_number(unique_key):
+    phone_number = get_phone_number(unique_key)
 
     if phone_number:
-        phone_number = phone_number[0]
+        phone_number = phone_number
         if  not phone_number.verified:
             return None
         return phone_number 
@@ -57,7 +68,6 @@ def email_is_verified(unique_key):
     from .models import User
     email_address = EmailAddress.objects.filter(email__iexact=unique_key)
     users = User.objects.filter(email__iexact=unique_key)
-    print(email_address, users)
 
     verified = False
     for email in email_address:
@@ -80,13 +90,6 @@ def _get_pin(length=4):
     pin = random.sample(range(10**(length-1),10**length), 1)[0]
     return pin
 
-
-
-
-def _verify_pin(pin):
-    """Verify a pin is correct"""
-    print(pin, cache.get('pin'))
-    return pin == cache.get('pin')
     
 
 @csrf_exempt

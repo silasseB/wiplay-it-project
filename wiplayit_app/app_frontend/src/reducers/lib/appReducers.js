@@ -106,7 +106,6 @@ export function entities(state=InitialState(), action) {
 
     switch (action.type){
         case 'SERVER_ERROR':
-            console.log(action)
             return updateStateEntyties('errors', action);
 
        

@@ -32,7 +32,14 @@
   background:#A33F0B;
 }
 
+.account-confirm-modal-container {
+    padding-bottom : 50px;
+}
 
+.confirmation-close-box button {
+    margin : 13px 25px 0;
+    color  : red; 
+}
 
 .navbar-title-box {
     font-size: 20px;
@@ -181,22 +188,23 @@
   border:px solid blue; 
 }
 
+.form-helper-text,
 .email-form-description,.password-form-description {
-  font-size: 14px;
-  margin: 14px 0;
+  font-size : 14px;
+  margin    : 14px 0;
 }
 
 
 .form-title-box {
-    font-weight: bold;
-    font-size: 11px;
-    border: px solid red;
-    text-align: center;
-    margin : 16px 0 8px;
+    font-weight : bold;
+    font-size   : 11px;
+    border      : px solid red;
+    text-align  : center;
+    margin      : 16px 0 8px;
         
 }
 
-
+.sms-code-form,
 .success-message-box, .password-change-form,
 .sign-up-form, .email-form, .login-form {
   border:1px solid #BDBDBD;

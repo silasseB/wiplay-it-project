@@ -46,8 +46,10 @@ export function MainAppHoc(Component) {
 
             this.state = {
                 currentUser        : {},
+                userAuth           : {},
                 cacheEntities      : this._cacheEntities(), 
                 isAuthenticated    : this.isAuthenticated(),
+                isAutheticanting   : true,
                 isAdmin            : this.isAdmin(),
                 displayMessage     : false,
                 message            : null,
@@ -61,7 +63,7 @@ export function MainAppHoc(Component) {
       	    let cacheEntities = this._cacheEntities();
             //console.log(cacheEntities)        
             if (cacheEntities){
-        	    let { userAuth  }  = cacheEntities;
+        	    let {userAuth}  = cacheEntities;
                                                
         	    if ( userAuth){
                     let {loginAuth} = userAuth;
@@ -77,7 +79,8 @@ export function MainAppHoc(Component) {
         isAdmin(){
             let cacheEntities = this._cacheEntities();
             if (cacheEntities) {
-                let {admin}        = cacheEntities;
+                
+                let {admin}  = cacheEntities;
                 if (admin && admin.loginAuth) {
                     let  auth  = admin.loginAuth;
                     let {isLoggedIn, tokenKey} = auth && auth || {};
@@ -92,6 +95,7 @@ export function MainAppHoc(Component) {
         }
 
         _SetCurrentUser =(currentUser=undefined)=>{
+            if(!this.isMounted) return;
                     
             if (!currentUser) {
                 let  cacheEntities  = this._cacheEntities();
@@ -128,6 +132,55 @@ export function MainAppHoc(Component) {
         }
 
         
+        componentWillUnmount() {
+            this.unsubscribe();
+            this.isMounted = false;
+            
+        };
+
+        componentDidUpdate(prevProps, nextProps) {
+        };
+
+                
+        componentDidMount() {
+            this.isMounted = true;
+            this.onStoreUpdate() //Subscribe on store change 
+             
+            let { entities } = this.props;
+            
+            window.onpopstate = (event) => {
+                closeModals();
+
+                if (!this.isAuthenticated()) {
+                }
+            }
+
+            window.addEventListener("beforeunload",(event)=>{
+                let { modal } = entities;
+                //event.returnValue = '';
+            });
+
+            if (!this.isAuthenticated()) {
+                //User is not authenticated,so redirect to authentication page.
+                history.push('/user/registration/')
+                return;
+            }
+           
+            let currentUser = this._SetCurrentUser();
+            if(currentUser){
+                store.dispatch(getCurrentUser());
+            }
+
+            if (currentUser && !currentUser.is_confirmed) {
+                store.dispatch(getCurrentUser());
+            }
+
+
+
+        };
+
+
+        
         onStoreUpdate = (params, callback=function(){}) =>{
  
             const onStoreChange = () => {
@@ -148,14 +201,16 @@ export function MainAppHoc(Component) {
                 let optionsModal   = modal['optionsMenu'];
                 let dropImageModal = modal['dropImage'];
                 let userListModal  = modal['userList'];
-
-                //console.log(entities)
+                let smsCodeFormModal = modal['smsCodeForm'] 
+              
+                this.setState({userAuth})   
                 this.confirmLogout(userAuth);
+                this.confirmLogin(userAuth)
 
                 if (errors.error) {
                     if (editorModal && editorModal.modalIsOpen ||
                         dropImageModal && dropImageModal.modalIsOpen){
-                        //Can avoid handling errors if any of these modal are open
+                        //We avoid handling errors if any of these modal are open
 
                     }else{
                         this._HandleErrors(errors)
@@ -330,30 +385,49 @@ export function MainAppHoc(Component) {
 
         };
 
-        confirmLogout =(userAuth)=>{
-           
-            if (userAuth) {
-                let {successMessage} = userAuth && userAuth.loginAuth || {};
-                let isLoggedOut =  successMessage === 'Successfully logged out.'
-
-                if (isLoggedOut) {
-                    let storeUpdate = store.getState();
-                    let { entities } = storeUpdate;
-                    let { modal } = entities;
-                    let navigationModal  = modal['navigationMenu'];
-                    if (navigationModal && navigationModal.modalIsOpen) {
-                        window.history.back();
-                        ModalManager.close('navigationMenu');
-                    }
-
-                    setTimeout(()=>{
-                        this.clearStore()
-                        history.push('/user/registration');
-
-                    }, 500)
-                }
-            }
+        isLoggedOut =(userAuth)=>{
+            let {successMessage} = userAuth && userAuth.loginAuth || {};
+            let isLoggedOut      = successMessage === 'Successfully logged out.'
             
+            if (isLoggedOut) return true;
+            return false;
+        };
+
+        isTokenRefresh =(userAuth)=>{
+            let {error, isTokenRefresh} = userAuth;
+            if (error && isTokenRefresh) return true;
+        };
+
+        confirmLogin =(userAuth)=>{
+            let {loginAuth} = userAuth || {};
+            if (loginAuth && loginAuth.isConfirmation) {
+                delete loginAuth.isConfirmation
+                let background = true;
+                closeModals(background);
+
+                let textMessage = 'You successfully confirmed your account'
+                let message = {textMessage, messageType:'success'}
+                this.displayAlertMessage(message)
+            }
+        }
+
+        confirmLogout =(userAuth)=>{
+
+            let isLoggedOut    = this.isLoggedOut(userAuth);
+            let isTokenRefresh = this.isTokenRefresh(userAuth)
+
+            if (isLoggedOut) {
+                let background = true;
+                closeModals(background);
+            }
+                
+            if (isLoggedOut || isTokenRefresh) {
+                                  
+                setTimeout(()=>{
+                    this.clearStore()
+                    history.push('/user/registration');
+                }, 500)
+            }
         };
 
         logout= () => {
@@ -363,54 +437,6 @@ export function MainAppHoc(Component) {
             this.props.authenticate({apiUrl, form:{},formName, useToken})
             
         };  
-
-        componentWillUnmount() {
-            this.unsubscribe();
-            this.isMounted = false;
-            
-        };
-
-        componentDidUpdate(prevProps, nextProps) {
-        };
-
-                
-        componentDidMount() {
-            this.onStoreUpdate() //Subscribe on store change 
-             
-            let { entities } = this.props;
-            
-            window.onpopstate = (event) => {
-                closeModals();
-
-                if (!this.isAuthenticated()) {
-                }
-            }
-
-            window.addEventListener("beforeunload",(event)=>{
-                let { modal } = entities;
-                //event.returnValue = '';
-            });
-
-            if (!this.isAuthenticated()) {
-                //User is not authenticated,so redirect to authentication page.
-                history.push('/user/registration/')
-                return;
-            }
-
-            this.isMounted = true;
-            let currentUser = this._SetCurrentUser();
-          
-            if(!currentUser){
-                store.dispatch(getCurrentUser());
-            }
-
-            if (currentUser && !currentUser.is_confirmed) {
-                store.dispatch(getCurrentUser());
-            }
-
-
-
-        };
 
        
         push(params){
@@ -431,10 +457,11 @@ export function MainAppHoc(Component) {
         redirecToQuestionPage  = (questionObj) => {
             questionObj = questionObj.newObject;
             if (questionObj) {
-                let path = `/question/${questionObj.slug}/` 
+                let path = `/question/${questionObj.slug}/`; 
                 let currentUser = this.state.currentUser;
+                let state = {questionObj, currentUser, isNeQuestion:true};
             
-                this.props.history.push(path, {questionObj, currentUser, isNeQuestion:true})
+                this.props.history.push(path, state);
             }
         };
 
@@ -486,6 +513,9 @@ export function MainAppHoc(Component) {
             const feather = require('feather-icons')
 
             let props = this.getProps();
+            let {userAuth} = props.entities;
+            
+
             let alertMessageStyles = props.displayMessage?{ display : 'block'}:
                                                           { display : 'none' };
 

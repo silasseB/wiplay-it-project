@@ -23,16 +23,7 @@ class PasswordResetPage extends Component{
    
     render(){
         let props = {...this.props, ...this.state};
-        let {formName, cacheEntities, passwordRestAuth} = props;
-        let {userAuth} = cacheEntities;
-
-        if (!passwordRestAuth) {
-            passwordRestAuth =  userAuth.passwordRestAuth;
-        }
-
-        let {identifier} = passwordRestAuth || {};
-        console.log(props)
-
+       
         return (
             <div className="registration-container">
                  <NavBar {...props}/>

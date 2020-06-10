@@ -28,7 +28,7 @@ from django.contrib.auth.models import update_last_login
 #from django.contrib.sites.shortcuts import get_current_site
 #from django.core.mail import EmailMultiAlternatives
 from django.template import loader
-from allauth.account.models import  EmailConfirmationHMAC
+from allauth.account.models import  EmailConfirmationHMAC, EmailConfirmation
 from rest_auth.views import (LoginView,
 							 PasswordResetView,
 							 PasswordResetConfirmView)
@@ -39,18 +39,26 @@ from rest_auth.app_settings import (TokenSerializer,
 from rest_auth.utils import jwt_encode
 from auth_backend.utils import (is_using_phone_number,
 								is_using_email_address,
+								get_phone_number,
 								_get_pin,
-								send_pin,_verify_pin,
+								send_pin,
 								get_intern_number_format)
 from app_backend.mixins.views_mixins import RetrieveMixin, UpdateObjectMixin
 from app_backend.views import BaseApiView
-from .models import User, PhoneNumberSmsCode, PhoneNumber
+from .models import (User,
+					 PhoneNumberConfirmation,
+					 PhoneNumberPasswordChange,
+					 PhoneNumber)
+
 from .serializers import (CustomRegisterSerializer,
                           CustomLoginSerializer,
                           CustomPasswordResetConfirmSerializer,
                           CustomPasswordResetSerializer,
+                          PhoneNumberConfirmationSerializer,
+                          PasswordChangeConfirmationSerializer,
                           SmsCodeSerializer,
                           EmailSerializer,
+                          PhoneNumberSerializer,
                           BaseUserSerializer,
                           UserSerializer,
                           UserProfileSerializer )
@@ -113,15 +121,9 @@ class CustomRegisterView(RegisterView):
 			create_token(self.token_model, user, serializer)
 
 		if self.is_phone_number:
-			phone_number = user.email
-			code = _get_pin()
-			sms_body = 'Your Account confirmation code is {0}'.format(code)
-			send_pin(phone_number, sms_body)
-
-			phone_number_sms_codes = PhoneNumberSmsCode.objects.filter(user=user)
-			for sms_code in phone_number_sms_codes:
-				sms_code.verify_sms_code = code
-				sms_code.save()
+			phone_number = PhoneNumber.objects.get(user=user)
+			if phone_number:
+				phone_number.send_confirmation(self.request._request, signup=True)
 
 		else:
 			complete_signup(self.request._request, user,
@@ -173,7 +175,11 @@ class VerifyEmailView(APIView):
 
 	def get_object(self, queryset=None):
 		key = self.kwargs['key']
-		emailconfirmation = EmailConfirmationHMAC.from_key(key)	
+
+		if allauth_settings.EMAIL_CONFIRMATION_HMAC:
+		 	emailconfirmation = EmailConfirmationHMAC.from_key(key)	
+		else:
+			emailconfirmation = EmailConfirmation.objects.filter(key=key)[0]
 		return emailconfirmation
 
 	def post(self, request, *args, **kwargs):
@@ -181,15 +187,15 @@ class VerifyEmailView(APIView):
 		serializer.is_valid(raise_exception=True)
 		self.kwargs['key'] = serializer.validated_data['key']
 		confirmation       = self.get_object()
-		
+				
 		if confirmation:
 			#Finally confirm the user 
 			confirmation.confirm(self.request)
 			user = confirmation.email_address.user
-			user.is_confirmed = True 
+			user.confirm(self.request) 
 			user.save()
 
-			payload = JWT_PAYLOAD_HANDLER(user)
+			payload   = JWT_PAYLOAD_HANDLER(user)
 			jwt_token = JWT_ENCODE_HANDLER(payload)
 			update_last_login(None, user)
 
@@ -198,8 +204,9 @@ class VerifyEmailView(APIView):
 			response_data = jwt_response_payload_handler(jwt_token, user, request)
 			return Response(response_data, status=status.HTTP_200_OK)
 
-		msg = """Could not confirm your account with this link"""
-		return Response({'detail':msg}, status=status.HTTP_400_BAD_REQUEST )
+		msg = """Could not confirm your account"""
+		return Response({'detail': 
+			msg}, status=status.HTTP_400_BAD_REQUEST )
 
 			
 class VerifyPhoneNumberView(APIView):
@@ -207,26 +214,29 @@ class VerifyPhoneNumberView(APIView):
 	
 	def get_object(self, request):
 		sms_code = request.data.get('sms_code')
-		phone_number_confirmation = PhoneNumberSmsCode.objects.get(verify_sms_code=sms_code)	
-		return phone_number_confirmation
+		confirmation = PhoneNumberConfirmation.objects.filter(sms_code=sms_code)
+		if confirmation:
+			confirmation = confirmation[0]
+			if confirmation.code_expired():
+				print(confirmation, 'code_expired')
+			return confirmation
+		return None
 
 	def get_serializer(self, *args, **kwargs):
-		return SmsCodeSerializer(*args, **kwargs)
+		return PhoneNumberConfirmationSerializer(*args, **kwargs)
 
 	def post(self, request, *args, **kwargs):
-		pin = request.data.get('sms_code')
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		
-		confirmation       = self.get_object(request)
+		confirmation  = self.get_object(request)
 		if confirmation:
-			user = confirmation.user
-			user.is_confirmed = True
+			confirmation.confirm(self.request)
+			user = confirmation.phone_number.user
+			user.confirm(self.request) 
 			user.save()
-			confirmation.verify_sms_code = '' #Delete verified code
-			confirmation.save()
-
-			payload = JWT_PAYLOAD_HANDLER(user)
+			
+			payload   = JWT_PAYLOAD_HANDLER(user)
 			jwt_token = JWT_ENCODE_HANDLER(payload)
 			update_last_login(None, user)
 
@@ -236,44 +246,92 @@ class VerifyPhoneNumberView(APIView):
 			return Response(response_data, status=status.HTTP_200_OK)
 
 		msg = """Could not confirm your account with this code"""
-		return Response({'detail':msg}, status=status.HTTP_400_BAD_REQUEST )
+		return Response({'non_field_errors':msg}, status=status.HTTP_400_BAD_REQUEST )
 
 
-class SendEmailConfirimationView(APIView):
+class SendAccountConfirmationView(APIView):
 	permission_classes = (AllowAny,)
 
 	def get_serializer(self, *args, **kwargs):
+		#print('serializer',kwargs, args, self.request.data)
+		email = self.request.data.get('email')
+		
+		self.is_phone_number  = is_using_phone_number(email)
+		self.is_email_address = is_using_email_address(email)
+
+		if self.is_phone_number:
+			return PhoneNumberSerializer(*args, **kwargs)
+
 		return EmailSerializer(*args, **kwargs)
 
+	def send_email_confirmation(self, user=None):
+		if self.user:
+			send_email_confirmation(self.request, self.user)
+		
+	def send_phone_number_confirmation(self, user=None):
+		if user:
+			phone_number = user
+			phone_number.send_confirmation(self.request._request)
+			return phone_number
+
 	def post(self, request, *args, **kwargs):
+		email = request.data.get('email')
+
+		
 		serializer = self.get_serializer(data=request.data)	
 
+
 		if serializer.is_valid(raise_exception=True):
-			user = serializer.validated_data.get('user', False)
-			email = serializer.validated_data['email']
+			self.user = serializer.validated_data.get('user', None)
+			if self.user:
+				if self.is_phone_number:
+					self.send_phone_number_confirmation(self.user)
 
-			if user:
-				user.is_active = False
-				send_email_confirmation(self.request, user)
-				msg = _('Account confirmation e-mail has been resent')
-				return Response({'email': email, 'detail': msg},
-					            status=status.HTTP_201_CREATED,)
-				
-			else:
+				else:
+					self.send_email_confirmation(self.user)
 
-				return Response(serializer.data)
+				response_data = self.get_response()
+				return Response(response_data, status=status.HTTP_201_CREATED)
+
+		msg = """Could not send confirmation"""
+		return Response({'non_field_errors':msg}, status=status.HTTP_400_BAD_REQUEST )
+
+	def get_response(self):
+		
+		if self.user and self.is_phone_number:
+			phone_number = self.user
+
+			msg = _('Account confirmation code has been resent')
+			return {
+				'detail':msg,
+				'phone_number':phone_number.national_format
+			}
+
+		elif self.user:
+			email = self.user.email
+			msg = _('Account confirmation e-mail has been resent')
+			return{
+				'detail':msg,
+				'email':email
+			}
+
+		return {}
+
+
+
 					
 	
-class ComfirmSmsCodeView(APIView):
+class PasswordChangeConfirmationView(APIView):
 	permission_classes = (AllowAny,)
 
 	def get_serializer(self, *args, **kwargs):
-		return SmsCodeSerializer(*args, **kwargs)
+		return PasswordChangeConfirmationSerializer(*args, **kwargs)
 
 	def post(self, request, *args, **kwargs):
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
-		sms_code = request.data.get('sms_code')
+		sms_code = serializer.validated_data.get('sms_code', None)
+		
 		msg   = """Code is valid."""
 		response_data = {'detail': msg, 'sms_code':sms_code}
 		return Response(response_data, status=status.HTTP_200_OK)
@@ -293,23 +351,15 @@ class CustomPasswordResetView(PasswordResetView):
         serializer.save()
 
         # Return the success message with OK HTTP status
-        
-        user_identify = request.data.get('email')
-        if is_using_phone_number(user_identify):
-        	phone_numbers = PhoneNumber.objects.filter(primary_number=user_identify)
-        	if not phone_numbers:
-        		phone_numbers = PhoneNumber.objects.filter(national_format=user_identify)
-
-        	national_format = None
-        	if phone_numbers:
-        		for number in phone_numbers:
-        			national_format = number.national_format
-        			print(number, user_identify, national_format)
-
+        user = serializer.validated_data.get('user', None)
+       
+        email = request.data.get('email')
+        if is_using_phone_number(email):
+        	phone_number = user.phone_numbers        			
         	msg =  "Password reset code has been sent."
 
         	response_data = {
-        		'phone_number':national_format,
+        		'phone_number':phone_number.national_format,
         		'detail':msg
         		}
         	return Response(response_data, status=status.HTTP_200_OK)
@@ -317,7 +367,7 @@ class CustomPasswordResetView(PasswordResetView):
         msg = _("Password reset e-mail has been sent.")
         response_data = {
         		'detail' : msg,
-        		'email' : user_identify,
+        		'email' : user.email,
         		}
         return Response(response_data, status=status.HTTP_200_OK)
 

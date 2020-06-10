@@ -3,6 +3,7 @@ import React from 'react';
 import {  Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
 import { SubmitBtn,
+         SmsCodeModalBtn,
          OpenUsersModalBtn,
          ModalCloseBtn,
          OpenEditorBtn  } from "templates/buttons";
@@ -73,7 +74,7 @@ export const NavBarMenuItems = props => {
 
         <div>
 
-            <div className="menu-img-container">
+            <div id="" className="menu-img-container">
                 <div className="menu-img-box" onClick={() => RedirectMenuLinks(toProfileProps)}> 
                         { profile && profile.profile_picture?
                             <img alt="" src={profile.profile_picture} className="menu-img"/>
@@ -181,7 +182,10 @@ const NavBarDropDown = props => {
                 </div>
             </div>
             
-            <div className="dropdown-menu nav-dropdown-menu" aria-labelledby="navBardropdown">
+            <div
+                id=""
+                className="dropdown-menu nav-dropdown-menu"
+                aria-labelledby="navBardropdown">
                 <NavBarMenuItems {...props}/>
                 
             </div>
@@ -269,11 +273,8 @@ export const NavBarSmallScreen = props => {
             userListProps : {currentUser},
             modalName     : 'userList', 
         }; 
-
     let state = { modalProps } 
-
-     
-
+    
     return (
 		<nav  className="mobile-navbar-top fixed-top navbar-expand-lg navbar-light"
               id="navigation-mobile">
@@ -284,6 +285,7 @@ export const NavBarSmallScreen = props => {
                              className="btn-sm navbar-feedback-btn">
                         Feedback
                     </button>
+                    
                 </ul>
                 <ul className="logo-contents">
                     <li>Wiplayit</li>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, Router } from "react-router-dom";
+import * as Icon from 'react-feather';
 import {history} from "App" 
 import { MatchMediaHOC } from 'react-match-media';
 import { ModalManager, Modal }   from  "components/modal/modal-container";
@@ -576,7 +577,7 @@ export const ModalCloseBtn = props => {
       <button type="button" 
               style={styles}
               onClick={()=>window.history.back()}
-              className="nav-bar-back-btn btn-sm" >
+              className="nav-bar-back-bt btn-sm" >
          {props.children}
       </button>  
   );
@@ -671,7 +672,7 @@ export const  OptionModal = props => {
 
     return(
         <button className="btn-sm options-btn"    onClick={()=> {  Modal(modalProps) }}>
-             <i className="material-icons ">more_horiz</i>  
+             <Icon.MoreHorizontal id="feather-more-horizontal" size={20}/>  
         </button>
     )
 }
@@ -744,5 +745,27 @@ export const OpenUsersModalBtn = props => {
     );
 };
 
+
+
+
+export const SmsCodeModalBtn = props => {
+    let {obj, linkName} = props
+    
+    let modalProps = {
+            ...props,
+            modalName : 'smsCodeForm', 
+        }; 
+          
+    return(
+        <button className="btn-sm text-highlight"
+                onClick={()=> {
+                        Modal(modalProps)
+                    }}>
+            {linkName} 
+            {props.children} 
+        </button>
+        
+    );
+};
 
 

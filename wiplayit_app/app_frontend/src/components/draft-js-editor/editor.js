@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-import { CharacterMetadata, CompositeDecorator, AtomicBlockUtils,
+import {CharacterMetadata, CompositeDecorator, AtomicBlockUtils,
          RichUtils,convertToRaw, convertFromRaw,Entity,
          genKey, EditorState, ContentBlock} from 'draft-js'; 
 
 import  {ModalSubmitPending}  from 'actions/actionCreators';
-import { ModalManager}   from  "components/modal/modal-container";
+import {ModalManager}   from  "components/modal/modal-container";
 
-import { List, Repeat } from 'immutable';
+import {List, Repeat} from 'immutable';
 
 import  Helper from 'utils/helpers';
 import {TextAreaEditor,
@@ -18,13 +18,13 @@ import {TextAreaEditor,
         MobileModalNavBar,
         DesktopModalNavBar } from  "templates/editor/editor-templates";
 import {insertLink, decorator} from 'components/draft-js-editor/plugins'
-import { AlertComponent } from 'templates/partial-components';
-import { showModal }  from 'actions/actionCreators';
+import {AlertComponent} from 'templates/partial-components';
+import {showModal}  from 'actions/actionCreators';
 import {handleModalScroll} from 'components/modal/helpers';
 import {store} from 'store/index';
-import { history } from "App";
+import {history} from "App";
 import Api from 'utils/api';
-import { handleSubmit, _GetApi }  from "dispatch/index"
+import {handleSubmit, _GetApi }  from "dispatch/index"
 import  * as action  from "actions/actionCreators";
 import * as checkType from 'helpers/check-types'; 
 

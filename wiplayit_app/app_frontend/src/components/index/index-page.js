@@ -38,6 +38,7 @@ class IndexBox extends Component {
             answerListById   : 'filteredAnswers',
             userListById     : 'filteredUsers',
             isReloading      : false,
+            isAutheticanting : false,
             homeTab          : {color:'#A33F0B'},      
         } 
     };
@@ -67,11 +68,12 @@ class IndexBox extends Component {
                index,
                questions,
                posts, 
-               answers, 
+               answers,
+               userAuth, 
                errors }   = entities && entities;
                      
-            //console.log(errors) 
-            index && this.setState({isReloading : index.isLoading})  
+            index && this.setState({isReloading : index.isLoading}) 
+            
 
             if (index && index.isSuccess) {
                 index.isSuccess = false;
@@ -117,40 +119,53 @@ class IndexBox extends Component {
         return getTimeState.menutes()
 
     }
+
+    checkDataExist(data){
+        if (!data) return false;
+
+        let {questions,
+             answers,
+             posts,
+             users} = data;
+
+        if (questions || users || answers || posts) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
     
     componentDidMount() {
         this.isMounted = true;
         this.onIndexUpdate();
+              
+        window.addEventListener("beforeunload",(event)=>{
+            //return this.props.getIndex();  
+              
+        });
+
+
         let { cacheEntities,
+              userAuth,
               entities } = this.props;
         let { index}     = entities;
         let cachedIndex  = cacheEntities && cacheEntities.index; 
+        let checkDataExist  = this.checkDataExist ; 
+                
+        if (!checkDataExist(index) && checkDataExist(cachedIndex)) {
+                        
+            let menDifference = this.getTimeState(cachedIndex.timeStamp);
 
-        const checkData = this._checkData   
-        
-        if (!checkData(index && checkData(cachedIndex))) {
-            let {questions,
-                 answers,
-                 posts,
-                 users} = cachedIndex && cachedIndex || {};
-            
-            if(checkData(questions) || checkData(answers) ||
-               checkData(posts) || checkData(users)){
-                let menDifference = this.getTimeState(cachedIndex.timeStamp)
-
-                if (menDifference <= 2) {
-                    this.updateIndexEntities(cachedIndex);
-                    return;
-                }
+            if (menDifference <= 5) {
+                this.updateIndexEntities(cachedIndex);
+                return;
             }
         }
-
-        !checkData(index) && this.props.getIndex();
-        
+       
+        if(!checkDataExist(index)) this.props.getIndex();
     };
-   
-
-   
+      
     reLoader =()=>{
         let id = this.state.id;   
         this.setState({isReloading : true})
@@ -216,7 +231,7 @@ class IndexBox extends Component {
 
                         {index && index.isLoading &&
                             <div className="page-spin-loader-box">
-                                <AjaxLoader/>
+                                <AjaxLoader {...props}/>
                             </div>
                         }
 

@@ -35,12 +35,14 @@ from .models import  (
 					Profile,
 					Country,
 					PhoneNumber,
-					PhoneNumberSmsCode)
+					PhoneNumberConfirmation,
+					PhoneNumberPasswordChange)
 from app_backend.mixins.serializer_mixins import SerialiizerMixin
 from app_backend import serializers  as app_serializers
 from app_backend.helpers import  has_perm, get_users_with_permissions
 from auth_backend.utils import (is_using_phone_number,
 								is_using_email_address,
+								get_phone_number,
 								get_phone_number_region,
 								phone_number_exists,
 								get_national_number_format,
@@ -49,6 +51,7 @@ from auth_backend.utils import (is_using_phone_number,
 								email_is_verified,
 								_get_pin,
 								send_pin,
+								is_valid_number,
 								get_intern_number_format)
 
 
@@ -131,72 +134,61 @@ class CustomRegisterSerializer(RegisterSerializer):
 	country    = serializers.CharField(required=False, allow_blank=True)
 	password   = serializers.CharField(write_only=True)
 
-	def _validate_email():
-		pass
-
-	def validate_phone_number(self, phone_number):
+	def validate_phone_number(self, phone_number=None):
+			
 		if allauth_settings.UNIQUE_EMAIL:
-			if phone_number and phone_number_exists(phone_number):
-				print('phone exists')
+			if  phone_number_exists(phone_number):
 				msg = _("A user is already registered with this phone number.")
 				raise serializers.ValidationError(msg)
+
 		return phone_number
 
 	def validate_email(self, email):
-		email = get_adapter().clean_email(email)
+		
 		self.is_phone_number  = is_using_phone_number(email)
 		self.is_email_address = is_using_email_address(email)
 
+		self.username = email
 		if self.is_phone_number:
-			phone_number = email
-			return self.validate_phone_number(phone_number)
+			return self.validate_phone_number(self.username)
 		
 		if allauth_settings.UNIQUE_EMAIL:
 			if email and email_address_exists(email):
 				msg = _("A user is already registered with this e-mail address.")
 				raise serializers.ValidationError(msg)
-				
-		return email
+		return self.username
 
 	def validate(self, data):
-		_data = {}
-		usarname = data.get('email', None)
-		self.is_phone_number  = is_using_phone_number(usarname)
-		self.is_email_address = is_using_email_address(usarname)
+		self.country_code = data.get('country', None)
 
+		_data = {}
 		if self.is_phone_number:
-			country = data.get('country')
-			self.usarname   = get_intern_number_format(country, usarname)
-			_data['email'] = self.usarname 
-					
+			if not is_valid_number(self.country_code, self.username):
+				msg = _("Phone number is invalid.")
+				raise serializers.ValidationError(msg)
+						
+			_data['email'] = get_intern_number_format(self.country_code, self.username) 
+
 		data.update(_data)
 		return data
-
-	def user_exist(self, email):
-		return User.objects.filter(email=email).exists()
+	
 
 	def custom_signup(self, request, user):
-		country = request.data.get('country')
-		phone_number = request.data.get('email')
-		
+				
 		if self.is_phone_number:
-			user_phone_numbers = PhoneNumber.objects.filter(user=user)
-			for number in user_phone_numbers:
-				number.primary_number  = phone_number
-				number.national_format = get_national_number_format(country, phone_number)
-				number.inter_format =  get_inter_number_format(country, phone_number)
-				number.save()
+			phone_number = PhoneNumber.objects.get(user=user)
+			phone_number.set_primary(self.username)
+			phone_number.set_national_format(self.country_code, self.username)
+			phone_number.set_inter_format(self.country_code, self.username)
 			
 
-		if country and self.is_phone_number:
-			country_long_name = get_phone_number_region(country, phone_number) 
-			
-			user_countries = Country.objects.filter(user=user)
-			for c in user_countries:
-				c.short_name = country
-				c.long_name  = country_long_name 
-				c.save()
-			
+		if self.country_code:
+			country = Country.objects.get(user=user)
+			country.set_short_name(self.country_code) 
+
+			if self.is_phone_number:
+				country.set_long_name(self.country_code, self.username)
+					
 		return user
 
 	def get_cleaned_data(self):
@@ -219,38 +211,97 @@ class TokenSerializer(serializers.ModelSerializer):
         model = Token
         fields = ('key', 'user')
 
-
+	
  
 class SmsCodeSerializer(serializers.Serializer):
-    sms_code = serializers.CharField()
-
-    def get_sms_code(self, code):
-    	sms_code = PhoneNumberSmsCode.objects.filter(verify_sms_code=code)
-    	if not sms_code:
-    		sms_code = PhoneNumberSmsCode.objects.filter(password_sms_code=code)
-    		if not sms_code:
-    			msg = "Code is invalid"
-    			raise serializers.ValidationError(msg)
-    	return sms_code[0] or None
+    sms_code = serializers.CharField(required=True)
 
 
     def validate(self, attrs):
-    	sms_code = attrs.get('sms_code')
-    	self.get_sms_code(sms_code)
+    	code = attrs.get('sms_code')
+    	sms_code = self.validate_code(code)
+    	if not sms_code:
+    		msg = 'Code is invalid'
+    		raise serializers.ValidationError(msg)
+
+    	if sms_code.code_expired():
+    		msg = 'Code expired'
+    		raise serializers.ValidationError(msg)
+
+
+    	attrs['sms_code'] = code
     	return attrs
+
+
+class PhoneNumberConfirmationSerializer(SmsCodeSerializer):
+	
+	def validate_code(self, value):
+		confirmation = PhoneNumberConfirmation.objects.filter(sms_code=value)
+
+		if not confirmation:
+			return None
+		return confirmation[0]
+
+
+class PasswordChangeConfirmationSerializer(SmsCodeSerializer):
+    
+    def validate_code(self, value):
+    	confirmation = PhoneNumberPasswordChange.objects.filter(sms_code=value)
+
+    	if not confirmation:
+    		return None
+   	
+    	return confirmation[0]
+
+
+
+
+class PhoneNumberSerializer(serializers.Serializer):
+	email   = serializers.CharField(required=False, allow_blank=True)
+
+	def validate(self, attrs):
+		email = attrs.get('email')
+		self.is_phone_number  = is_using_phone_number(email)
+		
+		user     = None
+		if self.is_phone_number:
+			user = self._validate_phone_number(email)
+
+		attrs['user'] = user
+		return attrs
+
+
+	def _validate_phone_number(self, phone_number):
+		if not phone_number_exists(phone_number):
+			msg = _('Account with this phone number does not exists')
+			raise serializers.ValidationError(msg)
+
+		phone_number = get_phone_number(phone_number)
+		return phone_number
+
 
 
 class EmailSerializer(serializers.Serializer):
 	email    = serializers.EmailField(required=False, allow_blank=True)
 
-	def validate(self, attrs):
-		email = attrs.get('email')
-		users = User.objects.filter(email=email)
-		
-		if not users:
-			msg = _('Account with this email address does not exists')
+
+	def _validate_email(self, email):
+		if not email_address_exists(email):
+			msg = _('Account with this email address does not exists.')
 			raise serializers.ValidationError(msg)
 
+		return User.objects.get(email=email)		
+		
+
+	def validate(self, attrs):
+		email = attrs.get('email')
+		self.is_email_address = is_using_email_address(email)
+
+		user     = None
+		if self.is_email_address:
+			user = self._validate_email(email)
+
+		attrs['user'] = user
 		return attrs
 
 
@@ -273,30 +324,27 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
 
 	def validate_phone_number(self, value):
 		phone_number = value
-
 		if not phone_number_exists(phone_number):
 			msg = _('Account with this phone number does not exists.')
 			raise serializers.ValidationError(msg)
 
-		phone_number = get_verified_number(phone_number)	
-		if not phone_number:
+		self.phone_number = get_verified_number(phone_number)	
+		if not self.phone_number:
 			msg = _('You must confirm your account before you can change a password.')
-			raise serializers.ValidationError(msg)	
+			raise serializers.ValidationError(msg)
 
-		self.send_sms_code(phone_number)
+		self.user = self.get_user(self.phone_number.user.email)
+		phone_number = self.user.phone_numbers
+		phone_number.send_password_rest()
 		return value
+	
 
-	def send_sms_code(self, phone_number):
-		to_number = phone_number.user.email
-		code = _get_pin()
-		sms_body = 'Your Account password change code is {0}'.format(code)
-		send_pin(to_number, sms_body)
-		
-		phone_number_sms_codes = PhoneNumberSmsCode.objects.filter(user=phone_number.user)
-		
-		for sms_code in phone_number_sms_codes:
-			sms_code.password_sms_code = code
-			sms_code.save()
+	def get_user(self, email):
+		user = User.objects.filter(email=email)
+		if user:
+			return user[0]
+	
+		return None
 
 
 	def validate_email(self, value):
@@ -318,7 +366,12 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
 		if not self.reset_form.is_valid():
 			raise serializers.ValidationError(self.reset_form.errors)
 
+		self.user = self.get_user(email=email)
 		return value
+
+	def validate(self, attrs):
+		attrs['user'] = self.user
+		return attrs
 
 	def save(self):
 		if self.is_phone_number:
@@ -367,13 +420,17 @@ class CustomPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):
 		return attrs
 
 	def validate_sms_code_based(self, attrs):
-		sms_code = attrs.get('sms_code')
-		sms_code = PhoneNumberSmsCode.objects.filter(password_sms_code=sms_code)
+		code = attrs.get('sms_code')
+		password_change = PhoneNumberPasswordChange.objects.filter(sms_code=code)
 
-		if sms_code:
-			sms_code = sms_code[0]
-
-			self.user = sms_code.user
+		if password_change:
+			password_change = password_change[0]
+			if not password_change.password_changed:
+				phone_number = password_change.phone_number
+				self.user = phone_number.user
+				
+			else:
+				raise ValidationError({'sms_code': ['Invalid code']})
 		else:
 			raise ValidationError({'sms_code': ['Invalid code']})
 
@@ -383,15 +440,13 @@ class CustomPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):
 		if not self.set_password_form.is_valid():
 			raise serializers.ValidationError(self.set_password_form.errors)
 
-		sms_code.password_sms_code = ''
-		sms_code.save()
+		password_change.confirm()
 		return attrs
 
 	def custom_validation(self, attrs):
 		pass
 
 	def validate(self, attrs):
-		print(attrs)
 		if attrs.get('uid') and attrs.get('token'):
 			self.validate_token_based(attrs)
 		else:
@@ -399,6 +454,11 @@ class CustomPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):
 
 		return attrs
 		
+
+class ProfilePhoneNumberSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = PhoneNumber 
+		fields = '__all__'
 
         
 
@@ -410,7 +470,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 			    
 class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
-	profile    = ProfileSerializer(read_only=False)
+	profile      = ProfileSerializer(read_only=False)
+	phone_numbers = ProfilePhoneNumberSerializer(read_only=False)
 	
 	class Meta():
 		model  = User
@@ -428,8 +489,8 @@ class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 		# Unless the application properly enforces that this field is
 		# always set, the follow could raise a `DoesNotExist`, which
 		# would need to be handled.
-		country = profile_data.get('country ')
-		phone_number = profile_data.get('phone_number')
+		country = profile_data.get('country', False)
+		phone_number = profile_data.get('phone_number', False)
 
 		print(phone_number,country)
 		
@@ -459,16 +520,6 @@ class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 
 		profile.profile_picture = profile_data.get(
      		'profile_picture',  profile.profile_picture
-
-			)
-
-		profile.phone_number = profile_data.get(
-     		'phone_number',  profile.phone_number
-
-			)
-
-		profile.country  = profile_data.get(
-     		'country ',  profile.country 
 
 			)
 

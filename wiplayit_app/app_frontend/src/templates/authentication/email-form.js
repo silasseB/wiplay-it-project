@@ -12,6 +12,7 @@ import { RegistrationSubmitBtn,
 
 
 const EmailForm = props => {
+
     let {submitting,
         onSignUpForm,
         onPasswordResetForm,
@@ -22,7 +23,6 @@ const EmailForm = props => {
         formIsValid,
         formName, 
         formDescription,
-        cacheEntities,
         validateForm,
         isSocialAuth } = props;
 
@@ -44,13 +44,9 @@ const EmailForm = props => {
                       onPasswordResetForm && 'Password Reset';
 
 
-    formDescription = formDescription ||  `Enter your e-mail address or ` +
-                                           `phone number to change password.`;
-    let {userAuth} = cacheEntities
-    if (!passwordRestAuth) {
-        passwordRestAuth =  userAuth.passwordRestAuth;
-    }
-        
+    formDescription = `Enter your e-mail address or ` +
+                                           `phone number.`;
+           
     return(
         <div>
             { form && 
@@ -165,8 +161,6 @@ export const SmsCodeForm = props => {
         onPasswordResetForm,
         successMessage,
         onEmailResendForm,
-        cacheEntities,
-        passwordRestAuth,
         form, 
         formIsValid,
         formName, 
@@ -187,20 +181,12 @@ export const SmsCodeForm = props => {
                                                      {opacity:'0.60'}:{};
     
     let fieldSetStyles = submitting && {opacity:'0.60'} || {};
-    let toggleProps = { value : true, formName : 'passwordResetForm' };
-    
-    let {userAuth} = cacheEntities
-
-    if (!passwordRestAuth) {
-        passwordRestAuth =  userAuth.passwordRestAuth;
-    }
-
-    let {identifier} = passwordRestAuth || {};
-    //console.log(props, formTitle)
+    let toggleProps    = {value : true, formName : 'passwordResetForm'};
+         
     return(
         <div>
-            { onPasswordResetForm &&
-                <div className="password-reset-box">
+            { onPasswordResetForm || onEmailResendForm &&
+                <div className="password-reset-bo">
                     <EmailForm {...props}>
                         <CancelEmailFormSmall {...props}/>
                     </EmailForm> 
@@ -209,33 +195,19 @@ export const SmsCodeForm = props => {
                 <div>
 
                 {form && 
-                    <div className="email-form-box">
+                    <div className="sms-code-form-box">
                         <ul className="form-title-box">
                             <li className="">{formTitle}</li>
                         </ul>
-                    
-                                        
-                        <form className="email-form" onSubmit={props.onSubmit}>
-                            <ul className="password-form-description">
-                                <li>
-                                    We sent a code to your phone {' '} 
-                                    <span className="unconfirmed-user-email">
-                                         { identifier }.
-                                    </span> Please enter the code to change password.
-                                </li>
-                            </ul>
+                                                                
+                        <form className="sms-code-form" onSubmit={props.onSubmit}>
+                            {props.children}
+                           
 
                         {error &&
                             <NonFieldErrors {...error}/>
                         }
-
-                        {error &&
-                          <EmailFieldErrors {...error}/>
-                        }
-
-                        {error &&
-                          <EmailFieldErrors {...error}/>
-                        }
+                     
 
                         <fieldset style={ fieldSetStyles} 
                                   disabled={ submitting || onSignUpForm} >
@@ -261,7 +233,7 @@ export const SmsCodeForm = props => {
                                 </div>
                                 <div className="resend-email-box">
                                     <p className="resend-email-text">
-                                        Not your phone number ?
+                                        You didn't receive any sms ?
                                     </p>
 
                                     <button type="button" 
@@ -286,16 +258,5 @@ export const SmsCodeForm = props => {
 };
 
 
-/*
-const  
-return(
-    {onPasswordResetForm?
-                    <div className="password-reset-container">
-                        <EmailForm {...props}/> 
-                    </div>
-                    :
-                    <div className="login-container" >
-                        <LoginForm {...props}/>
-                    </div>
-                }
-    )*/
+
+

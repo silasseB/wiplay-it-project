@@ -45,12 +45,7 @@ export const  SignUpForm = props => {
             </ul> 
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
-      
-            {!isSocialAuth && error &&
-                <NonFieldErrors {...error}/>
-            }       
-
-            <fieldset  disabled={ submitting } 
+              <fieldset  disabled={ submitting } 
                        style={ fieldSetStyles}
                        className="fieldset-signup" >
 
@@ -91,6 +86,10 @@ export const  SignUpForm = props => {
                     {!isSocialAuth && onSignUpForm && error &&
                         <EmailFieldErrors {...error}/>
                     }
+                    
+                    {!isSocialAuth && error &&
+                      <NonFieldErrors {...error}/>
+                    }    
 
                   <div className="email-box auth-input-field">
                     <input

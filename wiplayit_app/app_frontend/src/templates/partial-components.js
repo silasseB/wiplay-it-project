@@ -1,5 +1,8 @@
 import React from 'react';
-
+import * as Icon from 'react-feather';
+import {SmsCodeModalBtn} from "templates/buttons";
+import {validateEmail,
+        validatePhoneNumber} from 'components/authentication/utils';
 
 export const ButtonsBox = props => {
     let styles = props && props.Styles;
@@ -7,13 +10,12 @@ export const ButtonsBox = props => {
   	styles     = !styles && Styles.contents || styles;
     
     return (
-
-         <div className="contents-nav-container">
+        <div className="contents-nav-container">
 
             <div className="items-counter-box">
                <ul className="items-counter-box">
                     <li  className="items-btn-box">
-                        { props.itemsCounter || null}
+                        {props.itemsCounter || null}
                     </li>
                </ul>
             </div>
@@ -32,21 +34,18 @@ export const ButtonsBox = props => {
                </li>
             </ul>
             
-         </div>   
-      
-
+        </div>   
     )
 
-}
+};
 
 
 export const Styles = {
-      contents : {
-         display      : 'flex',
-         border       : 'px solid red',
-
-      }
-   }
+    contents : {
+        display      : 'flex',
+        border       : 'px solid red',
+    }
+}
 
 
 export const PageErrorComponent = props => {
@@ -125,16 +124,12 @@ export const UnconfirmedUserWarning =(props)=> {
             <div className="unconfirmed-user-warn-container">
                 <div className="alert alert-warning unconfirmed-user-warn-box">
                     <button type="bottom" className="">
-                        <span className="warning-icon material-icons">warning</span>
+                        <Icon.AlertCircle id="feather-alert-circle" size={20}/>
                     </button>
 
                     <ul className="unconfirmed-user-warn">
-                        <li>
-                        Your account has not been confirmed.
-                         Please go to your email <span className="unconfirmed-user-email">
-                         { currentUser && currentUser.email }</span> to
-                        confirm your account and start posting.
-                        </li>
+                        <EmailVerifyWarning {...props}/>
+                        <PhoneNumbeVerifyWarning {...props}/>
                     </ul>
                 </div>
 
@@ -144,3 +139,53 @@ export const UnconfirmedUserWarning =(props)=> {
     );
 };
 
+const EmailVerifyWarning =(props)=> {
+  let {cacheEntities, currentUser} = props;
+  currentUser     = !currentUser && cacheEntities && 
+                       cacheEntities.currentUser && 
+                       cacheEntities.currentUser.user || currentUser;
+    if (currentUser && validateEmail(currentUser.email)) {
+        return(
+            <li>
+                Your account has not been confirmed.
+                Please go to your email <span className="text-highlight">
+                { currentUser && currentUser.email }</span> to
+                confirm your account and start posting.
+            </li>
+        );
+    }else{
+        return null;
+    }
+
+
+}
+
+const PhoneNumbeVerifyWarning =(props)=> {
+    let {cacheEntities, currentUser} = props;
+    currentUser     = !currentUser && cacheEntities && 
+                       cacheEntities.currentUser && 
+                       cacheEntities.currentUser.user || currentUser;
+
+    if (currentUser && validatePhoneNumber(currentUser.email)) {
+        let phone_number = currentUser && currentUser.phone_numbers;
+        phone_number = phone_number && phone_number.national_format;
+
+        let smsCodeProps = {
+            linkName  : "Here",
+            currentUser,
+        };
+
+        return(
+            <li>
+                We texted a code to your phone number <span className="text-highlight">
+                {phone_number}</span> to confirm its your phone number.
+                Please click  <SmsCodeModalBtn {...smsCodeProps}/>  to
+                confirm your account.
+            </li>
+        );
+
+    }else{
+        return null;
+
+    } 
+};

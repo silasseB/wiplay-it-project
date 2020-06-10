@@ -124,7 +124,7 @@ export const  CancelEmailFormBtn  = props => {
 
     return (
         <button type="button" onClick={()=>props.toggleEmailForm(toggleProps)} 
-            className="form-cancel-btn btn-sm " >
+            className="form-cancel-btn text-highlight btn-sm " >
             Cancel
         </button>
     );

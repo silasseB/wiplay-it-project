@@ -130,7 +130,7 @@ REST_SESSION_LOGIN = True
 JWT_AUTH = { 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
     'JWT_ALLOW_REFRESH'     : True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
 
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'auth_backend.views.jwt_response_payload_handler',
@@ -290,3 +290,5 @@ TWILIO_ACCOUNT_SID = 'AC7ef780034af8db8aa10a7f13e03db4df' #'AC842714aac43137afd9
 TWILIO_AUTH_TOKEN =   'ab5cac9d50a69005858b4bbc63949a8a' #'140f11dd7fb5e548132d41ac773803ab'       #'2c80865e1ccdd1f694f1aacb5e299b9f'
 TWILIO_PHONE_NUMBER =  '+12566009898'
 
+
+#uxCQOGGovy3WZXkGYtdH36XFUT81YzeD71KF4a5_

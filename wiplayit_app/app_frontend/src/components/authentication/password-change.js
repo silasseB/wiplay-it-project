@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavBar} from 'templates/authentication/utils';
-import  PassWordChangeForm   from 'templates/authentication/password-change'; 
+import  PassWordChangeForm,{SuccessPasswordChange}   from 'templates/authentication/password-change'; 
 import AuthenticationHoc  from 'components/authentication/index-hoc'; 
 
 
@@ -38,14 +38,21 @@ export class PasswordChangePage extends Component{
     render(){
       
         let props = {...this.props, ...this.state};
-        
+        let {userAuth, errors} = props.entities;
+        let {passwordChangeAuth}  = userAuth;
+        let {successMessage} = passwordChangeAuth || {};
+  
         
         return (
             <div className="registration-page">
                <NavBar {...props}/>
                 <div className="password-change-container registration-container">
-                  <PassWordChangeForm {...props}/>
-               </div>   
+                    {successMessage &&
+                        <SuccessPasswordChange {...props}/>
+                        ||
+                        <PassWordChangeForm {...props}/>
+                    }
+                </div>   
             </div>
         )
     }

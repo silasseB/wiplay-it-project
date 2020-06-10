@@ -13,15 +13,18 @@ import { SpinLoader,
 
 
 const RegistrationComponent = (props)=>{
-    let {isAuthenticated, navbarTitle} = props;
+    let {isAuthenticated,
+         submitting,
+         navbarTitle} = props;
     navbarTitle = isAuthenticated && "You're logged in"  || navbarTitle;
+    let fieldSetStyles = submitting && {opacity:'0.60'} || {};
 
     let _props = {...props, navbarTitle}
 
     return(
         <div className="registration-page">
            <NavBar {..._props}/>
-            <div className="registration-container">
+            <div style={ fieldSetStyles} className="registration-container">
                 { isAuthenticated &&
                     <AuthenticatedComponent {..._props}/>
                         ||

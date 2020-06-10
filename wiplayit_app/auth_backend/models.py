@@ -1,15 +1,27 @@
+import datetime
 from PIL import Image
+
+from django.utils import timezone
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
 from django.contrib.auth.models import PermissionsMixin
+from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
+
+
+from allauth.account.adapter import get_adapter
 from guardian.mixins import GuardianUserMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.base_user import AbstractBaseUser
+
 from .managers import UserManager
-from django.db.models.signals import post_save
 from app_backend.slug_generator import generate_unique_slug
 from auth_backend.utils import (is_using_phone_number,
+                                _get_pin,
+                                send_pin,
+                                get_national_number_format,
+                                get_inter_number_format,
                                 get_phone_number_region)
 
 class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
@@ -59,12 +71,13 @@ class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
         slug_exist = self.__class__.objects.filter(slug=self.slug).exists()
         if not self.slug or not slug_exist:
             self.slug = generate_unique_slug(self.__class__, self.get_full_name())
+              
+        super().save() 
 
-        if not self.password:
-            pass
-            #self.set_password(self.password)    
-               
-        super().save()         
+    def confirm(self, request=None):
+        if not self.is_confirmed:
+            self.is_confirmed = True
+            self.save()        
 
 
 def get_anonymous_user_instance(CustomUser):
@@ -122,7 +135,7 @@ class PhoneNumber (models.Model):
     verified        = models.BooleanField(default=False)
     primary         = models.BooleanField(default=False)
     user            = models.OneToOneField(settings.AUTH_USER_MODEL,
-                       on_delete= models.CASCADE, related_name="phone_number", blank=True)
+                       on_delete= models.CASCADE, related_name="phone_numbers", blank=True)
 
 
     def __str__(self):
@@ -134,18 +147,139 @@ class PhoneNumber (models.Model):
     class Meta:
         db_table = 'user_phone_number'
 
-    def get_national_format(self, phone_number):
-        pass
+    def set_national_format(self, country, phone_number):
+        self.national_format = get_national_number_format(country, phone_number)
 
-    def get_inter_format(self, phone_number):
-        pass
+        self.save()
 
-    def is_verified(self, phone_number):
+    def set_inter_format(self, country, phone_number):
+        self.inter_format = get_inter_number_format(country, phone_number)
+        self.save()
+
+    def set_primary(self, primary_number):
+        self.primary_number = primary_number
+        self.save()
+
+    def is_verified(self):
         return  self.verified
 
-    def is_primary(self, phone_number):
+    def set_as_primary(self):
+        self.primary = True
+        self.save()
+
+    def send_confirmation(self, request=None, signup=False):
+        confirmation = PhoneNumberConfirmation.create(self)
+        confirmation.send(request, signup=signup)
+        return confirmation
+
+    def send_password_rest(self, request=None):
+        password_rest = PhoneNumberPasswordChange.create(self)
+        password_rest.send(request)
+        return password_rest
+
+    def confirmation_expired(self):
         pass
+       
         
+
+
+class PhoneNumberConfirmation(models.Model):
+    sms_code = models.CharField(max_length=5, null=True)
+    phone_number   = models.ForeignKey(PhoneNumber, verbose_name=_('phone number'),
+                                      on_delete=models.CASCADE)
+    sent     = models.DateTimeField(verbose_name=_('sent'), null=True)
+    created  = models.DateTimeField(verbose_name=_('created'),
+                                   default=timezone.now)
+
+    class Meta:
+        verbose_name = _("phone number confirmation")
+        verbose_name_plural = _("phone number confirmations")
+
+    def __str__(self):
+        return "confirmation for %s" % self.phone_number
+
+    @classmethod
+    def create(cls, phone_number):
+        sms_code = _get_pin()
+        return cls._default_manager.create(phone_number=phone_number, sms_code=sms_code)
+   
+    def code_expired(self):
+        now = timezone.now()
+        expiration_date = now - self.sent 
+        return expiration_date >= datetime.timedelta(hours=1)
+    code_expired.boolean = True
+
+    def confirm(self, request=None):
+        if not self.code_expired() and  not self.phone_number.verified:
+            self.phone_number.verified = True
+            self.phone_number.save()
+
+    def send(self, request=None, signup=False):
+        print(self.phone_number)
+        if  not self.phone_number.verified:
+            sms_code = self.sms_code
+            sms_body = 'Your Account confirmation code is {0}'.format(sms_code)
+            phone_number = self.phone_number.user
+            print(phone_number.email, phone_number.is_confirmed)
+            #send_pin(phone_number.email, sms_body)
+
+            self.sent = timezone.now()
+            self.save()
+
+
+
+
+
+
+class PhoneNumberPasswordChange(models.Model):
+    sms_code = models.CharField(max_length=5, null=True)
+    phone_number   = models.ForeignKey(PhoneNumber, verbose_name=_('phone number'),
+                                      on_delete=models.CASCADE)
+    sent     = models.DateTimeField(verbose_name=_('sent'), null=True)
+    created  = models.DateTimeField(verbose_name=_('created'),
+                                   default=timezone.now)
+    password_changed = models.BooleanField(verbose_name=_('password has changed'),
+                                           default=False)
+
+    class Meta:
+        verbose_name = _("phone number password change")
+        verbose_name_plural = _("phone number password change")
+
+    def __str__(self):
+        return "password change for %s" % self.phone_number
+
+    @classmethod
+    def create(cls, phone_number):
+        print('creating password changed', phone_number, cls)
+        exit= cls.objects.filter(phone_number=phone_number)
+        print(exit)
+        sms_code = _get_pin()
+        return cls._default_manager.create(phone_number=phone_number, sms_code=sms_code)
+   
+    def code_expired(self):
+        now = timezone.now()
+        expiration_date = now - self.sent 
+        expired = expiration_date >= datetime.timedelta(hours=1)
+        return expired
+    code_expired.boolean = True
+
+
+    def confirm(self, request=None):
+        self.password_changed = True
+        self.save()
+
+    def send(self, request=None):
+        if self.phone_number.verified:
+            sms_code = self.sms_code
+            sms_body = 'Your Account password change code is {0}'.format(sms_code)
+            phone_number = self.phone_number.user
+            #send_pin(phone_number, sms_body)
+            self.sent = timezone.now()
+            self.save()
+
+
+
+
 
        
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -172,6 +306,14 @@ class Country (models.Model):
     class Meta:
         db_table = 'user_country'
 
+    def set_long_name(self, country, phone_number):
+        self.long_name = get_phone_number_region(country, phone_number)
+        self.save()
+
+    def set_short_name(self, short_name):
+        self.short_name = short_name
+        self.save()
+
             
 
        
@@ -181,42 +323,5 @@ def create_country(sender, instance, created, **kwargs):
     if created and not kwargs.get('raw', False):
         country = Country(user=instance)
         country.save()
-
-
-
-class PhoneNumberSmsCode(models.Model):
-    verify_sms_code   = models.CharField(max_length=5, null=True)
-    password_sms_code = models.CharField(max_length=5, null=True)
-    user              = models.OneToOneField(settings.AUTH_USER_MODEL,
-                            on_delete= models.CASCADE, 
-                            related_name="sms_code",
-                            blank=True)
-
-    def __str__(self):
-        return (self.user.email)
-    
-    def save(self, *args, **kwargs):
-        super().save()
-
-    class Meta:
-        db_table = 'sms_code'
-
-    def confirm_password_change(self, request):
-        pass
-
-    def confirm_verification_change(self, request):
-        pass
-        
-
-       
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_phone_number_sms__code(sender, instance, created, **kwargs):
-
-    if created and not kwargs.get('raw', False):
-        if is_using_phone_number(instance.email):
-            print('Creating phone number sms code')
-            phone_number_sms_code = PhoneNumberSmsCode(user=instance)
-            phone_number_sms_code.save()
-
 
 

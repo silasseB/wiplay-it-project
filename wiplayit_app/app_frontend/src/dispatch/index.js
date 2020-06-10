@@ -5,7 +5,7 @@ import Axios from 'utils/axios_instance';
 import  * as action  from 'actions/actionCreators';
 import * as checkType from 'helpers/check-types'; 
 import {GetLoggedInUser } from 'utils/helpers';
-
+import {history} from 'App';
 const api = new Api();
 
 export const _GetApi =(useToken=true, opts={}) =>{
@@ -58,8 +58,9 @@ export function getAboutInfo(options) {
 
 export function getIndex(options) {
     let useToken=true
-    const Api  = _GetApi(useToken);
+    const Api  = _GetApi(useToken, {requestFor:'index'});
 
+    
     if(!Api){
         return  dispatch =>{ 
             dispatch(action.handleError());
@@ -69,6 +70,7 @@ export function getIndex(options) {
     let apiUrl = api.getIndexApi(); 
     
     return dispatch => {
+
         dispatch(action.getIndexPending());
 
         Api.get(apiUrl)
@@ -566,34 +568,66 @@ export function handleSubmit(props) {
  	}
 };
 
+export function authenticateWithGet(params={}){
+
+    let key = params.key;
+    let useToken = false;
+    const apiUrl = api.accountConfirmApi(key);
+    const Api    = _GetApi(useToken, {timeout:30000, requestFor:'authentication'}); 
+
+    return dispatch => {
+        dispatch(action.authenticationPending());
+        Api.get(apiUrl)
+            .then(response => { 
+                let {data}  = response;
+                data = {...data,isConfirmation:true}
+                handleLogin(data, dispatch);
+
+            }).catch(error => {
+                console.log(error)
+                if (error.response) {
+                    console.log(error.response)
+                } 
+            });
+    };
+}
 
 export function authenticate(params={}){
-    let useTokenIsBolean = checkType.isBoolean(useToken)
-    useToken  = useTokenIsBolean &&  useToken || false;
-
-    const Api = _GetApi(useToken, {timeout:30000});   
-    if (!Api) {
-        console.log(Api)
-        return dispatch =>{ dispatch(action.handleError()) };
-    }
-
+    
     let {
         apiUrl,
         form,
         useToken,
         formName,
+        isTokenRefresh,
         isSocialAuth} = params;
-      
+
+    let useTokenIsBolean = checkType.isBoolean(useToken)
+    useToken  = useTokenIsBolean &&  useToken || false;
+
+    const Api = _GetApi(useToken, {timeout:30000, requestFor:'authentication'});   
+    if(!Api){
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
     return dispatch => {
-        dispatch(action.authenticationPending(isSocialAuth));
+        dispatch(action.authenticationPending(isSocialAuth, isTokenRefresh));
 
         Api.post(apiUrl, form)
             .then(response => {
                 console.log(response)
                 let {data}  = response;
+                if (formName === 'emailResendForm') {
+                    handleEmailSent(data, dispatch);
+                }
 
-                if(formName === 'signUpForm') handleLogin(data, dispatch);
-                if(formName === 'loginForm') handleLogin(data, dispatch);
+                if (formName === 'phoneNumberSmsCodeForm'){
+                    handleLogin({...data,isConfirmation:true}, dispatch)
+                }
+                if (formName === 'signUpForm') handleLogin(data, dispatch);
+                if (formName === 'loginForm') handleLogin(data, dispatch);
                 if (isSocialAuth) handleLogin(data, dispatch);
                 if (formName === 'passwordChangeForm') handlePasswordChange(data, dispatch);
                 if (formName === 'logoutForm') handleLogin(data, dispatch)
@@ -602,15 +636,15 @@ export function authenticate(params={}){
                 if(formName === 'passwordResetSmsCodeForm') {
                     handleSmsCode(data, dispatch);
                 }
-               
-                
             }
         )
         .catch(error =>{
 
             let _error;
             if (error.response) {
-                console.log(error.response)  
+
+                console.log(error.response, params, isSocialAuth, isTokenRefresh) 
+                
                 if (error.response.status == 500) {
                     _error = error.response.statusText
                     dispatch(action.authenticationError(_error, isSocialAuth));
@@ -619,7 +653,8 @@ export function authenticate(params={}){
                 }
 
                 _error = error.response.data;
-                dispatch(action.authenticationError(_error, isSocialAuth));
+                dispatch(action.authenticationError(_error, isSocialAuth, isTokenRefresh));
+                    
                 isSocialAuth && dispatch(action.handleError(_error.non_field_errors[0]));
 
             }
@@ -627,7 +662,7 @@ export function authenticate(params={}){
                 console.log(error.request)
                 _error = 'Something wrong happened. Please try again';
                 
-                dispatch(action.authenticationError(_error, isSocialAuth));
+                dispatch(action.authenticationError(_error, isSocialAuth, isTokenRefresh));
                 dispatch(action.handleError(_error));
 
             }else{
@@ -645,7 +680,8 @@ const handleLogin=(data, dispatch)=>{
     let loginAuth = {
         isLoggedIn :true,
         tokenKey   : data.token || data.key || null,
-        successMessage: data.detail,
+        successMessage : data.detail || '',
+        isConfirmation : data.isConfirmation || false,
     }
     if (data.user) {
         let isSuperUser = data.user.is_superuser;
@@ -687,6 +723,17 @@ const handlePasswordChange = (data, dispatch) => {
     dispatch(action.authenticationSuccess({passwordChangeAuth}));
 
 }
+
+
+const handleEmailSent =(data, dispatch)=>{
+        
+    let emailResendAuth = {
+        successMessage : 'Email sent.',
+    }
+
+    dispatch(action.authenticationSuccess({emailResendAuth}));
+}
+
 
 export function getAdmin() {
     let useToken=true

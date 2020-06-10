@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, BrowserRouter } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
+import * as Icon from 'react-feather';
+
 import {history} from "App" 
 
 
@@ -129,7 +131,7 @@ export const ProfileComponent = props => {
     //console.log(props)
     
     return (
-        <div>
+        <div className="profile-container">
             {userProfile?
             <div className="profile-contents">
             
@@ -220,7 +222,7 @@ export const ProfileComponent = props => {
                             </div>
 
                             <div className="about-user-box">
-                                <span  className="location-icon material-icons">location_on</span>
+                            <Icon.MapPin id="feather-location" size={20}/>
                                 <p className="user-location">
                                      {profile &&  profile.country }   {profile && profile.live } 
                                 </p>

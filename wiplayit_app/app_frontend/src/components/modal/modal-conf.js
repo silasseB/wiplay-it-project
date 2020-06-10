@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
 import ModalBox,{ModalManager}  from "components/modal/modal-container";
 import * as Effects from 'components/modal/Effects';
@@ -45,6 +44,14 @@ export const ModalOpener = {
         
         return ModalManager.open(
             <NavBarMenuModal {...contentsProps} onRequestClose={() => true}/>,
+            modalName
+        );
+    },
+
+    smsCodeModalForm(modalName, contentsProps){
+        
+        return ModalManager.open(
+            <SmsCodeModal {...contentsProps} onRequestClose={() => true}/>,
             modalName
         );
     },
@@ -120,14 +127,13 @@ export const NavBarMenuModal = props => {
         effect         : Effects.SlideFromLeft,
         ...props
     };
-    //console.log(props)
+
     return(
         <div>
             <ModalContainer {...modalProps} />
         </div>
     ); 
 };
-
 
 
 export const mobileModalStyles = {
@@ -198,6 +204,23 @@ export const EditModal = props => {
 };
 
 
+
+
+
+export const SmsCodeModal = props => {
+    
+    let modalProps = {
+        modalStyles    : getDropImageStyles(),
+        effect         : Effects.ScaleUp,
+        ...props
+    };
+    
+    return(
+        <div>
+            <ModalContainer {...modalProps} />
+        </div>
+    ); 
+};
 
 
 

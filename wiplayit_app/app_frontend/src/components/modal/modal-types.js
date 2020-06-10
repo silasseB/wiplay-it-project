@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {AccountSmsCodeConfirmationPage} from "components/authentication/account-confirmation"
 import { ModalOptionsMenu } from "templates/buttons";
 import {EditProfile, DropImage} from "components/author/edit-profile";
 import UserListBox from "components/users/modal-user-list"; 
@@ -13,7 +13,8 @@ export const GetModalType = (props)=>{
     
     let getEditorContents = () =>{
         let { objName } = modalProps;
-        return objName === 'UserProfile' && <EditProfile {...modalProps}/> || <AppEditor {...modalProps}/>
+        return objName === 'UserProfile' &&
+              <EditProfile {...modalProps}/> || <AppEditor {...modalProps}/>;
     }
         
     let { modalName } = modalProps;
@@ -38,6 +39,10 @@ export const GetModalType = (props)=>{
         case 'userList':
             modalProps['modalContents'] = <UserListBox {...modalProps}/>
             return ModalOpener.userListModal(modalName, modalProps);
+
+        case 'smsCodeForm':
+            modalProps['modalContents'] = <AccountSmsCodeConfirmationPage {...modalProps}/>
+            return ModalOpener.smsCodeModalForm(modalName, modalProps);
 
         default:
             return; 

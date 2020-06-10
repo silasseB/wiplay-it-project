@@ -122,7 +122,11 @@
      border       : px solid red;
      width        : 18%; 
      margin       : 20px 25% 0 0;
+}
 
+.nav-bar-modal-menu-box {
+    overflow-y: scroll;
+    border : px solid  black;
 }
 
 .logout-btn, .dropdown-item {

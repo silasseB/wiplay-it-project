@@ -138,13 +138,12 @@
 }
 
 
-.unconfirmed-user-email {
-	text-decoration:  underline;
-	text-decoration-color : v;
-	color : #558FF0; 
+.text-highlight {
+	  color : #558FF0; 
+    font-size: 14px;
 }
 
-.unconfirmed-user-email:hover {
+.text-highlight:hover {
 	cursor : pointer;
 } 
 

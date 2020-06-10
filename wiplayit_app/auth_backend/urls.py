@@ -2,12 +2,13 @@ from django.conf.urls import url
 from django.urls import path
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
+
 from .views import ( 
                    FacebookLogin, TwitterLogin, 
                    GoogleLogin ,  CustomRegisterView,
                    CustomLoginView, VerifyEmailView, 
-                   ComfirmSmsCodeView,
-                   SendEmailConfirimationView,VerifyPhoneNumberView,
+                   PasswordChangeConfirmationView, SendAccountConfirmationView,
+                   VerifyPhoneNumberView,
                    UpdatePhoneNumberView, CustomPasswordResetView)
 
 from .views import ( UserView, RetrieveUserProfileView,
@@ -33,10 +34,10 @@ urlpatterns = [
         VerifyPhoneNumberView.as_view(), name='account_confirm_phone_number'),
 
     path('rest-auth/password-change-confirm-sms-code/',
-        ComfirmSmsCodeView.as_view(), name='password_hange_confirm_code'),
+        PasswordChangeConfirmationView.as_view(), name='password_hange_confirm_code'),
 
-    path('rest-auth/resend/account/confirm/email/',
-         SendEmailConfirimationView.as_view(),     name='account_confirm_email'),
+    path('rest-auth/confirmation/resend/',
+         SendAccountConfirmationView.as_view(),     name='account_confirm_send'),
 
     path("api/user/<int:pk>/followers/", 
         RetrieveUserFollowers.as_view({'get': 'list'})),

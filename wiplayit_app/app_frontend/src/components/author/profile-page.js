@@ -45,10 +45,9 @@ class UserProfileContainer extends Component {
     
 
     onProfileUpdate = () =>{
-        console.log(this.props)    
+        if (!this.isMounted) return;    
         const onStoreChange = () => {
-            if (!this.isMounted) return;
-
+            
             let { slug, id } = this.props.match.params;
             let storeUpdate  = store.getState();
             let {entities }  = storeUpdate;
@@ -59,19 +58,13 @@ class UserProfileContainer extends Component {
             let { errors } = entities;
             
             if (userProfile) {
-                this.setState({
-                            isReloading : userProfile.isLoading,
-                            error : userProfile.error} ) 
-            
-                userProfile = userProfile.user;
-                let answersById  = userProfile && `usersAnswers${userProfile.id}`;
+                let {user, isLoading, error} = userProfile;
+                this.setState({ isReloading : isLoading, error}); 
+                let answersById  = user && `usersAnswers${user.id}`;
                 answers          = answers[answersById];
-                //console.log(userProfile)
-
+                
                 if (!answers) {
-                    //console.log(userProfile, answers)
-
-                    this._dispatchUserProfileItems(userProfile);
+                    this._dispatchUserProfileItems(user);
                 }
             }
         };
@@ -86,16 +79,15 @@ class UserProfileContainer extends Component {
     };
 
     componentDidUpdate(prevProps, nextProps){
-        //console.log(nextProps, this.props)
-        //this.props.reloadPage()
-        let { slug, id }  = this.props.match.params;
-        let profileById   = `userProfile${id}`;
-        let {state} = this;
-        let byId    =  state.profileById; 
+        if(!this.isMounted) return;
+        
+        let { slug, id } = this.props.match.params;
+        let profileById  = `userProfile${id}`;
+        let {state}      = this;
+        let byId         =  state.profileById; 
 
         if (byId && byId !== profileById) {
-            console.log(byId, profileById )
-
+         
             this.setState({profileById });
             this.updateWithCacheData({profileById, id});
             this.updateUsersStore();
@@ -153,17 +145,14 @@ class UserProfileContainer extends Component {
             const getTimeState = new GetTimeStamp({timeStamp});
             let menDiff        = parseInt(getTimeState.menutes());
 
-            //console.log(parseInt(menDiff)  + ' ' + 'menutes ago')
-            //console.log(menDiff <= 3)
-
             if ( menDiff <= 2) {
-                //userProfile = userProfile && userProfile.user;
+                userProfile = userProfile && userProfile.user;
 
                 console.log('userProfile found from cachedEntyties')
                                 
                 store.dispatch(action.getUserProfilePending(profileById));
-                store.dispatch(action.getUserProfileSuccess( profileById, userProfile.user));
-                this._dispatchUserProfileItems(userProfile.user);
+                store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
+                this._dispatchUserProfileItems(userProfile);
 
                 return 
             }
@@ -175,6 +164,8 @@ class UserProfileContainer extends Component {
     };
 
     reLoader =()=>{
+        if(!this.isMounted) return;
+
         let id = this.state.id;   
         this.isMounted && this.setState({isReloading : true})
         return this.props.getUserProfile(id);
@@ -223,8 +214,8 @@ class UserProfileContainer extends Component {
 
    
     showUserItems(params) {
-        //console.log(params)
         if(!this.isMounted) return;
+
         let {items, component, byId, data } = params;
         this.setState({userItemsComponent : component});
 

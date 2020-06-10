@@ -99,9 +99,7 @@ export const PassWordChangeForm = props => {
                         </div>
                     </fieldset>
                 </form>
-            }
-
-            <SpinLoader {...props}/> 
+                <SpinLoader {...props}/> 
         </div>
         :
         ""

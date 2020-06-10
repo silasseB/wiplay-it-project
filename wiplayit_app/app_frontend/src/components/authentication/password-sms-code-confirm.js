@@ -34,6 +34,7 @@ class PasswordChangeSmsCodePage extends Component{
             let {entities}         =  storeUpdate;
             let {userAuth, errors} = entities;
             let {smsCodeAuth, passwordChangeAuth}  = userAuth;
+            console.log(userAuth)
             
 
             let {formName,
@@ -47,6 +48,8 @@ class PasswordChangeSmsCodePage extends Component{
                 this.tooglePasswordChangeForm(smsCode)
 
             }else if(passwordChangeAuth && passwordChangeAuth.successMessage){
+                delete passwordChangeAuth.successMessage;
+
                 this.setState({passswordChanged:true});
                 this.handlePasswordChangeSuccess(userAuth);
                 
@@ -62,26 +65,27 @@ class PasswordChangeSmsCodePage extends Component{
         let {location} = this.props;
         let state = location && location.state || {};
         this.setState({...state})
-
-        
+       
         this.props.formConstructor('passwordResetSmsCodeForm');
 
         let cachedCode =   this.getCachedSmsCode();
         if (cachedCode) {
-           this.tooglePasswordChangeForm(cachedCode)
+          // this.tooglePasswordChangeForm(cachedCode)
         }
     };
 
     handlePasswordChangeSuccess=(userAuth)=>{
+        console.log(userAuth)
         
-        let auth = {
+        let smsCodeAuth = {
                 smsCodeValidated : false,
                 smsCode : undefined,
             }
-        store.dispatch(authenticationSuccess({auth}))
+        store.dispatch(authenticationSuccess({smsCodeAuth}))
     };
 
     tooglePasswordChangeForm=(smsCode)=>{
+        console.log(smsCode)
         if (smsCode) {
             let onPasswordChangeForm = true;
             let onPasswordResetSmsCodeForm = false;
@@ -123,6 +127,7 @@ class PasswordChangeSmsCodePage extends Component{
 
     render(){
         let props = this.getProps();
+        console.log(props)
                   
         return (
             <div className="registration-page">
@@ -131,7 +136,7 @@ class PasswordChangeSmsCodePage extends Component{
                     {props.passswordChanged &&
                         <SuccessPasswordChange {...props}/>
                         ||
-                        <PasswordChangeForm {...props}/>
+                        <PasswordChange {...props}/>
                     }
                 </div>   
             </div>
@@ -143,7 +148,7 @@ class PasswordChangeSmsCodePage extends Component{
 
 export default AuthenticationHoc(PasswordChangeSmsCodePage);
 
-const PasswordChangeForm =(props)=>{
+const PasswordChange =(props)=>{
         
     let passwordChangeProps = {
         formTitle          : 'Password Change',
@@ -156,10 +161,32 @@ const PasswordChangeForm =(props)=>{
                 {props.smsCode &&
                     <PassWordChangeForm {...passwordChangeProps}/>
                     ||
-                    <SmsCodeForm {...props}/>
+                    <SmsCodeForm {...props}>
+                        <SmsCodeHelperText {...props}/>
+                    </SmsCodeForm>
                 }
             </div>
         )
 }
 
 
+const SmsCodeHelperText = (props)=>{
+    let {cacheEntities, passwordRestAuth,} = props;
+    let {userAuth}     = cacheEntities || {};
+
+    if (!passwordRestAuth) {
+        passwordRestAuth =  userAuth && userAuth.passwordRestAuth;
+    }
+    let {identifier} = passwordRestAuth || {};
+
+    return (
+        <ul className="form-helper-text">
+            <li>
+                We sent a code to your phone {' '} 
+                <span className="unconfirmed-user-email">
+                { identifier }.
+                </span> Please enter the code to change password.
+            </li>
+        </ul>
+    )
+};

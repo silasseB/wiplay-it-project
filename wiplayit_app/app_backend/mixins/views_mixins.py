@@ -226,11 +226,7 @@ class UpdateObjectMixin(BaseMixin):
 			if request_field:
 				#print(request_field)
 				profile[field]  = request_field
-
-			if field == 'phone_number':
-				print()
-				self.update_phone_number_field(instance)
-				
+						
 
 		data['profile']  = profile
 		return data

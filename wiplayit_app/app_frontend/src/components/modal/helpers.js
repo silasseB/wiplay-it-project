@@ -4,7 +4,8 @@ import {store } from "store/index";
 import { ModalManager}   from  "components/modal/modal-container";
 
 
-export const closeModals =()=> {
+export const closeModals =(background)=> {
+
     let { entities}  = store.getState();
     let { modal } = entities;
     console.log(modal)
@@ -13,6 +14,7 @@ export const closeModals =()=> {
     let dropImageModal   = modal && modal['dropImage'];
     let userListModal    = modal && modal['userList'];
     let navigationModal  = modal && modal['navigationMenu'];
+    let smsCodeFormModal = modal && modal['smsCodeForm'];
 
     editorModal     && editorModal.modalIsOpen      &&
                                      ModalManager.close('editor');
@@ -27,6 +29,10 @@ export const closeModals =()=> {
                                         
     navigationModal && navigationModal.modalIsOpen  && 
                                   ModalManager.close('navigationMenu');
+    smsCodeFormModal && smsCodeFormModal.modalIsOpen  && 
+                                  ModalManager.close('smsCodeForm');
+                                  
+    if (background) window.history.back();
 };
 
 export const handleModalScroll =()=> {

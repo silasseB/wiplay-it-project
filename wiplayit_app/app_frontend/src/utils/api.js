@@ -295,7 +295,7 @@ export default class Api{
     }
 
     confirmationEmailResendApi(){
-        return `/rest-auth/resend/account/confirm/email/`;
+        return `/rest-auth/confirmation/resend/`;
     }
 
     passwordResetSmsConfirmApi(){

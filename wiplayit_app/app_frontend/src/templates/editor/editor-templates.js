@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Icon from 'react-feather';
 import { ModalManager}   from  "components/modal/modal-container";
 import { ModalCloseBtn } from "templates/buttons"
 import LinkInput from 'components/input';
@@ -119,32 +120,6 @@ export const ToolBar = props => {
       )
 } 
 
-export const ModalCloseButton = props => {
-    let background = props.background;
-
-    return(
-        <button type="button" className="modal-custom-back-btn custom-back-btn "
-                  onClick={()=> ModalManager.close('editor', background)} >
-            <span className="modal-close-icon material-icons ">arrow_back</span>
-        </button>
-    )
- 
-};
-
-
-export const DesktopModalCloseBtn = props => {
-    let background = props.background;
-    return(
-        <button  type="button" 
-                onClick={()=> window.history.back()}
-                className="btn-sm modal-custom-back-btn custom-back-btn">
-
-            <span className="modal-close-icon">&times;</span>
-        </button>
-        )
- 
-};
-
 
 
 export const MobileModalNavBar = props  => {
@@ -181,7 +156,7 @@ export const MobileModalNavBar = props  => {
             <div className="modal-navbar-box"> 
                 <ul className="partial-navbar-back-btn-box">
                     <ModalCloseBtn> 
-                       <span className="modal-close-icon material-icons ">arrow_back</span>
+                       <Icon.X id="feather-x" size={20} color="white"/>
                     </ModalCloseBtn>     
                 </ul>
 
@@ -224,10 +199,10 @@ export const DesktopModalNavBar = (props) => {
                 <li className="modal-title">{modalTitle || ""}</li>
             </ul>
 
-            <div className="modal-close-btn-box">
-                <ModalCloseBtn>
-                    {<span className="modal-close-icon">&times;</span>}
-                </ModalCloseBtn>    
+            <div className="desktop-modal-close-btn">
+                <ModalCloseBtn> 
+                    <Icon.X id="feather-x" size={20} color="white"/>
+                </ModalCloseBtn> 
             </div>
         </div>
     )  
