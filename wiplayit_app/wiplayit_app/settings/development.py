@@ -31,10 +31,13 @@ SITE_ID = 3
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-EMAIL_HOST          = 'smtp.gmail.com'
-EMAIL_HOST_USER     = 'silassibaloy@gmail.com'
-EMAIL_HOST_PASSWORD = 'SilasiBaloyi9020@?'
+EMAIL_HOST          = os.getenv("EMAIL_HOST")
+EMAIL_HOST_USER     = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
 
 INSTALLED_APPS.append('coverage')
 ALLOWED_HOSTS = [ '127.0.0.1', '192.168.43.14', 'localhost' ]

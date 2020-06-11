@@ -20,13 +20,6 @@
     border: 1px solid #edf0f3;
 }
 
-.authentication-alert-box {
-    border : 1px solid red;
-    margin : 0;
-    width  : 60%;
-
-}
-
 .password-change-container {
    min-height: 50%;
 }
@@ -232,7 +225,7 @@
 }
 
 .create-account-link-box {
-    border : 1px solid blue; 
+    
 }
 
 .registration-btns-box {
@@ -290,11 +283,10 @@
 
 .cancel-email-form-btn-box,
 .resend-confirmation-btn {
-    border : 1px solid black;
+   
 }
 
 .form-cancel-btn {
-    background-color: #edf0f3;
     color:#5384e5;
     font-size: 12px;
 }

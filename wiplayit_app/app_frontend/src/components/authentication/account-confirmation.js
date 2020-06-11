@@ -89,12 +89,15 @@ export class AccountSmsCodeConfirmationPage extends Component{
 
         const onStoreChange = () => {
             let  storeUpdate = store.getState(); 
-            let { entities } =  storeUpdate;
-            let { userAuth, errors } = entities;
-            this.setState({submitting : userAuth.isLoading}); 
+            let {entities} =  storeUpdate;
+            let {userAuth, errors} = entities;
             let {form, formName} = this.state;
-            let {error, emailResendAuth,loginAuth} = userAuth;
-            console.log(userAuth)
+            let {error,
+                 emailResendAuth,
+                 isLoading,
+                 loginAuth} = userAuth;
+            
+            this.setState({submitting : isLoading}); 
 
             if (form && error) {
                 form[formName]['error'] = error;
@@ -115,6 +118,7 @@ export class AccountSmsCodeConfirmationPage extends Component{
     componentDidMount() {
         this.isMounted = true;
         this.onAuthStoreUpdate();
+        console.log(this.props)
 
         let currentForm = this.state.form;
         let formName =  'phoneNumberSmsCodeForm';
@@ -145,6 +149,8 @@ export class AccountSmsCodeConfirmationPage extends Component{
         }
 
         let currentForm = this.state.form;
+        let currentFormName = this.state.formName;
+        currentForm[currentFormName].error = undefined; 
 
         let form     = getFormFields().emailForm;
         let formName = 'emailResendForm';

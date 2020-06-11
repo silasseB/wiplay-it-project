@@ -23,6 +23,7 @@ const EmailForm = props => {
         successMessage,
         formIsValid,
         formName, 
+        defaultFormName,
         formDescription,
         validateForm,
         isSocialAuth } = props;
@@ -56,7 +57,7 @@ const EmailForm = props => {
                     <ul className="form-title-box">
                         <li className="">{formTitle}</li>
                     </ul>
-                    {successMessage &&
+                    {successMessage && onPasswordResetForm &&
                         <EmailPasswordResetSuccess {...props}/>
                         ||
 
@@ -190,8 +191,7 @@ export const SmsCodeForm = props => {
             formName : 'passwordResetForm',
             defaultFormName,
         };
-        console.log(successMessage)
-             
+                 
     return(
         <div>
             {form &&  

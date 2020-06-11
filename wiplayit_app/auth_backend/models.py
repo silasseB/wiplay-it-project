@@ -219,7 +219,7 @@ class PhoneNumberConfirmation(models.Model):
 
     def send(self, request=None, signup=False):
         user = self.phone_number.user
-        if not user.is_confirmed and not self.phone_number.verified:
+        if not user.is_confirmed or not self.phone_number.verified:
             sms_code = self.sms_code
             sms_body = 'Your Account confirmation code is {0}'.format(sms_code)
             phone_number = self.phone_number.user

@@ -84,18 +84,17 @@ export const AlertComponent =(props)=> {
     let defaulfMessage   = 'This is a warning message alert'
     let { message,alertBoxStyles }      = props;
 
-    let textMessage      = message && message.textMessage || defaulfMessage; 
+    let textMessage  = message && message.textMessage || defaulfMessage; 
 
-    let  messageType     = message && message.messageType;
-    let classNames       = 'alert  alert-success' 
-    //classNames           = messageType === 'error'   && `${classNames} alert-danger`   ||
-      //                     !messageType === 'success' &&  `${classNames} alert-success` ||
-                                                                   classNames;
-    //console.log(classNames, messageType)        
+    let  messageType = message && message.messageType;
+     
+    let classNames   = messageType === 'error'   && `alert-danger`   ||
+                       messageType === 'success' &&  `alert-success` ;
+        
     let styles= alertBoxStyles || {}; 
     return(
         <div  className="alert-container">
-            <div style={styles} className={classNames}>
+            <div style={styles} className={`alert ${classNames}`}>
                 <div  className="alert-box">
 
                     <ul className="alert-message">
@@ -118,12 +117,11 @@ export const UnconfirmedUserWarning =(props)=> {
     currentUser     = !currentUser && cacheEntities && 
                        cacheEntities.currentUser && 
                        cacheEntities.currentUser.user || currentUser;
-
-    //console.log(currentUser)
+ 
     
     return(
         <div>
-            {currentUser && !currentUser.is_confirmed &&
+            {currentUser && currentUser.is_confirmed &&
             <div className="unconfirmed-user-warn-container">
                 <div className="alert alert-warning unconfirmed-user-warn-box">
                     <button type="bottom" className="">
