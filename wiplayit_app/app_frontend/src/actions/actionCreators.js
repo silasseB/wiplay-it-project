@@ -665,8 +665,7 @@ export const authenticationPending = (isSocialAuth=false, isTokenRefresh=false) 
 
 
 export const authenticationSuccess = (data={}, isSocialAuth=false, isTokenRefresh=false) => {
-    console.log(data, isTokenRefresh, isSocialAuth)
-    
+        
     return {
         type   : types.USER_AUTHENTICATION.SUCCESS,
         payLoad : {

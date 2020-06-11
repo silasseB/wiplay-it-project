@@ -167,7 +167,7 @@ export function MainAppHoc(Component) {
             }
            
             let currentUser = this._SetCurrentUser();
-            if(currentUser){
+            if(true){
                 store.dispatch(getCurrentUser());
             }
 

@@ -34,21 +34,21 @@ def phone_number_exists(phone_number, exclude_user=None):
 
     return ret
 
-def get_phone_number(phone_number):
+def get_phone_number(value):
     from .models import  PhoneNumber
-    if not phone_number_exists(phone_number):
+    if not phone_number_exists(value):
         msg = _('Account with this phone number does not exists')
         raise serializers.ValidationError(msg)
     
-    phone_number = PhoneNumber.objects.filter(primary_number=phone_number)
+    phone_number = PhoneNumber.objects.filter(primary_number=value)
 
     if not  phone_number:
-        phone_number = PhoneNumber.objects.filter(national_format=phone_number)
+        phone_number = PhoneNumber.objects.filter(national_format=value)
 
     if not phone_number:
-        phone_number =  PhoneNumber.objects.filter(user__email=phone_number)
+        phone_number =  PhoneNumber.objects.filter(user__email=value)
     if not phone_number:
-        phone_number = PhoneNumber.objects.filter(inter_format=phone_number)
+        phone_number = PhoneNumber.objects.filter(inter_format=vaule)
 
     return phone_number[0] or None
 

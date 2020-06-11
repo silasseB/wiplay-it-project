@@ -204,9 +204,12 @@ class PhoneNumberConfirmation(models.Model):
         return cls._default_manager.create(phone_number=phone_number, sms_code=sms_code)
    
     def code_expired(self):
-        now = timezone.now()
-        expiration_date = now - self.sent 
-        return expiration_date >= datetime.timedelta(hours=1)
+        if self.sent:
+            now = timezone.now()
+            expiration_date = now - self.sent 
+            return expiration_date >= datetime.timedelta(hours=1)
+
+        return True
     code_expired.boolean = True
 
     def confirm(self, request=None):
@@ -215,8 +218,8 @@ class PhoneNumberConfirmation(models.Model):
             self.phone_number.save()
 
     def send(self, request=None, signup=False):
-        print(self.phone_number)
-        if  not self.phone_number.verified:
+        user = self.phone_number.user
+        if not user.is_confirmed and not self.phone_number.verified:
             sms_code = self.sms_code
             sms_body = 'Your Account confirmation code is {0}'.format(sms_code)
             phone_number = self.phone_number.user
@@ -250,9 +253,6 @@ class PhoneNumberPasswordChange(models.Model):
 
     @classmethod
     def create(cls, phone_number):
-        print('creating password changed', phone_number, cls)
-        exit= cls.objects.filter(phone_number=phone_number)
-        print(exit)
         sms_code = _get_pin()
         return cls._default_manager.create(phone_number=phone_number, sms_code=sms_code)
    

@@ -620,7 +620,7 @@ export function authenticate(params={}){
                 console.log(response)
                 let {data}  = response;
                 if (formName === 'emailResendForm') {
-                    handleEmailSent(data, dispatch);
+                    handleConfirmationResend(data, dispatch);
                 }
 
                 if (formName === 'phoneNumberSmsCodeForm'){
@@ -725,10 +725,10 @@ const handlePasswordChange = (data, dispatch) => {
 }
 
 
-const handleEmailSent =(data, dispatch)=>{
+const handleConfirmationResend =(data, dispatch)=>{
         
     let emailResendAuth = {
-        successMessage : 'Email sent.',
+        successMessage : data.detail,
     }
 
     dispatch(action.authenticationSuccess({emailResendAuth}));

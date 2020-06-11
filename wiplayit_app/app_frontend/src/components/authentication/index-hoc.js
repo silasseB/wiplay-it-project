@@ -150,16 +150,17 @@ export function AuthenticationHoc(Component) {
                 let {entities} =  storeUpdate;
                 let {userAuth, errors} = entities;
                 let {form, formName} = this.state;
-                let {error,loginAuth, isLoading} = userAuth;
+                let {loginAuth, isLoading} = userAuth;
                 this.setState({submitting : isLoading}); 
              
                 if (errors && errors.error) {
                     this._HandleErrors(errors);
                 }
 
-                if (form && error) {
-                    form[formName]['error'] = error;
+                if (form && userAuth.error) {
+                    form[formName]['error'] = userAuth.error;
                     this.setState({form})
+                    delete userAuth.error
                 }
 
                 this.handleLogin(userAuth)
@@ -176,15 +177,27 @@ export function AuthenticationHoc(Component) {
             if (!passwordRestAuth.successMessage) return;
 
             let {successMessage} = passwordRestAuth;
-            let {isPhoneNumber, formName} = this.state;
+            let {isPhoneNumber,
+                 formName,
+                 onPasswordResetSmsCodeForm} = this.state;
+
+            this.displaySuccessMessage(passwordRestAuth)
+            this.setState({passwordRestAuth})
+
             if (isPhoneNumber && formName == 'passwordResetForm') {
-                history.push('/password/change/', {passwordRestAuth});
-            }else{
-
-                this.setState({passwordRestAuth, successMessage})
+                if (!onPasswordResetSmsCodeForm) {
+                   return history.push('/password/change/', {passwordRestAuth});
+                }else{
+                    let toggleProps = {
+                            value:false,
+                            defaultFormName:'passwordResetSmsCodeForm',
+                    };
+                    
+                    return this.toggleEmailForm(toggleProps)
+                }
             }
-
-            delete passwordRestAuth.successMessage;
+            
+            this.setState({successMessage})
         };
 
         handleLogin(userAuth){
@@ -231,6 +244,16 @@ export function AuthenticationHoc(Component) {
             delete errors.error;
         }
 
+        displaySuccessMessage =(params)=>{
+            let message = {
+                textMessage : params.successMessage,
+                messageType : 'success'
+            }
+
+            this.displayAlertMessage(message);
+            delete params.successMessage;
+        };
+
         displayAlertMessage = (message) => {
             if (!this.isMounted) return;
 
@@ -266,16 +289,62 @@ export function AuthenticationHoc(Component) {
 
             let currentForm = this.state.form;
             form = setForm(form, currentForm, formName);
-            
             this.setState({form, formName, successMessage:false});
+            this.setFormOpts(formName);
+            
+        };
+
+        setFormOpts(formName){
+            if (formName) {
+                switch(formName){
+
+                    case 'loginForm':
+                        return this.setState({ onLoginForm : true})
+                  
+                    case 'signUpForm':
+                        return this.setState({onSignUpForm : true})
+
+                    case 'passwordResetForm':
+                        return this.setState({onPasswordResetForm : true});
+
+                    case 'emailResendForm':
+                        return this.setState({ onEmailResendForm : true });
+                        
+                    case 'passwordResetSmsCodeForm':
+                        return this.setState({onPasswordResetSmsCodeForm:true});
+                        
+                    case 'passwordChangeForm':
+                        return this.setState({onPasswordChangeForm : true});
+                        
+                    default:
+                        return null;
+                };
+
+            }
+
+        };
+
+        hideToggledForm =()=>{
+            let {onPasswordResetForm,
+                 onEmailResendForm,
+                 onSignUpForm} = this.state;
+
+            onPasswordResetForm && this.setState({onPasswordResetForm : false})
+            onEmailResendForm   && this.setState({onEmailResendForm : false})
+
         };
 
     
-        formConstructor =(name,opts={})=> {
+        formConstructor =(name, opts={})=> {
             if (!this.isMounted) return;
             
             if (name) {
                 let formName = name;
+                let currentForm = this.state.form
+                if (currentForm) {
+                    //return
+                }
+
                 let defaultActiveForm = formName;
                 let form = null;
 
@@ -283,40 +352,28 @@ export function AuthenticationHoc(Component) {
 
                     case 'loginForm':
                         form = getFormFields().loginForm;
-                        this.setState({ onLoginForm : true, defaultActiveForm})
-
                         return this._SetForm(form, formName)
 
                     case 'signUpForm':
 
                         form = getFormFields().signUpForm;
-                        this.setState({onSignUpForm : true})
-
                         return this._SetForm(form, formName);
 
                     case 'passwordResetForm':
                         form = getFormFields().emailForm;
-                        this.setState({ onPasswordResetForm : true, defaultActiveForm });
-
                         return this._SetForm(form, formName); 
 
                     case 'emailResendForm':
-
                         form = getFormFields().emailForm;
-                        this.setState({ onEmailResendForm : true });
-
                         return this._SetForm(form, formName);
 
                     case 'passwordResetSmsCodeForm':
                         form = getFormFields().smsCodeForm;
-                        this.setState({onPasswordResetSmsCodeForm : true});
                         return this._SetForm(form, formName)
 
                     case 'passwordChangeForm':
                         form = getFormFields().passwordChangeForm;
                         form = Object.assign(opts, form);
-                        this.setState({onPasswordChangeForm : true});
-                        
                         return this._SetForm(form, formName);
 
                     default:
@@ -353,27 +410,17 @@ export function AuthenticationHoc(Component) {
         };
 
         toggleEmailForm = (params) => {
-            const defaultActiveForm = 'loginForm';
-            let { value, successMessage, formName } = params;
+            let {value,
+                 successMessage,
+                 defaultFormName,
+                 formName } = params;
 
-            if (!successMessage) {
-                console.log(formName)
-                this.setState({successMessage : false})
+            if (value) {
                 this.formConstructor(formName)
-            }
 
-            if (!value && formName !== 'emailResendForm') {
-                console.log(formName)
-                this.setState({onPasswordResetForm : false})
-                this.formConstructor(defaultActiveForm) 
-                
             }else{
-                this.setState({onEmailResendForm : false})
-            }
-
-            if ( value) {
-                console.log(formName)
-                this.formConstructor(formName)
+                this.hideToggledForm();
+                this.formConstructor(defaultFormName)
             }
         };
     
@@ -397,6 +444,7 @@ export function AuthenticationHoc(Component) {
                 toggleEmailForm  : this.toggleEmailForm, 
                 toggleSignUpForm : this.toggleSignUpForm,
                 validateForm     : formIsValid, 
+                alertBoxStyles   : alertBoxStyles(),
             };
         };
     
@@ -421,21 +469,21 @@ export function AuthenticationHoc(Component) {
     };
 };
 
+let alertBoxStyles =()=>{
+    if (window.matchMedia("(min-width: 900px)").matches) {
+        return{
+            width  : '60%',
+            margin : '0 20%' 
+        };
+    }
+};
 
 //binds on `props` change
 const mapDispatchToProps = (dispatch, ownProps) => {
      
     return {
-        togglePasswordReset : (self, props)=> dispatch(
-                                               action.togglePasswordResetForm(self, props)
-                                            ),
-        toggleSignUp        : (self, props)=> dispatch(
-                                               action.toggleSignUpForm(self , props)
-                                            ),
         authenticate        : (props)=> dispatch(authenticate(props)),
-     
-   }
-
+    }
 };
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {SmsCodeForm}   from 'templates/authentication/email-form'; 
+import EmailForm, {SmsCodeForm}   from 'templates/authentication/email-form'; 
 import AuthenticationHoc  from 'components/authentication/index-hoc';  
-import {NavBar} from 'templates/authentication/utils';
+import {NavBar, CancelEmailFormBtn} from 'templates/authentication/utils';
 import {PassWordChangeForm,
         SuccessPasswordChange} from 'templates/authentication/password-change';
 import {authenticationSuccess} from 'actions/actionCreators';
@@ -19,13 +19,35 @@ class PasswordChangeSmsCodePage extends Component{
             passswordChanged           : false,  
             onPasswordResetSmsCodeForm : true,  
             onPasswordChangeForm       : false,
+            defaultFormName            : 'passwordResetSmsCodeForm',
             smsCode                    : undefined,                         
         };
     
     };
     componentDidUpdate(prevProps, nexProps){
         //console.log(prevProps, nexProps)
+        let {onPasswordResetForm} = prevProps
+        if (!onPasswordResetForm) {
+            //this.props.formConstructor('passwordResetSmsCodeForm');
+        }
         
+    };
+
+
+    componentDidMount() {
+        
+        this.isMounted = true;
+        this.onAuthStoreUpdate();
+        let {location} = this.props;
+        let state = location && location.state || {};
+        this.setState({...state})
+       
+        this.props.formConstructor('passwordResetSmsCodeForm');
+
+        let cachedCode =   this.getCachedSmsCode();
+        if (cachedCode) {
+           this.tooglePasswordChangeForm(cachedCode)
+        }
     };
 
     onAuthStoreUpdate =()=> {
@@ -56,23 +78,8 @@ class PasswordChangeSmsCodePage extends Component{
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
-    }
-
-    componentDidMount() {
-        
-        this.isMounted = true;
-        this.onAuthStoreUpdate();
-        let {location} = this.props;
-        let state = location && location.state || {};
-        this.setState({...state})
-       
-        this.props.formConstructor('passwordResetSmsCodeForm');
-
-        let cachedCode =   this.getCachedSmsCode();
-        if (cachedCode) {
-          // this.tooglePasswordChangeForm(cachedCode)
-        }
     };
+
 
     handlePasswordChangeSuccess=(userAuth)=>{
         console.log(userAuth)
@@ -89,9 +96,10 @@ class PasswordChangeSmsCodePage extends Component{
         if (smsCode) {
             let onPasswordChangeForm = true;
             let onPasswordResetSmsCodeForm = false;
-            this.setState({smsCode,onPasswordChangeForm, onPasswordResetSmsCodeForm})
             let passwordAuthOpts = {sms_code:smsCode};
             this.props.formConstructor('passwordChangeForm', passwordAuthOpts);
+
+            this.setState({smsCode,onPasswordChangeForm, onPasswordResetSmsCodeForm})
         }
     };
 
@@ -127,8 +135,7 @@ class PasswordChangeSmsCodePage extends Component{
 
     render(){
         let props = this.getProps();
-        console.log(props)
-                  
+                        
         return (
             <div className="registration-page">
                 <NavBar {...props}/>
@@ -149,6 +156,7 @@ class PasswordChangeSmsCodePage extends Component{
 export default AuthenticationHoc(PasswordChangeSmsCodePage);
 
 const PasswordChange =(props)=>{
+    let {onPasswordResetForm} = props;
         
     let passwordChangeProps = {
         formTitle          : 'Password Change',
@@ -161,9 +169,19 @@ const PasswordChange =(props)=>{
                 {props.smsCode &&
                     <PassWordChangeForm {...passwordChangeProps}/>
                     ||
-                    <SmsCodeForm {...props}>
-                        <SmsCodeHelperText {...props}/>
-                    </SmsCodeForm>
+                    <div>
+                        {onPasswordResetForm &&
+                            <EmailForm {...props}>
+                               <CancelEmailFormBtn {...props}/>
+                            </EmailForm> 
+
+                            ||
+
+                            <SmsCodeForm {...props}>
+                                <SmsCodeHelperText {...props}/>
+                            </SmsCodeForm>
+                        }
+                    </div>
                 }
             </div>
         )
@@ -173,7 +191,7 @@ const PasswordChange =(props)=>{
 const SmsCodeHelperText = (props)=>{
     let {cacheEntities, passwordRestAuth,} = props;
     let {userAuth}     = cacheEntities || {};
-
+    
     if (!passwordRestAuth) {
         passwordRestAuth =  userAuth && userAuth.passwordRestAuth;
     }

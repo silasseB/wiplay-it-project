@@ -121,7 +121,7 @@ class CustomLoginSerializer(LoginSerializer):
 
 		if not user.is_confirmed:
 			msg = _('Your account is not confirmed.')
-			raise exceptions.ValidationError(msg)
+			#raise exceptions.ValidationError(msg)
 
 
 class CustomRegisterSerializer(RegisterSerializer):

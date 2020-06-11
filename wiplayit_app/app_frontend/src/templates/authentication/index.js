@@ -9,6 +9,7 @@ import  SignUpForm  from "templates/authentication/signup";
 import  EmailForm  from "templates/authentication/email-form";
 
 import { SpinLoader,
+         CancelEmailFormBtn, 
          AuthenticatedComponent } from  'templates/authentication/utils'
 
 
@@ -82,7 +83,9 @@ const RegistrationBig = props => {
             <div className="registration-flex-box ">
                 { onPasswordResetForm?
                     <div className="password-reset-container">
-                        <EmailForm {...props}/> 
+                        <EmailForm {...props}>
+                           <CancelEmailFormBtn {...props}/>
+                        </EmailForm> 
                     </div>
                     :
                     <div className="login-container" >

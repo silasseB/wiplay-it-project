@@ -82,26 +82,29 @@ export const PageErrorComponent = props => {
 export const AlertComponent =(props)=> {
     
     let defaulfMessage   = 'This is a warning message alert'
-    let { message }      = props; 
+    let { message,alertBoxStyles }      = props;
+
     let textMessage      = message && message.textMessage || defaulfMessage; 
 
     let  messageType     = message && message.messageType;
-    let classNames       = 'alert alert-container' 
-    classNames           = messageType === 'error'   && `${classNames} alert-danger`   ||
-                           messageType === 'success' &&  `${classNames} alert-success` ||
+    let classNames       = 'alert  alert-success' 
+    //classNames           = messageType === 'error'   && `${classNames} alert-danger`   ||
+      //                     !messageType === 'success' &&  `${classNames} alert-success` ||
                                                                    classNames;
     //console.log(classNames, messageType)        
-    
+    let styles= alertBoxStyles || {}; 
     return(
-        <div className={classNames}>
-            <div className="alert-box">
-                <ul className="alert-message">
-                    <li>
-                        { textMessage }
-                    </li>
-                </ul>
-            </div>
+        <div  className="alert-container">
+            <div style={styles} className={classNames}>
+                <div  className="alert-box">
 
+                    <ul className="alert-message">
+                        <li>
+                            { textMessage }
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     )
 };

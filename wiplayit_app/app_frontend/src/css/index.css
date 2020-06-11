@@ -40,8 +40,8 @@
     	border        : px solid blue;
     	width         : 100%;
     	margin        : 60px 0 0;
-        overflow      : none;
-        border-radius : 4px;
+      overflow      : none;
+      border-radius : 4px;
     	outline       : none;
     	height        : auto; 
     	bottom        : auto;
@@ -55,10 +55,13 @@
 
     .alert-box {
     	width           : 45%;
-        margin          : 0px 27.5%; 
-        justify-content : center;
+      margin          : 0px 27.5%; 
+      justify-content : center;
     	display         : flex;
-    	border          : px solid black;
+    }
+
+    .alert-message {
+        font-size: 14px;
     }
 
 }

@@ -8,7 +8,7 @@ import { CountryDropdown,
 import { NonFieldErrors,
          CountryFieldErrors,
          EmailFieldErrors} from "templates/authentication/errors"
-import { CancelFormBtn,
+import { CancelSignupFormBtn,
          RegistrationSubmitBtn,
          SpinLoader} from  'templates/authentication/utils';
 
@@ -126,7 +126,7 @@ export const  SignUpForm = props => {
                     <RegistrationSubmitBtn {...props}/>
                 </div>
                 <div className="cancel-signup-btn-box">
-                  <CancelFormBtn {...props}/> 
+                  <CancelSignupFormBtn {...props}/> 
                 </div>    
             </div>  
             <div className="country-select-box">

@@ -84,3 +84,12 @@
     font-size: 15px;
 
 }
+
+
+
+.success-resend-message {
+    color: green;
+    font-size: 12px;
+    text-align: center;
+    margin : 0 10px 8px;
+}

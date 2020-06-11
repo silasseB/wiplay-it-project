@@ -12,6 +12,7 @@ class RegistrationPage extends Component {
 
       this.state = {
          navbarTitle : 'Joining Wiplayit', 
+         defaultFormName : 'loginForm',
       }
 
     }
@@ -20,13 +21,8 @@ class RegistrationPage extends Component {
       this.props.formConstructor('loginForm')
     }
 
-
-    getProps(){
-        return Object.assign(this.state, this.props )
-    };
-
     render() {
-        let props = this.getProps();
+        let props = {...this.props, ...this.state};
           
         return (
             <RegistrationComponent {...props}/>         

@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import  AuthenticationHoc   from 'components/authentication/index-hoc'; 
 import {NavBar} from 'templates/authentication/utils';
 import AccountConfirmation from 'templates/authentication/confirmation';
-import {SmsCodeForm}   from 'templates/authentication/email-form'; 
+import EmailForm, {SmsCodeForm}   from 'templates/authentication/email-form';
+
+import {CancelEmailFormBtn} from  'templates/authentication/utils'
+
 import { ModalCloseBtn } from "templates/buttons"
 import * as Icon from 'react-feather';
 
@@ -67,9 +70,11 @@ export class AccountSmsCodeConfirmationPage extends Component{
             onPhoneNumberSmsCodeForm : true,
             formTitle        : 'Enter code',
             formDescription  : ['Enter code to confirm your account'],
-            formName         : undefined, 
+            formName         : 'phoneNumberSmsCodeForm',
+            defaultFormName  : 'phoneNumberSmsCodeForm', 
             submitting       : false,
             form             : undefined,
+            successMessage   : undefined,
         };
     };
 
@@ -88,12 +93,21 @@ export class AccountSmsCodeConfirmationPage extends Component{
             let { userAuth, errors } = entities;
             this.setState({submitting : userAuth.isLoading}); 
             let {form, formName} = this.state;
-            let {error, loginAuth} = userAuth;
+            let {error, emailResendAuth,loginAuth} = userAuth;
+            console.log(userAuth)
 
             if (form && error) {
                 form[formName]['error'] = error;
                 this.setState({form});
+                delete userAuth.error;
             }
+            if (emailResendAuth && emailResendAuth.successMessage) {
+                this.setState({successMessage:emailResendAuth.successMessage})
+                this.toggleEmailForm({value:false})
+
+                delete emailResendAuth.successMessage
+            }
+            
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
@@ -115,26 +129,27 @@ export class AccountSmsCodeConfirmationPage extends Component{
     toggleSmsCodeForm(){
         let currentForm = this.state.form;
         let formName    =  'phoneNumberSmsCodeForm';
-        let onPasswordResetSmsCodeForm = true;
-
+        let onPhoneNumberSmsCodeForm = true;
+        
         let form = getFormFields().smsCodeForm;
         form = setForm(form, currentForm, formName);
-        this.setState({form, formName, onPasswordResetSmsCodeForm});
+        this.setState({form, formName, onPhoneNumberSmsCodeForm});
 
     }
 
     toggleEmailForm(params){
         
         if (params && !params.value) {
-            this.setState({onEmailResendForm:false});
-            return this.toggleSmsCodeForm();
-
+            this.toggleSmsCodeForm();
+            return this.setState({onEmailResendForm:false});
         }
+
         let currentForm = this.state.form;
 
         let form     = getFormFields().emailForm;
         let formName = 'emailResendForm';
         let onEmailResendForm = true;
+        
         form = setForm(form, currentForm, formName);
        
         this.setState({form, formName, onEmailResendForm});
@@ -168,6 +183,7 @@ export class AccountSmsCodeConfirmationPage extends Component{
      
     render() {
         let props = this.getProps();
+        let {onEmailResendForm, successMessage} = props;
         console.log(props); 
 
         return (
@@ -180,9 +196,18 @@ export class AccountSmsCodeConfirmationPage extends Component{
                     </div>
 
                     <div className="account-confirm-modal-container">
-                        <SmsCodeForm {...props}>
-                            <SmsCodeHelperText {...props}/>  
-                        </SmsCodeForm>
+                        {onEmailResendForm &&
+                            <div className="password-reset-bo">
+                                <EmailForm {...props}>
+                                    <CancelEmailFormBtn {...props}/>
+                                </EmailForm> 
+                            </div>
+                            ||
+
+                            <SmsCodeForm {...props}>
+                                <SmsCodeHelperText {...props}/>  
+                            </SmsCodeForm>
+                        }
                     </div>
                 </div>
             </div>
@@ -195,7 +220,7 @@ export class AccountSmsCodeConfirmationPage extends Component{
 const SmsCodeHelperText = (props)=>{
     let {cacheEntities, currentUser} = props;
     let phone_number = currentUser && currentUser.phone_numbers;
-    phone_number = phone_number && phone_number.national_format;
+    phone_number     = phone_number && phone_number.national_format;
     
     return (
         <ul className="form-helper-text">

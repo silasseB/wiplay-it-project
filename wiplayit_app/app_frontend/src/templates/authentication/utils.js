@@ -91,7 +91,9 @@ const  CancelConfirmationBtn  = props => {
 
 export const  PasswordChangeButton  = props => {
 
-    let toggleProps = { value : true, formName : 'passwordResetForm' };
+    let toggleProps = {value : true,
+                       defaultFormName:props.defaultFormName, 
+                       formName : 'passwordResetForm' };
     return(
         <button type="button" onClick={()=> props.toggleEmailForm(toggleProps)} 
                   className="password-change-btn" >
@@ -107,7 +109,7 @@ const  PasswordChangeLink  = props => (
 );
 
 
-const  CancelBtn  = props => {
+const  CancelSignupBtn  = props => {
     let toggleProps = {value : false, formName:props.formName};
     
 
@@ -120,7 +122,11 @@ const  CancelBtn  = props => {
 };
 
 export const  CancelEmailFormBtn  = props => {
-    let toggleProps = {value:false, formName:props.formName};
+    let toggleProps = {
+        value:false,
+        formName:props.formName,
+        defaultFormName:props.defaultFormName,
+    };
 
     return (
         <button type="button" onClick={()=>props.toggleEmailForm(toggleProps)} 
@@ -170,20 +176,29 @@ const LoginBig = props => {
 export const LoginSmallScreem   = MatchMediaHOC(LoginSmall, '(max-width: 980px)')
 export const LoginBigScreem   = MatchMediaHOC(LoginBig, '(min-width: 980px)')
 
-export const  SubmitBtnSmallScreen = MatchMediaHOC(RegistrationSubmitBtn, '(max-width: 980px)') 
-export const  SubmitBtnBigScreen = MatchMediaHOC(RegistrationSubmitBtn, '(min-width: 980px)') 
+export const  SubmitBtnSmallScreen = MatchMediaHOC( RegistrationSubmitBtn, 
+                                                   '(max-width: 980px)') 
+export const  SubmitBtnBigScreen = MatchMediaHOC(RegistrationSubmitBtn, 
+                                                '(min-width: 980px)') 
 
 export const RegistrationSpinLoader = MatchMediaHOC(SpinLoader , '(min-width: 980px)');
 
-export const CancelEmailFormSmall = MatchMediaHOC(CancelEmailFormBtn, '(max-width : 980px)');
-export const CancelFormBtn   = MatchMediaHOC(CancelBtn , '(min-width: 980px)');
-export const CancelEmailForm = MatchMediaHOC(CancelEmailFormBtn , '(min-width: 980px)');
+export const CancelEmailFormSmall = MatchMediaHOC(CancelEmailFormBtn, 
+                                                 '(max-width : 980px)');
+export const CancelSignupFormBtn   = MatchMediaHOC(CancelSignupBtn ,
+                                            '(min-width: 980px)');
+export const CancelEmailFormBig = MatchMediaHOC(CancelEmailFormBtn , 
+                                                  '(min-width: 980px)');
 
-export const ConfirmationResendSmall = MatchMediaHOC(ConfirmationResendLink, '(max-width: 980px)');
-export const ConfirmationResendBig   = MatchMediaHOC(ConfirmationResendBtn,  '(min-width: 980px)');
+export const ConfirmationResendSmall = MatchMediaHOC(ConfirmationResendLink, 
+                                                       '(max-width: 980px)');
+export const ConfirmationResendBig   = MatchMediaHOC(ConfirmationResendBtn,
+                                                   '(min-width: 980px)');
 
 
-export const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , '(max-width: 980px)');
-export const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton , '(min-width: 980px)');
+export const PasswordChangeSmall = MatchMediaHOC(PasswordChangeLink , 
+                                                '(max-width: 980px)');
+export const PasswordChangeBig   = MatchMediaHOC(PasswordChangeButton ,
+                                                 '(min-width: 980px)');
 
 

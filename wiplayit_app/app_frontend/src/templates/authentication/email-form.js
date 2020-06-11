@@ -4,8 +4,9 @@ import { NonFieldErrors,
          EmailFieldErrors} from "templates/authentication/errors"
 
 import { RegistrationSubmitBtn,
-         CancelEmailForm,
+         CancelEmailFormBig,
          CancelEmailFormSmall,
+         CancelEmailFormBtn,
          SpinLoader, 
          NavBarSmallScreen } from  'templates/authentication/utils'
 
@@ -46,7 +47,7 @@ const EmailForm = props => {
 
     formDescription = `Enter your e-mail address or ` +
                                            `phone number.`;
-           
+          
     return(
         <div>
             { form && 
@@ -99,7 +100,6 @@ const EmailForm = props => {
                                     <RegistrationSubmitBtn {...props}/>
                                 </div>
                                 <div className="cancel-email-form-btn-box">
-                                    <CancelEmailForm {...props}/> 
                                     {props.children}
                                 </div>                  
                             </div>
@@ -120,10 +120,10 @@ export default EmailForm;
 
 export const EmailPasswordResetSuccess =(props)=>{
     let {formName, cacheEntities, passwordRestAuth} = props;
-    let {userAuth} = cacheEntities
+    let {userAuth} = cacheEntities | {};
 
     if (!passwordRestAuth) {
-        passwordRestAuth =  userAuth.passwordRestAuth;
+        passwordRestAuth = userAuth && userAuth.passwordRestAuth;
     }
 
     let {identifier} = passwordRestAuth || {};
@@ -164,16 +164,20 @@ export const SmsCodeForm = props => {
         form, 
         formIsValid,
         formName, 
+        defaultFormName,
+        handleFormChange,
         formTitle,
         validateForm,
         isSocialAuth } = props;
+   
 
-    form = form && form[formName]? 
-                           form[formName]:null;
+    form = form && form[defaultFormName]? 
+                           form[defaultFormName]:null;
+    
     let error = form && form.error; 
 
     formIsValid =  onPasswordResetForm || onEmailResendForm?
-                             validateForm(form, formName):false;
+                             validateForm(form, defaultFormName):false;
 
     let email = successMessage?props.email:null;
 
@@ -181,27 +185,29 @@ export const SmsCodeForm = props => {
                                                      {opacity:'0.60'}:{};
     
     let fieldSetStyles = submitting && {opacity:'0.60'} || {};
-    let toggleProps    = {value : true, formName : 'passwordResetForm'};
-         
+    let toggleProps    = {
+            value : true,
+            formName : 'passwordResetForm',
+            defaultFormName,
+        };
+        console.log(successMessage)
+             
     return(
         <div>
-            { onPasswordResetForm || onEmailResendForm &&
-                <div className="password-reset-bo">
-                    <EmailForm {...props}>
-                        <CancelEmailFormSmall {...props}/>
-                    </EmailForm> 
-                </div>
-                ||
-                <div>
-
-                {form && 
-                    <div className="sms-code-form-box">
-                        <ul className="form-title-box">
-                            <li className="">{formTitle}</li>
+            {form &&  
+                <div className="sms-code-form-box">
+                    <ul className="form-title-box">
+                        <li className="">{formTitle}</li>
+                    </ul>
+                    {successMessage &&
+                        <ul className="success-resend-message">
+                            <li className="">{successMessage}</li>
                         </ul>
+
+                    }
                                                                 
-                        <form className="sms-code-form" onSubmit={props.onSubmit}>
-                            {props.children}
+                    <form className="sms-code-form" onSubmit={props.onSubmit}>
+                        {props.children}
                            
 
                         {error &&
@@ -220,7 +226,7 @@ export const SmsCodeForm = props => {
                                         type="number"
                                         name="sms_code"
                                         value={form.sms_code}
-                                        onChange={props.handleFormChange}
+                                        onChange={handleFormChange}
                                         required
                                     />
 
@@ -238,7 +244,7 @@ export const SmsCodeForm = props => {
 
                                     <button type="button" 
                                             onClick={()=>props.toggleEmailForm(toggleProps)} 
-                                            className="resend-email-btn btn-sm " >
+                                            className="resend-email-btn btn-sm" >
                                         Resend
                                     </button>
                                 </div>                  
@@ -247,11 +253,8 @@ export const SmsCodeForm = props => {
                         {!isSocialAuth && !onSignUpForm &&
                             <SpinLoader {...props}/> 
                         }   
-                        </form>
-                    </div>
-                }
+                    </form>
                 </div>
-
             }
         </div>
     )
