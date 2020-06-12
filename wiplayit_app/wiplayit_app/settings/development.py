@@ -40,9 +40,8 @@ TWILIO_AUTH_TOKEN   = os.getenv("TWILIO_AUTH_TOKEN")
 TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
 
 INSTALLED_APPS.append('coverage')
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS") 
-print(ALLOWED_HOSTS)
 
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS") 
 
 DATABASES = {
     'default': {
