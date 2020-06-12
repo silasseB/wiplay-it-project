@@ -50,7 +50,8 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS") 
+
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'] 
 
 CORS_ORIGIN_WHITELIST = [
     'https://wiplayit.com',
