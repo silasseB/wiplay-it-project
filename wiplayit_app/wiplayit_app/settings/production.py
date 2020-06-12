@@ -51,7 +51,8 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'] 
+#ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
+ALLOWED_HOSTS=['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com'] 
 
 CORS_ORIGIN_WHITELIST = [
     'https://wiplayit.com',
