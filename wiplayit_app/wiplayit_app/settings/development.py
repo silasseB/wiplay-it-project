@@ -68,5 +68,5 @@ CORS_ORIGIN_WHITELIST = [
 
     ]
 
-CORS_ORIGIN_WHITELIST = ['http://192.168.43.14:3000', 'http://localhost:3000' ]
+
 

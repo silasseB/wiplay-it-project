@@ -52,7 +52,12 @@ DATABASES = {
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS") 
 
-CORS_ORIGIN_WHITELIST = os.getenv("CORS_ORIGIN_WHITELIST")
+CORS_ORIGIN_WHITELIST = [
+    'https://wiplayit.com',
+    'http://wiplayit.com',
+    'https://www.wiplayit.com',
+    'http://www.wiplayit.com'
+    ] #os.getenv("CORS_ORIGIN_WHITELIST")
 
 print(CORS_ORIGIN_WHITELIST)
 print(ALLOWED_HOSTS)
