@@ -26,21 +26,9 @@ EMAIL_FROM         = EMAIL_HOST_USER
 
 SECURE_SSL_REDIRECT = True
 
-CORS_ORIGIN_WHITELIST = [
-	'https://baloyi.pythonanywhere.com',
-	'https://wiplayit.com',
-	'http://wiplayit.com',
-	'https://www.wiplayit.com',
-	'http://www.wiplayit.com' ]
-	 
+CORS_ORIGIN_WHITELIST = os.getenv("CORS_ORIGIN_WHITELIST") 	 
 
-ALLOWED_HOSTS = [
-	'baloyi.pythonanywhere.com',
-	'wiplayit.com',
-	'www.wiplayit.com',
-	'valoi.pythonanywhere.com', 
-	'silasi.pythonanywhere.com' ]
-
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS") 
 
 DATABASES = {
     'default': {
