@@ -7,6 +7,9 @@ from wiplayit_app.settings.common import *
 DEBUG = False
 SITE_ID = 4
 
+#ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
+ALLOWED_HOSTS=['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com'] 
+
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
 EMAIL_PORT    = 25
@@ -50,9 +53,6 @@ DATABASES = {
     }
 }
 
-
-#ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
-ALLOWED_HOSTS=['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com'] 
 
 CORS_ORIGIN_WHITELIST = [
     'https://wiplayit.com',
