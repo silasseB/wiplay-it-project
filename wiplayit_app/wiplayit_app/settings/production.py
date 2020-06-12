@@ -32,6 +32,9 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 print(os.getenv('DATABASE_NAME'))
 print(os.getenv('DATABASE_USER'))
 print(os.getenv('DATABASE_PASSWORD'))
+print(CORS_ORIGIN_WHITELIST)
+print(ALLOWED_HOSTS)
+print(EMAIL_HOST,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD)
 
 DATABASES = {
     'default': {
