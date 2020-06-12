@@ -29,6 +29,9 @@ SECURE_SSL_REDIRECT = True
 CORS_ORIGIN_WHITELIST = os.getenv("CORS_ORIGIN_WHITELIST") 	 
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS") 
+print(os.getenv('DATABASE_NAME'))
+print(os.getenv('DATABASE_USER'))
+print(os.getenv('DATABASE_PASSWORD'))
 
 DATABASES = {
     'default': {
