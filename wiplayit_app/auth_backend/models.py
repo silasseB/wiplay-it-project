@@ -23,6 +23,7 @@ from auth_backend.utils import (is_using_phone_number,
                                 get_national_number_format,
                                 get_inter_number_format,
                                 get_phone_number_region)
+ 
 
 class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
     email         = models.CharField(
@@ -47,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
 
 
     class Meta:
-        db_table = "user" 
+        db_table = "users" 
         permissions = (
                 ("change_user_followers", "Can Profile Followers"),
                 ("change_user_followings", "Can User Followings"),
@@ -105,7 +106,7 @@ class Profile (models.Model):
         super().save()
 
     class Meta:
-        db_table = "profile"
+        db_table = "profiles"
         
         
 
@@ -145,7 +146,7 @@ class PhoneNumber (models.Model):
         super().save()
 
     class Meta:
-        db_table = 'user_phone_number'
+        db_table = 'users_phone_numbers'
 
     def set_national_format(self, country, phone_number):
         self.national_format = get_national_number_format(country, phone_number)
@@ -184,7 +185,7 @@ class PhoneNumber (models.Model):
 
 
 class PhoneNumberConfirmation(models.Model):
-    sms_code = models.CharField(max_length=5, null=True)
+    sms_code = models.CharField(max_length=8, null=True, unique=True)
     phone_number   = models.ForeignKey(PhoneNumber, verbose_name=_('phone number'),
                                       on_delete=models.CASCADE)
     sent     = models.DateTimeField(verbose_name=_('sent'), null=True)
@@ -192,6 +193,7 @@ class PhoneNumberConfirmation(models.Model):
                                    default=timezone.now)
 
     class Meta:
+        db_table = 'phone_number_confirmations'
         verbose_name = _("phone number confirmation")
         verbose_name_plural = _("phone number confirmations")
 
@@ -201,12 +203,15 @@ class PhoneNumberConfirmation(models.Model):
     @classmethod
     def create(cls, phone_number):
         sms_code = _get_pin()
+        print(sms_code)
         return cls._default_manager.create(phone_number=phone_number, sms_code=sms_code)
    
     def code_expired(self):
+        
         if self.sent:
             now = timezone.now()
             expiration_date = now - self.sent 
+            print(self.sent, now, expiration_date)
             return expiration_date >= datetime.timedelta(hours=1)
 
         return True
@@ -223,9 +228,7 @@ class PhoneNumberConfirmation(models.Model):
             sms_code = self.sms_code
             sms_body = 'Your Account confirmation code is {0}'.format(sms_code)
             phone_number = self.phone_number.user
-            print(phone_number.email, phone_number.is_confirmed)
             #send_pin(phone_number.email, sms_body)
-
             self.sent = timezone.now()
             self.save()
 
@@ -235,7 +238,7 @@ class PhoneNumberConfirmation(models.Model):
 
 
 class PhoneNumberPasswordChange(models.Model):
-    sms_code = models.CharField(max_length=5, null=True)
+    sms_code = models.CharField(max_length=8, null=True, unique=True)
     phone_number   = models.ForeignKey(PhoneNumber, verbose_name=_('phone number'),
                                       on_delete=models.CASCADE)
     sent     = models.DateTimeField(verbose_name=_('sent'), null=True)
@@ -245,6 +248,7 @@ class PhoneNumberPasswordChange(models.Model):
                                            default=False)
 
     class Meta:
+        db_table = 'phone_number_password_change'
         verbose_name = _("phone number password change")
         verbose_name_plural = _("phone number password change")
 

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
+import {HelpPageNavBar} from "templates/navBar";
 
 
 class  PrivacyContainer extends Component  {
@@ -21,13 +21,14 @@ class  PrivacyContainer extends Component  {
         let props = {...this.props, ...this.state}
 
         return(
-            <div className="privacy-page">
-                <PartalNavigationBar {...props}/>
-                <NavigationBarBigScreen {...props} />
-                <div className="privacy-box">
+            <div className="">
+                <HelpPageNavBar {...props}/>
+                <div className="privacy-page">
+                    <div className="privacy-box">
                     <img alt="" 
                          src={require("media/pages-placeholder/pageUnderConstruction.jpeg")} 
                          className="page-placeholder-img"/> 
+                </div>
                 </div>
             </div>
         )

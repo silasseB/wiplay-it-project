@@ -63,6 +63,17 @@ class AboutAdmin(admin.ModelAdmin):
 
 admin.site.register(AboutCompany, AboutAdmin)
 
+class BugReportAdmin(admin.ModelAdmin):
+    fields = ['full_name', 'email', 'subject', 'description']
+
+admin.site.register(BugReport, BugReportAdmin)
+
+        
+class FeedBackAdmin(admin.ModelAdmin):
+    fields = ['full_name', 'email', 'subject', 'description']
+
+admin.site.register(FeedBack, FeedBackAdmin)
+
 
 '''
 class FootballClubsAdmin(admin.ModelAdmin):

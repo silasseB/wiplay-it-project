@@ -24,10 +24,6 @@ from rest_auth.registration.serializers import (
 										   VerifyEmailSerializer,
 										   SocialLoginSerializer
 										)
-from django.contrib.auth.models import update_last_login
-#from django.contrib.sites.shortcuts import get_current_site
-#from django.core.mail import EmailMultiAlternatives
-from django.template import loader
 from allauth.account.models import  EmailConfirmationHMAC, EmailConfirmation
 from rest_auth.views import (LoginView,
 							 PasswordResetView,
@@ -194,11 +190,12 @@ class VerifyEmailView(APIView):
 			user = confirmation.email_address.user
 			user.confirm(self.request) 
 			user.save()
+			django_login(self.request, user, 
+					backend='django.contrib.auth.backends.ModelBackend'
+					)
 
 			payload   = JWT_PAYLOAD_HANDLER(user)
 			jwt_token = JWT_ENCODE_HANDLER(payload)
-			update_last_login(None, user)
-
 			msg   = """Your Account has been successfully confirmed."""
 			
 			response_data = jwt_response_payload_handler(jwt_token, user, request)
@@ -216,10 +213,7 @@ class VerifyPhoneNumberView(APIView):
 		sms_code = request.data.get('sms_code')
 		confirmation = PhoneNumberConfirmation.objects.filter(sms_code=sms_code)
 		if confirmation:
-			confirmation = confirmation[0]
-			if confirmation.code_expired():
-				print(confirmation, 'code_expired')
-			return confirmation
+			return confirmation[0]
 		return None
 
 	def get_serializer(self, *args, **kwargs):
@@ -235,11 +229,13 @@ class VerifyPhoneNumberView(APIView):
 			user = confirmation.phone_number.user
 			user.confirm(self.request) 
 			user.save()
+
+			django_login(self.request, user, 
+					backend='django.contrib.auth.backends.ModelBackend'
+					)
 			
 			payload   = JWT_PAYLOAD_HANDLER(user)
 			jwt_token = JWT_ENCODE_HANDLER(payload)
-			update_last_login(None, user)
-
 			msg   = """Your Account has been successfully confirmed."""
 			
 			response_data = jwt_response_payload_handler(jwt_token, user, request)

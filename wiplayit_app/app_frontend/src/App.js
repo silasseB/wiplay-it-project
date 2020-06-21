@@ -25,6 +25,7 @@ import AccountEmailConfirmationPage,
        {AccountSmsCodeConfirmationPage} from "components/authentication/account-confirmation"
 import {TestEditor, ExampleCountry}  from 'components/test-editor';
 import FeedBackContainer  from 'components/feed-back';
+import ContactAdminContainer  from 'components/contact-admin';
 import AboutContainer  from 'components/about';
 import PrivacyContainer  from 'components/privacy';
 import HelpContainer  from 'components/help';
@@ -68,9 +69,10 @@ function App() {
             <Route path="/about/" component={AboutContainer}/>
             <Route path="/privacy/" component={PrivacyContainer}/>
             <Route path="/help/" component={HelpContainer}/>
+            <Route path="/contact/us/" component={ContactAdminContainer}/>
             <Route path="/settings/" component={SettingsContainer}/>  
             <Route path="/notifications/" component={NotificationsContainer}/>    
-            <Route path="/report/" component={ReportContainer}/>
+            <Route path="/bug/report/" component={ReportContainer}/>
             <Route exact path="/app/admin/"  component={AdminPage}/>
             <Route path="/app/admin/about/" component={AboutAdminPage}/>
             <Route path="/country/" component={ExampleCountry}/>

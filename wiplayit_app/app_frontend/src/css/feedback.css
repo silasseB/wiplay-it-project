@@ -1,6 +1,9 @@
+
+
 @media (max-width: 980px) {
 
-	.feedback-form-page, 
+	.feedback-page, 
+	.report-page,
 	.privacy-page,
 	.help-page,
 	.about-info-page,
@@ -9,21 +12,42 @@
       	padding-top: 60px;
 	}
 
+	.feedback-title {
+
+	}
+
+	.feedback-helper-text {
+		font-size: 16px;
+	}
+
 }
 
 
 
 @media (min-width: 980px) {
 
-	.feedback-form-page, 
+	.feedback-page, 
+	.report-page,
 	.privacy-page,
 	.help-page,
 	.about-info-page,
 	.settings-page {
     	border      : px solid blue;
-      	padding-top : 60px;
+      	padding-top : 40px;
       	width       : 50%;
-        margin      : 30px 25%;  
+        margin      : 0 25% 90px;  
+	}
+
+	.feedback-title {
+		font-weight : bold;
+		font-size   : 25px;
+		margin      : 0 0 17px;
+	}
+
+	.feedback-helper-text {
+		font-size : 15px;
+		margin    : 0 0 17px;
+		padding   : 10px 0;  
 	}
 
 }

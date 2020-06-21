@@ -42,6 +42,7 @@ export default class Axios {
         this.useToken      =  props && props.useToken;
         this.timeout       =  props && props.timeout || 15000; 
         this.requestFor    =  props.requestFor; 
+        console.log(props)
     }
 
     tokenTimeStampe(timeStamp){
@@ -67,6 +68,7 @@ export default class Axios {
     tokenExpired=()=>{
         let userAuth = this._getAuth();
         let expireTime = userAuth && this.tokenTimeStampe(userAuth.timeStamp);
+        console.log(expireTime.days())
         return expireTime && expireTime.days() >= 7 || false
 
     }

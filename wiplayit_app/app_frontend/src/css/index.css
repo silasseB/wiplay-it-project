@@ -30,18 +30,18 @@
     }
 
     .page-spin-loader-box {
-	    border  : px solid blue;
 	    width   : auto;
 	    margin  : 66px 45% 0; 
-	    padding : 25px 0  10px 30px;  
+	    justify-content : center;
+        display         : flex;
     }
 
     .alert-container {
     	border        : px solid blue;
     	width         : 100%;
     	margin        : 60px 0 0;
-      overflow      : none;
-      border-radius : 4px;
+        overflow      : none;
+        border-radius : 4px;
     	outline       : none;
     	height        : auto; 
     	bottom        : auto;
@@ -84,10 +84,10 @@
     }
 
     .page-spin-loader-box {
-	    border  : px solid blue;
-	    width   : auto;
-	    margin  : 28px 35% 0; 
-	    padding : 25px 0  10px 15px;  
+	    justify-content : center;
+        display         : flex;
+	    margin          : 28px  0; 
+	    
     }
 
     .alert-container {
@@ -109,7 +109,7 @@
 
 
     .alert-box {
-        justify-content : center;
+      justify-content : center;
     	display         : flex;
     	border          : px solid black;
     	margin          : 4px 0; 

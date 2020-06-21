@@ -9,35 +9,23 @@ const helper   = new Helper();
 const InitialState = () => {
   
     return {
-    
         userAuth    : {},
-
         currentUser : {},
-
         userProfile : {},
-
         users       : {},
-
         index       : {},
-
         questions   : {},
-
         posts       : {},
-
         question    : {},
-
         post        : {},
-
         answers     : {},
-
         comments    : {},
-
         replies     : {},
-
         modal       : {},
         errors      : {},
         about       : {},
         admin       : {},
+        message     : {},
     };
 };
 
@@ -72,31 +60,21 @@ export function entities(state=InitialState(), action) {
             let stateEntintie = oldState[stateEntintieKey]
                                       
             if (byId) {
-                //console.log(oldState)
-            
+                        
                 if(stateEntintie[byId]){
-                    //console.log(stateEntintie, payLoad)
-                    //console.log('Updating existing state for ' + stateEntintieKey + ' with byId ' + byId )
                     stateEntintie[byId] = {...stateEntintie[byId], ...payLoad};
                     
-
                 }else {
-                    //console.log(stateEntintie, payLoad)
-                    //console.log('creating new state for ' + stateEntintieKey + ' with byId ' + byId )
                     let newEntitie = CreateNewEntities(params);
                     stateEntintie = {...stateEntintie, ...newEntitie}
-                    
                 }
 
             }else{
                 stateEntintie = {...stateEntintie,...payLoad}
-                
             }
 
             newState[stateEntintieKey] =  stateEntintie;
-            newState             = {...oldState, ...newState};
-            //console.log(newState, oldState)
-            return newState;
+            return {...oldState, ...newState};
     };
    
     let newStateEntintie;
@@ -121,6 +99,11 @@ export function entities(state=InitialState(), action) {
         case "ADMIN_ERROR":
         case "ADMIN_PENDING":
             return updateStateEntyties('admin', action);
+
+        case "SEND_MESSAGE_SUCCESS":
+        case "SEND_MESSAGE_ERROR":
+        case "SEND_MESSAGE_PENDING":
+            return updateStateEntyties('message', action);
 
         case 'MODAL_ROUTER':
         case "MODAL_SUBMIT_PENDING":

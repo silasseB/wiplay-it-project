@@ -1,128 +1,58 @@
 
-import React, { Component } from 'react';
-import {TextAreaEditor} from 'templates/editor/editor-templates';
-import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
+import React, {Component} from 'react';
+import {HelpPageNavBar} from 'templates/navBar';
+import MessageFormContainer from 'components/message';
+import Api from 'utils/api';
+import  MainAppHoc from "components/index/index-hoc";
 
 
 class FeedBackContainer extends Component{
 
-   constructor(props) {
+    constructor(props) {
         super(props);
         this.state = { 
-            form     : {feedback : "" },
             pageName : "Feedback", 
         }; 
-        this.handleChange = this.onChange.bind(this);      
-    }
-
-    onChange(event) {
-        event.preventDefault();
-        let form = this.state.form;
-        form[event.target.name] = event.target.value;
-        this.setState({form});
-
-    }
+    };
 
     componentDidMount() {
         
     }
 
-   textAreaProps() {
-        return {
-           value       : this.state.form.feedback,
-           onChange    : this.handleChange,
-           name        : "feedback",
-           className   : "feedback-textarea-field",
-           placeholder : 'Your Feedback',
-        };
-    };
-
-    _handleSubmit(event){
-        console.log(event)
-        let {form} = this.state
-
-    }
 
     render(){
-        let textAreaProps = this.textAreaProps;
-        let props  = {...this.props, ...this.state}
-        let {form} = props;
-
+        let api    = new Api()
+        let apiUrl = api.getFeedBackApi();
+        let props  = {
+                ...this.props,
+                ...this.state,
+                apiUrl,
+            };
+        
         return(
-            <div className="feedback-form-page">
-                <PartalNavigationBar {...props}/>
-                <NavigationBarBigScreen {...props} />
-                <div className="feedback-form-container">
-                    <div className="feedback-form-box">
-                        <div className="">
-                            <ul className="item-title-box">
-                                <li className="item-title">
-                                    Full Name
-                                </li>
-                            </ul>
-                            <div className="input-box">
-                                <input
-                                    type="text"
-                                    placeholder="" 
-                                    className=""
-                                    name="full_name"
-                                    value={form && form.full_name || ''}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
-                        </div>
+            <div className="app-box-container">
+                <HelpPageNavBar {...props}/>
+                <div className="feedback-page">
+                    <div className="feedback-container">
+                        <ul className="feedback-title">
+                            <li className="">
+                                How would want to see this platform be?
+                            </li>
+                        </ul>
+                        <ul className="feedback-helper-text">
+                            <li className="">
+                                Wiplayit is a new platform and everyday we work to make
+                                this platform a better place for football lovers. 
+                            </li>
 
-                        <div className="">
-                            <ul className="item-title-box">
-                                <li className="item-title">
-                                    Your email address
-                                </li>
-                            </ul>
-                            <div className="input-box">
-                                <input
-                                    type="text"
-                                    placeholder="About you" 
-                                    className=""
-                                    name="email"
-                                    value={form && form.email || ''}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
-                        </div>
+                            <li className="">
+                                So as a user of this flatform we would like to hear from you
+                                what we can add or change in the platform to make it great 
+                                and enjoyable. 
+                            </li>
+                        </ul>
 
-                        <div className="">
-                            <ul className="item-title-box">
-                                <li className="item-title">
-                                    Subject
-                                </li>
-                            </ul>
-                            <div className="input-box">
-                                <input
-                                    type="text"
-                                    placeholder="" 
-                                    className=""
-                                    name="subject"
-                                    value={form && form.subject || ''}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="">
-                            <ul className="item-title-box">
-                                <li className="item-title">
-                                    Description
-                                </li>
-                            </ul>
-
-                            <TextAreaEditor {...textAreaProps}/>
-                        </div>
-            
-                        <button
-                            onClick={() => this._handleSubmit()}
-                            className="btn-sm add-link">
-                            Submit
-                        </button>
+                        <MessageFormContainer {...props}/>
                     </div>
                 </div>
             </div>
@@ -130,6 +60,6 @@ class FeedBackContainer extends Component{
     }
 };
 
-export default FeedBackContainer; 
+export default MainAppHoc(FeedBackContainer); 
 
 

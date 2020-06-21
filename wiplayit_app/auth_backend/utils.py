@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework import serializers, exceptions
 
 
+
 def signup_phone_number(request, user):
     pass
 
@@ -58,8 +59,6 @@ def get_verified_number(unique_key):
 
     if phone_number:
         phone_number = phone_number
-        if  not phone_number.verified:
-            return None
         return phone_number 
     return None
 
@@ -86,7 +85,7 @@ def username_exist(email_or_phone_num):
     return is_taken
 
 
-def _get_pin(length=4):
+def _get_pin(length=6):
     pin = random.sample(range(10**(length-1),10**length), 1)[0]
     return pin
 
@@ -95,7 +94,7 @@ def _get_pin(length=4):
 @csrf_exempt
 def send_pin(phone_number, message_body=None):
     twiml = '<Response><Message>Hello!</Message></Response>'
-
+    
     if not phone_number:
         return HttpResponse(twiml, content_type='text/xml')
     
@@ -123,17 +122,21 @@ def is_using_email_address(username):
     return validate_username(validator, username)
 
 def validate_username(validator, username):
+    if not validator: return 
+
     try:
         validator(username)
         return True
     except  ValidationError as e:
-        error =   e
+        error = e
         return False
 
 def get_username_validator(is_phone_number=False, is_email_address=False):
+    validate_phone_number = RegexValidator(regex=r'^\+?[\d\s]+$')
+    
     if is_phone_number:
-        return RegexValidator(regex=r'^\+?[\d\s]+$')
-    else:
+        return validate_phone_number  
+    elif is_email_address:
         if is_email_address:
             return validate_email
     return None

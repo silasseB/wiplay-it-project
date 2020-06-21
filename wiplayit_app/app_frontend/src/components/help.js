@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
-import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
+import {HelpPageNavBar} from "templates/navBar";
+import MainAppHoc from "components/index/index-hoc";
 
 
 
@@ -13,28 +14,28 @@ class  HelpContainer extends Component  {
     }
 
 
-
     componentDidMount() {
-      console.log(this.props)
+       console.log(this.props)
     }
 
     render(){
         let props = {...this.props, ...this.state}
 
         return(
-            <div className="help-page">
-                <PartalNavigationBar {...props}/>
-                <NavigationBarBigScreen {...props} />
-                <div className="help-box">
-                    <img alt="" 
-                         src={require("media/pages-placeholder/pageUnderConstruction.jpeg")} 
-                         className="page-placeholder-img"/>       
+            <div className="help-continer">
+                <HelpPageNavBar {...props}/>
+                <div className="help-page">
+                    <div className="help-box">
+                        <img alt="" 
+                             src={require("media/pages-placeholder/pageUnderConstruction.jpeg")} 
+                             className="page-placeholder-img"/>       
+                    </div>
                 </div>
             </div>
         )
     }
 };
 
-export default HelpContainer;
+export default MainAppHoc(HelpContainer);
 
 

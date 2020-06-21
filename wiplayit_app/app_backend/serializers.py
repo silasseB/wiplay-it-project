@@ -1,8 +1,12 @@
+from django.conf import settings
+from django.core.mail import send_mail, EmailMessage
+from django.template.loader import render_to_string
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 from auth_backend.models import User
 from .models import ( Question, Post, Answer, AnswerComment, AnswerReply,
 	                  PostComment, PostReply, DraftEditorMediaContent,
-	                  AboutCompany)
+	                  AboutCompany, BugReport, FeedBack, ContactAdmin)
 
 from .mixins.serializer_mixins import   SerialiizerMixin
 from auth_backend.serializers import  BaseUserSerializer, UserSerializer
@@ -285,7 +289,79 @@ class IndexSerializer(BaseSerializer):
 class AboutSerializer(BaseModelSerializer):
 		
 	class Meta:
-		model = AboutCompany 
+		model  = AboutCompany 
 		fields = '__all__'
 	
 	
+class AdminSerializerMixin():
+	
+	def validate(self, attrs):
+
+		for value in attrs:
+			if not attrs[value]:
+				msg = _('Please fill in all fields')
+				raise serializers.ValidationError(msg)
+				break
+
+		return attrs
+	
+
+	def get_from_email(self):
+		return settings.DEFAULT_FROM_EMAIL
+
+	def render_mail(self, request=None):
+		
+		subject_template_name = 'admin_notification_mail_subject.txt'
+		email_template_name   = 'admin_notification_mail.html'
+
+		full_name   = self.validated_data.get('full_name')
+		subject     = self.validated_data.get('subject')
+		description = self.validated_data.get('description')
+		email       = self.validated_data.get('email')
+
+
+		subject = render_to_string(subject_template_name, {'subject':subject})
+		subject = ''.join(subject.splitlines())
+
+		context = {
+			'description':description,
+			'full_name':full_name,
+			'emai':email,	
+		}
+
+		message = render_to_string(email_template_name, context)
+
+		from_email = self.get_from_email()
+		to_email = 'silassibaloy@gmail.com'
+		msg = EmailMessage(subject, message, from_email, [to_email])
+		msg.content_subtype = "html"  # Main content is now text/html
+
+		return msg
+		
+
+	def send_notification_to_admin(self, request=None):
+		msg = self.render_mail(request)
+		msg.send()
+
+	
+class BugReportSerializer(AdminSerializerMixin, BaseModelSerializer):
+
+	class Meta:
+		model = BugReport 
+		fields = '__all__'
+	
+class FeedBackSerializer(AdminSerializerMixin, BaseModelSerializer):
+
+	class Meta:
+		model = FeedBack 
+		fields = '__all__'
+	
+
+	
+class ContactAdminSerializer(AdminSerializerMixin, BaseModelSerializer):
+
+	class Meta:
+		model = ContactAdmin 
+		fields = '__all__'
+	
+

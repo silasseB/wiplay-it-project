@@ -6,6 +6,7 @@ import  * as action  from 'actions/actionCreators';
 import * as checkType from 'helpers/check-types'; 
 import {GetLoggedInUser } from 'utils/helpers';
 import {history} from 'App';
+
 const api = new Api();
 
 export const _GetApi =(useToken=true, opts={}) =>{
@@ -14,6 +15,50 @@ export const _GetApi =(useToken=true, opts={}) =>{
 
 } 
 
+
+export function sendMessage(options={}) {
+    let useToken = true
+    const Api    = _GetApi(useToken);
+    
+    if(!Api){
+        console.log(!Api)
+        return  dispatch =>{ 
+            dispatch(action.handleError());
+        };
+    }
+
+    let {apiUrl, formData} = options; 
+    
+    return dispatch => {
+        dispatch(action.sendMessagePending());
+
+        Api.post(apiUrl, formData)
+            .then(response => {
+                console.log(response)  
+                dispatch(action.sendMessageSuccess(response.data)); 
+            })
+            .catch(error => {
+                            
+                if (error.response) {
+                    error = error.response.data;
+                    console.log(error)
+                    dispatch(action.sendMessageError(error));
+
+                }else if(error.request){
+                    console.log(error.request)
+                    error = 'Look like you lost connection, please try again.';
+                    dispatch(action.handleError(error));
+                    dispatch(action.sendMessageError(error));
+
+                }else{
+                    console.log(error)
+                    error = 'Something wrong happened.';
+                    dispatch(action.handleError(error));
+                }
+            })
+                
+    }
+};
 
 
 export function getAboutInfo(options) {

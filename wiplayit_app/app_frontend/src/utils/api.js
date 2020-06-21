@@ -2,6 +2,19 @@
 
 
 export default class Api{
+
+    getContactAdminApi() {
+       return `/api/contact/admin/`;
+    }
+
+    getFeedBackApi() {
+       return `/api/feedback/`;
+    }
+
+    getBugReportApi() {
+       return `/api/bug/report/`;
+    }
+
     getAdminApi() {
        return `/api/admin/`;
     }

@@ -165,17 +165,19 @@ class UserListBox extends Component {
                 id="users-modal-container"
                 className="users-modal-container">
                 <UserListModalNavBar {...props}/>
-                { users &&
+                {users &&
                     <div>
-                        { users.isLoading &&
+                        {users.isLoading &&
                             <div className="page-spin-loader-box">
                                 <AjaxLoader/>
                             </div>
                         }
-                        { users.error &&
+                        
+                        {users.error &&
                             <PageErrorComponent {...props}/>
                         }
-                        { users.userList &&
+
+                        {users.userList &&
                             <div onScroll={this.handleScroll()}
                                 style={onScroolStyles} 
                                 className="user-list-container"

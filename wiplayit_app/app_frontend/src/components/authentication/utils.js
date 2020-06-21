@@ -13,8 +13,8 @@ export default class FormValidator {
     };
 
     cleanForm(){
+        
         const helper = new Helper();
-
         let formName = this.formName;
         let form     = this.form[formName];
         return helper.createFormData({...form});
@@ -29,24 +29,18 @@ export default class FormValidator {
         }
     };
 
-    isPhoneNumber(){
-        let formName = this.formName;
-        let form     = this.form[formName];
-
-        if (form.email) {
-            return validatePhoneNumber(form.email);
+    isPhoneNumber(value){
+        if (value) {
+            return validatePhoneNumber(value);
         }
-        return true;
+        return false;
     };
 
-    isEmail(){
-        let formName = this.formName;
-        let form     = this.form[formName];
-        if (form.email) {
-            return validateEmail(form.email);
+    isEmail(value){
+        if (value) {
+            return validateEmail(value);
         }
-
-        return true;
+        return false;
     };
 
     formErrors(){
@@ -57,11 +51,14 @@ export default class FormValidator {
         let isValid = formIsValid(form);
 
         if (!isValid) {
-            formErrors = {non_field_errors:['Please fill all fields']};
+            formErrors = {non_field_errors:['Please fill in all fields']};
         }
                 
-        if (form.email && !this.isEmail() && !this.isPhoneNumber()) {
-            formErrors = {email:['Please enter a valid email or phone number']}
+        if (form.email) {
+            let {email} = form;
+            if (!this.isEmail(email) && !this.isPhoneNumber(email)) {
+                formErrors = {email:['Please enter a valid email or phone number']}
+            }
         }
 
         if (this.isPhoneNumber() && formName === 'signUpForm' && !form.country) {
@@ -76,7 +73,7 @@ export default class FormValidator {
 
 export const authSubmit =(self)=>{
     let formName = self.state.formName;
-    let form     = getForm(self,formName);
+    let form     = getForm(self, formName);
        
     _isSubmitting(self, form);
         
@@ -130,9 +127,9 @@ export const validatePhoneNumber=(phone_number)=>{
                                           
     if (isPhoneNumber) {
         return true
-    }else{
-        return false
     }
+
+    return false
 };
 
 export const validateEmail=(email)=>{

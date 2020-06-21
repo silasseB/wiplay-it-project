@@ -192,7 +192,10 @@ export function MainAppHoc(Component) {
                       question,
                       userProfile,
                       userAuth,
+                      message,
                       errors } = entities;
+
+                console.log(entities)
 
                 let editorModal    = modal['editor']; 
                 let optionsModal   = modal['optionsMenu'];
@@ -213,6 +216,7 @@ export function MainAppHoc(Component) {
                         this._HandleErrors(errors)
                     }
                 }
+                this.handleMessageSuccess(message)
 
                 this.handleCreateSuccess(editorModal);
                 this.handleUpdateSuccess(editorModal);
@@ -236,6 +240,16 @@ export function MainAppHoc(Component) {
             this.displayErrorMessage(errors.error);
             delete errors.error;
         }
+
+        handleMessageSuccess =(message)=> {
+            if (!message) return;
+
+            if (message.messageSent) {
+                delete message.messageSent;
+                console.log(message)
+                this.displaySuccessMessage(message.successMessage)
+            }
+        };
 
         handleCreateSuccess(modal){
             if (!modal) return;
@@ -429,7 +443,7 @@ export function MainAppHoc(Component) {
 
         logout= () => {
             let apiUrl   =  api.logoutUser();
-            let useToken = true;
+            let useToken = false;
             let formName = 'logoutForm';
             this.props.authenticate({apiUrl, form:{},formName, useToken})
             

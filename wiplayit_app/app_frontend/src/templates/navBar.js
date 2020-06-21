@@ -75,11 +75,16 @@ export const NavBarMenuItems = props => {
         <div>
 
             <div id="" className="menu-img-container">
-                <div className="menu-img-box" onClick={() => RedirectMenuLinks(toProfileProps)}> 
+                <div className="menu-img-box" 
+                     onClick={() => RedirectMenuLinks(toProfileProps)}> 
                         { profile && profile.profile_picture?
-                            <img alt="" src={profile.profile_picture} className="menu-img"/>
+                            <img alt="" 
+                                 src={profile.profile_picture} 
+                                 className="menu-img"/>
                             :
-                            <img alt="" src={require("media/user-image-placeholder.png")} className="menu-img"/> 
+                            <img alt="" 
+                                 src={require("media/user-image-placeholder.png")} 
+                                 className="menu-img"/> 
 
                         }
                 </div>
@@ -87,7 +92,8 @@ export const NavBarMenuItems = props => {
                 <ul className="menu-username-box">
                     <li className="menu-username"  
                         onClick={() => RedirectMenuLinks(toProfileProps)}>
-                        {currentUser && currentUser.first_name}  {currentUser && currentUser.last_name} 
+                        {currentUser && currentUser.first_name} 
+                        {currentUser && currentUser.last_name} 
                     </li>
                     <li className="menu-user-credential" >
                         {profile && profile.credential} 
@@ -123,13 +129,8 @@ export const NavBarMenuItems = props => {
                         className="btn dropdown-item">
                     Privacy
                 </button>  
-
-                 <button type="button"
-                        onClick={() => RedirectMenuLinks({pathname:'/report/'})}
-                        className="btn dropdown-item">
-                    Report
-                </button> 
-                
+                 <div className="dropdown-divider"></div>
+            
                 <button  onClick={props.logout} className="btn logout-btn">Logout</button>
             </div>
         </div>
@@ -171,12 +172,18 @@ const NavBarDropDown = props => {
         <div className="navigation-img-box">
                     
             <div className="droplef" id="navBardropdown" 
-                           data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
+                           data-toggle="dropdown"
+                           aria-haspopup="false" 
+                           aria-expanded="true">
                 <div className="nav-bar-img-box"> 
                     { profile && profile.profile_picture?
-                        <img alt="" src={profile.profile_picture} className="nav-bar-img"/>
+                        <img alt="" 
+                             src={profile.profile_picture}
+                             className="nav-bar-img"/>
                         :
-                        <img alt="" src={require("media/user-image-placeholder.png")} className="nav-bar-img"/> 
+                        <img alt=""
+                             src={require("media/user-image-placeholder.png")}
+                             className="nav-bar-img"/> 
 
                     }
                 </div>
@@ -242,9 +249,12 @@ const NavBarModalMenu = props => {
             <div className="nav-bar-modal-menu" id="nav-bar-modal-menu">
                 <div className="nav-bar-img-box"> 
                     { profile && profile.profile_picture?
-                        <img alt="" src={profile.profile_picture} className="nav-bar-img"/>
+                        <img alt="" 
+                             src={profile.profile_picture} className="nav-bar-img"/>
                         :
-                        <img alt="" src={require("media/user-image-placeholder.png")} className="nav-bar-img"/> 
+                        <img alt=""
+                             src={require("media/user-image-placeholder.png")}
+                             className="nav-bar-img"/> 
 
                     }
                 </div>
@@ -346,10 +356,7 @@ export const NavBarBigScreen = props => {
     }
     let pathname = `/compose/${'user'}/${1}/`;
 
-    //console.log(createQuestionProps, createPostProps)
-    
-        
-	return(
+    return(
 			
         <nav className="navigation fixed-top" id="navigation">
             <div className="navigation-box">
@@ -498,12 +505,24 @@ export const PartialNavBar = props =>{
 
 
 
-export const NavigationBarBottom = MatchMediaHOC(NavBarBottomTemplate, '(max-width: 980px)');
+export const NavigationBarBottom = MatchMediaHOC(
+                                      NavBarBottomTemplate, 
+                                      '(max-width: 980px)'
+                                    );
 
-export const PartalNavigationBar = MatchMediaHOC(PartialNavBar, '(max-width: 980px)');
+export const PartalNavigationBar = MatchMediaHOC(
+                                     PartialNavBar,
+                                     '(max-width: 980px)'
+                                    );
 
-export const NavigationBarBigScreen = MatchMediaHOC(NavBarBigScreen, '(min-width: 980px)');
-export const NavigationBarSmallScreen = MatchMediaHOC(NavBarSmallScreen, '(max-width: 980px)');
+export const NavigationBarBigScreen = MatchMediaHOC(
+                                           NavBarBigScreen,
+                                           '(min-width: 980px)'
+                                        );
+export const NavigationBarSmallScreen = MatchMediaHOC(
+                                           NavBarSmallScreen, 
+                                           '(max-width: 980px)'
+                                        );
 
 
 
@@ -571,8 +590,44 @@ export const CustomBackBtn = props => {
 
 export const ModalNavBar = props => {
     return(
-      <EditorNavBar title={ <SubmitBtn handleSubmit={props.handleSubmit} /> } / >
+      <EditorNavBar title={ <SubmitBtn handleSubmit={props.handleSubmit}/> } />
   );
 }
 
+
+
+
+export const HelpPageNavBar = props => {
+        
+        
+    return(
+        <nav className="navigation fixed-top" id="help-navigation">
+            <div className="help-navigation-box">
+                <ul className="help-logo-contents"
+                    onClick={()=>RedirectMenuLinks({pathname:'/'})} >
+                    <li>Wiplayit</li>
+                </ul>
+                <div className="help-menu-box">
+                    <ul className="help-menu-contents">
+                        <button type="button" 
+                            onClick={()=>RedirectMenuLinks({pathname:'/bug/report/'})} 
+                            className="btn-sm">
+                            Report a bug
+                        </button>  
+                        <button type="button" 
+                            onClick={()=>RedirectMenuLinks({pathname:'/feedback/'})} 
+                            className="btn-sm">
+                            Feedback
+                        </button> 
+                        <button type="button" 
+                            onClick={()=>RedirectMenuLinks({pathname:'/contact/us/'})} 
+                            className="btn-sm">
+                            Contact us
+                        </button> 
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    );
+};
 

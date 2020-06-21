@@ -28,16 +28,16 @@ class BaseMixin(object):
     def update_text_field(self, instance=None):
     	data = dict()
     	if hasattr(self, 'fields_to_update'):
-    		related_field  = self.fields_to_update.get('related_field', False) 
-    		text_field     = self.fields_to_update.get('text_field', False)
+    		related_field  = self.fields_to_update.get('related_field', None) 
+    		text_field     = self.fields_to_update.get('text_field', None)
      	 
     	if  hasattr(self, 'is_user'):
     		data = self.update_user_fields(instance)
     		
-    	else:
-    		data[text_field ]  = self.request.data.get(text_field, False)
-    		add_post     = self.request.data.get("add_post", False)
-    		add_question     = self.request.data.get("add_question", False)
+    	elif text_field:
+    		data[text_field ]  = self.request.data.get(text_field, None)
+    		add_post     = self.request.data.get("add_post", None)
+    		add_question     = self.request.data.get("add_question", None)
 
     		if add_question or add_post:
 
@@ -46,7 +46,7 @@ class BaseMixin(object):
 
     			if add_post:
     				data['add_title'] = self.request.data.get("add_title") 
-    	return data
+    	return data or None
 
 
     def update_slug_field(self, instance):
@@ -276,25 +276,22 @@ class UpdateObjectMixin(BaseMixin):
 class CreateMixin(BaseMixin):
 	
 	def post(self, request, *args, **kwargs):
-		instance       = self.get_object()
-		related_field  = self.fields_to_update.get('related_field', False)
-		data           = self.update_text_field(instance)
+		data = request.data
 
-		if related_field and instance:
-			data[related_field] = instance.id
-		
+		if  hasattr(self, 'fields_to_update'):
+			instance = self.get_object()
+			data = self.update_text_field(instance)
+			related_field  = self.fields_to_update.get('related_field', None)
+
+			if related_field and instance:
+				data[related_field] = instance.id
+
 		serializer = self.create(data)
 		return serializer
 	
 		
 	def create(self, data):
 		created_by = self.request.user;	
-
-		if  hasattr(self, 'permissions'):
-			edit_perms = self.permissions.get('edit_perms',None)
-
-		print(data)
-		print(self.request.data)
 
 		serializer = self.get_serializer(data=data)
 		if not serializer.is_valid():
@@ -306,15 +303,16 @@ class CreateMixin(BaseMixin):
 			instance = serializer.save(created_by=created_by)
 		else:
 			instance = serializer.save()
+	
 
+		if  hasattr(self, 'permissions'):
+			edit_perms = self.permissions.get('edit_perms',None)
+			is_superuser = created_by.is_superuser
 
-		print(serializer.data)
-
-		is_superuser = created_by.is_superuser
-		if not is_superuser and edit_perms is not None:
-			for perm in edit_perms:
-				self.assign_perm(perm, instance)
-
+			if not is_superuser and edit_perms is not None:
+				for perm in edit_perms:
+					self.assign_perm(perm, instance)
+		
 		return Response(serializer.data, status=status.HTTP_201_CREATED)
 		
 		

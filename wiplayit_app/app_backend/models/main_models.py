@@ -24,7 +24,7 @@ class Question(models.Model):
                 ('change_question_followers', 'Can Change Question Followers'),
 
             )
-		db_table = "question"
+		db_table = "questions"
 
 
 	#@models.permalink
@@ -79,7 +79,7 @@ class AnswerComment(models.Model):
 	
 	
 	class Meta:
-		db_table = "Answercomments"
+		db_table = "answer_comments"
 		permissions = (('change_answer_comment_upvotes', 'Can Change Answer Comment Uvotes'),)
                 
                 
@@ -103,7 +103,7 @@ class AnswerReply(MPTTModel):
 
 
     class Meta:
-        db_table = "replies"
+        db_table = "answer_replies"
         permissions = (('change_answer_reply_upvotes', 'Can Change Answer Reply Uvotes'),)
 
     class MPTTMeta:
@@ -174,7 +174,7 @@ class PostComment(models.Model):
     upvotes      = models.IntegerField(default=0)
 
     class Meta:
-        db_table = "post_comment"
+        db_table = "post_comments"
         permissions = ( ('change_post_comment_upvotes', 'Can Change Post Comment  Uvotes'),)
 
 
@@ -248,21 +248,35 @@ class PrivacyAndPolicy(models.Model):
     def __str__(self):
         return self.policy
 
+class AdminMessage(models.Model):
+    full_name  = models.CharField(max_length=50, blank=True, null=True)
+    email      = models.CharField(max_length=50, blank=True, null=True)
+    subject    = models.CharField(max_length=250, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
-class Help(models.Model):
-    terms    = models.TextField( blank=True)
-    service  = models.TextField( blank=True)
-
-    def __str__(self):
-        return self.terms
-    
-
-class BugReport(models.Model):
-    bug     = models.TextField( blank=True)
-    service = models.TextField( blank=True)
+    class Meta:
+        db_table = "admin_messages" 
 
     def __str__(self):
-        return self.terms
+        return self.subject
+
+
+class ContactAdmin(AdminMessage):
+
+    class Meta:
+        db_table = "contact_admin" 
+
+class BugReport(AdminMessage):
+
+    class Meta:
+        db_table = "bug_reports"
+       
+
+class FeedBack(AdminMessage):
+
+    class Meta:
+        db_table = "feedbacks"
+           
 
 class FootballClubs(models.Model):
     name    = models.CharField(max_length=50, blank=True)
@@ -298,13 +312,6 @@ class FootballClubs(models.Model):
 
                 ('change_followers', 'Can Change Followers'),
                 )
-
-
-
-class SendMessage(models.Model):
-    messsage = models.TextField(blank=True)
-
-
 
  
 

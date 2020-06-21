@@ -891,6 +891,44 @@ export const getAdminError = (error) => {
 };
 
 
+
+export const sendMessagePending = () => {
+    
+    return {
+        type    : 'SEND_MESSAGE_PENDING',
+        payLoad : {
+            isLoading: true,
+        }
+    };
+};
+
+
+export const sendMessageSuccess = (data) => {
+    let successMessage = 'Request has succefully been sent';
+
+    return {
+        type    : 'SEND_MESSAGE_SUCCESS',
+        payLoad : {
+            data,
+            isLoading   : false,
+            messageSent : true,
+            successMessage,
+        }
+    };
+};
+
+
+export const sendMessageError = (error) => {
+    
+    return {
+        type    : 'SEND_MESSAGE_ERROR',
+        payLoad : {
+            error,
+            isLoading: false,
+        }
+    };
+};
+
 export const getUserAnswer = (answerList) => {
     let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')); 
     let currentUser =  cacheEntities.currentUser;

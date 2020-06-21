@@ -32,7 +32,6 @@ export const  SignUpForm = props => {
     
     formIsValid = onSignUpForm? validateForm(form, formName):false;
     let submitButtonStyles = submitting || !formIsValid?{opacity:'0.60'}:{};
-    
     let fieldSetStyles = submitting ? {opacity:'0.60'}:{}; 
 
     
@@ -45,9 +44,9 @@ export const  SignUpForm = props => {
             </ul> 
 
           <form onSubmit={props.onSubmit} className="sign-up-form">
-              <fieldset  disabled={ submitting } 
-                       style={ fieldSetStyles}
-                       className="fieldset-signup" >
+              <fieldset  disabled={submitting} 
+                         style={fieldSetStyles}
+                         className="fieldset-signup" >
 
               <div className="sign-up-box">
             

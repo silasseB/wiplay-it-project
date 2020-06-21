@@ -1,6 +1,8 @@
 
 import React, { Component } from 'react';
-import {PartalNavigationBar,NavigationBarBigScreen } from "templates/navBar";
+import {PartalNavigationBar,
+        NavigationBarBottom,
+        NavigationBarBigScreen} from "templates/navBar";
 import  MainAppHoc from "components/index/index-hoc";
 import {store} from "store/index";
 import {getAboutInfo} from "dispatch/index"
@@ -47,18 +49,21 @@ class  AboutContainer extends Component  {
         let props = {...this.props, ...this.state}
 
         return(
-         <div className="about-info-page">
-            <PartalNavigationBar {...props}/>
-            <NavigationBarBigScreen {...props} />
-            <div className="about-info-box">
-                <AboutComponent {...props}/>
+            <div className="">
+                <PartalNavigationBar {...props}/>
+                <NavigationBarBigScreen {...props}/>
+                <NavigationBarBottom {...props}/> 
+                <div className="about-info-page">
+                    <div className="about-info-box">
+                        <AboutComponent {...props}/>
+                    </div>
+                </div>
             </div>
-         </div>
         )
     }
 };
 
-export default AboutContainer; 
+export default MainAppHoc(AboutContainer); 
 
 
 export const AboutComponent = props => {

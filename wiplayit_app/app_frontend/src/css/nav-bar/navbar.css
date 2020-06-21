@@ -368,12 +368,7 @@
 
 
 @media (min-width:980px) {
-
-    body {
-        background: #F9F7F7;
-        border:px solid red;
-    }
-
+  
     .page-name-box {
         border  : px solid black;
         width   : 100%;
@@ -401,10 +396,10 @@
     }
 
     .navigation {
-        background : white;
-        display    : flex;
-        padding    : 3px 0; 
-        border     : 1px solid  #D5D7D5;
+        background    : white;
+        display       : flex;
+        padding       : 3px 0; 
+        border-bottom : 1px solid  #D5D7D5;
     }
 
     .btn-box {
@@ -462,6 +457,51 @@
         text-decoration: none;
     }
 
+    #help-navigation {
+        padding: 15px 20px;
+    }
+
+    .help-navigation-box {
+        border  : px solid black;
+        display : flex;
+        width   : 100%;
+    }
+
+    .help-menu-box{
+        border    : px solid blue;
+        display   : flex;
+        width     : 100%;
+        justify-content: flex-end !important; 
+    }
+
+    .help-menu-contents{
+        border :  px solid red;
+        margin :  0 27px;
+    }
+
+    .help-menu-contents button {
+        border    : px solid black;
+        font-size : 15px;
+        margin    : 0 10px; 
+    }
+
+
+    .help-menu-contents button:hover {
+        color  : #A33F0B;
+    }
+
+    .help-logo-contents{
+        color       : #A33F0B;
+        font-weight : bold;
+        font-size   : 20px;
+        padding-left : 130px;
+        font-family: 'Ubuntu';
+    }
+
+    .help-logo-contents li:hover {
+        cursor: pointer;
+    }
+
     .logo-img-contents {
         background : #fff;
         border    : px solid blue;
@@ -514,11 +554,16 @@
         background  : #A33F0B;
         color       : #fefefe;
         font-weight : bold;
-        font-size   : 10px;
+        font-size   : 11px;
         height      : 30px; 
-        margin-top  : 7px;             
+        margin-top  : 9px;             
         
     }
+
+    .create-question-btn:hover, .create-post-btn:hover {
+        color  : #fefefe;
+    }
+
 
     .post-question-btn-box p {
         margin      : 12px 5px 0;

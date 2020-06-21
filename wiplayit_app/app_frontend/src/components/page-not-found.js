@@ -48,8 +48,7 @@ export default NotFoundPage;
 
 export const NotFoundComponent = props => {
     console.log(props)
-    let about = props.about;
-    about = about && about.info;
+    
     return(
         <div className="page-not-found-contents">
             <div className="page-not-found-text">

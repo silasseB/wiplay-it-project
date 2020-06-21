@@ -121,7 +121,7 @@ export const UnconfirmedUserWarning =(props)=> {
     
     return(
         <div>
-            {currentUser && currentUser.is_confirmed &&
+            {currentUser && !currentUser.is_confirmed &&
             <div className="unconfirmed-user-warn-container">
                 <div className="alert alert-warning unconfirmed-user-warn-box">
                     <button type="bottom" className="">

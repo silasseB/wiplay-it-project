@@ -76,9 +76,14 @@ class CustomLoginSerializer(LoginSerializer):
 	def _validate_phone_number(self, phone_number, password):
 		
 		user = None
-		verified_number =  get_verified_number(phone_number)
-		email = verified_number.user.email
-		
+		phone_number = get_phone_number(phone_number)
+
+		if phone_number and not phone_number.verified:
+			msg = _('Account with this phone number does not exists')
+			#raise serializers.ValidationError(msg)
+
+		email = phone_number.user.email
+				
 		user = authenticate(email=email, password=password)
 		return user
 
@@ -119,9 +124,11 @@ class CustomLoginSerializer(LoginSerializer):
 			msg = _('User account is disabled.')
 			raise exceptions.ValidationError(msg)
 
+		''' 
 		if not user.is_confirmed:
 			msg = _('Your account is not confirmed.')
 			#raise exceptions.ValidationError(msg)
+		'''
 
 
 class CustomRegisterSerializer(RegisterSerializer):
