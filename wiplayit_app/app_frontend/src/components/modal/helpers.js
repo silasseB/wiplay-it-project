@@ -15,6 +15,7 @@ export const closeModals =(background)=> {
     let userListModal    = modal && modal['userList'];
     let navigationModal  = modal && modal['navigationMenu'];
     let smsCodeFormModal = modal && modal['smsCodeForm'];
+    let passwordConfirmForm = modal && modal['passwordConfirmForm'];
 
     editorModal     && editorModal.modalIsOpen      &&
                                      ModalManager.close('editor');
@@ -31,6 +32,8 @@ export const closeModals =(background)=> {
                                   ModalManager.close('navigationMenu');
     smsCodeFormModal && smsCodeFormModal.modalIsOpen  && 
                                   ModalManager.close('smsCodeForm');
+    passwordConfirmForm && passwordConfirmForm.modalIsOpen && 
+                                   ModalManager.close('passwordConfirmForm'); 
                                   
     if (background) window.history.back();
 };
@@ -44,15 +47,15 @@ export const handleModalScroll =()=> {
         let contentRectTop      = parseInt(contentRect.top);
         let contentClientHeight = parseInt(content.clientHeight)
 
-        console.log('contentRectTop is: ', contentRectTop)  
-        console.log('content clientHeight: ', contentClientHeight)
-        console.log('Overlay is: ', overlay.clientHeight)
+        //console.log('contentRectTop is: ', contentRectTop)  
+        //console.log('content clientHeight: ', contentClientHeight)
+        //console.log('Overlay is: ', overlay.clientHeight)
         
         let totalContentHeight = contentClientHeight + contentRectTop;
-        let _overlay = overlay.clientHeight - 30;
+        let _overlay = overlay.clientHeight - 70;
 
-        console.log('totalContentHeight', totalContentHeight)   
-        console.log('Now overlay is: ', _overlay)                     
+        //console.log('totalContentHeight', totalContentHeight)   
+        //console.log('Now overlay is: ', _overlay)                     
         if (totalContentHeight >= _overlay) {
             console.log('Reached bottom')
            return true;

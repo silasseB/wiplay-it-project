@@ -130,8 +130,6 @@ class AboutAdminPage extends Component {
 export default  MainAppHoc(AboutAdminPage);
 
 const EditAboutProps =(obj=undefined)=>{
-
-    //isPut=false, isPost=false
     let isPut    = obj && true || false;
     let isPost   = !obj && true || false;
 
@@ -139,8 +137,9 @@ const EditAboutProps =(obj=undefined)=>{
         isPost,
         isPut,
         obj,
-        objName   : 'About',
-        className : "edit-about-admin-btn btn-sm",
+        withTextArea : true,
+        objName      : 'About',
+        className    : "edit-about-admin-btn btn-sm",
     };
 
     return GetModalLinkProps.props(props);
@@ -169,11 +168,13 @@ export const AboutAdminComponent = props => {
                 return(
                     <div key={index}>
                         <OpenEditorBtn {...editAboutProps}/>
-                        <div className="">
-                            <h2 className="about-info-title">{about.about_title}</h2>
-                        </div>
+                        <ul className="about-info-title-box">
+                            <li className="about-info-title">
+                                {about.about_title}
+                            </li>
+                        </ul>
 
-                        <div>
+                        <div className="about-info-box">
                             <Editor
                                 blockRendererFn={pageMediaBlockRenderer}
                                 editorState={editorState} 

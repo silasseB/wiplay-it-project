@@ -18,18 +18,21 @@ class  NotificationsContainer extends Component  {
     }
 
     componentDidMount() {
+        this.props.authenticate();
       console.log(this.props)
     }
+
+    
 
     render(){
         let props = {...this.props, ...this.state}
 
         return(
-         <div className="about-info-page">
+         <div className="app-box-container">
             <PartalNavigationBar {...props}/>
             <NavigationBarBigScreen {...props} />
             <NavigationBarBottom {...props}/>
-            <div className="about-info-box">
+            <div className="notifications-page">
                 <ul className="">
                     <li>Notifications empty</li>
                 </ul>

@@ -163,22 +163,28 @@
         
 }
 
+
 .partial-form-navbar {
     border-bottom : 1px solid #D5D7D5;
 }
 
 .partial-navbar-back-btn-box {
     border:  px solid black;  
-    padding: 7px 18px 0 10px;
+    
 }
 
+.partial-navbar-back-btn-box button {
+    border:  px solid black;
+    margin: 10px;  
+}
 
 @media (max-width:980px) {
 
     .page-name-box {
-        border  : px solid black;
-        width   : 100%;
-        padding : 15px 0 0 10px; 
+        border    : px solid black;
+        width     : 100%;
+        padding   : 15px 0 0 10px; 
+        font-size : 15px;
     }
    
     .nav-bar-arrow-icon  {
@@ -214,8 +220,6 @@
         font-family : 'Oswald'; 
         font-weight : bold;
         width       : 100%;
-        
-        
     }
 
     .post-question-btn-box p {
@@ -277,7 +281,7 @@
         margin          : 10px 0 0;
     }
 
-    .navigation-img-item{
+    .navigation-img-item { 
         border   : px solid black;
         padding  : 10px  15px;  
     }
@@ -313,7 +317,7 @@
 
     .nav-bar-menu-close-btn {
         float   : right;
-        border  : px solid blue;
+        border  : 1px solid blue;
         margin  : 7px;
 
     }
@@ -331,15 +335,12 @@
         height        : 27px; 
     }
 
-    
-
     .nav-bar-img {
         border-radius : 50%;
         width         : 27px;
         height        : 27px;
         object-fit    : cover;
     }
-
 
    .items {
         font-family     : 'Jura';
@@ -358,6 +359,78 @@
     .navbar-dropdown {
         padding-right: 17px;
     }
+
+    #help-navigation {
+        
+        background : #ffff;
+        border-bottom : 1px solid #D5D7D5;
+    }
+
+    .help-navigation-box {
+        border  : px solid black;
+        display : flex;
+        width   : 100%;
+        padding : 10px 0; 
+    }
+
+    .help-menu-box{
+        border    : px solid blue;
+        display   : flex;
+        width     : 100%;
+        justify-content: flex-end; 
+    }
+
+    .help-dropdown-box {
+        border : px solid red;
+        margin-right : 20px;
+    }
+
+    .menu-toggle-icon {
+        color: gray;
+    }
+
+    
+    .help-menu-contents{
+        padding:  0 15px;        
+    }
+
+    .help-dropdown-menu {
+        width         : 100%;
+        margin        : 2% 0 0 4%; 
+        border        : none;
+        border-bottom : 1px solid #D5D7D5;
+       
+    }
+
+    .help-menu-items {
+        font-size    : 15px;
+        margin-bottom : 5px;
+        padding       : 10px;
+        width        : 100% !important;
+        text-align   : left !important;
+        font-size    : 13px; 
+        font-family  : 'Cambay';
+        
+    }
+ 
+
+    .help-menu-contents button:hover {
+        color  : #A33F0B;
+    }
+
+    .help-logo-contents{
+        color       : #A33F0B;
+        font-weight : bold;
+        font-size   : 20px;
+        font-family : 'Ubuntu';
+        border      : px solid black;
+        margin-left : 10px
+    }
+
+    .help-logo-contents li:hover {
+        cursor: pointer;
+    }
+
 
 }
 

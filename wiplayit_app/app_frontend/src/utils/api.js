@@ -291,7 +291,7 @@ export default class Api{
          
     }
     
-    passwordResetConfirmApi() {
+    passwordChangeConfirmApi() {
         var url = `/rest-auth/password/reset/confirm/`;
         return url ;
   
@@ -321,6 +321,14 @@ export default class Api{
         return url ;
          
     }
+
+    addEmailApi(){
+        return `/rest-auth/add/email/`;
+    };
+
+    addPhoneNumberApi(){
+        return `rest-auth/add/phone-number/`;
+    };
 
     facebookLoginApi() {
         

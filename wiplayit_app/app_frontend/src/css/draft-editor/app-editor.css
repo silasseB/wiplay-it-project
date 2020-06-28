@@ -13,6 +13,7 @@
 .active {
     border : 1px solid  #D5D7D5  !important;
     color  : #A33F0B !important; 
+    border-radius : 50%;
 }
 
 @media (min-width: 900px) {
@@ -133,52 +134,52 @@
         max-height       : 100%;
         overflow-y       : auto;
         min-height       : 180px;
-        font-size        : 15px;
         font-family      : 'calibri', sans-serif;
         border           : px solid red;
         
     }
+
+    .draft-editor {
+        font-size : 17px;
+        padding   : 10px 6px 100px;
+    }
  
-    .navigation-toolbar button {
-      overflow      : hidden;
-      position      : relative;
-      display       : block;
-      background    : #fefefe; 
-      width         : auto;
-      height        : 84%;
-      text-align    : center;
-      color         : #6A6767;
-      margin        : 4px 6px 0;
-      border        : px solid red;
+    .toolbar-button {
+        overflow      : hidden;
+        position      : relative;
+        display       : block;
+        background    : #fefefe; 
+        width         : auto;
+        height        : auto;
+        text-align    : center;
+        color         : #6A6767;
+        margin        : 4px 6px 0;
+        padding       : 5px; 
+        border        : px solid red;
+        border-radius : 50%;
     }
-
-    .navigation-toolbar span {
-        border    : px solid red;
-        font-size :  19px;
-        margin-top: 3px;
-
-    }
-
-
    
-#fileContainer {
-   overflow      : hidden;
-   position      : relative;
-   display       : block;
-   background    : white; 
-   width         : auto;
-   height        : 80%;
-   text-align    : center;
-   color         : #6A6767;
-   border        : px solid black;
-   margin        : 4px 6px 0;
-}
 
-
-
+    #fileContainer:hover,
+    .toolbar-button:hover {
+        background : #D5D7D5;
+        cursor     : pointer;
+    }
+   
+    #fileContainer {
+        overflow      : hidden;
+        position      : relative;
+        display       : block;
+        background    : white; 
+        width         : auto;
+        height        : 80%;
+        text-align    : center;
+        color         : #6A6767;
+        margin        : 4px 6px 0;
+    }
 
 #fileContainer [type=file] {
-   cursor     : inherit;
+   cursor     : pointer;
    display    : block;
    font-size  : 999px;
    filter     : alpha(opacity=0);
@@ -189,16 +190,9 @@
    right      : 0;
    text-align : center;
    top        : 0;
-   background: #D5D7D5;
-    
-    
+   background : #D5D7D5;
+     
 }
-
-#fileContainer [type=file] {
-    cursor: pointer;
-
-}
-
 
 .options {
   margin-bottom: 20px;
@@ -207,7 +201,7 @@
 
 
 #editor-nav-bar{
-   background : #A33F0B !important;
+   background : #A33F0B;
    width      : 100%;
    margin : 0;
 
@@ -216,7 +210,7 @@
 
 
 .editor-navbar {
-  background : #A33F0B !important;
+  background : #A33F0B;
   display: flex; 
   
 }
@@ -260,14 +254,9 @@
 }
 
 #toolbar {
-    border      : px solid black;
+    border   : px solid black;
 
   
-}
-
-
-.image{
-   border: px solid blue;
 }
 
 .navigation-toolbar{
@@ -292,7 +281,7 @@
 
 .text-btns{
    padding-left : 10px;
-   width        : 30%;
+   width        : 40%;
 }
 
 .post-title-input{
@@ -322,7 +311,6 @@
 }
 
 .textarea-box {
-    border-bottom :  0.5px solid #D5D7D5;
     overflow-y    : auto;
 }
 
@@ -332,20 +320,17 @@
 
 .textarea-form-field {
     width       : 100%;
-    border      : none !important;
-    margin      : 4px 0 0 !important;
+    margin      : 4px 0 0;
     font-weight : bold;
     font-size   : 14px;
-    overflow-y  : auto !important;
-    border     : 1px solid  red;
+    overflow-y  : auto;
+    border      : none;
+    border-bottom :  0.5px solid #D5D7D5;
 }
 
-textarea:active, textarea:focus{
+.textarea-form-field:active, .textarea-form-field:focus{
   outline    : 0;
   box-shadow : none;
-  border     : 1px solid #D5D7D5;
-
-
 }
 }
 
@@ -374,7 +359,6 @@ div.public-DraftEditor-content {
         max-height       : 100%; 
         height           : 100%;
         overflow-y       : auto;
-        font-size        : 18px;
         font-family      : 'calibri', sans-serif;
         border           : px solid red;
         margin-top       : 45px; 
@@ -386,7 +370,13 @@ div.public-DraftEditor-content {
         min-height       : 100px; 
         overflow-y       : auto;  
         border           : px solid blue;
-        padding          : 10px;  
+        padding          : 35px 10px;  
+    }
+
+    .draft-editor {
+        font-size : 17px;
+        border    : px solid blue;
+        padding   : 10px 4px 100px;
     }
 
     .pure-draft-editor {
@@ -399,7 +389,7 @@ div.public-DraftEditor-content {
         padding-top: 45px;
     }
 
-   .navigation-toolbar button {
+    .navigation-toolbar button {
         overflow      : hidden;
         position      : relative;
         display       : block;
@@ -578,27 +568,22 @@ div.public-DraftEditor-content {
 
     .post-title-form-box, .question-form-box{
         border: px solid black;
+
     }
 
     .textarea-form-field {
-        padding       : 4 10px;
+        padding       : 0 10px;
         font-weight   : bold;
         font-size     : 14px;
         border-bottom : 0.5px solid #D5D7D5;
     }
 
     .textarea-box {
-        border  : px solid red;
+              
     }
 
-    .create-question-form {
-        width       : 100%;
-        border      : none !important;
-        font-weight : bold;
-        font-size   : 14px;
-    }
-
-    textarea:active, textarea:focus{
+    
+    .textarea-form-field:active, .textarea-form-field:focus{
         outline        : 0;
         box-shadow     : none;
         border-bottom  : 1px solid #D5D7D5;

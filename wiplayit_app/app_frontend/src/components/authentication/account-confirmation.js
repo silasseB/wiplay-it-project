@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
+
 import  AuthenticationHoc   from 'components/authentication/index-hoc'; 
 import {NavBar} from 'templates/authentication/utils';
 import AccountConfirmation from 'templates/authentication/confirmation';
 import EmailForm, {SmsCodeForm}   from 'templates/authentication/email-form';
-
+import {PasswordConfirmForm} from 'templates/authentication/password-change'
 import {CancelEmailFormBtn} from  'templates/authentication/utils'
-
-import { ModalCloseBtn } from "templates/buttons"
+import { closeModals}   from  'components/modal/helpers';
+import { ModalCloseBtn } from "templates/buttons";
+import {authenticationSuccess} from 'actions/actionCreators';
 import * as Icon from 'react-feather';
 
-import FormValidator, {getFormFields,
-                       formIsValid,
-                       authSubmit,
-                       getAuthUrl,
-                       setForm,} from 'components/authentication/utils';         
+import {formIsValid,
+        authSubmit,
+        changeForm,
+        getFormFields,
+        setForm,} from 'components/authentication/utils';         
 import {store} from "store/index";
-import Axios from 'utils/axios_instance'
 import {authenticateWithGet}  from "dispatch/index"
 import Api from 'utils/api';
 
@@ -24,6 +25,7 @@ const api = new Api();
   
 
 class AccountEmailConfirmationPage extends Component{
+    isMounted = false;
 
     constructor(props) {
         super(props);
@@ -34,8 +36,13 @@ class AccountEmailConfirmationPage extends Component{
             formDescription  :  ['Enter your email address'],
         };
     };
+
+    componentWillUnmount =()=> {
+        this.isMounted = false;
+    };
    
     componentDidMount() {
+        this.isMounted = true
         let {match} = this.props;
         let {params} = match || {};
         let { key } = params || {}; 
@@ -165,11 +172,7 @@ export class AccountSmsCodeConfirmationPage extends Component{
 
     handleChange=(e)=>{
         e.preventDefault()
-        let  { form, formName } = this.state;
-        if (form) {
-            form[formName][e.target.name] = e.target.value;
-            this.setState({form});
-        }
+        changeForm(this, e);
     };
 
     onSubmit =(e)=> {
@@ -239,3 +242,171 @@ const SmsCodeHelperText = (props)=>{
         </ul>
     )
 }
+
+
+
+export class PasswordConfirmationPage extends Component{
+    isMounted = false;
+    constructor(props) {
+        super(props);
+        this.state = {
+            formDescription   : ['Enter code to confirm your account'],
+            formName          : undefined,
+            currentUser       : undefined,
+            submitting        : false,
+            form              : undefined,
+            successMessage    : undefined,
+            passwordConfirmed :false,
+        };
+    };
+
+    componentWillUnmount =()=> {
+        this.isMounted = false;
+        this.unsubscribe();
+    };
+
+    onReLoginStoreUpdate =()=> {
+        if (!this.isMounted) return;
+
+        const onStoreChange = () => {
+            let  storeUpdate = store.getState(); 
+            let {entities} =  storeUpdate;
+            let {userAuth, errors} = entities;
+            let {form, formName} = this.state;
+            let {error, loginAuth, isLoading} = userAuth;
+            
+            this.setState({submitting : isLoading}); 
+
+            if (form && error) {
+                form[formName]['error'] = error;
+                this.setState({form});
+                delete userAuth.error;
+            }
+
+            this.handlePasswordConfirmSuccess(userAuth); 
+            
+            
+        };
+        this.unsubscribe = store.subscribe(onStoreChange);
+    };
+
+    handlePasswordConfirmSuccess(userAuth){
+        if (!userAuth.loginAuth)return;
+
+        let loginAuth    = userAuth.loginAuth
+        let {isLoggedIn} = loginAuth;
+        let {form, passwordConfirmed,formName} = this.state
+        console.log(this.state, loginAuth)
+                                                             
+        if(isLoggedIn && !passwordConfirmed){
+            this.setState({passwordConfirmed:true});
+            this.togglePasswordChangeForm();
+        }
+    };
+
+    togglePasswordChangeForm(){
+        let {form}     = this.state;
+        let {password} = form && form['reLoginForm'];
+
+        if (password) {
+            let passswordParams = {old_password : password};
+
+            this.cachePassword(passswordParams);
+            this.props.toggleForm('passwordChangeForm', passswordParams);
+            this._closeModal();    
+        }
+    };
+
+    cachePassword(passswordParams={}) {
+        let timeStamp = new Date();
+        
+        let passwordConfirmAuth = {
+                timeStamp   : timeStamp.getTime(),
+                passwordValidated : true,
+                ...passswordParams,
+        };
+        store.dispatch(authenticationSuccess({passwordConfirmAuth}));
+    }; 
+    
+
+    _closeModal (){
+        let background = true;
+        closeModals(background);
+    };
+    
+    componentDidMount() {
+        this.isMounted = true;
+        this.onReLoginStoreUpdate();
+        
+        let {currentUser} = this.props
+        let currentForm   = this.state.form;
+        let formName      =  'reLoginForm';
+
+        let form = getFormFields().loginForm;
+        form = {...form, email:currentUser.email}
+        form = setForm(form, currentForm, formName);
+        this.setState({form, formName, currentUser});
+    };
+
+    onChange(event, formName) {
+        event.preventDefault();
+        console.log(formName)
+
+        formName && this.setState({formName})
+        changeForm(this, event);
+    };
+
+    handleSubmit(event, formName){
+        event.preventDefault();
+
+        formName && this.setState({formName});
+        let useToken = false;
+        authSubmit(this, useToken);
+    };
+
+    validateForm(form){
+        return formIsValid(form)
+    };
+
+    passwordRest =()=> {
+        let {currentUser} = this.state;
+        let currentForm = this.state.form;
+        let email = currentUser &&  currentUser.email;
+        if (email) {
+            let formName = 'passwordResetForm';
+            let form = getFormFields().passwordResetForm;
+            form     = {...form, email}
+
+            form = setForm(form, currentForm, formName);
+            this.setState({form, formName});
+            this.sendPasswordRest();
+            
+        }
+
+    };
+
+    sendPasswordRest(){
+        let formName = 'passwordResetForm';
+        authSubmit(this, formName);
+    };
+
+    getProps(){
+        return{
+            ...this.props,
+            ...this.state,
+            handleFormChange  : this.onChange.bind(this),
+            onSubmit          : this.handleSubmit.bind(this),
+            validateForm      : this.validateForm.bind(this),
+            passwordRest      : this.passwordRest.bind(this),
+        };
+    };
+
+    render(){
+        let props = this.getProps();
+
+        return(
+            <PasswordConfirmForm {...props}/>
+        )
+
+    };
+};

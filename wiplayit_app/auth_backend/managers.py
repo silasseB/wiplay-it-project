@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
+from django.db import models
 
 
 
@@ -36,3 +37,25 @@ class UserManager(BaseUserManager):
 
 
 
+class PhoneNumberManager(models.Manager):
+    
+    def add_phone_number(self, request, user, number,
+                  confirm=False, signup=False):
+
+        phone_number, created = self.get_or_create(
+                                        user=user, 
+                                        primary_number__iexact=number,
+                                        defaults={"primary_number":number}
+                                    )
+
+        print(created, phone_number, phone_number.primary_number, number)
+        phone_number.set_national_format(number)
+        phone_number.set_inter_format(number)
+
+
+        if created and confirm:
+            phone_number.send_confirmation(request, signup=signup)
+
+        return phone_number
+
+        

@@ -7,11 +7,12 @@ import {store} from 'store/index';
 import Axios from 'utils/axios_instance';
 import Api from 'utils/api';
 import Helper from 'utils/helpers';
-import FormValidator, {getFormFields,
-                       authSubmit,
-                       getAuthUrl,
-                       formIsValid,
-                       setForm,} from 'components/authentication/utils';
+import {getFormFields,
+        authSubmit,
+        getAuthUrl,
+        formIsValid,
+        changeForm,
+        setForm,} from 'components/authentication/utils';
 
 import {authenticate, _GetApi} from 'dispatch/index';
 import { getCookie } from 'utils/csrf_token.js';
@@ -202,13 +203,12 @@ export function AuthenticationHoc(Component) {
 
         handleLogin(userAuth){
             if (!userAuth.loginAuth)return;
+            
             let loginAuth = userAuth.loginAuth
             let {isLoggedIn, isConfirmation} = loginAuth;
-            console.log(loginAuth)
             this.setState({isConfirmation});
                                                 
             if(isLoggedIn && !isConfirmation){
-                
                 this._Redirect();
             }
         };
@@ -268,11 +268,7 @@ export function AuthenticationHoc(Component) {
             if (!this.isMounted) return;
 
             e.preventDefault()
-            let  { form, formName } = this.state;
-            if (form) {
-                form[formName][e.target.name] = e.target.value;
-                this.setState({form});
-            }
+            changeForm(this, event);
         };
 
         selectCountry =(val)=> {
@@ -313,8 +309,8 @@ export function AuthenticationHoc(Component) {
                     case 'passwordResetSmsCodeForm':
                         return this.setState({onPasswordResetSmsCodeForm:true});
                         
-                    case 'passwordChangeForm':
-                        return this.setState({onPasswordChangeForm : true});
+                    case 'passwordChangeConfirmForm':
+                        return this.setState({onPasswordChangeConfirmForm : true});
                         
                     default:
                         return null;
@@ -371,7 +367,7 @@ export function AuthenticationHoc(Component) {
                         form = getFormFields().smsCodeForm;
                         return this._SetForm(form, formName)
 
-                    case 'passwordChangeForm':
+                    case 'passwordChangeConfirmForm':
                         form = getFormFields().passwordChangeForm;
                         form = Object.assign(opts, form);
                         return this._SetForm(form, formName);

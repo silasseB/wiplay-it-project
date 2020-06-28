@@ -25,6 +25,7 @@ admin.site.register(Profile,Priofiledmin)
 
 
 class PhoneNumberAdmin(admin.ModelAdmin):
+	list_display = ('primary_number', 'user', 'primary', 'verified')
 	fields = ['user', 'inter_format','primary_number',
 	          'national_format', 'verified', 'primary']
 

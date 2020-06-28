@@ -1,8 +1,6 @@
 
 import axios from 'axios';
 
-let API_URL = 'http://127.0.0.1:8000';
-let MobileAPI_URL = 'http://192.168.43.14:8000'
 import GetTimeStamp from 'utils/timeStamp';
 import { getCookie } from 'utils/csrf_token.js';
 import * as checkType from 'helpers/check-types'; 
@@ -10,42 +8,35 @@ import {store} from "store/index";
 import {authenticate} from "dispatch/index"
 import Api from 'utils/api';
 
-
 const api      = new Api();
-  
-var csrftoken = getCookie('csrftoken');  
+let csrftoken = getCookie('csrftoken');  
 
+let isRefreshingToken =()=>{
+    let storeUpdate = store.getState();
+    let {entities}  = storeUpdate;
+    let {userAuth}  = entities;
 
-
-let   isRefreshingToken =()=>{
-        let storeUpdate = store.getState();
-        let {entities}  = storeUpdate;
-        let {userAuth}  = entities;
-
-        let isLoading = checkType.isBoolean(userAuth.isLoading)
+    let isLoading = checkType.isBoolean(userAuth.isLoading)
         
-        if (isLoading) {
-            //console.log(userAuth)
-            return userAuth.isLoading;
+    if (isLoading) {
+        return userAuth.isLoading;
 
-        }else{
-            return false;
-        }
+    }else{
+        return false;
     }
+};
 
 export default class Axios {
 
     constructor(props){
-        this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities'));
-        this.baseURL       =  API_URL;
+        this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
         this.DOMAIN_URL    =  window.location.origin; 
         this.useToken      =  props && props.useToken;
         this.timeout       =  props && props.timeout || 15000; 
-        this.requestFor    =  props.requestFor; 
-        console.log(props)
+        this.requestFor    =  props.requestFor;
     }
 
-    tokenTimeStampe(timeStamp){
+    authTimeStampe(timeStamp){
         return new GetTimeStamp({timeStamp});
     }
 
@@ -58,7 +49,7 @@ export default class Axios {
                 let {loginAuth} = userAuth;
 
                 if (loginAuth && loginAuth.tokenKey) {
-                   return userAuth
+                   return loginAuth;
                 }
             }
         }
@@ -66,18 +57,19 @@ export default class Axios {
     };
 
     tokenExpired=()=>{
-        let userAuth = this._getAuth();
-        let expireTime = userAuth && this.tokenTimeStampe(userAuth.timeStamp);
-        console.log(expireTime.days())
-        return expireTime && expireTime.days() >= 7 || false
-
-    }
+        let loginAuth  = this._getAuth();
+        let expireTime = loginAuth && this.authTimeStampe(loginAuth.timeStamp);
+        if (expireTime) {
+            return expireTime.days() >= 7;
+        }
+        return true
+    };
 
     refreshToken(){
                         
         if (this.tokenExpired()) {
-            let userAuth = this._getAuth();
-            let token = this.getToken(userAuth);
+            let loginAuth = this._getAuth();
+            let token = this.getToken(loginAuth);
            
             let authProps ={
                 apiUrl :api.refreshTokenApi(), 
@@ -89,8 +81,7 @@ export default class Axios {
         }
     };
 
-    getToken(userAuth){
-        let loginAuth = userAuth && userAuth.loginAuth;
+    getToken(loginAuth){
         return loginAuth && loginAuth.tokenKey; 
     };
 
@@ -113,9 +104,14 @@ export default class Axios {
             this.refreshToken();
             let userAuth = this._getAuth();  
             let tokenKey = this.getToken(userAuth)
-                               
-            tokenKey =`JWT ${tokenKey}`;
-            instance.defaults.headers.common['Authorization'] = tokenKey;
+            
+            if (tokenKey) {
+                tokenKey =`JWT ${tokenKey}`;
+                instance.defaults.headers.common['Authorization'] = tokenKey;
+
+            }else{
+                return undefined
+            }
         }
      
         return instance        

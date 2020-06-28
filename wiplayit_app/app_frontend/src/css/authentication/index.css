@@ -22,12 +22,11 @@
 }
 
 .auth-input-field {
-    border : 1px solid #D2D2D2;
     margin : 4px;
 }
 
 .auth-input-field input {
-    border    : px solid red;
+    border    : 1px solid #D2D2D2;
     font-size : 15px;
 }
 

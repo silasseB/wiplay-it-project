@@ -274,35 +274,28 @@
     
 }
 
-.registration-link-box {
-  display: flex;
-  border: px solid red;
-  margin: 0;
+.registration-links {
+    display    : flex;
+    background : #edf0f3;
+    color      : #5384e5;
+    font-size  : 12px;
+    margin     : 0 30px 0 10px;
 }
 
-
-.registration-link-box a {
-   border: px solid red;
-   background:#edf0f3;
-   color: #5384e5;
-   font-size: 12px;
+.registration-login-link {
+    border: px solid black;
+    
 }
 
-
-.login-user-link {
-  border: px solid blue;
-  margin: 0 0 0 2%;
- }
-
-.create-account-link {
-  border: px solid blue;
-  margin: 0 0 0 50%;
- }
+.registration-signup-link {
+    border  : px solid blue;
+    display : flex;
+    width   : 100%;
+    justify-content : flex-end;
+}
 
 .terms-and-policy-box {
-  margin: 10px;
-  border: px solid red;
-
+  margin : 0 10px;
 }
 
 

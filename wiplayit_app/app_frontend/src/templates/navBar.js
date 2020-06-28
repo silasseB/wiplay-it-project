@@ -39,16 +39,18 @@ let createPostProps = {
         objName     : 'Post',
         linkName    : 'Add Post',
         isPost      : true,
+        withTextArea: true,
         className   : "create-post-btn btn",
         editorLinkDesktopStyles,
         editorLinkMobileStyles,
     };
 
 let createQuestionProps = {
-        objName   : 'Question',
-        isPost    : true,
-        linkName  : "Ask Question",
-        className : "create-question-btn btn",
+        objName      : 'Question',
+        isPost       : true,
+        withTextArea :true,
+        linkName     : "Ask Question",
+        className    : "create-question-btn btn",
         editorLinkMobileStyles,
         editorLinkDesktopStyles,
     };
@@ -59,12 +61,10 @@ createPostProps = GetModalLinkProps.props(createPostProps);
 
 
 export const NavBarMenuItems = props => {
-    //console.log(props)
-    let { currentUser } = props;
-
+    let {currentUser, isAuthenticated} = props;
     let profile = currentUser && currentUser.profile;
           
-    let state = {userProfile : currentUser};
+    let state = {userProfile : currentUser, isAuthenticated};
     
     let pathToProfile = currentUser && `/profile/${currentUser.id}/${currentUser.slug}/`;
     let toProfileProps = {pathname:pathToProfile, state}
@@ -92,7 +92,7 @@ export const NavBarMenuItems = props => {
                 <ul className="menu-username-box">
                     <li className="menu-username"  
                         onClick={() => RedirectMenuLinks(toProfileProps)}>
-                        {currentUser && currentUser.first_name} 
+                        {currentUser && currentUser.first_name} {''} 
                         {currentUser && currentUser.last_name} 
                     </li>
                     <li className="menu-user-credential" >
@@ -202,8 +202,7 @@ const NavBarDropDown = props => {
 }
 
 export const NavBarMenuModalItems = props =>{
-    console.log(props);
-   
+     
     return(
         <div className="">
             <div className="nav-bar-menu-header">
@@ -266,12 +265,19 @@ const NavBarModalMenu = props => {
 
 
 export const NavBarSmallScreen = props => {
+    let {isAuthenticated, currentUser} = props;
+    
+    createPostProps     = {
+        ...createPostProps,
+        currentUser,
+        isAuthenticated,
+    };
 
-    
-    var { currentUser } = props;
-    
-    createPostProps     = {...createPostProps, currentUser};
-    createQuestionProps = {...createQuestionProps, currentUser};
+    createQuestionProps = {
+        ...createQuestionProps,
+        currentUser,
+        isAuthenticated,
+    };
 
     let styles = {
         width     : '100%',
@@ -280,7 +286,7 @@ export const NavBarSmallScreen = props => {
     };
 
     let modalProps = {
-            userListProps : {currentUser},
+            userListProps : {currentUser, isAuthenticated},
             modalName     : 'userList', 
         }; 
     let state = { modalProps } 
@@ -329,18 +335,28 @@ export const NavBarSmallScreen = props => {
 
 
 export const NavBarBigScreen = props => {
-    var {currentUser}       = props;
+    var {currentUser, isAuthenticated}       = props;
     let path_to_profile     = `/`;
    
-    let pathToProfile = currentUser  && `/profile/${currentUser.id}/${currentUser.slug}/`;
+    let pathToProfile = currentUser  &&
+                        `/profile/${currentUser.id}/${currentUser.slug}/`;
     let userProfile   = currentUser  && currentUser.profile;
       
 
-    createPostProps     = {...createPostProps, currentUser};
-    createQuestionProps = {...createQuestionProps, currentUser};
+    createPostProps     = {
+            ...createPostProps,
+            currentUser,
+            isAuthenticated,
+    };
+
+    createQuestionProps = {
+        ...createQuestionProps,
+        currentUser,
+        isAuthenticated,
+    };
     
     let modalProps = {
-            userListProps : {currentUser},
+            userListProps : {currentUser, isAuthenticated},
             modalType     : 'userList', 
         }; 
 
@@ -412,6 +428,7 @@ export const NavigationMenuBtns =(props)=>{
          questionListTab,
          usersTab,
          currentUser,
+         isAuthenticated,
          notificationsTab} = props || {};
 
     return(
@@ -427,7 +444,7 @@ export const NavigationMenuBtns =(props)=>{
                 </ul>
 
                 <ul  className="navbar-bottom-item">
-                    <OpenUsersModalBtn {...{currentUser}}>
+                    <OpenUsersModalBtn {...{currentUser, isAuthenticated}}>
                         <Icon.Users id="feather-users" size={20} {...usersTab}/>
                         People
                     </OpenUsersModalBtn>
@@ -469,7 +486,7 @@ export const NavigationMenuBtns =(props)=>{
 
 export const PartialNavBar = props =>{
    //console.log(props)
-   var {currentUser } = props;
+   var {currentUser, isAuthenticated } = props;
 
    let path_to_profile = `/`;
    let userProfile = {};
@@ -485,8 +502,11 @@ export const PartialNavBar = props =>{
     return (
         <nav className="navigation partial-page-navbar fixed-top" id="navigation">
             <div className="partial-navbar-back-btn-box">
-                 <ModalCloseBtn> 
-                    <span className="nav-bar-arrow-icon material-icons ">arrow_back</span>
+                <ModalCloseBtn> 
+                    <Icon.ArrowLeft
+                        className="nav-bar-arrow-icon"
+                        id="arrow-left" 
+                        size={20}/>
                 </ModalCloseBtn>  
             </div>
 
@@ -495,8 +515,9 @@ export const PartialNavBar = props =>{
             </div>
          
             <div className="navigation-img-item">
-                <NavBarModalMenu {...props}/>
-            
+                { isAuthenticated &&
+                    <NavBarModalMenu {...props}/>
+                }
             </div>
         </nav>
     );
@@ -535,15 +556,22 @@ export const EditProfileNavBar = props  => {
     const ModalCloseBtnIcon = () => {
         if (window.matchMedia("(min-width: 980px)").matches) {
             return (
-                <span className="nav-bar-arrow-icon">&times;</span>
+                <Icon.X 
+                    className="nav-bar-arrow-icon"
+                    id="arrow-left"
+                    size={20}
+                />
             )
         }
         
         return (
-            <span className="nav-bar-arrow-icon material-icons ">arrow_back</span>
+            <Icon.ArrowLeft 
+                className="nav-bar-arrow-icon"
+                id="arrow-left"
+                size={20}
+            />
             )
-    }
-
+        }
 
     return(
         <nav className="partial-form-navbar fixed-top"> 
@@ -580,7 +608,11 @@ export const CustomBackBtn = props => {
         <button type="button" 
               onClick={()=>window.history.back()} 
               className="btn-sm custom-back-btn" >
-            <span className="arrow material-icons ">arrow_back</span>
+            <Icon.ArrowLeft 
+                className="nav-bar-arrow-icon"
+                id="arrow-left"
+                size={20}
+            />
         </button>  
   );
 }
@@ -608,26 +640,76 @@ export const HelpPageNavBar = props => {
                     <li>Wiplayit</li>
                 </ul>
                 <div className="help-menu-box">
-                    <ul className="help-menu-contents">
-                        <button type="button" 
-                            onClick={()=>RedirectMenuLinks({pathname:'/bug/report/'})} 
-                            className="btn-sm">
-                            Report a bug
-                        </button>  
-                        <button type="button" 
-                            onClick={()=>RedirectMenuLinks({pathname:'/feedback/'})} 
-                            className="btn-sm">
-                            Feedback
-                        </button> 
-                        <button type="button" 
-                            onClick={()=>RedirectMenuLinks({pathname:'/contact/us/'})} 
-                            className="btn-sm">
-                            Contact us
-                        </button> 
-                    </ul>
+                    <HelpDropDownMenu/>
+                    <HelpMenu/>
                 </div>
             </div>
         </nav>
     );
 };
+
+const HelpNavBarMenuItems = () => {
+
+    return (
+        <div className="help-menu-contents">
+            <button type="button help-menu-items" 
+                    onClick={()=>RedirectMenuLinks({pathname:'/bug/report/'})} 
+                    className="btn-sm help-menu-items">
+                Report a bug
+            </button>  
+            <button type="button" 
+                    onClick={()=>RedirectMenuLinks({pathname:'/feedback/'})} 
+                    className="btn-sm help-menu-items">
+                Feedback
+            </button> 
+            <button type="button" 
+                    onClick={()=>RedirectMenuLinks({pathname:'/contact/us/'})} 
+                    className="btn-sm help-menu-items">
+                Contact us
+            </button> 
+        </div>
+    )
+
+};
+
+
+const BigScreenHelpMenu = props => {
+ 
+    return(
+        <div className="">
+            <HelpNavBarMenuItems/>
+        </div>
+    )
+}
+
+
+
+const SmallScreenHelpMenu = props => {
+ 
+    return(
+        <div className="help-dropdown-box">
+            <div className="droplet"
+                 id="helpNavBarDropdown" 
+                 data-toggle="dropdown"
+                 aria-haspopup="false" 
+                 aria-expanded="true">
+                <button type="button" className="menu-tooggle-btn">
+                    <Icon.Menu className="menu-toggle-icon" size={30}/>
+                </button>
+            </div>
+            
+            <div className="dropdown-menu help-dropdown-menu"
+                 aria-labelledby="helpNavBarDropdown">
+                <HelpNavBarMenuItems/>
+            </div>
+        </div>
+    )
+};
+
+const HelpMenu         = MatchMediaHOC(BigScreenHelpMenu,'(min-width: 980px)');
+const HelpDropDownMenu = MatchMediaHOC(SmallScreenHelpMenu,'(max-width: 980px)');
+
+
+
+
 

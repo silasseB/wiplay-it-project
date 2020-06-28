@@ -18,8 +18,6 @@ import {handleSubmit,
 
 import  * as action  from 'actions/actionCreators';
 import { closeModals}   from  'components/modal/helpers';
-import { ModalManager}   from  "components/modal/modal-container";
-
 import {NavigationBarBottom} from 'templates/navBar';
 import { AlertComponent } from 'templates/partial-components';
 import * as checkType from 'helpers/check-types'; 
@@ -58,6 +56,12 @@ export function MainAppHoc(Component) {
           
         };
 
+        authenticate =()=> {
+            if (!this.isAuthenticated()) {
+                //User is not authenticated,so redirect to authentication page.
+                history.push('/user/registration/');
+            }
+        };
 
         isAuthenticated() {
       	    let cacheEntities = this._cacheEntities();
@@ -99,8 +103,8 @@ export function MainAppHoc(Component) {
                     
             if (!currentUser) {
                 let  cacheEntities  = this._cacheEntities();
-                currentUser = cacheEntities.currentUser;
-                currentUser = currentUser && currentUser.user;
+                currentUser = cacheEntities && cacheEntities.currentUser;
+                currentUser = currentUser   && currentUser.user;
             }
                        
             this.setState({currentUser})
@@ -108,7 +112,7 @@ export function MainAppHoc(Component) {
         };
 
         _cacheEntities = ()=>{
-            return JSON.parse(localStorage.getItem('@@CacheEntities'))  || {};
+            return JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
         }
 
 
@@ -157,23 +161,20 @@ export function MainAppHoc(Component) {
 
             window.addEventListener("beforeunload",(event)=>{
                 let { modal } = entities;
-                //event.returnValue = '';
+        
             });
 
             if (!this.isAuthenticated()) {
                 //User is not authenticated,so redirect to authentication page.
-                history.push('/user/registration/')
-                return;
+                //history.push('/user/registration/')
+                //return;
             }
            
             let currentUser = this._SetCurrentUser();
-            
+                    
             if (!currentUser || currentUser && !currentUser.is_confirmed) {
                 store.dispatch(getCurrentUser());
             }
-
-
-
         };
 
 
@@ -195,17 +196,18 @@ export function MainAppHoc(Component) {
                       message,
                       errors } = entities;
 
-                console.log(entities)
+                //console.log(entities)
 
-                let editorModal    = modal['editor']; 
-                let optionsModal   = modal['optionsMenu'];
-                let dropImageModal = modal['dropImage'];
-                let userListModal  = modal['userList'];
-                let smsCodeFormModal = modal['smsCodeForm'] 
+                let editorModal      = modal['editor']; 
+                let optionsModal     = modal['optionsMenu'];
+                let dropImageModal   = modal['dropImage'];
+                let userListModal    = modal['userList'];
+                let smsCodeFormModal = modal['smsCodeForm']; 
               
-                this.setState({userAuth})   
+                this.setState({userAuth});  
                 this.confirmLogout(userAuth);
-                this.confirmLogin(userAuth)
+                this.confirmLogin(userAuth);
+                this.handlePasswordChangeSuccess(userAuth);
 
                 if (errors.error) {
                     if (editorModal && editorModal.modalIsOpen ||
@@ -217,7 +219,7 @@ export function MainAppHoc(Component) {
                     }
                 }
                 this.handleMessageSuccess(message)
-
+                
                 this.handleCreateSuccess(editorModal);
                 this.handleUpdateSuccess(editorModal);
                 this.handleUpdateSuccess(dropImageModal);
@@ -250,6 +252,26 @@ export function MainAppHoc(Component) {
                 this.displaySuccessMessage(message.successMessage)
             }
         };
+
+        handlePasswordChangeSuccess(userAuth){
+            if (!userAuth.passwordChangeAuth)return;
+
+            let {passwordChangeAuth} = userAuth
+            let {passwordChanged}    = this.state;
+            let {successMessage}     = passwordChangeAuth;
+        
+                                                      
+            if(successMessage && !passwordChanged){
+                this.displaySuccessMessage(successMessage)
+                delete userAuth.successMessage;
+        
+                let passwordConfirmAuth = {
+                        passwordValidated : false,
+                        old_password : undefined,
+                };
+                store.dispatch(action.authenticationSuccess({passwordConfirmAuth}));
+            }
+        };  
 
         handleCreateSuccess(modal){
             if (!modal) return;
@@ -445,10 +467,8 @@ export function MainAppHoc(Component) {
             let apiUrl   =  api.logoutUser();
             let useToken = false;
             let formName = 'logoutForm';
-            this.props.authenticate({apiUrl, form:{},formName, useToken})
-            
+            this.props.authenticateUser({apiUrl, form:{},formName, useToken})
         };  
-
        
         push(params){
             let path = params && params.path;
@@ -510,6 +530,7 @@ export function MainAppHoc(Component) {
                 reloadPage              : this.reloadPage.bind(this),
                 push                    : this.push.bind(this),
                 redirectToRouter        : this.redirectToRouter.bind(this),
+                authenticate            : this.authenticate.bind(this), 
                 ...this.state,
             };
         };
@@ -573,7 +594,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getReplyChildrenList : (reply)      => dispatch(getReplyChildrenList(reply)),
         getCurrentUser       : (apiUrl)     => dispatch(getCurrentUser()),
         submit               : (props )     => dispatch(handleSubmit(props)), 
-        authenticate         : (props)      => dispatch(authenticate(props)),
+        authenticateUser     : (props)      => dispatch(authenticate(props)),
         
    }
 

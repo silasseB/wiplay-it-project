@@ -138,6 +138,8 @@ class IndexBox extends Component {
     
     componentDidMount() {
         this.isMounted = true;
+        this.props.authenticate()
+
         this.onIndexUpdate();
               
         window.addEventListener("beforeunload",(event)=>{

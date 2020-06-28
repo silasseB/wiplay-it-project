@@ -63,6 +63,7 @@ class QuestionPage extends Component {
 
     componentDidMount() {
         this.isMounted = true;
+        this.props.authenticate();
         this.onQuestionUpdate();
                       
         let { entities,

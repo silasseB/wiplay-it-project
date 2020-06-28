@@ -1,12 +1,55 @@
 
+	.message-submit-btn {
+		background  : #A33F0B;
+        color       : #fefefe;
+        font-weight : bold;
+        font-size   : 11px;
+        width       : 150px; 
+        height      : 30px; 
+        margin-top  : 9px;      
+	}
+
+	.message-textarea-field {
+		min-height : 150px;
+	    border     : 1px solid #D5D7D5;
+		padding    : 5px;
+		font-size  : 13px;
+
+	}
+
+	.message-textarea-field:focus,
+	.message-textarea-field:active {
+		border: 1px solid #5384e5;
+		box-shadow: 2;
+		
+	}
+
+	.input-label {
+		font-size : 13px;
+		margin    : 10px 0;
+	}
+
+	.required {
+		color  : red;
+	}
+
 
 @media (max-width: 980px) {
+	.message-container{
+		border : px solid blue;
+		margin : 0 3%;
+	}
+
+	.message-form {
+		border : px solid black
+	}
+
 	.message-submit-box{
-		border : 1px solid blue;
+		
 	}
 
 	.message-submit-btn {
-		border : 1px solid black;
+		border : px solid black;
 	}
 }
 

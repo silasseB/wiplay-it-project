@@ -38,6 +38,7 @@ class CreatePostView(CreateMixin, PostView):
 		pass 
 
 class AdminMessageViewMixin():
+	permission_classes = (AllowAny,)
 
 	def post(self, request, *args, **kwargs):
 		serializer = self.serializer_class(data=request.data)

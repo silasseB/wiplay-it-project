@@ -34,6 +34,23 @@ export const  EmailFieldErrors = errors => {
 };
 
 
+export const  PhoneNumberFieldErrors = errors => {
+    if (!errors) return null;
+
+    return(
+        <div>
+            {errors.phone_nmber && 
+                <ul className="form-errors">
+                    { errors.phone_nmber.map((error, index) =>
+                        <li key={index}>{error}</li>
+                    )}
+                </ul>
+            }   
+        </div>
+    )   
+};
+
+
 export const  PasswordErrors = errors => {
     if (!errors) return null;
     console.log(errors)

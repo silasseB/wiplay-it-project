@@ -96,6 +96,7 @@ class UserProfileContainer extends Component {
 
     componentDidMount() {
         this.isMounted = true;
+        this.props.authenticate()
         this.onProfileUpdate();
         
         let { entities, match }    = this.props;

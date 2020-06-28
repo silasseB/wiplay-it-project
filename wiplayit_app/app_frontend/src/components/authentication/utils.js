@@ -61,7 +61,7 @@ export default class FormValidator {
             }
         }
 
-        if (this.isPhoneNumber() && formName === 'signUpForm' && !form.country) {
+        if (formName === 'signUpForm' && !form.country) {
             formErrors = {country:['Please select your country']}
         }
                 
@@ -71,20 +71,24 @@ export default class FormValidator {
 };
 
 
-export const authSubmit =(self)=>{
-    let formName = self.state.formName;
-    let form     = getForm(self, formName);
+export const authSubmit =(self, formName="", useToken=false)=>{
+    formName  = !formName && self.state.formName || formName;
+    let form  = getForm(self, formName);
+    console.log(formName)
+    console.log(form)
+    console.log(self.state)
        
     _isSubmitting(self, form);
         
     if (!form.formIsClean()) {
+        console.log(form.formErrors(), formName)
         let error = form.formErrors(); 
         return setFormErrors(self, error, formName)
     }
 
     let apiUrl = getAuthUrl(formName);           
     form       = form.cleanForm();
-    return store.dispatch(authenticate({apiUrl, form, formName}));
+    return store.dispatch(authenticate({apiUrl, form, formName, useToken}));
 
 };
 
@@ -142,7 +146,14 @@ export const validateEmail=(email)=>{
     return false
 }
 
-
+export const changeForm =(self, event)=> {
+    let  {form, formName} = self.state;
+    
+    if (form && formName) {
+        form[formName][event.target.name] = event.target.value;
+        self.setState({form});
+    }
+};
 
 export const setForm =(form, currentForm, formName)=> {
     
@@ -152,7 +163,14 @@ export const setForm =(form, currentForm, formName)=> {
         }
         form = currentForm;
     }else{
-        form = Object.defineProperty({}, formName, { value : form });
+        let formValue = {
+            value        : form,
+            writable     : true,
+            configurable : true,
+            enumerable   : true,
+        };
+
+        form = Object.defineProperty({}, formName, formValue);
     }
     return form;
 };
@@ -185,6 +203,8 @@ export const getFormFields =()=> {
             'new_password1' : '',
             'new_password2' : '',
         },
+        phoneNumberForm : {phone_number:''}, 
+
     };  
 };
 export const getAuthUrl =(formName)=> {
@@ -193,7 +213,9 @@ export const getAuthUrl =(formName)=> {
         
     switch(formName){
         case 'loginForm':
+        case 'reLoginForm':
             return api.logginUser();
+
         case 'signUpForm':
             return api.createUser();
                 
@@ -201,7 +223,10 @@ export const getAuthUrl =(formName)=> {
             return api.passwordResetApi();
 
         case 'passwordChangeForm':
-                    return api.passwordResetConfirmApi();
+            return api.passwordChangeApi();
+
+        case 'passwordChangeConfirmForm':
+            return api.passwordChangeConfirmApi()
 
         case 'passwordResetSmsCodeForm':
             return api.passwordResetSmsConfirmApi();
@@ -210,7 +235,13 @@ export const getAuthUrl =(formName)=> {
             return api.confirmationEmailResendApi();
 
         case 'phoneNumberSmsCodeForm':
-            return api.accountConfirmPhoneNumberApi()
+            return api.accountConfirmPhoneNumberApi();
+
+        case 'emailForm':
+            return api.addEmailApi();
+
+        case 'phoneNumberForm':
+            return api.addPhoneNumberApi();
 
         default:
             return  '';

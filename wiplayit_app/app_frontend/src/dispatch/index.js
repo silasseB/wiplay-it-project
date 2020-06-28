@@ -8,6 +8,7 @@ import {GetLoggedInUser } from 'utils/helpers';
 import {history} from 'App';
 
 const api = new Api();
+const timeStamp = new Date();
 
 export const _GetApi =(useToken=true, opts={}) =>{
     const axios     = new Axios({useToken, ...opts});
@@ -17,7 +18,7 @@ export const _GetApi =(useToken=true, opts={}) =>{
 
 
 export function sendMessage(options={}) {
-    let useToken = true
+    let useToken = false;
     const Api    = _GetApi(useToken);
     
     if(!Api){
@@ -662,25 +663,14 @@ export function authenticate(params={}){
 
         Api.post(apiUrl, form)
             .then(response => {
-                console.log(response)
+                console.log(response, params)
                 let {data}  = response;
-                if (formName === 'emailResendForm') {
-                    handleConfirmationResend(data, dispatch);
-                }
-
+                
                 if (formName === 'phoneNumberSmsCodeForm'){
-                    handleLogin({...data,isConfirmation:true}, dispatch)
+                    data = {...data, isConfirmation:true}
                 }
-                if (formName === 'signUpForm') handleLogin(data, dispatch);
-                if (formName === 'loginForm') handleLogin(data, dispatch);
                 if (isSocialAuth) handleLogin(data, dispatch);
-                if (formName === 'passwordChangeForm') handlePasswordChange(data, dispatch);
-                if (formName === 'logoutForm') handleLogin(data, dispatch)
-                if (formName === 'passwordResetForm') handlePasswordReset(data, dispatch);
-
-                if(formName === 'passwordResetSmsCodeForm') {
-                    handleSmsCode(data, dispatch);
-                }
+                handleSuccessAuth(formName, data, dispatch)
             }
         )
         .catch(error =>{
@@ -720,13 +710,44 @@ export function authenticate(params={}){
    
 }; 
 
-const handleLogin=(data, dispatch)=>{
+const handleSuccessAuth = (formName, data, dispatch)=> {
+    switch(formName){
+        case 'loginForm':
+        case 'reLoginForm':
+        case 'signUpForm':
+        case 'logoutForm':
+        case 'phoneNumberSmsCodeForm':
+            return handleLogin(data, dispatch);
+                
+        case 'passwordResetForm':
+            return handlePasswordReset(data, dispatch);
+
+        case 'passwordChangeForm':
+            return handlePasswordChange(data, dispatch);
+
+        case 'passwordResetSmsCodeForm':
+            return handleSmsCode(data, dispatch);
+
+        case 'emailResendForm':
+            return handleConfirmationResend(data, dispatch);
+        
+        case 'phoneNumberForm':
+            return null;
+
+        default:
+            return  undefined;
+    }
+}
+
+
+const handleLogin = (data, dispatch) => {
      
     let loginAuth = {
         isLoggedIn :true,
         tokenKey   : data.token || data.key || null,
         successMessage : data.detail || '',
         isConfirmation : data.isConfirmation || false,
+        timeStamp      : timeStamp.getTime(),
     }
     if (data.user) {
         let isSuperUser = data.user.is_superuser;
@@ -738,7 +759,7 @@ const handleLogin=(data, dispatch)=>{
 }
 
 
-const handlePasswordReset =(data, dispatch)=>{
+const handlePasswordReset = (data, dispatch) => {
         
     let passwordRestAuth = {
         successMessage : data.detail,
@@ -746,7 +767,7 @@ const handlePasswordReset =(data, dispatch)=>{
     }
 
     dispatch(action.authenticationSuccess({passwordRestAuth}));
-}
+};
 
 
 
@@ -764,10 +785,8 @@ const handlePasswordChange = (data, dispatch) => {
     let passwordChangeAuth = {
         successMessage : data.detail,
     }
-
     dispatch(action.authenticationSuccess({passwordChangeAuth}));
-
-}
+};
 
 
 const handleConfirmationResend =(data, dispatch)=>{

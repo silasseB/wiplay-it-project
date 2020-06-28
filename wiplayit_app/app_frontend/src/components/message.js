@@ -109,7 +109,7 @@ class MessageFormContainer extends Component{
 
        
         return(
-            <div className="">
+            <div className="message-container">
                 <MessageForm {...props}/>
             </div>
         )

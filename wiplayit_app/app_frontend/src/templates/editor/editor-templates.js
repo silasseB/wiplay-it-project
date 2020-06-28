@@ -10,52 +10,52 @@ import TextareaAutosize from 'react-autosize-textarea';
 
 
 export const ToolBar = props => {
-   const textStyles  = ['BOLD', 'ITALIC'];
-   const mediaStyles = ['Video','Image', 'Link', 'MoreOptions']
+    const textStyles  = ['BOLD', 'ITALIC'];
+    const mediaStyles = ['Video','Image', 'Link', 'MoreOptions']
 
-   const buttons = textStyles.map(style => {
-      let button;
-      let buttonProps = {};
-      buttonProps['name']   = style;
+    const buttons = textStyles.map(style => {
+        let button;
+        let buttonProps = {};
+        buttonProps['name']   = style;
       
-      //console.log(props)
+        //console.log(props)
       
           
-      if (style === 'BOLD' || style === "ITALIC") {
+        if (style === 'BOLD' || style === "ITALIC") {
 
-         if (style === "BOLD" ) {
-            buttonProps['onClick'] = props.addBold;
-            buttonProps['buttonFormat'] = 'format_bold';
-            buttonProps['boldOnClick']  = props.boldOnClick;
-            buttonProps['className'] = props.boldOnClick?
+            if (style === "BOLD" ) {
+                buttonProps['onClick'] = props.addBold;
+                buttonProps['boldOnClick']  = props.boldOnClick;
+                buttonProps['className'] = props.boldOnClick?
+                                      "btn-sm active toolbar-button":
+                                      "btn-sm toolbar-button";
+                button = <Button {...buttonProps} key={style}>
+                            <Icon.Bold className="toolbar-btn-icon"  size={20}/>
+                         </Button>   
+            }
+
+            else if (style === "ITALIC") {
+                buttonProps['onClick'] = props.addItalic;
+                buttonProps['className'] = props.italicOnClick?
                                       "btn-sm active toolbar-button":
                                       "btn-sm toolbar-button";
       
-            
-         }
-         else if (style === "ITALIC") {
-            buttonProps['onClick'] = props.addItalic;
-            buttonProps['buttonFormat'] = 'format_italic';
+                button = <Button {...buttonProps} key={style}>
+                        <Icon.Italic className="toolbar-btn-icon"  size={20}/>
+                    </Button>   
+            }
+        }
 
-            buttonProps['className'] = props.italicOnClick?
-                                      "btn-sm active toolbar-button":
-                                      "btn-sm toolbar-button";
-      
-         }
-
-         button = <Button {...buttonProps} key={style} />; 
-      }
-
-      return button;
-      });
+        return button;
+    });
 
 
-      const MediaBtns = mediaStyles.map(style => {
-         let button;
-         let buttonProps = {};
-         buttonProps['style']  = style
+    const MediaBtns = mediaStyles.map(style => {
+        let button;
+        let buttonProps = {};
+        buttonProps['style']  = style
        
-         if(style === "Image" || style === "Video") {
+        if(style === "Image" || style === "Video") {
                       
             buttonProps['onChange']     = props.onURLChange;
             
@@ -63,43 +63,51 @@ export const ToolBar = props => {
             if (style === "Image" ) {
                buttonProps['name']         = 'image';
                buttonProps['accept']       = 'image/*'; 
-               buttonProps['buttonFormat'] = 'insert_photo'; 
+             
+                button = <ImageButton  key={style} {...buttonProps}>
+                            <Icon.Camera className="toolbar-btn-icon" size={20}/>
+                        </ImageButton> 
             }
             else if (style === "Video"){
-               buttonProps['name']         = 'video'
-               buttonProps['accept']       = 'video/*';
-               buttonProps['buttonFormat'] = 'videocam'; 
+                buttonProps['name']         = 'video'
+                buttonProps['accept']       = 'video/*';
+                button = <ImageButton  key={style} {...buttonProps}>
+                            <Icon.Video className="toolbar-btn-icon" size={20}/>
+                        </ImageButton>
             }
 
-            button = <ImageButton  key={style} {...buttonProps}/>
-         }
+        }
 
-         else if(style === "MoreOptions"){
-           buttonProps['name']         = 'more-options'
-           buttonProps['onClick']      = props.moreBtns;
-           buttonProps['buttonFormat'] = 'more_horiz'; 
-           buttonProps['className']    = "btn-sm toolbar-button";
+        else if(style === "MoreOptions"){
+            buttonProps['name']         = 'more-options'
+            buttonProps['onClick']      = props.moreBtns;
+            buttonProps['buttonFormat'] = 'more_horiz'; 
+            buttonProps['className']    = "btn-sm toolbar-button";
 
-           button = <Button  key={style} {...buttonProps}/>
+            button = <Button  key={style} {...buttonProps}>
+                        <Icon.MoreHorizontal  className="toolbar-btn-icon"  size={20}/>
+                    </Button>
 
-         }
+        }
 
-         else if(style === "Link"){
+        else if(style === "Link"){
             buttonProps['name']         = 'LINK'
             buttonProps['onClick']      = props.promptLinkIpunt;
             buttonProps['buttonFormat'] = 'insert_link'; 
             buttonProps['className']    = "btn-sm toolbar-button";
-            button = <Button  key={style} {...buttonProps}/>
+            button = <Button key={style} {...buttonProps}>
+                        <Icon.Link2 className="toolbar-btn-icon"  size={20}/>
+                     </Button>  
 
-         }
+        }
 
-         return button;
+        return button;
 
-      });
+    });
 
-      let LinkInputProps = {handleAddLink:props.handleAddLink}
+    let LinkInputProps = {handleAddLink:props.handleAddLink}
 
-      return (
+    return (
          <div id='toolbar'>
             <div>
             { props.onLinkInput?
@@ -110,15 +118,55 @@ export const ToolBar = props => {
                      { buttons }
                   </li>
 
-                  <li className="media-btns">
+                 <li className="media-btns">
                      {MediaBtns}
                   </li>
                </ul>
             }
             </div>
          </div>
-      )
-} 
+    )
+}; 
+
+
+
+const ImageButton = props => {
+   
+   return (
+      <label  id="fileContainer" className="btn-sm toolbar-button">
+         <input
+            type="file"
+            accept={props.accept} 
+            name={props.name}
+            onChange={props.onChange}
+            className="image-input toolbar-button"
+            value={ props.urlValue }
+         />
+         {props.children}
+      </label>
+     
+   )
+}
+
+
+const Button = props => {
+   //console.log(props)
+   const style = props.boldOnClick? props.active:{}; 
+   //console.log(style)
+               
+    return (
+
+        <button
+            style={style}
+            onClick={props.onClick} 
+            name={props.name} 
+            className={props.className}>
+            {props.children}
+        </button>
+
+   )
+}
+
 
 
 
@@ -135,7 +183,7 @@ export const MobileModalNavBar = props  => {
     modalTitle = !modalTitle &&  `${action} ${objName}` ||  modalTitle;
 
     let SubmitBtn = ()=>(
-            <button type="button" onClick={()=> props.subimtCleanForm()}
+            <button type="button" onClick={()=> props.submit()}
                             className="editor-submit-btn submit-btn">
                         Submit
             </button>
@@ -156,7 +204,7 @@ export const MobileModalNavBar = props  => {
             <div className="modal-navbar-box"> 
                 <ul className="partial-navbar-back-btn-box">
                     <ModalCloseBtn> 
-                       <Icon.X id="feather-x" size={20} color="white"/>
+                       <Icon.ArrowLeft id="feather-x" size={20} color={'white'}/>
                     </ModalCloseBtn>     
                 </ul>
 
@@ -208,48 +256,27 @@ export const DesktopModalNavBar = (props) => {
     )  
 };
 
+export const DesktopToolBar = (props) => {
+    let {objName, submit} = props;
+    return(
+        <div className="editor-navbar-bottom">
+            <div className="toolbar-box">
+                { objName === "Question"?
+                    null
+                    :
+                    <ToolBar {...props}/>
+                }
+            </div>
 
-const ImageButton = props => {
-   
-   return (
-     
-       <label  id="fileContainer" className="btn-sm toolbar-button">
-         <input
-            type="file"
-            accept={props.accept} 
-            name={props.name}
-            onChange={props.onChange}
-            className="image toolbar-button"
-            value={ props.urlValue }
-         />
-         <span className='material-icons'>{props.buttonFormat}</span>
-      </label>
-     
-   )
-}
-
-
-const Button = props => {
-   //console.log(props)
-   const style = props.boldOnClick? props.active:{}; 
-   //console.log(style)
-               
-      return (
-
-      <button
-         style={style}
-         onClick={props.onClick} 
-         name={props.name} 
-         className={props.className}>
-         <span  className='image-icon material-icons'>{props.buttonFormat}</span>
-      </button>
-
-   )
-}
-
-
-
-
+            <div className="editor-submit-btn-box">
+                <button type="button" onClick={()=> submit()}
+                        className="editor-submit-btn">
+                        Submit
+                </button>
+            </div>
+        </div>
+    );
+};
 
 export const TextAreaEditor = props => {
     //console.log(props)
@@ -267,84 +294,81 @@ export const TextAreaEditor = props => {
 
 
 export const PostEditor = (props) => {
-    let {objName} = props;
-    console.log(props)
-    if(objName !== 'Post') return null;
-
+    let {onScroolStyles} = props;
+    
     return(
-        <div style={props.onScroolStyles} id="editors-box" className="editors-box">
-            <TextAreaEditor   {...props} rows={1}/>
-            <div className="">
-                <DraftEditor {...props}/>
+        <div className="editors-page" id="editors-page">
+        <div className="post-editor-box">
+            <div style={onScroolStyles} id="editors-box" className="editors-box">
+                <TextAreaEditor   {...props} rows={2}/>
+                <div className="">
+                    <DraftEditor {...props}/>
+                </div>
             </div>
         </div>
-    )
-
-}
+        </div>
+    );
+};
 
 
 export const QuestionEditor = (props) => {
-    let {objName} = props;
-   
-    if(objName !== 'Question') return null;
+    let {onScroolStyles} = props;
 
     return(
-        <div style={props.onScroolStyles} id="editors-box" className="editors-box">
-            <div className="question-form-box">
-                <TextAreaEditor {...props}/>
-            </div> 
+        <div className="editors-page" id="editors-page">
+        <div className="question-editor-box">
+            <div style={onScroolStyles} id="editors-box" className="editors-box">
+                <div className="question-form-box">
+                    <TextAreaEditor {...props} rows={2}/>
+                </div> 
+            </div>
         </div>
-    )
+        </div>
+    );
 
-}
+};
 
 export const DraftEditor = props => {
        
 	return (
-		    <Editor 
-               editorState={props.editorState} 
-               blockRendererFn={mediaBlockRenderer}
-               handleKeyCommand={props.handleKeyCommand}
-               onChange={props.onChange}
-               decorators={CompositeDecorator}
-               blockStyleFn={props.blockStyleFn}
-               placeholder={props.editorPlaceHolder}
-               onFocus={props.handleFocus}
-               onBlur={props.handleBlur}
-               //plugins={props.plugins}
-               
+        <div className="draft-editor">
+            <Editor 
+                editorState={props.editorState} 
+                blockRendererFn={mediaBlockRenderer}
+                handleKeyCommand={props.handleKeyCommand}
+                onChange={props.onChange}
+                decorators={CompositeDecorator}
+                blockStyleFn={props.blockStyleFn}
+                placeholder={props.editorPlaceHolder}
+                onFocus={props.handleFocus}
+                onBlur={props.handleBlur}
+                //plugins={props.plugins}
             />
-        )        
-}
-
-
-
-
-
+        </div>
+    );        
+};
 
 export  function mediaBlockRenderer(block) {
         
-        if (block.getType() === 'atomic') {
-          return {
+    if (block.getType() === 'atomic') {
+        return {
             component: Media,
             editable: false,
-          };
-        }
-        return null;
-      }
-
-
+        };
+    }
+    return null;
+}
 
 export  function pageMediaBlockRenderer(block) {
         
-        if (block.getType() === 'atomic') {
-          return {
+    if (block.getType() === 'atomic') {
+        return {
             component: MediaPage,
             editable: false,
-          };
-        }
-        return null;
-   }   
+        };
+    }
+    return null;
+};   
 
 
 const Image = (props) => {
@@ -355,7 +379,6 @@ const Video = (props) => {
    return <video controls src={props.src} style={styles.media} />;
 };
 
-//const contentState = EditorState.getCurrentContent();
 
 const Media = (props) => {
    const entity = props.contentState.getEntity(props.block.getEntityAt(0));
@@ -425,7 +448,7 @@ const styles = {
    },
 
    media: {
-      width     : '100%',
+      width     : '50%',
       height    : 'auto',
       objectFit : 'cover',
    },

@@ -20,11 +20,12 @@ from rest_auth.registration.views import SocialLoginView, RegisterView
 
 from allauth.account.utils import complete_signup,  send_email_confirmation
 from allauth.account import app_settings as allauth_settings
-from rest_auth.registration.serializers import (
-										   VerifyEmailSerializer,
-										   SocialLoginSerializer
-										)
-from allauth.account.models import  EmailConfirmationHMAC, EmailConfirmation
+from rest_auth.registration.serializers import ( VerifyEmailSerializer,
+										   		 SocialLoginSerializer)
+from allauth.account.models import (
+							 EmailConfirmationHMAC,
+							 EmailConfirmation, 
+							 EmailAddress)
 from rest_auth.views import (LoginView,
 							 PasswordResetView,
 							 PasswordResetConfirmView)
@@ -33,6 +34,8 @@ from rest_auth.app_settings import (TokenSerializer,
                                     JWTSerializer,
                                     create_token)
 from rest_auth.utils import jwt_encode
+
+
 from auth_backend.utils import (is_using_phone_number,
 								is_using_email_address,
 								get_phone_number,
@@ -55,8 +58,11 @@ from .serializers import (CustomRegisterSerializer,
                           SmsCodeSerializer,
                           EmailSerializer,
                           PhoneNumberSerializer,
+                          EmailAddressSerializer,
                           BaseUserSerializer,
                           UserSerializer,
+                          AddEmailSerializer,
+                          AddPhoneNumberSerializer,
                           UserProfileSerializer )
 from app_backend.helpers import ( get_users_with_permissions,
 	                              has_perm,
@@ -314,8 +320,53 @@ class SendAccountConfirmationView(APIView):
 		return {}
 
 
+class AddEmailView(APIView):
 
-					
+	def get_serializer(self, *args, **kwargs):
+		return AddEmailSerializer(*args, **kwargs)
+
+	def post(self, request, *args, **kwargs):
+		serializer = self.get_serializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+
+		user = serializer.save(request)
+		print(user)
+		return self.get_response(user)
+
+	def get_response(self, user):
+		email_address = user.emailaddress_set.all()
+		email_address = EmailAddressSerializer(email_address, many=True).data
+
+		msg = _('Account confirmation e-mail has been sent')
+		response_data = {'detail': msg, 'email_address':email_address}
+	 
+		return Response(response_data, status=status.HTTP_200_OK)
+
+
+
+class AddPhoneNumberView(APIView):
+	def get_serializer(self, *args, **kwargs):
+		return AddPhoneNumberSerializer(*args, **kwargs)
+
+	def post(self, request, *args, **kwargs):
+		serializer = self.get_serializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+
+		user = serializer.save(request)
+		return self.get_response(user)	
+		
+
+	def get_response(self, user):
+		phone_numbers = user.phone_numbers
+		phone_numbers = PhoneNumberSerializer(phone_numbers, many=True).data
+
+		msg = _('Account confirmation code has been resent')
+		response_data = {'detail': msg, 'phone_numbers':phone_numbers}
+	 
+		return Response(response_data, status=status.HTTP_200_OK)
+
+
+			
 	
 class PasswordChangeConfirmationView(APIView):
 	permission_classes = (AllowAny,)
@@ -348,10 +399,10 @@ class CustomPasswordResetView(PasswordResetView):
 
         # Return the success message with OK HTTP status
         user = serializer.validated_data.get('user', None)
-       
-        email = request.data.get('email')
+        email = serializer.validated_data.get('email')
+
         if is_using_phone_number(email):
-        	phone_number = user.phone_numbers        			
+        	phone_number = user 
         	msg =  "Password reset code has been sent."
 
         	response_data = {

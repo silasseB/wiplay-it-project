@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { NavBar} from 'templates/authentication/utils';
-import  PassWordChangeForm,{SuccessPasswordChange}   from 'templates/authentication/password-change'; 
+import {NavBar,
+        PasswordChangeSmall,
+        PasswordChangeBig} from 'templates/authentication/utils';
+import  PassWordChangeForm,
+        {SuccessPasswordChange}   from 'templates/authentication/password-change'; 
 import AuthenticationHoc  from 'components/authentication/index-hoc'; 
 
 
@@ -30,7 +33,7 @@ export class PasswordChangePage extends Component{
             passwordAuthOpts = {uid, token}
         }
 
-        this.props.formConstructor('passwordChangeForm', passwordAuthOpts);
+        this.props.formConstructor('passwordChangeConfirmForm', passwordAuthOpts);
     }
 
     
@@ -50,7 +53,10 @@ export class PasswordChangePage extends Component{
                     {successMessage &&
                         <SuccessPasswordChange {...props}/>
                         ||
-                        <PassWordChangeForm {...props}/>
+                        <PassWordChangeForm {...props}>
+                            <PasswordChangeSmall {...props}/>
+                            <PasswordChangeBig {...props}/>
+                        </PassWordChangeForm>
                     }
                 </div>   
             </div>

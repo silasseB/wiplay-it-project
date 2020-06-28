@@ -15,7 +15,7 @@ from guardian.mixins import GuardianUserMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.base_user import AbstractBaseUser
 
-from .managers import UserManager
+from .managers import UserManager, PhoneNumberManager
 from app_backend.slug_generator import generate_unique_slug
 from auth_backend.utils import (is_using_phone_number,
                                 _get_pin,
@@ -135,9 +135,14 @@ class PhoneNumber (models.Model):
     inter_format    = models.CharField(max_length=50, null=True)
     verified        = models.BooleanField(default=False)
     primary         = models.BooleanField(default=False)
-    user            = models.OneToOneField(settings.AUTH_USER_MODEL,
-                       on_delete= models.CASCADE, related_name="phone_numbers", blank=True)
+    user            = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             verbose_name=_('user'),
+                             related_name='phone_numbers',
+                             on_delete=models.CASCADE,
+                             blank=True)
+    
 
+    objects = PhoneNumberManager()
 
     def __str__(self):
         return (self.user.email)
@@ -148,12 +153,28 @@ class PhoneNumber (models.Model):
     class Meta:
         db_table = 'users_phone_numbers'
 
-    def set_national_format(self, country, phone_number):
-        self.national_format = get_national_number_format(country, phone_number)
+    def get_country_code(self):
+        print(self.user.user_country)
+        country = self.user.user_country
+        if country:
+            return country.short_name
 
+        return None
+
+    def set_national_format(self, phone_number, country=None):
+        country = self.get_country_code()
+        print(country, phone_number)
+        if not country:
+            return
+
+        self.national_format = get_national_number_format(country, phone_number)
         self.save()
 
-    def set_inter_format(self, country, phone_number):
+    def set_inter_format(self, phone_number, country=None):
+        country = self.get_country_code()
+        if not country:
+            return
+
         self.inter_format = get_inter_number_format(country, phone_number)
         self.save()
 
@@ -203,15 +224,16 @@ class PhoneNumberConfirmation(models.Model):
     @classmethod
     def create(cls, phone_number):
         sms_code = _get_pin()
-        print(sms_code)
-        return cls._default_manager.create(phone_number=phone_number, sms_code=sms_code)
+        return cls._default_manager.create(
+                                    phone_number=phone_number, 
+                                    sms_code=sms_code
+                                )
    
     def code_expired(self):
         
         if self.sent:
             now = timezone.now()
             expiration_date = now - self.sent 
-            print(self.sent, now, expiration_date)
             return expiration_date >= datetime.timedelta(hours=1)
 
         return True
@@ -311,6 +333,10 @@ class Country (models.Model):
         db_table = 'user_country'
 
     def set_long_name(self, country, phone_number):
+        if not country:
+            country = self.user.country
+            country = country.short_name
+
         self.long_name = get_phone_number_region(country, phone_number)
         self.save()
 

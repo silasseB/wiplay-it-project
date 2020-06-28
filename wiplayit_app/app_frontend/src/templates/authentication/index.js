@@ -59,8 +59,14 @@ const RegistrationSmall = props => (
 
         <div className="sign-or-login">
             <div className="registration-link-box">
-                <Link className="login-user-link" to="/user/login/">Login </Link>  
-                <Link className="create-account-link" to="/user/signup/">Create Account </Link>    
+                <ul className="registration-links">
+                    <li className="registration-login-link">
+                        <Link to="/user/login/">Login</Link>
+                    </li>
+                    <li className="registration-signup-link">
+                        <Link to="/user/signup/">Create Account</Link>
+                    </li>
+                </ul>    
             </div> 
             <TermsAndContionTextComponent/>
        </div>
@@ -120,17 +126,17 @@ const RegistrationBig = props => {
 
 
 const TermsAndContionTextComponent = props => {
-   return(
-      <div className="terms-and-policy-box">
+    return(
+        <div className="terms-and-policy-box">
             <p className="terms-and-policy">
                By signing up you indicate that you read and agree 
                to wiplayit <Link className="" to="/privacy/">Terms and Conditions </Link>
                 and <Link className="" to="/privacy/"> Privacy</Link>
             </p>
               
-       </div>
-   )
-}
+        </div>
+    )
+};
 
 const WelcomeTextComponent = props => {
     return(

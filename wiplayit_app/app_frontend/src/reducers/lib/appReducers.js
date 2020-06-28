@@ -32,8 +32,8 @@ const InitialState = () => {
 
 export function entities(state=InitialState(), action) {
 
-    var currentTimeStamp = new Date();
-    if ( action.payLoad) {
+    let currentTimeStamp = new Date();
+    if (action.payLoad) {
         action.payLoad['timeStamp'] = currentTimeStamp.getTime();
     }
 

@@ -163,13 +163,23 @@ def get_intern_number_format(country, phone_number):
 
 
 def get_national_number_format(country, phone_number):
-    phone_number = parse_phone_number(country, phone_number)                             
-    return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.NATIONAL)
+    print(phone_number, country)
+    phone_number = parse_phone_number(country, phone_number) 
+    print(phone_number)  
+    if phone_number:
+        return phonenumbers.format_number(
+                            phone_number,
+                            phonenumbers.PhoneNumberFormat.NATIONAL)
+    return None
 
 
 def get_inter_number_format(country, phone_number):
-    phone_number = parse_phone_number(country, phone_number)                             
-    return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+    phone_number = parse_phone_number(country, phone_number)  
+    if phone_number:
+        return phonenumbers.format_number(
+                            phone_number, 
+                            phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+    return None
 
 def get_phone_number_region(country, phone_number):
     

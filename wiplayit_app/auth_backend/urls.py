@@ -12,6 +12,7 @@ from .views import (
                    UpdatePhoneNumberView, CustomPasswordResetView)
 
 from .views import ( UserView, RetrieveUserProfileView,
+                     AddEmailView, AddPhoneNumberView,
                      retrieve_current_user, RetrieveUserFollowers,
                      RetrieveUserFollowings, UpdateUserProfileView ) 
 
@@ -27,6 +28,8 @@ urlpatterns = [
     path('rest-auth/registration/', CustomRegisterView.as_view()),
     path('rest-auth/login/', CustomLoginView.as_view()),
     path('rest-auth/password/reset/', CustomPasswordResetView.as_view()),
+    path('rest-auth/add/phone-number/', AddPhoneNumberView.as_view()),
+    path('rest-auth/add/email/', AddEmailView.as_view()),
 
     url(r'^rest-auth/account-confirm-email/(?P<key>[-:\w]+)/$',
         VerifyEmailView.as_view(), name='account_confirm_email'),

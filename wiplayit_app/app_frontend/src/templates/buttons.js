@@ -618,28 +618,31 @@ export const OpenEditorBtn = props => {
 };
 
 const OpenModalEditor=(props)=>{
-    let { currentUser} = props ;
+    let {isAuthenticated, currentUser} = props;
+    console.log(props)
+    if (!isAuthenticated) {
+        return history.push('/user/registration/');
+    }
     
-    let storeUpdate  = store.getState();
-    let { entities } = storeUpdate;
-    let { modal }    = entities;
+    let storeUpdate = store.getState();
+    let {entities}  = storeUpdate;
+    let {modal}     = entities;
     let optionsModal = modal && modal['optionsMenu'];
 
     if (currentUser && !currentUser.is_confirmed) {
         let error = 'Sorry, you must confirm your account to start posting and editting ';
-        store.dispatch(handleError(error));
-        return;   
+        return store.dispatch(handleError(error));
     }
 
     let modalProps = {
         ...props,
-        modalName   : 'editor',
-        isModal     :  true, 
+        modalName : 'editor',
+        isModal   : true, 
     };
 
-    if (optionsModal && optionsModal.modalIsOpen ) {
+    if (optionsModal && optionsModal.modalIsOpen) {
+        window.history.back();
 
-        window.history.back()
         return setTimeout(()=> {
             Modal(modalProps) ; 
         }, 500);
@@ -709,7 +712,7 @@ export const ChangeImageBtn = props => {
             className="edit-img-btn btn" 
             onClick={()=> {
                 if (!currentUser.is_confirmed) {
-                    let error = 'Sorry, you must confirm your account to to change photo ';
+                    let error = 'Sorry, you must confirm your account to to change photo.';
                     store.dispatch(handleError(error));
                         return;   
                     }
@@ -725,19 +728,20 @@ export const ChangeImageBtn = props => {
 
 
 export const OpenUsersModalBtn = props => {
-    let {obj, linkName} = props
+    let {linkName, isAuthenticated} = props;
         
     let modalProps = {
             ...props,
             modalName : 'userList', 
         }; 
-        
-        
+           
     return(
-        <button className="btn-sm "    onClick={()=> {
-                        Modal(modalProps)
-
-                    }}>
+        <button className="btn-sm "
+                onClick={()=> {
+                    if(!isAuthenticated) return history.push('/user/registration/');
+                    
+                    Modal(modalProps)
+                } }>
             {linkName} 
             {props.children} 
         </button>
@@ -754,6 +758,27 @@ export const SmsCodeModalBtn = props => {
     let modalProps = {
             ...props,
             modalName : 'smsCodeForm', 
+        }; 
+          
+    return(
+        <button className="btn-sm text-highlight"
+                onClick={()=> {
+                        Modal(modalProps)
+                    }}>
+            {linkName} 
+            {props.children} 
+        </button>
+        
+    );
+};
+
+
+export const PasswordConfirmModalBtn = props => {
+    let {obj, linkName} = props
+    
+    let modalProps = {
+            ...props,
+            modalName : 'passwordConfirmForm', 
         }; 
           
     return(

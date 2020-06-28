@@ -59,6 +59,7 @@ class  QuestionListPage extends Component  {
       
     componentDidMount() {
         this.isMounted = true;
+        this.props.authenticate();
         this.onQuestionListUpdate();
 
         var questionListById = this.state.questionListById;

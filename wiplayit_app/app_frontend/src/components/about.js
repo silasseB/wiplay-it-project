@@ -47,16 +47,17 @@ class  AboutContainer extends Component  {
 
     render(){
         let props = {...this.props, ...this.state}
+        let {isAuthenticated} = props;
 
         return(
-            <div className="">
+            <div className="app-box-container">
                 <PartalNavigationBar {...props}/>
                 <NavigationBarBigScreen {...props}/>
-                <NavigationBarBottom {...props}/> 
-                <div className="about-info-page">
-                    <div className="about-info-box">
-                        <AboutComponent {...props}/>
-                    </div>
+                {isAuthenticated &&
+                    <NavigationBarBottom {...props}/> 
+                }
+                <div className="about-page">
+                    <AboutComponent {...props}/>
                 </div>
             </div>
         )
@@ -72,16 +73,18 @@ export const AboutComponent = props => {
     about = about && about.info;
     
     return(
-        <div>
+        <div className="about-container">
             {about && about.map( (about, index)=>{
                 let editorState = helper.convertFromRaw(about.about_text)
                 return(
-                    <div key={index}>
-                        <div className="">
-                            <h2 className="about-info-title">{about.about_title}</h2>
-                        </div>
+                    <div key={index} className="about-contents">
+                        <ul className="about-info-title-box">
+                            <li className="about-info-title">
+                                {about.about_title}
+                            </li>
+                        </ul>
 
-                        <div>
+                        <div className="about-info-box">
                             <Editor
                                 blockRendererFn={pageMediaBlockRenderer}
                                 editorState={editorState} 

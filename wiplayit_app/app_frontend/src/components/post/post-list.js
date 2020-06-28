@@ -66,8 +66,9 @@ class  PostListPage extends Component  {
       
     componentDidMount() {
         this.isMounted = true;
+        this.props.authenticate();
         this.onPostListUpdate();
-        console.log(this.props)
+        
         var postListById = this.state.postListById;
         let { cacheEntities } = this.props;
         let { posts, currentUser } = cacheEntities;
