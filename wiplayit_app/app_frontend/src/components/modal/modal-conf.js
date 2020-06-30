@@ -136,7 +136,7 @@ export const EditModal = props => {
 export const SmsCodeModal = props => {
     
     let modalProps = {
-        modalStyles    : getDropImageStyles(),
+        modalStyles    : Styles.getDropImageStyles(),
         effect         : Effects.ScaleUp,
         ...props
     };

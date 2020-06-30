@@ -20,27 +20,32 @@ from rest_framework import serializers, exceptions
 def signup_phone_number(request, user):
     pass
 
-def phone_number_exists(phone_number, exclude_user=None):
+def phone_number_exists(phone_number, request=None, exclude_user=None):
     from .models import  PhoneNumber
 
     ret = PhoneNumber.objects.filter(primary_number__iexact=phone_number).exists()
-    
+        
     if not ret:
         ret = PhoneNumber.objects.filter(national_format__iexact=phone_number).exists()
+    
     if not ret:
         ret = PhoneNumber.objects.filter(inter_format__iexact=phone_number).exists()
-       
+           
     if not ret:
         ret = PhoneNumber.objects.filter(user__email__iexact=phone_number).exists()
 
     return ret
 
-def get_phone_number(value):
+def get_for_user(numbers, user):
+    phone_numbers = numbers.filter(user=user)
+    return phone_numbers
+
+
+def get_phone_numbers(value, request=None):
     from .models import  PhoneNumber
-    if not phone_number_exists(value):
-        msg = _('Account with this phone number does not exists')
-        raise serializers.ValidationError(msg)
+
     
+    user = request and request.user    
     phone_number = PhoneNumber.objects.filter(primary_number=value)
 
     if not  phone_number:
@@ -48,14 +53,15 @@ def get_phone_number(value):
 
     if not phone_number:
         phone_number =  PhoneNumber.objects.filter(user__email=value)
+        
     if not phone_number:
         phone_number = PhoneNumber.objects.filter(inter_format=vaule)
 
-    return phone_number[0] or None
+    return phone_number or None
 
 
 def get_verified_number(unique_key):
-    phone_number = get_phone_number(unique_key)
+    phone_number = get_phone_numbers(unique_key)
 
     if phone_number:
         phone_number = phone_number
@@ -152,7 +158,7 @@ def is_valid_number(country, phone_number):
     phone_number = parse_phone_number(country, phone_number)
     return phonenumbers.is_valid_number(phone_number)
 
-def get_intern_number_format(country, phone_number):
+def get_e164_number_format(country, phone_number):
     phone_number = parse_phone_number(country, phone_number)
     if phone_number:
         return phonenumbers.format_number(
@@ -163,9 +169,8 @@ def get_intern_number_format(country, phone_number):
 
 
 def get_national_number_format(country, phone_number):
-    print(phone_number, country)
     phone_number = parse_phone_number(country, phone_number) 
-    print(phone_number)  
+     
     if phone_number:
         return phonenumbers.format_number(
                             phone_number,

@@ -4,8 +4,6 @@ from rest_framework.response import Response
 from guardian.shortcuts import assign_perm, remove_perm
 from app_backend.slug_generator import generate_unique_slug
 from app_backend.helpers import  get_objects_perms, has_perm
-import phonenumbers
-from auth_backend.utils import send_pin
 	
 
 
@@ -128,14 +126,18 @@ class UpdateObjectMixin(BaseMixin):
 
 			if user_is_following:
 				
-				current_user.profile = self.modify_current_user_followings_field(instance.profile, decrem=True)
+				current_user.profile = self.modify_current_user_followings_field(
+															instance.profile, decrem=True
+														)
 				self.unfollow(instance.profile)
 
 				self.remove_perm(followers_perms, instance)
 				self.remove_perm(followings_perms, current_user, user=instance)
 				
 			else:
-				current_user.profile = self.modify_current_user_followings_field(instance.profile, increm=True)
+				current_user.profile = self.modify_current_user_followings_field(
+													   instance.profile, increm=True
+													)
 				self.follow(instance.profile)
 
 				self.assign_perm(followers_perms, instance)
@@ -180,28 +182,7 @@ class UpdateObjectMixin(BaseMixin):
 		data['upvotes']  = instance.upvotes
 		return data 
 
-	def update_phone_number_field(self, instance):
-		print(self.request.data)
-		phone_number = self.request.data.get('phone_number')
-		country = self.request.data.get('country')
-		self.format_phone_number(phone_number, country)
 		
-	def format_phone_number(self, username, country):
-		national_format  = phonenumbers.parse(username, country)
-		#print(national_format)
-
-		int_format = phonenumbers.format_number(
-									national_format,
-									phonenumbers.PhoneNumberFormat.INTERNATIONAL
-								)
-		#print(int_format)
-		national_format_number = phonenumbers.format_number(
-									national_format, 
-									phonenumbers.PhoneNumberFormat.E164
-							)
-		print(national_format_number)	
-
-		send_pin(self.request, national_format_number)	
 		
 	def update_user_fields(self, instance=None):
 		profile     = dict()

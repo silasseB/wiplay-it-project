@@ -731,8 +731,10 @@ const handleSuccessAuth = (formName, data, dispatch)=> {
         case 'emailResendForm':
             return handleConfirmationResend(data, dispatch);
         
-        case 'phoneNumberForm':
-            return null;
+        case 'addPhoneNumberForm':
+        case 'addEmailForm':
+        console.log(formName, data)
+            return handlePhoneNumberOrEmailAdd(data, dispatch);
 
         default:
             return  undefined;
@@ -797,6 +799,17 @@ const handleConfirmationResend =(data, dispatch)=>{
 
     dispatch(action.authenticationSuccess({emailResendAuth}));
 }
+
+
+const handlePhoneNumberOrEmailAdd =(data, dispatch)=>{
+        
+    let phoneNumberOrEmailAuth = {
+        ...data,
+    }
+
+    dispatch(action.authenticationSuccess({phoneNumberOrEmailAuth}));
+}
+
 
 
 export function getAdmin() {

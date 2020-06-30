@@ -42,17 +42,14 @@ from app_backend import serializers  as app_serializers
 from app_backend.helpers import  has_perm, get_users_with_permissions
 from auth_backend.utils import (is_using_phone_number,
 								is_using_email_address,
-								get_phone_number,
+								get_phone_numbers,
+								get_for_user,
 								get_phone_number_region,
 								phone_number_exists,
-								get_national_number_format,
-								get_inter_number_format,
 								get_verified_number,
 								email_is_verified,
-								_get_pin,
-								send_pin,
 								is_valid_number,
-								get_intern_number_format)
+								get_e164_number_format)
 
 
 UserModel = get_user_model()
@@ -74,16 +71,18 @@ class CustomLoginSerializer(LoginSerializer):
 		return user[0]
 
 	def _validate_phone_number(self, phone_number, password):
-		
-		user = None
-		phone_number = get_phone_number(phone_number)
-
-		if phone_number and not phone_number.verified:
-			msg = _('Account with this phone number does not exists')
-			#raise serializers.ValidationError(msg)
-
-		email = phone_number.user.email
 				
+		phone_numbers = get_phone_numbers(phone_number)
+		phone_number = None
+		email = None
+		user  = None
+
+		for numbObj in phone_numbers:
+			unique_username = numbObj.user.email
+
+			if is_using_phone_number(unique_username):
+				email = unique_username
+										
 		user = authenticate(email=email, password=password)
 		return user
 
@@ -174,7 +173,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 				msg = _("Phone number is invalid.")
 				raise serializers.ValidationError(msg)
 						
-			_data['email'] = get_intern_number_format(self.country_code, self.username) 
+			_data['email'] = get_e164_number_format(self.country_code, self.username) 
 
 		data.update(_data)
 		return data
@@ -190,13 +189,13 @@ class CustomRegisterSerializer(RegisterSerializer):
 				country.set_long_name(self.country_code, self.username)
 
 		if self.is_phone_number:
-		
-			phone_number = PhoneNumber.objects.get(user=user) 
-			phone_number.set_primary(self.username)
-			phone_number.set_as_primary()
-			phone_number.set_national_format(self.username, self.country_code)
-			phone_number.set_inter_format(self.username, self.country_code)
-					
+			phone_number = PhoneNumber.objects.add_phone_number(
+												request,
+												user,
+												self.username,
+               									confirm=True,
+               									signup=True
+											)
 		return user
 
 	def get_cleaned_data(self):
@@ -262,18 +261,22 @@ class PasswordChangeConfirmationSerializer(SmsCodeSerializer):
     	return confirmation[0]
 
 
-
-
-class PhoneNumberSerializer(serializers.Serializer):
+class AccountConfirmationResendSerializer(serializers.Serializer):
 	email   = serializers.CharField(required=False, allow_blank=True)
 
 	def validate(self, attrs):
-		email = attrs.get('email')
-		self.is_phone_number  = is_using_phone_number(email)
+		value = attrs.get('email')
+		self.is_phone_number  = is_using_phone_number(value)
+		self.is_email_address = is_using_email_address(value)
 		
-		user     = None
+		user  = None
 		if self.is_phone_number:
-			user = self._validate_phone_number(email)
+			phone_number = self._validate_phone_number(value)
+			attrs['phone_number'] = phone_number
+			user = phone_number.user
+
+		elif self.is_email_address:
+			user = self._validate_email(value)
 
 		attrs['user'] = user
 		return attrs
@@ -284,8 +287,21 @@ class PhoneNumberSerializer(serializers.Serializer):
 			msg = _('Account with this phone number does not exists')
 			raise serializers.ValidationError(msg)
 
-		phone_number = get_phone_number(phone_number)
-		return phone_number
+		phone_numbers = get_phone_numbers(phone_number)
+
+		for numbObj in phone_numbers:
+			username = numbObj.user.email
+			if is_using_phone_number(username):
+				return numbObj
+
+		return None
+
+	def _validate_email(self, email):
+		if not email_address_exists(email):
+			msg = _('Account with this email address does not exists.')
+			raise serializers.ValidationError(msg)
+
+		return User.objects.get(email=email)		
 
 
 class AddEmailSerializer(serializers.Serializer):
@@ -301,7 +317,8 @@ class AddEmailSerializer(serializers.Serializer):
 
 			if not email_address.verified:
 				email_address.send_confirmation(request)
-				return email_address.user
+
+			return email_address.user
 
 
 		user  = request.user
@@ -322,16 +339,25 @@ class AddPhoneNumberSerializer(serializers.Serializer):
 	def phone_number_exists(self):
 		pass
 
+	def resendConfirmation(self, phone_numbers, request=None):
+		if phone_numbers:
+			for number in phone_numbers:
+				if number.verified:
+					number.send_confirmation(request)
+
+
 
 	def save(self, request):
 		phone_number = self.validated_data.get('phone_number')
 		
 		if phone_number_exists(phone_number):
-			phone_number = get_phone_number(phone_number)
-			if not phone_number.verified:
-				phone_number.send_confirmation(request)
-				return phone_number.user
-
+			phone_numbers = get_phone_numbers(phone_number, request)
+			for_user = get_for_user(phone_numbers, request.user)
+			self.resendConfirmation(for_user)
+			for user in for_user:
+				if user:
+					return user
+		
 		user = request.user
 		phone_number = PhoneNumber.objects.add_phone_number(
 												request,
@@ -341,29 +367,6 @@ class AddPhoneNumberSerializer(serializers.Serializer):
 											)
 		return phone_number.user
 
-
-class EmailSerializer(serializers.Serializer):
-	email    = serializers.EmailField(required=False, allow_blank=True)
-
-
-	def _validate_email(self, email):
-		if not email_address_exists(email):
-			msg = _('Account with this email address does not exists.')
-			raise serializers.ValidationError(msg)
-
-		return User.objects.get(email=email)		
-		
-
-	def validate(self, attrs):
-		email = attrs.get('email')
-		self.is_email_address = is_using_email_address(email)
-
-		user     = None
-		if self.is_email_address:
-			user = self._validate_email(email)
-
-		attrs['user'] = user
-		return attrs
 
 
 class CustomPasswordResetForm(PasswordResetForm):
@@ -389,25 +392,35 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
 			msg = _('Account with this phone number does not exists.')
 			raise serializers.ValidationError(msg)
 
-		self.phone_number = get_verified_number(phone_number)	
-		if not self.phone_number:
+		self.phone_number =  self.get_unique_phone_number(value)
+		if self.phone_number and not self.phone_number.verified:
 			msg = _('You must confirm your account before you can change a password.')
 			raise serializers.ValidationError(msg)
-
-		self.user = self.phone_number #self.get_user(self.phone_number.user.email)
-		print(self.phone_number)
-		phone_number =  self.phone_number
-		phone_number.send_password_rest()
+						
 		return value
-	
 
-	def get_user(self, email):
-		user = User.objects.filter(email=email)
+	def send_password_rest_code(self, request=None):
+		self.phone_number.send_password_rest()
+
+	def get_unique_phone_number(self, value):
+		
+		phone_numbers = get_phone_numbers(value)
+
+		for numbObj in phone_numbers:
+			if numbObj:
+				unique_username = numbObj.user.email
+
+				if is_using_phone_number(unique_username):
+					return numbObj
+		return None
+	
+	def get_unique_user(self, value):
+		
+		user = User.objects.filter(email=value)
 		if user:
 			return user[0]
 	
 		return None
-
 
 	def validate_email(self, value):
 		# Create PasswordResetForm with the serializer
@@ -428,18 +441,21 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
 		if not self.reset_form.is_valid():
 			raise serializers.ValidationError(self.reset_form.errors)
 
-		self.user = self.get_user(email=email)
 		return value
 
 	def validate(self, attrs):
-		attrs['user'] = self.user
+		
+		if hasattr(self, 'phone_number'):
+			attrs['phone_number'] = self.phone_number
+
 		return attrs
 
 	def save(self):
-		if self.is_phone_number:
-			return
-
 		request = self.context.get('request')
+
+		if self.is_phone_number:
+			return self.send_password_rest_code()
+		
 		# Set some values to trigger the send_email method.
 		opts = {
             'use_https': request.is_secure(),
@@ -520,20 +536,18 @@ class CustomPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):
 		return attrs
 		
 
+class PhoneNumberSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = PhoneNumber 
+		fields = '__all__'
+
 
 class EmailAddressSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = EmailAddress 
 		fields = '__all__'
-
-class ProfilePhoneNumberSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = PhoneNumber 
-		fields = '__all__'
-
-        
-
-
+ 
 class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile 
@@ -542,7 +556,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 			    
 class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 	profile       = ProfileSerializer(read_only=False)
-	phone_numbers = ProfilePhoneNumberSerializer(read_only=False, many=True)
+	phone_numbers = serializers.SerializerMethodField()
 	email_address = serializers.SerializerMethodField()
 	
 	class Meta():
@@ -554,6 +568,10 @@ class BaseUserSerializer(SerialiizerMixin, serializers.ModelSerializer):
 		email_address = obj.emailaddress_set.all()
 
 		return EmailAddressSerializer(email_address, many=True).data
+
+	def get_phone_numbers(self, obj):
+		phone_numbers = obj.phone_numbers.all()
+		return PhoneNumberSerializer(phone_numbers, many=True).data
 		
 		                
 	def update(self, instance, validated_data):

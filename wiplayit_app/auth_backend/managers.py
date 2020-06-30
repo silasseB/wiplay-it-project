@@ -48,10 +48,11 @@ class PhoneNumberManager(models.Manager):
                                         defaults={"primary_number":number}
                                     )
 
-        print(created, phone_number, phone_number.primary_number, number)
+        if signup:
+            phone_number.set_as_primary()
+
         phone_number.set_national_format(number)
         phone_number.set_inter_format(number)
-
 
         if created and confirm:
             phone_number.send_confirmation(request, signup=signup)

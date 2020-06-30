@@ -175,7 +175,6 @@ desktopModalStyles = {
         }
 };
 
-mobileModalStyles = mobileImageModalStyles;
 
 export let getPasswordConfirmStyles = ()=>{
     if (window.matchMedia("(min-width: 980px)").matches) {

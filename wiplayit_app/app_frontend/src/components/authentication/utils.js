@@ -237,10 +237,10 @@ export const getAuthUrl =(formName)=> {
         case 'phoneNumberSmsCodeForm':
             return api.accountConfirmPhoneNumberApi();
 
-        case 'emailForm':
+        case 'addEmailForm':
             return api.addEmailApi();
 
-        case 'phoneNumberForm':
+        case 'addPhoneNumberForm':
             return api.addPhoneNumberApi();
 
         default:

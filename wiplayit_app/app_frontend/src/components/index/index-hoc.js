@@ -100,7 +100,7 @@ export function MainAppHoc(Component) {
 
         _SetCurrentUser =(currentUser=undefined)=>{
             if(!this.isMounted) return;
-                    
+                            
             if (!currentUser) {
                 let  cacheEntities  = this._cacheEntities();
                 currentUser = cacheEntities && cacheEntities.currentUser;
@@ -171,6 +171,7 @@ export function MainAppHoc(Component) {
             }
            
             let currentUser = this._SetCurrentUser();
+            store.dispatch(getCurrentUser());
                     
             if (!currentUser || currentUser && !currentUser.is_confirmed) {
                 store.dispatch(getCurrentUser());

@@ -296,8 +296,7 @@ export class PasswordConfirmationPage extends Component{
         let loginAuth    = userAuth.loginAuth
         let {isLoggedIn} = loginAuth;
         let {form, passwordConfirmed,formName} = this.state
-        console.log(this.state, loginAuth)
-                                                             
+                                                                     
         if(isLoggedIn && !passwordConfirmed){
             this.setState({passwordConfirmed:true});
             this.togglePasswordChangeForm();
@@ -312,7 +311,7 @@ export class PasswordConfirmationPage extends Component{
             let passswordParams = {old_password : password};
 
             this.cachePassword(passswordParams);
-            this.props.toggleForm('passwordChangeForm', passswordParams);
+            this.props.togglePasswordChangeForm(passswordParams);
             this._closeModal();    
         }
     };

@@ -17,8 +17,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 
 from .managers import UserManager, PhoneNumberManager
 from app_backend.slug_generator import generate_unique_slug
-from auth_backend.utils import (is_using_phone_number,
-                                _get_pin,
+from auth_backend.utils import (_get_pin,
                                 send_pin,
                                 get_national_number_format,
                                 get_inter_number_format,
@@ -249,8 +248,8 @@ class PhoneNumberConfirmation(models.Model):
         if not user.is_confirmed or not self.phone_number.verified:
             sms_code = self.sms_code
             sms_body = 'Your Account confirmation code is {0}'.format(sms_code)
-            phone_number = self.phone_number.user
-            #send_pin(phone_number.email, sms_body)
+            phone_number = user.email
+            #send_pin(phone_number, sms_body)
             self.sent = timezone.now()
             self.save()
 
@@ -308,7 +307,7 @@ class PhoneNumberPasswordChange(models.Model):
 
 
        
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+
 def create_phone_number(sender, instance, created, **kwargs):
 
     if created and not kwargs.get('raw', False):
