@@ -163,7 +163,6 @@ export const SmsCodeForm = props => {
         successMessage,
         onEmailResendForm,
         form, 
-        formIsValid,
         formName, 
         defaultFormName,
         handleFormChange,
@@ -172,12 +171,15 @@ export const SmsCodeForm = props => {
         isSocialAuth } = props;
    
 
-    form = form && form[defaultFormName]? 
-                           form[defaultFormName]:null;
+    let phoneNumberSmsCodeForm   = form?.phoneNumberSmsCodeForm;
     
-    let error = form && form.error; 
+    let passwordResetSmsCodeForm =  form?.passwordResetSmsCodeForm;
 
-    formIsValid =  onPasswordResetForm || onEmailResendForm?
+    form = phoneNumberSmsCodeForm || passwordResetSmsCodeForm;
+    
+    let error = form?.error; 
+
+    let formIsValid =  onPasswordResetForm || onEmailResendForm?
                              validateForm(form, defaultFormName):false;
 
     let email = successMessage?props.email:null;
@@ -186,11 +188,9 @@ export const SmsCodeForm = props => {
                                                      {opacity:'0.60'}:{};
     
     let fieldSetStyles = submitting && {opacity:'0.60'} || {};
-    let toggleProps    = {
-            value : true,
-            formName : 'passwordResetForm',
-            defaultFormName,
-        };
+    
+        console.log(form)
+        console.log(props)
                  
     return(
         <div>
@@ -207,7 +207,7 @@ export const SmsCodeForm = props => {
                     }
                                                                 
                     <form className="sms-code-form" onSubmit={props.onSubmit}>
-                        {props.children}
+                        {props?.children[0]}
                            
 
                         {error &&
@@ -216,7 +216,7 @@ export const SmsCodeForm = props => {
                      
 
                         <fieldset style={ fieldSetStyles} 
-                                  disabled={ submitting || onSignUpForm} >
+                                  disabled={submitting} >
                             <div  className="email-fields">
                                 <p></p>
                                 <div className="email-box auth-input-field">
@@ -241,12 +241,8 @@ export const SmsCodeForm = props => {
                                     <p className="resend-email-text">
                                         You didn't receive any sms ?
                                     </p>
+                                    {props?.children[1]}
 
-                                    <button type="button" 
-                                            onClick={()=>props.toggleEmailForm(toggleProps)} 
-                                            className="resend-email-btn btn-sm" >
-                                        Resend
-                                    </button>
                                 </div>                  
                             </div>
                         </fieldset>   

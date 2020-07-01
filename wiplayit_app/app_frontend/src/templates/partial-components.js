@@ -118,7 +118,11 @@ export const UnconfirmedUserWarning =(props)=> {
                        cacheEntities.currentUser && 
                        cacheEntities.currentUser.user || currentUser;
  
-    
+    let smsCodeProps = {
+            linkName  : "Here to confirm",
+            currentUser,
+        };
+
     return(
         <div>
             {currentUser && !currentUser.is_confirmed &&
@@ -129,8 +133,11 @@ export const UnconfirmedUserWarning =(props)=> {
                     </button>
 
                     <ul className="unconfirmed-user-warn">
-                        <EmailVerifyWarning {...props}/>
-                        <PhoneNumbeVerifyWarning {...props}/>
+                        <li>
+                            Your account has not been confirmed and you won't be avble to
+                            post or edit you profile.Please click 
+                            <SmsCodeModalBtn {...smsCodeProps}/> your account.
+                        </li>
                     </ul>
                 </div>
 
@@ -148,7 +155,9 @@ const EmailVerifyWarning =(props)=> {
     if (currentUser && validateEmail(currentUser.email)) {
         return(
             <li>
-                Your account has not been confirmed.
+
+                Your account has not been confirmed and you won't be avble to 
+                post or edit you profile.
                 Please go to your email <span className="text-highlight">
                 { currentUser && currentUser.email }</span> to
                 confirm your account and start posting.

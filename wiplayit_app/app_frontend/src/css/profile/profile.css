@@ -720,14 +720,13 @@
     }
 
     .profile-user-list-container {
-        width      : 30%;
-        border    : px solid  blue;
+        width     : 30%;
         padding   : 10px 0; 
 
     }
 
     .profile-user-list-box{
-        border         : px solid  #D5D7D5;
+        border         : 1px solid  #D5D7D5;
         background     : #F4F2F1;
         border-radius  : 10px; 
     }

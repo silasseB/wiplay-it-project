@@ -368,6 +368,7 @@ export function AuthenticationHoc(Component) {
                         return this._SetForm(form, formName)
 
                     case 'passwordChangeConfirmForm':
+                    case 'passwordChangeForm':
                         form = getFormFields().passwordChangeForm;
                         form = Object.assign(opts, form);
                         return this._SetForm(form, formName);

@@ -10,6 +10,8 @@ export default class FormValidator {
     constructor(props){
         this.formName = props.formName;
         this.form = props.form;
+        this.isEmail = false;
+        this.isPhoneNumber = false;
     };
 
     cleanForm(){
@@ -29,14 +31,14 @@ export default class FormValidator {
         }
     };
 
-    isPhoneNumber(value){
+    _isPhoneNumber(value){
         if (value) {
             return validatePhoneNumber(value);
         }
         return false;
     };
 
-    isEmail(value){
+    _isEmail(value){
         if (value) {
             return validateEmail(value);
         }
@@ -45,7 +47,8 @@ export default class FormValidator {
 
     formErrors(){
         let formName = this.formName;
-        let form     = this.form[formName];
+        let form     = this.form && this.form[formName];
+        console.log(formName, form, this)
        
         let formErrors;
         let isValid = formIsValid(form);
@@ -54,9 +57,12 @@ export default class FormValidator {
             formErrors = {non_field_errors:['Please fill in all fields']};
         }
                 
-        if (form.email) {
+        if (form && form.email) {
             let {email} = form;
-            if (!this.isEmail(email) && !this.isPhoneNumber(email)) {
+            this.isPhoneNumber = this._isPhoneNumber(email)
+            this.isEmail = this._isEmail(email)
+
+            if (!this.isEmail && !this.isPhoneNumber) {
                 formErrors = {email:['Please enter a valid email or phone number']}
             }
         }
@@ -73,21 +79,20 @@ export default class FormValidator {
 
 export const authSubmit =(self, formName="", useToken=false)=>{
     formName  = !formName && self.state.formName || formName;
-    let form  = getForm(self, formName);
-    console.log(formName)
-    console.log(form)
-    console.log(self.state)
-       
-    _isSubmitting(self, form);
+    let validatedForm  = getForm(self, formName);
+    console.log(self.state, formName)
+          
+    _isSubmitting(self, formName);
         
-    if (!form.formIsClean()) {
-        console.log(form.formErrors(), formName)
-        let error = form.formErrors(); 
+    if (!validatedForm.formIsClean()) {
+        
+        let error = validatedForm.formErrors(); 
+        console.log(error)
         return setFormErrors(self, error, formName)
     }
 
     let apiUrl = getAuthUrl(formName);           
-    form       = form.cleanForm();
+    let form       = validatedForm.cleanForm();
     return store.dispatch(authenticate({apiUrl, form, formName, useToken}));
 
 };
@@ -99,22 +104,31 @@ export const getForm =(self, formName)=> {
 
 export const setFormErrors =(self, error, formName)=> {
     let form        = self.state.form;
-    form[formName]['error'] = error
-    self.setState({form, submitting : false})
+
+    if (form) {
+        form[formName]['error'] = error
+        self.setState({form, submitting : false});
+    }
 }
 
-export const _isSubmitting=(self, form)=>{
+export const _isSubmitting=(self, formName)=>{
+    let {form} = self.state;
+    form = form && form[formName]
 
-    if (!form) return;
-    let isPhoneNumber = form.isPhoneNumber();
-    let isEmail       = form.isEmail();   
-    self.setState({submitting : true, isEmail, isPhoneNumber})
+    if (form && form.email) {
+        let isPhoneNumber = validatePhoneNumber(form.email);
+        let isEmail       = validateEmail(form.email); 
+        self.setState({isEmail, isPhoneNumber})  
+    }
+        
+    self.setState({submitting : true})
 };
 
 export const formIsValid =(form)=> {
     //Check form is complete
+    console.log(form)
     if (form) {
-        for (var key in form) {
+        for (let key in form) {
             if(/^ *$/.test(form[key])){
                 return false; //Form is not complete
             }
@@ -200,8 +214,8 @@ export const getFormFields =()=> {
         }, 
 
         passwordChangeForm : {
-            'new_password1' : '',
-            'new_password2' : '',
+            'new_password1' : 'sila9020',
+            'new_password2' : 'sila9020',
         },
         phoneNumberForm : {phone_number:''}, 
 

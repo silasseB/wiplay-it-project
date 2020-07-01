@@ -271,6 +271,7 @@ export const UserProfileFollowingList = props => {
         entities,
         users,
         currentUser,
+        isAuthenticated,
         userProfile } = props;
 
     let usersById = 'filteredUsers';    
@@ -281,6 +282,7 @@ export const UserProfileFollowingList = props => {
     let userProfileFollowersProps = {
             byId      : usersById,
             obj       : userProfile,
+            isAuthenticated,
             currentUser,
             linkName  : `Show more`,
            
@@ -303,8 +305,8 @@ export const UserProfileFollowingList = props => {
                         return(
                             <div style={props.userListBoxStyles}
                                 key={index}
-                                className="user-list-container"
-                                id="user-list-container">
+                                className="user-list-containe"
+                                id="user-list-containe">
 
                                 <PartialUserList {...userProps}/>
 

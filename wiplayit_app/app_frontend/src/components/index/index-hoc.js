@@ -171,8 +171,7 @@ export function MainAppHoc(Component) {
             }
            
             let currentUser = this._SetCurrentUser();
-            store.dispatch(getCurrentUser());
-                    
+                              
             if (!currentUser || currentUser && !currentUser.is_confirmed) {
                 store.dispatch(getCurrentUser());
             }

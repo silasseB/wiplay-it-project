@@ -14,6 +14,8 @@ import * as Icon from 'react-feather';
 import {formIsValid,
         authSubmit,
         changeForm,
+        validatePhoneNumber,
+        validateEmail,
         getFormFields,
         setForm,} from 'components/authentication/utils';         
 import {store} from "store/index";
@@ -79,6 +81,8 @@ export class AccountSmsCodeConfirmationPage extends Component{
             formDescription  : ['Enter code to confirm your account'],
             formName         : 'phoneNumberSmsCodeForm',
             defaultFormName  : 'phoneNumberSmsCodeForm', 
+            isPhoneNumber    : false,
+            isEmail          : false,
             submitting       : false,
             form             : undefined,
             successMessage   : undefined,
@@ -86,8 +90,8 @@ export class AccountSmsCodeConfirmationPage extends Component{
     };
 
     componentWillUnmount =()=> {
-            this.isMounted = false;
-            this.unsubscribe();
+        this.isMounted = false;
+        this.unsubscribe();
     };
 
 
@@ -113,8 +117,8 @@ export class AccountSmsCodeConfirmationPage extends Component{
             }
             if (emailResendAuth && emailResendAuth.successMessage) {
                 this.setState({successMessage:emailResendAuth.successMessage})
-                this.toggleEmailForm({value:false})
-
+                this.toggleSmsCodeForm()
+                
                 delete emailResendAuth.successMessage
             }
             
@@ -125,55 +129,72 @@ export class AccountSmsCodeConfirmationPage extends Component{
     componentDidMount() {
         this.isMounted = true;
         this.onAuthStoreUpdate();
-        console.log(this.props)
+        
+        let {currentUser} = this.props;
+        let {isPhoneNumber, isEmail} = this.state;
+        let email = currentUser && currentUser.email;
 
-        let currentForm = this.state.form;
-        let formName =  'phoneNumberSmsCodeForm';
+        if (email && validatePhoneNumber(email)) {
+            isPhoneNumber = true;
+            this.toggleSmsCodeForm();
 
-        let form = getFormFields().smsCodeForm;
-        form = setForm(form, currentForm, formName);
-        this.setState({form, formName});
+        }else if (email && validateEmail(email)) {}{
+            isEmail = true
+            this.toggleEmailForm()
+        }
 
-          
+        this.setState({currentUser, isEmail, isPhoneNumber});
     };
 
-    toggleSmsCodeForm(){
-        let currentForm = this.state.form;
+    toggleEmailForm(){
+        let formName    =  'phoneNumberSmsCodeForm';
+        let onPhoneNumberSmsCodeForm = true;
+        let form = getFormFields().smsCodeForm;
+        this.setState({onPhoneNumberSmsCodeForm});
+        this._SetForm(form, formName)
+
+    }
+
+    toggleSmsCodeForm=()=>{
         let formName    =  'phoneNumberSmsCodeForm';
         let onPhoneNumberSmsCodeForm = true;
         
         let form = getFormFields().smsCodeForm;
-        form = setForm(form, currentForm, formName);
-        this.setState({form, formName, onPhoneNumberSmsCodeForm});
-
+        this.setState({onPhoneNumberSmsCodeForm});
+        this._SetForm(form, formName);
     }
 
-    toggleEmailForm(params){
-        
-        if (params && !params.value) {
-            this.toggleSmsCodeForm();
-            return this.setState({onEmailResendForm:false});
-        }
-
+    _SetForm(form, formName){
         let currentForm = this.state.form;
-        let currentFormName = this.state.formName;
-        currentForm[currentFormName].error = undefined; 
-
-        let form     = getFormFields().emailForm;
-        let formName = 'emailResendForm';
-        let onEmailResendForm = true;
-        
         form = setForm(form, currentForm, formName);
-       
-        this.setState({form, formName, onEmailResendForm});
-
+        this.setState({form, formName});
     }
-
 
     handleChange=(e)=>{
         e.preventDefault()
         changeForm(this, e);
+    }
+
+    resendConfirmation =()=> {
+        let {currentUser} = this.state;
+        let currentForm = this.state.form;
+        let email = currentUser &&  currentUser.email;
+        
+        if (email) {
+            let formName = 'emailResendForm';
+            let form = getFormFields().emailForm;
+            form     = {...form, email}
+
+            form = setForm(form, currentForm, formName);
+
+            this.setState({form, formName});
+            console.log(this.state)
+            if (this.state.form) {
+                authSubmit(this, formName)
+            }
+        }
     };
+    
 
     onSubmit =(e)=> {
         e.preventDefault();
@@ -183,8 +204,8 @@ export class AccountSmsCodeConfirmationPage extends Component{
     getProps=()=>{
         return{
             handleFormChange : this.handleChange.bind(this),
-            toggleEmailForm  : this.toggleEmailForm.bind(this), 
             onSubmit         : this.onSubmit.bind(this),
+            resendConfirmation : this.resendConfirmation.bind(this),
             validateForm     : formIsValid, 
             ...this.props, ...this.state,
         };
@@ -192,33 +213,42 @@ export class AccountSmsCodeConfirmationPage extends Component{
      
     render() {
         let props = this.getProps();
-        let {onEmailResendForm, successMessage} = props;
+        let {isPhoneNumber, submitting, successMessage} = props;
         console.log(props); 
+        let submitButtonStyles = submitting? {opacity:'0.60'} : {};
+    
+        let fieldSetStyles = submitting && {opacity:'0.60'} || {};
 
         return (
             <div className="">
+                <fieldset style={ fieldSetStyles} 
+                          disabled={submitting} >
                 <div>
                     <div className="confirmation-close-box">
                         <ModalCloseBtn> 
                             <Icon.X id="feather-x" size={20}/>
                         </ModalCloseBtn>
                     </div>
-
-                    <div className="account-confirm-modal-container">
-                        {onEmailResendForm &&
-                            <div className="password-reset-bo">
-                                <EmailForm {...props}>
-                                    <CancelEmailFormBtn {...props}/>
-                                </EmailForm> 
-                            </div>
-                            ||
+                    {isPhoneNumber &&
+                        <div className="account-confirm-modal-container">
 
                             <SmsCodeForm {...props}>
                                 <SmsCodeHelperText {...props}/>  
+                                <button type="button" 
+                                        onClick={()=>
+                                                props.resendConfirmation()} 
+                                        className="resend-email-btn btn-sm" >
+                                    Resend
+                                </button>
                             </SmsCodeForm>
-                        }
-                    </div>
+                            
+                        </div>
+                        ||
+
+                        <EmailConfirmation {...props}/>
+                    }
                 </div>
+                </fieldset>
             </div>
         );
     };
@@ -228,20 +258,64 @@ export class AccountSmsCodeConfirmationPage extends Component{
 
 const SmsCodeHelperText = (props)=>{
     let {cacheEntities, currentUser} = props;
-    let phone_number = currentUser && currentUser.phone_numbers;
+    let phone_number = currentUser && currentUser.phone_numbers[0];
     phone_number     = phone_number && phone_number.national_format;
     
     return (
         <ul className="form-helper-text">
             <li>
                 We sent a code to your phone {' '} 
-                <span className="unconfirmed-user-email">
+                <span className="text-highlight">
                 {phone_number}.
-                </span> Please enter the code to confrm your number.
+                </span> Please enter the code to confrm your account.
             </li>
         </ul>
     )
 }
+
+
+const EmailConfirmation = (props)=>{
+    let {successMessage, currentUser} = props;
+    let email = currentUser && currentUser.email;
+        
+    return (
+        <div className="email-confirm-container">
+        <div className="email-confirm-box">
+            <ul className="email-confirm-title-box">
+                <li className="">Account Confirmation</li>
+            </ul>
+            <div className="email-confirm-contents">
+                {successMessage &&
+                    <ul className="success-resend-message">
+                        <li className="">{successMessage}</li>
+                    </ul>
+                }
+
+                <ul className="email-confirm-helper-text">
+                    <li>
+                        We sent a link to your email address {' '} 
+                        <span className="text-highlight">{email}</span> with {' '}
+                        instructions to confirm your account. {' '} 
+                        Please go to your email to confirm you account.
+                    </li>
+                </ul>
+                <div className="resend-email-box">
+                    <p className="resend-email-text">
+                        You didn't receive any email?
+                    </p>
+
+                    <button type="button" 
+                            onClick={()=> props.resendConfirmation()} 
+                            className="resend-email-btn btn-sm" >
+                                Resend
+                    </button>
+                </div>            
+            </div>
+        </div>
+        </div>
+    )
+}
+
 
 
 

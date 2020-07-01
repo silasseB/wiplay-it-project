@@ -305,21 +305,16 @@
     
     .nav-bar-menu-title-box {
         width : 100%;
-        border  : px solid blue;
     }
 
     .nav-bar-menu-title-box li {
-        border       : px solid black;
         padding-left : 20px;
         padding-top  : 7px;
-
     }
 
     .nav-bar-menu-close-btn {
         float   : right;
-        border  : 1px solid blue;
         margin  : 7px;
-
     }
 
     .dismiss-nav-bar-menu-icon {

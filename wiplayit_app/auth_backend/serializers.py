@@ -247,7 +247,7 @@ class PhoneNumberConfirmationSerializer(SmsCodeSerializer):
 		
 		if not confirmation:
 			return None
-		return confirmation[1]
+		return confirmation[0]
 
 
 class PasswordChangeConfirmationSerializer(SmsCodeSerializer):

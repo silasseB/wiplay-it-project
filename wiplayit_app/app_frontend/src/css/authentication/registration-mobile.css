@@ -64,6 +64,7 @@
    margin-top : 10%;
 }
 
+.email-confirm-box,
 .password-change-success,
 .sms-code-form,
 .email-form,
@@ -182,7 +183,7 @@
     font-size  : 14px;
 }
 
-
+.email-confirm-title-box,
 .form-title-box {
     font-weight: bold;
     font-size: 11px;
@@ -191,9 +192,22 @@
     margin : 16px 0 8px;
 }
 
-.form-helper-text,
+.form-helper-text,.email-confirm-helper-text,
 .email-form-description,.password-form-description {
     font-size: 15px;
+}
+
+.email-confirm-containe {
+   margin-bottom: 10% !important;
+    border : 1px solid #fff;
+}
+
+.email-confirm-box {
+    
+}
+
+.email-confirm-contents {
+       
 }
 
 .message-success {

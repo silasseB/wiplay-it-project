@@ -18,7 +18,7 @@ class PasswordChangeSmsCodePage extends Component{
             formTitle                  : 'Enter code',
             passswordChanged           : false,  
             onPasswordResetSmsCodeForm : true,  
-            onPasswordChangeForm       : false,
+            onPasswordChangeConfirmForm : false,
             defaultFormName            : 'passwordResetSmsCodeForm',
             smsCode                    : undefined,                         
         };
@@ -57,13 +57,7 @@ class PasswordChangeSmsCodePage extends Component{
             let {userAuth, errors} = entities;
             let {smsCodeAuth, passwordChangeAuth}  = userAuth;
             console.log(userAuth)
-            
-
-            let {formName,
-                 onPasswordResetSmsCodeForm,
-                 onPasswordChangeForm, } = this.props;
-
-            
+         
             if (smsCodeAuth && smsCodeAuth.successMessage) {
                 delete smsCodeAuth.successMessage;
                 let {smsCode} = smsCodeAuth; 
@@ -94,12 +88,16 @@ class PasswordChangeSmsCodePage extends Component{
     tooglePasswordChangeForm=(smsCode)=>{
         console.log(smsCode)
         if (smsCode) {
-            let onPasswordChangeForm = true;
+            let onPasswordChangeConfirmForm = true;
             let onPasswordResetSmsCodeForm = false;
             let passwordAuthOpts = {sms_code:smsCode};
-            this.props.formConstructor('passwordChangeForm', passwordAuthOpts);
+            this.props.formConstructor('passwordChangeConfirmForm', passwordAuthOpts);
 
-            this.setState({smsCode,onPasswordChangeForm, onPasswordResetSmsCodeForm})
+            this.setState(
+                {smsCode,
+                 onPasswordChangeConfirmForm,
+                 onPasswordResetSmsCodeForm}
+                 )
         }
     };
 
@@ -156,12 +154,18 @@ class PasswordChangeSmsCodePage extends Component{
 export default AuthenticationHoc(PasswordChangeSmsCodePage);
 
 const PasswordChange =(props)=>{
-    let {onPasswordResetForm} = props;
+    let {onPasswordResetForm, defaultFormName} = props;
         
     let passwordChangeProps = {
         formTitle          : 'Password Change',
         formDescription    : 'Enter a new passsword on both fields.',
     };
+
+    let toggleProps    = {
+            value : true,
+            formName : 'passwordResetForm',
+            defaultFormName,
+        };
     
     passwordChangeProps = {...props, ...passwordChangeProps}
     return(
@@ -173,12 +177,18 @@ const PasswordChange =(props)=>{
                         {onPasswordResetForm &&
                             <EmailForm {...props}>
                                <CancelEmailFormBtn {...props}/>
+                               
                             </EmailForm> 
 
                             ||
 
                             <SmsCodeForm {...props}>
                                 <SmsCodeHelperText {...props}/>
+                                <button type="button" 
+                                       onClick={()=> props.toggleEmailForm(toggleProps)}
+                                       className="resend-email-btn" >
+                                    Resend
+                                </button>
                             </SmsCodeForm>
                         }
                     </div>
@@ -201,7 +211,7 @@ const SmsCodeHelperText = (props)=>{
         <ul className="form-helper-text">
             <li>
                 We sent a code to your phone {' '} 
-                <span className="unconfirmed-user-email">
+                <span className="text-highlight">
                 { identifier }.
                 </span> Please enter the code to change password.
             </li>

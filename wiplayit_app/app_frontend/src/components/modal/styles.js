@@ -168,7 +168,7 @@ export let getDropImageStyles = ()=>{
         } 
     };
 
-desktopModalStyles = {
+let desktopPasswordStyles = {
         content: {
             marginTop : '20%',
             ...desktopModalStyles.content
@@ -177,8 +177,9 @@ desktopModalStyles = {
 
 
 export let getPasswordConfirmStyles = ()=>{
+
     if (window.matchMedia("(min-width: 980px)").matches) {
-        return desktopModalStyles;
+        return desktopPasswordStyles;
     } else {
         return mobileImageModalStyles;
     } 

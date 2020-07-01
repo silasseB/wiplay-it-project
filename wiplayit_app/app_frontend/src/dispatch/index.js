@@ -723,6 +723,7 @@ const handleSuccessAuth = (formName, data, dispatch)=> {
             return handlePasswordReset(data, dispatch);
 
         case 'passwordChangeForm':
+        case 'passwordChangeConfirmForm':
             return handlePasswordChange(data, dispatch);
 
         case 'passwordResetSmsCodeForm':

@@ -53,21 +53,27 @@ export const PasswordForm =(props)=>{
 
     if (formName !== 'passwordChangeForm' && 
         formName !== 'passwordChangeConfirmForm'){
-        return null;
+        //return null;
     }
 
-    form = form && form[formName]? form[formName] : null;
-    if (!form) return null;
+   
+
+    let passwordChangeForm   = form?.passwordChangeForm;
+    
+    let passwordChangeConfirmForm =  form?.passwordChangeConfirmForm;
+
+    form = passwordChangeForm || passwordChangeConfirmForm;
+    console.log(form, props)
+    
 
 
     let error = form && form.error; 
-    let disabledStyle = submitting || onSignUpForm? {opacity:'0.60'} : {};
+    let disabledStyle = submitting? {opacity:'0.60'} : {};
     let formIsValid = onPasswordChangeForm? validateForm(form): false;
 
-    let submitButtonStyles = submitting || onSignUpForm || !formIsValid?
-                                                     {opacity:'0.60'}:{};
+    let submitButtonStyles = submitting? {opacity:'0.60'}:{};
     
-    let fieldSetStyles = submitting || onSignUpForm ? {opacity:'0.60'}:{};
+    let fieldSetStyles = submitting? {opacity:'0.60'}:{};
 
 
     return(
@@ -89,7 +95,7 @@ export const PasswordForm =(props)=>{
                             placeholder="New Password"
                             type="password"
                             name="new_password1"
-                            value={form.new_password1}
+                            value={form?.new_password1}
                             onChange={(event)=> 
                                       handleFormChange(event, 'passwordChangeForm')}
                             required
@@ -101,7 +107,7 @@ export const PasswordForm =(props)=>{
                             placeholder="Repeat New Password"
                             type="password"
                             name="new_password2"
-                            value={form.new_password2}
+                            value={form?.new_password2}
                             onChange={(event)=>
                                         handleFormChange(event, 'passwordChangeForm')}
                             required
