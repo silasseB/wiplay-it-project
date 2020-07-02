@@ -371,6 +371,7 @@ export class PasswordConfirmationPage extends Component{
         if (!passwordRestAuth) return;
 
         if (passwordRestAuth.successMessage) {
+            this.props.displaySuccessMessage(passwordRestAuth.successMessage);
             delete passwordRestAuth.successMessage;
             this.togglePasswordConfirmForm();
         }

@@ -156,11 +156,11 @@
 
 	.password-confirm-form {
 		margin  : 10px 15px 15px;
-		padding : 10px;	
+		border  : px solid blue;
 	}
 
 	.confirm-password-box {
-		display : flex;
+		border  : px solid red;
 	}
 
 	.confirm-password-title-box {
@@ -171,10 +171,14 @@
 		width: 100%;
 	}
 
+	.password-form-description-box {
+		margin : 0 10px; 
+	}
+
 	.password-confirm-form-dismiss {
 		border  : px solid blue;
 		margin  : 0 15px;
-		padding :  10px; 
+		padding : 10px; 
 	}
 
 	.password-confirm-form-cancel {
@@ -189,20 +193,19 @@
 
 	.confirm-password-input {
 		border : px solid blue;
-		width  : 60%;
+		margin : 0 8px; 
 	}
 
 	.confirm-password-submit {
-		border  : px solid black;
-		display :  flex;
+		display  : flex;
 		justify-content:  flex-end;
 	}
 
 	.confirm-password-rest-btn {
-		border :  px solid black;
-		color  :  gray;
+		border    : px solid black;
+		color     : gray;
 		font-size : 14px; 
-		margin    : 15px 0 0 5px;
+		margin    : 6px 0 15px;
 	}
 
 	.confirm-password-rest-btn:hover,
@@ -259,11 +262,29 @@
 
 	.primary-phone-number,
 	.primary-email {
-		margin :  5px ; 
+	}
+
+	.non-primary-email {
+		border  : px solid red;
+		padding : 5px 0 0; 
 	}
 
 	.non-primary-email-box {
-		display: flex;
+		display : flex;
+		border  : px solid blue;
+		padding : 10px 0;
+	}
+
+	.non-primary-email-btns {
+		display : flex;
+		border  : px solid black;
+
+	}
+
+	.remove-email-btn,
+	.confirm-email-btn{
+		color     : #9D9D9D;
+		font-size : 13px;
 	}
 
 	.change-password-btn,
@@ -348,14 +369,13 @@
 	}
 
 	.confirm-password-submit {
-		border  : px solid black;
 		display :  flex;
+		margin   : 8% 8px 0; 
 		justify-content:  flex-end;
 	}
 
 	.confirm-password-rest-btn {
-		border :  px solid black;
-		color  :  gray;
+		color     : gray;
 		font-size : 14px; 
 		margin    : 15px 0 0 5px;
 	}

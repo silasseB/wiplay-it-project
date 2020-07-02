@@ -2,8 +2,7 @@ import { MatchMediaHOC } from 'react-match-media';
 
 import React, { Component } from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
-import {ModalManager} from 'components/modal/modal-container';
-
+import {handleModalScroll} from 'components/modal/helpers';
 import { GetModalLinkProps } from 'templates/component-props';
 
 import { EditProfileNavBar } from 'templates/navBar';
@@ -257,6 +256,7 @@ export class EditProfile extends Component{
             submitProps          : this.submitProps(),
             submit               : this.submit.bind(this), 
             editUserProfileProps : this.getUserEditProps(),
+            handleScroll : this.handleScroll.bind(this),
             ...this.state,
         }
     }
@@ -313,6 +313,25 @@ export class EditProfile extends Component{
 
     }
 
+    handleScroll=()=>{
+        let {onScroolStyles}    = this.state;
+        let isDesktopScreenSize = window.matchMedia("(min-width: 980px)").matches;
+
+        if (isDesktopScreenSize) {
+            let editorsBoxElem = document.getElementById('editors-box')
+            let isAtBottom     = handleModalScroll();
+            //editorsBoxElem && console.log(editorsBoxElem.clientHeight)
+
+            if (editorsBoxElem && isAtBottom && !onScroolStyles) {
+                onScroolStyles  = {
+                    height : editorsBoxElem.clientHeight
+                };
+
+                this.isMounted && this.setState({onScroolStyles});
+            }
+        }
+    };
+
     submit(params){
         store.dispatch(handleSubmit(params));
     };
@@ -324,17 +343,18 @@ export class EditProfile extends Component{
         var userProfile = props.userProfile
 
       return (
-        <div>
+        <div className="modal-editor"
+             id="modal-editor"
+             onScroll={props.handleScroll()}>
+
             <EditProfileNavBar {...props}/>
-            
-            <div>
-                { userProfile?
+            <div style={props.onScroolStyles || {}}
+                 id="editors-box" 
+                 className="editors-box">
+                { userProfile &&
                     <div>
                         <ProfileEditComponent {...props}/>
                     </div>
-
-                    :
-                    ""    
                 }  
 
                 <div style={alertMessageStyles}>
@@ -409,24 +429,6 @@ const ProfileEditComponent = props => {
                             className=""
                             name="live"
                             value={props.form.live}
-                            onChange={props.handleChange}
-                        />
-                    </div>        
-                </div>
-
-                <div className="user-locacion-box">
-                    <ul className="item-title-box">
-                        <li className="item-title">
-                            Country
-                        </li>
-                    </ul>
-                    <div className="input-box">
-                        <input
-                            type="text" 
-                            placeholder="Country"
-                            className=""
-                            name="country"
-                            value={props.form.country}
                             onChange={props.handleChange}
                         />
                     </div>        

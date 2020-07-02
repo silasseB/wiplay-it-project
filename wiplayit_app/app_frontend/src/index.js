@@ -23,6 +23,7 @@ import "css/profile/user-list.css";
 import "css/profile/index-user-list.css";
 import "css/feedback.css";
 import "css/settings.css";
+import "css/notifications.css";
 import "css/about.css";
 import "css/message-form.css";
 import "css/profile/profile.css"

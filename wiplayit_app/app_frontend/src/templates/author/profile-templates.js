@@ -29,6 +29,7 @@ const api      = new Api();
 export const ProfileComponent = props => {
     let {entities,
         currentUser,
+        isAuthenticated,
          profileById} = props;
 
     let userProfile = entities.userProfile[profileById];
@@ -67,6 +68,7 @@ export const ProfileComponent = props => {
             isPut       : true,
             obj         : userProfile, 
             byId        : profileById,
+            isAuthenticated,
             linkName    : 'Edit',
             currentUser,
 

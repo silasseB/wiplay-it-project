@@ -28,16 +28,18 @@ class  NotificationsContainer extends Component  {
         let props = {...this.props, ...this.state}
 
         return(
-         <div className="app-box-container">
-            <PartalNavigationBar {...props}/>
-            <NavigationBarBigScreen {...props} />
-            <NavigationBarBottom {...props}/>
-            <div className="notifications-page">
-                <ul className="">
-                    <li>Notifications empty</li>
-                </ul>
-            </div>
-         </div>
+            <div className="app-box-container">
+                <PartalNavigationBar {...props}/>
+                <NavigationBarBigScreen {...props} />
+                <NavigationBarBottom {...props}/>
+                <div className="notifications-page">
+                    <div className="empty-notifications-box">
+                        <ul className="empty-notifications">
+                            <li>Your notifications will appear here</li>
+                        </ul>
+                    </div>
+                </div>
+          </div>
         )
     }
 };

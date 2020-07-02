@@ -191,24 +191,27 @@ export const _PasswordConfirmForm =(props)=>{
     return (
         <form className="password-confirm-form" 
               onSubmit={(event)=> onSubmit(event)} >
-            <ul className="password-form-description">
-                <li>
-                    For security purposes, please enter your 
-                    password in order to continue. If you signed 
-                    up for Wiplayit using Facebook or Google,
-                    please <button
+            <div className="password-form-description-box">
+                <ul className="password-form-description">
+                    <li>
+                        For security purposes, please enter your 
+                        password in order to continue. If you signed 
+                        up for Wiplayit using Facebook or Google,
+                        please <span
                                 onClick={()=> passwordRest()}
-                                type="button"
+                                style={fieldSetStyles}
+                                disabled={submitting}
                                 className="password-rest-btn text-highlight">
                                 create an account password.
-                        </button>
-                </li>
-            </ul>
-            {error &&
-                <ul className="form-errors">
-                    <li>The password you enterd is invalid</li>   
+                        </span>
+                    </li>
                 </ul>
-            }
+                {error &&
+                    <ul className="form-errors">
+                        <li>The password you entered is invalid</li>   
+                    </ul>
+                }
+            </div>
                 
             <fieldset style={fieldSetStyles}
                       disabled={submitting}>
@@ -220,9 +223,8 @@ export const _PasswordConfirmForm =(props)=>{
                                 placeholder="Password"
                                 type="password"
                                 name="password"
-                                value={form.password}
-                                onChange={(event)=> 
-                                      handleFormChange(event)}
+                                value={form?.password}
+                                onChange={(event)=> handleFormChange(event)}
                                 required
                             />
                         </div>
