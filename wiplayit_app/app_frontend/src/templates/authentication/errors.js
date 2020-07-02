@@ -53,7 +53,7 @@ export const  PhoneNumberFieldErrors = errors => {
 
 export const  PasswordErrors = errors => {
     if (!errors) return null;
-    console.log(errors)
+    
     let passwordErrors = errors.new_password2 || errors.new_password1
 
     return(

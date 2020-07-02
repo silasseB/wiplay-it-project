@@ -330,7 +330,7 @@ export class PasswordConfirmationPage extends Component{
             submitting        : false,
             form              : undefined,
             successMessage    : undefined,
-            passwordConfirmed :false,
+            oldPasswordConfirmed : false,
         };
     };
 
@@ -347,7 +347,10 @@ export class PasswordConfirmationPage extends Component{
             let {entities} =  storeUpdate;
             let {userAuth, errors} = entities;
             let {form, formName} = this.state;
-            let {error, loginAuth, isLoading} = userAuth;
+            let {error, 
+                 loginAuth,
+                 passwordRestAuth,
+                  isLoading} = userAuth;
             
             this.setState({submitting : isLoading}); 
 
@@ -357,49 +360,61 @@ export class PasswordConfirmationPage extends Component{
                 delete userAuth.error;
             }
 
-            this.handlePasswordConfirmSuccess(userAuth); 
-            
-            
+            this.handlePasswordConfirmSuccess(loginAuth); 
+            this.handlePasswordRestSuccess(passwordRestAuth);
+
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
-    handlePasswordConfirmSuccess(userAuth){
-        if (!userAuth.loginAuth)return;
+    handlePasswordRestSuccess(passwordRestAuth){
+        if (!passwordRestAuth) return;
 
-        let loginAuth    = userAuth.loginAuth
+        if (passwordRestAuth.successMessage) {
+            delete passwordRestAuth.successMessage;
+            this.togglePasswordConfirmForm();
+        }
+
+    }
+
+    handlePasswordConfirmSuccess(loginAuth){
+        if (!loginAuth) return;
+        
         let {isLoggedIn} = loginAuth;
-        let {form, passwordConfirmed,formName} = this.state
+        let {oldPasswordConfirmed} = this.state
+        console.log(this.state, loginAuth)
                                                                      
-        if(isLoggedIn && !passwordConfirmed){
-            this.setState({passwordConfirmed:true});
+        if(isLoggedIn && !oldPasswordConfirmed){
+            console.log(this.state)
+            this.setState({oldPasswordConfirmed:true});
             this.togglePasswordChangeForm();
+            delete loginAuth.isLoggedIn
         }
     };
 
+    togglePasswordConfirmForm(){
+        let {currentUser} = this.props
+        let currentForm   = this.state.form;
+        let formName      =  'reLoginForm';
+
+        let form = getFormFields().loginForm;
+        form = {...form, email:currentUser.email}
+        form = setForm(form, currentForm, formName);
+        this.setState({form, formName, currentUser,oldPasswordConfirmed:false});
+    }
+
     togglePasswordChangeForm(){
         let {form}     = this.state;
-        let {password} = form && form['reLoginForm'];
+        let password = form?.reLoginForm?.password;
 
         if (password) {
             let passswordParams = {old_password : password};
-
-            this.cachePassword(passswordParams);
+   
             this.props.togglePasswordChangeForm(passswordParams);
             this._closeModal();    
         }
     };
-
-    cachePassword(passswordParams={}) {
-        let timeStamp = new Date();
-        
-        let passwordConfirmAuth = {
-                timeStamp   : timeStamp.getTime(),
-                passwordValidated : true,
-                ...passswordParams,
-        };
-        store.dispatch(authenticationSuccess({passwordConfirmAuth}));
-    }; 
+    
     
 
     _closeModal (){
@@ -410,16 +425,10 @@ export class PasswordConfirmationPage extends Component{
     componentDidMount() {
         this.isMounted = true;
         this.onReLoginStoreUpdate();
-        
-        let {currentUser} = this.props
-        let currentForm   = this.state.form;
-        let formName      =  'reLoginForm';
-
-        let form = getFormFields().loginForm;
-        form = {...form, email:currentUser.email}
-        form = setForm(form, currentForm, formName);
-        this.setState({form, formName, currentUser});
+        this.togglePasswordConfirmForm();
+                
     };
+    
 
     onChange(event, formName) {
         event.preventDefault();

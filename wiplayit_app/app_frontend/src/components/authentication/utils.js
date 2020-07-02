@@ -80,14 +80,12 @@ export default class FormValidator {
 export const authSubmit =(self, formName="", useToken=false)=>{
     formName  = !formName && self.state.formName || formName;
     let validatedForm  = getForm(self, formName);
-    console.log(self.state, formName)
           
     _isSubmitting(self, formName);
         
     if (!validatedForm.formIsClean()) {
         
         let error = validatedForm.formErrors(); 
-        console.log(error)
         return setFormErrors(self, error, formName)
     }
 
@@ -126,7 +124,7 @@ export const _isSubmitting=(self, formName)=>{
 
 export const formIsValid =(form)=> {
     //Check form is complete
-    console.log(form)
+
     if (form) {
         for (let key in form) {
             if(/^ *$/.test(form[key])){
@@ -214,8 +212,8 @@ export const getFormFields =()=> {
         }, 
 
         passwordChangeForm : {
-            'new_password1' : 'sila9020',
-            'new_password2' : 'sila9020',
+            'new_password1' : '',
+            'new_password2' : '',
         },
         phoneNumberForm : {phone_number:''}, 
 

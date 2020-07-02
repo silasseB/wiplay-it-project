@@ -313,12 +313,14 @@ class AddEmailSerializer(serializers.Serializer):
 	def save(self, request):
 		email = self.validated_data.get('email')
 		if self.email_address_exists(email):
-			email_address = EmailAddress.objects.get(email=email)
+			email_address = EmailAddress.objects.filter(user=request.user, email=email)
+			print(email_address)
 
-			if not email_address.verified:
-				email_address.send_confirmation(request)
-
-			return email_address.user
+			for email in email_address:
+				if not email.verified:
+					email.send_confirmation(request)
+					
+			return request.user
 
 
 		user  = request.user

@@ -14,12 +14,10 @@
 		font-size   : 18px;
 		margin      : 0 0 17px;
 		text-align  : center;
-
 	}
 
 	.settings-container{
-		border  : px solid black;
-		margin  : 30px 10px; 
+		margin  : 30px 0; 
 	}
 
 	.settings-page-title {
@@ -30,15 +28,14 @@
 
 	.account-settings {
 		border-top : 1px solid #D5D7D5;
-		padding    : 10px 0 30px 0; 
-		
 	}
 
 	.settings-items {
-		font-size : 14px;
-		border    : px solid black;
-		width     : 50%; 
+		font-size  : 14px;
+		background : #D5D7D5;
+		padding    : 10px 15px; 
 	}
+
 	.settings-items li {
 		border : px solid red;
 	}
@@ -50,41 +47,104 @@
 		border      : px solid black;
 	}
 
+	.non-primary-email-box,
+	.primary-email-box {
+		border-bottom  : 1px solid  #D5D7D5;	
+		padding : 15px 0; 
+	}
+
+	.primary-email-title {
+		border    : px solid green;
+		font-size : 15px;
+		color     : gray;	
+		margin  : 0 15px;	
+	}
+
 	.primary-phone-number,
 	.primary-email {
-		margin :  5px ; 
+		font-size : 13px;
+		margin  : 0 15px;
 	}
 
-	.non-primary-email-box {
-		border  : 1px solid black;
+	.change-password-btn-box,
+	.add-email-btn-box {
+		padding : 15px;
 	}
 
-	.non-primary-email {
-		margin  : 5px;
-		border  : 1px solid black;
-	}
-
-	.change-password-btn,
-	.add-email-btn {
+	.remove-email-btn,
+	.confirm-email-btn{
 		color     : #5384e5;
 		font-size : 13px;
 	}
 
-	.add-phone-number-input-box,
-	.add-email-input-box {
-		display: flex;
+	.change-password-btn,
+	.add-email-btn {
+		background: #5384e5;
+		font-size : 11px;
+		color     : #fefefe;
+		font-weight: bold;
+
+		width     : 100%;
+		padding   : 10px 0; 
+		border  : px solid blue;
 	}
 
-	.add-phone-number-input-box input,
-	.add-email-input-box input {
+	.add-email-btn {
+
+	}
+
+	.non-primary-email-btns {
+		display: flex;
+		margin  : 0 10px;
+	}
+
+	.non-primary-email-btns button {
+		margin  : 0 15px 0 0; 
+	}
+
+	.non-primary-email-box {
+		border  : px solid blue;
+	}
+
+	.non-primary-email {
+		border  : px solid black;
+		margin  : 0 15px; 
+	}
+
+	.add-phone-number-form,
+	.add-email-form {
+		padding : 15px 0;
+	}
+
+	.add-phone-number-form-contents,
+	.add-email-form-contents {
+		display : flex;
+		border  : px solid black;
+	}
+
+
+
+	.add-phone-number-input-box,
+	.add-email-input-box {
+		border : 1px solid #D5D7D5;
+		width: 100%;
+	}
+
+
+	.add-phone-number-input,
+	.add-email-input {
 		border : 1px solid #D5D7D5;
 	}
 
+	.submit-email-btn-box {
+	    margin-left : 10px;
+		padding-top : 3px;
+	}
+		
 	.submit-email-btn {
 		background  : #5384e5;
         color       : #fefefe;
         font-size   : 12px;
-        margin      : 0 12px;
         height      : 30px;
     }
 
@@ -212,21 +272,34 @@
 		font-size : 13px;
 	}
 
-	.add-phone-number-input-box,
-	.add-email-input-box {
+	.add-phone-number-form-contents,
+	.add-email-form-contents {
 		display: flex;
+		border  : px solid black;
 	}
 
-	.add-phone-number-input-box input,
-	.add-email-input-box input {
+	.add-phone-number-box,
+	.add-email-input-box {
 		border : 1px solid #D5D7D5;
+		width: 100%;
+	}
+
+
+	.add-phone-number-input,
+	.add-email-input {
+		border : 1px solid #D5D7D5;
+	}
+
+	.submit-email-btn-box {
+		border  : px solid red;
+		margin-left: 10px
 	}
 
 	.submit-email-btn {
 		background  : #5384e5;
         color       : #fefefe;
         font-size   : 12px;
-        margin      : 0 12px;
+        
         height      : 30px;
     }
 

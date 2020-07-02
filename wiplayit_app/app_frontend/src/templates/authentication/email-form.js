@@ -215,7 +215,7 @@ export const SmsCodeForm = props => {
                         }
                      
 
-                        <fieldset style={ fieldSetStyles} 
+                        <fieldset style={fieldSetStyles} 
                                   disabled={submitting} >
                             <div  className="email-fields">
                                 <p></p>

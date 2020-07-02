@@ -53,7 +53,7 @@ export const PasswordForm =(props)=>{
 
     if (formName !== 'passwordChangeForm' && 
         formName !== 'passwordChangeConfirmForm'){
-        //return null;
+        return null;
     }
 
    
@@ -63,13 +63,10 @@ export const PasswordForm =(props)=>{
     let passwordChangeConfirmForm =  form?.passwordChangeConfirmForm;
 
     form = passwordChangeForm || passwordChangeConfirmForm;
-    console.log(form, props)
-    
-
 
     let error = form && form.error; 
     let disabledStyle = submitting? {opacity:'0.60'} : {};
-    let formIsValid = onPasswordChangeForm? validateForm(form): false;
+    let formIsValid = validateForm(form);
 
     let submitButtonStyles = submitting? {opacity:'0.60'}:{};
     
@@ -208,7 +205,9 @@ export const _PasswordConfirmForm =(props)=>{
                 </li>
             </ul>
             {error &&
-                <PasswordErrors {...error}/>
+                <ul className="form-errors">
+                    <li>The password you enterd is invalid</li>   
+                </ul>
             }
                 
             <fieldset style={fieldSetStyles}

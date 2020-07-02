@@ -318,6 +318,7 @@ class AddEmailView(APIView):
 
 	def get_response(self, user):
 		email_address = user.emailaddress_set.all()
+		print(email_address, user)
 		email_address = EmailAddressSerializer(email_address, many=True).data
 
 		msg = _('Account confirmation e-mail has been sent')

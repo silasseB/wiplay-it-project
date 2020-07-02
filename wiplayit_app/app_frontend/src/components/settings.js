@@ -7,7 +7,7 @@ import {store} from 'store/index';
 import MainAppHoc from 'components/index/index-hoc';
 import {PasswordConfirmModalBtn} from 'templates/buttons';
 import {Modal} from 'components/modal/modal-container';
-import {getCurrentUserSuccess} from 'actions/actionCreators';
+import {getCurrentUserSuccess, authenticationSuccess} from 'actions/actionCreators';
 import {PasswordForm} from 'templates/authentication/password-change';
 import {formIsValid,
         validateEmail,
@@ -31,7 +31,9 @@ class  SettingsContainer extends Component  {
             pageName   : "Settings",
             formName   : '',
             submitting : false,
-            passwordChanged  : false,
+            onPasswordChangeForm : false,
+            onAddEmailForm : false,
+            onAddPhoneNumberForm : false,
             phoneNumberOrEmailAdded : false,
             successMessage   : undefined,
             form : undefined,
@@ -63,9 +65,7 @@ class  SettingsContainer extends Component  {
                  passwordChangeAuth,
                  phoneNumberOrEmailAuth,
                  isLoading} = userAuth;
-                 console.log(phoneNumberOrEmailAuth)
-
-            
+                
             this.setState({submitting : isLoading}); 
 
             if (form && error) {
@@ -73,11 +73,13 @@ class  SettingsContainer extends Component  {
                 this.setState({form});
                 delete userAuth.error;
             }
+
             this.handlePhoneNumberAddSucces(phoneNumberOrEmailAuth);
                  
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
+
 
     handlePhoneNumberAddSucces(phoneNumberOrEmailAuth){
         if (!phoneNumberOrEmailAuth) return;
@@ -86,14 +88,16 @@ class  SettingsContainer extends Component  {
         let {currentUser} = this.props;
 
         if (!phoneNumberOrEmailAdded) {
+            let successMessage = 'Your new phone number has been added successfully.'
+            this.props.displaySuccessMessage(successMessage)
             
             let {phone_numbers,
-                  email_address} =  phoneNumberOrEmailAuth || {};
+                 email_address} =  phoneNumberOrEmailAuth || {};
             
-            if (phone_numbers) {
+            if (phone_numbers?.length ) {
                 currentUser =  {...currentUser, phone_numbers};
 
-            }else if (email_address) {
+            }else if (email_address?.length) {
                 currentUser = email_address && {...currentUser, email_address};
             }
                    
@@ -102,19 +106,36 @@ class  SettingsContainer extends Component  {
         }
     };
     
+    cachePassword(passswordParams={}) {
+        let timeStamp = new Date();
+        
+        let passwordConfirmAuth = {
+                timeStamp   : timeStamp.getTime(),
+                passwordValidated : true,
+                ...passswordParams,
+        };
+        store.dispatch(authenticationSuccess({passwordConfirmAuth}));
+    }; 
 
     togglePasswordChangeForm=(params)=>{
         let formName = 'passwordChangeForm';
 
-        let old_password = params && params.old_password;
-        old_password = !old_password && this.getOldPassword() || old_password;
-            
-        if (!old_password) {
+        let old_password = params?.old_password;
+        let fromCache    = this.getOldPassword();
+        if (old_password) {
+            this.cachePassword(params);
+        }
+                    
+        if (!old_password && !fromCache) {
                 return this.openPasswordConfirmationModal();
                 
         }else{
+            
             let formFields = getFormFields();
             let form = formFields.passwordChangeForm;
+            let onPasswordChangeForm = true;
+            let passwordChanged      = false
+            this.setState({onPasswordChangeForm, passwordChanged})
             return this._SetForm(form, formName, {old_password})
         }
     }
@@ -122,25 +143,29 @@ class  SettingsContainer extends Component  {
     togglePhoneNumberForm =()=> {
         let formFields = getFormFields();
         let form = formFields.phoneNumberForm;
+        let onAddPhoneNumberForm = true
+        this.setState({onAddPhoneNumberForm})
         this._SetForm(form, 'addPhoneNumberForm')
-    };
+    }
 
     toggleEmailForm =()=> {
         let formFields = getFormFields();
         let form = formFields.emailForm;
+        let onAddEmailForm = true
+        this.setState({onAddEmailForm})
         this._SetForm(form, 'addEmailForm');
-    };
+    }
 
-    _SetForm(form={}, formName='', formOpts={}){
+    _SetForm=(form={}, formName='', formOpts={})=>{
         let currentForm = this.state.form;
                  
         form = {...form, ...formOpts};
         form = setForm(form, currentForm, formName);
 
         this.setState({form, formName});
-    };
+    }
 
-    passwordConfirmExpired(passwordConfirmAuth={}){
+    passwordConfirmExpired=(passwordConfirmAuth={})=>{
         let {timeStamp} = passwordConfirmAuth;
         timeStamp = new GetTimeStamp({timeStamp});
 
@@ -169,7 +194,7 @@ class  SettingsContainer extends Component  {
             }
         }
         return undefined;
-    };
+    }
    
     openPasswordConfirmationModal =()=> {
         let {currentUser} = this.props;
@@ -189,14 +214,35 @@ class  SettingsContainer extends Component  {
         changeForm(this, event);
     };
 
-    handleSubmit(event, formName){
+    handleSubmit=(event, formName)=>{
         event.preventDefault();
         formName && this.setState({formName});
+        this.resetSuccessSubmitListers();
 
-        this.resetSuccessSubmitListers()
+        if (formName === 'passwordChangeForm') {
+            return this.submitPasswordChange(formName)
+        }
+
         let useToken = true;
         authSubmit(this, formName, useToken);
-    };
+    }
+
+    submitPasswordChange =(formName)=>{
+        let {passwordChanged, entities} = this.props;
+        let {userAuth} = entities;
+        let passwordConfirmAuth = userAuth?.passwordConfirmAuth;
+                       
+        if (passwordConfirmAuth) {
+            let passwordValidated = passwordConfirmAuth.passwordValidated;
+
+            if (!passwordValidated) {
+                return this.openPasswordConfirmationModal()
+            }
+        }
+
+        let useToken = true;
+        authSubmit(this, formName, useToken);
+    }
 
     resetSuccessSubmitListers(){
         this.setState(
@@ -284,6 +330,7 @@ const SettingsTemplate =(props)=>{
 
 const EmailSettings = (props) => {
     let {toggleEmailForm,
+        onAddEmailForm,
          currentUser} = props;
          
     let account = currentUser;
@@ -298,25 +345,39 @@ const EmailSettings = (props) => {
                     return emailAddress;
                 })
     }
+    let addEmailStyles = onAddEmailForm && {opacity:'0.60'} || {};
     
     return(
         <div className="email-settings account-settings">
             <ul className="settings-items">
                 <li className="">
-                    Primary Email
+                    Email
                 </li>
             </ul>
             <div className="account-email">
-                <ul className="primary-email">
-                    <li>{email}</li>
-                </ul>
+                <div className="primary-email-box">
+                    <ul className="primary-email-title">
+                        <li className="">
+                           Primary Email
+                        </li>
+                    </ul>
+                    <ul className="primary-email">
+                        <li>{email}</li>
+                    </ul>
+                </div>
                 <NonPrimaryEmail {...props}/>
-                <button type="button" 
+
+                <div className="add-email-btn-box">
+                    <button type="button" 
+                            style={addEmailStyles}
+                            disabled={onAddEmailForm}
                         onClick={()=>toggleEmailForm()} 
                         className="btn-sm add-email-btn">
-                    Add Another Email Address
-                </button>
-                <AddEmailAddressForm {...props}/>
+                        Add Another Email Address
+                    </button>
+                    <AddEmailAddressForm {...props}/>
+                </div>
+
             </div>
         </div>  
     )
@@ -325,6 +386,7 @@ const EmailSettings = (props) => {
 
 const PhoneNumberSettings = (props) => {
     let {togglePhoneNumberForm,
+         onAddPhoneNumberForm,
          currentUser,} = props;
 
     let account = currentUser;
@@ -340,6 +402,7 @@ const PhoneNumberSettings = (props) => {
                 })
     }
 
+    let addPhoneNumberStyles = onAddPhoneNumberForm && {opacity:'0.60'} || {};
     
     return (
         <div className="phone-number-settings account-settings">
@@ -349,19 +412,33 @@ const PhoneNumberSettings = (props) => {
                 </li>
             </ul>
 
-            <ul className="account-phone-number">
-                <li className="primary-phone-number">
-                    {phoneNumber}
-                </li>
+            <div className="account-phone-number">
+                <div className="primary-email-box">
+                    <ul className="primary-email-title">
+                        <li className="">
+                           Primary Phone Number
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li className="primary-phone-number">
+                            {phoneNumber}
+                        </li>
+                    </ul>
+                </div>
+                
                 <NonPrimaryPhoneNumber {...props}/>
-              
-                <button type="button"
-                    onClick={()=>togglePhoneNumberForm()}
-                    className="btn-sm add-email-btn">
-                    Add Another Phone Number
-                </button>
-                <AddPhoneNumberForm {...props}/>
-            </ul>
+                <div className="add-email-btn-box">
+                   <button type="button"
+                           style={addPhoneNumberStyles}
+                           disabled={onAddPhoneNumberForm} 
+                           onClick={()=>togglePhoneNumberForm()}
+                           className="btn-sm add-email-btn">
+                        Add Another Phone Number
+                    </button>
+                    <AddPhoneNumberForm {...props}/>
+                </div>
+            </div>
         </div>    
     )
 
@@ -370,12 +447,13 @@ const PhoneNumberSettings = (props) => {
 
 const PasswordChangeSettings = (props) =>{
     let {togglePasswordChangeForm,
+         onPasswordChangeForm,
          currentUser,} = props;
 
     let account = currentUser;
     let formDescription = 'Enter a new passsword on both fields.';
     let passswordProps = {...props, formDescription};
-    
+    let changePasswordStyles = onPasswordChangeForm && {opacity:'0.60'} || {};
 
     return(
         <div className="">
@@ -386,15 +464,21 @@ const PasswordChangeSettings = (props) =>{
                     </li>
                 </ul>
 
-                <ul className="account-password">
+                <div className="change-password-btn-box">
                     <button type="button"
+                        style={changePasswordStyles}
+                        disabled={onPasswordChangeForm}
                         onClick={()=>togglePasswordChangeForm()}
                         className="btn-sm change-password-btn">
                         Change Password
                     </button>
-                </ul>
+                    
+                </div>
+
             </div>
-            <PasswordForm {...passswordProps}/>
+            {onPasswordChangeForm &&
+                <PasswordForm {...passswordProps}/>
+             }
             
         </div>   
     )
@@ -422,11 +506,11 @@ const NonPrimaryEmail = (props) => {
                     <ul className="non-primary-email">
                         <li>{email.email}</li>
                     </ul>
-                    <div className="">
+                    <ul className="non-primary-email-btns">
                         {!email.verified &&
                         <button
                             type="button" 
-                            className="btn-sm add-email-btn"
+                            className="btn-sm confirm-email-btn"
                             onClick={()=> sendConfirmation(email.email)}>
                             confirm
                         </button>   
@@ -434,11 +518,11 @@ const NonPrimaryEmail = (props) => {
                     
                         <button
                             type="button" 
-                            className="btn-sm add-email-btn"
+                            className="btn-sm remove-email-btn"
                             onClick={()=> removePhoneNumber(email) }>
                                 Remove
                         </button>
-                    </div>
+                    </ul>
                 </div>
             )}
 
@@ -468,11 +552,11 @@ const NonPrimaryPhoneNumber = (props) => {
                     <ul className="non-primary-email">
                         <li>{phoneNumber.national_format}</li>
                     </ul>
-                    <div className="">
+                    <ul className="non-primary-email-btns">
                         {!phoneNumber.verified &&
                         <button
                             type="button" 
-                            className="btn-sm add-email-btn"
+                            className="btn-sm confirm-email-btn"
                             onClick={()=> sendConfirmation(phoneNumber.primary_number)}>
                             confirm
                         </button>   
@@ -480,11 +564,11 @@ const NonPrimaryPhoneNumber = (props) => {
                     
                         <button
                             type="button" 
-                            className="btn-sm add-email-btn"
+                            className="btn-sm remove-email-btn"
                             onClick={()=> removePhoneNumber(phoneNumber.primary_number)}>
                                 Remove
                         </button>
-                    </div>
+                    </ul>
                 </div>
                 )
             })}
@@ -495,28 +579,40 @@ const NonPrimaryPhoneNumber = (props) => {
 const AddEmailAddressForm = (props)=> {
     let {handleFormChange,
          onSubmit,
+         submitting,
          formName,
          form} = props;
 
     form = form && form.addEmailForm;
     if (!form) return null;
+    let fieldSetStyles = submitting && {opacity:'0.60'} || {};
         
     return(
-        <div className="add-email-input-box">
-            <input 
-                className=""
-                type="email" 
-                name="email"
-                placeholder="name@example.com"
-                value={form && form.email}
-                onChange={(event)=> handleFormChange(event, 'addEmailForm')}
-            />
-            <button type="button"
-                    onClick={(event)=> onSubmit(event, 'addEmailForm')}
-                    className="btn-sm submit-email-btn">
-                Add Email 
-            </button>
-        </div>
+        <form className="add-email-form">
+            <fieldset style={fieldSetStyles} 
+                      disabled={submitting} >
+                <div className="add-email-form-contents">
+                    <div className="add-email-input-box">
+                        <input 
+                            className="add-email-input"
+                            type="email" 
+                            name="email"
+                            placeholder="name@example.com"
+                            value={form && form.email}
+                            onChange={(event)=> handleFormChange(event, 'addEmailForm')}
+                        />
+                    </div>
+
+                    <div className="submit-email-btn-box">
+                        <button type="button"
+                            onClick={(event)=> onSubmit(event, 'addEmailForm')}
+                            className="btn-sm submit-email-btn">
+                            Add Email 
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     )
 
 }
@@ -526,27 +622,40 @@ const AddEmailAddressForm = (props)=> {
 const AddPhoneNumberForm = (props)=> {
     let {handleFormChange,
          onSubmit,
+         submitting,
          formName,
          form} = props;
 
     form = form && form.addPhoneNumberForm;
     if (!form) return null;
+    let fieldSetStyles = submitting && {opacity:'0.60'} || {};
 
     return(
-        <div className="add-phone-number-input-box">
-            <input 
-                type="number" 
-                name="phone_number"
-                placeholder=""
-                value={form && form.phone_number}
-                onChange={(event)=> handleFormChange(event, 'addPhoneNumberForm')}
-            />
-            <button type="button" 
-                    onClick={(event)=> onSubmit(event, 'addPhoneNumberForm')}
-                    className="btn-sm submit-email-btn">
-                Add Phone Number 
-            </button>
-        </div>
+        <form className="add-phone-number-form">
+            <fieldset style={fieldSetStyles} 
+                      disabled={submitting} >
+            <div className="add-phone-number-form-contents">
+                <div className="add-phone-number-input-box">
+                    <input 
+                        className="add-phone-number-input"
+                        type="number" 
+                        name="phone_number"
+                        placeholder=""
+                        value={form && form.phone_number}
+                        onChange={(event)=> handleFormChange(event, 'addPhoneNumberForm')}
+                    />
+                </div>
+
+                <div className="submit-email-btn-box">
+                    <button type="button" 
+                        onClick={(event)=> onSubmit(event, 'addPhoneNumberForm')}
+                        className="btn-sm submit-email-btn">
+                        Add Phone Number 
+                    </button>
+                </div>
+            </div>
+            </fieldset>
+        </form>
     )
 
 }

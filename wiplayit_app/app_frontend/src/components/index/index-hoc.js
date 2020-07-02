@@ -50,6 +50,7 @@ export function MainAppHoc(Component) {
                 isAutheticanting   : true,
                 isAdmin            : this.isAdmin(),
                 displayMessage     : false,
+                passwordChanged    : false,
                 message            : null,
                 modalIsOpen        : false,
             };
@@ -172,7 +173,7 @@ export function MainAppHoc(Component) {
            
             let currentUser = this._SetCurrentUser();
                               
-            if (!currentUser || currentUser && !currentUser.is_confirmed) {
+            if (!currentUser || !currentUser?.is_confirmed) {
                 store.dispatch(getCurrentUser());
             }
         };
@@ -254,21 +255,21 @@ export function MainAppHoc(Component) {
         };
 
         handlePasswordChangeSuccess(userAuth){
-            if (!userAuth.passwordChangeAuth)return;
+            if (!userAuth?.passwordChangeAuth)return;
 
             let {passwordChangeAuth} = userAuth
-            let {passwordChanged}    = this.state;
-            let {successMessage}     = passwordChangeAuth;
-        
+             
                                                       
-            if(successMessage && !passwordChanged){
-                this.displaySuccessMessage(successMessage)
-                delete userAuth.successMessage;
+            if(passwordChangeAuth?.successMessage){
+                this.displaySuccessMessage(passwordChangeAuth.successMessage)
+                delete passwordChangeAuth.successMessage;
         
                 let passwordConfirmAuth = {
                         passwordValidated : false,
                         old_password : undefined,
                 };
+
+                this.setState({passwordChanged : true,})
                 store.dispatch(action.authenticationSuccess({passwordConfirmAuth}));
             }
         };  
@@ -531,6 +532,7 @@ export function MainAppHoc(Component) {
                 push                    : this.push.bind(this),
                 redirectToRouter        : this.redirectToRouter.bind(this),
                 authenticate            : this.authenticate.bind(this), 
+                displaySuccessMessage   : this.displaySuccessMessage.bind(this),  
                 ...this.state,
             };
         };
