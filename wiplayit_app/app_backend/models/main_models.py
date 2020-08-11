@@ -246,7 +246,7 @@ class PrivacyAndPolicy(models.Model):
 
     def __str__(self):
         return self.policy
-
+'''
 class AdminMessage(models.Model):
     full_name  = models.CharField(max_length=50, blank=True, null=True)
     email      = models.CharField(max_length=50, blank=True, null=True)
@@ -275,7 +275,7 @@ class FeedBack(AdminMessage):
 
     class Meta:
         db_table = "feedbacks"
-           
+'''           
 
 class FootballClubs(models.Model):
     name    = models.CharField(max_length=50, blank=True)

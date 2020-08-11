@@ -6,10 +6,7 @@ from app_backend.api_views.api_create_views import ( CreateQuestionView,
                                                      CreateAnswerReplyView, 
                                                      CreateAnswerReplyChildView,
                                                      CreatePostView,
-                                                     BugReportView,
-                                                     FeedBackView,
-                                                     ContactAdminView,
-                                                     CreatePostCommentView, 
+                                                                                                 CreatePostCommentView, 
                                                      CreatePostReplyView, 
                                                      CreatePostReplyChildView,
                                                      CreateDraftEditorContentsView )
@@ -48,8 +45,8 @@ urlpatterns = [
     path("api/create/post/reply/<int:pk>/child/",
        CreatePostReplyChildView.as_view({'get':'get','post':'post' })),
 
-    path("api/bug/report/", BugReportView.as_view(), name="bug_report"),
-    path("api/feedback/", FeedBackView.as_view(), name="feedback"),
-    path("api/contact/admin/", ContactAdminView.as_view(), name="contact-admin"),
+    #path("api/bug/report/", BugReportView.as_view(), name="bug_report"),
+    #path("api/feedback/", FeedBackView.as_view(), name="feedback"),
+    #path("api/contact/admin/", ContactAdminView.as_view(), name="contact-admin"),
 ]
 
