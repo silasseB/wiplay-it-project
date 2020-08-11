@@ -1,12 +1,11 @@
 import os
+import mptt
+from PIL import Image
 from django.conf import settings
 from django.db import models 
-from PIL import Image
-
-from app_backend.slug_generator import generate_unique_slug
-import mptt
 from mptt.models import MPTTModel, TreeForeignKey
 
+from app_backend.slug_generator import generate_unique_slug
 
 
 

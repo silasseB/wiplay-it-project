@@ -33,6 +33,7 @@ export const AnswersComponent = props => {
         isNewAnswers,
         isQuestionBox,
         isProfileBox, 
+        isAuthenticated,
         currentUser } = props;
 
     if(!answer) return null;
@@ -64,6 +65,7 @@ export const AnswersComponent = props => {
             obj       : answer,
             currentUser,
             linkName,
+            isAuthenticated,
         };
 
     let editAnswerProps = {
@@ -73,6 +75,7 @@ export const AnswersComponent = props => {
         obj         : answer, 
         byId        : answerListById,
         currentUser,
+        isAuthenticated,
     };
 
 
@@ -81,9 +84,10 @@ export const AnswersComponent = props => {
         objName           : 'Comment',
         obj               : answer,
         isPost            : true,
-        byId              : answerListById,
+        byId              : `newAnswerComments${answer.id}`,
         className         : 'btn-sm edit-comment-btn',
         currentUser,
+        isAuthenticated,
         
     };
 
@@ -93,7 +97,8 @@ export const AnswersComponent = props => {
 
     let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
     
-    let AnswerUpVotersBtn = answer.upvotes !== 0 && <OpenUsersModalBtn {...answerUpvotersProps}/> 
+    let AnswerUpVotersBtn = answer.upvotes !== 0 &&
+                            <OpenUsersModalBtn {...answerUpvotersProps}/> 
    
     
 

@@ -336,12 +336,12 @@ export function entities(state=InitialState(), action) {
             let newComments          = [newComment];  
 
             let currentNewComments = state.comments[byId];
-            currentNewComments = currentNewComments.commentList;
-
-            newComments = currentNewComments && currentNewComments.length &&
-                                  currentNewComments.unshift(newComment) || newComments;
-         
+            currentNewComments = currentNewComments?.commentList;
             
+
+            newComments = currentNewComments?.length &&
+                          currentNewComments.unshift(newComment) || newComments;
+                        
             payLoad['commentList'] = Array.isArray(newComments) && newComments;
             delete payLoad.comment;
             return updateStateEntyties('comments', { byId, payLoad }) || state; 
@@ -380,9 +380,9 @@ export function entities(state=InitialState(), action) {
             let newReply            = payLoad.reply;
             let newReplies          = [newReply];
             let currentNewReplies   = state.replies[action.byId];
-            currentNewReplies       = currentNewReplies.replyList;
+            currentNewReplies       = currentNewReplies?.replyList;
 
-            newReplies = currentNewReplies && currentNewReplies.unshift(newReply)
+            newReplies = currentNewReplies?.unshift(newReply)
                                                   || newReplies;  
                        
             payLoad['replyList'] = Array.isArray(newReplies) && newReplies;

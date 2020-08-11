@@ -193,58 +193,38 @@ export const ReplyGrandChildernComponent = props => {
 
 
 export const ReplyGreatGrandChildComponent = props => {
-  console.log(props)
+    console.log(props)
 
-  let replyStyles = {
+    let replyStyles = {
              
               border     : 'px solid green',
               margin     : '15px 22px 10px 75px'
             }
 
-   var replies   =  props.entities.replies;
-   replies       =  replies[props.byId];
-   var replyList =  replies.replyList;
+    var replies   =  props.entities.replies;
+    replies       =  replies[props.byId];
+    var replyList =  replies.replyList;
 
-   return(
+    return(
          <div>
-
-            { replyList.map( (reply, index) => {
+            {replyList.map( (reply, index) => {
                let replyProps = {reply,index,replyStyles,props}
                 
                 return(
 
-                <div  key={index}>
-                    { props.greatGrandChildParent.id === reply.parent?
-                        <div className="reply-great-grand-child-container">
-                     
-                        <div className="reply-great-grand-child-contents"> 
-                          <Reply {...replyProps}/>
-  
-                        </div>
-                        
-                        { reply.has_children?
-                          ""
-                         :
-
-                        ''
+                    <div  key={index}>
+                        {props.greatGrandChildParent?.id === reply?.parent &&
+                            <div className="reply-great-grand-child-container">
+                                <div className="reply-great-grand-child-contents"> 
+                                    <Reply {...replyProps}/>
+                                </div>
+                            </div>
                         }
-
-                     </div>
-
-                  : ""
-                  }
-
-                 </div>  
-               )
-            }
-
-
-            )}
-
-         </div>
-
-        
-   )
+                    </div>  
+                )
+            })}
+        </div>
+    )
 }
 
 
@@ -260,15 +240,20 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
               color      : '#4A4A4A',
               margin     : '0 0 2px'
     }
-
-   let {answer, post, currentUser, isAnswerBox, isPostBox } = props;
+    
+    let { answer,
+         post,
+         currentUser,
+         isAnswerBox,
+         isAuthenticated,
+         isPostBox } = props;
 
    let {
         byId,
         newRepliesById, 
         reply,
         replyStyles } = replyProps && replyProps  
-        //console.log(props, newRepliesById, isNewReply) 
+    
    const editorState  = helper.convertFromRaw(reply.reply);
   
    let state = {
@@ -311,6 +296,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
             byId      : usersById,
             obj       : reply,
             currentUser,
+            isAuthenticated,
             linkName,
         };
    
@@ -322,6 +308,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         byId,
         apiUrl      : updateUrl,
         currentUser,
+        isAuthenticated,
     };
 
 
@@ -332,6 +319,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         isPost            : true,
         byId              :  `newReplies${reply.id}`,
         currentUser,
+        isAuthenticated,
         apiUrl            : createApiUrl,
         className         : 'btn-sm edit-reply-btn',
         
@@ -344,52 +332,39 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
     
 
     let EditorModalBtn   = <OpenEditorBtn {...editReplyChildProps}/>; 
-    let MenuModalBtn     = <OptBtnSmallScreen {...editReplyProps}/>;
-    let MenuDropdownBtn  = <OptBtnBigScreen {...editReplyProps}/>;
-
-    let optionsBtn = ()=>(
-        <div>
-            {MenuModalBtn}
-            {MenuDropdownBtn}
-        </div>
-        )
-
-    let ReplyUpVotersBtn = reply.upvotes !== 0 && <OpenUsersModalBtn {...replyUpvotersProps}/> 
+    
+    
+    let ReplyUpVotersBtn = reply.upvotes !== 0 &&
+                           <OpenUsersModalBtn {...replyUpvotersProps}/> 
 
     
 
-   let btnsProps = {
+    let btnsProps = {
         editReplyProps,
         editReplyChildProps,
-         btnStyles:optionsBtnStyles,
-         btnText : 'More', 
-      }; 
+        btnStyles:optionsBtnStyles,
+        btnText : 'More', 
+    }; 
 
-   Object.assign(btnsProps, props)
-   let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
+    Object.assign(btnsProps, props)
+    let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
                          { reply.upvotes }  Upvotes
                      </Link>;
 
-   let upvoteBtn =  reply.upvoted && <DownVoteReplytBtn {...btnsProps}/> || <UpVoteReplyBtn {...btnsProps}/>
+    let upvoteBtn =  reply.upvoted && <DownVoteReplytBtn {...btnsProps}/> ||
+                                     <UpVoteReplyBtn {...btnsProps}/>
 
-                         
-              
-   
-
-   const btnsList  = {
+    const btnsList  = {
         itemsCounter :  ReplyUpVotersBtn,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalBtn,
         btn3         :  <OpenOptionlBtn {...editReplyProps}/>,
-      } 
+    } 
 
-
-   const userProps  = {
+    const userProps  = {
             obj   : reply,
             currentUser,
-        };
- 
-
+    };
 
    return (
          <div style={ replyStyles}  className="reply-box" id="reply-box">
@@ -631,7 +606,7 @@ export const GreatGrandChildRepliesLink = props => {
       <div onClick={ () => props.getReplyChildrenList(replyProps) }> 
          <ul>
             <li>Click to view More</li>
-            <li>{ linkData.totalReplies }</li>
+            <li>{linkData.totalReplies}</li>
          </ul>
       </div> 
    );

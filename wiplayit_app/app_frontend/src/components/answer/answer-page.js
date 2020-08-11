@@ -73,7 +73,9 @@ class AnswerContainer extends Component {
                                     </Link>
                                 </p>
                             </div>
+                            
                             <AvailableAnswers {...props}/>
+
                         </div>
                     </div>
                 </div> 
@@ -168,9 +170,15 @@ export class AnswersBox extends Component {
                     {numberOfAnswers !== 0 && isQuestionBox &&
                         <ul className="number-answers-box">
                             { numberOfAnswers > 1 && 
-                                <li className="number-of-answers">{numberOfAnswers}  Answers</li>
-                                   ||
-                                <li className="number-of-answers">{numberOfAnswers}  Answer</li>
+                                <li className="number-of-answers">
+                                    {numberOfAnswers}  Answers
+                                </li>
+
+                                ||
+
+                                <li className="number-of-answers">
+                                    {numberOfAnswers}  Answer
+                                </li>
                             }
                         </ul>
                     }

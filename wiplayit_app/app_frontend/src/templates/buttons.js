@@ -611,7 +611,8 @@ export const OpenEditorBtn = props => {
     linkName   = linkName?linkName:getButtonName();
     
     return(
-        <button className={className}  onClick={()=> OpenModalEditor(props)}>
+        <button className={className}
+                onClick={()=> OpenModalEditor(props)}>
             { linkName } 
         </button>
     );

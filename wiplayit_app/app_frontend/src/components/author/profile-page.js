@@ -60,12 +60,15 @@ class UserProfileContainer extends Component {
             if (userProfile) {
                 let {user, isLoading, error} = userProfile;
                 this.setState({ isReloading : isLoading, error}); 
+
                 let answersById  = user && `usersAnswers${user.id}`;
                 answers          = answers[answersById];
                 
                 if (!answers) {
                     this._dispatchUserProfileItems(user);
                 }
+
+                delete userProfile.error
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
@@ -145,8 +148,9 @@ class UserProfileContainer extends Component {
             let timeStamp      = userProfile.timeStamp;
             const getTimeState = new GetTimeStamp({timeStamp});
             let menDiff        = parseInt(getTimeState.menutes());
+            console.log(menDiff)
 
-            if ( menDiff <= 2) {
+            if (menDiff >= 2) {
                 userProfile = userProfile && userProfile.user;
 
                 console.log('userProfile found from cachedEntyties')
@@ -168,7 +172,7 @@ class UserProfileContainer extends Component {
         if(!this.isMounted) return;
 
         let id = this.state.id;   
-        this.isMounted && this.setState({isReloading : true})
+        this.isMounted && this.setState({isReloading : true, error:undefined})
         return this.props.getUserProfile(id);
     };
 
@@ -293,6 +297,7 @@ class UserProfileContainer extends Component {
             ...this.props,
             showUserItems  : this.showUserItems.bind(this),
             reLoader       : this.reLoader.bind(this),
+            redirectToUserProfile : this.props.redirectToRouter,
             mouseEnter     : this.mouseEnter,
             mouseLeave     : this.mouseLeave,
             ...this.state, 

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import  AjaxLoader from "templates/ajax-loader";
 import  * as action  from 'actions/actionCreators';
-
+import Helper from 'utils/helpers';
 import {  CommentsComponent } from "templates/comment/comment-templates"
-import {Editor} from 'draft-js';
+import {Editor, EditorState} from 'draft-js';
 import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
 import {store} from "store/index";
 
 
 
 
-
+const helper   = new Helper();
 
 
 class CommentsBox extends Component {
@@ -42,7 +42,9 @@ class CommentsBox extends Component {
             
         var parent       = post   && post || answer && answer;
         let comments     = parent && parent.comments;
-        var commentsById = answer && `commentsAnswer${parent.id}` || post && `commentsPost${parent.id}`;
+        var commentsById = answer && `commentsAnswer${parent.id}` ||
+                           post && `commentsPost${parent.id}`;
+                           
         let newCommentsById = answer && `newAnswerComments${parent.id}` 
                                 || post && `newPostComments${parent.id}`;
 
@@ -66,14 +68,13 @@ class CommentsBox extends Component {
 
    render() { 
         let props  = this.getProps();
-        //console.log(this.props)
         let {entities, newCommentsById, commentsById} = props;
             
         var {comments}  = entities  && entities;
         let newComments = comments && comments[newCommentsById]; 
         comments        = comments && comments[commentsById]
-               
-        //console.log(comments, newComments)
+            
+        
         return (
             <div>
                 <div>
@@ -210,22 +211,21 @@ const Comments = (props, commentList) => {
 
 
 export const Links = props => {
-   let storedState = JSON.parse(props.comment.comment)
-   const contentState = convertFromRaw(storedState);
-   const editorState = EditorState.createWithContent(contentState, decorator);
-  
-   return (
-      <div  className="comment-box" id="comment-box">
-         <div className="user-box">
+   let storedState = JSON.parse(props.comment.comment);
+   const editorState = helper.convertFromRaw(storedState);
+     
+    return (
+        <div  className="comment-box" id="comment-box">
+            <div className="user-box">
             
-          </div>
+            </div>
     
-         <div className="comment">
-           <Editor
-             blockRendererFn={pageMediaBlockRenderer}
-             editorState={editorState} 
-            readOnly={true} /> 
-         </div>
-      </div>
-   )  
+            <div className="comment">
+                <Editor
+                    blockRendererFn={pageMediaBlockRenderer}
+                    editorState={editorState} 
+                    readOnly={true} /> 
+            </div>
+        </div>
+    )  
 }

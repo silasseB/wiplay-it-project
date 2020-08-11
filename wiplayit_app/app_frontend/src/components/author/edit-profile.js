@@ -12,7 +12,7 @@ import MainAppHoc from "components/index/index-hoc";
 import  * as types  from 'actions/types';
 import  * as action  from 'actions/actionCreators';
 import {store} from "store/index";
-import { handleSubmit, getUserProfile }  from "dispatch/index"
+import {handleSubmit, getUserProfile}  from "dispatch/index"
 import { AlertComponent } from 'templates/partial-components';
 import  AjaxLoader from 'templates/ajax-loader';
 import  Helper from 'utils/helpers';

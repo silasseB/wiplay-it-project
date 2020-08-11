@@ -20,7 +20,7 @@ export const createActionPending = (params) => {
 
 
 export const createActionSuccess = (params) => {
-   //console.log(actionType)
+   console.log(params)
    let {byId, actionType, data} = params;
  
     return{

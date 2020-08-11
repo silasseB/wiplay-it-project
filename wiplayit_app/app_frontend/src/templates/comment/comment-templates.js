@@ -25,7 +25,7 @@ const api      = new Api();
 const helper   = new Helper();
 
 export const CommentsComponent = props => {
-    //console.log(props)
+    
     let optionsBtnStyles = {
               fontSize   : '11px',
               background : ' #F5F5F5',
@@ -43,6 +43,7 @@ export const CommentsComponent = props => {
         newCommentsById, 
         commentsById, 
         currentUser, 
+        isAuthenticated,
         isNewComments, } = props;
        
     let editorState = helper.convertFromRaw(comment.comment)  
@@ -79,6 +80,7 @@ export const CommentsComponent = props => {
             obj       : comment,
             currentUser,
             linkName,
+            isAuthenticated,
         };
    
     let editCommentProps = {
@@ -87,6 +89,7 @@ export const CommentsComponent = props => {
         obj         : comment, 
         byId,
         currentUser,
+        isAuthenticated,
     };
 
 
@@ -96,6 +99,8 @@ export const CommentsComponent = props => {
         obj               : comment,
         isPost            : true,
         currentUser,
+        isAuthenticated,
+        isAuthenticated,
         byId              : `newCommentsReplies${comment.id}`,
         className         : 'btn-sm edit-reply-btn',
         

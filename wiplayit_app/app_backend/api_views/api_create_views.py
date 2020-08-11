@@ -1,6 +1,7 @@
 
 
 from django.shortcuts import get_object_or_404
+
 from rest_framework.generics import CreateAPIView, ListAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework import  status
@@ -37,7 +38,7 @@ class CreatePostView(CreateMixin, PostView):
 	def get_object(self):
 		pass 
 
-class AdminMessageViewMixin():
+class AdminMessageViewMixin(CreateAPIView):
 	permission_classes = (AllowAny,)
 
 	def post(self, request, *args, **kwargs):
@@ -50,16 +51,16 @@ class AdminMessageViewMixin():
 		return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ContactAdminView(AdminMessageViewMixin, CreateAPIView):
+class ContactAdminView(AdminMessageViewMixin):
 	queryset         = ContactAdmin.objects.all()
 	serializer_class = ContactAdminSerializer
 
-class FeedBackView(AdminMessageViewMixin, CreateAPIView):
+class FeedBackView(AdminMessageViewMixin):
 	queryset         = FeedBack.objects.all()
 	serializer_class = FeedBackSerializer
 
 
-class BugReportView(AdminMessageViewMixin, CreateAPIView):
+class BugReportView(AdminMessageViewMixin):
 	queryset         = BugReport.objects.all()
 	serializer_class = BugReportSerializer
 

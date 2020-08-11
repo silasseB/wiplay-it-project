@@ -33,14 +33,14 @@ export const ProfileComponent = props => {
          profileById} = props;
 
     let userProfile = entities.userProfile[profileById];
-    userProfile     = userProfile && userProfile.user;
+    userProfile     = userProfile?.user;
     if (!userProfile) return null;
 
          
-    let profile  = userProfile && userProfile.profile;
-    let apiUrl   = userProfile && api.getQuestionFollowersListApi(userProfile.id);
-    let linkName = profile && profile.followers > 1 && `${profile.followers} Followers` 
-                                                    || profile && `${profile.followers} Follower`;
+    let profile  = userProfile.profile;
+    let apiUrl   = api.getQuestionFollowersListApi(userProfile?.id);
+    let linkName = profile.followers > 1 && `${profile.followers} Followers` 
+                                || `${profile?.followers} Follower`;
 
     let userProfileFollowersProps = {
             apiUrl,
@@ -122,7 +122,7 @@ export const ProfileComponent = props => {
     let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
    
     
-    let UserList                = MatchMediaHOC(UserProfileFollowingList, '(min-width: 980px)')
+    let UserList = MatchMediaHOC(UserProfileFollowingList, '(min-width: 980px)')
 
       
     const UserItemsComponent = props.userItemsComponent;   
@@ -151,9 +151,11 @@ export const ProfileComponent = props => {
                                              src={`${profile_picture}`}
                                              className="profile-image"/>
                                         :
-                                        <img alt=""
-                                             src={require("media/user-image-placeholder.png")} 
-                                             className="profile-image"/>
+                                        <img 
+                                        alt=""
+                                        src={require("media/user-image-placeholder.png")} 
+                                        className="profile-image"
+                                        />
                                     }
                                 </div>
 
@@ -164,7 +166,9 @@ export const ProfileComponent = props => {
                                         <div className="" 
                                              onMouseEnter={props.mouseEnter}
                                              onMouseLeave={props.mouseLeave} >
-                                            <ChangeImageBtnBigScreen {...editUserProfileProps}/>
+                                            <ChangeImageBtnBigScreen
+                                                {...editUserProfileProps}
+                                            />
                                         </div>
                                     </div>
                                     :
@@ -212,27 +216,26 @@ export const ProfileComponent = props => {
                                     <p className="about">About</p>
                                 </div>
                         
-                                { userProfile && userProfile.user_can_edit?
+                                { userProfile?.user_can_edit &&
                                     <div className="edit-credential-btn-box">
 
-                                        <EditorModalBtnBigScreen {...editUserProfileProps}/>
-                                        <EditorModalBtnSmallScreen/>
+                                    <EditorModalBtnBigScreen {...editUserProfileProps}/>
+                                    <EditorModalBtnSmallScreen/>
                                     </div>
-                                    :
-                                    ""
                                 }
                             </div>
 
                             <div className="about-user-box">
                             <Icon.MapPin id="feather-location" size={20}/>
                                 <p className="user-location">
-                                     {profile &&  profile.country }   {profile && profile.live } 
+                                     {profile?.country }  
+                                     {profile?.live } 
                                 </p>
                             </div>
                   
                             <div className="about-user-box">
                                 <p className="user-fav-quote">
-                                    {profile && profile.favorite_quote }
+                                    {profile?.favorite_quote }
                                 </p>
                             </div> 
                         </div>
@@ -277,7 +280,7 @@ export const UserProfileFollowingList = props => {
         userProfile } = props;
 
     let usersById = 'filteredUsers';    
-    users   = entities && entities.users[usersById] || users && users[usersById];
+    users  = entities?.users[usersById] || users && users[usersById];
     //console.log(users, entities.users)
     let userList = users && users.userList && users.userList.slice(0, 3);
 
@@ -357,7 +360,8 @@ export const PartialUserList = props => {
                             { profile_picture? 
                                 <img 
                                     onClick={() => history.push(pathToProfile,user)}
-                                    src={`${profile_picture}`} alt="" className="user-list-photo"/> 
+                                    src={`${profile_picture}`} alt="" 
+                                    className="user-list-photo"/> 
                                 :
                                 <img alt="" 
                                      onClick={() => props.push({path:pathToProfile,user})}
@@ -394,12 +398,12 @@ export const UserList = props => {
     //console.log(props)
     let {entities,users, usersById } = props
 
-    users   = entities && entities.users && entities.users[usersById] || users && users[usersById];
-    let userList = users && users.userList || [];
+    users   = entities?.users[usersById] || users && users[usersById];
+    let userList = users?.userList || [];
 
     return (
         <div className="">
-            { userList && userList.map(( user, index )  => {
+            {userList?.map(( user, index )  => {
                 let userProps = {user  : user, objIndex:index};
                 Object.assign(userProps, props);
 
@@ -450,21 +454,26 @@ export const UserAnswers = props =>{
                 <div className="answer-container">
                     <div className="number-answers-box">
                         {usersAnswers.answerList.length === 1? 
-                            <p className="items-count">{ usersAnswers.answerList.length }  Answer</p>
+                            <p className="items-count">
+                               { usersAnswers.answerList.length }  Answer
+                            </p>
 
                             :
 
-                            <p className="items-count">{ usersAnswers.answerList.length } Answers</p>
+                            <p className="items-count">
+                              { usersAnswers.answerList.length } Answers
+                            </p>
                         }
                     </div> 
 
                     <div>
-                        { usersAnswers.answerList.map((answer, index) => {
+                        {usersAnswers.answerList.map((answer, index) => {
                             let answerProps = {answer, answerListById }
                             Object.assign(answerProps, props)
 
                             return(
-                                <div key={answer.id} className="answer-contents profile-activites "> 
+                                <div key={answer.id} 
+                                     className="answer-contents profile-activites "> 
                                     <AnswersComponent {...answerProps}  />
                                 </div>
                             )
@@ -500,14 +509,18 @@ export const UserQuestions = props => {
             {questions &&
                 <div className="question-container">
                     <div className="number-question-box">
-                        { questionList && questionList.length? 
-                            <p className="items-count">{questionList.length } Questions</p>
+                        { questionList?.length? 
+                            <p className="items-count">
+                                {questionList.length } Questions
+                            </p>
                             :
-                            <p className="items-count">{questionList.length } Question</p>
+                            <p className="items-count">
+                                {questionList.length } Question
+                            </p>
                         }
                     </div> 
      
-                    {  questionList && questionList.map((question, index) => {
+                    {questionList?.map((question, index) => {
                         let questionProps = {question, questionListById }
                         Object.assign(questionProps, props)
 
@@ -571,7 +584,10 @@ export const UserPosts = props => {
 
 export const UsersComponent = props => {
 
-    let {user, usersById, currentUser} = props
+    let {user,
+         usersById,
+         currentUser,
+         redirectToUserProfile} = props
 
     let pathToProfile =  `/profile/${user.id}/${user.slug}/`;
     let profile_picture = user.profile.profile_picture;
@@ -592,9 +608,7 @@ export const UsersComponent = props => {
     var btnsProps   = {...props, editUserProfileProps};
       
     let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
-
-   let {redirectToUserProfile} = props;
-    
+      
 
     return (
         <BrowserRouter>
@@ -602,9 +616,12 @@ export const UsersComponent = props => {
             <div className="user-list-contents">
                 <div className="user-list-img-box">
                     <div className="user-list-img">
-                        <div  onClick={() => redirectToUserProfile({path:pathToProfile,state})}>  
+                        <div  onClick={() => 
+                              redirectToUserProfile({path:pathToProfile,state})}>  
                             { user && profile_picture? 
-                                <img  src={`${profile_picture}`} alt="" className="user-list-photo"/> 
+                                <img  src={`${profile_picture}`}
+                                      alt=""
+                                      className="user-list-photo"/> 
                                 :
                                 <img alt=""
                                      src={require("media/user-image-placeholder.png")}
@@ -617,7 +634,8 @@ export const UsersComponent = props => {
 
                 <div className="user-list-credentials-box">
                     <ul className="user-list-credentials-contents">
-                        <li onClick={() => redirectToUserProfile({path:pathToProfile,state})}
+                        <li onClick={() => 
+                             redirectToUserProfile({path:pathToProfile,state})}
                            className="user-list-name">
                             { user.first_name }   {user.last_name }
                         </li>
@@ -664,9 +682,12 @@ export const UserFollowings = props => {
                  <div>
                      <div className="number-answers-box">
                         { users.userList.length > 1? 
-                           <p className="items-count">{ users.userList.length }  Followings</p>
-                           :
-                           <p className="items-count">{ users.userList.length } Following</p>
+                            <p className="items-count">
+                               {users.userList.length}  Followings</p>
+                            :
+                            <p className="items-count">
+                               {users.userList.length} Following
+                            </p>
                         }
                      </div> 
                      <UserList {...userListProps }/>
@@ -702,9 +723,12 @@ export const UserFollowers = props => {
                         <div>
                             <div className="number-answers-box">
                                 { users.userList.length > 1? 
-                                    <p className="items-count">{ users.userList.length }  Followings</p>
+                                    <p className="items-count">
+                                       {users.userList.length}  Followings</p>
                                     :
-                                    <p className="items-count">{ users.userList.length } Following</p>
+                                    <p className="items-count">
+                                        {users.userList.length} Following
+                                    </p>
                                 }
                             </div> 
                             <UserList {...userListProps}/>
@@ -763,11 +787,11 @@ export const UserActivitiesBtns = props => {
       items               :  'isUsersFollowings'
     }
 
-    let totalAnswers    = userProfile && userProfile.answers    && userProfile.answers.length || 0;
-    let totalQuestions  = userProfile && userProfile.questions  && userProfile.questions.length || 0;
-    let totalPosts      = userProfile && userProfile.posts      && userProfile.posts.length || 0;
-    let totalFollowers  = userProfile && userProfile.followers  && userProfile.followers.length || 0;
-    let totalFollowings = userProfile && userProfile.followings && userProfile.followings.length || 0;
+    let totalAnswers    = userProfile?.answers?.length || 0;
+    let totalQuestions  = userProfile?.questions?.length || 0;
+    let totalPosts      = userProfile?.posts?.length || 0;
+    let totalFollowers  = userProfile?.followers?.length || 0;
+    let totalFollowings = userProfile?.followings?.length || 0;
 
     let {answersBtnStyles,
         questionsBtnStyles,

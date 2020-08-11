@@ -734,7 +734,6 @@ const handleSuccessAuth = (formName, data, dispatch)=> {
         
         case 'addPhoneNumberForm':
         case 'addEmailForm':
-        console.log(formName, data)
             return handlePhoneNumberOrEmailAdd(data, dispatch);
 
         default:

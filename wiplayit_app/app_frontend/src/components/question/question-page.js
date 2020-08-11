@@ -52,7 +52,8 @@ class QuestionPage extends Component {
                      
             //console.log(errors) 
             if (this.isMounted && question){
-                this.setState({isReloading : question.isLoading, error: question.error})  
+                this.setState({isReloading : question.isLoading, error: question.error})
+                delete question.error;  
             }
                       
         };

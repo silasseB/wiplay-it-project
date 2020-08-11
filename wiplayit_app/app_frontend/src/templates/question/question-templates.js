@@ -18,7 +18,12 @@ const api      = new Api();
 
 export const QuestionComponent = props => {
     
-    let { question, questionById,questionListById, isQuestionBox, currentUser }    = props;
+    let { question,
+          questionById,
+          questionListById, 
+          isQuestionBox, 
+          currentUser, 
+          isAuthenticated}    = props;
 
 
 
@@ -74,6 +79,7 @@ export const QuestionComponent = props => {
         obj         : question, 
         byId        : questionById || questionListById,
         currentUser,
+        isAuthenticated,
     };
 
 
@@ -86,6 +92,7 @@ export const QuestionComponent = props => {
         isPut             : question.user_has_answer, 
         className         : 'btn-sm edit-answer-btn', 
         currentUser,  
+        isAuthenticated
        
     };
 

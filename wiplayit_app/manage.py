@@ -2,11 +2,9 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from dotenv import load_dotenv
 
 project_home = './Mywork/wiplay-it-project/wiplayit_app/'
 project_folder = os.path.expanduser(project_home)
-load_dotenv(os.path.join(project_folder, '.env'))
 
 
 def main():

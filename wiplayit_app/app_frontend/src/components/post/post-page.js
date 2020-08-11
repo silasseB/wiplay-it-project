@@ -47,6 +47,7 @@ class  PostPage extends Component  {
                 this.setState({
                             isReloading : post.isLoading,
                             error : post.error} ) 
+                delete post.error;
             }
             
         };

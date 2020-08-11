@@ -629,7 +629,7 @@ export const EditorContentsComponent = (props)=> {
 };
 
 const PureDraftEditor =(props)=>{
-    let {onScroolStyles, handleScroll} = props;
+    let {onScroolStyles, handhleFocus, handleScroll} = props;
 
     return(
         <div className="editors-page" id="editors-page">

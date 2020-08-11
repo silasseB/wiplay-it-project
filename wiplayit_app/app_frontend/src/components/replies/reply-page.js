@@ -165,8 +165,7 @@ const Replies = (props, replyList, isNewReply=false) => {
                 };
 
                 let replyChildProps = {...props, reply}
-                //console.log(replyChildProps)
-
+           
                 return (
                     <div  key={index} >
                         { comment.id === reply.comment?

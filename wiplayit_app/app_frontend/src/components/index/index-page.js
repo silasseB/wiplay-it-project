@@ -72,13 +72,20 @@ class IndexBox extends Component {
                userAuth, 
                errors }   = entities && entities;
                      
-            index && this.setState({isReloading : index.isLoading}) 
-            
+            if(index){
+                let state = {
+                    isReloading : index.isLoading,
+                    error       : index.error
+                }
+                this.setState({state});
 
-            if (index && index.isSuccess) {
-                index.isSuccess = false;
-             
-                this.updateIndexEntities(index);
+                if (index.isSuccess) {
+                    index.isSuccess = false;
+
+                    this.updateIndexEntities(index);
+                }
+
+                delete index.error;
                
             }
           
@@ -170,7 +177,7 @@ class IndexBox extends Component {
       
     reLoader =()=>{
         let id = this.state.id;   
-        this.setState({isReloading : true})
+        this.setState({isReloading : true, error:undefined})
         return this.props.getIndex(id);
     };
 
@@ -220,7 +227,7 @@ class IndexBox extends Component {
         let { entities }  = props ;
         var { index }          = entities;
         //console.log(props, index)
-        props['error'] = index && index.error; 
+        
                          
         return (
             <div>
