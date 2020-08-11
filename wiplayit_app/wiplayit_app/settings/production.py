@@ -52,8 +52,9 @@ DATABASES = {
 }
 
 
-ALLOWED_HOSTS         = os.environ.get('ALLOWED_HOSTS') # os.getenv('ALLOWED_HOSTS')
-CORS_ORIGIN_WHITELIST = os.environ.get('CORS_ORIGIN_WHITELIST')
+ALLOWED_HOSTS         = ['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com']
+#os.environ.get('ALLOWED_HOSTS') # os.getenv('ALLOWED_HOSTS')
+CORS_ORIGIN_WHITELIST = ['https://wiplayit.com','http://wiplayit.com','https://www.wiplayit.com','http://www.wiplayit.com']
 #os.getenv("CORS_ORIGIN_WHITELIST")
 
 print(CORS_ORIGIN_WHITELIST)
