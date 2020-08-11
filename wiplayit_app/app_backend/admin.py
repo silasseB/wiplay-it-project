@@ -57,7 +57,7 @@ class AnswerReplyAdmin(MPTTModelAdmin):
 
 admin.site.register(AnswerReply, AnswerReplyAdmin)
 
-'''
+
 class AboutAdmin(admin.ModelAdmin):
     fields = ['about_title', 'about_text']
 
@@ -73,7 +73,7 @@ class FeedBackAdmin(admin.ModelAdmin):
     fields = ['full_name', 'email', 'subject', 'description']
 
 admin.site.register(FeedBack, FeedBackAdmin)
-'''
+
 
 '''
 class FootballClubsAdmin(admin.ModelAdmin):
