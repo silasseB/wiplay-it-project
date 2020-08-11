@@ -5,8 +5,8 @@ from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 from auth_backend.models import User
 from .models import ( Question, Post, Answer, AnswerComment, AnswerReply,
-	                  PostComment, PostReply, AboutCompany, DraftEditorMediaContent)
-	                  #AboutCompany, BugReport, FeedBack, ContactAdmin)
+	                  PostComment, PostReply, DraftEditorMediaContent,
+	                  AboutCompany, BugReport, FeedBack, ContactAdmin)
 
 from .mixins.serializer_mixins import   SerialiizerMixin
 from auth_backend.serializers import  BaseUserSerializer, UserSerializer
@@ -285,7 +285,7 @@ class IndexSerializer(BaseSerializer):
 		
 		
 	
-
+	
 class AboutSerializer(BaseModelSerializer):
 		
 	class Meta:
@@ -343,7 +343,7 @@ class AdminSerializerMixin():
 		msg = self.render_mail(request)
 		msg.send()
 
-'''	
+	
 class BugReportSerializer(AdminSerializerMixin, BaseModelSerializer):
 
 	class Meta:
@@ -365,4 +365,3 @@ class ContactAdminSerializer(AdminSerializerMixin, BaseModelSerializer):
 		fields = '__all__'
 	
 
-'''

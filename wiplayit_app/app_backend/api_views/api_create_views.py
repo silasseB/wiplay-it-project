@@ -7,10 +7,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework import  status
 from rest_framework.response import Response
 from app_backend.helpers import get_objects_perms
-from app_backend.serializers import (DraftEditorContentsSerializer)
+from app_backend.serializers import (DraftEditorContentsSerializer,
+									 FeedBackSerializer,
+									 ContactAdminSerializer,
+                                     BugReportSerializer)
 from app_backend.mixins.views_mixins import CreateMixin
 from app_backend.admin_api.views import AboutView 
-from app_backend.models import ( Question, Post,
+from app_backend.models import ( Question, Post,BugReport,
+								 FeedBack,ContactAdmin,
                                  Answer, AnswerComment, 
                                  AnswerReply, PostComment,
                                  PostReply, DraftEditorMediaContent )
@@ -46,7 +50,7 @@ class AdminMessageViewMixin(CreateAPIView):
 		notification = serializer.send_notification_to_admin(request)
 		return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-'''
+
 class ContactAdminView(AdminMessageViewMixin):
 	queryset         = ContactAdmin.objects.all()
 	serializer_class = ContactAdminSerializer
@@ -59,7 +63,7 @@ class FeedBackView(AdminMessageViewMixin):
 class BugReportView(AdminMessageViewMixin):
 	queryset         = BugReport.objects.all()
 	serializer_class = BugReportSerializer
-'''
+
 
 class CreatePostCommentView(CreateMixin, PostCommentView):
 		
