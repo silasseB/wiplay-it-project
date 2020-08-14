@@ -92,7 +92,7 @@ export const  SignUpForm = props => {
 
                   <div className="email-box auth-input-field">
                     <input
-                      placeholder="Email or Phone Number"
+                      placeholder="Email"
                       className="email"
                       type="text"
                       name="email"

@@ -61,7 +61,7 @@ export const  LoginForm = props => {
                                 <div className="login-fields auth-input-field">
                                     <input
                                         className="login-email-field"
-                                        placeholder="Email or Phone Number"
+                                        placeholder="Email"
                                         type="text"
                                         name="email"
                                         value={form.email}
