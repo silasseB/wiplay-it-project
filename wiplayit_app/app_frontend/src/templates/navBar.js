@@ -574,7 +574,7 @@ export const EditProfileNavBar = props  => {
         }
 
     return(
-        <nav className="partial-form-navbar fixed-top"> 
+        <nav className="partial-form-navbar edit-profile-navbar fixed-top"> 
 
             <div className="partial-navbar-back-btn-box">
                 <ModalCloseBtn> 

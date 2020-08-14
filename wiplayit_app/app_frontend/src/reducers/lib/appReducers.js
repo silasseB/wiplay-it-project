@@ -293,13 +293,14 @@ export function entities(state=InitialState(), action) {
             let newAnswer      =  payLoad.answer;
             let newAnswerList  =  [newAnswer];
             let currentAnswers =  state.answers[byId];
-            currentAnswers     =  currentAnswers && currentAnswers.answerList;
+            currentAnswers     =  ccurrentAnswers?.answerList;
 
-            newAnswerList      =  currentAnswers && currentAnswers.length &&
+            newAnswerList      =  currentAnswers?.length &&
                                   currentAnswers.unshift(newAnswer) || newAnswerList;
             console.log(newAnswerList)
 
-            payLoad['answerList'] = Array.isArray(newAnswerList) && newAnswerList || currentAnswers;
+            payLoad['answerList'] = Array.isArray(newAnswerList) && 
+                        newAnswerList || currentAnswers;
             delete payLoad.answer; 
             return  updateStateEntyties('answers', {byId, payLoad})|| state;  
             
@@ -308,8 +309,8 @@ export function entities(state=InitialState(), action) {
         case types.UPDATE_ANSWER.SUCCESS:
             
             let updatedAnswer = payLoad.answer;
-            var answers = state.answers[action.byId];
-            answers = answers.answerList;
+            var answers = state.answers[byId];
+            answers = answers?.answerList;
             delete updatedAnswer.question;
 
             payLoad['answerList'] = helper.updateReducerListEntynties(answers, updatedAnswer);

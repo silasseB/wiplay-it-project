@@ -168,6 +168,10 @@
     border-bottom : 1px solid #D5D7D5;
 }
 
+.edit-profile-navbar {
+    background-color: #fefefe;
+} 
+
 .partial-navbar-back-btn-box {
     border:  px solid black;  
     

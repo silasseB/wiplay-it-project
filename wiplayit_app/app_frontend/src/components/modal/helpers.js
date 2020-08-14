@@ -41,27 +41,20 @@ export const closeModals =(background)=> {
 export const handleModalScroll =()=> {
     let content      = document.getElementById('modal-content');
     let overlay      = document.getElementById('modal-overlay');
-    
+
     if (content) {
-        let contentRect =  content.getBoundingClientRect();
-        let contentRectTop      = parseInt(contentRect.top);
-        let contentClientHeight = parseInt(content.clientHeight)
+        let contentRectTop      = content.getBoundingClientRect().top;
+        let _contentHeight = content.clientHeight + contentRectTop;
+        let _overlay = overlay.clientHeight - 80;
+                        
+        if (_contentHeight >= _overlay) {
+            return true;
 
-        //console.log('contentRectTop is: ', contentRectTop)  
-        //console.log('content clientHeight: ', contentClientHeight)
-        //console.log('Overlay is: ', overlay.clientHeight)
-        
-        let totalContentHeight = contentClientHeight + contentRectTop;
-        let _overlay = overlay.clientHeight - 70;
-
-        //console.log('totalContentHeight', totalContentHeight)   
-        //console.log('Now overlay is: ', _overlay)                     
-        if (totalContentHeight >= _overlay) {
-            console.log('Reached bottom')
-           return true;
         }else{
             return false;
         }
     }
+
+    return false;
 }
 

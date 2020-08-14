@@ -44,7 +44,7 @@ admin.site.register(Question,QuestionAdmin)
 class AnswerAdmin(admin.ModelAdmin):
     fields = ['add_answer','upvotes', 'created_by', 'question']
 
-admin.site.register(Answer,AnswerAdmin)
+admin.site.register(Answer, AnswerAdmin)
 
 
 class AnswerCommentAdmin(admin.ModelAdmin):

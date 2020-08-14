@@ -82,12 +82,18 @@ export const QuestionComponent = props => {
         isAuthenticated,
     };
 
+    let answersById = ()=>{
+        if (question.user_has_answer) {
+            return `answers${question.id}`
+        }
 
+        return `newAnswers${question.id}`
+    }
 
     let editAnswerProps = {
         objName           : 'Answer',
         obj               : getQuestion(),
-        byId              : `newAnswers${question.id}`,
+        byId              : answersById(),
         isPost            : !question.user_has_answer,
         isPut             : question.user_has_answer, 
         className         : 'btn-sm edit-answer-btn', 

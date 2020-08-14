@@ -4,18 +4,19 @@ import { createBrowserHistory } from 'history';
 
 import AdminPage from 'components/admin/admin-page';
 import AboutAdminPage from 'components/admin/about-admin';
-import  RegistrationPage  from "components/authentication/index";
-import  SignUpPage from "components/authentication/signup";
-import  LoginPage from "components/authentication/login";
-import PasswordChangeSmsCodePage from 'components/authentication/password-sms-code-confirm'
+import RegistrationPage  from "components/authentication/index";
+import SignUpPage from "components/authentication/signup";
+import LoginPage from "components/authentication/login";
+import PasswordChangeSmsCodePage from 'components/authentication/password-sms-code-confirm';
 
+import EditorPage from 'components/editor/editor-page/';
 import EditProfileRouter from "components/author/edit-profile";
 import IndexBox from "components/index/index-page";
 import PostListPage from "components/post/post-list"
-import  PostPage    from "components/post/post-page"
-import  QuestionPage    from "components/question/question-page"
+import PostPage    from "components/post/post-page"
+import QuestionPage    from "components/question/question-page"
 import QuestionListPage from "components/question/question-list"
-import  AnswerContainer  from "components/answer/answer-page";
+import AnswerContainer  from "components/answer/answer-page";
 
 import UserProfileContainer from "components/author/profile-page";
 import PasswordChangePage from "components/authentication/password-change";

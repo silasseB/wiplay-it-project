@@ -63,9 +63,9 @@ export default  class AppEditor extends Component{
             editorsBoxStyles   : undefined,
             onScroolStyles     : undefined,
             isDraftEditor      : true, 
+            focused            : false,
         };
-
-        this.focus             = () => this.refs.editor.focus();
+    
         this.onChange          = this.onChange.bind(this);
         this.onTextAreaChange  = this.onTextAreaChange.bind(this);
         this.onURLChange       = this.onURLChange.bind(this);
@@ -192,7 +192,8 @@ export default  class AppEditor extends Component{
 
     componentWillUnmount() {
         this.isMounted = false;
-        
+        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('scroll', this.handleEditorScroll);
         this.unsubscribe();
     };
 
@@ -205,10 +206,17 @@ export default  class AppEditor extends Component{
     componentDidMount(){
         this.isMounted = true;
         this.onEditorUpdate();
+                
+        let editorsBoxElem    = document.getElementById('editors-box');
         
+        editorsBoxElem.addEventListener('scroll', this.handleEditorScroll)
+
+        window.addEventListener('resize', this.handleResize)
+
         let {isPut, objName, obj} = this.props;
                    
         if (isPut) {
+
             this.setState({contentIsEmpty:false})          
             if (objName === 'About') {
                 this.updateDraftEditor(obj.about_text);
@@ -235,13 +243,19 @@ export default  class AppEditor extends Component{
             else if (objName === 'Reply') {
                 this.updateDraftEditor(obj.reply)
             }
+            
         }
     };
 
     updateDraftEditor(value){
-
         const editorState  = helper.convertFromRaw(value);
-        this.setState({editorState})
+
+        setTimeout(()=> {
+           this.setState({editorState});
+           this.setScrollHeight();
+           this.modifyEditorSize();
+        }, 1000);
+        
     };
 
     updateTextAreaForm(value){
@@ -279,12 +293,18 @@ export default  class AppEditor extends Component{
                 return store.dispatch(action.handleError());
             }
     
-
             Api.post(apiUrl, fileForm)
             .then(response => {
                 let {draft_editor_file} = response.data;
-                const entityKey = Entity.create(name, 'IMMUTABLE', {src:draft_editor_file});
-                editorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, '');
+                const entityKey = Entity.create(
+                                    name, 'IMMUTABLE', 
+                                    {src:draft_editor_file}
+                                );
+                editorState = AtomicBlockUtils.insertAtomicBlock(
+                                    editorState, 
+                                    entityKey, 
+                                    ' '
+                                );
                 this.setState({editorState});
             })
             .catch(error => {
@@ -442,48 +462,111 @@ export default  class AppEditor extends Component{
            onFocus     : this.handleFocus,
            onBlur      : this.handleBlur,
         };
-    };
-
-    handleScroll=()=>{
-        let {onScroolStyles}    = this.state;
-        let isDesktopScreenSize = window.matchMedia("(min-width: 980px)").matches;
-
-        if (isDesktopScreenSize) {
-            let editorsBoxElem = document.getElementById('editors-box')
-            let isAtBottom     = handleModalScroll();
-            //editorsBoxElem && console.log(editorsBoxElem.clientHeight)
-
-            if (editorsBoxElem && isAtBottom && !onScroolStyles) {
-                onScroolStyles  = {
-                    height : editorsBoxElem.clientHeight
-                };
-
-                this.isMounted && this.setState({onScroolStyles});
-            }
-        }
-    };
-
-    handleFocus =()=> {
-        console.log('focused')
-        
-        if (window.matchMedia("(max-width: 980px)").matches) {
-            let onScroolStyles   = { height : '100px' };
-
-            if(!this.state.onScroolStyles){
-                this.setState({onScroolStyles})
-            }
-        }
     }
 
-    handhleFocus =()=> {
-        this.focus()
+    modifyEditorSize =()=> {
+        let editorsBoxElem = document.getElementById('editors-box');
+        let overlay      = document.getElementById('modal-overlay');
+        console.log("Content is scrolling")
+            
+        let editorsBoxTop = editorsBoxElem.getBoundingClientRect().top
+        editorsBoxTop =  editorsBoxTop + editorsBoxTop;
+        let editorHeight = overlay.clientHeight - editorsBoxTop; 
+        
+        let styles  = {
+                    height : `${editorHeight}px`
+                };
+
+        if (!this.state.onScroolStyles) {
+            console.log(styles)
+          this.setState({onScroolStyles:styles});
+        }
+       
+    }
+
+    handleEditorScroll =()=>{
+        let editorsBoxElem = document.getElementById('editors-box');
+        if (!editorsBoxElem) return;
+        
+        console.log("Editor Box",editorsBoxElem.getBoundingClientRect());
+        
+        console.log("Editor is scrolling")
+
+    }
+
+    handleScroll=(event)=>{
+        let {onScroolStyles}    = this.state;
+            
+        if (this.matchDesktopMedia() && this.isMounted) {
+            let editorsBoxElem = document.getElementById('editors-box')
+            let isAtBottom     = handleModalScroll();
+                                                           
+            if (isAtBottom && editorsBoxElem) {
+                
+                editorsBoxElem.scrollTop = editorsBoxElem.scrollHeight;
+                let styles  = {
+                    height : `${editorsBoxElem.clientHeight}px`
+                };
+
+                if (!onScroolStyles) {
+                    this.setState({onScroolStyles:styles});
+                }
+               
+            }
+        }
+
+    };
+
+
+    handleFocus =()=> {
+        this.editor.focus();
+        this.setState({focused:true});
     }
 
     handleBlur =()=> {
-        console.log('Blured')
+    }
+
+    handleResize =(event)=> {
+        console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
+        let editorsBoxElem = document.getElementById('editors-box');
+
+        if (editorsBoxElem) {
+            let editorsBoxTop = editorsBoxElem.getBoundingClientRect().top;
+            let clientHeight = window.innerHeight - editorsBoxTop;
+            this.setScrollHeight(clientHeight);
+        }
+    }
+
+
+    matchSmallScreenMedia(){
+       return window.matchMedia("(max-width: 980px)").matches;
+    }
+
+    matchDesktopMedia(){
+        return window.matchMedia("(min-width: 980px)").matches;
+    }
+
+    matchTabletMedia(){
+        return window.matchMedia("(min-width: 760px)").matches
+    }
+
+
+    setScrollHeight =(elemHeight=undefined)=> {
         
-        if (window.matchMedia("(max-width: 980px)").matches) {
-            this.state.onScroolStyles &&   this.setState({onScroolStyles:undefined});
+        if (!this.matchSmallScreenMedia()) return;
+
+        let editorsBoxElem = document.getElementById('editors-box');
+        let modalContent = document.getElementById('modal-content');
+
+        if (modalContent && editorsBoxElem) {
+            let editorsBoxTop = editorsBoxElem.getBoundingClientRect().top;
+                    
+            let scrollHeight = elemHeight ||
+                               modalContent.clientHeight - editorsBoxTop - 30;
+
+            let onScroolStyles = {height : `${scrollHeight}px`}; 
+            console.log('Set scrool on mobile')
+            this.setState({onScroolStyles})
         }
     }
 
@@ -506,9 +589,13 @@ export default  class AppEditor extends Component{
             textAreaProps     : this.getTextAreaProps(), 
             handleScroll      : this.handleScroll, 
             handleBlur        : this.handleBlur,
-            handhleFocus      : this.handhleFocus,
+            handleFocus      : this.handleFocus,
+            self: this,
             ...this.state,
         } 
+    }
+    scroolIcon =(e)=>{
+        console.log(e)
     }
 
     render() {
@@ -520,16 +607,10 @@ export default  class AppEditor extends Component{
                                                      { display : 'none' };
 
         return (
-            <div
-                className="modal-editor"
-                id="modal-editor"
-                onClick={this.focus}
-                ref="editor"
-                onScroll={props.handleScroll()}
-                
-                >
+            <div className="modal-editor" id="modal-editor"
+                onScroll={this.handleScroll()}>
                 <fieldset style={onSubmitStyles} 
-                      disabled={ props.submitting } >
+                      disabled={props.submitting} >
                     <EditorCommponent {...props}/>
                 </fieldset>
 
@@ -544,7 +625,8 @@ export default  class AppEditor extends Component{
 
 const EditorCommponent = (props)=>{
     if (window.matchMedia("(min-width: 900px)").matches) {
-            return DesktopEditorComponent(props);
+        return DesktopEditorComponent(props);
+
     } else {
         return MobileEditorComponent(props);
     } 
@@ -629,14 +711,14 @@ export const EditorContentsComponent = (props)=> {
 };
 
 const PureDraftEditor =(props)=>{
-    let {onScroolStyles, handhleFocus, handleScroll} = props;
-
+    let {onScroolStyles, handleFocus, handleScroll} = props;
+    
     return(
         <div className="editors-page" id="editors-page">
             <div style={onScroolStyles}
+                onClick={()=> handleFocus()}
                 id="editors-box" 
-                className="editors-box pure-draft-editor"
-                onClick={()=> handhleFocus()}>
+                className="editors-box pure-draft-editor">
                 <DraftEditor {...props}/>
             </div>
         </div>

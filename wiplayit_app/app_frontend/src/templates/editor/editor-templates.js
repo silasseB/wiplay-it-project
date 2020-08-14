@@ -340,13 +340,12 @@ export const DraftEditor = props => {
                 decorators={CompositeDecorator}
                 blockStyleFn={props.blockStyleFn}
                 placeholder={props.editorPlaceHolder}
-                onFocus={props.handleFocus}
-                onBlur={props.handleBlur}
+                ref={input => props.self.editor = input}
                 //plugins={props.plugins}
             />
         </div>
-    );        
-};
+    )        
+}
 
 export  function mediaBlockRenderer(block) {
         
@@ -354,7 +353,7 @@ export  function mediaBlockRenderer(block) {
         return {
             component: Media,
             editable: false,
-        };
+        }
     }
     return null;
 }
@@ -381,28 +380,35 @@ const Video = (props) => {
 
 
 const Media = (props) => {
-   const entity = props.contentState.getEntity(props.block.getEntityAt(0));
-   const {src} = entity.getData();
-   const type = entity.getType();
-   let media;
-       
-   if (type === 'image') {
+    let {contentState, block} = props;
+    let entityKey = props.block.getEntityAt(0);
+
+    if (!entityKey) return null;
+
+    const entity = contentState.getEntity(entityKey);
+    const {src} = entity.getData();
+    const type = entity.getType();
+    
+    let media;
+    if (type === 'image') {
       media = <Image src={src} />;
-   }
-   else if (type === 'video') {
+    }
+    else if (type === 'video') {
       media = <Video src={src} />;
-   }
+    }
    return media;
 };
 
 const MediaPage = (props) => {
+   let {contentState, block} = props;
+   let blockEntity = props.block.getEntityAt(0);
 
-   
-   // contentState.getEntity
-   const entity = props.contentState.getEntity(props.block.getEntityAt(0));
-   const {src}  = entity.getData();
-   const type   = entity.getType();
-   let media;
+    if (!blockEntity) return null;
+
+    const entity = props.contentState.getEntity(blockEntity);
+    const {src}  = entity.getData();
+    const type   = entity.getType();
+    let media;
        
     if (type === 'image') {
         media = <div style={styles.imageBox}>
