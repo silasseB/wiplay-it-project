@@ -16,7 +16,7 @@
     border-radius : 50%;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 980px) {
      
     .modal-navbar-top{
         background : #A33F0B;
@@ -116,7 +116,8 @@
 
     }
 
-     #editors-box  .DraftEditor-root {
+    
+    #editors-box  .DraftEditor-root {
         background-color: #fffef7;
         margin:auto;
         padding:20px;
@@ -302,34 +303,22 @@
   background-color : #fffef7; 
 } 
 
-.post-title-form{
-   border: px solid blue;
-}
-
-.post-title-form-box{
-    border : px solid black;
-}
 
 .textarea-form {
-     width   : 100%;
-}
-
-.textarea-box {
-    overflow-y    : auto;
-}
-
-.post-textarea-box {
-
+    width   : 100%;
+    padding : 0 20px;
 }
 
 .textarea-form-field {
+    border      : none;
     width       : 100%;
     margin      : 4px 0 0;
     font-weight : bold;
     font-size   : 14px;
-    overflow-y  : auto;
-    border      : none;
+    padding     : 10px 0 4px; 
     border-bottom :  0.5px solid #D5D7D5;
+    background-color: #fffef7;
+    font-family: 'calibri', sans-serif;
 }
 
 .textarea-form-field:active, .textarea-form-field:focus{
@@ -369,26 +358,15 @@ div.public-DraftEditor-content {
         font-family: 'calibri', sans-serif;
     }
 
-    .DraftStyleDefault-block:first-child{
-        border: 1px solid red;
-        
+    .editor-container {
+        padding-top : 50px;
+
     }
 
-    #editors-page {
-        background-color : #fffef7;
-        max-height       : 100%; 
-        height           : 100%;
-        overflow-y       : auto;
-        font-family      : 'calibri', sans-serif;
-        margin-top       : 37px; 
-    }
- 
     #editors-box  {
         background-color : #fffef7;
         overflow-y       : auto;  
         padding          : 10px 10px 7px;  
-        border    : px solid blue;
-        min-height: 150px;
     }
 
     .draft-editor {
@@ -398,13 +376,17 @@ div.public-DraftEditor-content {
     }
 
     .pure-draft-editor {
-       margin-top : 50px;
-       border     : px solid black;
+       margin-top : 40px;
+       border    : 1px solid blue;
+    }
 
+    .post-draft-editor-box {
+        
     }
 
     .post-editor-box {
-        padding-top: 45px;
+        border : 1px solid red;
+        margin-top: 45px;
     }
 
     .navigation-toolbar button {
@@ -569,38 +551,16 @@ div.public-DraftEditor-content {
         width   : 100%;
         border  : px solid blue;
     }
-
-    .post-title-input{
-        width     : 100%;
-        height    : 40px;
-        padding   : 10px;
-        font-size : 14px;
-        border    : 1px solid #D5D7D5;
-    }
-
-    .post-title-input:focus, .post-title-input:active {
-        border           : 1px solid #D5D7D5;
-        outline          : 0;
-        background-color : #fffef7; 
-    } 
-
-    .post-title-form-box, .question-form-box{
-        border: px solid black;
-
-    }
+    
 
     .textarea-form-field {
-        padding       : 0 10px;
+        width         : 100%;
+        padding       : 10px 10px 0;
         font-weight   : bold;
         font-size     : 14px;
         border-bottom : 0.5px solid #D5D7D5;
     }
 
-    .textarea-box {
-              
-    }
-
-    
     .textarea-form-field:active, .textarea-form-field:focus{
         outline        : 0;
         box-shadow     : none;

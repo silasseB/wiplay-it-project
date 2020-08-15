@@ -74,9 +74,9 @@ export let mobileModalStyles = {
 let desktopModalStyles  = {
     content: {
         position                : 'relative',
-        margin                  : '2% 27.5% 0',
-        width                   : '45%',
-        background              : '#F6F6F6',
+        margin                  : '2% 30% 0',
+        width                   : '40%',
+        background              : '#fff',
         overflowX               : 'hidden',
         overflowY               : 'hidden',
         borderRadius            : '4px',

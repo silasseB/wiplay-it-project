@@ -91,26 +91,22 @@ class QuestionPage extends Component {
     };
 
     updateQuestionStore(id){
+        let questionById = `question${id}`;
 
-        let { cacheEntities } = this.props;
-        let { question }     = cacheEntities && cacheEntities;
-        question = question[`question${id}`]
-
-        if (question) {
-            let timeStamp = question.timeStamp;
-            const getTimeState = new GetTimeStamp({timeStamp});
-            let menDiff        = parseInt(getTimeState.menutes());
-            console.log(menDiff  + ' ' + 'Menutes ago')
-                          
-            if (menDiff <= 0) {
-                question     = question.question;
-                let questionById = `question${id}`;
-                this.setState({questionById })
-                console.log('Question found from cachedEntyties')
-                this.dispatchToStore(questionById, question)
-
-                return 
-            }
+        let {cacheEntities} = this.props;
+        let question     = cacheEntities && cacheEntities;
+        if (!question && question[questionById]) return
+                
+        let timeStamp = question[questionById].timeStamp;
+        const getTimeState = new GetTimeStamp({timeStamp});
+        let menDiff        = parseInt(getTimeState.menutes());
+                                  
+        if (menDiff <= 0) {
+            question     = question[questionById].question;
+            
+            this.setState({questionById })
+            console.log('Question found from cachedEntyties')
+            return this.dispatchToStore(questionById, question)
         }
 
         console.log('Fetching question data form the server') 

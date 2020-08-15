@@ -46,6 +46,7 @@ export const handleModalScroll =()=> {
         let contentRectTop      = content.getBoundingClientRect().top;
         let _contentHeight = content.clientHeight + contentRectTop;
         let _overlay = overlay.clientHeight - 80;
+        
                         
         if (_contentHeight >= _overlay) {
             return true;

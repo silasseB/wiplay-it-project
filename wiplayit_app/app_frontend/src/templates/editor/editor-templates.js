@@ -282,11 +282,7 @@ export const TextAreaEditor = props => {
     //console.log(props)
     return (
         <form className="textarea-form">
-            <div className="textarea-box" >
-               <TextareaAutosize
-                     {...props.textAreaProps} 
-                        rows={1}/>
-            </div>
+            <TextareaAutosize {...props.textAreaProps} rows={1}/>
         </form>
     );
 
@@ -294,18 +290,19 @@ export const TextAreaEditor = props => {
 
 
 export const PostEditor = (props) => {
-    let {onScroolStyles} = props;
+    let {onScroolStyles, handleFocus} = props;
     
     return(
-        <div className="editors-page" id="editors-page">
         <div className="post-editor-box">
-            <div style={onScroolStyles} id="editors-box" className="editors-box">
+            <div style={onScroolStyles} 
+                 id="editors-box"
+                 className="editors-box post-textarea-editor-box">
                 <TextAreaEditor   {...props} rows={2}/>
-                <div className="">
+                
+                <div className="post-draft-editor-box" onClick={()=> handleFocus()}>
                     <DraftEditor {...props}/>
                 </div>
             </div>
-        </div>
         </div>
     );
 };
@@ -341,6 +338,7 @@ export const DraftEditor = props => {
                 blockStyleFn={props.blockStyleFn}
                 placeholder={props.editorPlaceHolder}
                 ref={input => props.self.editor = input}
+                onBlur={props.handleBlur}
                 //plugins={props.plugins}
             />
         </div>
