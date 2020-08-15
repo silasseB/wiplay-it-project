@@ -92,25 +92,27 @@ class QuestionPage extends Component {
 
     updateQuestionStore(id){
         let questionById = `question${id}`;
+        let question     = this.props.cacheEntities?.question;
+        console.log(question)
 
-        let {cacheEntities} = this.props;
-        let question     = cacheEntities && cacheEntities;
-        if (!question && question[questionById]) return
-                
-        let timeStamp = question[questionById].timeStamp;
-        const getTimeState = new GetTimeStamp({timeStamp});
-        let menDiff        = parseInt(getTimeState.menutes());
-                                  
-        if (menDiff <= 0) {
-            question     = question[questionById].question;
-            
-            this.setState({questionById })
-            console.log('Question found from cachedEntyties')
-            return this.dispatchToStore(questionById, question)
+        if (!question || question && !question[questionById]){
+            console.log('No question and Fetching question data from the server')
+            return this.props.getQuestion(id);
         }
 
-        console.log('Fetching question data form the server') 
-        return this.props.getQuestion(id);
+        let timeStamp = question[questionById]?.timeStamp;
+        const getTimeState = new GetTimeStamp({timeStamp});
+                                      
+        if (getTimeState.menutes() >= 5) {
+            console.log('Cache expired and Fetching question data from the server')
+            return this.props.getQuestion(id);
+        }
+
+        this.setState({questionById })
+        console.log( question,'Question found from cachedEntyties')
+        this.dispatchToStore(questionById,  question[questionById].question)
+         
+        
     }
 
     dispatchToStore(questionById, question){
