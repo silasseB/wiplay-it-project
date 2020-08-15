@@ -130,9 +130,7 @@ export default  MainAppHoc(AdminPage);
 
 
 export const AdminComponent = props => {
-
-    //console.log(props)
-      
+    
     return(
         <div className="admin-contents" id="admin-contents">
             <div className="">

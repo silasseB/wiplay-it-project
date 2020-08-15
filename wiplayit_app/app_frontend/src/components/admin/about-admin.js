@@ -129,27 +129,32 @@ class AboutAdminPage extends Component {
 
 export default  MainAppHoc(AboutAdminPage);
 
-const EditAboutProps =(obj=undefined)=>{
-    let isPut    = obj && true || false;
-    let isPost   = !obj && true || false;
-
-    let props = {
-        isPost,
-        isPut,
-        obj,
-        withTextArea : true,
-        objName      : 'About',
-        className    : "edit-about-admin-btn btn-sm",
-    };
-
-    return GetModalLinkProps.props(props);
-};
 
 export const AboutAdminComponent = props => {
+
     let about = props.about;
     about = about && about.info;
+
+    const EditAboutProps =(obj=undefined)=>{
+        let isPut    = obj && true || false;
+        let isPost   = !obj && true || false;
+
+        let params = {
+            isPost,
+            isPut,
+            obj,
+            isAuthenticated :  props.isAuthenticated,
+            withTextArea : true,
+            objName      : 'About',
+            className    : "edit-about-admin-btn btn-sm",
+        };
+
+        return GetModalLinkProps.props(params);
+    };
+
     console.log(props ,about)
     let createAboutProps = EditAboutProps();
+    console.log(createAboutProps)
     
     
     return(
