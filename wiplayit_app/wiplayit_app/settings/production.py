@@ -17,7 +17,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://wiplayit.com',
     'https://www.wiplayit.com','http://www.wiplayit.com'
     ]
-ALLOWED_HOSTS ['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com']
+ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com']
 
 print(ALLOWED_HOSTS)
 print(CORS_ORIGIN_WHITELIST)
