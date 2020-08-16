@@ -32,7 +32,7 @@ export default class Axios {
         this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
         this.DOMAIN_URL    =  window.location.origin; 
         this.useToken      =  props && props.useToken;
-        this.timeout       =  props && props.timeout || 15000; 
+        this.timeout       =  props && props.timeout || 30000; 
         this.requestFor    =  props.requestFor;
     }
 

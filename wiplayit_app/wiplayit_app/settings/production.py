@@ -7,10 +7,6 @@ import os
 DEBUG = False
 SITE_ID = 4
 
-ALLOWED_HOSTS  = os.getenv('ALLOWED_HOSTS') 
-CORS_ORIGIN_WHITELIST = os.getenv("CORS_ORIGIN_WHITELIST")
-print(ALLOWED_HOSTS)
-print(CORS_ORIGIN_WHITELIST)
 
 CORS_ORIGIN_WHITELIST = [
     'https://wiplayit.com',
@@ -19,8 +15,6 @@ CORS_ORIGIN_WHITELIST = [
     ]
 ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com']
 
-print(ALLOWED_HOSTS)
-print(CORS_ORIGIN_WHITELIST)
 
 EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
@@ -41,8 +35,6 @@ EMAIL_FROM         = EMAIL_HOST_USER
 
 SECURE_SSL_REDIRECT = True
 
-
-print(EMAIL_HOST,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD)
 
 DATABASES = {
     'default': {
