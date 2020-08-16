@@ -341,7 +341,8 @@ class AdminSerializerMixin():
 
 	def send_notification_to_admin(self, request=None):
 		msg = self.render_mail(request)
-		msg.send()
+		m = msg.send()
+		print(m)
 
 	
 class BugReportSerializer(AdminSerializerMixin, BaseModelSerializer):

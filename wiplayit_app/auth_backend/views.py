@@ -252,7 +252,8 @@ class SendAccountConfirmationView(APIView):
 
 	def send_email_confirmation(self, user=None):
 		if self.user:
-			send_email_confirmation(self.request, self.user)
+			mail = send_email_confirmation(self.request, self.user)
+			print(mail)
 		
 	def send_phone_number_confirmation(self, phone_number=None):
 		if phone_number:
