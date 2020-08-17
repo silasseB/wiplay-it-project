@@ -16,9 +16,9 @@ CORS_ORIGIN_WHITELIST = [
 ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com']
 
 
-EMAIL_USE_SSL = False
+EMAIL_USE_SSL = True
 EMAIL_USE_TLS = True
-EMAIL_PORT =  587
+EMAIL_PORT =  465
 
 EMAIL_HOST          = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER     = os.getenv("EMAIL_HOST_USER")
