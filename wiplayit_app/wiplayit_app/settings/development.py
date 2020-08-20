@@ -6,9 +6,14 @@ import os
 DEBUG = True
 SITE_ID = 3
 
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_PORT =  587
+#EMAIL_USE_TLS = True
+#EMAIL_USE_SSL = False
+#EMAIL_PORT =  587
+
+
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_PORT =  465
 
 EMAIL_HOST          = os.getenv("DEV_EMAIL_HOST")
 EMAIL_HOST_USER     = os.getenv("DEV_EMAIL_HOST_USER")
