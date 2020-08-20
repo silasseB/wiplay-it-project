@@ -15,15 +15,14 @@ CORS_ORIGIN_WHITELIST = [
     ]
 ALLOWED_HOSTS = ['baloyi.pythonanywhere.com','wiplayit.com','www.wiplayit.com']
 
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT =  587
 
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_PORT =  465
 
-
-EMAIL_HOST          = os.getenv("DEV_EMAIL_HOST")
-EMAIL_HOST_USER     = os.getenv("DEV_EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("G")
+EMAIL_HOST          = os.getenv("EMAIL_HOST")
+EMAIL_HOST_USER     = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 TWILIO_ACCOUNT_SID  = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN   = os.getenv("TWILIO_AUTH_TOKEN")
