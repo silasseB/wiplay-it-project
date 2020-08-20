@@ -156,7 +156,7 @@ const EmailVerifyWarning =(props)=> {
         return(
             <li>
 
-                Your account has not been confirmed and you won't be avble to 
+                Your account has not been confirmed and you won't be able to 
                 post or edit you profile.
                 Please go to your email <span className="text-highlight">
                 { currentUser && currentUser.email }</span> to
