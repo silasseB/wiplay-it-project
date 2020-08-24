@@ -115,7 +115,7 @@ class  QuestionListPage extends Component  {
                 <NavigationBarBottom {...props}/>
                 
                 { questions &&
-                    <div  className="app-box-container question-list-page" id="question-list-page">
+                    <div  className="app-box-container">
                         <UnconfirmedUserWarning {...props}/>
                         
                         { questions.isLoading && 
@@ -162,7 +162,7 @@ const Questions = props => {
     let questionList = questions && questions.questionList;
    
     return (
-        <div>
+        <div className="question-list-page" id="question-list-page">
             { questionList && questionList.length &&
                 IterateQuestionList(props, questionList)
 

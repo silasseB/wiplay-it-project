@@ -448,10 +448,9 @@ export const NavigationMenuBtns =(props)=>{
                         <Icon.Users id="feather-users" size={20} {...usersTab}/>
                         People
                     </OpenUsersModalBtn>
-                    
                 </ul>
 
-                <ul  className="navbar-bottom-item">
+                <ul className="navbar-bottom-item">
                     <button type="button"
                             style={questionListTab}
                              onClick={() => RedirectMenuLinks({pathname:'/questions/'})}

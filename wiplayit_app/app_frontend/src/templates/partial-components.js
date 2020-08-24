@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Icon from 'react-feather';
 import {SmsCodeModalBtn} from "templates/buttons";
+import * as checkType from 'helpers/check-types'; 
 import {validateEmail,
         validatePhoneNumber} from 'components/authentication/utils';
 
@@ -50,25 +51,25 @@ export const Styles = {
 
 export const PageErrorComponent = props => {
     let {error, isReloading } = props;
-    if (isReloading) return null;
-    if (!error) return null;
-
+    if (isReloading || !error || !checkType.isString(error)) return null;
+   
     return(
         <div className="page-error-box" id="page-error-box">
             <ul className="error-box">
-                <li className="error-text">{error}</li>
+                <li className="error-text">
+                    {error}
+                </li>
             </ul>
 
             <ul className="reload-btn-box">
-                
-                    <button type="bottom"
+                <button type="bottom"
                         onClick={()=> props.reLoader() }
                         className="reload-btn btn-sm">
-                        <li className="reload-btn-box2">
-                            <span className="reload-icon material-icons">refresh</span> 
-                            <span className="reload-icon-text">Try Again</span>
-                        </li>
-                    </button>
+                    <li className="reload-btn-box2">
+                        <Icon.RefreshCcw size={30}/>
+                        <span className="reload-icon-text">Try Again</span>
+                    </li>
+                </button>
             </ul>
         </div>
     )
@@ -119,7 +120,7 @@ export const UnconfirmedUserWarning =(props)=> {
                        cacheEntities.currentUser.user || currentUser;
  
     let smsCodeProps = {
-            linkName  : "Here to confirm",
+            linkName  : "confirm account",
             currentUser,
         };
 
@@ -134,9 +135,9 @@ export const UnconfirmedUserWarning =(props)=> {
 
                     <ul className="unconfirmed-user-warn">
                         <li>
-                            Your account has not been confirmed and you won't be avble to
-                            post or edit you profile.Please click 
-                            <SmsCodeModalBtn {...smsCodeProps}/> your account.
+                            Your account has not been confirmed and you won't be able to
+                            post or edit your profile. Please click 
+                            <SmsCodeModalBtn {...smsCodeProps}/> to verify your account.
                         </li>
                     </ul>
                 </div>

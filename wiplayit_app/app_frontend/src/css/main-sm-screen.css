@@ -14,6 +14,30 @@
     border-radius: 50%;
 }
 
+.dropdown-menu-box {
+    border: px solid red;
+    padding: 0 !important;
+}
+
+.options-menu {
+    border  : px solid blue;
+}
+
+
+.options-menu button {
+    width: 100%;
+    font-family: 'PT San'; /*'Squada one';*/
+    font-size:13px;
+    border:none;
+    text-align: left !important;
+    padding: 10px;
+    color: #807f7f; 
+}
+
+
+.options-menu button:hover {
+    background: #F9F7F7;  
+}
 
 @media (max-width: 900px) {
 

@@ -76,7 +76,7 @@ export const ProfileComponent = props => {
 
     editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
 
-    const EditorModalBtnSmall = ()=>{
+    const EditProfileLink = ()=>{
         const pathToEditProfile = userProfile  && 
                  `/edit/profile/${userProfile.slug}/${userProfile.id}/`;
         return(
@@ -92,7 +92,7 @@ export const ProfileComponent = props => {
 
 
     let EditorModalBtnSmallScreen = MatchMediaHOC(
-                                            EditorModalBtnSmall,
+                                            EditProfileLink,
                                             '(max-width: 980px)');
     const EditorModalBtnBigScreen = MatchMediaHOC(
                                             OpenEditorBtn,
@@ -110,28 +110,21 @@ export const ProfileComponent = props => {
     
 
     let btnsProps = {
-        editUserProfileProps,
-        btnStyles : optionsBtnStyles,
-        btnText   : <i className="material-icons ">more_horiz</i>,  
-    };
-
-    Object.assign(btnsProps, props);
+            editUserProfileProps,
+            btnStyles : optionsBtnStyles,
+            ...props
+        };
+    
 
     var followers_text =  profile && profile.followers > 1? 'Followers' : 'Follower';  
 
     let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
    
-    
     let UserList = MatchMediaHOC(UserProfileFollowingList, '(min-width: 980px)')
-
       
     const UserItemsComponent = props.userItemsComponent;   
-
-
     let  profile_picture = profile && profile.profile_picture || null;
-                 
-    //console.log(props)
-    
+        
     return (
         <div className="profile-container">
             {userProfile?
@@ -178,6 +171,7 @@ export const ProfileComponent = props => {
 
                                             
                             <div className="profile-credential-box">
+
                                 <ul className="profile-name-box">
                                     <li className="profile-name">
                                     {userProfile.first_name} {userProfile.last_name } 
@@ -200,10 +194,10 @@ export const ProfileComponent = props => {
                                         <OpenOptionlBtn {...editUserProfileProps}/>
                                     </div>
                                 </div>
+
                             </div>
+
                         </div>
-
-
                     </div>
                 </div>
      

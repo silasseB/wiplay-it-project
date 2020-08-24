@@ -467,7 +467,7 @@ const UserIsConfirmed =(currentUser)=> {
 }
 
 export function handleSubmit(props) {
-    console.log(props)
+    
     let useToken=true
     const Api  = _GetApi(useToken); 
     if (!Api) {
@@ -528,7 +528,7 @@ export function handleSubmit(props) {
 
 		    Api.put(apiUrl, formData)
 		    .then(response => {
-		        //console.log(response)
+		        
                 updateProps['data'] = prepPayLoad(objName, response.data);
                 isModal && dispatch(action.ModalSubmitSuccess(updateProps))
 			    dispatch(action.updateActionSuccess(updateProps));
@@ -537,15 +537,15 @@ export function handleSubmit(props) {
 		    .catch(error => {
 			    			
 			    if (error.response && error.response.data) {
-                    console.log(error.response)
+                    
                     error = error.response.data
-                   updateProps['error'] = error;
+                    updateProps['error'] = error.detail;
 
-                   isModal  && dispatch(action.ModalSubmitError(updateProps));
-			       !isModal && dispatch(action.updateActionError(updateProps));
+                    isModal  && dispatch(action.ModalSubmitError(updateProps));
+			        !isModal && dispatch(action.updateActionError(updateProps));
 
 			    }else if(error.request){
-                    console.log(error.request)
+                    
                     error = 'Something wrong happened.';
                     updateProps['error'] = error;
                     !isModal && dispatch(action.updateActionError(updateProps));
@@ -664,7 +664,6 @@ export function authenticate(params={}){
 
         Api.post(apiUrl, form)
             .then(response => {
-                console.log(response, params)
                 let {data}  = response;
                 
                 if (formName === 'phoneNumberSmsCodeForm'){
@@ -678,8 +677,6 @@ export function authenticate(params={}){
 
             let _error;
             if (error.response) {
-
-                console.log(error.response, params, isSocialAuth, isTokenRefresh) 
                 
                 if (error.response.status == 500) {
                     _error = error.response.statusText
@@ -695,7 +692,6 @@ export function authenticate(params={}){
 
             }
             else if (error.request)  {
-                console.log(error.request)
                 _error = 'Something wrong happened. Please try again';
                 
                 dispatch(action.authenticationError(_error, isSocialAuth, isTokenRefresh));
@@ -827,14 +823,10 @@ export function getAdmin() {
         dispatch(action.getAdminPending());
 
         Api.get(`/api/admin/`)
-            .then(response => {
-                console.log(response)
-                dispatch(action.getAdminSuccess(response.data)) 
-            })
+            .then(response => dispatch(action.getAdminSuccess(response.data)))
             .catch(error =>{
-                //console.log(error)
+               
                 if (error.response && error.response.data) {
-                    console.log(error.response)
                     dispatch(action.getAdminError(error.response.data));
 
                 }else{

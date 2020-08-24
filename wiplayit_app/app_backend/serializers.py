@@ -73,11 +73,6 @@ class AnswerReplyReadSerializer(BaseReplySerializer):
 		self.update_serializer_obj_perms('answer_reply_perms')
 		return AnswerReplyReadSerializer(children_queryset, context=self.context, many=True).data
 		
-		
-	
-			
-
-
 
 class AnswerCommentSerializer(BaseChildSerializer):
 		
@@ -93,10 +88,6 @@ class AnswerCommentReadSerializer(AnswerCommentSerializer):
 	def get_replies(self, obj):
 		self.update_serializer_obj_perms('answer_reply_perms')
 		return AnswerReplyReadSerializer(obj.replies, context=self.context, many=True).data
-
-	
-
-
 
 
 class PostReplySerializer(BaseChildSerializer):
@@ -152,22 +143,12 @@ class PostReadSerializer(PostSerializer):
 		return PostCommentReadSerializer(obj.comments, context=self.context, many=True).data
 	
 
-
-
-
-
-
 class AnswerSerializer(BaseChildSerializer):
 	
 	class Meta:
 		model = Answer 
 		fields = '__all__'
 		
-		
-	
-
-	
-
 class AnswerReadSerializer(AnswerSerializer):
 	comments   = serializers.SerializerMethodField()
 	question   =  serializers.SerializerMethodField()
@@ -218,14 +199,6 @@ class QuestionSerializer(BaseQuestionSerializer):
 	def get_answer_count(self, obj):
 		return obj.answers.count()
 		
-	
-	
-
-
-
-	
-
-
 
 class QuestionReadSerializer(QuestionSerializer):
 	answers          = serializers.SerializerMethodField()
@@ -275,9 +248,9 @@ class IndexSerializer(BaseSerializer):
 		users = User.objects.exclude(
 						first_name="Anonymous"
 					).filter(
-						is_confirmed=True
-					).filter(
 						is_superuser=False
+					).filter(
+						is_confirmed=True
 					)
 
 		user_list = UserSerializer(users, context=self.context, many=True).data

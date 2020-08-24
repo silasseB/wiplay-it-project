@@ -475,12 +475,10 @@ export default  class AppEditor extends Component{
 
     handleResize =(event)=> {
         let editorsBoxElem = document.getElementById('editors-box');
-        console.log('keyboard is on')
-
+        
         if (editorsBoxElem) {
             let editorsBoxTop = editorsBoxElem.getBoundingClientRect().top;
             let clientHeight = window.innerHeight - editorsBoxTop - 20;
-            console.log('window innerHeight is: ', window.innerHeight)
             this.setScrollHeight(clientHeight, true);
         }
     }
@@ -512,12 +510,6 @@ export default  class AppEditor extends Component{
         let _contentHeight = content.clientHeight + contentRectTop;
         let _overlay = overlay.clientHeight - 80;
         
-        console.log("_contentHeight ", _contentHeight)
-        console.log(" total_overlay", overlay.clientHeight)
-
-        console.log(editorsBoxElem.clientHeight)
-
-        if (_contentHeight >= _overlay) console.log("Reached the bottom")
         editorsBoxElem.scrollTop = editorsBoxElem.scrollHeight;
             
         if (_contentHeight >= _overlay && this.matchDesktopMedia()) {
@@ -534,8 +526,6 @@ export default  class AppEditor extends Component{
                 height : `${scrollHeight}px`,
                 border : 'px solid blue',
             }; 
-            
-        console.log(onScroolStyles)
         this.setState({onScroolStyles});
     }
 

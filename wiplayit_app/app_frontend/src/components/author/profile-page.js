@@ -56,24 +56,30 @@ class UserProfileContainer extends Component {
 
             let userProfile  = profileById && entities.userProfile[profileById];
             let { errors } = entities;
-            
-            if (userProfile) {
-                let {user, isLoading, error} = userProfile;
-                this.setState({ isReloading : isLoading, error}); 
 
-                let answersById  = user && `usersAnswers${user.id}`;
-                answers          = answers[answersById];
+            if (userProfile) {
+                this.setErrors(userProfile); 
+
+                let user = userProfile.user;
+                answers = answers[`usersAnswers${user?.id}`];
                 
                 if (!answers) {
-                    this._dispatchUserProfileItems(user);
+                    this._dispatchUserProfileItems(userProfile.user);
                 }
 
-                delete userProfile.error
+                
             }
         };
         this.unsubscribe = store.subscribe(onStoreChange);
-    };
-  
+    }
+    
+    setErrors =(userProfile) => {
+        let {isLoading, isUpdating, error} = userProfile;
+        if (isUpdating) return
+
+        this.setState({ isReloading : isLoading, error});
+        delete userProfile?.error
+    }
   
 
     componentWillUnmount() {
@@ -144,12 +150,10 @@ class UserProfileContainer extends Component {
         userProfile = userProfile && userProfile[profileById];
         
         if (userProfile && userProfile.user) {
-
             let timeStamp      = userProfile.timeStamp;
             const getTimeState = new GetTimeStamp({timeStamp});
             let menDiff        = parseInt(getTimeState.menutes());
-            console.log(menDiff)
-
+            
             if (menDiff >= 2) {
                 userProfile = userProfile && userProfile.user;
 
@@ -158,7 +162,6 @@ class UserProfileContainer extends Component {
                 store.dispatch(action.getUserProfilePending(profileById));
                 store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
                 this._dispatchUserProfileItems(userProfile);
-
                 return 
             }
         }
@@ -310,7 +313,7 @@ class UserProfileContainer extends Component {
         let   props = this.getProps();
         var   profileById = props.profileById;
         const userProfile = props.entities.userProfile[profileById];
-              
+                      
         return (
             <div>
                 <PartalNavigationBar {...props}/>

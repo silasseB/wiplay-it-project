@@ -1,15 +1,11 @@
 import  * as types  from 'actions/types';
 
 
-
-
-
-export const createActionPending = (params) => {
-   //console.log(actionType)
-   let {byId, actionType} = params;
+export const createActionPending = (params={}) => {
+    let {byId, actionType} = params;
 
     return{
-        type : actionType && actionType.PENDING,
+        type : actionType?.PENDING,
         byId,
         payLoad: {
            isCreating : true,
@@ -19,12 +15,12 @@ export const createActionPending = (params) => {
 
 
 
-export const createActionSuccess = (params) => {
-   console.log(params)
+export const createActionSuccess = (params={}) => {
+   
    let {byId, actionType, data} = params;
  
     return{
-        type : actionType && actionType.SUCCESS,
+        type : actionType?.SUCCESS,
         byId,
         payLoad: {
             ...data, 
@@ -34,12 +30,12 @@ export const createActionSuccess = (params) => {
 };
 
 
-export const createActionError = (params) => {
+export const createActionError = (params={}) => {
     let {byId, actionType, error} = params;
-    error = error && error.detail; 
+    error =  error?.detail; 
 
     return {
-        type : actionType && actionType.ERROR,
+        type : actionType?.ERROR,
         byId,
         payLoad: {
            error,
@@ -53,11 +49,11 @@ export const createActionError = (params) => {
 
 
 
-export const updateActionPending = (params) => {
+export const updateActionPending = (params={}) => {
     let {byId, actionType} = params;
 
     return {
-        type : actionType && actionType.PENDING,
+        type : actionType?.PENDING,
         byId,
         payLoad : {
             submitting : true,
@@ -69,12 +65,11 @@ export const updateActionPending = (params) => {
 
 
 
-export const updateActionSuccess = (params)=> {
-   //console.log(params)
-   let {byId, actionType, data} = params
+export const updateActionSuccess = (params={})=> {
+    let {byId, actionType, data} = params
 
     return{
-        type : actionType && actionType.SUCCESS,
+        type : actionType?.SUCCESS,
         byId,
         payLoad: {
             ...data,
@@ -85,12 +80,11 @@ export const updateActionSuccess = (params)=> {
 };
 
 
-export const updateActionError = (params) => {
+export const updateActionError = (params={}) => {
     let {byId, actionType, error} = params
-    console.log(params)
-
+    
     return {
-        type : actionType && actionType.ERROR,
+        type : actionType?.ERROR,
         byId,
         payLoad: {
            error,
@@ -113,8 +107,7 @@ export const ModalSubmitSuccess = (params) => {
     let {objName, isUpdating, isCreating, modalName, data } = params;
     let action         = isCreating &&'created' || isUpdating && 'edited';
     let successMessage = `${objName} successefully ${action}`
-    console.log(params)
-
+    
     return{
         type : "MODAL_SUBMIT_SUCESS",
         byId : modalName,

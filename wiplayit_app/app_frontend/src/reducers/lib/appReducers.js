@@ -57,7 +57,7 @@ export function entities(state=InitialState(), action) {
             let {byId, payLoad} = params
             let oldState = state;
             let newState = {};
-            let stateEntintie = oldState[stateEntintieKey]
+            let stateEntintie = oldState[stateEntintieKey];
                                       
             if (byId) {
                         
@@ -328,9 +328,7 @@ export function entities(state=InitialState(), action) {
         case 'GET_COMMENT_LINK_DATA':
             return updateStateEntyties('comments', action);
 
-           
-
-
+    
         case types.CREATE_COMMENT.SUCCESS:
              
             let newComment           = payLoad.comment;

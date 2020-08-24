@@ -141,10 +141,10 @@ export function MainAppHoc(Component) {
             this.unsubscribe();
             this.isMounted = false;
             
-        };
+        }
 
         componentDidUpdate(prevProps, nextProps) {
-        };
+        }
 
                 
         componentDidMount() {
@@ -176,9 +176,7 @@ export function MainAppHoc(Component) {
             if (!currentUser || !currentUser?.is_confirmed) {
                 store.dispatch(getCurrentUser());
             }
-        };
-
-
+        }
         
         onStoreUpdate = (params, callback=function(){}) =>{
  
@@ -211,6 +209,7 @@ export function MainAppHoc(Component) {
                 this.handlePasswordChangeSuccess(userAuth);
 
                 if (errors.error) {
+                    console.log(errors)
                     if (editorModal && editorModal.modalIsOpen ||
                         dropImageModal && dropImageModal.modalIsOpen){
                         //We avoid handling errors if any of these modal are open
@@ -479,12 +478,12 @@ export function MainAppHoc(Component) {
                 history.push(path, state);
                 //this.reloadPage();
             }
-        };
+        }
 
         reloadPage(){
             console.log(this.props,window.location, 'Im reloading this page')
             window.location.reload();
-        };
+        }
      
         redirecToQuestionPage  = (questionObj) => {
             questionObj = questionObj.newObject;
@@ -495,12 +494,13 @@ export function MainAppHoc(Component) {
             
                 this.props.history.push(path, state);
             }
-        };
+        }
 
         editfollowersOrUpVoters = (params) =>{
+            this.setState({isUpdating:true})
             params = this._getFormData(params);
             this.props.submit(params); 
-        };
+        }
 
         _getFormData = (params) =>{
            
@@ -561,7 +561,7 @@ export function MainAppHoc(Component) {
                     <fieldset style={ onModalStyles } 
                               disabled={ props.modalIsOpen } >
                         
-                        <Component {...props}/>                    
+                       modal <Component {...props}/>                    
 
                     </fieldset>
 

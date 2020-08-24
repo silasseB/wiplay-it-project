@@ -48,8 +48,7 @@ export default class FormValidator {
     formErrors(){
         let formName = this.formName;
         let form     = this.form && this.form[formName];
-        console.log(formName, form, this)
-       
+               
         let formErrors;
         let isValid = formIsValid(form);
 

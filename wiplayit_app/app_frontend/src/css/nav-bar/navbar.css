@@ -546,7 +546,7 @@
         justify-content: flex-end !important; 
     }
 
-    .help-menu-contents{
+    .help-menu-contents {
         border :  px solid red;
         margin :  0 27px;
     }
@@ -562,7 +562,7 @@
         color  : #A33F0B;
     }
 
-    .help-logo-contents{
+    .help-logo-contents {
         color       : #A33F0B;
         font-weight : bold;
         font-size   : 20px;
@@ -605,7 +605,7 @@
         margin: 0 0 0 13%  !important;
     }
 
-    .post-question-box{
+    .post-question-box {
         border  : px solid black;
         display : flex;
         width   : 25%;
@@ -643,28 +643,23 @@
         font-size   : 13px;
     }
 
-    .navigation-img-box{
+    .navigation-img-box {
         border : px solid red;
         margin : 7px 5px 0;
     }
 
-    #navBardropdown{
+    #navBardropdown {
         border  : px solid blue;
-  
     }
-
 
     .navbar-dropdown {
         padding-right: 17px;
     }
 
-
-
     .logo-box{
         width   :  20%;
         border  : px solid blue;
     }
-
 
     .logo {
         color: #A33F0B;
@@ -672,27 +667,21 @@
         font-size: 25px;
         font-weight: bold;
         margin  : 10px 0 0 45px; 
-       
     }
 
     .logo:hover {
         color:  #A33F0B;
         text-decoration: none;
-
     }
 
     .profile-photo:hover, #navBardropdown:hover {
         cursor: pointer !important; 
     }
 
-
-
     .active {
         border-bottom: 3px solid #A33F0B;
         color:  #A33F0B;  
-
     }
-
 
     .img-container-sm {
         border: 1px solid  #D5D7D5;/*#F9F7F7;*/
@@ -703,7 +692,6 @@
         margin: auto;
         margin-left:0px;        
     }
-
 
     .profile-photo {
         border-radius  :  100%;
@@ -717,7 +705,6 @@
         position: relative;
         display:inline-block;
         font-family: 'Jura';
-
         left:5px;
         font-size: 10px;
     }
