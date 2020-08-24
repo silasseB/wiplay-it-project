@@ -135,26 +135,25 @@ export const UpVoteAnswerBtn = props => (
 
          
 export const DownVoteAnswerBtn = props => (  
-<div>       
-    <button   type="button" onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
-                                         className="btn-sm icon-color upvote-answer" >
-    Upvoted <span className=" fa fa-arrow-up upvote-icon"></span>
-  </button>
+    <div>       
+    <button type="button"
+            onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
+            className="btn-sm icon-color upvote-answer" >
+        Upvoted <span className=" fa fa-arrow-up upvote-icon"></span>
+    </button>
   </div>
  )
 
 
-
-
-
              
 export const UpVoteCommentBtn = props => (     
-   <div>    
-      <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editCommentProps)}
-               className="btn-sm upvote-comment-btn" >
-         Upvote 
-      </button>
-   </div>
+    <div>    
+        <button  type="button"
+            onClick={ () => props.editfollowersOrUpVoters(props.editCommentProps)}
+            className="btn-sm upvote-comment-btn" >
+            Upvote 
+        </button>
+    </div>
 
 )
 
@@ -205,6 +204,17 @@ export const ProfileOptsModalBtns = props => {
 }
 
 
+export const QuestionOptsModalBtns = props => {
+   console.log(props)
+    return (
+        <button type="button"
+                className="btn-sm" >
+            <Icon.Rss className="options-menu-icon" size={20}/> 
+            Follow Question
+        </button>
+    )
+}
+
 export const OptionsMenuBtns = props => {
    
     return(
@@ -239,7 +249,7 @@ export const Author = props =>{
 
 export const ExtraBtns = (props) =>{
     let {objName} = props
-    if (objName == 'Question') return null
+    if (objName == 'Question') return <QuestionOptsModalBtns {...props}/>
     if (objName === 'UserProfile') return <ProfileOptsModalBtns/>   
 
     return(
