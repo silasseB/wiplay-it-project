@@ -443,18 +443,14 @@ export function getCurrentUser(tokenKey) {
 
 		Api.get(`/api/current/user/`)
             .then(response => {
-      	        console.log(response)
       	        dispatch(action.getCurrentUserSuccess(response.data)) 
             })
             .catch(error =>{
-                //console.log(error)
-      	        if (error.response && error.response.data) {
-                    console.log(error.response)
-      		        dispatch(action.getCurrentUserError(error.response.data));
+                if (error.response && error.response.data) {
+                    dispatch(action.getCurrentUserError(error.response.data));
 
       	        }else{
-                    console.log(error.request)
-      		        dispatch(action.handleError(error.request))
+                    dispatch(action.handleError(error.request))
       	        }
             });
     };

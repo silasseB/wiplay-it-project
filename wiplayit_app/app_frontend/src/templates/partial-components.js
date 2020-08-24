@@ -66,7 +66,7 @@ export const PageErrorComponent = props => {
                         onClick={()=> props.reLoader() }
                         className="reload-btn btn-sm">
                     <li className="reload-btn-box2">
-                        <Icon.RefreshCcw size={30}/>
+                        <Icon.RotateCcw size={30}/>
                         <span className="reload-icon-text">Try Again</span>
                     </li>
                 </button>

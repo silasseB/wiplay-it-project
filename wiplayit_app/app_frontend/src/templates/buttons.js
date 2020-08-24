@@ -222,8 +222,14 @@ export const Author = props =>{
 
     return(
         <div className="options-menu">
-            <OpenEditorBtn {...props}/> 
-            <button type="button" className="btn-sm  delete-question" >
+            <OpenEditorBtn {...props}>
+                <Icon.Edit className="options-menu-icon" size={20}/> 
+            </OpenEditorBtn>
+            <button type="button" className="btn-sm  option-delete-btn" >
+                <Icon.Trash2 
+                    className="options-menu-icon"
+                    id="options-menu-icon" size={20}
+                />
                 Delete 
             </button>
         </div>
@@ -239,9 +245,11 @@ export const ExtraBtns = (props) =>{
     return(
         <div>
             <button  type="button" className="btn-sm  bookmark" >
-               Add to Bookmark 
+                <Icon.Bookmark className="options-menu-icon" size={20}/>
+                Add to Bookmark 
             </button>
             <button  type="button" className="btn-sm  bookmark">
+                <Icon.Share2 className="options-menu-icon" size={20}/>
                 Share 
             </button>
         </div>
@@ -249,32 +257,19 @@ export const ExtraBtns = (props) =>{
 }
 
 
-
-export const ModalMenuHeader = props => (
- 
-    <div className="menu-header-box">
-        <ul className="modal-menu-title" >
-            <li className="header-text">Choose category</li>
-        </ul>
-
-        <ul className="modal-menu-dismiss-box">
-            <ModalCloseBtn> 
-                <span className="modal-dismiss-icon">&times;</span>
-            </ModalCloseBtn>
-        </ul>
-    </div>
-)
-
-
 export const ModalOptionsMenu = props => {
     return (
-        <div className="modal-menu  modal-body">
-            <ModalMenuHeader {...props}/>
+        <div className="modal-menu">
             <OptionsMenuBtns {...props}/>
+
+            <ul className="modal-menu-dismiss-box">
+                <ModalCloseBtn> 
+                    Cancel
+                </ModalCloseBtn>
+            </ul>
         </div>
     )
 }
-
 
 
 export const ModalCloseBtn = props => {
@@ -322,7 +317,7 @@ export const OpenEditorBtn = props => {
     return(
         <button className={className}
                 onClick={()=> OpenModalEditor(props)}>
-            { linkName } 
+           {props.children} {linkName} 
         </button>
     );
 };
