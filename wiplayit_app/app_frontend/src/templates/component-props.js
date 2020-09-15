@@ -18,8 +18,10 @@ export const GetModalLinkProps = {
 		isPost  = isPost || false;
 		isPut  =  isPut || false;
 
-		linkProps['actionType'] = actionType || GetActionTypesProps(objName, isPut, isPost);
-		linkProps['apiUrl']     = apiUrl || GetRestApiProps(objName, obj, isPut, isPost);
+		linkProps['actionType'] = actionType || 
+								  GetActionTypesProps(objName, isPut, isPost);
+		linkProps['apiUrl'] = apiUrl || 
+								GetRestApiProps(objName, obj, isPut, isPost);
 		linkProps['editorPlaceHolder'] = `Add ${objName}...`;
 
 		return linkProps;
@@ -55,6 +57,9 @@ export const GetActionTypesProps = (actionName, isPut=false, isPost=false) => {
  	    case 'Answer':
  	        actionType = isPut? types.UPDATE_ANSWER: types.CREATE_ANSWER;
  	 	    return actionType;
+
+ 	 	case 'AnswerBookmark':
+ 	        return types.CREATE_BOOKMARK;
 
         case 'Comment':
  	        actionType = isPut? types.UPDATE_COMMENT: types.CREATE_COMMENT;
@@ -118,8 +123,8 @@ export const GetRestApiProps = (actionName, obj=null, isPut=false, isPost=false)
  	         	        
  	        return apiUrl;
 
-
- 	    
+ 	    case 'AnswerBookmark':
+ 	    	return api.AddAnswerBookMarkApi(id)  	    
 
  	    default:
  	    	return apiUrl;

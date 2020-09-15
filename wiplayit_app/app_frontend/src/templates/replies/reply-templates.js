@@ -301,7 +301,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         };
    
      
-    let editReplyProps = {
+    let editObjProps = {
         objName     : 'Reply',
         isPut       : true,
         obj         : reply, 
@@ -313,7 +313,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
 
 
 
-    let editReplyChildProps = {
+    let createObjProps = {
         objName           : 'Reply',
         obj               : reply,
         isPost            : true,
@@ -322,16 +322,12 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         isAuthenticated,
         apiUrl            : createApiUrl,
         className         : 'btn-sm edit-reply-btn',
-        
-        
     };
 
-
-    editReplyChildProps = GetModalLinkProps.props( editReplyChildProps )
-    editReplyProps = GetModalLinkProps.props(editReplyProps)
-    
-
-    let EditorModalBtn   = <OpenEditorBtn {...editReplyChildProps}/>; 
+    editObjProps = GetModalLinkProps.props(editObjProps);
+    createObjProps = GetModalLinkProps.props(createObjProps);
+   
+    let EditorModalBtn   = <OpenEditorBtn {...createObjProps}/>; 
     
     
     let ReplyUpVotersBtn = reply.upvotes !== 0 &&
@@ -340,13 +336,14 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
     
 
     let btnsProps = {
-        editReplyProps,
-        editReplyChildProps,
+        ...props,
+        editObjProps,
+        createObjProps,
         btnStyles:optionsBtnStyles,
         btnText : 'More', 
     }; 
 
-    Object.assign(btnsProps, props)
+    
     let itemsCounter = <Link to={{pathname:pathToUpvoters,state }}>
                          { reply.upvotes }  Upvotes
                      </Link>;
@@ -358,7 +355,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
         itemsCounter :  ReplyUpVotersBtn,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalBtn,
-        btn3         :  <OpenOptionlBtn {...editReplyProps}/>,
+        btn3         :  <OpenOptionlBtn {...btnsProps}/>,
     } 
 
     const userProps  = {
@@ -366,7 +363,7 @@ export const Reply = (props, replyProps=undefined, isNewReply=false) => {
             currentUser,
     };
 
-   return (
+    return (
          <div style={ replyStyles}  className="reply-box" id="reply-box">
             <div className="autor-details-box">
                 <UserComponentSmall {...userProps}/>
@@ -466,16 +463,16 @@ export const RepliesLink = props => {
 
          <ul style={ userStyles}>
             <li style={ imgStiles }>
-               { props.reply.created_by.profile.profile_picture === null?
+               { props.reply.author.profile.profile_picture === null?
                   <img alt="" src={require("media/user-image-placeholder.png")} className="profile-photo"/>
                :  
-                  <img alt="" src={props.reply.created_by.profile.profile_picture}
+                  <img alt="" src={props.reply?.author?.profile.profile_picture}
                          className="profile-photo"/> 
                }
 
             </li>
             <li style={ userNameStyles } >
-               { props.reply.created_by.first_name }   { props.reply.created_by.last_name } ...
+               { props.reply?.author?.first_name }   { props.reply?.author?.last_name } ...
             </li>
          </ul>
 

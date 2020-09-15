@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Icon from 'react-feather';
 import { GetModalLinkProps } from "templates/component-props";
 import { BrowserRouter, Link } from "react-router-dom";
 import { MatchMediaHOC } from 'react-match-media';
@@ -46,22 +47,19 @@ export const QuestionComponent = props => {
 
     
 
-    let getQuestion = ()=>{
-
-        if (isQuestionBox && question.user_has_answer) {
+    let getUserAnswer = ()=>{
             let questionEntitie  = props.entities.question;
             questionEntitie  = questionEntitie[questionById];
-
-            return questionEntitie.userAnswer;
-        }
-        return question;
+            return questionEntitie?.userAnswer;
     }
 
 
     let usersById =  question && `questionFollowers${question.id}`;
     let apiUrl    = question && api.getQuestionFollowersListApi(question.id);
-    let linkName  = question.followers > 1 && `${question.followers} Followers` || `${question.followers} Follower`;
-    //console.log(linkName) 
+    let linkName  = question.followers > 1 && 
+                    `${question.followers} Followers` ||
+                     `${question.followers} Follower`;
+    
 
     let questionFollowersProps = {
             apiUrl,
@@ -73,7 +71,7 @@ export const QuestionComponent = props => {
         };
 
 
-    let editQuestionProps = {
+    let editObjProps = {
         objName     : 'Question',
         isPut       : true,
         obj         : question, 
@@ -90,9 +88,9 @@ export const QuestionComponent = props => {
         return `newAnswers${question.id}`
     }
 
-    let editAnswerProps = {
+    let createObjProps = {
         objName           : 'Answer',
-        obj               : getQuestion(),
+        obj               : question.user_has_answer && getUserAnswer() || question,
         byId              : answersById(),
         isPost            : !question.user_has_answer,
         isPut             : question.user_has_answer, 
@@ -102,53 +100,50 @@ export const QuestionComponent = props => {
        
     };
 
-
-    editAnswerProps = GetModalLinkProps.props(editAnswerProps)
-    editQuestionProps = GetModalLinkProps.props(editQuestionProps)
+  
+    editObjProps = GetModalLinkProps.props(editObjProps)
+    createObjProps = GetModalLinkProps.props(createObjProps)
  
-    let EditorModalBtn = <OpenEditorBtn {...editAnswerProps}/>; 
+    let EditorModalBtn = <OpenEditorBtn {...createObjProps}>
+                            <Icon.Edit className="" size={20}/> 
+                         </OpenEditorBtn> 
 
-    let optionsBtn = ()=>(
-        <div>
-           <OptBtnBigScreen {...editQuestionProps}/>
-           <OptBtnSmallScreen {...editQuestionProps}/>
-        </div>
-        )
+    
 
     let questionFollowersBtn = question.followers !== 0 && 
                <OpenUsersModalBtn {...questionFollowersProps}/> || null;
     
   
 
-   let btnsProps = {
-            editAnswerProps,
-            editQuestionProps
+    let btnsProps = {
+            ...props,
+            editObjProps,
+            createObjProps,
         }
 
-   Object.assign(btnsProps, props)
+    
 
-   let unfollowOrFollowQuestionBtn =  question.user_is_following? 
-                                         <UnfollowQuestionBtn {...btnsProps} />
-                                       :
-                                         <FollowQuestionBtn {...btnsProps}/>;
+    let unfollowOrFollowQuestionBtn =  question.user_is_following? 
+                                        <UnfollowQuestionBtn {...btnsProps}/>
+                                          :
+                                        <FollowQuestionBtn {...btnsProps}/>;
 
 
-   const btnsList  = {
+    const btnsList  = {
             itemsCounter : questionFollowersBtn,
             btn1         : EditorModalBtn,
             btn2         : unfollowOrFollowQuestionBtn,
-            btn3         : <OpenOptionlBtn {...editQuestionProps}/>,
+            btn3         : <OpenOptionlBtn {...btnsProps}/>,
             Styles       : Styles,
         }
 
-   let QuestionProps = { questionPath, state, btnsList };
-   Object.assign(QuestionProps, props)
+    let QuestionProps = {questionPath, state, btnsList};
+    Object.assign(QuestionProps, props)
 
    
     return(
         <div key={question.id}>
             <div className="question-contents">
-
                 <div className="question-box ">
                     <div className="question">
                         {props.isQuestionBox?
@@ -157,18 +152,15 @@ export const QuestionComponent = props => {
                             </b>
                             :
                             <b className="">
-                                <Link className="question-link"  to={{pathname: questionPath,  state:{...state}}}>
+                                <Link className="question-link" 
+                                      to={{pathname: questionPath,  state:{...state}}}>
                                     { question.add_question }
                                 </Link>
                             </b>
                         }
                         <ButtonsBox {...btnsList}/>
-
                     </div>
-             
-
                 </div>
-                
             </div>
         </div>
     );

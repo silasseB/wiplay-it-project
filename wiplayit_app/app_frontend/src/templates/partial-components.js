@@ -22,19 +22,18 @@ export const ButtonsBox = props => {
             </div>
 
             <ul  className="contents-nav-box" > 
-               <li className="btn-box1">
-                 { props.btn1 || null}
-               </li>
+                <li className="btn-box1">
+                    {props?.btn1}
+                </li>
 
-               <li  className="btn-box2">
-                  { props.btn2 || null  }
-               </li>
+                <li  className="btn-box2">
+                    {props?.btn2}
+                </li>
 
-               <li className="btn-box3">
-                  {props.btn3 || null }
-               </li>
+                <li className="btn-box3">
+                    {props?.btn3}
+                </li>
             </ul>
-            
         </div>   
     )
 

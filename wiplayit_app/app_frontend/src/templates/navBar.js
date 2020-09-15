@@ -113,6 +113,13 @@ export const NavBarMenuItems = props => {
                 </button>
 
                 <button type="button"
+                        onClick={() => RedirectMenuLinks({pathname:'/bookmarks/'})}
+                        className="btn dropdown-item">
+                    Bookmarks
+                </button>
+
+
+                <button type="button"
                         onClick={() => RedirectMenuLinks({pathname:'/settings/'})}
                         className="btn dropdown-item">
                     Settings
@@ -171,7 +178,7 @@ const NavBarDropDown = props => {
         
         <div className="navigation-img-box">
                     
-            <div className="droplef" id="navBardropdown" 
+            <div className="dropleft" id="navBardropdown" 
                            data-toggle="dropdown"
                            aria-haspopup="false" 
                            aria-expanded="true">
@@ -501,12 +508,12 @@ export const PartialNavBar = props =>{
     return (
         <nav className="navigation partial-page-navbar fixed-top" id="navigation">
             <div className="partial-navbar-back-btn-box">
-                <ModalCloseBtn> 
+                <button className="btn-sm" onClick={()=> window.history.back()}> 
                     <Icon.ArrowLeft
                         className="nav-bar-arrow-icon"
                         id="arrow-left" 
                         size={20}/>
-                </ModalCloseBtn>  
+                </button>  
             </div>
 
             <div className="page-name-box">

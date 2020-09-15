@@ -32,6 +32,8 @@ import PrivacyContainer  from 'components/privacy';
 import HelpContainer  from 'components/help';
 import SettingsContainer  from 'components/settings';
 import NotificationsContainer from 'components/notifications';
+import BookmarkContainer from 'components/bookmarks';
+
 import ReportContainer from 'components/report';
 import NotFoundPage from 'components/page-not-found';
 
@@ -66,13 +68,15 @@ function App() {
             <Route path="/password/change/" component={PasswordChangeSmsCodePage}/>
             <Route path="/:slug/answer/" component={QuestionPage}/>
             <Route path="/editor/" component={TestEditor}/>
+            <Route path="/compose/:slug/" component={TestEditor}/>
             <Route path="/feedback/" component={FeedBackContainer}/>
             <Route path="/about/" component={AboutContainer}/>
             <Route path="/privacy/" component={PrivacyContainer}/>
             <Route path="/help/" component={HelpContainer}/>
             <Route path="/contact/us/" component={ContactAdminContainer}/>
             <Route path="/settings/" component={SettingsContainer}/>  
-            <Route path="/notifications/" component={NotificationsContainer}/>    
+            <Route path="/notifications/" component={NotificationsContainer}/>  
+            <Route path="/bookmarks/" component={BookmarkContainer}/>     
             <Route path="/bug/report/" component={ReportContainer}/>
             <Route exact path="/app/admin/"  component={AdminPage}/>
             <Route path="/app/admin/about/" component={AboutAdminPage}/>

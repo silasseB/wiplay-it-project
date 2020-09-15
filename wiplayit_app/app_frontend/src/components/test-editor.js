@@ -1,6 +1,11 @@
 
 import React, { Component } from 'react';
-import AppEditor  from 'components/draft-js-editor/editor';
+import {CharacterMetadata, CompositeDecorator, AtomicBlockUtils,
+         RichUtils,convertToRaw, convertFromRaw,Entity,
+         genKey, EditorState, ContentBlock, getDefaultKeyBinding} from 'draft-js'; 
+
+import {insertLink, decorator} from 'components/draft-js-editor/plugins'
+import {DraftEditor} from  "templates/editor/editor-templates";
 import  { _GetApi } from 'dispatch/index';
 import {GetLoggedInUser} from 'utils/helpers';
 import { CountryDropdown,
@@ -9,11 +14,42 @@ import { CountryDropdown,
 
 
 
-export const TestEditor = (props)=> {
+export class TestEditor extends Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            editorState : EditorState.createEmpty(decorator),
+        }
 
-    const modalProps = { modalName : 'editor' };
+        this.onChange          = this.onChange.bind(this);
+    }
 
-    return <AppEditor {...modalProps}/>
+    onChange(editorState){
+        this.setState({editorState});
+    }
+
+    keyBindingFn =(e)=> {
+        console.log(e.key)
+        if (e.key === 'Delete') {
+            return 'delete-me' // name this whatever you want
+        }
+
+        //This wasn't the delete key, so we return Draft's default command for this key
+        return getDefaultKeyBinding(e)
+    }
+
+    render(){
+        let props = {
+            ...this.props, 
+            ...this.state,
+            onChange : this.onChange,
+            keyBindingFn:this.keyBindingFn,
+
+        }
+        return (
+            <DraftEditor {...props}/>
+        )
+    }
     
 };
 

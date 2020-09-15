@@ -228,7 +228,7 @@ export const Answers = (props, answerList, isNewAnswers=false) => {
              
     return(
         <div className="answer-container">
-            { answerList && answerList.map((answer, index) => {
+            {answerList?.map((answer, index) => {
                 let answerProps = { answer, isNewAnswers };
                 answerProps = {...props, ...answerProps}; 
       

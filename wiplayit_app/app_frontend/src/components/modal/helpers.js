@@ -18,24 +18,23 @@ export const closeModals =(background)=> {
     let passwordConfirmForm = modal && modal['passwordConfirmForm'];
 
     editorModal     && editorModal.modalIsOpen      &&
-                                     ModalManager.close('editor');
+                                     ModalManager.close('editor', background);
     optionsModal    && optionsModal.modalIsOpen     &&
-                                     ModalManager.close('optionsMenu');
+                                     ModalManager.close('optionsMenu', background);
 
     dropImageModal  && dropImageModal.modalIsOpen   &&
-                                    ModalManager.close('dropImage'); 
+                                    ModalManager.close('dropImage', background); 
 
     userListModal   && userListModal.modalIsOpen    && 
-                                  ModalManager.close('userList'); 
+                                  ModalManager.close('userList', background); 
                                         
     navigationModal && navigationModal.modalIsOpen  && 
-                                  ModalManager.close('navigationMenu');
+                                  ModalManager.close('navigationMenu', background);
     smsCodeFormModal && smsCodeFormModal.modalIsOpen  && 
-                                  ModalManager.close('smsCodeForm');
+                                  ModalManager.close('smsCodeForm', background);
     passwordConfirmForm && passwordConfirmForm.modalIsOpen && 
-                                   ModalManager.close('passwordConfirmForm'); 
+                                   ModalManager.close('passwordConfirmForm', background); 
                                   
-    if (background) window.history.back();
 };
 
 export const handleModalScroll =()=> {

@@ -6,6 +6,9 @@ from app_backend.api_views.api_create_views import ( CreateQuestionView,
                                                      CreateAnswerReplyView, 
                                                      CreateAnswerReplyChildView,
                                                      CreatePostView,
+                                                     AddAnswerBookMarkView,
+                                                     AddPostBookMarkView,
+                                                     DeleteAnswerBookMarkView,
                                                      BugReportView,
                                                      FeedBackView,
                                                      ContactAdminView,
@@ -47,6 +50,15 @@ urlpatterns = [
 
     path("api/create/post/reply/<int:pk>/child/",
        CreatePostReplyChildView.as_view({'get':'get','post':'post' })),
+
+    path("api/answer/<int:pk>/bookmark/add/",
+       AddAnswerBookMarkView.as_view({'get':'get','post':'post' })),
+
+    path("api/post/<int:pk>/bookmark/add/",
+       AddPostBookMarkView.as_view({'get':'get','post':'post' })),
+
+    path("api/answer/<int:pk>/bookmark/remove/",
+       DeleteAnswerBookMarkView.as_view({'delete':'destroy'})),
 
     path("api/bug/report/", BugReportView.as_view(), name="bug_report"),
     path("api/feedback/", FeedBackView.as_view(), name="feedback"),

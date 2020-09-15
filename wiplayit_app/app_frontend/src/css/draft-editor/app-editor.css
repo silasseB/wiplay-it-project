@@ -377,7 +377,6 @@ div.public-DraftEditor-content {
 
     .pure-draft-editor {
        margin-top : 40px;
-       border    :  1px solid blue;
        height    :  100%; 
        bottom    :  0;
        position:  relative;

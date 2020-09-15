@@ -333,6 +333,7 @@ export const DraftEditor = props => {
                 editorState={props.editorState} 
                 blockRendererFn={mediaBlockRenderer}
                 handleKeyCommand={props.handleKeyCommand}
+                keyBindingFn={props.keyBindingFn}
                 onChange={props.onChange}
                 decorators={CompositeDecorator}
                 blockStyleFn={props.blockStyleFn}

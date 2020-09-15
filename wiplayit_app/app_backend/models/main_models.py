@@ -11,99 +11,135 @@ from app_backend.slug_generator import generate_unique_slug
 
 #Quetion model
 class Question(models.Model):
-	add_question = models.TextField('what is you question',  blank=True)
-	slug         = models.SlugField(max_length=250, blank=True, unique=True)
-	followers    = models.IntegerField(default=0)
-	created_at   = models.DateTimeField(auto_now_add=True, blank=True)
-	created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
-	deleted      = models.BooleanField('deleted', default=False)
+    add_question = models.TextField('what is you question',  blank=True)
+    slug         = models.SlugField(max_length=250, blank=True, unique=True)
+    followers    = models.IntegerField(default=0)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author   = models.ForeignKey(
+                       settings.AUTH_USER_MODEL,
+                       on_delete=models.CASCADE, 
+                       blank=True
+                       )
+    deleted      = models.BooleanField('deleted', default=False)
 
-	class Meta:
-		permissions = (
+    class Meta:
+        permissions = (
                 ('change_question_followers', 'Can Change Question Followers'),
-
-            )
-		db_table = "questions"
-
-
-	#@models.permalink
-	def get_absolute_url(self):
-		from django.urls import reverse
-		return reverse('retrieve_apis : question', args=[self.id, self.slug])
-
-	def save(self, *args, **kwargs):
-		if not self.slug:
-			self.slug = generate_unique_slug(self.__class__, self.add_question)
-		super().save(*args,**kwargs)
-
-	def __str__(self):
-		return self.add_question
+        )
+        db_table = "questions"
 
 
+    #@models.permalink
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('retrieve_apis : question', args=[self.id, self.slug])
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self.__class__, self.add_question)
+        super().save(*args,**kwargs)
+
+    def __str__(self):
+        return self.add_question
+
+
+
+	
     
 
 class Answer(models.Model):
-	add_answer   = models.TextField(null=True)
-	question     = models.ForeignKey( Question, on_delete=models.CASCADE, related_name="answers",blank=True)
-	created_at   = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-	created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
-	upvotes      = models.IntegerField(default=0)
-	deleted      = models.BooleanField(default=False)
-	
-	
-	class Meta:
-		db_table = "answers"
-		permissions = ( ('change_answer_upvotes', 'Can Change Answer  Upvotes'),)
+    add_answer   = models.TextField(null=True)
+    question     = models.ForeignKey(
+                       Question,
+                       on_delete=models.CASCADE,
+                       related_name="answers",
+                       blank=True
+                    )
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author   = models.ForeignKey(
+                        settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE, 
+                        blank=True
+                    )
+    upvotes      = models.IntegerField(default=0)
+    deleted      = models.BooleanField(default=False)
+    
+    
+    class Meta:
+        db_table = "answers"
+        permissions = ( ('change_answer_upvotes', 'Can Change Answer  Upvotes'),)
                 
-	
-	def __str__(self):
-		return "{0}".format(self.add_answer)
-		
-		
-	def get_absolute_url(self):
-		from django.urls import reverse
-		return reverse('question_app:answer-page', args=[self.id])
-
-
-
-
-
+    
+    def __str__(self):
+        return "{0}".format(self.add_answer)
+        
+        
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('question_app:answer-page', args=[self.id])
 
 class AnswerComment(models.Model):
-	comment     = models.TextField(null=True)
-	answer      = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name="comments",blank=True)
-	created_at   = models.DateTimeField(auto_now_add=True, blank=True)
-	created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
-	upvotes      = models.IntegerField(default=0)
-	
-	
-	class Meta:
-		db_table = "answer_comments"
-		permissions = (('change_answer_comment_upvotes', 'Can Change Answer Comment Uvotes'),)
+    comment     = models.TextField(null=True)
+    answer      = models.ForeignKey(
+                    Answer,
+                    on_delete=models.CASCADE, 
+                    related_name="comments",
+                    blank=True
+                )
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author   = models.ForeignKey(
+                        settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE, 
+                        blank=True
+                    )
+    upvotes      = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = "answer_comments"
+        permissions = (
+            ('change_answer_comment_upvotes', 'Can Change Answer Comment Uvotes'),
+        )
                 
                 
-	def __str__(self):
-		return self.comment
-
-
-
+    def __str__(self):
+        return self.comment
+	
+	
 
 
 class AnswerReply(MPTTModel):
     reply          = models.TextField(null=True)
-    created_at     = models.DateTimeField( auto_now_add=True, blank=True)
-    created_by     = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE, related_name="user",blank=True)
-    parent         = TreeForeignKey('self', on_delete=models.CASCADE, 
-                                null=True, blank=True, related_name='children')
-    comment        = models.ForeignKey(AnswerComment, on_delete=models.CASCADE,
-                                related_name="replies", blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author     = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                                related_name="user",
+                                blank=True
+                             )
+    parent         = TreeForeignKey(
+                        'self', on_delete=models.CASCADE, 
+                        null=True,
+                        blank=True,
+                        related_name='children'
+                    )
+    comment        = models.ForeignKey(
+                        AnswerComment,
+                        on_delete=models.CASCADE,
+                        related_name="replies", 
+                        blank=True,
+                        null=True
+                     )
     upvotes        = models.IntegerField(default=0)
 
 
     class Meta:
         db_table = "answer_replies"
-        permissions = (('change_answer_reply_upvotes', 'Can Change Answer Reply Uvotes'),)
+        permissions = (
+                ('change_answer_reply_upvotes', 'Can Change Answer Reply Uvotes'),
+            )
 
     class MPTTMeta:
         order_insertion_by = ['parent']
@@ -139,8 +175,13 @@ class Post(models.Model):
     add_title  = models.CharField(max_length=250, blank=True)
     add_post   = models.TextField(null=True)
     slug       = models.SlugField(max_length=250, blank=True, unique=True)
-    created_at   = models.DateTimeField(auto_now_add=True, blank=True)
-    created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True,null=True)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author  = models.ForeignKey(
+                        settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE,
+                        blank=True
+                    )
     upvotes      = models.IntegerField(default=0)
     deleted    = models.BooleanField('deleted', default=False)
 
@@ -167,39 +208,63 @@ class Post(models.Model):
 
 class PostComment(models.Model):
     comment      = models.TextField(null=True)
-    post         = models.ForeignKey(Post, on_delete=models.CASCADE,blank=True, related_name="comments")
-    created_at   = models.DateTimeField(auto_now_add=True, null=True ,blank=True)
-    created_by   = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    post         = models.ForeignKey(
+                        Post,
+                        on_delete=models.CASCADE,
+                        blank=True,
+                        related_name="comments"
+                    )
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author   = models.ForeignKey(
+                        settings.AUTH_USER_MODEL, 
+                        on_delete=models.CASCADE,
+                        null=True, 
+                        blank=True
+                    )
     upvotes      = models.IntegerField(default=0)
 
     class Meta:
         db_table = "post_comments"
-        permissions = ( ('change_post_comment_upvotes', 'Can Change Post Comment  Uvotes'),)
-
+        permissions = (
+            ('change_post_comment_upvotes', 'Can Change Post Comment  Uvotes'),
+        )
 
     def __str__(self):
         return self.comment
 
 
-
-
-
-
 class PostReply(MPTTModel):
     reply      = models.TextField(null=True)
-    parent     = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,related_name='children')
-    created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
-    comment    = models.ForeignKey(PostComment, on_delete=models.CASCADE,
-                                        blank=True, null=True, related_name="replies")
+    parent     = TreeForeignKey(
+                    'self', 
+                    on_delete=models.CASCADE,
+                    null=True, 
+                    blank=True,
+                    related_name='children')
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_updated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    author = models.ForeignKey(
+                        settings.AUTH_USER_MODEL, 
+                        on_delete=models.CASCADE, 
+                        blank=True
+                     )
+    comment    = models.ForeignKey(
+                        PostComment,
+                        on_delete=models.CASCADE,
+                        blank=True,
+                        null=True, 
+                        related_name="replies"
+                    )
     
     upvotes    = models.IntegerField(default=0)
 
 
     class Meta:
         db_table = "post_replies"
-        permissions = (('change_post_reply_upvotes', 'Can Change Post Reply Uvotes'),
-                )
+        permissions = (
+            ('change_post_reply_upvotes', 'Can Change Post Reply Uvotes'),
+        )
 
     class MPTTMeta:
         order_insertion_by = ['reply']
@@ -221,6 +286,51 @@ class PostReply(MPTTModel):
 
     def __str__(self):
         return self.reply
+
+
+class AnswerBookmark(models.Model):
+    
+    answer = models.ForeignKey(
+                        Answer, 
+                        on_delete=models.CASCADE,
+                        blank=True, 
+                        related_name="answer_bookmarks"
+                    )
+    date_created  = models.DateTimeField(
+                        auto_now_add=True,
+                        null=True, 
+                        blank=True
+                    )
+    author   = models.ForeignKey(
+                        settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE,
+                        null=True,
+                        blank=True
+                    )
+   
+    class Meta:
+        db_table = "answer_bookmarks"
+
+    def save(self, *args, **kwargs):
+        super().save()
+
+class PostBookmark(models.Model):
+    post = models.ForeignKey(
+                        Post, 
+                        on_delete=models.CASCADE,
+                        blank=True,
+                        related_name="post_bookmarks" 
+                    )
+    author = models.ForeignKey(
+                        settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE,
+                        null=True,
+                        blank=True
+                    )
+    class Meta:
+        db_table = "post_bookmark"
+
+
 
 
 class AboutCompany(models.Model):

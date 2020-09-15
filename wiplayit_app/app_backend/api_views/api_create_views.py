@@ -10,6 +10,8 @@ from app_backend.helpers import get_objects_perms
 from app_backend.serializers import (DraftEditorContentsSerializer,
 									 FeedBackSerializer,
 									 ContactAdminSerializer,
+									 AnswerBookmarkSerializer,
+									 PostBookmarkSerializer,
                                      BugReportSerializer)
 from app_backend.mixins.views_mixins import CreateMixin
 from app_backend.admin_api.views import AboutView 
@@ -17,6 +19,7 @@ from app_backend.models import ( Question, Post,BugReport,
 								 FeedBack,ContactAdmin,
                                  Answer, AnswerComment, 
                                  AnswerReply, PostComment,
+                                 AnswerBookmark,PostBookmark,
                                  PostReply, DraftEditorMediaContent )
 
 from app_backend.views import (BaseApiView, PostView,
@@ -24,6 +27,7 @@ from app_backend.views import (BaseApiView, PostView,
                                PostChildReplyView,
 	                           QuestionView, AnswerView,
 	                           AnswerCommentView, AnswerReplyView,
+	                           AnswerBookMarkView, PostBookMarkView,
 	                           AnswerChildReplyView)
 
 
@@ -125,6 +129,20 @@ class CreateAnswerReplyChildView(CreateMixin , AnswerChildReplyView):
 			
 
 
+class AddAnswerBookMarkView(CreateMixin, AnswerBookMarkView):
+			
+	def get_object(self):
+		return get_object_or_404(Answer, id=self.kwargs['pk']) 
+
+class AddPostBookMarkView(CreateMixin, PostBookMarkView):
+			
+	def get_object(self):
+		return get_object_or_404(Post, id=self.kwargs['pk'])  
+    
+class DeleteAnswerBookMarkView(AnswerBookMarkView):
+
+	def get_object(self):
+		return get_object_or_404(AnswerBookmark, answer=self.kwargs['pk'])
 
 class CreateDraftEditorContentsView(CreateMixin, BaseApiView):
 	queryset = DraftEditorMediaContent.objects.all()

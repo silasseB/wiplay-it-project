@@ -58,7 +58,7 @@ export const PostComponent = props => {
             linkName,
         };
 
-    let editPostProps = {
+    let editObjProps = {
         objName     : 'Post',
         isPut       : true,
         obj         : post, 
@@ -68,39 +68,43 @@ export const PostComponent = props => {
 
 
 
-    let editCommentProps = {
+    let createObjProps = {
         objName           : 'Comment',
         obj               : post,
         isPost            : true,
         currentUser,
         byId        : postById,
         className   : 'btn-sm edit-comment-btn',
-        
-        
     };
 
+    let createBookmarkProps = {
+        objName           : `PostBookmark`,
+        obj               : answer,
+        byId              : `bookmarkedPosts`,
+        isPost            : true,
+        currentUser,  
+        isAuthenticated
+    };
 
-    editPostProps = GetModalLinkProps.props(editPostProps)
-    editCommentProps = GetModalLinkProps.props(editCommentProps)
+    createBookmarkProps = GetModalLinkProps.props(createBookmarkProps)
+    editObjProps = GetModalLinkProps.props(editObjProps)
+    createObjProps = GetModalLinkProps.props(createObjProps)
 
-    let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
+    let EditorModalBtn     = <OpenEditorBtn {...createObjProps}/>; 
 
     let PostUpVotersBtn = post.upvotes !== 0 &&   
                     <OpenUsersModalBtn {...postUpvotersProps}/>; 
    
     
 
-   let btnsProps = {
-        editPostProps,
-        editCommentProps, 
-      }; 
+    let btnsProps = {
+        ...props,
+        createObjProps,
+        editObjProps,
+        createBookmarkProps
+    }; 
 
-
-
-   
-   Object.assign(btnsProps, props)
-   
-   let UpVoteBtn =  post.upvoted? <DownVotePostBtn {...btnsProps}/>
+    let UpVoteBtn =  post.upvoted? <DownVotePostBtn {...btnsProps}/>
                : <UpVotePostBtn {...btnsProps}/>
 
 
@@ -108,7 +112,7 @@ export const PostComponent = props => {
             itemsCounter : PostUpVotersBtn,
             btn1   : UpVoteBtn,
             btn2   : EditorModalBtn,
-            btn3   : <OpenOptionlBtn {...editPostProps}/>,
+            btn3   : <OpenOptionlBtn {...btnsProps}/>,
             Styles : Styles
          };
 

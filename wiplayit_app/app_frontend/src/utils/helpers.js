@@ -50,7 +50,7 @@ export default class Helper {
     convertFromRaw =(contents)=>{
         let contentState = contents;
 
-        if (contents.length) {
+        if (contents?.length) {
 
             for (var i = contents.length - 1; i >= 0; i--) {
                 let carecter = contents[i];
@@ -148,7 +148,28 @@ export default class Helper {
 
 };
 
+export const IsBookMarked =(contentType, obj)=>{
+    
+    let cache = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
+    let index  = cache?.index;
+    let bookmarks = index?.bookmarks;
+    let isBookmarked = false;
 
+    if (bookmarks && obj) {
+        let contents = bookmarks[contentType] || []
+        console.log(contents)
+
+        contents.map((value, key)=> {
+                        
+            if(value.id === obj.id) {
+                isBookmarked = true
+            }
+        })
+    }
+    console.log('Object exist in bookmarks ', isBookmarked)
+    return isBookmarked
+
+}
 
 export const GetLoggedInUser =()=>{
     let cache = JSON.parse(localStorage.getItem('@@CacheEntities'))  || {};

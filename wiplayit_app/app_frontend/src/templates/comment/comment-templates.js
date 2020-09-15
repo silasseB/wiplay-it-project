@@ -83,7 +83,7 @@ export const CommentsComponent = props => {
             isAuthenticated,
         };
    
-    let editCommentProps = {
+    let editObjProps = {
         objName     : 'Comment',
         isPut       : true,
         obj         : comment, 
@@ -94,7 +94,7 @@ export const CommentsComponent = props => {
 
 
 
-    let editReplyProps = {
+    let createObjProps = {
         objName           : 'Reply',
         obj               : comment,
         isPost            : true,
@@ -103,14 +103,12 @@ export const CommentsComponent = props => {
         isAuthenticated,
         byId              : `newCommentsReplies${comment.id}`,
         className         : 'btn-sm edit-reply-btn',
-        
     };
 
-
-    editCommentProps  = GetModalLinkProps.props( editCommentProps)
-    editReplyProps    = GetModalLinkProps.props(editReplyProps)
+    editObjProps = GetModalLinkProps.props(editObjProps);
+    createObjProps = GetModalLinkProps.props(createObjProps);
     
-    let EditorModalBtn     = <OpenEditorBtn {...editReplyProps}/>; 
+    let EditorModalBtn     = <OpenEditorBtn {...createObjProps}/>; 
     
     let CommentUpVotersBtn = comment.upvotes !== 0 && 
                              <OpenUsersModalBtn {...commentUpvotersProps}/>; 
@@ -118,16 +116,16 @@ export const CommentsComponent = props => {
 
 
     
-   let btnsProps = {
-         editCommentProps,
-         editReplyProps,
-         btnStyles:optionsBtnStyles,
-         btnText : 'More', 
-      }; 
+    let btnsProps = {
+            ...props,
+            createObjProps,
+            editObjProps,
+            btnStyles:optionsBtnStyles,
+            btnText : 'More', 
+    }; 
 
-   Object.assign(btnsProps, props)
-      
-   let upvoteBtn =  props.comment.upvoted? <DownVoteCommentBtn {...btnsProps}/>
+         
+    let upvoteBtn =  props.comment.upvoted? <DownVoteCommentBtn {...btnsProps}/>
                : <UpVoteCommentBtn {...btnsProps}/>
 
    
@@ -136,7 +134,7 @@ export const CommentsComponent = props => {
         itemsCounter :  CommentUpVotersBtn,
         btn1         :  upvoteBtn,
         btn2         :  EditorModalBtn,
-        btn3         :  <OpenOptionlBtn {...editCommentProps}/>,
+        btn3         :  <OpenOptionlBtn {...btnsProps}/>,
         Styles       : Styles,
       } 
 

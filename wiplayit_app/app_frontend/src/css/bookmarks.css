@@ -1,0 +1,152 @@
+
+
+.bookmark-page  {
+  	padding-top : 40px;
+}
+
+.empty-bookmark {
+	font-size   : 18px;
+	margin      : 0 0 17px;
+	text-align  : center;
+}
+
+.empty-bookmark-box {
+
+}
+
+.bookmark-nav {
+	border: px solid red;
+	display: flex;
+	width: 100%;
+	padding: 15px 10px;
+}
+
+
+.bookmark-nav-contents {
+	width: 100%;
+}
+
+.bookmark-active {
+	width: 100%;
+}
+
+.bookmark-nav-contents p {
+	border-bottom : 2px solid #D5D7D5;
+	transition: width 2s;
+}
+
+
+.bookmark-nav-contents:first-child {
+	margin-right: 10px;	
+}
+
+
+.bookmark-nav-contents:last-child {
+	margin-left: 10px;	
+}
+
+
+.bookmark-nav-contents button {
+	border: none;
+	width: 100%;
+	font-size : 15px; 
+	font-size : 'Squada one';
+
+}
+
+.bookmark-nav-contents button:hover,
+.bookmark-nav-contents button:focus {
+	border: none;
+	background: #D5D7D5;
+}
+
+@media (max-width: 980px) {
+	
+	.bookmark-nav-title-box,
+	.bookmark-title-box {
+  		display: none;
+    }
+}
+
+
+
+@media (min-width: 980px) {
+
+	.bookmark-page {
+    	border      : px solid blue;
+      	padding-top : 40px;
+      	width       : 45%;
+        margin      : 0 27.5% 90px;  
+	}
+
+
+	.bookmark-box  {
+  		border:  px solid black;
+
+	}
+
+	.bookmark-title-box {
+  		border-bottom : 1px solid #D5D7D5;
+  		margin-bottom: 20px;
+    }
+
+    .bookmark-title {
+    	border :  px solid red;
+    }
+
+    .bookmark-nav-title-box {
+   		margin: 10px 0 0;	
+    }
+
+	.bookmark-contents {
+		border : 1px solid #D5D7D5;	
+		background : #ffff;
+		margin-bottom: 20px;
+		padding: 20px 0;
+	}
+
+	.bookmark-contents-box {
+		border:  px solid red;
+	}
+
+	.bookmark-nav {
+		border: px solid red;
+		display: block;
+		position:  absolute;
+		width : 12% ;
+		bottom        : auto;
+        top           : 14%; 
+        right         : auto;
+        left          : 12%;
+        padding: 0;
+	}
+
+
+	.bookmark-nav-contents {
+		width: auto;
+		border: px solid blue;
+		margin-top: 5px;
+	}
+
+
+	.bookmark-nav-contents:first-child {
+		margin-right: 0px;	
+	}
+
+
+	.bookmark-nav-contents:last-child {
+		margin-left: 0px;	
+	}
+
+
+	.bookmark-nav-contents button {
+		border: px solid red;
+		font-size : 15px; 
+		font-size : 'Squada one';
+		text-align: left !important;
+	}
+
+}
+
+
+

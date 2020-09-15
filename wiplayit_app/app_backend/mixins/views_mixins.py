@@ -44,7 +44,7 @@ class BaseMixin(object):
 
     			if add_post:
     				data['add_title'] = self.request.data.get("add_title") 
-    	return data or None
+    	return data 
 
 
     def update_slug_field(self, instance):
@@ -69,17 +69,17 @@ class BaseMixin(object):
         
     	
      	
-    def remove_perm(self, perm, instance, user=None):
-    	if user is None:
-    		user = self.request.user
-    	return remove_perm(perm, user, instance)
+    def remove_perm(self, perm, instance, author=None):
+    	if author is None:
+    		author = self.request.user
+    	return remove_perm(perm, author, instance)
 
     	        
-    def assign_perm(self,  perm, instance, user=None):
-        if user is None:
-            user = self.request.user
+    def assign_perm(self,  perm, instance, author=None):
+        if author is None:
+            author = self.request.user
 
-        return assign_perm(perm, user, instance )
+        return assign_perm(perm, author, instance )
         
         
 class UpdateObjectMixin(BaseMixin):
@@ -113,11 +113,11 @@ class UpdateObjectMixin(BaseMixin):
 	
 
 	def update_followers_fields(self, instance, **kwargs):
-		data    = dict()
-		current_user     = self.request.user
+		data   = dict()
+		author = self.request.user
 		
 		followers_perms = self.permissions.get('followers_perms',None)
-		user_is_following = has_perm(current_user, followers_perms, instance)
+		user_is_following = has_perm(author, followers_perms, instance)
 
 		if  hasattr(self, 'is_user'):
 			profile    = dict()
@@ -126,22 +126,22 @@ class UpdateObjectMixin(BaseMixin):
 
 			if user_is_following:
 				
-				current_user.profile = self.modify_current_user_followings_field(
+				author.profile = self.modify_current_user_followings_field(
 															instance.profile, decrem=True
 														)
 				self.unfollow(instance.profile)
 
 				self.remove_perm(followers_perms, instance)
-				self.remove_perm(followings_perms, current_user, user=instance)
+				self.remove_perm(followings_perms, author, user=instance)
 				
 			else:
-				current_user.profile = self.modify_current_user_followings_field(
+				author.profile = self.modify_current_user_followings_field(
 													   instance.profile, increm=True
 													)
 				self.follow(instance.profile)
 
 				self.assign_perm(followers_perms, instance)
-				self.assign_perm(followings_perms, current_user, user=instance)
+				self.assign_perm(followings_perms, author, user=instance)
 
 			
 			profile['followers']  = instance.profile.followers
@@ -167,9 +167,9 @@ class UpdateObjectMixin(BaseMixin):
 
 		upvotes_perm = self.permissions.get('upvotes_perms',None)
 		data = dict()
-		current_user     = self.request.user
+		author     = self.request.user
 				
-		if has_perm(current_user, upvotes_perm, instance):
+		if has_perm(author, upvotes_perm, instance):
 			instance.upvotes = instance.upvotes - 1
 			instance.save()
 			self.remove_perm(upvotes_perm, instance )
@@ -272,37 +272,30 @@ class CreateMixin(BaseMixin):
 	
 		
 	def create(self, data):
-		created_by = self.request.user;	
+		author = self.request.user;	
 
 		serializer = self.get_serializer(data=data)
+
 		if not serializer.is_valid():
-			print(serializer.errors)
-			
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 		if data and data.get('about_text', None) is None:
-			instance = serializer.save(created_by=created_by)
+			instance = serializer.save(author=author)
+			
 		else:
 			instance = serializer.save()
 	
 
 		if  hasattr(self, 'permissions'):
 			edit_perms = self.permissions.get('edit_perms',None)
-			is_superuser = created_by.is_superuser
+			is_superuser = author.is_superuser
 
 			if not is_superuser and edit_perms is not None:
 				for perm in edit_perms:
 					self.assign_perm(perm, instance)
-		
+				
 		return Response(serializer.data, status=status.HTTP_201_CREATED)
-		
-		
-	
-         
-        
-	
-	        
-            
+		          
 class RetrieveMixin(BaseMixin):
 	pass
 	

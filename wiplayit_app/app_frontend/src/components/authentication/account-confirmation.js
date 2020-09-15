@@ -350,7 +350,7 @@ export class PasswordConfirmationPage extends Component{
             let {error, 
                  loginAuth,
                  passwordRestAuth,
-                  isLoading} = userAuth;
+                 isLoading} = userAuth;
             
             this.setState({submitting : isLoading}); 
 
@@ -375,7 +375,6 @@ export class PasswordConfirmationPage extends Component{
             delete passwordRestAuth.successMessage;
             this.togglePasswordConfirmForm();
         }
-
     }
 
     handlePasswordConfirmSuccess(loginAuth){

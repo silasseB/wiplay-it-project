@@ -20,6 +20,7 @@ const asyncActionToggleType = (type) => ({
 
 const actionType = (type) => ({
     ABOUT                   : `${type}_ABOUT`,
+    BOOKMARK                : `${type}_BOOKMARK`,
     INDEX                   : `${type}_INDEX`,
     QUESTION                : `${type}_QUESTION`,
     POST                    : `${type}_POST`,
@@ -76,9 +77,11 @@ export const GET_REPLY_LIST              = asyncActionType(GET.REPLY_LIST);
 export const GET_REPLY_CHILD_LIST        = asyncActionType(GET.REPLY_CHILD_LIST);
 export const GET_REPLY_GRAND_CHILD_LIST  = asyncActionType(GET.REPLY_GRAND_CHILD_LIST);
 
-export const GET_REPLY_GREAT_GRAND_CHILD_LIST = asyncActionType(GET.REPLY_GREAT_GRAND_CHILD_LIST);
+export const GET_REPLY_GREAT_GRAND_CHILD_LIST = 
+                asyncActionType(GET.REPLY_GREAT_GRAND_CHILD_LIST);
 
 export const CREATE_ABOUT        = asyncActionType(CREATE.ABOUT);
+export const CREATE_BOOKMARK     = asyncActionType(CREATE.BOOKMARK);
 export const CREATE_QUESTION     = asyncActionType(CREATE.QUESTION);
 export const CREATE_POST         = asyncActionType(CREATE.POST);
 export const CREATE_ANSWER       = asyncActionType(CREATE.ANSWER);

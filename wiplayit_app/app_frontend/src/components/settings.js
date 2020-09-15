@@ -70,14 +70,14 @@ class  SettingsContainer extends Component  {
                 delete userAuth.error;
             }
 
-            this.handlePhoneNumberAddSucces(phoneNumberOrEmailAuth);
+            this.handlePhoneNumberAddSuccess(phoneNumberOrEmailAuth);
                  
         };
         this.unsubscribe = store.subscribe(onStoreChange);
     };
 
 
-    handlePhoneNumberAddSucces(phoneNumberOrEmailAuth){
+    handlePhoneNumberAddSuccess(phoneNumberOrEmailAuth){
         if (!phoneNumberOrEmailAuth) return;
 
         let {phoneNumberOrEmailAdded} = this.state;
@@ -91,10 +91,10 @@ class  SettingsContainer extends Component  {
                  email_address} =  phoneNumberOrEmailAuth || {};
             
             if (phone_numbers?.length ) {
-                currentUser =  {...currentUser, phone_numbers};
+                currentUser = {...currentUser, phone_numbers};
 
             }else if (email_address?.length) {
-                currentUser = email_address && {...currentUser, email_address};
+                currentUser = {...currentUser, email_address};
             }
                    
             this.setState({phoneNumberOrEmailAdded:true});
@@ -242,9 +242,7 @@ class  SettingsContainer extends Component  {
     }
 
     resetSuccessSubmitListers(){
-        this.setState(
-            {phoneNumberOrEmailAdded:false, 
-             passwordChanged:false})
+        this.setState({phoneNumberOrEmailAdded:false, passwordChanged:false})
     }
 
     validateForm(form){

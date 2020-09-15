@@ -141,6 +141,10 @@ def get_model_fields(for_model=None):
 	    'about_model_fields' : {
 	     	'text_field' :'about_text',
 		},
+
+		'answer_bookmarks_model_fields' : {
+		   'related_field':'answer'
+    	},
 		
 	}
 	

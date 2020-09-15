@@ -13,10 +13,10 @@ class MessageFormContainer extends Component{
     constructor(props) {
         super(props);
         this.state = { 
-            form     : {full_name   : 'Silasi Baloyi',
-                        email       : 'silas@gmail.com',
-                        subject     : 'Hello guys',
-                        description : 'Hi guys , thanks for creating this platform',},
+            form     : {full_name   : '',
+                        email       : '',
+                        subject     : '',
+                        description : '',},
             error     : '',
             submitting : false,
             displayMessage :false,

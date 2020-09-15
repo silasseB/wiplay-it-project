@@ -14,6 +14,8 @@ from .models import (Question,
 					 AnswerReply,
 	                 PostComment,
 	                 PostReply,
+	                 AnswerBookmark,
+	                 PostBookmark,
 	                 DraftEditorMediaContent )
 
 from app_backend.serializers import ( UserSerializer,
@@ -24,6 +26,8 @@ from app_backend.serializers import ( UserSerializer,
 	                                  AnswerCommentSerializer,
 	                                  AnswerCommentReadSerializer,
 	                                  AnswerReplySerializer,
+	                                  PostBookmarkSerializer,
+	                 			 	  AnswerBookmarkSerializer,
 	                                  AnswerReplyReadSerializer )
 
 from app_backend.serializers import (PostSerializer,
@@ -114,7 +118,6 @@ class PostDetailView(PostView):
 	serializer_class =  PostReadSerializer
 	
 	
-	
 
 class PostCommentView(BaseApiView):
 	queryset         = PostComment.objects.all()
@@ -141,10 +144,17 @@ class PostChildReplyView(PostReplyView):
 class PostReplyDetailView(PostReplyView):
 	serializer_class = PostReplyReadSerializer
 	
-	
-	
-	
 
+class AnswerBookMarkView(BaseApiView):
+	queryset = AnswerBookmark.objects.all()
+	serializer_class = AnswerBookmarkSerializer
+	fields_to_update = {'related_field':'answer'}
+
+
+class PostBookMarkView(BaseApiView):
+	queryset = PostBookmark.objects.all()
+	serializer_class = PostBookmarkSerializer
+	fields_to_update = {'related_field':'post'}
 	
 			
 			

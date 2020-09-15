@@ -2,7 +2,7 @@
  
 import Api from 'utils/api';
 import Axios from 'utils/axios_instance';
-import  * as action  from 'actions/actionCreators';
+import * as action  from 'actions/actionCreators';
 import * as checkType from 'helpers/check-types'; 
 import {GetLoggedInUser } from 'utils/helpers';
 import {history} from 'App';
@@ -48,7 +48,7 @@ export function sendMessage(options={}) {
 
                 }else if(error.request){
                     console.log(error.request)
-                    error = 'Look like you lost connection, please try again.';
+                    error = 'Looks like you lost connection, please try again.';
                     dispatch(action.handleError(error));
                     dispatch(action.sendMessageError(error));
 
@@ -399,10 +399,7 @@ export function getReplyList(props) {
 
 export function getReplyChildrenList(props) {
     let {actionType, byId, apiUrl, children } = props;
-    //const instance = axiosApi.axiosInstance();
-
-    //console.log(props)
-
+ 
     if (children && children.length) {
         return dispatch => {
             dispatch(action.getReplyChildListPending(actionType, byId));
@@ -420,11 +417,15 @@ export function getReplyChildrenList(props) {
     }
 
     return dispatch => {
-       dispatch(action.getReplyChildListPending(actionType, byId))
-	   Api.get(apiUrl)
-      .then(response => dispatch(action.getReplyChildListSuccess(actionType, byId, response.data)))
-      .catch(error => dispatch(action.getReplyChildListError(actionType, byId, error))) 
-   }
+        dispatch(action.getReplyChildListPending(actionType, byId))
+	    Api.get(apiUrl)
+        .then(response =>{
+            dispatch(action.getReplyChildListSuccess(actionType, byId, response.data))
+        })
+        .catch(error => {
+            dispatch(action.getReplyChildListError(actionType, byId, error))
+        }) 
+    }
 };
 
 
@@ -461,6 +462,56 @@ const UserIsConfirmed =(currentUser)=> {
     return currentUser && currentUser.is_confirmed;
 
 }
+
+export const Delete = (params)=>{
+    let apiUrl = params.apiUrl;
+    const Api  = _GetApi(true); 
+    if (!Api) {
+        return dispatch =>{ dispatch(action.handleError()) };
+    }
+
+    return dispatch => {
+        
+        Api.delete(apiUrl, {})
+            .then(response => {
+                console.log(response, params) 
+                let bookmarks = removeBookmark(params.obj, params.bookmarkType)
+         
+                dispatch(action.getIndexSuccess(bookmarks))
+                
+                let alertMessage = {
+                    textMessage : 'Bookmark successfully removed.',
+                    messageType : 'success'
+                }
+                dispatch(action.HandleAlertMessage(alertMessage))
+            })
+            .catch(error =>{
+                if (error.response && error.response.data) {
+                    console.log(error)
+
+                }else{
+                    console.log(error)
+                    dispatch(action.handleError(error.request))
+                }
+            });
+    };
+} 
+
+const removeBookmark =(bookmarkObj, bookmarkType)=>{
+    let cache = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
+    let index = cache?.index
+    
+    let bookmarks = index?.bookmarks || []
+    let bookmarksCache = bookmarks[bookmarkType] || []
+    bookmarks[bookmarkType] = bookmarksCache.filter((bookmark)=> {
+                                     return bookmark.id !== bookmarkObj.id;
+                                    })
+    
+    index['bookmarks'] = bookmarks
+    index['bookmarkRemoved'] = true
+    
+    return index
+} 
 
 export function handleSubmit(props) {
     
@@ -526,8 +577,14 @@ export function handleSubmit(props) {
 		    .then(response => {
 		        
                 updateProps['data'] = prepPayLoad(objName, response.data);
-                isModal && dispatch(action.ModalSubmitSuccess(updateProps))
+                isModal && dispatch(action.ModalSubmitSuccess(updateProps));
 			    dispatch(action.updateActionSuccess(updateProps));
+
+                let alertMessage = {
+                    textMessage : BuildAlertMessage(updateProps),
+                    messageType : 'success'
+                }
+                dispatch(action.HandleAlertMessage(alertMessage))
 			
 		    })
 		    .catch(error => {
@@ -562,15 +619,23 @@ export function handleSubmit(props) {
         }
 
 	}else if (props.isPost) {
+        console.log(props)
         return dispatch => {
            isModal && dispatch(action.ModalSubmitPending(modalName))
      	   !isModal && dispatch(action.createActionPending(createProps ))
 
 		    Api.post(props.apiUrl, props.formData)
 		    .then(response => {
+                console.log(response)
 			    createProps['data'] = prepPayLoad(objName, response.data); 
                 isModal && dispatch(action.ModalSubmitSuccess(createProps))
 			    dispatch(action.createActionSuccess(createProps));
+                            
+                let alertMessage = {
+                    textMessage : BuildAlertMessage(createProps),
+                    messageType : 'success'
+                }
+                dispatch(action.HandleAlertMessage(alertMessage))
                 
 		    })
 		    .catch(error => {
@@ -585,20 +650,16 @@ export function handleSubmit(props) {
                     console.log(error.request)
                     error = 'Something wrong happened.';
                     createProps['error'] = error;
-
-                    !isModal && dispatch(action.createActionError(error));
                     isModal && dispatch(action.handleError(error));
                     
-                    isModal && dispatch(action.ModalSubmitError(createProps))
-
                 }else{
                     console.log(error)
                     dispatch(action.handleError());
-
                     createProps['error'] = 'Something wrong happened.'
-                    isModal && dispatch(action.ModalSubmitError(createProps))
                 }
 
+                !isModal && dispatch(action.createActionError(error));
+                isModal && dispatch(action.ModalSubmitError(createProps))
 			   
 	        })
    	    }
@@ -678,19 +739,24 @@ export function authenticate(params={}){
                     _error = error.response.statusText
                     dispatch(action.authenticationError(_error, isSocialAuth));
                     return dispatch(action.handleError(_error));
-
                 }
 
                 _error = error.response.data;
-                dispatch(action.authenticationError(_error, isSocialAuth, isTokenRefresh));
+                dispatch(
+                    action.authenticationError(_error, isSocialAuth, isTokenRefresh)
+                );
                     
-                isSocialAuth && dispatch(action.handleError(_error.non_field_errors[0]));
+                isSocialAuth && dispatch(
+                                    action.handleError(_error.non_field_errors[0])
+                                );
 
             }
             else if (error.request)  {
                 _error = 'Something wrong happened. Please try again';
                 
-                dispatch(action.authenticationError(_error, isSocialAuth, isTokenRefresh));
+                dispatch(
+                    action.authenticationError(_error, isSocialAuth, isTokenRefresh)
+                );
                 dispatch(action.handleError(_error));
 
             }else{
@@ -836,36 +902,52 @@ export function getAdmin() {
 
 
 const prepPayLoad = (objName, data)=>{
-	
-	if(objName === "Question"){
-	   data = { question : data };
-	}
-	else if(objName === "Answer"){
-      data = { answer : data };
-	}
-	else if(objName === "Comment"){
-		data = { comment : data };
-	}
-	else if(objName === "Reply"){
-		data = { reply : data };
-	}
-	else if(objName === "Post"){
-		data = { post : data };
-	}
+	switch(objName){
+        case 'Question':
+            return {question : data}
 
-	else if(objName === "UserProfile"){
-		data = {user : data};
-	}
+        case 'Answer':
+            return {answer : data}
 
-	else if(objName === "UsersList"){
-		data = {user : data};
-	}
+        case 'Comment':
+            return {comment : data}
 
+        case 'Reply':
+            return {reply : data}
 
-   return data;
+        case 'Post':
+            return {post : data}
+
+        case 'UserProfile':
+        case 'UsersList':
+            return {user: data}
+
+        case 'AnswerBookmark':
+            return {answers : data}
+
+        case 'PostBookmark':
+            return {posts : data}
+    }
 };  
 
 
+const BuildAlertMessage = (params)=>{
+    let {objName,
+         isUpdating,
+         isCreating } = params;
+
+    let action = isCreating &&'created' || isUpdating && 'edited';
+    let alertMessage = `${objName} successfully ${action}`
+
+    if(objName === 'AnswerBookmark'){
+        alertMessage = 'Answer successfully added to bookmarks'
+    }
+    else if(objName === 'PostBookmark'){
+        alertMessage = 'Post successfully added to bookmarks'
+    }
+
+   return alertMessage;
+};  
 
 
 

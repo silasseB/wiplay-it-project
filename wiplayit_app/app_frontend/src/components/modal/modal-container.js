@@ -177,7 +177,8 @@ export const ModalManager = {
 
         modals.push(component);
 
-        if(modals.length === 1){ // render the modal only if there is no other showing modals
+        if(modals.length === 1){ 
+            // render the modal only if there is no other showing modals
             renderModal();
         }
 
@@ -186,11 +187,12 @@ export const ModalManager = {
 
         store.dispatch(showModal(modalName, true));
     },
-    close(modalName){
+    close(modalName, background){
           
         onClose && onClose(() => {
             EnablePageScrool()
             store.dispatch(showModal(modalName, false));
+            background && window.history.back();
 
             ReactDOM.unmountComponentAtNode(node);
            //renderModal();// render the other modals which are waiting.

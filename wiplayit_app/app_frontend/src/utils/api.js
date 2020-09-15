@@ -97,6 +97,18 @@ export default class Api{
     }
 
 
+    AddPostBookMarkApi(id){
+        return `api/post/${id}/bookmark/add/`
+    }
+    
+    AddAnswerBookMarkApi(id){
+        return `api/answer/${id}/bookmark/add/`
+    }  
+
+    removeAnswerBookMarkApi(id){
+        return `api/answer/${id}/bookmark/remove/`
+    }   
+
     getQuestionListApi() {
         var api = `/api/question/list/`;
         return api;
@@ -172,17 +184,12 @@ export default class Api{
         var api = `/api/answer/${id}/upvoters/`;
         return api;
     }
-    
-
 
 
     getAnswerCommentListApi(id) {
         var api = `/api/answer/${id}/comment/list/`;
         return api;
     }
-
-
-
 
     getAnswerCommentUpVotersListApi(id) {
         var api = `/api/answer/comment/${id}/upvoters/`;
@@ -206,7 +213,6 @@ export default class Api{
         var api = `/api/answer/reply/${id}/upvoters/`;
         return api;
     }
-
 
     getProfileApi(id ) {
         var api = `/api/profile/${id}/`;
@@ -268,7 +274,7 @@ export default class Api{
         return api;
     }
 
-   createUser() {
+    createUser() {
         var url = `/rest-auth/registration/`;
         return url;
     }
@@ -319,7 +325,6 @@ export default class Api{
     passwordChangeApi() {
         var url = `/rest-auth/password/change/`;
         return url ;
-         
     }
 
     addEmailApi(){

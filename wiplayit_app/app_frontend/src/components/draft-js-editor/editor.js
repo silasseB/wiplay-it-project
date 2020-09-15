@@ -108,35 +108,28 @@ export default  class AppEditor extends Component{
            this.setState({contentIsEmpty : true,})
 
         }
-
-       
     };
 
-
-
     onTextAreaChange(event) {
-      event.preventDefault();
-      let form = this.state.form;
-      form[event.target.name] = event.target.value;
-      this.setState({form});
+        event.preventDefault();
+        let form = this.state.form;
+        form[event.target.name] = event.target.value;
+        this.setState({form});
 
-      let validatedForm = helper.validateForm({form : this.state.form})
-      if (validatedForm.formIsValid) {
-         this.setState({contentIsEmpty : false,})
-      }else {
-         this.setState({contentIsEmpty : true,})
-
-      }
+        let validatedForm = helper.validateForm({form : this.state.form})
+        if (validatedForm.formIsValid) {
+            this.setState({contentIsEmpty : false,})
+        }else {
+           this.setState({contentIsEmpty : true,})
+        }
     };
    
     submit = () => {
         let { contentIsEmpty }= this.state;
 
         if (contentIsEmpty) {
-            console.log('Form is Empth')
-
             let message = {
-                textMessage : 'You cannot submit incomplete form',
+                textMessage : 'You cannot submit empth form',
                 messageType : 'error'
             }
             this._SetErrorMessage(message)
@@ -165,8 +158,8 @@ export default  class AppEditor extends Component{
             if (this.isMounted) {
                 let storeUpdate   = store.getState();
           
-                let { entities } = storeUpdate
-                let { modal,errors    } = entities
+                let {entities} = storeUpdate
+                let {modal, errors} = entities
                                                              
                 if (modal && modal['editor']) {
                     modal = modal['editor']
@@ -180,7 +173,6 @@ export default  class AppEditor extends Component{
                         }
 
                         this._SetErrorMessage(message)
-
                         delete modal.error;   
                     }
                 }
@@ -367,15 +359,11 @@ export default  class AppEditor extends Component{
             let https = 'https://';
             let http  = 'http://';
 
-
             if (protocol !== http.slice(0, 4)) {
                 urlValue = `${http}${urlValue}`
 
             }
 
-            console.log(linkUrl)
-            console.log( protocol )
-        
             newEditorState = insertLink(editorState, { url: urlValue }, linkUrl)
             console.log(newEditorState)
         }
@@ -445,9 +433,8 @@ export default  class AppEditor extends Component{
 
 
     getTextAreaProps() {
-
         let getPlaceHolder = ()=> {
-            let { editorPlaceHolder, objName} = this.props;
+            let {editorPlaceHolder, objName} = this.props;
                     
             if (objName === 'Post' || objName === 'About' ) {
                editorPlaceHolder = 'Title...'
@@ -474,6 +461,7 @@ export default  class AppEditor extends Component{
     }
 
     handleResize =(event)=> {
+        console.log(event, 'keyboard')
         let editorsBoxElem = document.getElementById('editors-box');
         
         if (editorsBoxElem) {
@@ -500,17 +488,17 @@ export default  class AppEditor extends Component{
     }
 
     handleScroll=(event)=>{
-        let editorsBoxElem = document.getElementById('editors-box')
+        let editorsBoxElem = document.getElementById('editors-box');
         let content      = document.getElementById('modal-content');
         let overlay      = document.getElementById('modal-overlay');
 
-        if (!editorsBoxElem) return;
+        if (!overlay && !content) return;
         
-        let contentRectTop      = content.getBoundingClientRect().top;
-        let _contentHeight = content.clientHeight + contentRectTop;
-        let _overlay = overlay.clientHeight - 80;
+        let contentRectTop      = content?.getBoundingClientRect()?.top;
+        let _contentHeight = content?.clientHeight + contentRectTop;
+        let _overlay = overlay?.clientHeight - 80;
         
-        editorsBoxElem.scrollTop = editorsBoxElem.scrollHeight;
+        editorsBoxElem.scrollTop = editorsBoxElem?.scrollHeight;
             
         if (_contentHeight >= _overlay && this.matchDesktopMedia()) {
             this.setScrollHeight(editorsBoxElem.clientHeight);
@@ -524,8 +512,7 @@ export default  class AppEditor extends Component{
                 
         let onScroolStyles = {
                 height : `${scrollHeight}px`,
-                border : 'px solid blue',
-            }; 
+             }; 
         this.setState({onScroolStyles});
     }
 
@@ -543,8 +530,8 @@ export default  class AppEditor extends Component{
 
 
     getProps() {
-        let currentContent   = this.state.editorState.getCurrentContent();
-        let editorContents   = convertToRaw(currentContent);
+        let currentContent   = this.state.editorState?.getCurrentContent();
+        let editorContents   = currentContent && convertToRaw(currentContent) || {};
         editorContents       =  JSON.stringify(editorContents);
     
         return {
@@ -674,7 +661,7 @@ export const EditorContentsComponent = (props)=> {
         case 'Post':
         case 'About':
             return <PostEditor {...props}/>
-
+ 
         default:
             return <PureDraftEditor {...props}/>;  
     };

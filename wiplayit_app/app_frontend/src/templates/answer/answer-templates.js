@@ -68,7 +68,7 @@ export const AnswersComponent = props => {
             isAuthenticated,
         };
 
-    let editAnswerProps = {
+    let editObjProps = {
         objName     : 'Answer',
         linkName    : 'Edit Answer',
         isPut       : true,
@@ -80,7 +80,7 @@ export const AnswersComponent = props => {
 
 
 
-    let editCommentProps = {
+    let createObjProps = {
         objName           : 'Comment',
         obj               : answer,
         isPost            : true,
@@ -88,14 +88,23 @@ export const AnswersComponent = props => {
         className         : 'btn-sm edit-comment-btn',
         currentUser,
         isAuthenticated,
-        
+    };
+  
+    let createBookmarkProps = {
+        objName           : `AnswerBookmark`,
+        bookmarkType      : 'answers',
+        obj               : answer,
+        byId              : `bookmarkedAnswers`,
+        isPost            : true,
+        currentUser,  
+        isAuthenticated
     };
 
+    createBookmarkProps = GetModalLinkProps.props(createBookmarkProps)
+    editObjProps = GetModalLinkProps.props(editObjProps);
+    createObjProps = GetModalLinkProps.props(createObjProps);
 
-    editAnswerProps = GetModalLinkProps.props(editAnswerProps);
-    editCommentProps = GetModalLinkProps.props(editCommentProps);
-
-    let EditorModalBtn     = <OpenEditorBtn {...editCommentProps}/>; 
+    let EditorModalBtn     = <OpenEditorBtn {...createObjProps}/>; 
     
     let AnswerUpVotersBtn = answer.upvotes !== 0 &&
                             <OpenUsersModalBtn {...answerUpvotersProps}/> 
@@ -103,11 +112,11 @@ export const AnswersComponent = props => {
     
 
     let btnsProps = {
-         editAnswerProps,
-         editCommentProps, 
-      }; 
-
-    Object.assign(btnsProps, props)
+            ...props,
+            editObjProps,
+            createObjProps, 
+            createBookmarkProps,
+    }; 
    
     
     let UpVoteBtn = answer.upvoted? <DownVoteAnswerBtn {...btnsProps}/>
@@ -118,9 +127,9 @@ export const AnswersComponent = props => {
             itemsCounter : AnswerUpVotersBtn,
             btn1   : UpVoteBtn,
             btn2   : EditorModalBtn,
-            btn3   : <OpenOptionlBtn {...editAnswerProps}/>,
+            btn3   : <OpenOptionlBtn {...btnsProps}/>,
             Styles : Styles
-         };
+        };
 
     const userProps  = {
             obj   : answer,

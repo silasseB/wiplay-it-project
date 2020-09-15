@@ -436,7 +436,6 @@ class GoogleLogin(SocialLoginView):
 
 
 class UserView(BaseApiView):
-	#queryset = User.objects.exclude(first_name="Anonymous")
 	serializer_class = UserSerializer
 	is_user          = True
 	permissions      = get_objects_perms('user_perms')

@@ -3,9 +3,11 @@ import { Link, useLocation, Router } from "react-router-dom";
 import * as Icon from 'react-feather';
 import {history} from "App" 
 import { MatchMediaHOC } from 'react-match-media';
-import { ModalManager, Modal }   from  "components/modal/modal-container";
+import {ModalManager, Modal}   from  "components/modal/modal-container";
+import {closeModals}   from  'components/modal/helpers';
 import { store } from "store/index";
 import {showModal, handleError} from 'actions/actionCreators';
+import {IsBookMarked} from 'utils/helpers';
 
 
  let unfollowedBtnStyles = {
@@ -25,23 +27,23 @@ import {showModal, handleError} from 'actions/actionCreators';
 export const FollowUserBtn = props => {
        
     let {currentUser,
-         editUserProfileProps,
+         editObjProps,
          editfollowersOrUpVoters } = props;
 
-    let obj = editUserProfileProps?.obj;
+    let obj = editObjProps?.obj;
     
     let btnText        =  obj?.user_is_following && "Following" || "Follow";
     var followers_text =  obj?.profile.followers > 1 && 'Followers' || 'Follower';  
-    let styles         =  obj?.user_is_following && followedBtnStyles || unfollowedBtnStyles;
+    let styles         =  obj?.user_is_following &&
+                          followedBtnStyles || unfollowedBtnStyles;
         
-    
     return(
         <div className="follow-btn-box">
             {obj?.email !== currentUser?.email &&
                 <button 
                     style={styles} type="button" 
                     className="btn-sm follow-user-btn"
-                    onClick={() => editfollowersOrUpVoters(editUserProfileProps)}>  
+                    onClick={() => editfollowersOrUpVoters(editObjProps)}>  
                     
                     {btnText} {obj?.profile.followers }             
                 </button>
@@ -62,68 +64,73 @@ export const UnfollowUserBtn = props => {
     
     return(
         <button type="button"
-                onClick={() => props.editfollowersOrUpVoters(props.editUserProfileProps)}
-               className="unfollow-user">
+                onClick={() => props.editfollowersOrUpVoters(props.editObjProps)}
+                className="unfollow-user">
             Follow 
-      </button>
-    
-  )
+        </button>
+    )
 }                           
 
 
 export const FollowQuestionBtn = props => {
-    //console.log(props.editQuestionProps)
+    let obj = props?.editQuestionProps?.obj
+
     return(
         <button 
             type="button" 
-            onClick={ () => props.editfollowersOrUpVoters(props.editQuestionProps)}
+            onClick={ () => props.editfollowersOrUpVoters(props.editObjProps)}
             className="btn-sm follow-question-btn" >
 
-            Follow <span className="fa fa-rss icon-color"></span>            
+            <Icon.Rss 
+                className="follow-btn icon-color" 
+                size={20}/> Follow - {obj?.followers}       
         </button>
     )
 }
 
 
 export const UnfollowQuestionBtn = props => {
-    //console.log(props.editQuestionProps)
+    let obj = props?.editQuestionProps?.obj
+
     return(
-        <button  type="button" onClick={() =>  props.editfollowersOrUpVoters(props.editQuestionProps)}
-                               className="btn-sm  follow-question-btn" >
-               Following <span className="fa fa-rss"></span>
+        <button type="button"
+                onClick={() =>  props.editfollowersOrUpVoters(props.editObjProps)}
+                className="btn-sm  follow-question-btn" >
+            <Icon.Rss className="follow-btn" size={20}/> Following - {obj?.followers}
          </button>
-      )
+    )
 };
 
 
            
 export const UpVotePostBtn = props => (     
-<div>    
-   <button  type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editPostProps)}
-                                          className="btn-sm  upvote-answer" >
-     Upvote <span className="fa fa-arrow-up"></span>
-  </button>
-</div>
-
- )
-
-
+   
+        <button  type="button" 
+            onClick={() => props.editfollowersOrUpVoters(props.editObjProps)}
+            className="btn-sm  upvote-answer" >
+            Upvote <span className="fa fa-arrow-up"></span>
+        </button>
+)
 
 
          
 export const DownVotePostBtn = props => (  
       
-    <button   type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editPostProps)}
-                                         className="btn-sm icon-color upvote-answer" >
-    Upvoted <span className=" fa fa-arrow-up upvote-icon"></span>
-  </button>
+    <button 
+        type="button" 
+        onClick={() =>  props.editfollowersOrUpVoters(props.editObjProps)}
+        className="btn-sm icon-color upvote-answer" >
+        Upvoted <span className="fa fa-arrow-up upvote-icon"></span>
+    </button>
 );
 
 
             
 export const UpVoteAnswerBtn = props => (     
       
-        <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
+        <button
+            type="button"
+            onClick={() => props.editfollowersOrUpVoters(props.editObjProps)}
                                           className="btn-sm  upvote-answer" >
             Upvote <span className="fa fa-arrow-up"></span>
         </button>
@@ -136,11 +143,11 @@ export const UpVoteAnswerBtn = props => (
          
 export const DownVoteAnswerBtn = props => (  
     <div>       
-    <button type="button"
-            onClick={ () => props.editfollowersOrUpVoters(props.editAnswerProps)}
+        <button type="button"
+            onClick={ () => props.editfollowersOrUpVoters(props.editObjProps)}
             className="btn-sm icon-color upvote-answer" >
-        Upvoted <span className=" fa fa-arrow-up upvote-icon"></span>
-    </button>
+            Upvoted <span className=" fa fa-arrow-up upvote-icon"></span>
+        </button>
   </div>
  )
 
@@ -149,7 +156,7 @@ export const DownVoteAnswerBtn = props => (
 export const UpVoteCommentBtn = props => (     
     <div>    
         <button  type="button"
-            onClick={ () => props.editfollowersOrUpVoters(props.editCommentProps)}
+            onClick={ () => props.editfollowersOrUpVoters(props.editObjProps)}
             className="btn-sm upvote-comment-btn" >
             Upvote 
         </button>
@@ -159,32 +166,34 @@ export const UpVoteCommentBtn = props => (
 
 
 export const DownVoteCommentBtn = props => (     
-   <div>    
-      <button  type="button" onClick={ () => props.editfollowersOrUpVoters(props.editCommentProps)} 
+    <div>    
+        <button  type="button" 
+            onClick={ () => props.editfollowersOrUpVoters(props.editObjProps)} 
                       className="btn-sm upvote-comment-btn" >
          Upvoted 
-      </button>
-   </div>
-
+        </button>
+    </div>
 )
 
 
 export const UpVoteReplyBtn = props => (     
-<div>    
-   <button  type="button" onClick={ () =>  props.editfollowersOrUpVoters(props.editReplyProps)}
-                   className="btn-sm upvote-reply-btn" >
-     Upvote 
-  </button>
-</div>
+    <div>    
+        <button 
+            type="button"
+            onClick={ () => props.editfollowersOrUpVoters(props.editObjProps)}
+            className="btn-sm upvote-reply-btn" >
+            Upvote 
+        </button>
+    </div>
 
- )
+)
 
 
 export const DownVoteReplytBtn = props => (     
     <div>    
         <button  
             type="button"
-            onClick={ () => props.editfollowersOrUpVoters(props.editReplyProps)} 
+            onClick={() => props.editfollowersOrUpVoters(props.editObjProps)} 
             className="btn-sm  icon-color upvote-comment" >
             Upvoted 
         </button>
@@ -205,10 +214,15 @@ export const ProfileOptsModalBtns = props => {
 
 
 export const QuestionOptsModalBtns = props => {
-   console.log(props)
+    let editObjProps = props?.editObjProps;
+
     return (
         <button type="button"
-                className="btn-sm" >
+                onClick={() => {
+                    closeModals(true)
+                    props.editfollowersOrUpVoters(editObjProps)
+                }}
+                className="btn-sm">
             <Icon.Rss className="options-menu-icon" size={20}/> 
             Follow Question
         </button>
@@ -216,7 +230,7 @@ export const QuestionOptsModalBtns = props => {
 }
 
 export const OptionsMenuBtns = props => {
-   
+    
     return(
         <div className="options-menu">
             <ExtraBtns {...props}/>
@@ -226,13 +240,14 @@ export const OptionsMenuBtns = props => {
 }
 
 export const Author = props =>{
-    let {currentUser, obj} = props;
-
-    if(obj?.created_by?.id != currentUser?.id) return null
+    let {currentUser} = props;
+    let obj = props.editObjProps?.obj;
+    
+    if(obj?.author?.id != currentUser?.id) return null
 
     return(
         <div className="options-menu">
-            <OpenEditorBtn {...props}>
+            <OpenEditorBtn {...props.editObjProps}>
                 <Icon.Edit className="options-menu-icon" size={20}/> 
             </OpenEditorBtn>
             <button type="button" className="btn-sm  option-delete-btn" >
@@ -248,17 +263,36 @@ export const Author = props =>{
 } 
 
 export const ExtraBtns = (props) =>{
-    let {objName} = props
+    console.log(props)
+    let objName = props?.editObjProps?.objName
     if (objName == 'Question') return <QuestionOptsModalBtns {...props}/>
-    if (objName === 'UserProfile') return <ProfileOptsModalBtns/>   
+    if (objName === 'UserProfile') return <ProfileOptsModalBtns {...props}/>   
+    if (objName !== 'Post' && objName !== 'Answer') return null;
 
+    let obj = props.answer || props.post;
+    let inBookMarks = IsBookMarked('answers', obj);
+    console.log(inBookMarks, 'inBookMarks')
     return(
         <div>
-            <button  type="button" className="btn-sm  bookmark" >
+            <button  
+                type="button"
+                onClick={()=> {
+                    closeModals(true)
+                    props.addBookmark(props.createBookmarkProps)
+                }}
+                className="btn-sm bookmark-btn">
                 <Icon.Bookmark className="options-menu-icon" size={20}/>
                 Add to Bookmark 
+                {inBookMarks &&
+                    <Icon.Check 
+                        className="check-bookmark-icon text-highlight"
+                        size={20}/>
+                }
             </button>
-            <button  type="button" className="btn-sm  bookmark">
+            <button 
+                type="button" 
+                onClick={()=> closeModals(true)}
+                className="btn-sm  bookmark">
                 <Icon.Share2 className="options-menu-icon" size={20}/>
                 Share 
             </button>
@@ -288,7 +322,7 @@ export const ModalCloseBtn = props => {
     return(
         <button type="button" 
               style={styles}
-              onClick={()=>window.history.back()}
+              onClick={()=> closeModals(true)}
               className="nav-bar-back-bt btn-sm" >
            {props.children}
         </button>  
@@ -297,7 +331,7 @@ export const ModalCloseBtn = props => {
 
 
 export const SubmitBtn = props => {
-  //console.log(props)
+    //console.log(props)
     return (
         <div className="submit-btn-box">
             <button type="button" 
@@ -322,12 +356,12 @@ export const OpenEditorBtn = props => {
         let Edit = isPut && "Edit " || "";
         return `${Edit}${objName}`;
     };
-    linkName   = linkName?linkName: getButtonName();
+    linkName   = linkName || getButtonName();
     
     return(
-        <button className={className}
+        <button className={`modal-editor-btn ${className}`}
                 onClick={()=> OpenModalEditor(props)}>
-           {props.children} {linkName} 
+            {props.children} <span className="">{linkName}</span> 
         </button>
     );
 };
@@ -367,15 +401,16 @@ const OpenModalEditor=(props)=>{
 };
 
 export const OptionsDropDownBtn = props => {
+
     return(
-        <div>
+        <div className="droplef dropdown-box">
             <button className="btn-sm options-btn" id="dropdown-menu-toggle"
                   data-toggle="dropdown" aria-haspopup="false"
                   aria-expanded="true" type="button" >
                 <Icon.MoreHorizontal id="feather-more-horizontal" size={30}/>  
 
             </button>
-            <div className="dropdown-menu drop-left dropdown-menu-box"
+            <div className="dropdown-menu dropdown-menu-box"
                  aria-labelledby="dropdown-menu-toggle">
                 <OptionsMenuBtns {...props}/>
             </div>
@@ -400,7 +435,7 @@ export const  OptionModal = props => {
 
 
 export const OpenOptionlBtn  = props => {
-             
+            
     return(
         <div>
             <OptBtnSmallScreen {...props}/>

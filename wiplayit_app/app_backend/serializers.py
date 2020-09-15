@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from auth_backend.models import User
 from .models import ( Question, Post, Answer, AnswerComment, AnswerReply,
 	                  PostComment, PostReply, DraftEditorMediaContent,
-	                  AboutCompany, BugReport, FeedBack, ContactAdmin)
+	                  AnswerBookmark,PostBookmark, AboutCompany,
+	                  BugReport, FeedBack, ContactAdmin)
 
 from .mixins.serializer_mixins import   SerialiizerMixin
 from auth_backend.serializers import  BaseUserSerializer, UserSerializer
@@ -17,25 +18,18 @@ from .helpers import get_users_with_permissions,  has_perm
 class BaseModelSerializer(SerialiizerMixin, serializers.ModelSerializer):
 	user_can_edit   = serializers.SerializerMethodField()
 
-	
-
 class BaseSerializer(SerialiizerMixin, serializers.Serializer):
 	pass
-		
-		 	
 	
 class BaseChildSerializer(BaseModelSerializer):
 	upvoted    = serializers.SerializerMethodField()
-	created_by = BaseUserSerializer(read_only=True)
+	author = BaseUserSerializer(read_only=True)
 				
 	def get_upvoted(self, obj):
 		perms = self.get_obj_permissions('upvotes_perms')
 		if perms:
 			return has_perm(self.current_user(), perms, obj)
 		return False
-
-		
-	
 
 class BaseReplySerializer(BaseChildSerializer):
 	children     = serializers.SerializerMethodField()
@@ -71,7 +65,10 @@ class AnswerReplyReadSerializer(BaseReplySerializer):
 		
 	def children_serializer(self, children_queryset=[]):
 		self.update_serializer_obj_perms('answer_reply_perms')
-		return AnswerReplyReadSerializer(children_queryset, context=self.context, many=True).data
+		return AnswerReplyReadSerializer(
+				children_queryset, 
+				context=self.context,
+				many=True).data
 		
 
 class AnswerCommentSerializer(BaseChildSerializer):
@@ -87,7 +84,10 @@ class AnswerCommentReadSerializer(AnswerCommentSerializer):
 
 	def get_replies(self, obj):
 		self.update_serializer_obj_perms('answer_reply_perms')
-		return AnswerReplyReadSerializer(obj.replies, context=self.context, many=True).data
+		return AnswerReplyReadSerializer(
+					obj.replies,
+					context=self.context,
+					many=True).data
 
 
 class PostReplySerializer(BaseChildSerializer):
@@ -106,7 +106,10 @@ class PostReplyReadSerializer(BaseReplySerializer):
 		
 	def children_serializer(self, children_queryset=[]):
 		self.update_serializer_obj_perms('post_reply_perms')
-		return PostReplyReadSerializer(children_queryset, context=self.context, many=True).data
+		return PostReplyReadSerializer(
+					children_queryset,
+					context=self.context, 
+					many=True).data
 
 
 class PostCommentSerializer(BaseChildSerializer):
@@ -122,10 +125,10 @@ class PostCommentReadSerializer(PostCommentSerializer):
 
 	def get_replies(self, obj):
 		self.update_serializer_obj_perms('post_reply_perms')
-		return PostReplyReadSerializer(obj.replies, context=self.context, many=True).data
-
-
-	
+		return PostReplyReadSerializer(
+					obj.replies,
+					context=self.context,
+					many=True).data
 
 class PostSerializer(BaseChildSerializer):
 		
@@ -140,7 +143,10 @@ class PostReadSerializer(PostSerializer):
 
 	def get_comments(self, obj):
 		self.update_serializer_obj_perms('post_comment_perms')
-		return PostCommentReadSerializer(obj.comments, context=self.context, many=True).data
+		return PostCommentReadSerializer(
+					obj.comments, 
+					context=self.context,
+					many=True).data
 	
 
 class AnswerSerializer(BaseChildSerializer):
@@ -154,19 +160,19 @@ class AnswerReadSerializer(AnswerSerializer):
 	question   =  serializers.SerializerMethodField()
 
 	def get_comments(self, obj):
-
 		self.update_serializer_obj_perms('answer_comment_perms')
-		return AnswerCommentReadSerializer(obj.comments, context=self.context, many=True).data
+		return AnswerCommentReadSerializer(
+						obj.comments,
+						context=self.context,
+						many=True).data
 
 
 	def get_question(self, obj):
-
 		self.update_serializer_obj_perms('question_perms')
 		question = obj.question
 		question = Question.objects.get(id=question.id)
 		
 		return QuestionSerializer(question ,context=self.context, many=False).data
-
 
 
 class BaseQuestionSerializer(BaseChildSerializer):	
@@ -175,7 +181,6 @@ class BaseQuestionSerializer(BaseChildSerializer):
 	class Meta:
 		model = Question 
 		fields = '__all__'
-
 
 
 class QuestionSerializer(BaseQuestionSerializer):
@@ -193,7 +198,7 @@ class QuestionSerializer(BaseQuestionSerializer):
 	def get_user_has_answer(self, obj):
 		request = self.context.get('request', None)
 		if request:
-			return obj.answers.filter(created_by=request.user).exists()
+			return obj.answers.filter(author=request.user).exists()
 		return 	False
 		
 	def get_answer_count(self, obj):
@@ -201,17 +206,79 @@ class QuestionSerializer(BaseQuestionSerializer):
 		
 
 class QuestionReadSerializer(QuestionSerializer):
-	answers          = serializers.SerializerMethodField()
+	answers = serializers.SerializerMethodField()
 
 	def get_answers(self, obj):
 		self.update_serializer_obj_perms('answer_perms')
-		return AnswerReadSerializer(obj.answers, context=self.context, many=True).data
+		return AnswerReadSerializer(
+					obj.answers, 
+					context=self.context,
+					many=True
+					).data
 	
 
 class DraftEditorContentsSerializer(BaseModelSerializer):
+	
 	class Meta:
 		model = DraftEditorMediaContent
 		fields = '__all__'
+
+
+class AnswerBookmarkSerializer(BaseModelSerializer):
+	bookmark = serializers.SerializerMethodField()
+
+	class Meta:
+		model = AnswerBookmark
+		fields = '__all__'
+
+	def create(self, validated_data):
+		ModelClass = self.Meta.model
+		instance, created = ModelClass._default_manager.get_or_create(**validated_data)
+				
+		return instance
+
+	def get_bookmark(self, obj):
+		request = self.context.get('request', None)
+		answer_bookmarks = Answer.objects.filter(
+								answer_bookmarks__author=request.user,
+								answer_bookmarks=obj.id
+
+							)
+		
+		answer_bookmarks_serialiser = AnswerReadSerializer(
+											answer_bookmarks, 
+											context=self.context,
+											many=True).data	
+		return answer_bookmarks_serialiser
+
+
+class PostBookmarkSerializer(BaseModelSerializer):
+	post = serializers.SerializerMethodField()
+
+	class Meta:
+		model = PostBookmark
+		fields = '__all__'
+
+	def create(self, validated_data):
+		ModelClass = self.Meta.model
+		instance, created = ModelClass._default_manager.get_or_create(**validated_data)
+				
+		return instance
+
+	
+	def get_post(self, obj):
+		request = self.context.get('request', None)
+		post_bookmarks = Post.objects.filter(
+								post_bookmarks__author=request.user,
+								post_bookmarks=obj.id
+
+							)
+		
+		post_bookmarks_serialiser = PostReadSerializer(
+											post_bookmarks, 
+											context=self.context,
+											many=True).data	
+		return post_bookmarks_serialiser
 
 
 class IndexSerializer(BaseSerializer):
@@ -219,18 +286,39 @@ class IndexSerializer(BaseSerializer):
 	answers   = serializers.SerializerMethodField()
 	posts     = serializers.SerializerMethodField() 
 	users     = serializers.SerializerMethodField()
+	bookmarks = serializers.SerializerMethodField()
 	
+
+	def get_bookmarks(self, obj):
+		request = self.context.get('request', None)
+		answer_bookmarks = Answer.objects.filter(
+								answer_bookmarks__author=request.user
+
+							)
+		post_bookmarks = Post.objects.filter(
+							post_bookmarks__author=request.user)
+		answer_bookmarks_serialiser = AnswerReadSerializer(
+											answer_bookmarks, 
+											context=self.context,
+											many=True).data	
+		post_bookmarks_serialiser = PostReadSerializer(
+											post_bookmarks, 
+											context=self.context,
+											many=True).data	
+		return {
+			'answers':answer_bookmarks_serialiser,
+			'posts':post_bookmarks_serialiser
+		}
 	
 	def get_questions(self, obj):
 		request = self.context.get('request', None)
-		questions = Question.objects.exclude(created_by=request.user)
+		questions = Question.objects.all()
 		
 		self.update_serializer_obj_perms('question_perms')		       
 		return QuestionSerializer(questions, context=self.context, many=True).data
 		
 		
 	def get_answers(self, obj):
-
 		answers = Answer.objects.all()
 		self.update_serializer_obj_perms('answer_perms')
 		return AnswerReadSerializer(answers, context=self.context, many=True).data
@@ -238,7 +326,7 @@ class IndexSerializer(BaseSerializer):
 	
 	def get_posts(self, obj):
 		request = self.context.get('request', None)
-		posts = Post.objects.exclude(created_by=request.user)
+		posts = Post.objects.exclude(author=request.user)
 		self.update_serializer_obj_perms('post_perms')
 
 		return PostReadSerializer(posts, context=self.context, many=True).data

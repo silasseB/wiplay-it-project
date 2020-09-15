@@ -16,7 +16,7 @@ export const createActionPending = (params={}) => {
 
 
 export const createActionSuccess = (params={}) => {
-   
+   console.log(params)
    let {byId, actionType, data} = params;
  
     return{
@@ -93,26 +93,33 @@ export const updateActionError = (params={}) => {
     }
 };
 
+export const HandleAlertMessage = (message)=>({
+
+    type : "ALERT_MESSAGE",
+    payLoad: {
+        message,
+    }
+});
+
 
 export const ModalSubmitPending = (modalName) => ({
     type : "MODAL_SUBMIT_PENDING",
     byId : modalName,
     payLoad: {
-        submitting     : true,
+        submitting : true,
     }
 });
 
 
 export const ModalSubmitSuccess = (params) => {
-    let {objName, isUpdating, isCreating, modalName, data } = params;
-    let action         = isCreating &&'created' || isUpdating && 'edited';
-    let successMessage = `${objName} successefully ${action}`
-    
+    let { isUpdating,
+          isCreating,
+          modalName } = params;
+       
     return{
         type : "MODAL_SUBMIT_SUCESS",
         byId : modalName,
         payLoad : {
-            successMessage,
             ...params,
             submitting : false,
             updated    : isUpdating || false,
@@ -186,9 +193,6 @@ export const getIndexPending = () => {
 };
 
 
-
-
-
 export const getIndexError = ( error) => {
     console.log(error)
     return{
@@ -230,10 +234,9 @@ export const getQuestionPending = (byId) => {
 
 
 export const getQuestionSuccess = ( byId, question) => {
-    //@userAnswer is for what
-    // 
+   
     let userAnswer        = question.answers  && getUserAnswer(question.answers);
-    let userHasAnswer     =     userAnswer?true:false;
+    let userHasAnswer     = userAnswer?true:false;
     let questionHasAnswer = question.answers && question.answers.length && true ||false;
    
     return{
@@ -610,10 +613,7 @@ export const getReplyChildListError = (actionType, byId, error) =>({
 
 
 export const handleError  = (error) => {
-  //if (!error) return {};
     console.log(error)
-    //error = error || 'Something wrong happened, please try again.'; 
-
     return {
         type: types.SERVER.ERROR,
         payLoad: {
@@ -897,7 +897,7 @@ export const sendMessagePending = () => {
 
 
 export const sendMessageSuccess = (data) => {
-    let successMessage = 'Request has succefully been sent';
+    let successMessage = 'Message has succefully been sent';
 
     return {
         type    : 'SEND_MESSAGE_SUCCESS',
@@ -926,11 +926,11 @@ export const getUserAnswer = (answerList) => {
     let cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')); 
     let currentUser =  cacheEntities.currentUser;
     currentUser = currentUser.user;
-    var answer  = ''; 
+    var answer  = undefined; 
       
     if (answerList.length) {
         answerList.map( (item, index) => {
-            if (item.created_by.id === currentUser.id) {
+            if (item?.author?.id === currentUser?.id) {
                 answer = item;
             }
             return answer;

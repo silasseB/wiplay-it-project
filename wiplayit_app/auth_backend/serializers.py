@@ -314,8 +314,7 @@ class AddEmailSerializer(serializers.Serializer):
 		email = self.validated_data.get('email')
 		if self.email_address_exists(email):
 			email_address = EmailAddress.objects.filter(user=request.user, email=email)
-			print(email_address)
-
+			
 			for email in email_address:
 				if not email.verified:
 					email.send_confirmation(request)
@@ -623,9 +622,6 @@ class UserSerializer(BaseUserSerializer):
 		perms = self.get_obj_permissions('followers_perms')
 		return has_perm(self.current_user() ,perms, obj)	  
 	
-	
-	
-	
 
 class UserProfileSerializer(UserSerializer):
 	questions    = serializers.SerializerMethodField()
@@ -633,26 +629,22 @@ class UserProfileSerializer(UserSerializer):
 	answers      = serializers.SerializerMethodField()
 	followers    = serializers.SerializerMethodField()
 	followings   = serializers.SerializerMethodField()
-	
-		
-			                
+               
 	def get_questions(self, obj):
-		questions  =  Question.objects.filter(created_by=obj)
+		questions  =  Question.objects.filter(author=obj)
 		self.update_serializer_obj_perms('question_perms')
 		return app_serializers.QuestionSerializer(questions, context=self.context, many=True).data
 	  
 	def get_posts(self, obj):
-		posts  =  Post.objects.filter(created_by=obj)
+		posts  =  Post.objects.filter(author=obj)
 		self.update_serializer_obj_perms('post_perms')
 		return app_serializers.PostSerializer(posts, context=self.context ,many=True).data
 		
-		  
 	def get_answers(self, obj):
-		answers  =  Answer.objects.filter(created_by=obj)
+		answers  =  Answer.objects.filter(author=obj)
 		self.update_serializer_obj_perms('answer_perms')
 		return app_serializers.AnswerReadSerializer(answers, context=self.context ,many=True).data
-		
-	  
+		  
 	def get_followers(self, obj):
 		users  = get_users_with_permissions(obj,  "change_user_followers")
 		self.update_serializer_obj_perms('user_perms')

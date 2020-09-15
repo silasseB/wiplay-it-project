@@ -22,6 +22,7 @@
 .dropdown-menu-box {
     border: px solid red;
     padding: 0 !important;
+    margin-right :  30%;
 }
 
 .options-menu {
@@ -35,12 +36,17 @@
     font-size:13px;
     border:none;
     text-align: left !important;
-    padding: 10px 15px;
+    padding: 10px 20px;
     color: #807f7f; 
+    border  : px solid blue;
 }
 
 .options-menu-icon {
     margin-right: 10px;
+}
+
+.check-bookmark-icon {
+   float : right;
 }
 
 .option-delete-btn {
@@ -69,6 +75,10 @@
     font-weight: bold;
     font-size: 14px;
     font-family: PT San;
+}
+
+.dropdown-box {
+    border : px solid red;
 }
 
 @media (max-width: 900px) {

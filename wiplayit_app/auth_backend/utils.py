@@ -55,7 +55,7 @@ def get_phone_numbers(value, request=None):
         phone_number =  PhoneNumber.objects.filter(user__email=value)
         
     if not phone_number:
-        phone_number = PhoneNumber.objects.filter(inter_format=vaule)
+        phone_number = PhoneNumber.objects.filter(inter_format=value)
 
     return phone_number or None
 

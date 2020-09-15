@@ -15,45 +15,45 @@ admin.site.register( DraftEditorMediaContent, DraftEditorMediaContentAdmin)
            
 
 class PostAdmin(admin.ModelAdmin):
-    fields =  ['add_post','add_title', 'created_by','upvotes', 'deleted']
+    fields =  ['add_post','add_title', 'author','upvotes', 'deleted']
 
 admin.site.register(Post,PostAdmin)
 
 
 
 class PostCommentAdmin(admin.ModelAdmin):
-    fields = ['comment', 'upvotes', 'created_by', 'post']
+    fields = ['comment', 'upvotes', 'author', 'post']
 
 admin.site.register(PostComment, PostCommentAdmin)
 
 
 class PostCommentReplyAdmin(MPTTModelAdmin):
-    fields = ['reply', 'upvotes', 'created_by', 'parent', 'comment' ]
+    fields = ['reply', 'upvotes', 'author', 'parent', 'comment' ]
 
 admin.site.register(PostReply,PostCommentReplyAdmin)
 
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    fields = ['add_question', 'created_by', 'followers']
+    fields = ['add_question', 'author', 'followers']
 
 admin.site.register(Question,QuestionAdmin)
 
 
 
 class AnswerAdmin(admin.ModelAdmin):
-    fields = ['add_answer','upvotes', 'created_by', 'question']
+    fields = ['add_answer','upvotes', 'author', 'question']
 
 admin.site.register(Answer, AnswerAdmin)
 
 
 class AnswerCommentAdmin(admin.ModelAdmin):
-    fields = ['comment', 'upvotes', 'created_by', 'answer']
+    fields = ['comment', 'upvotes', 'author', 'answer']
 
 admin.site.register(AnswerComment,AnswerCommentAdmin)
 
 class AnswerReplyAdmin(MPTTModelAdmin):
-    fields = ['reply', 'upvotes', 'created_by', 'parent', 'comment' ]
+    fields = ['reply', 'upvotes', 'author', 'parent', 'comment' ]
 
 admin.site.register(AnswerReply, AnswerReplyAdmin)
 
@@ -73,6 +73,12 @@ class FeedBackAdmin(admin.ModelAdmin):
     fields = ['full_name', 'email', 'subject', 'description']
 
 admin.site.register(FeedBack, FeedBackAdmin)
+
+class AnswerBookmarkAdmin(admin.ModelAdmin):
+    fields = ['answer', 'author', ]
+
+
+admin.site.register(AnswerBookmark, AnswerBookmarkAdmin)
 
 
 '''

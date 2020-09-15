@@ -63,7 +63,7 @@ export const ProfileComponent = props => {
 
             
 
-    let editUserProfileProps = {
+    let editObjProps = {
             objName     : 'UserProfile',
             isPut       : true,
             obj         : userProfile, 
@@ -74,7 +74,7 @@ export const ProfileComponent = props => {
 
     }
 
-    editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
+    editObjProps = GetModalLinkProps.props(editObjProps);
 
     const EditProfileLink = ()=>{
         const pathToEditProfile = userProfile  && 
@@ -83,7 +83,7 @@ export const ProfileComponent = props => {
             <button 
                 className="btn-sm edit-user-profile"
                 onClick={()=>{
-                        history.push(pathToEditProfile, {...editUserProfileProps}); 
+                        history.push(pathToEditProfile, {...editObjProps}); 
                     }}>
                 Edit
             </button>
@@ -110,7 +110,7 @@ export const ProfileComponent = props => {
     
 
     let btnsProps = {
-            editUserProfileProps,
+            editObjProps,
             btnStyles : optionsBtnStyles,
             ...props
         };
@@ -160,7 +160,7 @@ export const ProfileComponent = props => {
                                              onMouseEnter={props.mouseEnter}
                                              onMouseLeave={props.mouseLeave} >
                                             <ChangeImageBtnBigScreen
-                                                {...editUserProfileProps}
+                                                {...editObjProps}
                                             />
                                         </div>
                                     </div>
@@ -191,7 +191,7 @@ export const ProfileComponent = props => {
                                     </div>
 
                                     <div className="user-profile-options-box">
-                                        <OpenOptionlBtn {...editUserProfileProps}/>
+                                        <OpenOptionlBtn {...editObjProps}/>
                                     </div>
                                 </div>
 
@@ -213,7 +213,7 @@ export const ProfileComponent = props => {
                                 { userProfile?.user_can_edit &&
                                     <div className="edit-credential-btn-box">
 
-                                    <EditorModalBtnBigScreen {...editUserProfileProps}/>
+                                    <EditorModalBtnBigScreen {...editObjProps}/>
                                     <EditorModalBtnSmallScreen/>
                                     </div>
                                 }
@@ -844,19 +844,13 @@ export const UserActivitiesBtns = props => {
 
 export const UserComponentSmall = props => {
     let {obj, currentUser} = props;
-    let author = obj.created_by;
-
-
+    let author = obj.author;
     let pathToProfile =  `/profile/${author.id}/${author.slug}/`;
     let state = {currentUser, userProfile:author}
-    //console.log(props)
-    
     let currentdate = new Date();
 
-    let timeCreated = obj && new Date(obj.created_at);
-    //timeCreated && console.log(timeCreated)
-
-    let timeStamp = timeCreated && timeCreated.getTime()
+    let timeCreated = obj && new Date(obj.date_created);
+    let timeStamp = timeCreated && timeCreated.getTime();
 
     const getTimeState = new GetTimeStamp({timeStamp});
     let menDiff        = parseInt(getTimeState.menutes());
@@ -865,7 +859,7 @@ export const UserComponentSmall = props => {
     let weekDiff       = parseInt(getTimeState.weeks());
     
 
-    let created_at;
+    let dateCreated;
     let dateOptions;
 
     const getLocaleDateString=(dateOptions)=>{
@@ -877,14 +871,14 @@ export const UserComponentSmall = props => {
     let year  = getLocaleDateString({year : 'numeric'})
 
     if (menDiff <= 59) {
-        created_at = `${menDiff} menutes ago`
+        dateCreated = `${menDiff} menutes ago`
 
     }else if(hourDiff <= 23){
-        created_at = `${hourDiff} hours ago`
+        dateCreated = `${hourDiff} hours ago`
         
     }else if(dayDiff <= 6){
         dateOptions = {'weekday':'short'}
-        created_at = getLocaleDateString(dateOptions)
+        dateCreated = getLocaleDateString(dateOptions)
 
     }else{
         let yearCreated = timeCreated.getFullYear();
@@ -892,9 +886,9 @@ export const UserComponentSmall = props => {
         
 
         if (yearCreated === currentYear) {
-            created_at = month + ' ' + day; 
+            dateCreated = month + ' ' + day; 
         }else{
-             created_at =  month + ' ' + day + ', ' + year;
+            dateCreated =  month + ' ' + day + ', ' + year;
 
         }
     }
@@ -907,12 +901,12 @@ export const UserComponentSmall = props => {
                 <li className="author-img  img-container-sm">
                     <Link  to={ {pathname: pathToProfile,state}}>
 
-                        { author.profile.profile_picture === null?
+                        {author?.profile?.profile_picture === null?
                             <img alt="" src={require("media/user-image-placeholder.png")}
                              className="profile-photo"/>
              
                             :  
-                            <img alt="" src={ author.profile.profile_picture}
+                            <img alt="" src={author?.profile?.profile_picture}
                                    className="profile-photo"/> 
                         }
                     </Link>
@@ -922,10 +916,10 @@ export const UserComponentSmall = props => {
             <ul className="author-properties-box">
                 <li className="author-name-box">
                     <Link className="author-name" to={ {pathname: pathToProfile,state}}>
-                        { author.first_name}     { author.last_name }
+                        {author?.first_name} {author?.last_name}
                     </Link>
                 </li>
-                <li className="time-created">{created_at}</li>
+                <li className="time-created">{dateCreated}</li>
             </ul>
         </div>
     );

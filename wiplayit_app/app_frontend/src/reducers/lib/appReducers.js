@@ -26,6 +26,7 @@ const InitialState = () => {
         about       : {},
         admin       : {},
         message     : {},
+        alertMessage : {}, 
     };
 };
 
@@ -59,7 +60,7 @@ export function entities(state=InitialState(), action) {
             let newState = {};
             let stateEntintie = oldState[stateEntintieKey];
                                       
-            if (byId) {
+            if (stateEntintie && byId) {
                         
                 if(stateEntintie[byId]){
                     stateEntintie[byId] = {...stateEntintie[byId], ...payLoad};
@@ -86,6 +87,8 @@ export function entities(state=InitialState(), action) {
         case 'SERVER_ERROR':
             return updateStateEntyties('errors', action);
 
+        case 'ALERT_MESSAGE':
+            return updateStateEntyties('alertMessage', action);
        
         case 'ABOUT_SUCCESS':
         case 'ABOUT_ERROR':
@@ -284,16 +287,13 @@ export function entities(state=InitialState(), action) {
         case types.UPDATE_ANSWER.ERROR:
             return updateStateEntyties('answers', action);
           
-            
-     //64663847882540464253     
-
-
+     
         case types.CREATE_ANSWER.SUCCESS:
                
             let newAnswer      =  payLoad.answer;
             let newAnswerList  =  [newAnswer];
             let currentAnswers =  state.answers[byId];
-            currentAnswers     =  ccurrentAnswers?.answerList;
+            currentAnswers     =  currentAnswers?.answerList;
 
             newAnswerList      =  currentAnswers?.length &&
                                   currentAnswers.unshift(newAnswer) || newAnswerList;
@@ -357,7 +357,7 @@ export function entities(state=InitialState(), action) {
          
             return updateStateEntyties('comments', {byId, payLoad })|| state; 
       
-
+            
 
         case  types.GET_REPLY_LIST.PENDING:
         case  types.GET_REPLY_CHILD_LIST.PENDING:
@@ -370,8 +370,6 @@ export function entities(state=InitialState(), action) {
         case  'GET_REPLY_LINK_DATA':
         case  'GET_REPLY_CHILD_LINK_DATA':
             return updateStateEntyties('replies', action);
-
-           
 
 
         case types.CREATE_REPLY.SUCCESS:
@@ -388,26 +386,64 @@ export function entities(state=InitialState(), action) {
             delete payLoad.reply;
             return updateStateEntyties('replies', {byId, payLoad }) || state;    
 
-      
-        
-      
-
         case types.UPDATE_REPLY.SUCCESS:
-            
             let repliesToUpdate     = state.replies[action.byId]; 
             let updatedReply        = payLoad.reply;
-        
-           
+
             payLoad['commentList'] = helper.updateReducerListEntynties(
-                                                                repliesToUpdate.replyList, 
-                                                                updatedReply
-                                                            );
+                                                        repliesToUpdate.replyList, 
+                                                        updatedReply
+                                                    );
             delete payLoad.reply;
          
             return updateStateEntyties('replies', {byId, payLoad})|| state
-            
-            
 
+
+        case types.CREATE_BOOKMARK.PENDING:
+        case types.CREATE_BOOKMARK.ERROR:
+            return state
+
+        case types.CREATE_BOOKMARK.SUCCESS:
+            console.log(action)
+            let bookmarksType = '';
+
+            if (byId === 'bookmarkedAnswers') {
+                bookmarksType = 'answers'
+                   
+            } else {
+                bookmarksType = 'posts'
+            }
+
+            let cache = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
+            let indexData = cache?.index
+            delete indexData.index
+
+            let bookmarks = indexData.bookmarks
+            let bookmarksCache = bookmarks[bookmarksType]
+            let newBookmarks = payLoad[bookmarksType]
+            
+            for (var i = 0; i < bookmarksCache.length; i++) {
+                if (bookmarksCache[i]?.id ===  newBookmarks[0]?.id) {
+                    newBookmarks = []
+                }
+            }
+
+            bookmarksCache = [...bookmarksCache, ...newBookmarks]
+            delete  action.payLoad[bookmarksType]
+            delete action.byId
+
+            bookmarks[bookmarksType] = bookmarksCache
+            console.log(bookmarks)
+            console.log(indexData)
+
+            indexData['bookmarks'] = bookmarks
+            action.payLoad = {...indexData};
+            console.log(indexData)
+            console.log(bookmarksCache)
+            console.log(newBookmarks, action.payLoad )
+
+            return updateStateEntyties('index', action);
+            
         default:
             return state; 
     }

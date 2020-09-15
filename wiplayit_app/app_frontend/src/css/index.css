@@ -288,18 +288,31 @@ ul {
     display : flex; 
 }
 
+.btn-box1 button, .btn-box2 button {
+    border  : px solid blue;
+    margin-top: 7px;
+}
+
+.modal-editor-btn {
+    border: px solid red;
+}
+
+.modal-editor-btn span {
+    border: px solid blue;
+    margin-top : 10px !important; 
+}
+
 .btn-box1,.btn-box2 {
-      border :  px solid red;
+    border :  px solid red;
 }
 
 .btn-box2 {
 	margin: 0 14px;
-  
 }
 
 .btn-box3 {
-   border  :   px solid blue;
-   width: 100%;
+   border : px solid blue;
+   width  : 100%;
    
 }
 
@@ -307,9 +320,7 @@ ul {
   border      : px solid black;
   float       : right !important;
   color       : gray; 
-  font-weight : bold; 
-  font-size   : 20px;
-
+  
 }
 
 .items-counter-box {

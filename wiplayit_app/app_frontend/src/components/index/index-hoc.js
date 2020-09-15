@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import {handleSubmit, 
+        Delete,
         getCurrentUser,
         getPost,
         getUserList,
@@ -26,7 +27,7 @@ import {store} from 'store/index';
 import {history} from "App";
 import GetTimeStamp from 'utils/timeStamp';
 import Api from 'utils/api';
-import Helper from 'utils/helpers';
+import Helper, {IsBookMarked} from 'utils/helpers';
 
 
 
@@ -145,7 +146,6 @@ export function MainAppHoc(Component) {
 
         componentDidUpdate(prevProps, nextProps) {
         }
-
                 
         componentDidMount() {
             this.isMounted = true;
@@ -193,6 +193,7 @@ export function MainAppHoc(Component) {
                       userProfile,
                       userAuth,
                       message,
+                      alertMessage,
                       errors } = entities;
 
                 //console.log(entities)
@@ -219,6 +220,7 @@ export function MainAppHoc(Component) {
                     }
                 }
                 this.handleMessageSuccess(message)
+                this.displayAlertMessage(alertMessage)
                 
                 this.handleCreateSuccess(editorModal);
                 this.handleUpdateSuccess(editorModal);
@@ -231,7 +233,7 @@ export function MainAppHoc(Component) {
             }
         };
 
-            this.unsubscribe = store.subscribe(onStoreChange);
+        this.unsubscribe = store.subscribe(onStoreChange);
 
         };
 
@@ -381,12 +383,17 @@ export function MainAppHoc(Component) {
             this.displayAlertMessage(message)
         };
 
-        displayAlertMessage = (message) => {
-            if (!this.isMounted) return;
-
+        displayAlertMessage = (alertMessage) => {
+            
+            if (!this.isMounted) return
+            let message = alertMessage?.message
+            if(!message || !Object.keys(message).length) return;
+            
             this.setState({ displayMessage : true, message });
+            delete alertMessage.message
+
             setTimeout(()=> {
-                this.setState({displayMessage : false}); 
+                this.setState({displayMessage : false, message:undefined}); 
             }, 5000);
         };
 
@@ -435,8 +442,7 @@ export function MainAppHoc(Component) {
             let {loginAuth} = userAuth || {};
             if (loginAuth && loginAuth.isConfirmation) {
                 delete loginAuth.isConfirmation
-                let background = true;
-                closeModals(background);
+                closeModals(true);
 
                 let textMessage = 'You successfully confirmed your account'
                 let message = {textMessage, messageType:'success'}
@@ -450,8 +456,7 @@ export function MainAppHoc(Component) {
             let isTokenRefresh = this.isTokenRefresh(userAuth)
 
             if (isLoggedOut) {
-                let background = true;
-                closeModals(background);
+                closeModals(true);
             }
                 
             if (isLoggedOut || isTokenRefresh) {
@@ -502,6 +507,26 @@ export function MainAppHoc(Component) {
             this.props.submit(params); 
         }
 
+        removeAnswerBookmark =(params)=>{
+            let obj = params?.obj
+            let apiUrl = api.removeAnswerBookMarkApi(obj?.id)
+            store.dispatch(Delete({...params, apiUrl}))
+        }
+
+        addBookmark =(params)=> {
+            console.log(params)
+            
+            let isBookMarked = IsBookMarked('answers', params?.obj)
+            console.log(isBookMarked)
+            if (isBookMarked){
+                return this.removeAnswerBookmark(params)
+            }
+            
+            var post_data   = params?.obj
+            params['formData'] = helper.createFormData({post_data});
+            this.props.submit(params);
+        }
+
         _getFormData = (params) =>{
            
             let {objName, obj} = params;
@@ -510,7 +535,7 @@ export function MainAppHoc(Component) {
                 case 'Question':
                 case 'UserProfile':
                 case 'UsersList':
-                    var followers     = obj.followers || obj.profile && obj.profile.followers;
+                    var followers = obj.followers || obj.profile && obj.profile.followers;
                     params['formData'] = helper.createFormData({ followers });
                     return params;
 
@@ -528,6 +553,7 @@ export function MainAppHoc(Component) {
                 ...this.props,
                 logout                  : this.logout,
                 editfollowersOrUpVoters : this.editfollowersOrUpVoters.bind(this),
+                addBookmark             : this.addBookmark.bind(this),
                 reloadPage              : this.reloadPage.bind(this),
                 push                    : this.push.bind(this),
                 redirectToRouter        : this.redirectToRouter.bind(this),
@@ -561,7 +587,7 @@ export function MainAppHoc(Component) {
                     <fieldset style={ onModalStyles } 
                               disabled={ props.modalIsOpen } >
                         
-                       modal <Component {...props}/>                    
+                       <Component {...props}/>                    
 
                     </fieldset>
 

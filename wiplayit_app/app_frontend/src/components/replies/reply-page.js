@@ -155,7 +155,7 @@ const Replies = (props, replyList, isNewReply=false) => {
 
     return(
         <div>
-            { replyList && replyList.map( (reply, index) => {
+            {replyList?.map( (reply, index) => {
                 let replyProps = {
                         reply,
                         byId : repliesById,

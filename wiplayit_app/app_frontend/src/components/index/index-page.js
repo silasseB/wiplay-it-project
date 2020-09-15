@@ -19,7 +19,7 @@ import * as checkType from 'helpers/check-types';
 import  AjaxLoader from "templates/ajax-loader";
 import { AnswersComponent } from "templates/answer/answer-templates";
 import GetTimeStamp from 'utils/timeStamp';
-
+import {history} from 'App'
 import  MainAppHoc from "components/index/index-hoc";
 
 
@@ -159,7 +159,7 @@ class IndexBox extends Component {
               userAuth,
               entities } = this.props;
         let { index}     = entities;
-        let cachedIndex  = cacheEntities && cacheEntities.index; 
+        let cachedIndex  = cacheEntities?.index; 
         let checkDataExist  = this.checkDataExist ; 
                 
         if (!checkDataExist(index) && checkDataExist(cachedIndex)) {
@@ -269,9 +269,16 @@ export default  MainAppHoc(IndexBox);
 export const IndexComponent = props => {
 
     //console.log(props)
+    let pathname = `/compose/comment/`
       
     return(
         <div className="home-page-contents" id="home-page-contents">
+            <button 
+                type="button" 
+                onClick={()=> history.push(pathname, {})} 
+                className="btn">
+                Compose
+            </button> 
            <Answers {...props}/>
            <Users {...props}/>
            <Posts {...props}/>
