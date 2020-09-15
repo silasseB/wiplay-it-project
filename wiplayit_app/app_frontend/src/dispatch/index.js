@@ -11,7 +11,6 @@ const api = new Api();
 const timeStamp = new Date();
 
 export const _GetApi =(useToken, opts={}) =>{
-    console.log(useToken, 'calling the instance')
     const axios     = new Axios({useToken, ...opts});
     return axios.instance()
 

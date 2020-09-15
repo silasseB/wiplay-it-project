@@ -66,7 +66,6 @@ export default MainAppHoc(AboutContainer);
 
 
 export const AboutComponent = props => {
-    console.log(props)
     let about = props.about;
     about = about && about.info;
     

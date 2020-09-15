@@ -4,38 +4,21 @@ import axios from 'axios';
 import GetTimeStamp from 'utils/timeStamp';
 import { getCookie } from 'utils/csrf_token.js';
 import * as checkType from 'helpers/check-types'; 
-import {store} from "store/index";
 import {authenticate} from "dispatch/index"
 import Api from 'utils/api';
 
 const api      = new Api();
 let csrftoken = getCookie('csrftoken');  
 
-let isRefreshingToken =()=>{
-    let storeUpdate = store.getState();
-    let {entities}  = storeUpdate;
-    let {userAuth}  = entities;
-
-    let isLoading = checkType.isBoolean(userAuth.isLoading)
-        
-    if (isLoading) {
-        return userAuth.isLoading;
-
-    }else{
-        return false;
-    }
-};
 
 export default class Axios {
 
     constructor(props){
         this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
         this.DOMAIN_URL    =  window.location.origin; 
-        this.useToken      =  props.useToken;
-        this.timeout       =  props.timeout || 15000; 
-        this.requestFor    =  props.requestFor;
-
-        console.log(props)
+        this.useToken      =  props?.useToken;
+        this.timeout       =  props?.timeout || 15000; 
+        this.requestFor    =  props?.requestFor;
     }
 
     authTimeStampe(timeStamp){
@@ -60,7 +43,6 @@ export default class Axios {
 
     tokenExpired=()=>{
         let loginAuth  = this._getAuth();
-        console.log(loginAuth)
         let expireTime = loginAuth && this.authTimeStampe(loginAuth.timeStamp);
         if (expireTime) {
             return expireTime.days() >= 7;
@@ -73,6 +55,7 @@ export default class Axios {
         if (this.tokenExpired()) {
             let loginAuth = this._getAuth();
             let token = this.getToken(loginAuth);
+            if (!token) return
            
             let authProps ={
                 apiUrl :api.refreshTokenApi(), 
@@ -89,7 +72,6 @@ export default class Axios {
     };
 
     createInstance=()=>{
-        console.log(this.props, 'createInstance')
         let instance = axios.create({
             baseURL: this.DOMAIN_URL,
         });
@@ -105,7 +87,6 @@ export default class Axios {
         const instance = this.createInstance()
 
         if (this.useToken) {
-            console.log(this)
             this.refreshToken();
             let userAuth = this._getAuth();  
             let tokenKey = this.getToken(userAuth)
