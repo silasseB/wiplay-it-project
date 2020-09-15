@@ -31,9 +31,11 @@ export default class Axios {
     constructor(props){
         this.cacheEntities = JSON.parse(localStorage.getItem('@@CacheEntities')) || {};
         this.DOMAIN_URL    =  window.location.origin; 
-        this.useToken      =  props && props.useToken;
-        this.timeout       =  props && props.timeout || 15000; 
+        this.useToken      =  props.useToken;
+        this.timeout       =  props.timeout || 15000; 
         this.requestFor    =  props.requestFor;
+
+        console.log(props)
     }
 
     authTimeStampe(timeStamp){
@@ -58,6 +60,7 @@ export default class Axios {
 
     tokenExpired=()=>{
         let loginAuth  = this._getAuth();
+        console.log(loginAuth)
         let expireTime = loginAuth && this.authTimeStampe(loginAuth.timeStamp);
         if (expireTime) {
             return expireTime.days() >= 7;
@@ -86,6 +89,7 @@ export default class Axios {
     };
 
     createInstance=()=>{
+        console.log(this.props, 'createInstance')
         let instance = axios.create({
             baseURL: this.DOMAIN_URL,
         });
@@ -101,6 +105,7 @@ export default class Axios {
         const instance = this.createInstance()
 
         if (this.useToken) {
+            console.log(this)
             this.refreshToken();
             let userAuth = this._getAuth();  
             let tokenKey = this.getToken(userAuth)

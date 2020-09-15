@@ -17,14 +17,12 @@ import PostPage    from "components/post/post-page"
 import QuestionPage    from "components/question/question-page"
 import QuestionListPage from "components/question/question-list"
 import AnswerContainer  from "components/answer/answer-page";
-
 import UserProfileContainer from "components/author/profile-page";
 import PasswordChangePage from "components/authentication/password-change";
 import EmailResendPage    from "components/authentication/email-resend"
 import PasswordResetPage   from "components/authentication/password-reset"
 import AccountEmailConfirmationPage, 
        {AccountSmsCodeConfirmationPage} from "components/authentication/account-confirmation"
-import {TestEditor, ExampleCountry}  from 'components/test-editor';
 import FeedBackContainer  from 'components/feed-back';
 import ContactAdminContainer  from 'components/contact-admin';
 import AboutContainer  from 'components/about';
@@ -67,8 +65,6 @@ function App() {
             <Route path="/email/verification/resend/" component={EmailResendPage}/>
             <Route path="/password/change/" component={PasswordChangeSmsCodePage}/>
             <Route path="/:slug/answer/" component={QuestionPage}/>
-            <Route path="/editor/" component={TestEditor}/>
-            <Route path="/compose/:slug/" component={TestEditor}/>
             <Route path="/feedback/" component={FeedBackContainer}/>
             <Route path="/about/" component={AboutContainer}/>
             <Route path="/privacy/" component={PrivacyContainer}/>
@@ -80,7 +76,6 @@ function App() {
             <Route path="/bug/report/" component={ReportContainer}/>
             <Route exact path="/app/admin/"  component={AdminPage}/>
             <Route path="/app/admin/about/" component={AboutAdminPage}/>
-            <Route path="/country/" component={ExampleCountry}/>
             <Route path="*" component={NotFoundPage}/>                    
         </Switch>
         </div>

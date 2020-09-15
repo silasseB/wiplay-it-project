@@ -10,7 +10,6 @@ import {pageMediaBlockRenderer} from 'templates/editor/editor-templates';
 import {Editor} from 'draft-js';
 import Helper from 'utils/helpers';
 
-
 const helper = new Helper();
 
 
