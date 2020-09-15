@@ -41,7 +41,6 @@ class  AboutContainer extends Component  {
         this.isMounted = true;
         this.onAboutInfoUpdate()
         store.dispatch(getAboutInfo())
-        console.log(this.props)
     }
 
     render(){
