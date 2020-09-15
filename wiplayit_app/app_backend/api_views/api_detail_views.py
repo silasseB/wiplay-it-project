@@ -50,14 +50,9 @@ class IndexView(BaseView, APIView):
 
 		return Response(serializer.data,  status=status.HTTP_200_OK )
 		
-		
-
-
-
 class RetrievePostListView(RetrieveMixin, PostDetailView):
 	pass
 	
-
 
 class RetrieveQuestionListView( RetrieveMixin, QuestionView):
 		
@@ -65,23 +60,15 @@ class RetrieveQuestionListView( RetrieveMixin, QuestionView):
 		serializer = self.list(request)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 			
-	   	
-
-
 class RetrievePostView(RetrieveMixin, PostDetailView):
 	pass
 		
-
-
 
 class RetrieveQuestionView(QuestionDetailView):
 
 	def get_action_data(self, request):
 		serializer = self.retrive(request)
 		return Response(serializer.data, status=status.HTTP_200_OK)
-
-	
-		
 
 
 class RetrieveAnswerCommentListView(AnswerCommentDetailView):

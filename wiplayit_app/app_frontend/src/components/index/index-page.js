@@ -273,17 +273,10 @@ export const IndexComponent = props => {
       
     return(
         <div className="home-page-contents" id="home-page-contents">
-            <button 
-                type="button" 
-                onClick={()=> history.push(pathname, {})} 
-                className="btn">
-                Compose
-            </button> 
-           <Answers {...props}/>
-           <Users {...props}/>
-           <Posts {...props}/>
-           <Questions {...props}/>
-
+            <Answers {...props}/>
+            <Users {...props}/>
+            <Posts {...props}/>
+            <Questions {...props}/>
         </div>
     )
 
