@@ -20,7 +20,7 @@ export const _GetApi =(useToken, opts={}) =>{
 export function sendMessage(options={}) {
     let useToken = false;
     let opts = {}
-    //const Api    = _GetApi(useToken,{timeout:120000});
+    const Api    = _GetApi(useToken,{timeout:120000});
     
     if(!Api){
         console.log(!Api)
@@ -709,7 +709,7 @@ export function authenticate(params={}){
     let useTokenIsBolean = checkType.isBoolean(useToken)
     useToken  = useTokenIsBolean &&  useToken || false;
 
-    //const Api = _GetApi(useToken, {timeout:120000, requestFor:'authentication'});   
+    const Api = _GetApi(useToken, {timeout:120000, requestFor:'authentication'});   
     if(!Api){
         return  dispatch =>{ 
             dispatch(action.handleError());
