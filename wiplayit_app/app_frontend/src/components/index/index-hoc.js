@@ -502,6 +502,7 @@ export function MainAppHoc(Component) {
         }
 
         editfollowersOrUpVoters = (params) =>{
+            console.log(params)
             this.setState({isUpdating:true})
             params = this._getFormData(params);
             this.props.submit(params); 

@@ -584,7 +584,7 @@ export function handleSubmit(props) {
                     textMessage : BuildAlertMessage(updateProps),
                     messageType : 'success'
                 }
-                dispatch(action.HandleAlertMessage(alertMessage))
+                isModal && dispatch(action.HandleAlertMessage(alertMessage))
 			
 		    })
 		    .catch(error => {
@@ -635,7 +635,7 @@ export function handleSubmit(props) {
                     textMessage : BuildAlertMessage(createProps),
                     messageType : 'success'
                 }
-                dispatch(action.HandleAlertMessage(alertMessage))
+                isModal && dispatch(action.HandleAlertMessage(alertMessage))
                 
 		    })
 		    .catch(error => {

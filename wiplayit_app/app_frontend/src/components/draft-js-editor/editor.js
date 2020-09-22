@@ -266,10 +266,10 @@ export default  class AppEditor extends Component{
 
     onURLChange(e) {
         e.preventDefault();
-        let {editorState} = this.state;
-            
-        var reader = new FileReader();
-        var file = e.target.files[0];
+        if (!this.state.editorIsFocused) return;
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
         let name = e.target.name;
                              
         reader.onloadend = () => {
@@ -286,10 +286,11 @@ export default  class AppEditor extends Component{
     
             Api.post(apiUrl, fileForm)
             .then(response => {
-                let {draft_editor_file} = response.data;
+                let {editorState} = this.state;
+               
                 const entityKey = Entity.create(
                                     name, 'IMMUTABLE', 
-                                    {src:draft_editor_file}
+                                    {src:reader.data.draft_editor_file}
                                 );
                 editorState = AtomicBlockUtils.insertAtomicBlock(
                                     editorState, 

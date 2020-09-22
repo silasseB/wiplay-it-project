@@ -446,7 +446,7 @@ export const Users = props => {
                             let profile         = user    &&  user.profile;
                             let profile_picture = profile &&  profile.profile_picture;
 
-                            let editUserProfileProps = {
+                            let editObjProps = {
                                 objName    : 'UsersList',
                                 isPut      : true,
                                 obj        : user, 
@@ -454,8 +454,8 @@ export const Users = props => {
                                 currentUser,
                             }
 
-                            editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-                            var btnsProps   = {...props, editUserProfileProps};
+                            editObjProps = GetModalLinkProps.props(editObjProps);
+                            var btnsProps   = {...props, editObjProps};
                             let UnfollowOrFollowUserBtn =  <FollowUserBtn {...btnsProps}/>;
 
                             Object.assign(userProps, props); 

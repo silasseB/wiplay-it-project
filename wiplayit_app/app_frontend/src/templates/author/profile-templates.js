@@ -332,7 +332,7 @@ export const PartialUserList = props => {
         let profile         = user && user.profile;
         let profile_picture = profile &&  profile.profile_picture;
 
-        let editUserProfileProps = {
+        let editObjProps = {
             objName    : 'UsersList',
             isPut      : true,
             obj        : user, 
@@ -340,8 +340,8 @@ export const PartialUserList = props => {
             currentUser,
         }
 
-        editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-        let btnsProps   = {...props, editUserProfileProps};
+        editObjProps = GetModalLinkProps.props(editObjProps);
+        let btnsProps   = {...props, editObjProps};
       
         let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
         //console.log(props)
@@ -589,7 +589,7 @@ export const UsersComponent = props => {
         
     let state    = { userProfile : user}
     
-    let editUserProfileProps = {
+    let editObjProps = {
             objName    : 'UsersList',
             isPut      : true,
             obj        : user, 
@@ -598,8 +598,8 @@ export const UsersComponent = props => {
             
     }
 
-    editUserProfileProps = GetModalLinkProps.props(editUserProfileProps);
-    var btnsProps   = {...props, editUserProfileProps};
+    editObjProps = GetModalLinkProps.props(editObjProps);
+    var btnsProps   = {...props, editObjProps};
       
     let FollowBtn   = MatchMediaHOC(FollowUserBtn, '(min-width: 980px)');
       
