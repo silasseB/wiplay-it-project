@@ -40,7 +40,7 @@ export const SlideFromRight = {
         timingfunction : 'cubic-bezier(0.25, 0.5, 0.5, 0.9)'
      },
      begin : {
-       'transform': 'translateX(-35%)',
+       'transform': 'translateX(35%)',
        'opacity': 0
      },
      end : {
@@ -83,21 +83,23 @@ export const Newspaper = {
 
 
 export const Fall = {
-     transition : {
+    transition : {
         property : 'all',
         duration : 300,
         timingfunction : 'ease-in'
-     },
-     begin : {
+    },
+
+    begin : {
        'transformStyle': 'preserve-3d',
        'transform': 'translateZ(600px) rotateX(20deg)',
        'opacity': 0
-     },
-     end : {
+    },
+
+    end : {
        'transformStyle': 'preserve-3d',
        'transform': 'translateZ(0px) rotateX(0deg)',
        'opacity': 1
-     }
+    }
 };
 
 
@@ -176,19 +178,21 @@ export const Sign3D = {
 };
 
 export const SuperScaled = {
-     transition : {
+    transition : {
         property : 'all',
         duration : 300,
         timingfunction : 'linear'
-     },
-     begin : {
+    },
+
+    begin : {
        'transform': 'scale(2)',
        'opacity': 0
-     },
-     end : {
+    },
+    
+    end : {
        'transform': 'scale(1)',
        'opacity': 1
-     }
+    }
 };
 
 

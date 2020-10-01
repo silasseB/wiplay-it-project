@@ -68,8 +68,6 @@ class ModalBox extends Component{
         this.state = {
             open : false
         };
-
-        
     }
 
     close(){
@@ -80,53 +78,52 @@ class ModalBox extends Component{
             window.history.back();
             ModalManager.close(modalName);
         }
-   }
+    }
 
-   handleKeyDown(event){
+    handleKeyDown(event){
       if (event.keyCode === 27 /*esc*/) this.close();
-   }
+    }
     
-
     componentDidMount(){
         
         const transitionTimeMS = this.getTransitionDuration();
 
         setTimeout(() => this.setState({open : true}),0);
-            onClose = (callback) => {
-                this.setState({open: false}, () => {
+
+        onClose = (callback) => {
+            this.setState({open: false}, () => {
                 this.closeTimer = setTimeout(callback, transitionTimeMS);
             });
         };
     }
 
     componentWillUnmount(){
-      onClose = null;
-      clearTimeout(this.closeTimer);
+        onClose = null;
+        clearTimeout(this.closeTimer);
     }
 
     getTransitionDuration(){
-       const { effect } = this.props;
+        const { effect } = this.props;
 
-       if(!effect.transition){
-          return defaultTransition.duration;
-       }
-       return effect.transition.duration || defaultTransition.duration;
+        if(!effect.transition){
+            return defaultTransition.duration;
+        }
+        return effect.transition.duration || defaultTransition.duration;
     }
 
     render(){
-      
-      const {style,effect} = this.props;
-      const { open } = this.state;
+        const {style,effect} = this.props;
+        const { open } = this.state;
 
-      let transition = effect.transition;
-      if(!transition){
-        transition = defaultTransition;
-      }else{
-        transition = Assign({},defaultTransition,transition);
-      }
-      let transition_style = {
-          'transition': transition.property+' '+(transition.duration / 1000) + 's'+' '+transition.timingfunction
-      };
+        let transition = effect.transition;
+        if(!transition){
+            transition = defaultTransition;
+        }else{
+            transition = Assign({},defaultTransition,transition);
+        }
+        let transition_style = {
+           'transition': transition.property+' '+(transition.duration / 1000) + 's'+' '+transition.timingfunction
+        };
 
         return (
             <div
@@ -157,16 +154,15 @@ var modals = [];
 
 const renderModal = () => {
    
-   if(modals.length === 0)
-      return;
+    if(modals.length === 0) return;
 
-   const component = modals.shift();
+    const component = modals.shift();
 
-   if(!node){
+    if(!node){
         node = document.createElement('div');
         document.body.appendChild(node);
-   }
-   ReactDOM.render(component,node);
+    }
+    ReactDOM.render(component,node);
 }
 
 

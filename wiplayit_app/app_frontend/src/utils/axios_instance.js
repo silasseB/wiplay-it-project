@@ -6,6 +6,7 @@ import { getCookie } from 'utils/csrf_token.js';
 import * as checkType from 'helpers/check-types'; 
 import {authenticate} from "dispatch/index"
 import Api from 'utils/api';
+import {store} from 'store/index';
 
 const api      = new Api();
 let csrftoken = getCookie('csrftoken');  
