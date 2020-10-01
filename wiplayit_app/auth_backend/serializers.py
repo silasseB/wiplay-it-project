@@ -77,6 +77,9 @@ class CustomLoginSerializer(LoginSerializer):
 		email = None
 		user  = None
 
+		if phone_numbers:
+			pass
+
 		for numbObj in phone_numbers:
 			unique_username = numbObj.user.email
 

@@ -57,7 +57,7 @@ def get_phone_numbers(value, request=None):
     if not phone_number:
         phone_number = PhoneNumber.objects.filter(inter_format=value)
 
-    return phone_number or None
+    return phone_number 
 
 
 def get_verified_number(unique_key):
