@@ -366,7 +366,7 @@ div.public-DraftEditor-content {
     #editors-box  {
         background-color : #fffef7;
         overflow-y       : auto;  
-        padding          : 10px 10px 7px;  
+        padding          : 10px 10px 7px; 
     }
 
     .draft-editor {

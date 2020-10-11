@@ -266,52 +266,51 @@ export default  class AppEditor extends Component{
 
     onURLChange(e) {
         e.preventDefault();
-        if (!this.state.editorIsFocused) return;
+        this.handleFocus();
 
         let reader = new FileReader();
         let file = e.target.files[0];
         let name = e.target.name;
                              
         reader.onloadend = () => {
-            let apiUrl   = api.createDraftEditorContentsApi(this);
-            let form     = {'draft_editor_file': file}
-            let fileForm = helper.createFormData(form);
-
-            let useToken=true
-            const Api = _GetApi(useToken);   
-
-            if (!Api) {
-                return store.dispatch(action.handleError());
-            }
-    
-            Api.post(apiUrl, fileForm)
-            .then(response => {
-                let {editorState} = this.state;
-               
-                const entityKey = Entity.create(
-                                    name, 'IMMUTABLE', 
-                                    {src:reader.data.draft_editor_file}
-                                );
-                editorState = AtomicBlockUtils.insertAtomicBlock(
-                                    editorState, 
-                                    entityKey, 
-                                    ' '
-                                );
-                this.setState({editorState});
-            })
-            .catch(error => {
-
-                if (error.request) {
-                    console.log(error.request)
-                }
-                else if(error.response){
-                    console.log(error.response)
-                }
-            });
+            this.saveFile(name, file)  
         };
 
         reader.readAsDataURL(file);
     };
+
+    saveFile(name, file){
+        let apiUrl   = api.createDraftEditorContentsApi(this);
+        let form     = {'draft_editor_file': file}
+        let fileForm = helper.createFormData(form);
+
+        let useToken=true
+        const Api = _GetApi(useToken);   
+
+        if (!Api) {
+            return store.dispatch(action.handleError());
+        }
+    
+        Api.post(apiUrl, fileForm)
+        .then(response => {
+            let file = response.data.draft_editor_file
+            this.addFile(name, file)
+        })
+        .catch(error => {
+            if (error.request) {
+                console.log(error.request)
+            }else if(error.response){
+                console.log(error.response)
+            }
+        });
+    }
+
+    addFile(name,file){
+        let {editorState} = this.state;
+        const entityKey = Entity.create(name, 'IMMUTABLE', {src:file});
+        editorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
+        this.setState({editorState});
+    }
 
    
     addBold(e){
@@ -453,16 +452,18 @@ export default  class AppEditor extends Component{
     }
 
     handleFocus =()=> {
+       
+        this.setState({editorIsFocused : true, onFocus:true});
+        console.log('Handle Focus', this.state)
         this.editor.focus();
-        this.setState({editorIsFocused : true});
     }
 
     handleBlur =()=> {
         this.setState({editorIsFocused : false});
+        console.log('Handle Blur', this.state)
     }
 
     handleResize =(event)=> {
-        console.log(event, 'keyboard')
         let editorsBoxElem = document.getElementById('editors-box');
         
         if (editorsBoxElem) {
@@ -675,7 +676,7 @@ const PureDraftEditor =(props)=>{
     return(
         <div className="editors-page">
             <div style={onScroolStyles}
-                 onClick={()=> handleFocus()}
+                 onClick={(e)=> handleFocus(e)}
                  id="editors-box" 
                  className="editors-box pure-draft-editor">
                 <DraftEditor {...props}/>

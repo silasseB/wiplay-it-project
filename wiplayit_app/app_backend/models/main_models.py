@@ -432,7 +432,7 @@ class DraftEditorMediaContent(models.Model):
         return os.path.join('draft-editor-files', filename) 
 
     draft_editor_file = models.FileField(upload_to=get_upload_path, null=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE, 
                               blank=True, null=True) 
 

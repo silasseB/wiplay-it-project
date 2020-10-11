@@ -340,7 +340,6 @@ export const DraftEditor = props => {
                 placeholder={props.editorPlaceHolder}
                 ref={input => props.self.editor = input}
                 onBlur={props.handleBlur}
-                //plugins={props.plugins}
             />
         </div>
     )        
