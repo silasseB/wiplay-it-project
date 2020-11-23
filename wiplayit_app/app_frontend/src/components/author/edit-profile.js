@@ -88,8 +88,6 @@ export class EditProfile extends Component{
             let dropImageModal = modal['dropImage'];
               
             if (userProfile) {
-                console.log(userProfile, this.state)
-
                 let isEditorModal    = this.checkModalIsOpen('editor');
                 let isDropImageModal = this.checkModalIsOpen('dropImage');
 
@@ -123,8 +121,7 @@ export class EditProfile extends Component{
 
         if (userProfile.updated === true) {
             delete userProfile.updated;
-            console.log(userProfile)
-
+     
             let textMessage = "Your profile successfuly updated"
             textMessage     = {textMessage, messageType:'success'}
             this.displayMessage(textMessage)
@@ -139,8 +136,7 @@ export class EditProfile extends Component{
 
     displayMessage(message){
         if (!this.isMounted) return;
-        console.log(message)
-                     
+                  
         this.setState({ displayMessage : true, message });
         setTimeout(()=> {
             this.setState({displayMessage : false}); 
@@ -155,8 +151,7 @@ export class EditProfile extends Component{
     componentDidMount() {
         this.isMounted = true
         this.onProfileUpdate();
-        console.log(this.props)
-        
+           
         let { location, match } = this.props; 
         let state =  location && location.state;
                 
@@ -185,8 +180,7 @@ export class EditProfile extends Component{
         let {userProfile} = entities;
 
         userProfile = userProfile[byId];
-        console.log(userProfile)
-                         
+                                
         if (userProfile && userProfile.user) {
             userProfile = userProfile.user;
             this.populateEditForm(userProfile);

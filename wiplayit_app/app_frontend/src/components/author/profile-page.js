@@ -156,8 +156,6 @@ class UserProfileContainer extends Component {
             
             if (menDiff >= 2) {
                 userProfile = userProfile && userProfile.user;
-
-                console.log('userProfile found from cachedEntyties')
                                 
                 store.dispatch(action.getUserProfilePending(profileById));
                 store.dispatch(action.getUserProfileSuccess( profileById, userProfile));
@@ -165,8 +163,7 @@ class UserProfileContainer extends Component {
                 return 
             }
         }
-
-        console.log('Fetching userProfile from the server')
+     
         this.props.getUserProfile(id);
 
     };

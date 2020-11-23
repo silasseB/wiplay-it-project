@@ -559,33 +559,32 @@ export const EditProfileNavBar = props  => {
     let submitButtonStyles = submitting?{opacity:'0.60'}:{};
     let fieldSetStyles     = submitting? {opacity:'0.60'}:{};
 
-    const ModalCloseBtnIcon = () => {
+    const BackBtn = () => {
+        let backButton;
         if (window.matchMedia("(min-width: 980px)").matches) {
-            return (
-                <Icon.X 
-                    className="nav-bar-arrow-icon"
-                    id="arrow-left"
-                    size={20}
-                />
-            )
-        }
-        
-        return (
-            <Icon.ArrowLeft 
-                className="nav-bar-arrow-icon"
-                id="arrow-left"
-                size={20}
-            />
-            )
+            backButton =
+                <ModalCloseBtn> 
+                    <Icon.X 
+                        className="nav-bar-arrow-icon"
+                        id="arrow-left"
+                        size={20}
+                    />
+                </ModalCloseBtn>  
+            
+        }else{
+
+            backButton = <CustomBackBtn/>;
         }
 
+        return backButton
+    }
+
+    
     return(
         <nav className="partial-form-navbar edit-profile-navbar fixed-top"> 
 
             <div className="partial-navbar-back-btn-box">
-                <ModalCloseBtn> 
-                    <ModalCloseBtnIcon/>
-                </ModalCloseBtn>  
+               <BackBtn {...props}/>
 	        </div>
 
             <div className="page-name-box">
@@ -609,11 +608,11 @@ export const EditProfileNavBar = props  => {
 
 
 export const CustomBackBtn = props => {
-    let styles = props.styles || {};
+
     return(
         <button type="button" 
               onClick={()=>window.history.back()} 
-              className="btn-sm custom-back-btn" >
+              className="btn-sm custom-back-bt nav-bar-back-bt" >
             <Icon.ArrowLeft 
                 className="nav-bar-arrow-icon"
                 id="arrow-left"
